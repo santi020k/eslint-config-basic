@@ -1,0 +1,10 @@
+{
+  "name": "@santi020k/eslint-config-core",
+  "version": "1.0.0",
+  "type": "module",
+  "exports": "./eslint.config.js",
+  "peerDependencies": {
+    "eslint": "^9.33.0",
+    "typescript": "^5.9.2"
+  }
+}

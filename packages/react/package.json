@@ -1,0 +1,14 @@
+{
+  "name": "@santi020k/eslint-config-react",
+  "version": "1.0.0",
+  "type": "module",
+  "exports": "./eslint.config.js",
+  "peerDependencies": {
+    "eslint": "^9.33.0",
+    "typescript": "^5.9.2",
+    "@santi020k/eslint-config-core": "workspace:*",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2"
+  }
+}
