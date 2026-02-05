@@ -1,0 +1,75 @@
+# @santi020k/eslint-config
+
+> A comprehensive ESLint configuration package for JavaScript, TypeScript, React, Next.js, Astro, and Expo projects.
+
+## Quick Start
+
+```js
+import { eslintConfig, ConfigOption, OptionalOption } from '@santi020k/eslint-config-santi020k'
+
+export default [
+  ...eslintConfig({
+    config: [ConfigOption.React, ConfigOption.Ts],
+    optionals: [OptionalOption.Tailwind, OptionalOption.Vitest]
+  })
+]
+```
+
+## Architecture
+
+This is a monorepo-style ESLint config package using ESLint 9 Flat Config format.
+
+### Directory Structure
+
+```
+src/
+├── index.ts          # Main entry point, exports eslintConfig()
+├── configs/          # Framework-specific configurations
+│   ├── js/           # Base JavaScript rules
+│   ├── ts/           # TypeScript rules
+│   ├── react/        # React rules
+│   ├── next/         # Next.js rules
+│   ├── astro/        # Astro rules
+│   └── expo/         # Expo/React Native rules
+├── optionals/        # Optional feature configs
+│   ├── cspell.ts     # Spell checking
+│   ├── tailwind.ts   # Tailwind CSS
+│   ├── vitest.ts     # Vitest testing
+│   ├── i18next.ts    # i18n
+│   ├── mdx.ts        # MDX support
+│   ├── markdown.ts   # Markdown linting
+│   └── stencil.ts    # Stencil.js
+├── settings/         # ESLint settings (gitignore integration)
+├── typings/          # TypeScript type definitions
+└── utils/            # Helper utilities
+```
+
+### Key Enums
+
+- **ConfigOption**: `Ts`, `React`, `Next`, `Expo`, `Astro`
+- **OptionalOption**: `Cspell`, `Tailwind`, `Vitest`, `I18next`, `Mdx`, `Markdown`, `Stencil`
+- **SettingOption**: `Gitignore`
+
+## Commands
+
+```bash
+npm run build       # Build with tsup
+npm run lint        # Run ESLint
+npm run lint:fix    # Fix linting issues
+npm run dev         # Watch mode development
+npm run inspector   # Open ESLint config inspector
+```
+
+## Adding New Configurations
+
+1. Create a new directory under `src/configs/` or `src/optionals/`
+2. Export the config from the respective `index.ts`
+3. Add new enum value in `src/index.ts`
+4. Wire up in `eslintConfig()` function
+
+## Tech Stack
+
+- **Build**: tsup, TypeScript
+- **ESLint**: v9+ Flat Config format
+- **Package Manager**: npm/pnpm
+- **Node**: ^18.18.0 || ^20.9.0 || >=21.1.0
