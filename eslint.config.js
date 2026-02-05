@@ -5,6 +5,6 @@ export default [
   ...eslintConfig({ config: [ConfigOption.Ts], optionals: [OptionalOption.Mdx, OptionalOption.Markdown] }),
   {
     name: 'local-config',
-    ignores: ['dist/*', 'CHANGELOG.md']
+    ignores: ['dist/*', 'CHANGELOG.md', 'AGENTS.md', 'llms.txt', '.github/*.md']
   }
 ]
