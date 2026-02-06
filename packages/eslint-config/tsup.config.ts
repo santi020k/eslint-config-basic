@@ -4,8 +4,8 @@ const env = process.env.NODE_ENV
 
 export const tsup: Options = {
   splitting: true,
-  clean: false, // clean up the dist folder
-  dts: false, // generate dts files
+  clean: true, // clean up the dist folder
+  dts: true, // generate dts files
   format: ['esm'], // generate esm files
   minify: false,
   // bundle: env === 'production',

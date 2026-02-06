@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'vitest'
 
+import { astroConfig } from '@santi020k/eslint-config-astro'
 import {
   ConfigOption,
   coreConfig,
   OptionalOption,
   SettingOption
 } from '@santi020k/eslint-config-core'
+import { expoConfig } from '@santi020k/eslint-config-expo'
 import { nextConfig } from '@santi020k/eslint-config-next'
 import { reactConfig } from '@santi020k/eslint-config-react'
 import { typescriptConfig } from '@santi020k/eslint-config-typescript'
@@ -56,6 +58,26 @@ describe('Next.js Config', () => {
   })
 })
 
+describe('Astro Config', () => {
+  it('should export astroConfig as an array', () => {
+    expect(Array.isArray(astroConfig)).toBe(true)
+  })
+
+  it('should have at least one config entry', () => {
+    expect(astroConfig.length).toBeGreaterThan(0)
+  })
+})
+
+describe('Expo Config', () => {
+  it('should export expoConfig as an array', () => {
+    expect(Array.isArray(expoConfig)).toBe(true)
+  })
+
+  it('should have at least one config entry', () => {
+    expect(expoConfig.length).toBeGreaterThan(0)
+  })
+})
+
 describe('Config Enums', () => {
   it('should export ConfigOption enum with expected values', () => {
     expect(ConfigOption.Ts).toBeDefined()
@@ -63,6 +85,10 @@ describe('Config Enums', () => {
     expect(ConfigOption.React).toBeDefined()
 
     expect(ConfigOption.Next).toBeDefined()
+
+    expect(ConfigOption.Astro).toBeDefined()
+
+    expect(ConfigOption.Expo).toBeDefined()
   })
 
   it('should export OptionalOption enum with expected values', () => {
