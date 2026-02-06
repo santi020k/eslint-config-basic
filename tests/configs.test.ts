@@ -59,13 +59,17 @@ describe('Next.js Config', () => {
 describe('Config Enums', () => {
   it('should export ConfigOption enum with expected values', () => {
     expect(ConfigOption.Ts).toBeDefined()
+
     expect(ConfigOption.React).toBeDefined()
+
     expect(ConfigOption.Next).toBeDefined()
   })
 
   it('should export OptionalOption enum with expected values', () => {
     expect(OptionalOption.Tailwind).toBeDefined()
+
     expect(OptionalOption.Vitest).toBeDefined()
+
     expect(OptionalOption.Cspell).toBeDefined()
   })
 

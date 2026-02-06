@@ -13,6 +13,7 @@ describe('eslintConfig Function', () => {
     const config = eslintConfig({ config: [ConfigOption.Ts] })
 
     expect(Array.isArray(config)).toBe(true)
+
     expect(config.length).toBeGreaterThan(0)
   })
 
@@ -20,6 +21,7 @@ describe('eslintConfig Function', () => {
     const config = eslintConfig({ config: [ConfigOption.React] })
 
     expect(Array.isArray(config)).toBe(true)
+
     expect(config.length).toBeGreaterThan(0)
   })
 
@@ -27,6 +29,7 @@ describe('eslintConfig Function', () => {
     const config = eslintConfig({ config: [ConfigOption.Next] })
 
     expect(Array.isArray(config)).toBe(true)
+
     expect(config.length).toBeGreaterThan(0)
   })
 
@@ -45,6 +48,7 @@ describe('eslintConfig Function', () => {
     })
 
     expect(Array.isArray(config)).toBe(true)
+
     expect(config.length).toBeGreaterThan(0)
   })
 
@@ -63,7 +67,9 @@ describe('Type Exports', () => {
     const options = Object.values(ConfigOption)
 
     expect(options).toContain('ts')
+
     expect(options).toContain('react')
+
     expect(options).toContain('next')
   })
 
@@ -71,6 +77,7 @@ describe('Type Exports', () => {
     const options = Object.values(OptionalOption)
 
     expect(options).toContain('tailwind')
+
     expect(options).toContain('vitest')
   })
 

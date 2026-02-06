@@ -2,7 +2,10 @@
 import { ConfigOption, eslintConfig, OptionalOption } from './dist/index.js'
 
 export default [
-  ...eslintConfig({ config: [ConfigOption.Ts], optionals: [OptionalOption.Mdx, OptionalOption.Markdown] }),
+  ...eslintConfig({
+    config: [ConfigOption.Ts],
+    optionals: [OptionalOption.Mdx, OptionalOption.Markdown, OptionalOption.Vitest]
+  }),
   {
     name: 'local-config',
     ignores: [
@@ -11,8 +14,6 @@ export default [
       'packages/*/*.config.ts',
       'packages/*/index.ts',
       '.agent/**',
-      'tests/**',
-      'vitest.config.ts',
       'CHANGELOG.md',
       'AGENTS.md',
       'llms.txt',

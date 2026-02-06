@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
 import { coreConfig, rules } from '@santi020k/eslint-config-core'
-import { typescriptConfig } from '@santi020k/eslint-config-typescript'
 import { reactConfig } from '@santi020k/eslint-config-react'
+import { typescriptConfig } from '@santi020k/eslint-config-typescript'
 
 describe('Core Rules', () => {
   it('should export rules object', () => {
@@ -12,6 +12,7 @@ describe('Core Rules', () => {
   it('should include expected core rules', () => {
     // Check for actual rules exported from the core package
     expect(rules['@stylistic/indent']).toBeDefined()
+
     expect(rules['@stylistic/quotes']).toBeDefined()
   })
 
@@ -25,6 +26,7 @@ describe('Core Rules', () => {
     const pluginsConfig = coreConfig.find(c => c.name === 'eslint-config/plugins')
 
     expect(pluginsConfig).toBeDefined()
+
     expect(pluginsConfig?.plugins).toBeDefined()
   })
 })
@@ -37,11 +39,7 @@ describe('TypeScript Rules', () => {
   })
 
   it('should target TypeScript files', () => {
-    const hasTypeScriptFiles = typescriptConfig.some(c =>
-      c.files?.some(pattern =>
-        typeof pattern === 'string' && pattern.includes('.ts')
-      )
-    )
+    const hasTypeScriptFiles = typescriptConfig.some(c => c.files?.some(pattern => typeof pattern === 'string' && pattern.includes('.ts')))
 
     expect(hasTypeScriptFiles).toBe(true)
   })
@@ -49,17 +47,13 @@ describe('TypeScript Rules', () => {
 
 describe('React Rules', () => {
   it('should include React plugin configuration', () => {
-    const hasReactPlugin = reactConfig.some(c =>
-      c.plugins && ('react' in c.plugins || 'react-hooks' in c.plugins)
-    )
+    const hasReactPlugin = reactConfig.some(c => c.plugins && ('react' in c.plugins || 'react-hooks' in c.plugins))
 
     expect(hasReactPlugin).toBe(true)
   })
 
   it('should have React version detection setting', () => {
-    const hasReactSettings = reactConfig.some(c =>
-      (c.settings?.react as { version?: string } | undefined)?.version === 'detect'
-    )
+    const hasReactSettings = reactConfig.some(c => (c.settings?.react as { version?: string } | undefined)?.version === 'detect')
 
     expect(hasReactSettings).toBe(true)
   })
