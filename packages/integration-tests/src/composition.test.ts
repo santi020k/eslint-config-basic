@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { ConfigOption, eslintConfig, OptionalOption, SettingOption } from '../dist/index.js'
+import { ConfigOption, eslintConfig, OptionalOption, SettingOption } from '@santi020k/eslint-config'
 
 describe('eslintConfig Function', () => {
   it('should return an array when called with minimal options', () => {

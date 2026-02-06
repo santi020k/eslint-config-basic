@@ -1,123 +1,45 @@
 {
-  "name": "@santi020k/eslint-config",
-  "version": "0.0.1",
-  "packageManager": "npm@10.8.3",
+  "name": "@santi020k/eslint-config-monorepo",
   "private": true,
-  "description": "A comprehensive ESLint configuration package for JavaScript, TypeScript, and React projects, including popular plugins and custom rules for consistent coding style.",
-  "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    },
-    "./package.json": "./package.json",
-    "./*": {
-      "import": "./dist/*.js",
-      "types": "./dist/*.d.ts"
-    }
-  },
-  "files": [
-    "dist",
-    "README.md",
-    "LICENSE"
-  ],
+  "version": "0.0.0",
+  "packageManager": "npm@10.8.3",
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
-    "build:root": "tsup src/index.ts --format esm --dts",
-    "build:dev": "tsup --watch",
-    "build:prod": "turbo run build --filter=!playground/*",
-    "inspector": "npx @eslint/config-inspector@latest",
-    "lint": "eslint . --max-warnings=0",
-    "lint:fix": "eslint . --fix --max-warnings=0",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "test": "vitest run packages/integration-tests",
     "clean": "turbo run clean && rm -rf node_modules",
     "pre-commit": "lint-staged",
-    "pre-push": "npm run build && npm run lint:fix",
-    "prepare": "husky config/.husky",
-    "test": "vitest run",
-    "test:watch": "vitest"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/santi020k/eslint-config.git"
-  },
-  "bugs": {
-    "url": "https://github.com/santi020k/eslint-config/issues"
-  },
-  "homepage": "https://github.com/santi020k/eslint-config#readme",
-  "keywords": [
-    "eslint",
-    "config",
-    "santi020k",
-    "monorepo",
-    "turborepo"
-  ],
-  "author": "santi020k",
-  "contributors": [
-    "Santiago Molina <info@santi020k.me>"
-  ],
-  "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  },
-  "engines": {
-    "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
+    "prepare": "husky config/.husky"
   },
   "devDependencies": {
-    "@eslint/config-inspector": "^1.4.2",
-    "@types/node": "^25.2.1",
-    "cz-conventional-changelog": "^3.3.0",
-    "esbuild": "^0.27.3",
-    "eslint-plugin-astro": "^1.5.0",
-    "eslint-plugin-expo": "^1.0.0",
-    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint": "^9.39.2",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-n": "^17.23.2",
+    "eslint-plugin-promise": "^7.2.1",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "tslib": "^2.8.1",
-    "tsup": "^8.5.1",
     "turbo": "^2.5.3",
-    "typescript": "^5.9.3",
-    "vitest": "^4.0.18",
-    "yalc": "^1.0.0-pre.53"
-  },
-  "dependencies": {
-    "@eslint/compat": "^2.0.2",
-    "@eslint/js": "^9.39.2",
-    "@santi020k/eslint-config-astro": "workspace:*",
-    "@santi020k/eslint-config-core": "workspace:*",
-    "@santi020k/eslint-config-expo": "workspace:*",
-    "@santi020k/eslint-config-next": "workspace:*",
-    "@santi020k/eslint-config-optionals": "workspace:*",
-    "@santi020k/eslint-config-react": "workspace:*",
-    "@santi020k/eslint-config-typescript": "workspace:*",
-    "@typescript-eslint/eslint-plugin": "^8.54.0",
-    "@typescript-eslint/type-utils": "^8.54.0",
-    "cross-dirname": "^0.1.0",
-    "eslint": "^9.39.2",
-    "typescript-eslint": "^8.54.0"
-  },
-  "overrides": {
-    "typescript-eslint": "$typescript-eslint",
-    "@typescript-eslint/eslint-plugin": "$@typescript-eslint/eslint-plugin",
-    "@typescript-eslint/type-utils": "$@typescript-eslint/type-utils",
-    "eslint": "$eslint"
+    "vitest": "^4.0.18"
   },
   "lint-staged": {
-    "*.{js, jsx, ts, tsx, md}": [
-      "npm run lint:fix"
+    "*.{js,jsx,ts,tsx,md}": [
+      "eslint --fix"
     ]
   },
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "overrides": {
+    "eslint": "$eslint",
+    "eslint-config-standard": "$eslint-config-standard",
+    "eslint-plugin-promise": "$eslint-plugin-promise",
+    "eslint-plugin-n": "$eslint-plugin-n"
   }
 }

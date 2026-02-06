@@ -1,0 +1,21 @@
+{
+  "name": "@santi020k/eslint-config-tests",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@santi020k/eslint-config": "*",
+    "@santi020k/eslint-config-core": "*",
+    "@santi020k/eslint-config-typescript": "*",
+    "@santi020k/eslint-config-react": "*",
+    "@santi020k/eslint-config-astro": "*",
+    "@santi020k/eslint-config-next": "*",
+    "@santi020k/eslint-config-expo": "*",
+    "vitest": "^4.0.18",
+    "eslint": "^9.39.2",
+    "typescript": "^5.9.3"
+  }
+}
