@@ -13,9 +13,7 @@ export const applyConfigIfOptionPresent = (
   configs: ConfigOption[],
   option: ConfigOption,
   configToAdd: FlatConfigArray
-): FlatConfigArray => {
-  return configs.includes(option) ? configToAdd : []
-}
+): FlatConfigArray => configs.includes(option) ? configToAdd : []
 
 /**
  * Checks if the provided configs array includes any React-specific configurations.
@@ -25,5 +23,6 @@ export const applyConfigIfOptionPresent = (
  */
 export const hasReactConfig = (configs?: ConfigOption[]): boolean => {
   if (!configs) return false
+
   return ReactConfigs.some(reactConfig => configs.includes(reactConfig))
 }

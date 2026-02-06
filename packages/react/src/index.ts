@@ -3,10 +3,10 @@ import pluginReactConfig from 'eslint-plugin-react/configs/recommended.js'
 import pluginReactHooks from 'eslint-plugin-react-hooks'
 import globals from 'globals'
 
+import { rules } from './rules.js'
+
 import { fixupConfigRules } from '@eslint/compat'
 import type { TSESLint } from '@typescript-eslint/utils'
-
-import { rules } from './rules.js'
 
 const languageOptions: TSESLint.FlatConfig.LanguageOptions = {
   ecmaVersion: 'latest',

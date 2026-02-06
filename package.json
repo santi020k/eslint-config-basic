@@ -34,7 +34,7 @@
     "build:dev": "tsup --watch",
     "build:prod": "turbo run build --filter=!playground/*",
     "inspector": "npx @eslint/config-inspector@latest",
-    "lint": "turbo run lint",
+    "lint": "eslint . --max-warnings=0",
     "lint:fix": "eslint . --fix --max-warnings=0",
     "clean": "turbo run clean && rm -rf node_modules",
     "pre-commit": "lint-staged",

@@ -1,6 +1,5 @@
-import type { TSESLint } from '@typescript-eslint/utils'
-
 import { groups } from '@santi020k/eslint-config-core'
+import type { TSESLint } from '@typescript-eslint/utils'
 
 export const rules: TSESLint.Linter.RulesRecord = {
   'react/react-in-jsx-scope': 'off',

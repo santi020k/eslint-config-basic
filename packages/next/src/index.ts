@@ -1,7 +1,7 @@
+import { rules } from './rules.js'
+
 import pluginNext from '@next/eslint-plugin-next'
 import type { TSESLint } from '@typescript-eslint/utils'
-
-import { rules } from './rules.js'
 
 /**
  * Next.js ESLint configuration
