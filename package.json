@@ -40,7 +40,8 @@
     "pre-commit": "lint-staged",
     "pre-push": "npm run build && npm run lint:fix",
     "prepare": "husky config/.husky",
-    "test": "not yet"
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "repository": {
     "type": "git",
@@ -81,6 +82,7 @@
     "tsup": "^8.5.1",
     "turbo": "^2.5.3",
     "typescript": "^5.9.3",
+    "vitest": "^4.0.18",
     "yalc": "^1.0.0-pre.53"
   },
   "dependencies": {

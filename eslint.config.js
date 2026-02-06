@@ -11,6 +11,8 @@ export default [
       'packages/*/*.config.ts',
       'packages/*/index.ts',
       '.agent/**',
+      'tests/**',
+      'vitest.config.ts',
       'CHANGELOG.md',
       'AGENTS.md',
       'llms.txt',
