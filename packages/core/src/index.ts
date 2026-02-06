@@ -70,3 +70,6 @@ export { coreConfig as jsConfig }
 
 // Export rules and groups for use by other packages
 export { rules, groups } from './rules.js'
+
+// Export settings
+export { gitignore } from './settings/index.js'
