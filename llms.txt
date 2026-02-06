@@ -5,7 +5,7 @@
 ## Quick Start
 
 ```js
-import { eslintConfig, ConfigOption, OptionalOption } from '@santi020k/eslint-config-santi020k'
+import { ConfigOption, eslintConfig, OptionalOption } from '@santi020k/eslint-config'
 
 export default [
   ...eslintConfig({
@@ -21,28 +21,19 @@ This is a monorepo-style ESLint config package using ESLint 9 Flat Config format
 
 ### Directory Structure
 
-```
-src/
-├── index.ts          # Main entry point, exports eslintConfig()
-├── configs/          # Framework-specific configurations
-│   ├── js/           # Base JavaScript rules
-│   ├── ts/           # TypeScript rules
-│   ├── react/        # React rules
-│   ├── next/         # Next.js rules
-│   ├── astro/        # Astro rules
-│   └── expo/         # Expo/React Native rules
+packages/
+├── eslint-config/    # Main entry point (@santi020k/eslint-config)
+│   ├── src/index.ts  # Exports eslintConfig()
+│   └── dist/         # Build artifacts
+├── core/             # Core logic and shared types
+├── typescript/       # TypeScript config
+├── react/            # React config
+├── next/             # Next.js config
+├── astro/            # Astro config
+├── expo/             # Expo config
 ├── optionals/        # Optional feature configs
-│   ├── cspell.ts     # Spell checking
-│   ├── tailwind.ts   # Tailwind CSS
-│   ├── vitest.ts     # Vitest testing
-│   ├── i18next.ts    # i18n
-│   ├── mdx.ts        # MDX support
-│   ├── markdown.ts   # Markdown linting
-│   └── stencil.ts    # Stencil.js
-├── settings/         # ESLint settings (gitignore integration)
-├── typings/          # TypeScript type definitions
-└── utils/            # Helper utilities
-```
+├── playground/       # Internal testing playground
+└── tests/            # Integration tests
 
 ### Key Enums
 
@@ -62,10 +53,11 @@ npm run inspector   # Open ESLint config inspector
 
 ## Adding New Configurations
 
-1. Create a new directory under `src/configs/` or `src/optionals/`
-2. Export the config from the respective `index.ts`
-3. Add new enum value in `src/index.ts`
-4. Wire up in `eslintConfig()` function
+1. Create a new package under `packages/` (e.g. `packages/vue`).
+2. Implement the config in `src/index.ts` of that package.
+3. Export it from the package's entry point.
+4. Add to `ConfigOption` enum in `packages/core/src/types.ts`.
+5. Wire up in `packages/eslint-config/src/index.ts`.
 
 ## Tech Stack
 
