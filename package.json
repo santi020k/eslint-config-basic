@@ -14,8 +14,9 @@
     "lint:fix": "turbo run lint:fix",
     "test": "vitest run packages/tests",
     "clean": "turbo run clean && rm -rf node_modules",
+    "prepare": "husky config/.husky",
     "pre-commit": "lint-staged",
-    "prepare": "husky config/.husky"
+    "pre-push": "npm run test && npm run lint && npm run build"
   },
   "devDependencies": {
     "eslint": "^9.39.2",
