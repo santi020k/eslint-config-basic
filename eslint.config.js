@@ -1,5 +1,5 @@
 // @ts-check
-import { ConfigOption, eslintConfig, OptionalOption } from './dist/index.js'
+import { ConfigOption, eslintConfig, OptionalOption } from '@santi020k/eslint-config'
 
 export default [
   ...eslintConfig({
@@ -11,16 +11,6 @@ export default [
     ignores: [
       'dist/*',
       'packages/*/dist/*',
-      'packages/*/*.config.ts',
-      'packages/*/index.ts',
-      'packages/astro/src/**',
-      'packages/expo/src/**',
-      'packages/optionals/src/**',
-      '.agent/**',
-      'CHANGELOG.md',
-      'AGENTS.md',
-      'llms.txt',
-      '.github/*.md'
     ]
   }
 ]

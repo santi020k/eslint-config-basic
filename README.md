@@ -20,19 +20,19 @@ npm install eslint --save-dev
 Then, install the configuration package. **Important:** I recommend using a fixed version (do not use `^` or `~`), as any new functionality or change may introduce new linter errors that require manual updates.
 
 ```bash
-npm install @santi020k/eslint-config-santi020k --save-dev
+npm install @santi020k/eslint-config --save-dev
 ```
 
 ## Usage
 
-Create an `eslint.config.js` file (or update your existing one) and extend **@santi020k/eslint-config-santi020k** based on your project type.
+Create an `eslint.config.js` file (or update your existing one) and extend **@santi020k/eslint-config** based on your project type.
 
 ### Basic Usage
 
 For a basic JavaScript/Node.js project:
 
 ```js
-import { eslintConfig } from '@santi020k/eslint-config-santi020k'
+import { eslintConfig } from '@santi020k/eslint-config'
 
 export default [
   ...eslintConfig()
@@ -45,7 +45,7 @@ export default [
 For projects that require specific configurations (e.g., TypeScript, React, Next.js, ...Etc), use the appropriate options:
 
 ```js
-import { ConfigOption, eslintConfig } from '@santi020k/eslint-config-santi020k'
+import { ConfigOption, eslintConfig } from '@santi020k/eslint-config'
 
 // TypeScript project
 export default [
@@ -71,13 +71,13 @@ export default [
   // Your custom config
 ]
 
-// Expo project (Beta)
+// Expo project
 export default [
   ...eslintConfig({ config: [ConfigOption.Expo] })
   // Your custom config
 ]
 
-// Astro project (beta, supports Astro with React)
+// Astro project (supports Astro with React)
 export default [
   ...eslintConfig({ config: [ConfigOption.Astro] })
   // Your custom config
@@ -89,7 +89,7 @@ export default [
 There are additional optional parameters to add support for other front-end/back-end technologies. This enables you to extend support as needed:
 
 ```js
-import { ConfigOption, eslintConfig, OptionalOption } from '@santi020k/eslint-config-santi020k'
+import { ConfigOption, eslintConfig, OptionalOption } from '@santi020k/eslint-config'
 
 export default [
   ...eslintConfig({
@@ -120,7 +120,7 @@ export default [
 This experimental option allows ESLint to honor your `.gitignore` file:
 
 ```js
-import { eslintConfig, SettingOption } from '@santi020k/eslint-config-santi020k'
+import { eslintConfig, SettingOption } from '@santi020k/eslint-config'
 
 export default [
   ...eslintConfig({
@@ -129,6 +129,42 @@ export default [
   })
   // Your custom config
 ]
+```
+
+## Monorepo Structure
+
+This project is a monorepo managed with **Turbo** and **npm Workspaces**.
+
+- `packages/eslint-config`: Main package entry point.
+- `packages/core`: Core logic and shared types.
+- `packages/typescript`: TypeScript specific rules.
+- `packages/react`: React and Hooks rules.
+- `packages/next`: Next.js rules.
+- `packages/astro`: Astro rules.
+- `packages/expo`: Expo/React Native rules.
+- `packages/optionals`: Optional configurations (Tailwind, Vitest, etc.).
+- `packages/tests`: Integration tests.
+- `packages/playground`: Testing playground for local development.
+
+## Development
+
+If you want to contribute or modify the configurations:
+
+### Prerequisites
+- Node.js (version specified in `.nvmrc`)
+- npm
+
+### Setup
+```bash
+npm install
+```
+
+### Useful Commands
+```bash
+npm run build      # Build all packages using Turbo
+npm run lint       # Lint all packages
+npm run test       # Run integration tests
+npm run dev        # Development mode with watch
 ```
 
 ## Opinionated but Flexible
@@ -148,30 +184,30 @@ Add the following useful scripts to your `package.json`:
 
 ## How to Implement in an Existing Project
 
-1. **Install the Dependencies:** Ensure that both ESLint and this configuration package are installed.
-2. **Update Your ESLint Configuration:** Extend **@santi020k/eslint-config-santi020k** in your ESLint configuration file as shown above.
-3. **Run ESLint:** Lint your project files and automatically fix issues if possible:
+1.  **Install the Dependencies:** Ensure that both ESLint and this configuration package are installed.
+2.  **Update Your ESLint Configuration:** Extend **@santi020k/eslint-config** in your ESLint configuration file as shown above.
+3.  **Run ESLint:** Lint your project files and automatically fix issues if possible:
 
-   ```bash
-   npm run lint
-   npm run lint:fix
-   ```
+    ```bash
+    npm run lint
+    npm run lint:fix
+    ```
 
-4. **Adjust as Necessary:** Review and modify the linting rules based on your project's needs. Some rules might be too strict or not applicable; feel free to disable or adjust them.
+4.  **Adjust as Necessary:** Review and modify the linting rules based on your project's needs. Some rules might be too strict or not applicable; feel free to disable or adjust them.
 
 ## Future Features
 
-- [ ] Unit testing
+- [X] testing
 - [ ] Enhanced documentation
 - [ ] Additional framework support:
   - [ ] Vue
   - [ ] Angular
-  - [ ] Astro (Process)
-- [X] Refactored rules structure (previously duplicated configurations)
+- [X] Refactored rules structure (Monorepo transition)
+- [X] Astro and Expo support
 
 ## Contributing
 
-If you encounter any issues or have suggestions for improvements, please open an issue or submit a pull request on the [GitHub repository](https://github.com/santi020k/eslint-config-santi020k).
+If you encounter any issues or have suggestions for improvements, please open an issue or submit a pull request on the [GitHub repository](https://github.com/santi020k/eslint-config).
 
 ## Acknowledgements
 
@@ -196,4 +232,4 @@ Special thanks to the developers and maintainers of the following libraries, whi
 
 Their ongoing contributions help maintain the high standards of code quality we all strive for.
 
-Thank you for using **@santi020k/eslint-config-santi020k**. Together, let's write cleaner, more maintainable code!
+Thank you for using **@santi020k/eslint-config**. Together, let's write cleaner, more maintainable code!
