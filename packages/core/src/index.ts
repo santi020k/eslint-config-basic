@@ -8,14 +8,15 @@ import pluginSimpleImport from 'eslint-plugin-simple-import-sort'
 import pluginUnusedImport from 'eslint-plugin-unused-imports'
 import globals from 'globals'
 
+import { rules } from './rules.js'
+
 import eslint from '@eslint/js'
 import pluginStylistic from '@stylistic/eslint-plugin'
 import type { TSESLint } from '@typescript-eslint/utils'
 
-import { rules } from './rules.js'
-
 // Re-export types and utilities
 export * from './types.js'
+
 export * from './utils/index.js'
 
 const languageOptions: TSESLint.FlatConfig.LanguageOptions = {
@@ -39,9 +40,9 @@ export const coreConfig: TSESLint.FlatConfig.ConfigArray = [
   {
     name: 'eslint-config/plugins',
     plugins: {
-      'n': pluginN,
-      'promise': pluginPromise,
-      'import': { rules: pluginImport.rules },
+      n: pluginN,
+      promise: pluginPromise,
+      import: { rules: pluginImport.rules },
       'simple-import-sort': pluginSimpleImport,
       'jsx-a11y': pluginJsxA11y,
       'unused-imports': pluginUnusedImport

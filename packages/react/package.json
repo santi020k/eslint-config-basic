@@ -18,8 +18,7 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "clean": "rm -rf dist",
-    "lint": "eslint src --report-unused-disable-directives"
+    "clean": "rm -rf dist"
   },
   "peerDependencies": {
     "eslint": "^9.0.0",

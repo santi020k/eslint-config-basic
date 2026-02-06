@@ -34,12 +34,12 @@ const groups = [
 
 export const rules: TSESLint.Linter.RulesRecord = {
   'unused-imports/no-unused-imports': 'warn',
-  'indent': 'off',
+  indent: 'off',
   'brace-style': 'off',
   '@stylistic/brace-style': ['warn', '1tbs'],
   '@stylistic/indent': ['warn', 2],
   '@stylistic/quote-props': ['warn', 'as-needed'],
-  'quotes': 'off',
+  quotes: 'off',
   '@stylistic/quotes': ['warn', 'single'],
   '@stylistic/semi': ['warn', 'never'],
   'quote-props': 'off',
@@ -130,10 +130,10 @@ export const rules: TSESLint.Linter.RulesRecord = {
     }
   ],
   'no-void': 'warn',
-  'camelcase': 'warn',
+  camelcase: 'warn',
   'array-callback-return': 'warn',
   'no-fallthrough': 'warn',
-  'eqeqeq': 'warn',
+  eqeqeq: 'warn',
   'no-constant-binary-expression': 'warn',
   '@stylistic/lines-around-comment': ['error', { allowClassStart: true, beforeLineComment: false, allowBlockStart: true }],
   'import/no-duplicates': 'warn',
