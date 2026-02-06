@@ -14,13 +14,6 @@
     "isolatedModules": true,                 // Ensure that each file can be treated as a module
     "resolveJsonModule": true,               // Allows importing JSON files as modules
     "noEmit": true,                         // Emit output files (disable when using ESLint as a utility)
-    "paths": {                               // Aliases
-      "src/*": ["./src/*"],
-      "configs/*": ["./src/configs/*"],
-      "optionals/*": ["./src/optionals/*"],
-      "utils/*": ["./src/utils/*"],
-      "playground/*": ["./src/playground/*"]
-    },
     "allowImportingTsExtensions": true
   },
   "include": ["src/**/*.ts", "playground/**/*.ts", "./tsup.config.ts", "tests/**/*.ts", "./vitest.config.ts"],                // Files to include in the compilation process
