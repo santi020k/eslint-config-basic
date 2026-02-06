@@ -7,7 +7,8 @@ export {
   applyConfigIfOptionPresent,
   hasReactConfig,
   coreConfig,
-  jsConfig
+  jsConfig,
+  gitignore
 } from '@santi020k/eslint-config-core'
 
 export type {
@@ -22,24 +23,44 @@ export { reactConfig } from '@santi020k/eslint-config-react'
 
 export { nextConfig } from '@santi020k/eslint-config-next'
 
-// Import for composition
-// Import framework configs not yet migrated
-import { astroConfig } from './configs/astro/index.config.js'
-import { expoConfig } from './configs/expo/index.config.js'
-// Import optionals (still from src for now, until optionals package is created)
-import { cspell, i18next, markdown, mdx, stencil, tailwind, vitest } from './optionals/index.js'
-import { gitignore } from './settings/index.js'
+export { astroConfig } from '@santi020k/eslint-config-astro'
 
+export { expoConfig } from '@santi020k/eslint-config-expo'
+
+// Re-export optionals
+export {
+  cspell,
+  i18next,
+  markdown,
+  mdx,
+  stencil,
+  tailwind,
+  vitest
+} from '@santi020k/eslint-config-optionals'
+
+// Import for composition
+import { astroConfig } from '@santi020k/eslint-config-astro'
 import type { EslintConfigOptions, FlatConfigArray } from '@santi020k/eslint-config-core'
 import {
   applyConfigIfOptionPresent,
   ConfigOption,
   coreConfig,
+  gitignore,
   hasReactConfig,
   OptionalOption,
   SettingOption
 } from '@santi020k/eslint-config-core'
+import { expoConfig } from '@santi020k/eslint-config-expo'
 import { nextConfig } from '@santi020k/eslint-config-next'
+import {
+  cspell,
+  i18next,
+  markdown,
+  mdx,
+  stencil,
+  tailwind,
+  vitest
+} from '@santi020k/eslint-config-optionals'
 import { reactConfig } from '@santi020k/eslint-config-react'
 import { typescriptConfig } from '@santi020k/eslint-config-typescript'
 

@@ -1,7 +1,7 @@
 {
-  "name": "@santi020k/eslint-config-astro",
+  "name": "@santi020k/eslint-config-optionals",
   "version": "0.0.0",
-  "description": "Astro ESLint configuration",
+  "description": "Optional ESLint configurations for various tools and frameworks",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -24,8 +24,18 @@
     "eslint": "^9.0.0"
   },
   "dependencies": {
-    "@santi020k/eslint-config-core": "*",
-    "eslint-plugin-astro": "^1.3.1"
+    "@cspell/eslint-plugin": "^9.6.4",
+    "@eslint/compat": "^2.0.2",
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/markdown": "^7.5.1",
+    "@stencil-community/eslint-plugin": "^0.10.0",
+    "cross-dirname": "^0.1.0",
+    "eslint-plugin-i18next": "^6.1.3",
+    "eslint-plugin-mdx": "^3.6.2",
+    "eslint-plugin-tailwindcss": "^3.18.2",
+    "eslint-plugin-testing-library": "^7.15.4",
+    "eslint-plugin-vitest": "^0.5.4",
+    "globals": "^17.3.0"
   },
   "devDependencies": {
     "@typescript-eslint/utils": "^8.54.0",
@@ -40,6 +50,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/santi020k/eslint-config.git",
-    "directory": "packages/astro"
+    "directory": "packages/optionals"
   }
 }
