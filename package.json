@@ -2,6 +2,7 @@
   "name": "@santi020k/eslint-config-monorepo",
   "private": true,
   "version": "0.0.0",
+  "type": "module",
   "packageManager": "npm@10.8.3",
   "workspaces": [
     "packages/*"
