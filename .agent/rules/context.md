@@ -16,6 +16,23 @@ This is `@santi020k/eslint-config`, a composable ESLint 9 Flat Config package su
 - JavaScript, TypeScript, React, Next.js, Astro, Expo
 - Optional integrations: Tailwind, Vitest, cspell, i18next, MDX, Markdown, Stencil
 
+## Monorepo Architecture
+
+This project uses **Turborepo** with **npm Workspaces** for modular package management.
+
+### Package Structure
+| Package | Location | Purpose |
+|---------|----------|---------|
+| `@santi020k/eslint-config-core` | `packages/core` | Base JS config, utilities, types |
+| `@santi020k/eslint-config-typescript` | `packages/typescript` | TypeScript rules |
+| `@santi020k/eslint-config-react` | `packages/react` | React + Hooks |
+| `@santi020k/eslint-config-next` | `packages/next` | Next.js core-web-vitals |
+
+### Dependency Graph
+```
+core → typescript → react → next
+```
+
 ## Key Architecture Decisions
 
 ### Flat Config Only
@@ -34,27 +51,28 @@ Uses npm `overrides` with `$` references to align peer dependency versions acros
 
 Always validate changes with:
 ```bash
-npm run build && npm run lint
+npm run build && npm run lint && npm run test
 ```
 
-Both commands must pass before considering work complete.
+All commands must pass before considering work complete.
 
 ## Known Issues / Gotchas
 
 1. **FlatCompat issues**: Some legacy plugins don't resolve correctly. Use direct plugin object imports.
 2. **TS2742 errors**: Export explicit types when inferred types reference internal modules.
 3. **Plugin version conflicts**: Check `overrides` in package.json when adding new ESLint plugins.
+4. **Workspace lint**: Lint runs from root only, not from individual packages.
 
 ## File Modification Patterns
 
-### When adding a new framework config:
-1. Create `src/configs/{name}/index.config.ts`
-2. Export from `src/configs/index.ts`
-3. Add to `ConfigOption` enum in `src/index.ts`
-4. Wire into `eslintConfig()` function
+### When adding a new framework config (as a package):
+1. Create `packages/{name}/` with `package.json`, `tsconfig.json`, `tsup.config.ts`
+2. Create `packages/{name}/src/index.ts` exporting the config
+3. Add to `ConfigOption` enum in `packages/core/src/types.ts`
+4. Wire into `eslintConfig()` function in `src/index.ts`
 
 ### When adding a new optional:
 1. Create `src/optionals/{name}.ts`
 2. Export from `src/optionals/index.ts`
-3. Add to `OptionalOption` enum in `src/index.ts`
+3. Add to `OptionalOption` enum in `packages/core/src/types.ts`
 4. Wire into `eslintConfig()` function

@@ -10,12 +10,26 @@ This document provides guidance for AI coding assistants working on @santi020k/e
 
 This is an ESLint configuration package using **ESLint 9 Flat Config** format. It exports a composable `eslintConfig()` function.
 
+The project is a **monorepo** using Turborepo and npm Workspaces.
+
 ## Key Files to Understand
 
-1. `src/index.ts` - Main entry point with enums and `eslintConfig()` function
-2. `src/configs/*/index.config.ts` - Framework-specific ESLint configs
-3. `src/optionals/*.ts` - Optional feature configs
-4. `tsup.config.ts` - Build configuration
+### Root Level
+- `src/index.ts` - Main entry point, re-exports from packages + composes configs
+- `turbo.json` - Turborepo build configuration
+- `eslint.config.js` - ESLint config for this repo
+- `vitest.config.ts` - Test configuration
+
+### Packages
+- `packages/core/src/index.ts` - Core config, types, utilities
+- `packages/typescript/src/index.ts` - TypeScript config
+- `packages/react/src/index.ts` - React + Hooks config
+- `packages/next/src/index.ts` - Next.js config
+
+### Tests
+- `tests/configs.test.ts` - Config export tests
+- `tests/rules.test.ts` - Rule validation tests
+- `tests/composition.test.ts` - eslintConfig() composition tests
 
 ## Code Conventions
 
@@ -27,18 +41,17 @@ This is an ESLint configuration package using **ESLint 9 Flat Config** format. I
 - Prefer `const` assertions where appropriate
 
 ### Imports
-- Use path aliases from tsconfig (`utils/`, `configs/`, `optionals/`)
-- Include `.ts` extension in relative imports
-- Sort imports: external first, then internal
+- Use `.js` extension for relative imports (ESM compatibility)
+- Sort imports: external first, then internal with blank line
 
 ### Naming Conventions
 - Config arrays: `camelCaseConfig` (e.g., `reactConfig`, `tsConfig`)
 - Enums: `PascalCase` (e.g., `ConfigOption`, `OptionalOption`)
-- Files: `kebab-case.ts` or `index.config.ts` for configs
+- Files: `kebab-case.ts` or `index.ts` for main exports
 
 ### ESLint Configs
 - All configs return `TSESLint.FlatConfig.ConfigArray`
-- Each config directory has an `index.config.ts` exporting the config array
+- Each package exports a main config array
 - Rules are organized into separate files when complex
 - Preferred flat config pattern:
   ```typescript
@@ -52,53 +65,32 @@ This is an ESLint configuration package using **ESLint 9 Flat Config** format. I
   ]
   ```
 
-### File Structure
-- One config per directory under `src/configs/`
-- Optional features as single files in `src/optionals/`
-- Export everything through barrel files (`index.ts`)
-
-## Common Patterns
-
-### Adding a rule override
-```typescript
-{
-  name: 'my-config/override',
-  files: ['**/*.ts', '**/*.tsx'],
-  rules: {
-    'existing-rule': 'off'
-  }
-}
+### Package Structure
+Each package under `packages/` follows this structure:
 ```
-
-### Plugin configuration
-```typescript
-import myPlugin from 'eslint-plugin-my'
-
-{
-  name: 'my-config/plugin',
-  plugins: {
-    'my': myPlugin
-  },
-  rules: {
-    'my/rule-name': 'error'
-  }
-}
+packages/{name}/
+├── package.json
+├── tsconfig.json
+├── tsup.config.ts
+└── src/
+    ├── index.ts      # Main export
+    ├── rules.ts      # Rule definitions (optional)
+    └── ambient.d.ts  # Type declarations for plugins (if needed)
 ```
 
 ## Adding New Features
 
-### New Framework Config
-```typescript
-// src/configs/myframework/index.config.ts
-import type { TSESLint } from '@typescript-eslint/utils'
+### New Framework Config (as package)
+```bash
+# 1. Create package directory
+mkdir -p packages/myframework/src
 
-export const myframeworkConfig: TSESLint.FlatConfig.ConfigArray = [
-  // config rules
-]
-
-// Add to src/configs/index.ts
-// Add enum value to ConfigOption in src/index.ts
-// Wire in eslintConfig() function
+# 2. Create package.json with dependencies
+# 3. Create tsconfig.json extending base
+# 4. Create tsup.config.ts
+# 5. Create src/index.ts with config
+# 6. Add enum value to packages/core/src/types.ts
+# 7. Wire into src/index.ts eslintConfig()
 ```
 
 ### New Optional
@@ -111,14 +103,15 @@ export const myoptional: TSESLint.FlatConfig.ConfigArray = [
 ]
 
 // Add to src/optionals/index.ts
-// Add enum value to OptionalOption in src/index.ts
+// Add enum value to packages/core/src/types.ts
 ```
 
 ## Verification Commands
 
 ```bash
-npm run build      # Must pass - builds with tsup
-npm run lint       # Must pass - lints the codebase
+npm run build      # Turborepo builds all packages
+npm run lint       # Lints entire monorepo from root
+npm run test       # Runs Vitest (30 tests)
 npm run inspector  # Visual config inspection
 ```
 
@@ -127,3 +120,5 @@ npm run inspector  # Visual config inspection
 1. **Peer dependencies**: Use `$` references in overrides for version alignment
 2. **Plugin loading**: Use direct plugin object references, not string-based resolution
 3. **Type exports**: May need explicit type annotations to avoid TS2742 errors
+4. **Ambient declarations**: Create `.d.ts` files for plugins without TypeScript types
+5. **Workspace lint**: Don't add lint scripts to individual packages - lint runs from root only
