@@ -6,6 +6,6 @@
   "peerDependencies": {
     "eslint": "^9.33.0",
     "typescript": "^5.9.2",
-    "@santi020k/eslint-config-core": "workspace:*"
+    "@santi020k/eslint-config-core": "*"
   }
 }

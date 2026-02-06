@@ -1,86 +1,79 @@
-import { applyConfigIfOptionPresent } from 'utils/apply-config-if-option-present.ts'
-import { hasReactConfig } from 'utils/has-react-config.ts'
+// Re-export types and utilities from core
+export {
+  ConfigOption,
+  OptionalOption,
+  SettingOption,
+  ReactConfigs,
+  applyConfigIfOptionPresent,
+  hasReactConfig,
+  coreConfig,
+  jsConfig
+} from '@santi020k/eslint-config-core'
 
-import { astroConfig, expoConfig, jsConfig, nextConfig, reactConfig, tsConfig } from 'configs/index.ts'
-import { cspell, i18next, markdown, mdx, stencil, tailwind, vitest } from 'optionals/index.ts'
+export type {
+  EslintConfigOptions,
+  FlatConfigArray
+} from '@santi020k/eslint-config-core'
 
-import { gitignore } from './settings/index.ts'
+// Re-export framework configs
+export { typescriptConfig, tsConfig } from '@santi020k/eslint-config-typescript'
+export { reactConfig } from '@santi020k/eslint-config-react'
+export { nextConfig } from '@santi020k/eslint-config-next'
 
-import type { TSESLint } from '@typescript-eslint/utils'
+// Import for composition
+import {
+  ConfigOption,
+  OptionalOption,
+  SettingOption,
+  applyConfigIfOptionPresent,
+  hasReactConfig,
+  coreConfig
+} from '@santi020k/eslint-config-core'
+import type { EslintConfigOptions, FlatConfigArray } from '@santi020k/eslint-config-core'
 
-/**
- * Enum for configuration options in ESLint
- */
-enum ConfigOption {
-  Ts = 'ts',
-  React = 'react',
-  Next = 'next',
-  Expo = 'expo',
-  Astro = 'astro'
-}
+import { typescriptConfig } from '@santi020k/eslint-config-typescript'
+import { reactConfig } from '@santi020k/eslint-config-react'
+import { nextConfig } from '@santi020k/eslint-config-next'
 
-/**
- * Enum for optional features that can be included in ESLint
- */
-enum OptionalOption {
-  Cspell = 'cspell',
-  Tailwind = 'tailwind',
-  Vitest = 'vitest',
-  I18next = 'i18next',
-  Mdx = 'mdx',
-  Markdown = 'markdown',
-  Stencil = 'stencil'
-}
+// Import optionals (still from src for now, until optionals package is created)
+import { cspell, i18next, markdown, mdx, stencil, tailwind, vitest } from './optionals/index.js'
+import { gitignore } from './settings/index.js'
 
-/**
- * Enum for settings options in ESLint
- */
-enum SettingOption {
-  Gitignore = 'gitignore'
-  // TODO: Add more settings options
-}
-
-/**
- * Array of configurations that require React
- */
-export const ReactConfigs: ConfigOption[] = [
-  ConfigOption.React,
-  ConfigOption.Astro,
-  ConfigOption.Next,
-  ConfigOption.Expo
-]
-
-/**
- * ESLint configuration interface
- */
-interface EslintConfig {
-  config?: ConfigOption[]
-  optionals?: OptionalOption[]
-  settings?: SettingOption[]
-}
+// Import framework configs not yet migrated
+import { astroConfig } from './configs/astro/index.config.js'
+import { expoConfig } from './configs/expo/index.config.js'
 
 /**
  * Generates the ESLint configuration array, applying configurations
  * and optional settings based on the input configuration.
  *
- * @param {EslintConfig} options - Configuration and optional settings
- * @returns {TSESLint.FlatConfig.ConfigArray} The final ESLint configuration array
+ * @param {EslintConfigOptions} options - Configuration and optional settings
+ * @returns {FlatConfigArray} The final ESLint configuration array
  */
-const eslintConfig = ({
+export const eslintConfig = ({
   config = [],
   optionals = [],
   settings = []
-}: EslintConfig = {}): TSESLint.FlatConfig.ConfigArray => {
+}: EslintConfigOptions = {}): FlatConfigArray => {
   const hasReact = hasReactConfig(config)
 
   return [
+    // Settings
     ...(settings.includes(SettingOption.Gitignore) ? gitignore : []),
-    ...jsConfig,
+
+    // Core JS config (always included)
+    ...coreConfig,
+
+    // React config (included if any React-based framework is used)
     ...(hasReact ? reactConfig : []),
-    ...applyConfigIfOptionPresent(config, ConfigOption.Ts, tsConfig),
+
+    // Framework-specific configs
+    ...applyConfigIfOptionPresent(config, ConfigOption.Ts, typescriptConfig),
     ...applyConfigIfOptionPresent(config, ConfigOption.Next, nextConfig),
     ...applyConfigIfOptionPresent(config, ConfigOption.Astro, astroConfig),
     ...applyConfigIfOptionPresent(config, ConfigOption.Expo, expoConfig),
+
+    // Optionals
     ...(optionals.includes(OptionalOption.Cspell) ? cspell : []),
     ...(optionals.includes(OptionalOption.Tailwind) ? tailwind : []),
     ...(optionals.includes(OptionalOption.Vitest) ? vitest : []),
@@ -90,5 +83,3 @@ const eslintConfig = ({
     ...(optionals.includes(OptionalOption.Markdown) ? markdown : [])
   ]
 }
-
-export { ConfigOption, eslintConfig, OptionalOption, SettingOption }

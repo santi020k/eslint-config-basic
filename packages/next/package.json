@@ -1,7 +1,7 @@
 {
-  "name": "@santi020k/eslint-config-core",
+  "name": "@santi020k/eslint-config-next",
   "version": "0.0.0",
-  "description": "Core ESLint configuration with base JavaScript rules and shared utilities",
+  "description": "Next.js ESLint configuration",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -10,14 +10,6 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
-    },
-    "./utils": {
-      "import": "./dist/utils/index.js",
-      "types": "./dist/utils/index.d.ts"
-    },
-    "./types": {
-      "import": "./dist/types.js",
-      "types": "./dist/types.d.ts"
     }
   },
   "files": [
@@ -30,19 +22,13 @@
     "lint": "eslint src --report-unused-disable-directives"
   },
   "peerDependencies": {
-    "eslint": "^9.0.0"
+    "eslint": "^9.0.0",
+    "next": ">=13.0.0"
   },
   "dependencies": {
-    "@eslint/js": "^9.39.2",
-    "@stylistic/eslint-plugin": "^5.7.1",
-    "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-n": "^17.23.2",
-    "eslint-plugin-promise": "^7.2.1",
-    "eslint-plugin-simple-import-sort": "^12.1.1",
-    "eslint-plugin-unused-imports": "^4.3.0",
-    "globals": "^17.3.0"
+    "@santi020k/eslint-config-core": "*",
+    "@santi020k/eslint-config-react": "*",
+    "@next/eslint-plugin-next": "^16.1.6"
   },
   "devDependencies": {
     "@typescript-eslint/utils": "^8.54.0",
@@ -57,6 +43,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/santi020k/eslint-config.git",
-    "directory": "packages/core"
+    "directory": "packages/next"
   }
 }

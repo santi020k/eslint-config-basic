@@ -1,6 +1,8 @@
 {
   "name": "@santi020k/eslint-config",
-  "version": "0.0.0",
+  "version": "0.0.1",
+  "packageManager": "npm@10.8.3",
+  "private": true,
   "description": "A comprehensive ESLint configuration package for JavaScript, TypeScript, and React projects, including popular plugins and custom rules for consistent coding style.",
   "type": "module",
   "main": "./dist/index.js",
@@ -22,15 +24,19 @@
     "README.md",
     "LICENSE"
   ],
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "npm run build -- --watch ./src",
-    "build": "tsup src/index.ts --format esm --dts",
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "build:root": "tsup src/index.ts --format esm --dts",
     "build:dev": "tsup --watch",
-    "build:prod": "rm -rf ./dist && env NODE_ENV=production tsup",
-    "build:watch": "tsup --watch",
+    "build:prod": "turbo run build --filter=!playground/*",
     "inspector": "npx @eslint/config-inspector@latest",
-    "lint": "eslint . --report-unused-disable-directives",
-    "lint:fix": "npm run lint -- --fix --max-warnings=0",
+    "lint": "turbo run lint",
+    "lint:fix": "eslint . --fix --max-warnings=0",
+    "clean": "turbo run clean && rm -rf node_modules",
     "pre-commit": "lint-staged",
     "pre-push": "npm run build && npm run lint:fix",
     "prepare": "husky config/.husky",
@@ -38,16 +44,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/santi020k/eslint-config-santi020k.git"
+    "url": "git+https://github.com/santi020k/eslint-config.git"
   },
   "bugs": {
-    "url": "https://github.com/santi020k/eslint-config-santi020k/issues"
+    "url": "https://github.com/santi020k/eslint-config/issues"
   },
-  "homepage": "https://github.com/santi020k/eslint-config-santi020k#readme",
+  "homepage": "https://github.com/santi020k/eslint-config#readme",
   "keywords": [
     "eslint",
     "config",
-    "santi020k"
+    "santi020k",
+    "monorepo",
+    "turborepo"
   ],
   "author": "santi020k",
   "contributors": [
@@ -71,6 +79,7 @@
     "react-dom": "^19.2.4",
     "tslib": "^2.8.1",
     "tsup": "^8.5.1",
+    "turbo": "^2.5.3",
     "typescript": "^5.9.3",
     "yalc": "^1.0.0-pre.53"
   },
