@@ -8,7 +8,7 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
-    "@santi020k/eslint-config": "*",
+    "@santi020k/eslint-config-basic": "*",
     "eslint": "^9.39.2",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",

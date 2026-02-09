@@ -1,5 +1,5 @@
 {
-  "name": "@santi020k/eslint-config-monorepo",
+  "name": "@santi020k/eslint-config-basic",
   "private": true,
   "version": "0.0.0",
   "type": "module",

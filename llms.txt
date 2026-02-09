@@ -1,11 +1,11 @@
-# @santi020k/eslint-config
+# @santi020k/eslint-config-basic
 
 > A comprehensive ESLint configuration package for JavaScript, TypeScript, React, Next.js, Astro, and Expo projects.
 
 ## Quick Start
 
 ```js
-import { ConfigOption, eslintConfig, OptionalOption } from '@santi020k/eslint-config'
+import { ConfigOption, eslintConfig, OptionalOption } from '@santi020k/eslint-config-basic'
 
 export default [
   ...eslintConfig({
@@ -22,7 +22,7 @@ This is a monorepo-style ESLint config package using ESLint 9 Flat Config format
 ### Directory Structure
 
 packages/
-├── eslint-config/    # Main entry point (@santi020k/eslint-config)
+├── basic/            # Main entry point (@santi020k/eslint-config-basic)
 │   ├── src/index.ts  # Exports eslintConfig()
 │   └── dist/         # Build artifacts
 ├── core/             # Core logic and shared types
@@ -57,7 +57,7 @@ npm run inspector   # Open ESLint config inspector
 2. Implement the config in `src/index.ts` of that package.
 3. Export it from the package's entry point.
 4. Add to `ConfigOption` enum in `packages/core/src/types.ts`.
-5. Wire up in `packages/eslint-config/src/index.ts`.
+5. Wire up in `packages/basic/src/index.ts`.
 
 ## Tech Stack
 

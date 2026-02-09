@@ -1,5 +1,5 @@
 {
-  "name": "@santi020k/eslint-config",
+  "name": "@santi020k/eslint-config-basic",
   "version": "0.0.1",
   "description": "A comprehensive ESLint configuration package for JavaScript, TypeScript, and React projects.",
   "type": "module",
@@ -49,6 +49,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/santi020k/eslint-config.git",
-    "directory": "packages/eslint-config"
+    "directory": "packages/basic"
   }
 }

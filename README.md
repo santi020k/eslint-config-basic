@@ -1,6 +1,6 @@
-# @santi020k/eslint-config
+# @santi020k/eslint-config-basic
 
-Welcome to **@santi020k/eslint-config**, a comprehensive and opinionated ESLint configuration package for JavaScript, TypeScript, React, and other frameworks. Born from a desire to eliminate bad practices and ensure high-quality code, this configuration automates code quality checks and reduces cognitive load during code reviews by enforcing a consistent coding style across your projects.
+Welcome to **@santi020k/eslint-config-basic**, a comprehensive and opinionated ESLint configuration package for JavaScript, TypeScript, React, and other frameworks. Born from a desire to eliminate bad practices and ensure high-quality code, this configuration automates code quality checks and reduces cognitive load during code reviews by enforcing a consistent coding style across your projects.
 
 ## Why Use This Configuration?
 
@@ -20,19 +20,19 @@ npm install eslint --save-dev
 Then, install the configuration package. **Important:** I recommend using a fixed version (do not use `^` or `~`), as any new functionality or change may introduce new linter errors that require manual updates.
 
 ```bash
-npm install @santi020k/eslint-config --save-dev
+npm install @santi020k/eslint-config-basic --save-dev
 ```
 
 ## Usage
 
-Create an `eslint.config.js` file (or update your existing one) and extend **@santi020k/eslint-config** based on your project type.
+Create an `eslint.config.js` file (or update your existing one) and extend **@santi020k/eslint-config-basic** based on your project type.
 
 ### Basic Usage
 
 For a basic JavaScript/Node.js project:
 
 ```js
-import { eslintConfig } from '@santi020k/eslint-config'
+import { eslintConfig } from '@santi020k/eslint-config-basic'
 
 export default [
   ...eslintConfig()
@@ -45,7 +45,7 @@ export default [
 For projects that require specific configurations (e.g., TypeScript, React, Next.js, ...Etc), use the appropriate options:
 
 ```js
-import { ConfigOption, eslintConfig } from '@santi020k/eslint-config'
+import { ConfigOption, eslintConfig } from '@santi020k/eslint-config-basic'
 
 // TypeScript project
 export default [
@@ -89,7 +89,7 @@ export default [
 There are additional optional parameters to add support for other front-end/back-end technologies. This enables you to extend support as needed:
 
 ```js
-import { ConfigOption, eslintConfig, OptionalOption } from '@santi020k/eslint-config'
+import { ConfigOption, eslintConfig, OptionalOption } from '@santi020k/eslint-config-basic'
 
 export default [
   ...eslintConfig({
@@ -120,7 +120,7 @@ export default [
 This experimental option allows ESLint to honor your `.gitignore` file:
 
 ```js
-import { eslintConfig, SettingOption } from '@santi020k/eslint-config'
+import { eslintConfig, SettingOption } from '@santi020k/eslint-config-basic'
 
 export default [
   ...eslintConfig({
@@ -135,7 +135,7 @@ export default [
 
 This project is a monorepo managed with **Turbo** and **npm Workspaces**.
 
-- `packages/eslint-config`: Main package entry point.
+- `packages/basic`: Main package entry point.
 - `packages/core`: Core logic and shared types.
 - `packages/typescript`: TypeScript specific rules.
 - `packages/react`: React and Hooks rules.
@@ -185,7 +185,7 @@ Add the following useful scripts to your `package.json`:
 ## How to Implement in an Existing Project
 
 1.  **Install the Dependencies:** Ensure that both ESLint and this configuration package are installed.
-2.  **Update Your ESLint Configuration:** Extend **@santi020k/eslint-config** in your ESLint configuration file as shown above.
+2.  **Update Your ESLint Configuration:** Extend **@santi020k/eslint-config-basic** in your ESLint configuration file as shown above.
 3.  **Run ESLint:** Lint your project files and automatically fix issues if possible:
 
     ```bash
@@ -232,4 +232,4 @@ Special thanks to the developers and maintainers of the following libraries, whi
 
 Their ongoing contributions help maintain the high standards of code quality we all strive for.
 
-Thank you for using **@santi020k/eslint-config**. Together, let's write cleaner, more maintainable code!
+Thank you for using **@santi020k/eslint-config-basic**. Together, let's write cleaner, more maintainable code!
