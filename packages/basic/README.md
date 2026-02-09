@@ -1,4 +1,4 @@
-# @santi020k/eslint-config
+# @santi020k/eslint-config-basic
 
 A comprehensive, composable ESLint configuration for modern JavaScript and TypeScript projects.
 
@@ -11,7 +11,7 @@ A comprehensive, composable ESLint configuration for modern JavaScript and TypeS
 ## Installation
 
 ```bash
-npm install -D @santi020k/eslint-config eslint
+npm install -D @santi020k/eslint-config-basic eslint
 ```
 
 ## Usage
@@ -19,7 +19,7 @@ npm install -D @santi020k/eslint-config eslint
 Create `eslint.config.mjs` (or `.js`):
 
 ```js
-import { ConfigOption, eslintConfig, OptionalOption } from '@santi020k/eslint-config'
+import { ConfigOption, eslintConfig, OptionalOption } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
   config: [

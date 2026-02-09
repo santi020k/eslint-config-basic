@@ -1,5 +1,5 @@
 // @ts-check
-import { ConfigOption, eslintConfig, OptionalOption } from '@santi020k/eslint-config'
+import { ConfigOption, eslintConfig, OptionalOption } from '@santi020k/eslint-config-basic'
 
 export default [
   ...eslintConfig({
@@ -11,6 +11,7 @@ export default [
     ignores: [
       'dist/*',
       'packages/*/dist/*',
+      '**/tsup.config.ts'
     ]
   }
 ]

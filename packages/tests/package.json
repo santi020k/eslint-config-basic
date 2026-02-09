@@ -7,7 +7,7 @@
     "test": "vitest run"
   },
   "devDependencies": {
-    "@santi020k/eslint-config": "*",
+    "@santi020k/eslint-config-basic": "*",
     "@santi020k/eslint-config-core": "*",
     "@santi020k/eslint-config-typescript": "*",
     "@santi020k/eslint-config-react": "*",
