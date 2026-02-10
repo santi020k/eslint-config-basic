@@ -7,6 +7,7 @@
   "homepage": "https://santi020k.github.io/eslint-config-basic/",
   "version": "0.1.0",
   "type": "module",
+  "license": "MIT",
   "packageManager": "npm@10.8.3",
   "workspaces": [
     "packages/*"
