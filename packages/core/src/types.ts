@@ -8,11 +8,7 @@ export enum ConfigOption {
   React = 'react',
   Next = 'next',
   Expo = 'expo',
-  Astro = 'astro',
-  // Future additions
-  Angular = 'angular',
-  Vue = 'vue',
-  Nest = 'nest'
+  Astro = 'astro'
 }
 
 /**

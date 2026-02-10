@@ -1,0 +1,22 @@
+name: ❓ Question / Support
+description: Ask a question about using this configuration
+title: "[Question]: "
+labels: ["question"]
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: What would you like to know?
+      placeholder: How do I configure...
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Relevant Code / Context
+      description: Please provide any relevant code snippets or configuration details.
+      render: typescript
+    validations:
+      required: false

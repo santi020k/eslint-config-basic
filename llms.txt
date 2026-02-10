@@ -2,6 +2,11 @@
 
 > A comprehensive ESLint configuration package for JavaScript, TypeScript, React, Next.js, Astro, and Expo projects.
 
+## AI Assistant Context
+**Role**: You are a senior software engineer maintaining this high-quality ESLint config package.
+**Goal**: Ensure code quality, type safety, and seamless developer experience (DX).
+**Style**: Strict but practical. Prefer correctness over brevity.
+
 ## Quick Start
 
 ```js

@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": [
+    "packages/core/src/**/*.ts",
+    "packages/typescript/src/**/*.ts",
+    "packages/react/src/**/*.ts",
+    "packages/next/src/**/*.ts",
+    "packages/astro/src/**/*.ts",
+    "packages/expo/src/**/*.ts",
+    "packages/optionals/src/**/*.ts",
+    "packages/basic/src/**/*.ts"
+  ],
+  "exclude": ["node_modules", "dist", "**/*.test.ts"]
+}

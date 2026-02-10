@@ -60,6 +60,79 @@ describe('eslintConfig Function', () => {
 
     expect(Array.isArray(config)).toBe(true)
   })
+
+  it('should return a valid config when called with no arguments', () => {
+    const config = eslintConfig()
+
+    expect(Array.isArray(config)).toBe(true)
+
+    expect(config.length).toBeGreaterThan(0)
+  })
+
+  it('should handle all framework configs combined', () => {
+    const config = eslintConfig({
+      config: [
+        ConfigOption.Ts,
+        ConfigOption.React,
+        ConfigOption.Next,
+        ConfigOption.Astro,
+        ConfigOption.Expo
+      ]
+    })
+
+    expect(Array.isArray(config)).toBe(true)
+
+    expect(config.length).toBeGreaterThan(0)
+  })
+
+  it('should handle all optionals combined', () => {
+    const config = eslintConfig({
+      config: [ConfigOption.Ts],
+      optionals: [
+        OptionalOption.Cspell,
+        OptionalOption.Tailwind,
+        OptionalOption.Vitest,
+        OptionalOption.I18next,
+        OptionalOption.Mdx,
+        OptionalOption.Markdown,
+        OptionalOption.Stencil
+      ]
+    })
+
+    expect(Array.isArray(config)).toBe(true)
+
+    expect(config.length).toBeGreaterThan(0)
+  })
+
+  it('should handle duplicate config entries without crashing', () => {
+    const config = eslintConfig({
+      config: [ConfigOption.Ts, ConfigOption.Ts, ConfigOption.React, ConfigOption.React]
+    })
+
+    expect(Array.isArray(config)).toBe(true)
+
+    expect(config.length).toBeGreaterThan(0)
+  })
+
+  it('should not crash with unknown enum values', () => {
+    const config = eslintConfig({
+      config: ['unknown-config' as ConfigOption]
+    })
+
+    expect(Array.isArray(config)).toBe(true)
+  })
+
+  it('should handle full kitchen-sink configuration', () => {
+    const config = eslintConfig({
+      config: [ConfigOption.Ts, ConfigOption.React, ConfigOption.Next],
+      optionals: [OptionalOption.Tailwind, OptionalOption.Vitest, OptionalOption.Cspell],
+      settings: [SettingOption.Gitignore]
+    })
+
+    expect(Array.isArray(config)).toBe(true)
+
+    expect(config.length).toBeGreaterThan(0)
+  })
 })
 
 describe('Type Exports', () => {

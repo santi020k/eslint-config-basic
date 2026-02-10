@@ -16,7 +16,10 @@
     "clean": "turbo run clean && rm -rf node_modules",
     "prepare": "husky config/.husky",
     "pre-commit": "lint-staged",
-    "pre-push": "npm run test && npm run lint && npm run build"
+    "pre-push": "npm run test && npm run lint && npm run build",
+    "docs": "typedoc",
+    "docs:md": "typedoc --options typedoc.markdown.mjs",
+    "docs:clean": "rm -rf docs docs-md"
   },
   "devDependencies": {
     "commitizen": "^4.3.1",
@@ -28,6 +31,8 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "turbo": "^2.5.3",
+    "typedoc": "^0.28.16",
+    "typedoc-plugin-markdown": "^4.10.0",
     "vitest": "^4.0.18"
   },
   "lint-staged": {
@@ -44,6 +49,9 @@
     "eslint": "$eslint",
     "eslint-config-standard": "$eslint-config-standard",
     "eslint-plugin-promise": "$eslint-plugin-promise",
-    "eslint-plugin-n": "$eslint-plugin-n"
+    "eslint-plugin-n": "$eslint-plugin-n",
+    "lodash": "^4.17.23",
+    "minimist": "^1.2.6",
+    "tmp": "^0.2.3"
   }
 }

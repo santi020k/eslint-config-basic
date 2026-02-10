@@ -1,11 +1,11 @@
 # Sponsorship
 
-@santi020k/eslint-config-santi020k is an entirely volunteer-run project.
+`@santi020k/eslint-config-basic` is an entirely volunteer-run project.
 I am not associated with any company or organization; development is funded solely from community donations.
 
-## Why Sponsor @santi020k/eslint-config-santi020k?
+## Why Sponsor `@santi020k/eslint-config-basic`?
 
-This ESLint configuration is designed to help developers maintain clean and consistent codebases. Sponsoring this project helps ensure continued development and support for the broader JavaScript and TypeScript ecosystems. By supporting @santi020k/eslint-config-santi020k, you help:
+This ESLint configuration is designed to help developers maintain clean and consistent codebases. Sponsoring this project helps ensure continued development and support for the broader JavaScript and TypeScript ecosystems. By supporting `@santi020k/eslint-config-basic`, you help:
 
 - Support updates and improvements to the ESLint configuration
 - Continue enhancing documentation and user experience
@@ -24,4 +24,4 @@ Top sponsors may have their link, logo, and/or name featured on the project's Gi
 
 ### Project Direction
 
-While sponsorship is greatly appreciated, it does not influence issue prioritization or pull request reviews. If you need to push forward specific work in @santi020k/eslint-config-santi020k more urgently than a general donation can provide, consider contributing engineering time as well.
+While sponsorship is greatly appreciated, it does not influence issue prioritization or pull request reviews. If you need to push forward specific work in `@santi020k/eslint-config-basic` more urgently than a general donation can provide, consider contributing engineering time as well.

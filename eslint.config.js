@@ -11,7 +11,11 @@ export default [
     ignores: [
       'dist/*',
       'packages/*/dist/*',
-      '**/tsup.config.ts'
+      '**/tsup.config.ts',
+      'docs/*',
+      'docs-md/*',
+      'typedoc.config.mjs',
+      'typedoc.markdown.mjs'
     ]
   }
 ]

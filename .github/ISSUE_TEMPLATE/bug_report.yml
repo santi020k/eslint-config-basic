@@ -1,0 +1,69 @@
+name: 🐛 Bug Report
+description: Create a report to help us improve
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear and concise description of what the bug is.
+      placeholder: When I run eslint, it crashes with error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: |
+        Please provide a link to a reproduction repository or a minimal code snippet.
+        This is critical for us to understand and fix the issue.
+      placeholder: |
+        1. create a new project with...
+        2. install @santi020k/eslint-config-basic
+        3. run eslint .
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: packages
+    attributes:
+      label: Packages Affected
+      description: Select the packages that seem to be causing the issue.
+      options:
+        - label: "@santi020k/eslint-config-basic"
+        - label: "@santi020k/eslint-config-core"
+        - label: "@santi020k/eslint-config-typescript"
+        - label: "@santi020k/eslint-config-react"
+        - label: "@santi020k/eslint-config-next"
+        - label: "@santi020k/eslint-config-astro"
+        - label: "@santi020k/eslint-config-expo"
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: A clear and concise description of what you expected to happen.
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Environment Info
+      description: |
+        Create a report using `npx envinfo --system --binaries --browsers --npmPackages "{eslint,@santi020k/*,typescript}"`
+      placeholder: |
+        System:
+          OS: macOS 14.0
+        Binaries:
+          Node: 20.10.0
+          npm: 10.2.3
+    validations:
+      required: false
