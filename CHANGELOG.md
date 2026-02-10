@@ -1,49 +1,16 @@
-## [3.2.6](https://github.com/santi020k/eslint-config-santi020k/compare/v3.2.5...v3.2.6) (2025-07-02)
+# 0.1.0 (2026-02-10)
 
 
-### Bug Fixes
+### Features
 
-* **package.json:** update dependencies ([a637589](https://github.com/santi020k/eslint-config-santi020k/commit/a637589a26b7f4048b8238bc7b9823486168c721))
-
-
-
-## [3.2.5](https://github.com/santi020k/eslint-config-santi020k/compare/v3.2.4...v3.2.5) (2025-05-09)
-
-
-### Bug Fixes
-
-* **package.json:** fix package.json license ([03d71e7](https://github.com/santi020k/eslint-config-santi020k/commit/03d71e7faaa68f9e39a4beadb4a94445375f660c))
-* **package.json:** upgrade dependencies ([0a36d27](https://github.com/santi020k/eslint-config-santi020k/commit/0a36d2795bcc368e6d08e0438f2500a70432f78c))
-
-
-
-## [3.2.4](https://github.com/santi020k/eslint-config-santi020k/compare/v3.2.3...v3.2.4) (2025-04-21)
-
-
-### Bug Fixes
-
-* **mdx.ts:** fix mdx config after upgrade the library ([b82d55c](https://github.com/santi020k/eslint-config-santi020k/commit/b82d55cc1e66a2f2670b1d4ece946460a45d65fd))
-* **playground/*:** fix other playground configs ([9239b8d](https://github.com/santi020k/eslint-config-santi020k/commit/9239b8de691b41827a954750e417c8ce50e359f7))
-
-
-
-## [3.2.3](https://github.com/santi020k/eslint-config-santi020k/compare/v3.2.2...v3.2.3) (2025-03-13)
-
-
-### Bug Fixes
-
-* **license:** change the license version to more free one ([e48d0d9](https://github.com/santi020k/eslint-config-santi020k/commit/e48d0d9d24b12dac6f6cc5f29569c6cc2a9579b6))
-
-
-
-## [3.2.2](https://github.com/santi020k/eslint-config-santi020k/compare/v3.2.1...v3.2.2) (2025-02-24)
-
-
-### Bug Fixes
-
-* **js/rules.ts:** fix @stylistic/lines-around-comment rule ([ec688f0](https://github.com/santi020k/eslint-config-santi020k/commit/ec688f046604b7af221a7396d84ff8c9f28e6206))
-* **package.json:** install @stencil-community/eslint-plugin dependencie ([eebd78e](https://github.com/santi020k/eslint-config-santi020k/commit/eebd78e8265b6ed8f741116384b1d6d2e3740331))
-* **package.json:** remove eslint__js dependency ([c715e66](https://github.com/santi020k/eslint-config-santi020k/commit/c715e6602ab9bbe9acca77293363a7a4b4d8aee4))
+* Add  and  scripts to . ([9438293](https://github.com/santi020k/eslint-config-basic/commit/94382934292682ac82a24a4bf433b621687a23cb))
+* Add Vitest ESLint configuration and include test files in linting and TypeScript compilation. ([db249e0](https://github.com/santi020k/eslint-config-basic/commit/db249e06d0c3270a5b61d7a77706cdd5f1773e0f))
+* Add Vitest for comprehensive testing of ESLint configurations and rules. ([452d988](https://github.com/santi020k/eslint-config-basic/commit/452d988eb265fdd3abe0af0f690d86b77b4031d6))
+* Implement GitHub Actions for repository automation, including stale issue management, dependency updates, PR labeling, security audits, package size checks, and an updated build workflow ([d5e77b7](https://github.com/santi020k/eslint-config-basic/commit/d5e77b7f8b12c7854892606172495c03f1db6052))
+* Initial commit ([e527968](https://github.com/santi020k/eslint-config-basic/commit/e527968e975a9a0b5451eaee4462c315fe3c525b))
+* Introduce AI agent guidelines, instructions, and project context, alongside minor code formatting and updated ESLint ignore patterns. ([c2e0d74](https://github.com/santi020k/eslint-config-basic/commit/c2e0d749ae92666e529517c02356ab385755cb0d))
+* **nest:** Add NestJS ESLint Configuration Package ([#7](https://github.com/santi020k/eslint-config-basic/issues/7)) ([73d11df](https://github.com/santi020k/eslint-config-basic/commit/73d11df268e1f9fa524f66459274d3e4310c7db5))
+* restructure ESLint configuration into a monorepo with core, TypeScript, React, and Next.js packages, and implement a new build system using tsup and TurboRepo. ([f5516c6](https://github.com/santi020k/eslint-config-basic/commit/f5516c6ebb9a5a06bd86420b62c98bd125aff03c))
 
 
 
