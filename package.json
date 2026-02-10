@@ -49,6 +49,9 @@
     "eslint": "$eslint",
     "eslint-config-standard": "$eslint-config-standard",
     "eslint-plugin-promise": "$eslint-plugin-promise",
-    "eslint-plugin-n": "$eslint-plugin-n"
+    "eslint-plugin-n": "$eslint-plugin-n",
+    "lodash": "^4.17.23",
+    "minimist": "^1.2.6",
+    "tmp": "^0.2.3"
   }
 }
