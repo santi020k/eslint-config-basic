@@ -1,9 +1,13 @@
 {
   "name": "@santi020k/eslint-config-basic",
-  "private": true,
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "homepage": "https://santi020k.github.io/eslint-config-basic/",
   "version": "0.1.0",
   "type": "module",
+  "license": "MIT",
   "packageManager": "npm@10.8.3",
   "workspaces": [
     "packages/*"
