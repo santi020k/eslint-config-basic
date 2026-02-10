@@ -2,7 +2,7 @@
   "name": "@santi020k/eslint-config-basic",
   "private": true,
   "homepage": "https://santi020k.github.io/eslint-config-basic/",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "packageManager": "npm@10.8.3",
   "workspaces": [
