@@ -151,8 +151,13 @@ npm run lint       # Lint entire monorepo
 npm run lint:fix   # Fix lint issues
 npm run test       # Run tests (Vitest)
 npm run dev        # Watch mode
+npm run dev        # Watch mode
 npm run inspector  # Visual ESLint config inspector
 ```
+
+## Documentation
+
+Full API documentation is available at [santi020k.github.io/eslint-config-basic](https://santi020k.github.io/eslint-config-basic/).
 
 ## Commit Conventions
 

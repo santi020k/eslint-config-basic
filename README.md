@@ -3,6 +3,7 @@
 [![CI](https://github.com/santi020k/eslint-config/actions/workflows/build.yml/badge.svg)](https://github.com/santi020k/eslint-config/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@santi020k/eslint-config-basic.svg)](https://www.npmjs.com/package/@santi020k/eslint-config-basic)
 [![npm downloads](https://img.shields.io/npm/dm/@santi020k/eslint-config-basic.svg)](https://www.npmjs.com/package/@santi020k/eslint-config-basic)
+[![Docs](https://img.shields.io/badge/docs-TypeDoc-blue.svg)](https://santi020k.github.io/eslint-config-basic/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Welcome to **@santi020k/eslint-config-basic**, a comprehensive and opinionated ESLint configuration package for JavaScript, TypeScript, React, and other frameworks. Born from a desire to eliminate bad practices and ensure high-quality code, this configuration automates code quality checks and reduces cognitive load during code reviews by enforcing a consistent coding style across your projects.
@@ -186,13 +187,18 @@ This opens an interactive UI where you can see all active rules, plugins, and co
 
 ### API Documentation
 
-Auto-generated API docs are available via [TypeDoc](https://typedoc.org/). Generate them locally:
+### API Documentation
+
+Auto-generated API docs are available online:
+[**https://santi020k.github.io/eslint-config-basic/**](https://santi020k.github.io/eslint-config-basic/)
+
+You can also generate them locally:
 
 ```bash
 npm run docs
 ```
 
-This outputs markdown documentation to the `docs/` directory covering all exported types, enums, configs, and functions.
+This outputs markdown documentation to the `docs/` directory.
 
 ## Opinionated but Flexible
 
