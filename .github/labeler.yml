@@ -1,0 +1,46 @@
+core:
+  - changed-files:
+      - any-glob-to-any-file: 'packages/core/**'
+
+typescript:
+  - changed-files:
+      - any-glob-to-any-file: 'packages/typescript/**'
+
+react:
+  - changed-files:
+      - any-glob-to-any-file: 'packages/react/**'
+
+next:
+  - changed-files:
+      - any-glob-to-any-file: 'packages/next/**'
+
+astro:
+  - changed-files:
+      - any-glob-to-any-file: 'packages/astro/**'
+
+expo:
+  - changed-files:
+      - any-glob-to-any-file: 'packages/expo/**'
+
+optionals:
+  - changed-files:
+      - any-glob-to-any-file: 'packages/optionals/**'
+
+basic:
+  - changed-files:
+      - any-glob-to-any-file: 'packages/basic/**'
+
+tests:
+  - changed-files:
+      - any-glob-to-any-file: 'packages/tests/**'
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file: '.github/**'
+
+docs:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '*.md'
+          - 'packages/*/README.md'
+          - 'llms.txt'

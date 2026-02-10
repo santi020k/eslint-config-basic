@@ -1,0 +1,20 @@
+name: Package Size
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  size:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pkg-size/action@v1
+        with:
+          build-command: npm run build
+          display-size: uncompressed,gzip
+          comment-report: true
+          unchanged-files: collapse
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
