@@ -1,0 +1,45 @@
+{
+  "name": "@santi020k/eslint-config-nest",
+  "version": "0.0.0",
+  "description": "NestJS ESLint configuration",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "clean": "rm -rf dist"
+  },
+  "peerDependencies": {
+    "eslint": "^9.0.0"
+  },
+  "dependencies": {
+    "@santi020k/eslint-config-core": "*",
+    "@darraghor/eslint-plugin-nestjs-typed": "^6.0.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/utils": "^8.54.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
+  "author": "santi020k",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/santi020k/eslint-config.git",
+    "directory": "packages/nest"
+  }
+}

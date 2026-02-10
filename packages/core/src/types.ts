@@ -8,7 +8,8 @@ export enum ConfigOption {
   React = 'react',
   Next = 'next',
   Expo = 'expo',
-  Astro = 'astro'
+  Astro = 'astro',
+  Nest = 'nest'
 }
 
 /**

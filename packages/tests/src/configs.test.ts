@@ -8,6 +8,7 @@ import {
   SettingOption
 } from '@santi020k/eslint-config-core'
 import { expoConfig } from '@santi020k/eslint-config-expo'
+import { nestConfig } from '@santi020k/eslint-config-nest'
 import { nextConfig } from '@santi020k/eslint-config-next'
 import { reactConfig } from '@santi020k/eslint-config-react'
 import { typescriptConfig } from '@santi020k/eslint-config-typescript'
@@ -78,6 +79,16 @@ describe('Expo Config', () => {
   })
 })
 
+describe('NestJS Config', () => {
+  it('should export nestConfig as an array', () => {
+    expect(Array.isArray(nestConfig)).toBe(true)
+  })
+
+  it('should have at least one config entry', () => {
+    expect(nestConfig.length).toBeGreaterThan(0)
+  })
+})
+
 describe('Config Enums', () => {
   it('should export ConfigOption enum with expected values', () => {
     expect(ConfigOption.Ts).toBeDefined()
@@ -89,6 +100,8 @@ describe('Config Enums', () => {
     expect(ConfigOption.Astro).toBeDefined()
 
     expect(ConfigOption.Expo).toBeDefined()
+
+    expect(ConfigOption.Nest).toBeDefined()
   })
 
   it('should export OptionalOption enum with expected values', () => {

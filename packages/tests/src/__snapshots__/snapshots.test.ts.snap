@@ -26,6 +26,14 @@ exports[`Config Snapshots — Entry Names > expo config entries should match sna
 ]
 `;
 
+exports[`Config Snapshots — Entry Names > nest config entries should match snapshot 1`] = `
+[
+  "@darraghor/nestjs-typed/base",
+  "@darraghor/nestjs-typed/recommended",
+  "eslint-config-nest/custom",
+]
+`;
+
 exports[`Config Snapshots — Entry Names > next config entries should match snapshot 1`] = `
 [
   "eslint-config-next/custom",
@@ -409,6 +417,33 @@ exports[`Config Snapshots — Rule Names > expo config rules should match snapsh
   "unicode-bom",
   "use-isnan",
   "valid-typeof",
+]
+`;
+
+exports[`Config Snapshots — Rule Names > nest config rules should match snapshot 1`] = `
+[
+  "@darraghor/nestjs-typed/all-properties-are-whitelisted",
+  "@darraghor/nestjs-typed/all-properties-have-explicit-defined",
+  "@darraghor/nestjs-typed/api-enum-property-best-practices",
+  "@darraghor/nestjs-typed/api-method-should-specify-api-operation",
+  "@darraghor/nestjs-typed/api-method-should-specify-api-response",
+  "@darraghor/nestjs-typed/api-methods-should-be-guarded",
+  "@darraghor/nestjs-typed/api-operation-summary-description-capitalized",
+  "@darraghor/nestjs-typed/api-property-matches-property-optionality",
+  "@darraghor/nestjs-typed/api-property-returning-array-should-set-array",
+  "@darraghor/nestjs-typed/api-property-should-have-api-extra-models",
+  "@darraghor/nestjs-typed/controllers-should-supply-api-tags",
+  "@darraghor/nestjs-typed/injectable-should-be-provided",
+  "@darraghor/nestjs-typed/no-duplicate-decorators",
+  "@darraghor/nestjs-typed/param-decorator-name-matches-route-param",
+  "@darraghor/nestjs-typed/provided-injected-should-match-factory-parameters",
+  "@darraghor/nestjs-typed/should-specify-forbid-unknown-values",
+  "@darraghor/nestjs-typed/sort-module-metadata-arrays",
+  "@darraghor/nestjs-typed/use-dependency-injection",
+  "@darraghor/nestjs-typed/use-injectable-provided-token",
+  "@darraghor/nestjs-typed/validate-nested-of-array-should-set-each",
+  "@darraghor/nestjs-typed/validated-non-primitive-property-needs-type-decorator",
+  "simple-import-sort/imports",
 ]
 `;
 

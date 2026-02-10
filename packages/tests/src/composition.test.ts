@@ -33,6 +33,14 @@ describe('eslintConfig Function', () => {
     expect(config.length).toBeGreaterThan(0)
   })
 
+  it('should return config with Nest when Nest option is specified', () => {
+    const config = eslintConfig({ config: [ConfigOption.Nest] })
+
+    expect(Array.isArray(config)).toBe(true)
+
+    expect(config.length).toBeGreaterThan(0)
+  })
+
   it('should include gitignore when setting is specified', () => {
     const config = eslintConfig({
       config: [],
@@ -76,7 +84,8 @@ describe('eslintConfig Function', () => {
         ConfigOption.React,
         ConfigOption.Next,
         ConfigOption.Astro,
-        ConfigOption.Expo
+        ConfigOption.Expo,
+        ConfigOption.Nest
       ]
     })
 
