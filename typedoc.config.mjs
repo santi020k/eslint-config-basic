@@ -7,6 +7,7 @@ export default {
     'packages/next/src/index.ts',
     'packages/astro/src/index.ts',
     'packages/expo/src/index.ts',
+    'packages/nest/src/index.ts',
     'packages/optionals/src/index.ts',
     'packages/basic/src/index.ts'
   ],

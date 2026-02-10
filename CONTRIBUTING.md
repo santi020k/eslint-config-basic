@@ -118,7 +118,7 @@ export const myframeworkConfig: TSESLint.FlatConfig.ConfigArray = [
 
 ### Specific Framework Guides
 
-#### React, Next.js, Astro, Expo
+#### React, Next.js, Astro, Expo, NestJS
 These are already implemented. See their respective `packages/` for reference.
 
 #### Vue (Future)
@@ -131,10 +131,7 @@ These are already implemented. See their respective `packages/` for reference.
 2. Use `angular-eslint` capabilities.
 3. Note: Angular often requires a specific `builder` context.
 
-#### NestJS (Future)
-1. Create `packages/nest`.
-2. Extend core config.
-3. Add specific server-side rules (e.g., explicit return types).
+
 
 ## Adding a New Optional
 

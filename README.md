@@ -88,6 +88,12 @@ export default [
   ...eslintConfig({ config: [ConfigOption.Astro] })
   // Your custom config
 ]
+
+// NestJS project
+export default [
+  ...eslintConfig({ config: [ConfigOption.Nest] })
+  // Your custom config
+]
 ```
 
 ### Optional Usage
@@ -237,7 +243,7 @@ Add the following useful scripts to your `package.json`:
 - [ ] Additional framework support (contributions welcome!):
   - [ ] Vue
   - [ ] Angular
-  - [ ] NestJS
+  - [x] NestJS
 
 ## Contributing
 

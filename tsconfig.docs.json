@@ -10,6 +10,7 @@
     "packages/next/src/**/*.ts",
     "packages/astro/src/**/*.ts",
     "packages/expo/src/**/*.ts",
+    "packages/nest/src/**/*.ts",
     "packages/optionals/src/**/*.ts",
     "packages/basic/src/**/*.ts"
   ],

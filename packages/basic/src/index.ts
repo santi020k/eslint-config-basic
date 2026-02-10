@@ -27,6 +27,8 @@ export { astroConfig } from '@santi020k/eslint-config-astro'
 
 export { expoConfig } from '@santi020k/eslint-config-expo'
 
+export { nestConfig } from '@santi020k/eslint-config-nest'
+
 // Re-export optionals
 export {
   cspell,
@@ -51,6 +53,7 @@ import {
   SettingOption
 } from '@santi020k/eslint-config-core'
 import { expoConfig } from '@santi020k/eslint-config-expo'
+import { nestConfig } from '@santi020k/eslint-config-nest'
 import { nextConfig } from '@santi020k/eslint-config-next'
 import {
   cspell,
@@ -93,6 +96,7 @@ export const eslintConfig = ({
     ...applyConfigIfOptionPresent(config, ConfigOption.Next, nextConfig),
     ...applyConfigIfOptionPresent(config, ConfigOption.Astro, astroConfig),
     ...applyConfigIfOptionPresent(config, ConfigOption.Expo, expoConfig),
+    ...applyConfigIfOptionPresent(config, ConfigOption.Nest, nestConfig),
 
     // Optionals
     ...(optionals.includes(OptionalOption.Cspell) ? cspell : []),

@@ -24,6 +24,7 @@
     "@santi020k/eslint-config-astro": "*",
     "@santi020k/eslint-config-core": "*",
     "@santi020k/eslint-config-expo": "*",
+    "@santi020k/eslint-config-nest": "*",
     "@santi020k/eslint-config-next": "*",
     "@santi020k/eslint-config-optionals": "*",
     "@santi020k/eslint-config-react": "*",

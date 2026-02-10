@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { astroConfig } from '@santi020k/eslint-config-astro'
 import { coreConfig } from '@santi020k/eslint-config-core'
 import { expoConfig } from '@santi020k/eslint-config-expo'
+import { nestConfig } from '@santi020k/eslint-config-nest'
 import { nextConfig } from '@santi020k/eslint-config-next'
 import { reactConfig } from '@santi020k/eslint-config-react'
 import { typescriptConfig } from '@santi020k/eslint-config-typescript'
@@ -72,6 +73,12 @@ describe('Config Snapshots — Rule Names', () => {
 
     expect(rules).toMatchSnapshot()
   })
+
+  it('nest config rules should match snapshot', () => {
+    const rules = extractRuleNames(nestConfig as Record<string, unknown>[])
+
+    expect(rules).toMatchSnapshot()
+  })
 })
 
 describe('Config Snapshots — Entry Names', () => {
@@ -107,6 +114,12 @@ describe('Config Snapshots — Entry Names', () => {
 
   it('expo config entries should match snapshot', () => {
     const names = extractConfigNames(expoConfig as Record<string, unknown>[])
+
+    expect(names).toMatchSnapshot()
+  })
+
+  it('nest config entries should match snapshot', () => {
+    const names = extractConfigNames(nestConfig as Record<string, unknown>[])
 
     expect(names).toMatchSnapshot()
   })
