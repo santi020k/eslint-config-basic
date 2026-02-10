@@ -1,4 +1,13 @@
-# 0.1.0 (2026-02-10)
+# [0.2.0](https://github.com/santi020k/eslint-config-basic/compare/v0.1.0...v0.2.0) (2026-02-10)
+
+
+### Features
+
+* Configure public publishing and MIT license ([#8](https://github.com/santi020k/eslint-config-basic/issues/8)) ([a563b7d](https://github.com/santi020k/eslint-config-basic/commit/a563b7d71f6103f028cf3a953064d636ec5b983a))
+
+
+
+# [0.1.0](https://github.com/santi020k/eslint-config-basic/compare/e527968e975a9a0b5451eaee4462c315fe3c525b...v0.1.0) (2026-02-10)
 
 
 ### Features
