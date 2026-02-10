@@ -1,5 +1,10 @@
 # @santi020k/eslint-config-basic
 
+[![CI](https://github.com/santi020k/eslint-config/actions/workflows/build.yml/badge.svg)](https://github.com/santi020k/eslint-config/actions/workflows/build.yml)
+[![npm version](https://img.shields.io/npm/v/@santi020k/eslint-config-basic.svg)](https://www.npmjs.com/package/@santi020k/eslint-config-basic)
+[![npm downloads](https://img.shields.io/npm/dm/@santi020k/eslint-config-basic.svg)](https://www.npmjs.com/package/@santi020k/eslint-config-basic)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Welcome to **@santi020k/eslint-config-basic**, a comprehensive and opinionated ESLint configuration package for JavaScript, TypeScript, React, and other frameworks. Born from a desire to eliminate bad practices and ensure high-quality code, this configuration automates code quality checks and reduces cognitive load during code reviews by enforcing a consistent coding style across your projects.
 
 ## Why Use This Configuration?
@@ -165,7 +170,18 @@ npm run build      # Build all packages using Turbo
 npm run lint       # Lint all packages
 npm run test       # Run integration tests
 npm run dev        # Development mode with watch
+npm run inspector  # Open ESLint config inspector
 ```
+
+### ESLint Config Inspector
+
+You can visually inspect the generated ESLint configuration using the built-in inspector:
+
+```bash
+npm run inspector
+```
+
+This opens an interactive UI where you can see all active rules, plugins, and config layers. It's useful for debugging which rules are applied and understanding the final merged configuration.
 
 ## Opinionated but Flexible
 
@@ -197,17 +213,18 @@ Add the following useful scripts to your `package.json`:
 
 ## Future Features
 
-- [X] testing
+- [x] Testing
+- [x] Refactored rules structure (Monorepo transition)
+- [x] Astro and Expo support
 - [ ] Enhanced documentation
-- [ ] Additional framework support:
+- [ ] Additional framework support (contributions welcome!):
   - [ ] Vue
   - [ ] Angular
-- [X] Refactored rules structure (Monorepo transition)
-- [X] Astro and Expo support
+  - [ ] NestJS
 
 ## Contributing
 
-If you encounter any issues or have suggestions for improvements, please open an issue or submit a pull request on the [GitHub repository](https://github.com/santi020k/eslint-config).
+Contributions are welcome! Please read the [Contributing Guide](CONTRIBUTING.md) for details on setting up the project, adding new configurations, and submitting pull requests.
 
 ## Acknowledgements
 
