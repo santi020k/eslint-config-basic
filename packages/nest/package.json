@@ -39,7 +39,7 @@
   "author": "santi020k",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/santi020k/eslint-config.git",
+    "url": "git+https://github.com/santi020k/eslint-config-basic.git",
     "directory": "packages/nest"
   }
 }

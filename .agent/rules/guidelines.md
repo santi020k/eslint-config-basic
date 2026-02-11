@@ -2,12 +2,6 @@
 trigger: always_on
 ---
 
-# AI Coding Assistant Guidelines
-
-This document provides guidance for AI coding assistants working on @santi020k/eslint-config.
-
-## Project Overview
-
 This is an ESLint configuration package using **ESLint 9 Flat Config** format. It exports a composable `eslintConfig()` function.
 
 The project is a **monorepo** using Turborepo and npm Workspaces.
@@ -16,6 +10,7 @@ The project is a **monorepo** using Turborepo and npm Workspaces.
 
 ### Root Level
 - `src/index.ts` - Main entry point, re-exports from packages + composes configs
+- `@santi020k/eslint-config-basic` - Project name update
 - `turbo.json` - Turborepo build configuration
 - `eslint.config.js` - ESLint config for this repo
 - `vitest.config.ts` - Test configuration
@@ -67,7 +62,7 @@ The project is a **monorepo** using Turborepo and npm Workspaces.
 
 ### Package Structure
 Each package under `packages/` follows this structure:
-```
+```text
 packages/{name}/
 ├── package.json
 ├── tsconfig.json
