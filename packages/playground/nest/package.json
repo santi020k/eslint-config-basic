@@ -1,0 +1,16 @@
+{
+  "name": "@playground/nest",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.0.0",
+    "@santi020k/eslint-config-basic": "file:.yalc/@santi020k/eslint-config-basic",
+    "eslint": "^9.0.0"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  }
+}

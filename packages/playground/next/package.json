@@ -1,0 +1,18 @@
+{
+  "name": "@playground/next",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@santi020k/eslint-config-basic": "file:.yalc/@santi020k/eslint-config-basic",
+    "eslint": "^9.0.0",
+    "next": "^15.0.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  }
+}

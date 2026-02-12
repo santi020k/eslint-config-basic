@@ -10,7 +10,8 @@
   "license": "MIT",
   "packageManager": "npm@10.8.3",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "packages/playground/*"
   ],
   "repository": {
     "type": "git",

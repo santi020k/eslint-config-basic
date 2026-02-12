@@ -1,0 +1,10 @@
+{
+  "version": "v1",
+  "packages": {
+    "@santi020k/eslint-config-basic": {
+      "signature": "aa69697b9e943d0d680aff5536cb598c",
+      "file": true,
+      "replaced": "*"
+    }
+  }
+}
