@@ -5,7 +5,7 @@ export const rules: TSESLint.Linter.RulesRecord = {
   'react/react-in-jsx-scope': 'off',
   'react/jsx-max-depth': ['warn', { max: 7 }],
   'react/prop-types': 'off',
-  'react-hooks/exhaustive-deps': 'off',
+  'react-hooks/exhaustive-deps': 'warn',
   'react/button-has-type': 'warn',
   'react/display-name': 'warn',
   'react/no-children-prop': 'warn',

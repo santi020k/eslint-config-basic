@@ -13,9 +13,9 @@ exports[`Config Snapshots — Entry Names > astro config entries should match sn
 
 exports[`Config Snapshots — Entry Names > core config entries should match snapshot 1`] = `
 [
+  "@eslint/js/recommended",
   "eslint-config/custom-js",
   "eslint-config/plugins",
-  "eslint-config/recommended",
   "eslint-config/stylistic",
 ]
 `;
@@ -278,6 +278,7 @@ exports[`Config Snapshots — Rule Names > core config rules should match snapsh
   "no-this-before-super",
   "no-throw-literal",
   "no-trailing-spaces",
+  "no-unassigned-vars",
   "no-undef",
   "no-undef-init",
   "no-unexpected-multiline",
@@ -293,6 +294,7 @@ exports[`Config Snapshots — Rule Names > core config rules should match snapsh
   "no-unused-private-class-members",
   "no-unused-vars",
   "no-use-before-define",
+  "no-useless-assignment",
   "no-useless-backreference",
   "no-useless-call",
   "no-useless-catch",
@@ -316,6 +318,7 @@ exports[`Config Snapshots — Rule Names > core config rules should match snapsh
   "prefer-const",
   "prefer-promise-reject-errors",
   "prefer-regex-literals",
+  "preserve-caught-error",
   "promise/param-names",
   "quote-props",
   "quotes",

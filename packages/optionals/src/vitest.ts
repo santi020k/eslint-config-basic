@@ -1,9 +1,9 @@
 import testingLibrary from 'eslint-plugin-testing-library'
-import pluginVitest from 'eslint-plugin-vitest'
 import globals from 'globals'
 
 import { fixupPluginRules } from '@eslint/compat'
 import type { TSESLint } from '@typescript-eslint/utils'
+import pluginVitest from '@vitest/eslint-plugin'
 
 /**
  * Vitest ESLint configuration

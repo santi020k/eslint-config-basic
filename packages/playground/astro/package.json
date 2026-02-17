@@ -6,9 +6,9 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@santi020k/eslint-config-basic": "file:.yalc/@santi020k/eslint-config-basic",
+    "@santi020k/eslint-config-basic": "*",
     "astro": "^5.0.0",
-    "eslint": "^9.0.0"
+    "eslint": "^10.0.0"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.17"

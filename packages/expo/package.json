@@ -21,11 +21,11 @@
     "clean": "rm -rf dist"
   },
   "peerDependencies": {
-    "eslint": "^9.0.0"
+    "eslint": "^10.0.0"
   },
   "dependencies": {
     "@santi020k/eslint-config-core": "*",
-    "@eslint/compat": "^1.2.9",
+    "@eslint/compat": "^2.0.2",
     "@eslint/eslintrc": "^3.3.1",
     "cross-dirname": "^0.1.0",
     "eslint-config-expo": "^9.2.0"

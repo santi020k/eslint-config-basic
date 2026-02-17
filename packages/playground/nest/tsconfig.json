@@ -9,6 +9,8 @@
     "skipLibCheck": true,
     "allowJs": true,
     "noEmit": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "include": ["src/**/*", "eslint.config.js"]
 }

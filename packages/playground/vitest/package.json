@@ -6,8 +6,8 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@santi020k/eslint-config-basic": "file:.yalc/@santi020k/eslint-config-basic",
-    "eslint": "^9.0.0",
+    "@santi020k/eslint-config-basic": "*",
+    "eslint": "^10.0.0",
     "vitest": "^2.0.0"
   },
   "devDependencies": {
