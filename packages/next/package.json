@@ -30,7 +30,7 @@
     "@next/eslint-plugin-next": "^16.1.6"
   },
   "devDependencies": {
-    "@typescript-eslint/utils": "^8.54.0",
+    "@typescript-eslint/utils": "^8.56.0",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   },
