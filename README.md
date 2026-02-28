@@ -193,8 +193,6 @@ This opens an interactive UI where you can see all active rules, plugins, and co
 
 ### API Documentation
 
-### API Documentation
-
 Auto-generated API docs are available online:
 [**https://santi020k.github.io/eslint-config-basic/**](https://santi020k.github.io/eslint-config-basic/)
 

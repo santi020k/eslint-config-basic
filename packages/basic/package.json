@@ -29,6 +29,7 @@
     "@santi020k/eslint-config-optionals": "*",
     "@santi020k/eslint-config-react": "*",
     "@santi020k/eslint-config-typescript": "*",
+    "@santi020k/eslint-config-vue": "*",
     "@eslint/compat": "^2.0.2",
     "@eslint/js": "^10.0.1",
     "@typescript-eslint/eslint-plugin": "^8.54.0",

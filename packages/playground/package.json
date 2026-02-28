@@ -1,0 +1,8 @@
+{
+  "name": "@santi020k/playground",
+  "private": true,
+  "description": "Playground environments for testing the ESLint configuration",
+  "scripts": {
+    "lint": "turbo run lint --filter=\"@playground/*\""
+  }
+}

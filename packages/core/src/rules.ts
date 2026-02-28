@@ -10,7 +10,7 @@ const groups = [
   ['^(organisms|@/organisms|@organisms)(/.*|$)'],
   ['^(templates|@/templates|@templates)(/.*|$)'],
   ['^(pages|@/pages|@pages)(/.*|$)'],
-  // Other posible folders
+  // Other possible folders
   ['^(store|@/store|@store)(/.*|$)'],
   ['^(api|@/api|@api)(/.*|$)'],
   ['^(contexts|@/contexts|@contexts)(/.*|$)'],
