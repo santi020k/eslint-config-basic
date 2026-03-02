@@ -25,13 +25,13 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-core": "*",
-    "@eslint/compat": "^1.2.9",
-    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/compat": "^2.0.2",
+    "@eslint/eslintrc": "^3.3.4",
     "cross-dirname": "^0.1.0",
-    "eslint-config-expo": "^9.2.0"
+    "eslint-config-expo": "^55.0.0"
   },
   "devDependencies": {
-    "@typescript-eslint/utils": "^8.54.0",
+    "@typescript-eslint/utils": "^8.56.1",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   },
