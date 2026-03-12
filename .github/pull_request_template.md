@@ -37,8 +37,20 @@ Link to the issue this PR resolves, e.g. "Resolves #123"
 - [ ] `next` (@santi020k/eslint-config-next)
 - [ ] `astro` (@santi020k/eslint-config-astro)
 - [ ] `expo` (@santi020k/eslint-config-expo)
+- [ ] `nest` (@santi020k/eslint-config-nest)
+- [ ] `vue` (@santi020k/eslint-config-vue)
 - [ ] `optionals` (@santi020k/eslint-config-optionals)
 - [ ] `tests` (internal tests)
+
+## Changeset
+
+<!--
+If your change affects published packages, you must include a changeset.
+Run `npx changeset` to create one — it will ask which packages are affected and the bump type (patch/minor/major).
+The changeset bot will also comment on this PR if a changeset is missing.
+-->
+
+- [ ] I have added a changeset (`npx changeset`) or this PR does not require one (e.g. docs, CI, tests only)
 
 ## Checklist
 
