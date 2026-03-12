@@ -6,42 +6,34 @@ on:
       - main
 
 jobs:
-  changelog:
+  release:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Generate Conventional Changelog
-        id: changelog
-        uses: TriPSs/conventional-changelog-action@v6
-        with:
-          github-token: ${{ secrets.PA_TOKEN }}
-          version-file: './package.json,./package-lock.json'
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Create GitHub Release
-        if: ${{ steps.changelog.outputs.skipped == 'false' }}
-        uses: softprops/action-gh-release@v2
+      - name: Create Release Pull Request or Publish
+        id: changesets
+        uses: changesets/action@v1
         with:
-          tag_name: ${{ steps.changelog.outputs.tag }}
-          name: ${{ steps.changelog.outputs.tag }}
-          body: ${{ steps.changelog.outputs.clean_changelog }}
-          draft: false
-          prerelease: false
+          publish: npm run release
+          commit: "chore(release): version packages"
+          title: "chore(release): version packages"
         env:
-          GITHUB_TOKEN: ${{ secrets.PA_TOKEN }}
-
-      - name: Publish to NPM
-        if: ${{ steps.changelog.outputs.skipped == 'false' }}
-        run: npm publish
-        env:
+          GITHUB_TOKEN: ${{ secrets.PA_TOKEN || secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -1,4 +1,4 @@
-# @santi020k/eslint-config-optionals
+# @santi020k/eslint-config-vue
 
 This package is part of the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.
 

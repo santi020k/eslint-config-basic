@@ -181,6 +181,25 @@ npm run inspector  # Open ESLint config inspector
 npm run docs       # Generate API documentation
 ```
 
+### Publishing Workflow
+
+This repository uses **Changesets** (`@changesets/cli`) to automatically handle workspace dependency versioning and publishing to npm.
+
+To publish a new version of the packages:
+1. Make sure you are authenticated with npm in your terminal (`npm login`).
+2. Generate a changeset summarizing your changes:
+   ```bash
+   npm run changeset
+   ```
+3. Consume the changeset to bump package versions automatically:
+   ```bash
+   npm run version-packages
+   ```
+4. Build all packages and publish them to npm:
+   ```bash
+   npm run release
+   ```
+
 ### ESLint Config Inspector
 
 You can visually inspect the generated ESLint configuration using the built-in inspector:
