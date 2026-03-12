@@ -7,5 +7,5 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": []
+  "ignore": ["@santi020k/eslint-config-tests", "@santi020k/playground", "@playground/*"]
 }
