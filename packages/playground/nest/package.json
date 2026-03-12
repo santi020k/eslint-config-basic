@@ -6,12 +6,12 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@nestjs/common": "^10.0.0",
+    "@nestjs/common": "^11.1.16",
     "@nestjs/swagger": "^11.2.6",
     "@santi020k/eslint-config-basic": "*",
-    "eslint": "^10.0.0"
+    "eslint": "^10.0.3"
   },
   "devDependencies": {
-    "tailwindcss": "^3.4.17"
+    "tailwindcss": "^4.2.1"
   }
 }

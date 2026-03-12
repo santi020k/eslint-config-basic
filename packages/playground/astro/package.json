@@ -7,10 +7,10 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-basic": "*",
-    "astro": "^5.0.0",
-    "eslint": "^10.0.0"
+    "astro": "^6.0.4",
+    "eslint": "^10.0.3"
   },
   "devDependencies": {
-    "tailwindcss": "^3.4.17"
+    "tailwindcss": "^4.2.1"
   }
 }
