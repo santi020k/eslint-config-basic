@@ -32,7 +32,13 @@ const compatConfigs = flatCompat.extends('expo') as unknown as TSESLint.FlatConf
 
 const sanitizedConfigs = compatConfigs.map(config => {
   if (config.plugins) {
-    const { import: _import, react: _react, 'react-hooks': _reactHooks, ...restPlugins } = config.plugins
+    const {
+      import: _import,
+      react: _react,
+      'react-hooks': _reactHooks,
+      '@typescript-eslint': _tsEslint,
+      ...restPlugins
+    } = config.plugins
 
     return { ...config, plugins: restPlugins }
   }
