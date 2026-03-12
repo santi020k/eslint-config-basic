@@ -9,7 +9,8 @@ export enum ConfigOption {
   Next = 'next',
   Expo = 'expo',
   Astro = 'astro',
-  Nest = 'nest'
+  Nest = 'nest',
+  Vue = 'vue'
 }
 
 /**
@@ -22,14 +23,17 @@ export enum OptionalOption {
   I18next = 'i18next',
   Mdx = 'mdx',
   Markdown = 'markdown',
-  Stencil = 'stencil'
+  Stencil = 'stencil',
+  Prettier = 'prettier',
+  Unicorn = 'unicorn'
 }
 
 /**
  * Enum for settings options in ESLint
  */
 export enum SettingOption {
-  Gitignore = 'gitignore'
+  Gitignore = 'gitignore',
+  NoGitignore = 'no-gitignore'
 }
 
 /**

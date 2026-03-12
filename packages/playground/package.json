@@ -1,17 +1,8 @@
 {
-  "name": "@santi020k/eslint-config-playground",
-  "private": false,
-  "version": "0.0.0",
-  "type": "module",
+  "name": "@santi020k/playground",
+  "private": true,
+  "description": "Playground environments for testing the ESLint configuration",
   "scripts": {
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
-  },
-  "dependencies": {
-    "@santi020k/eslint-config-basic": "*",
-    "eslint": "^9.39.2",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "typescript": "^5.9.3"
+    "lint": "turbo run lint --filter=\"@playground/*\""
   }
 }

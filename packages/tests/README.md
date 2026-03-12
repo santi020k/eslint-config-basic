@@ -1,17 +1,5 @@
 # @santi020k/eslint-config-tests
 
-Internal integration tests for the ESLint configuration packages.
+This package is part of the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.
 
-## Description
-
-This package uses Vitest to run integration tests, verifying that:
-- Configs are exported correctly.
-- Configurations can be composed without errors.
-- Rules are present as expected.
-
-## Usage
-
-Run tests:
-```bash
-npm run test
-```
+For full usage instructions, installation guides, and documentation, please see the [Main Repository README](https://github.com/santi020k/eslint-config-basic/blob/main/README.md).

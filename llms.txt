@@ -36,15 +36,17 @@ packages/
 ├── next/             # Next.js config
 ├── astro/            # Astro config
 ├── expo/             # Expo config
+├── nest/             # NestJS config
+├── vue/              # Vue config
 ├── optionals/        # Optional feature configs
 ├── playground/       # Internal testing playground
 └── tests/            # Integration tests
 
 ### Key Enums
 
-- **ConfigOption**: `Ts`, `React`, `Next`, `Expo`, `Astro`
-- **OptionalOption**: `Cspell`, `Tailwind`, `Vitest`, `I18next`, `Mdx`, `Markdown`, `Stencil`
-- **SettingOption**: `Gitignore`
+- **ConfigOption**: `Ts`, `React`, `Next`, `Expo`, `Astro`, `Nest`, `Vue`
+- **OptionalOption**: `Cspell`, `Tailwind`, `Vitest`, `I18next`, `Mdx`, `Markdown`, `Stencil`, `Prettier`, `Unicorn`
+- **SettingOption**: `Gitignore`, `NoGitignore`
 
 ## Commands
 

@@ -1,0 +1,18 @@
+{
+  "name": "@playground/expo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@santi020k/eslint-config-basic": "*",
+    "eslint": "^10.0.3",
+    "react": "19.2.4",
+    "react-native": "^0.84.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "tailwindcss": "^4.2.1"
+  }
+}

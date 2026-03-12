@@ -58,9 +58,8 @@ export const coreConfig: TSESLint.FlatConfig.ConfigArray = [
     ...pluginStylistic.configs.recommended
   },
   {
-    name: 'eslint-config/custom-js',
+    name: 'eslint-config/custom-rules',
     languageOptions,
-    files: ['**/*.{js,jsx,mjs,cjs}'],
     rules
   }
 ]

@@ -1,8 +1,8 @@
-import type { Options } from 'tsup'
+import { defineConfig } from 'tsup'
 
 const env = process.env.NODE_ENV
 
-export const tsup: Options = {
+export default defineConfig({
   splitting: true,
   clean: true, // clean up the dist folder
   dts: true, // generate dts files
@@ -15,4 +15,4 @@ export const tsup: Options = {
   target: 'es2020',
   outDir: 'dist',
   entry: ['src/**/*.ts'] // include all files under src
-}
+})

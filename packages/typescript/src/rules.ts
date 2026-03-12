@@ -1,12 +1,10 @@
-import { rules as coreRules } from '@santi020k/eslint-config-core'
 import type { TSESLint } from '@typescript-eslint/utils'
 
 export const rules: TSESLint.Linter.RulesRecord = {
-  // Include core JS rules for TS files
-  ...coreRules,
-  // Disable conflicting rules
+  // Disable rules that conflict with TypeScript
   semi: 'off',
   'no-unused-vars': 'off',
+  'no-undef': 'off',
   '@typescript-eslint/indent': 'off',
   // TypeScript-specific rules
   '@typescript-eslint/no-unused-vars': [
