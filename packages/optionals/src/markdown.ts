@@ -28,7 +28,8 @@ export const markdown: TSESLint.FlatConfig.ConfigArray = [
       'no-multi-spaces': 'off',
       '@stylistic/no-multi-spaces': 'off',
       'comma-dangle': 'off',
-      '@stylistic/jsx-tag-spacing': 'off'
+      '@stylistic/jsx-tag-spacing': 'off',
+      '@stylistic/lines-around-comment': 'off'
     }
   },
   {

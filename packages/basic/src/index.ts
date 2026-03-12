@@ -29,14 +29,18 @@ export { expoConfig } from '@santi020k/eslint-config-expo'
 
 export { nestConfig } from '@santi020k/eslint-config-nest'
 
+export { vueConfig } from '@santi020k/eslint-config-vue'
+
 // Re-export optionals
 export {
   cspell,
   i18next,
   markdown,
   mdx,
+  prettier,
   stencil,
   tailwind,
+  unicorn,
   vitest
 } from '@santi020k/eslint-config-optionals'
 
@@ -60,12 +64,15 @@ import {
   i18next,
   markdown,
   mdx,
+  prettier,
   stencil,
   tailwind,
+  unicorn,
   vitest
 } from '@santi020k/eslint-config-optionals'
 import { reactConfig } from '@santi020k/eslint-config-react'
 import { typescriptConfig } from '@santi020k/eslint-config-typescript'
+import { vueConfig } from '@santi020k/eslint-config-vue'
 
 /**
  * Generates the ESLint configuration array, applying configurations
@@ -79,11 +86,17 @@ export const eslintConfig = ({
   optionals = [],
   settings = []
 }: EslintConfigOptions = {}): FlatConfigArray => {
-  const hasReact = hasReactConfig(config)
+  // Deduplicate entries to prevent double-applying configs (#4)
+  const uniqueConfig = [...new Set(config)]
+  const uniqueOptionals = [...new Set(optionals)]
+  const uniqueSettings = [...new Set(settings)]
+  const hasReact = hasReactConfig(uniqueConfig)
+  // Gitignore is enabled by default unless NoGitignore is specified (#8)
+  const useGitignore = !uniqueSettings.includes(SettingOption.NoGitignore)
 
   return [
     // Settings
-    ...(settings.includes(SettingOption.Gitignore) ? gitignore : []),
+    ...(useGitignore ? gitignore : []),
 
     // Core JS config (always included)
     ...coreConfig,
@@ -92,19 +105,24 @@ export const eslintConfig = ({
     ...(hasReact ? reactConfig : []),
 
     // Framework-specific configs
-    ...applyConfigIfOptionPresent(config, ConfigOption.Ts, typescriptConfig),
-    ...applyConfigIfOptionPresent(config, ConfigOption.Next, nextConfig),
-    ...applyConfigIfOptionPresent(config, ConfigOption.Astro, astroConfig),
-    ...applyConfigIfOptionPresent(config, ConfigOption.Expo, expoConfig),
-    ...applyConfigIfOptionPresent(config, ConfigOption.Nest, nestConfig),
+    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Ts, typescriptConfig),
+    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Next, nextConfig),
+    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Astro, astroConfig),
+    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Expo, expoConfig),
+    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Nest, nestConfig),
+    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Vue, vueConfig),
 
     // Optionals
-    ...(optionals.includes(OptionalOption.Cspell) ? cspell : []),
-    ...(optionals.includes(OptionalOption.Tailwind) ? tailwind : []),
-    ...(optionals.includes(OptionalOption.Vitest) ? vitest : []),
-    ...(optionals.includes(OptionalOption.I18next) ? i18next : []),
-    ...(optionals.includes(OptionalOption.Stencil) ? stencil : []),
-    ...(optionals.includes(OptionalOption.Mdx) ? mdx : []),
-    ...(optionals.includes(OptionalOption.Markdown) ? markdown : [])
+    ...(uniqueOptionals.includes(OptionalOption.Cspell) ? cspell : []),
+    ...(uniqueOptionals.includes(OptionalOption.Tailwind) ? tailwind : []),
+    ...(uniqueOptionals.includes(OptionalOption.Vitest) ? vitest : []),
+    ...(uniqueOptionals.includes(OptionalOption.I18next) ? i18next : []),
+    ...(uniqueOptionals.includes(OptionalOption.Stencil) ? stencil : []),
+    ...(uniqueOptionals.includes(OptionalOption.Mdx) ? mdx : []),
+    ...(uniqueOptionals.includes(OptionalOption.Markdown) ? markdown : []),
+    ...(uniqueOptionals.includes(OptionalOption.Unicorn) ? unicorn : []),
+
+    // Prettier must be last to override stylistic rules
+    ...(uniqueOptionals.includes(OptionalOption.Prettier) ? prettier : [])
   ]
 }

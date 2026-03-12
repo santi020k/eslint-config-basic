@@ -12,6 +12,7 @@ import { nestConfig } from '@santi020k/eslint-config-nest'
 import { nextConfig } from '@santi020k/eslint-config-next'
 import { reactConfig } from '@santi020k/eslint-config-react'
 import { typescriptConfig } from '@santi020k/eslint-config-typescript'
+import { vueConfig } from '@santi020k/eslint-config-vue'
 
 describe('Core Config', () => {
   it('should export coreConfig as an array', () => {
@@ -89,6 +90,16 @@ describe('NestJS Config', () => {
   })
 })
 
+describe('Vue Config', () => {
+  it('should export vueConfig as an array', () => {
+    expect(Array.isArray(vueConfig)).toBe(true)
+  })
+
+  it('should have at least one config entry', () => {
+    expect(vueConfig.length).toBeGreaterThan(0)
+  })
+})
+
 describe('Config Enums', () => {
   it('should export ConfigOption enum with expected values', () => {
     expect(ConfigOption.Ts).toBeDefined()
@@ -102,6 +113,8 @@ describe('Config Enums', () => {
     expect(ConfigOption.Expo).toBeDefined()
 
     expect(ConfigOption.Nest).toBeDefined()
+
+    expect(ConfigOption.Vue).toBeDefined()
   })
 
   it('should export OptionalOption enum with expected values', () => {
@@ -110,9 +123,15 @@ describe('Config Enums', () => {
     expect(OptionalOption.Vitest).toBeDefined()
 
     expect(OptionalOption.Cspell).toBeDefined()
+
+    expect(OptionalOption.Prettier).toBeDefined()
+
+    expect(OptionalOption.Unicorn).toBeDefined()
   })
 
   it('should export SettingOption enum with expected values', () => {
     expect(SettingOption.Gitignore).toBeDefined()
+
+    expect(SettingOption.NoGitignore).toBeDefined()
   })
 })

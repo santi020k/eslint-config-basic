@@ -9,9 +9,13 @@ import type { TSESLint } from '@typescript-eslint/utils'
  */
 export const nestConfig: TSESLint.FlatConfig.ConfigArray = [
   // Spread the recommended flat config from the plugin
-  ...(nestPlugin.configs.flatRecommended as TSESLint.FlatConfig.ConfigArray),
+  ...(nestPlugin.configs.flatRecommended as TSESLint.FlatConfig.ConfigArray).map(config => ({
+    ...config,
+    files: ['**/*.ts', '**/*.mts', '**/*.cts', '**/*.tsx']
+  })),
   {
     name: 'eslint-config-nest/custom',
+    files: ['**/*.ts', '**/*.mts', '**/*.cts', '**/*.tsx'],
     rules
   }
 ]

@@ -1,14 +1,5 @@
 # @santi020k/eslint-config-core
 
-Core ESLint configuration and utilities for the `@santi020k/eslint-config` monorepo.
+This package is part of the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.
 
-## Description
-
-This package contains:
-- Base JavaScript rules.
-- Types and Enums (`ConfigOption`, `OptionalOption`, etc.).
-- Utility functions for composing configurations.
-
-## Installation
-
-This package is an internal dependency of `@santi020k/eslint-config` and is not intended to be installed directly.
+For full usage instructions, installation guides, and documentation, please see the [Main Repository README](https://github.com/santi020k/eslint-config-basic/blob/main/README.md).

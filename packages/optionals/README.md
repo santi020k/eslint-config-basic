@@ -1,18 +1,5 @@
 # @santi020k/eslint-config-optionals
 
-Optional ESLint configurations for various tools and libraries.
+This package is part of the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.
 
-## Description
-
-This package provides optional configurations for:
-- Tailwind CSS
-- Vitest
-- CSpell
-- i18next
-- MDX
-- Markdown
-- Stencil.js
-
-## Usage
-
-These configurations are activated via the `optionals` array in the main `eslintConfig` function.
+For full usage instructions, installation guides, and documentation, please see the [Main Repository README](https://github.com/santi020k/eslint-config-basic/blob/main/README.md).

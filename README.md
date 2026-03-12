@@ -1,6 +1,6 @@
 # @santi020k/eslint-config-basic
 
-[![CI](https://github.com/santi020k/eslint-config/actions/workflows/build.yml/badge.svg)](https://github.com/santi020k/eslint-config/actions/workflows/build.yml)
+[![CI](https://github.com/santi020k/eslint-config-basic/actions/workflows/build.yml/badge.svg)](https://github.com/santi020k/eslint-config-basic/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@santi020k/eslint-config-basic.svg)](https://www.npmjs.com/package/@santi020k/eslint-config-basic)
 [![npm downloads](https://img.shields.io/npm/dm/@santi020k/eslint-config-basic.svg)](https://www.npmjs.com/package/@santi020k/eslint-config-basic)
 [![Docs](https://img.shields.io/badge/docs-TypeDoc-blue.svg)](https://santi020k.github.io/eslint-config-basic/)
@@ -181,6 +181,25 @@ npm run inspector  # Open ESLint config inspector
 npm run docs       # Generate API documentation
 ```
 
+### Publishing Workflow
+
+This repository uses **Changesets** (`@changesets/cli`) to automatically handle workspace dependency versioning and publishing to npm.
+
+To publish a new version of the packages:
+1. Make sure you are authenticated with npm in your terminal (`npm login`).
+2. Generate a changeset summarizing your changes:
+   ```bash
+   npm run changeset
+   ```
+3. Consume the changeset to bump package versions automatically:
+   ```bash
+   npm run version-packages
+   ```
+4. Build all packages and publish them to npm:
+   ```bash
+   npm run release
+   ```
+
 ### ESLint Config Inspector
 
 You can visually inspect the generated ESLint configuration using the built-in inspector:
@@ -190,8 +209,6 @@ npm run inspector
 ```
 
 This opens an interactive UI where you can see all active rules, plugins, and config layers. It's useful for debugging which rules are applied and understanding the final merged configuration.
-
-### API Documentation
 
 ### API Documentation
 

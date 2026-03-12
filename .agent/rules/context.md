@@ -12,7 +12,7 @@ trigger: always_on
 
 ## Project Summary
 
-This is `@santi020k/eslint-config`, a composable ESLint 9 Flat Config package supporting:
+This is `@santi020k/eslint-config-basic`, a composable ESLint 9 Flat Config package supporting:
 - JavaScript, TypeScript, React, Next.js, Astro, Expo
 - Optional integrations: Tailwind, Vitest, cspell, i18next, MDX, Markdown, Stencil
 
@@ -29,7 +29,7 @@ This project uses **Turborepo** with **npm Workspaces** for modular package mana
 | `@santi020k/eslint-config-next` | `packages/next` | Next.js core-web-vitals |
 
 ### Dependency Graph
-```
+```text
 core → typescript → react → next
 ```
 

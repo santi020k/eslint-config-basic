@@ -1,0 +1,47 @@
+{
+  "name": "@santi020k/eslint-config-vue",
+  "version": "0.1.0",
+  "description": "Vue ESLint configuration",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "clean": "rm -rf dist",
+    "check:exports": "publint"
+  },
+  "peerDependencies": {
+    "eslint": "^10.0.3"
+  },
+  "dependencies": {
+    "@santi020k/eslint-config-core": "*",
+    "eslint-plugin-vue": "^10.8.0",
+    "vue-eslint-parser": "^10.4.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/utils": "^8.57.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
+  "author": "santi020k",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/santi020k/eslint-config-basic.git",
+    "directory": "packages/vue"
+  }
+}

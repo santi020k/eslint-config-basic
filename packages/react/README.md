@@ -1,14 +1,5 @@
 # @santi020k/eslint-config-react
 
-React specific ESLint rules and configurations.
+This package is part of the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.
 
-## Description
-
-This package provides:
-- `eslint-plugin-react` recommended rules.
-- `eslint-plugin-react-hooks` recommended rules.
-- JSX accessibility rules.
-
-## Usage
-
-This package is used automatically when `ConfigOption.React` is selected in the main configuration.
+For full usage instructions, installation guides, and documentation, please see the [Main Repository README](https://github.com/santi020k/eslint-config-basic/blob/main/README.md).

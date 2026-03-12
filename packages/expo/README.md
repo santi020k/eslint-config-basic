@@ -1,13 +1,5 @@
 # @santi020k/eslint-config-expo
 
-Expo and React Native specific ESLint rules and configurations.
+This package is part of the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.
 
-## Description
-
-This package provides:
-- Expo plugin configuration.
-- React Native specific rules.
-
-## Usage
-
-This package is used automatically when `ConfigOption.Expo` is selected in the main configuration.
+For full usage instructions, installation guides, and documentation, please see the [Main Repository README](https://github.com/santi020k/eslint-config-basic/blob/main/README.md).

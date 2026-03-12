@@ -1,10 +1,8 @@
 import { getDirname } from 'cross-dirname'
 
 import { FlatCompat } from '@eslint/eslintrc'
-import { fixupConfigRules } from '@eslint/compat'
-import type { TSESLint } from '@typescript-eslint/utils'
-
 import { groups } from '@santi020k/eslint-config-core'
+import type { TSESLint } from '@typescript-eslint/utils'
 
 // Initialize FlatCompat with the base directory
 const flatCompat = new FlatCompat({
@@ -30,8 +28,30 @@ const rules: TSESLint.Linter.RulesRecord = {
  * Expo ESLint configuration
  * Extends the expo config with custom import sorting
  */
+const compatConfigs = flatCompat.extends('expo') as unknown as TSESLint.FlatConfig.ConfigArray
+
+const sanitizedConfigs = compatConfigs.map(config => {
+  if (config.plugins) {
+    const {
+      import: _import,
+      react: _react,
+      'react-hooks': _reactHooks,
+      '@typescript-eslint': _tsEslint,
+      ...restPlugins
+    } = config.plugins
+
+    return { ...config, plugins: restPlugins }
+  }
+
+  return config
+})
+
+/**
+ * Expo ESLint configuration
+ * Extends the expo config with custom import sorting
+ */
 export const expoConfig: TSESLint.FlatConfig.ConfigArray = [
-  ...(fixupConfigRules(flatCompat.extends('expo')) as unknown as TSESLint.FlatConfig.ConfigArray),
+  ...sanitizedConfigs,
   {
     name: 'eslint-config-expo/custom',
     rules

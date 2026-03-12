@@ -7,6 +7,7 @@ import { nestConfig } from '@santi020k/eslint-config-nest'
 import { nextConfig } from '@santi020k/eslint-config-next'
 import { reactConfig } from '@santi020k/eslint-config-react'
 import { typescriptConfig } from '@santi020k/eslint-config-typescript'
+import { vueConfig } from '@santi020k/eslint-config-vue'
 
 /**
  * Extract rule names from a config array for snapshot comparison.
@@ -79,6 +80,12 @@ describe('Config Snapshots — Rule Names', () => {
 
     expect(rules).toMatchSnapshot()
   })
+
+  it('vue config rules should match snapshot', () => {
+    const rules = extractRuleNames(vueConfig as Record<string, unknown>[])
+
+    expect(rules).toMatchSnapshot()
+  })
 })
 
 describe('Config Snapshots — Entry Names', () => {
@@ -120,6 +127,12 @@ describe('Config Snapshots — Entry Names', () => {
 
   it('nest config entries should match snapshot', () => {
     const names = extractConfigNames(nestConfig as Record<string, unknown>[])
+
+    expect(names).toMatchSnapshot()
+  })
+
+  it('vue config entries should match snapshot', () => {
+    const names = extractConfigNames(vueConfig as Record<string, unknown>[])
 
     expect(names).toMatchSnapshot()
   })
