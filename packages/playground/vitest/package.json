@@ -6,9 +6,11 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@nestjs/swagger": "11.2.6",
     "@santi020k/eslint-config-basic": "*",
     "eslint": "^10.0.0",
-    "vitest": "^2.0.0"
+    "eslint-plugin-unicorn": "63.0.0",
+    "vitest": "^2.1.9"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.17"

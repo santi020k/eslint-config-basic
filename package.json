@@ -26,12 +26,17 @@
     "clean": "turbo run clean && rm -rf node_modules",
     "prepare": "husky config/.husky",
     "pre-commit": "lint-staged",
-    "pre-push": "npm run test && npm run lint && npm run build",
+    "pre-push": "npm run test && npm run lint && npm run build && npm run check:exports",
     "docs": "typedoc",
     "docs:md": "typedoc --options typedoc.markdown.mjs",
-    "docs:clean": "rm -rf docs docs-md"
+    "docs:clean": "rm -rf docs docs-md",
+    "check:exports": "turbo run check:exports",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "turbo run build && changeset publish"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.30.0",
     "commitizen": "^4.3.1",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^10.0.0",
@@ -40,6 +45,7 @@
     "eslint-plugin-promise": "^7.2.1",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
+    "publint": "^0.2.12",
     "turbo": "^2.5.3",
     "typedoc": "^0.28.16",
     "typedoc-plugin-markdown": "^4.10.0",
