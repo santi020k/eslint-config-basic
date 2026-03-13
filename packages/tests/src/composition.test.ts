@@ -169,6 +169,7 @@ describe('eslintConfig Function', () => {
         OptionalOption.Mdx,
         OptionalOption.Markdown,
         OptionalOption.Stencil,
+        OptionalOption.Regexp,
         OptionalOption.Prettier,
         OptionalOption.Unicorn
       ]
@@ -292,6 +293,18 @@ describe('Deep Rule Assertions (#5)', () => {
     expect(names).toContain('eslint-config/prettier')
   })
 
+  it('should include regexp rules when Regexp optional is enabled', () => {
+    const config = eslintConfig({
+      config: [],
+      optionals: [OptionalOption.Regexp]
+    })
+    const rules = extractRuleNames(config as Record<string, unknown>[])
+
+    expect(rules).toContain('regexp/no-super-linear-backtracking')
+
+    expect(rules).toContain('regexp/no-useless-escape')
+  })
+
   it('should include Vue rules when Vue is enabled', () => {
     const config = eslintConfig({ config: [ConfigOption.Vue] })
     const rules = extractRuleNames(config as Record<string, unknown>[])
@@ -388,6 +401,8 @@ describe('Type Exports', () => {
     expect(options).toContain('vitest')
 
     expect(options).toContain('prettier')
+
+    expect(options).toContain('regexp')
 
     expect(options).toContain('unicorn')
   })
