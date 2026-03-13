@@ -25,6 +25,7 @@ export enum OptionalOption {
   Markdown = 'markdown',
   Stencil = 'stencil',
   Prettier = 'prettier',
+  Regexp = 'regexp',
   Unicorn = 'unicorn'
 }
 
