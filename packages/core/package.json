@@ -1,6 +1,6 @@
 {
   "name": "@santi020k/eslint-config-core",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Core ESLint configuration with base JavaScript rules and shared utilities",
   "type": "module",
   "main": "./dist/index.js",
