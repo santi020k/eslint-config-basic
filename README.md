@@ -17,7 +17,7 @@ Welcome to **@santi020k/eslint-config-basic**, a comprehensive and opinionated E
 
 ## Installation
 
-Before installing, make sure you have ESLint (version 9.0.0 or later) installed:
+Before installing, make sure you have ESLint (version 9.0.0 or 10.0.0 or later) installed:
 
 ```bash
 npm install eslint --save-dev
