@@ -1,6 +1,6 @@
 {
   "name": "@santi020k/eslint-config-vue",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Vue ESLint configuration",
   "type": "module",
   "main": "./dist/index.js",
@@ -25,7 +25,7 @@
     "eslint": "^10.0.3"
   },
   "dependencies": {
-    "@santi020k/eslint-config-core": "^0.7.0",
+    "@santi020k/eslint-config-core": "^0.7.1",
     "eslint-plugin-vue": "^10.8.0",
     "vue-eslint-parser": "^10.4.0"
   },
