@@ -171,7 +171,8 @@ describe('eslintConfig Function', () => {
         OptionalOption.Stencil,
         OptionalOption.Regexp,
         OptionalOption.Prettier,
-        OptionalOption.Unicorn
+        OptionalOption.Unicorn,
+        OptionalOption.Sonarjs
       ]
     })
 
@@ -281,6 +282,18 @@ describe('Deep Rule Assertions (#5)', () => {
     expect(rules).toContain('unicorn/better-regex')
 
     expect(rules).toContain('unicorn/prefer-array-flat-map')
+  })
+
+  it('should include sonarjs rules when Sonarjs optional is enabled', () => {
+    const config = eslintConfig({
+      config: [],
+      optionals: [OptionalOption.Sonarjs]
+    })
+    const rules = extractRuleNames(config as Record<string, unknown>[])
+
+    expect(rules).toContain('sonarjs/no-duplicate-string')
+
+    expect(rules).toContain('sonarjs/cognitive-complexity')
   })
 
   it('should include prettier config when Prettier optional is enabled', () => {
@@ -405,6 +418,8 @@ describe('Type Exports', () => {
     expect(options).toContain('regexp')
 
     expect(options).toContain('unicorn')
+
+    expect(options).toContain('sonarjs')
   })
 
   it('should have all SettingOption values', () => {
