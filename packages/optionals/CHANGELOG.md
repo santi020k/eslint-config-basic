@@ -1,5 +1,11 @@
 # @santi020k/eslint-config-optionals
 
+## 0.4.2
+
+### Patch Changes
+
+- [#39](https://github.com/santi020k/eslint-config-basic/pull/39) [`1c11dec`](https://github.com/santi020k/eslint-config-basic/commit/1c11decd67a9874ff42f98a7ac455216313c952f) Thanks [@santi020k](https://github.com/santi020k)! - refactor(optionals): replace eslint-plugin-tailwindcss with eslint-plugin-better-tailwindcss for better Tailwind v4 support
+
 ## 0.4.1
 
 ### Patch Changes

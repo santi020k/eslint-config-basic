@@ -1,5 +1,15 @@
 # @santi020k/eslint-config-expo
 
+## 0.2.2
+
+### Patch Changes
+
+- [#39](https://github.com/santi020k/eslint-config-basic/pull/39) [`1c11dec`](https://github.com/santi020k/eslint-config-basic/commit/1c11decd67a9874ff42f98a7ac455216313c952f) Thanks [@santi020k](https://github.com/santi020k)! - feat(astro): add robust defaults and virtual script support for Astro 5+
+  feat(core): standardize internal dependencies to workspace:\* for better monorepo development
+  docs: add Tailwind CSS v4 compatibility notes and workarounds to README
+- Updated dependencies [[`1c11dec`](https://github.com/santi020k/eslint-config-basic/commit/1c11decd67a9874ff42f98a7ac455216313c952f)]:
+  - @santi020k/eslint-config-core@0.4.2
+
 ## 0.2.1
 
 ### Patch Changes

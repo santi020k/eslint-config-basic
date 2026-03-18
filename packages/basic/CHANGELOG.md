@@ -1,5 +1,30 @@
 # @santi020k/eslint-config-basic
 
+## 0.6.0
+
+### Minor Changes
+
+- [#39](https://github.com/santi020k/eslint-config-basic/pull/39) [`1c11dec`](https://github.com/santi020k/eslint-config-basic/commit/1c11decd67a9874ff42f98a7ac455216313c952f) Thanks [@santi020k](https://github.com/santi020k)! - feat(astro): add robust defaults and virtual script support for Astro 5+
+  feat(core): standardize internal dependencies to workspace:\* for better monorepo development
+  docs: add Tailwind CSS v4 compatibility notes and workarounds to README
+
+### Patch Changes
+
+- [#39](https://github.com/santi020k/eslint-config-basic/pull/39) [`1c11dec`](https://github.com/santi020k/eslint-config-basic/commit/1c11decd67a9874ff42f98a7ac455216313c952f) Thanks [@santi020k](https://github.com/santi020k)! - Fix missing README in published package by ensuring symlinks are correctly handled during `prepack` and `postpack`, and explicitly including `README.md` and `CHANGELOG.md` in the `files` array.
+
+- [#39](https://github.com/santi020k/eslint-config-basic/pull/39) [`1c11dec`](https://github.com/santi020k/eslint-config-basic/commit/1c11decd67a9874ff42f98a7ac455216313c952f) Thanks [@santi020k](https://github.com/santi020k)! - refactor(optionals): replace eslint-plugin-tailwindcss with eslint-plugin-better-tailwindcss for better Tailwind v4 support
+
+- Updated dependencies [[`1c11dec`](https://github.com/santi020k/eslint-config-basic/commit/1c11decd67a9874ff42f98a7ac455216313c952f), [`1c11dec`](https://github.com/santi020k/eslint-config-basic/commit/1c11decd67a9874ff42f98a7ac455216313c952f)]:
+  - @santi020k/eslint-config-astro@0.3.0
+  - @santi020k/eslint-config-core@0.4.2
+  - @santi020k/eslint-config-typescript@0.1.2
+  - @santi020k/eslint-config-react@0.1.2
+  - @santi020k/eslint-config-next@0.1.2
+  - @santi020k/eslint-config-expo@0.2.2
+  - @santi020k/eslint-config-nest@0.2.2
+  - @santi020k/eslint-config-vue@0.2.2
+  - @santi020k/eslint-config-optionals@0.4.2
+
 ## 0.5.0
 
 ### Minor Changes
