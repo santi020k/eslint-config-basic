@@ -94,6 +94,12 @@ export default [
   ...eslintConfig({ config: [ConfigOption.Nest] })
   // Your custom config
 ]
+
+// Vue project
+export default [
+  ...eslintConfig({ config: [ConfigOption.Vue] })
+  // Your custom config
+]
 ```
 
 ### Optional Usage
@@ -121,8 +127,8 @@ export default [
       OptionalOption.Markdown,
       // Stencil
       OptionalOption.Stencil,
-      // SonarJS
-      OptionalOption.Sonarjs,
+      // Playwright
+      OptionalOption.Playwright,
       // Prettier
       OptionalOption.Prettier
     ]
@@ -279,8 +285,8 @@ Add the following useful scripts to your `package.json`:
 - [x] Refactored rules structure (Monorepo transition)
 - [x] Astro and Expo support
 - [x] Enhanced documentation
-- [ ] Additional framework support (contributions welcome!):
-  - [ ] Vue
+- [x] Additional framework support (contributions welcome!):
+  - [x] Vue
   - [ ] Angular
   - [x] NestJS
 
