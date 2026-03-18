@@ -8,7 +8,6 @@ exports[`Config Snapshots — Entry Names > astro config entries should match sn
   "astro/base/typescript",
   "astro/recommended",
   "eslint-config-astro/custom",
-  "eslint-config-astro/virtual-scripts",
 ]
 `;
 
@@ -72,11 +71,9 @@ exports[`Config Snapshots — Entry Names > vue config entries should match snap
 
 exports[`Config Snapshots — Rule Names > astro config rules should match snapshot 1`] = `
 [
-  "@stylistic/comma-dangle",
   "@stylistic/jsx-indent",
   "@stylistic/jsx-one-expression-per-line",
   "@stylistic/jsx-tag-spacing",
-  "@stylistic/quote-props",
   "astro/missing-client-only-directive-value",
   "astro/no-conflict-set-directives",
   "astro/no-deprecated-astro-canonicalurl",
@@ -85,14 +82,11 @@ exports[`Config Snapshots — Rule Names > astro config rules should match snaps
   "astro/no-deprecated-getentrybyslug",
   "astro/no-unused-define-vars-in-style",
   "astro/valid-compile",
-  "no-unused-vars",
   "prettier/prettier",
   "react/destructuring-assignment",
   "react/jsx-filename-extension",
   "react/jsx-key",
-  "react/jsx-no-undef",
   "react/jsx-props-no-spreading",
-  "react/no-unescaped-entities",
   "react/no-unknown-property",
   "react/react-in-jsx-scope",
   "react/require-default-props",
