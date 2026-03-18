@@ -1,5 +1,13 @@
 # @santi020k/eslint-config-core
 
+## 0.4.0
+
+### Minor Changes
+
+- [#34](https://github.com/santi020k/eslint-config-basic/pull/34) [`f015876`](https://github.com/santi020k/eslint-config-basic/commit/f015876442b88b395cd3775b06f829349dd34d3a) Thanks [@santi020k](https://github.com/santi020k)! - feat: add eslint-plugin-sonarjs as optional config
+  chore: remove tailwindcss from playground and test package dependencies
+  docs: update AI Agent skills in README
+
 ## 0.3.0
 
 ### Minor Changes
