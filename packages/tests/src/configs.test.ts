@@ -127,6 +127,8 @@ describe('Config Enums', () => {
     expect(OptionalOption.Prettier).toBeDefined()
 
     expect(OptionalOption.Unicorn).toBeDefined()
+
+    expect(OptionalOption.Sonarjs).toBeDefined()
   })
 
   it('should export SettingOption enum with expected values', () => {

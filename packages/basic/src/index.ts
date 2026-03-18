@@ -67,6 +67,7 @@ import {
   mdx,
   prettier,
   regexp,
+  sonarjs,
   stencil,
   tailwind,
   unicorn,
@@ -124,6 +125,7 @@ export const eslintConfig = ({
     ...(uniqueOptionals.includes(OptionalOption.Mdx) ? mdx : []),
     ...(uniqueOptionals.includes(OptionalOption.Markdown) ? markdown : []),
     ...(uniqueOptionals.includes(OptionalOption.Unicorn) ? unicorn : []),
+    ...(uniqueOptionals.includes(OptionalOption.Sonarjs) ? sonarjs : []),
 
     // Prettier must be last to override stylistic rules
     ...(uniqueOptionals.includes(OptionalOption.Prettier) ? prettier : [])
