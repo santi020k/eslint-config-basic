@@ -13,7 +13,9 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
   ],
   "scripts": {
     "build": "tsup",
@@ -21,7 +23,8 @@
     "dev": "tsup --watch",
     "clean": "rm -rf dist",
     "check:exports": "publint",
-    "prepack": "rm -f README.md && cp ../../README.md ./README.md"
+    "prepack": "rm -f README.md && cp ../../README.md ./README.md",
+    "postpack": "rm -f README.md && ln -s ../../README.md ./README.md"
   },
   "dependencies": {
     "@santi020k/eslint-config-astro": "*",
