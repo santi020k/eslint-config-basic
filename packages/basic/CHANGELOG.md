@@ -1,5 +1,17 @@
 # @santi020k/eslint-config-basic
 
+## 0.7.0
+
+### Minor Changes
+
+- [#41](https://github.com/santi020k/eslint-config-basic/pull/41) [`d802dfb`](https://github.com/santi020k/eslint-config-basic/commit/d802dfb2cb2f0813d91170771b3b21b3cf3b5e10) Thanks [@santi020k](https://github.com/santi020k)! - Add Playwright support as an optional configuration.
+
+### Patch Changes
+
+- Updated dependencies [[`d802dfb`](https://github.com/santi020k/eslint-config-basic/commit/d802dfb2cb2f0813d91170771b3b21b3cf3b5e10)]:
+  - @santi020k/eslint-config-core@0.5.0
+  - @santi020k/eslint-config-optionals@0.5.0
+
 ## 0.6.0
 
 ### Minor Changes
