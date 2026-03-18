@@ -27,7 +27,8 @@ export enum OptionalOption {
   Prettier = 'prettier',
   Regexp = 'regexp',
   Unicorn = 'unicorn',
-  Sonarjs = 'sonarjs'
+  Sonarjs = 'sonarjs',
+  Playwright = 'playwright'
 }
 
 /**

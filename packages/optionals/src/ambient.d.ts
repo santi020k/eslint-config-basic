@@ -43,3 +43,15 @@ declare module 'eslint-plugin-unicorn' {
 
   export default plugin
 }
+
+declare module 'eslint-plugin-playwright' {
+  import type { TSESLint } from '@typescript-eslint/utils'
+
+  const plugin: {
+    configs: {
+      'flat/recommended': TSESLint.FlatConfig.Config
+    }
+  }
+
+  export default plugin
+}
