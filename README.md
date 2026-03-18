@@ -231,7 +231,24 @@ npm run docs
 
 This outputs markdown documentation to the `docs/` directory.
 
+## Compatibility & Known Issues
+
+### Tailwind CSS v4
+The current version of `eslint-plugin-tailwindcss` (3.x) is incompatible with Tailwind CSS v4 because it relies on the internal `resolveConfig` module that was removed in v4.
+
+**Workaround:** If you are using Tailwind v4, you may see an error like `Package subpath './resolveConfig' is not defined`. To bypass this, you can manually disable the plugin in your `eslint.config.js` or provide a dummy configuration path in your ESLint settings until the plugin officially supports v4.
+
+### Astro 5+
+
+This package includes robust defaults for Astro projects, including:
+
+- Automatic detection of virtual scripts inside `.astro` files.
+- Disabled `react/jsx-no-undef` (Astro handles this).
+- Enforced `never` comma-dangle for Astro templates.
+- Support for JSX/TSX inside Astro components.
+
 ## Opinionated but Flexible
+
 
 This ESLint configuration is based on my personal preferences and practices, and it may evolve over time. **Important:** I recommend using a fixed version to avoid unexpected changes that might introduce new linter errors. To ensure stability, do not use `^` or `~` when specifying the version. If a rule feels too strict, consider changing it from an error to a warning to allow more flexibility during development.
 

@@ -25,7 +25,7 @@
     "eslint": "^10.0.3"
   },
   "dependencies": {
-    "@santi020k/eslint-config-core": "*",
+    "@santi020k/eslint-config-core": "workspace:*",
     "@eslint/compat": "^2.0.3",
     "@eslint/eslintrc": "^3.3.5",
     "cross-dirname": "^0.1.0",

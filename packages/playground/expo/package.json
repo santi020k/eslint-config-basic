@@ -6,7 +6,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@santi020k/eslint-config-basic": "*",
+    "@santi020k/eslint-config-basic": "workspace:*",
     "eslint": "^10.0.3",
     "react": "19.2.4",
     "react-native": "^0.84.1"
