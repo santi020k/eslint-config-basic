@@ -1,21 +1,21 @@
 {
   "name": "@santi020k/eslint-config-tests",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.7.0",
   "type": "module",
   "scripts": {
     "test": "vitest run"
   },
   "devDependencies": {
-    "@santi020k/eslint-config-astro": "*",
-    "@santi020k/eslint-config-basic": "*",
-    "@santi020k/eslint-config-core": "*",
-    "@santi020k/eslint-config-expo": "*",
-    "@santi020k/eslint-config-nest": "*",
-    "@santi020k/eslint-config-next": "*",
-    "@santi020k/eslint-config-react": "*",
-    "@santi020k/eslint-config-typescript": "*",
-    "@santi020k/eslint-config-vue": "*",
+    "@santi020k/eslint-config-astro": "^0.7.0",
+    "@santi020k/eslint-config-basic": "^0.7.0",
+    "@santi020k/eslint-config-core": "^0.7.0",
+    "@santi020k/eslint-config-expo": "^0.7.0",
+    "@santi020k/eslint-config-nest": "^0.7.0",
+    "@santi020k/eslint-config-next": "^0.7.0",
+    "@santi020k/eslint-config-react": "^0.7.0",
+    "@santi020k/eslint-config-typescript": "^0.7.0",
+    "@santi020k/eslint-config-vue": "^0.7.0",
     "eslint": "^10.0.3",
     "typescript": "^5.9.3",
     "vitest": "^4.1.0"

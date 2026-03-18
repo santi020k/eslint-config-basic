@@ -1,6 +1,6 @@
 {
   "name": "@santi020k/eslint-config-next",
-  "version": "0.1.2",
+  "version": "0.7.0",
   "description": "Next.js ESLint configuration",
   "type": "module",
   "main": "./dist/index.js",
@@ -26,8 +26,8 @@
     "next": ">=16.1.6"
   },
   "dependencies": {
-    "@santi020k/eslint-config-core": "*",
-    "@santi020k/eslint-config-react": "*",
+    "@santi020k/eslint-config-core": "^0.7.0",
+    "@santi020k/eslint-config-react": "^0.7.0",
     "@next/eslint-plugin-next": "^16.1.6"
   },
   "devDependencies": {
