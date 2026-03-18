@@ -125,6 +125,8 @@ export default [
       OptionalOption.Mdx,
       // Markdown
       OptionalOption.Markdown,
+      // SonarJS
+      OptionalOption.Sonarjs,
       // Stencil
       OptionalOption.Stencil,
       // Playwright
