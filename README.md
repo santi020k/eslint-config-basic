@@ -122,7 +122,9 @@ export default [
       // Stencil
       OptionalOption.Stencil,
       // SonarJS
-      OptionalOption.Sonarjs
+      OptionalOption.Sonarjs,
+      // Prettier
+      OptionalOption.Prettier
     ]
   })
   // Your custom config
