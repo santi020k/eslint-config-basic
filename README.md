@@ -120,7 +120,9 @@ export default [
       // Markdown
       OptionalOption.Markdown,
       // Stencil
-      OptionalOption.Stencil
+      OptionalOption.Stencil,
+      // SonarJS
+      OptionalOption.Sonarjs
     ]
   })
   // Your custom config
@@ -142,6 +144,10 @@ export default [
   // Your custom config
 ]
 ```
+
+## AI Agent Capabilities
+
+This project is optimized for AI agents and LLM-based tools. It includes an `.agent/skills/` directory containing specialized workflows, guidelines, and context specific to this monorepo. Agents can automatically use these skills to assist with development, testing, and release processes.
 
 ## Monorepo Structure
 
