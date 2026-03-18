@@ -1,6 +1,6 @@
 {
   "name": "@santi020k/eslint-config-optionals",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Optional ESLint configurations for various tools and frameworks",
   "type": "module",
   "main": "./dist/index.js",
