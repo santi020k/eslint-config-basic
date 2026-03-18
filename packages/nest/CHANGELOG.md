@@ -1,5 +1,12 @@
 # @santi020k/eslint-config-nest
 
+## 0.7.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @santi020k/eslint-config-core@0.7.1
+
 ## 0.2.2
 
 ### Patch Changes

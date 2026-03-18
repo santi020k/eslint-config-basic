@@ -1,5 +1,12 @@
 # @santi020k/eslint-config-astro
 
+## 0.7.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @santi020k/eslint-config-core@0.7.1
+
 ## 0.3.0
 
 ### Minor Changes

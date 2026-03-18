@@ -1,5 +1,7 @@
 # @santi020k/eslint-config-optionals
 
+## 0.7.1
+
 ## 0.5.0
 
 ### Minor Changes

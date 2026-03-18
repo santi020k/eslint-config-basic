@@ -1,5 +1,12 @@
 # @santi020k/eslint-config-react
 
+## 0.7.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @santi020k/eslint-config-core@0.7.1
+
 ## 0.1.2
 
 ### Patch Changes

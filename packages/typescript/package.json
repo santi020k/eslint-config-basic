@@ -1,6 +1,6 @@
 {
   "name": "@santi020k/eslint-config-typescript",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "TypeScript ESLint configuration",
   "type": "module",
   "main": "./dist/index.js",
@@ -26,7 +26,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@santi020k/eslint-config-core": "^0.7.0",
+    "@santi020k/eslint-config-core": "^0.7.1",
     "@typescript-eslint/eslint-plugin": "^8.57.0",
     "@typescript-eslint/parser": "^8.57.0",
     "typescript-eslint": "^8.57.0"

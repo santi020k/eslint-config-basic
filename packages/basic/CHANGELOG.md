@@ -1,5 +1,22 @@
 # @santi020k/eslint-config-basic
 
+## 0.7.1
+
+### Patch Changes
+
+- [#43](https://github.com/santi020k/eslint-config-basic/pull/43) [`6ceaa37`](https://github.com/santi020k/eslint-config-basic/commit/6ceaa370b9d5f4dfc3819760367bceb5cfd0ba38) Thanks [@santi020k](https://github.com/santi020k)! - Sync README documentation with implemented features (Vue, Playwright).
+
+- Updated dependencies []:
+  - @santi020k/eslint-config-astro@0.7.1
+  - @santi020k/eslint-config-core@0.7.1
+  - @santi020k/eslint-config-expo@0.7.1
+  - @santi020k/eslint-config-nest@0.7.1
+  - @santi020k/eslint-config-next@0.7.1
+  - @santi020k/eslint-config-optionals@0.7.1
+  - @santi020k/eslint-config-react@0.7.1
+  - @santi020k/eslint-config-typescript@0.7.1
+  - @santi020k/eslint-config-vue@0.7.1
+
 ## 0.7.0
 
 ### Minor Changes
