@@ -171,10 +171,12 @@ This project is a monorepo managed with **Turbo** and **npm Workspaces**.
 If you want to contribute or modify the configurations:
 
 ### Prerequisites
+
 - Node.js (version specified in `.nvmrc`)
 - npm
 
 ### Setup
+
 ```bash
 npm install
 ```
@@ -194,6 +196,7 @@ npm run docs       # Generate API documentation
 This repository uses **Changesets** (`@changesets/cli`) to automatically handle workspace dependency versioning and publishing to npm.
 
 To publish a new version of the packages:
+
 1. Make sure you are authenticated with npm in your terminal (`npm login`).
 2. Generate a changeset summarizing your changes:
    ```bash
@@ -233,11 +236,6 @@ This outputs markdown documentation to the `docs/` directory.
 
 ## Compatibility & Known Issues
 
-### Tailwind CSS v4
-The current version of `eslint-plugin-tailwindcss` (3.x) is incompatible with Tailwind CSS v4 because it relies on the internal `resolveConfig` module that was removed in v4.
-
-**Workaround:** If you are using Tailwind v4, you may see an error like `Package subpath './resolveConfig' is not defined`. To bypass this, you can manually disable the plugin in your `eslint.config.js` or provide a dummy configuration path in your ESLint settings until the plugin officially supports v4.
-
 ### Astro 5+
 
 This package includes robust defaults for Astro projects, including:
@@ -265,9 +263,9 @@ Add the following useful scripts to your `package.json`:
 
 ## How to Implement in an Existing Project
 
-1.  **Install the Dependencies:** Ensure that both ESLint and this configuration package are installed.
-2.  **Update Your ESLint Configuration:** Extend **@santi020k/eslint-config-basic** in your ESLint configuration file as shown above.
-3.  **Run ESLint:** Lint your project files and automatically fix issues if possible:
+1. Install the Dependencies: Ensure that both ESLint and this configuration package are installed.
+2. Update Your ESLint Configuration: Extend **@santi020k/eslint-config-basic** in your ESLint configuration file as shown above.
+3. Run ESLint: Lint your project files and automatically fix issues if possible:
 
     ```bash
     npm run lint

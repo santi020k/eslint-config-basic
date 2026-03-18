@@ -26,8 +26,8 @@
     "next": ">=16.1.6"
   },
   "dependencies": {
-    "@santi020k/eslint-config-core": "workspace:*",
-    "@santi020k/eslint-config-react": "workspace:*",
+    "@santi020k/eslint-config-core": "*",
+    "@santi020k/eslint-config-react": "*",
     "@next/eslint-plugin-next": "^16.1.6"
   },
   "devDependencies": {

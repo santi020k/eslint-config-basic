@@ -26,7 +26,7 @@
     "react": ">=19.2.4"
   },
   "dependencies": {
-    "@santi020k/eslint-config-core": "workspace:*",
+    "@santi020k/eslint-config-core": "*",
     "@eslint/compat": "^2.0.3",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",

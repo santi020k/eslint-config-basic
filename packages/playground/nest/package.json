@@ -8,7 +8,7 @@
   "dependencies": {
     "@nestjs/common": "^11.1.16",
     "@nestjs/swagger": "^11.2.6",
-    "@santi020k/eslint-config-basic": "workspace:*",
+    "@santi020k/eslint-config-basic": "*",
     "eslint": "^10.0.3"
   }
 }
