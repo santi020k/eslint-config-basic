@@ -1,8 +1,8 @@
 import pluginAstro from 'eslint-plugin-astro'
 
-import type { TSESLint } from '@typescript-eslint/utils'
-
 import { rules } from './rules.js'
+
+import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
  * Astro ESLint configuration
@@ -14,5 +14,13 @@ export const astroConfig: TSESLint.FlatConfig.ConfigArray = [
     name: 'eslint-config-astro/custom',
     files: ['**/*.astro'],
     rules
+  },
+  {
+    name: 'eslint-config-astro/virtual-scripts',
+    files: ['**/*.astro/*.js', '*.astro/*.js', '**/*.astro/*.ts', '*.astro/*.ts'],
+    languageOptions: { sourceType: 'module' },
+    rules: {
+      'prettier/prettier': 'off'
+    }
   }
 ]

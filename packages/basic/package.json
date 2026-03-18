@@ -21,7 +21,7 @@
     "dev": "tsup --watch",
     "clean": "rm -rf dist",
     "check:exports": "publint",
-    "prepack": "cp ../../README.md ./README.md"
+    "prepack": "rm -f README.md && cp ../../README.md ./README.md"
   },
   "dependencies": {
     "@santi020k/eslint-config-astro": "*",

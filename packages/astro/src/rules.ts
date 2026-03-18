@@ -24,5 +24,10 @@ export const rules: TSESLint.Linter.RulesRecord = {
   '@stylistic/jsx-indent': 'off',
   '@stylistic/jsx-one-expression-per-line': 'off',
   '@stylistic/jsx-tag-spacing': 'off',
-  'react/jsx-key': 'off'
+  'react/jsx-key': 'off',
+  'react/jsx-no-undef': 'off',
+  '@stylistic/comma-dangle': ['warn', 'never'],
+  'react/no-unescaped-entities': 'off',
+  '@stylistic/quote-props': ['warn', 'as-needed'],
+  'no-unused-vars': 'off'
 }

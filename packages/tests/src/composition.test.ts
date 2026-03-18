@@ -365,6 +365,18 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
     expect(rules).toContain('react/jsx-pascal-case')
   })
 
+  it('should include new Astro-specific default rules', () => {
+    const config = eslintConfig({ config: [ConfigOption.Astro] })
+
+    expect(getEffectiveRuleValue(config as Record<string, unknown>[], 'react/jsx-no-undef')).toBe('off')
+
+    expect(getEffectiveRuleValue(config as Record<string, unknown>[], '@stylistic/comma-dangle')).toEqual(['warn', 'never'])
+
+    expect(getEffectiveRuleValue(config as Record<string, unknown>[], 'react/no-unescaped-entities')).toBe('off')
+
+    expect(getEffectiveRuleValue(config as Record<string, unknown>[], '@stylistic/quote-props')).toEqual(['warn', 'as-needed'])
+  })
+
   it('should handle duplicate optionals without doubling', () => {
     const single = eslintConfig({
       config: [],
