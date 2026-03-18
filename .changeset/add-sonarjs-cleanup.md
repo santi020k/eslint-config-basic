@@ -2,7 +2,6 @@
 "@santi020k/eslint-config-basic": minor
 "@santi020k/eslint-config-core": minor
 "@santi020k/eslint-config-optionals": minor
-"@santi020k/eslint-config-tests": patch
 ---
 
 feat: add eslint-plugin-sonarjs as optional config
