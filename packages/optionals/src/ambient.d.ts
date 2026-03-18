@@ -10,12 +10,12 @@ declare module '@stencil-community/eslint-plugin' {
   export default plugin
 }
 
-declare module 'eslint-plugin-tailwindcss' {
+declare module 'eslint-plugin-better-tailwindcss' {
   import type { TSESLint } from '@typescript-eslint/utils'
 
   const plugin: {
     configs: {
-      'flat/recommended': TSESLint.FlatConfig.ConfigArray
+      recommended: TSESLint.FlatConfig.Config
     }
   }
 

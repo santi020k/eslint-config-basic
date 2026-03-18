@@ -60,4 +60,8 @@ npm run lint       # Lints the entire monorepo
 npm run test       # Runs the Vitest integration suite
 ```
 
+### 6. Pull Requests
+
+When creating a Pull Request, always use the project's PR template found at `.github/pull_request_template.md`. Fill out all relevant sections (Description, Type of Change, Packages Affected, Changeset, and Checklist) to ensure a smooth review process.
+
 ALL commands must pass successfully before submitting changes. Do not leave broken setups.

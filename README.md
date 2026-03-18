@@ -171,10 +171,12 @@ This project is a monorepo managed with **Turbo** and **npm Workspaces**.
 If you want to contribute or modify the configurations:
 
 ### Prerequisites
+
 - Node.js (version specified in `.nvmrc`)
 - npm
 
 ### Setup
+
 ```bash
 npm install
 ```
@@ -194,6 +196,7 @@ npm run docs       # Generate API documentation
 This repository uses **Changesets** (`@changesets/cli`) to automatically handle workspace dependency versioning and publishing to npm.
 
 To publish a new version of the packages:
+
 1. Make sure you are authenticated with npm in your terminal (`npm login`).
 2. Generate a changeset summarizing your changes:
    ```bash
@@ -231,7 +234,19 @@ npm run docs
 
 This outputs markdown documentation to the `docs/` directory.
 
+## Compatibility & Known Issues
+
+### Astro 5+
+
+This package includes robust defaults for Astro projects, including:
+
+- Automatic detection of virtual scripts inside `.astro` files.
+- Disabled `react/jsx-no-undef` (Astro handles this).
+- Enforced `never` comma-dangle for Astro templates.
+- Support for JSX/TSX inside Astro components.
+
 ## Opinionated but Flexible
+
 
 This ESLint configuration is based on my personal preferences and practices, and it may evolve over time. **Important:** I recommend using a fixed version to avoid unexpected changes that might introduce new linter errors. To ensure stability, do not use `^` or `~` when specifying the version. If a rule feels too strict, consider changing it from an error to a warning to allow more flexibility during development.
 
@@ -248,9 +263,9 @@ Add the following useful scripts to your `package.json`:
 
 ## How to Implement in an Existing Project
 
-1.  **Install the Dependencies:** Ensure that both ESLint and this configuration package are installed.
-2.  **Update Your ESLint Configuration:** Extend **@santi020k/eslint-config-basic** in your ESLint configuration file as shown above.
-3.  **Run ESLint:** Lint your project files and automatically fix issues if possible:
+1. Install the Dependencies: Ensure that both ESLint and this configuration package are installed.
+2. Update Your ESLint Configuration: Extend **@santi020k/eslint-config-basic** in your ESLint configuration file as shown above.
+3. Run ESLint: Lint your project files and automatically fix issues if possible:
 
     ```bash
     npm run lint
