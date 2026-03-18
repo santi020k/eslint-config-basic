@@ -10,8 +10,5 @@
     "@nestjs/swagger": "^11.2.6",
     "@santi020k/eslint-config-basic": "*",
     "eslint": "^10.0.3"
-  },
-  "devDependencies": {
-    "tailwindcss": "^4.2.1"
   }
 }

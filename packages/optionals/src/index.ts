@@ -18,3 +18,5 @@ export { unicorn } from './unicorn.js'
 export { regexp } from './regexp.js'
 
 export { vitest } from './vitest.js'
+
+export { sonarjs } from './sonarjs.js'
