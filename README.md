@@ -247,7 +247,6 @@ This package includes robust defaults for Astro projects, including:
 
 ## Opinionated but Flexible
 
-
 This ESLint configuration is based on my personal preferences and practices, and it may evolve over time. **Important:** I recommend using a fixed version to avoid unexpected changes that might introduce new linter errors. To ensure stability, do not use `^` or `~` when specifying the version. If a rule feels too strict, consider changing it from an error to a warning to allow more flexibility during development.
 
 ## Scripts
@@ -293,21 +292,30 @@ Contributions are welcome! Please read the [Contributing Guide](CONTRIBUTING.md)
 
 Special thanks to the developers and maintainers of the following libraries, which form the backbone of this ESLint configuration:
 
-- eslint-config-standard
-- eslint-plugin-import
-- eslint-plugin-jsx-a11y
-- eslint-plugin-n
-- eslint-plugin-promise
-- eslint-plugin-react
-- eslint-plugin-react-hooks
-- eslint-plugin-simple-import-sort
-- eslint-plugin-sonarjs
-- eslint-plugin-unused-imports
-- @stylistic/eslint-plugin
-- @typescript-eslint
-- @cspell/eslint-plugin
-- eslint-plugin-tailwindcss
-- eslint-plugin-vitest
+- [eslint-config-standard](https://www.npmjs.com/package/eslint-config-standard)
+- [eslint-plugin-import](https://www.npmjs.com/package/eslint-plugin-import)
+- [eslint-plugin-n](https://www.npmjs.com/package/eslint-plugin-n)
+- [eslint-plugin-promise](https://www.npmjs.com/package/eslint-plugin-promise)
+- [eslint-plugin-react](https://www.npmjs.com/package/eslint-plugin-react)
+- [eslint-plugin-react-hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks)
+- [eslint-plugin-jsx-a11y](https://www.npmjs.com/package/eslint-plugin-jsx-a11y)
+- [eslint-plugin-simple-import-sort](https://www.npmjs.com/package/eslint-plugin-simple-import-sort)
+- [eslint-plugin-sonarjs](https://www.npmjs.com/package/eslint-plugin-sonarjs)
+- [eslint-plugin-unused-imports](https://www.npmjs.com/package/eslint-plugin-unused-imports)
+- [@stylistic/eslint-plugin](https://www.npmjs.com/package/@stylistic/eslint-plugin)
+- [@typescript-eslint](https://www.npmjs.com/package/@typescript-eslint/eslint-plugin)
+- [@cspell/eslint-plugin](https://www.npmjs.com/package/@cspell/eslint-plugin)
+- [eslint-plugin-better-tailwindcss](https://www.npmjs.com/package/eslint-plugin-better-tailwindcss)
+- [eslint-plugin-vitest](https://www.npmjs.com/package/eslint-plugin-vitest)
+- [eslint-plugin-astro](https://www.npmjs.com/package/eslint-plugin-astro)
+- [eslint-plugin-next](https://www.npmjs.com/package/eslint-plugin-next)
+- [eslint-plugin-vue](https://www.npmjs.com/package/eslint-plugin-vue)
+- [eslint-plugin-unicorn](https://www.npmjs.com/package/eslint-plugin-unicorn)
+- [eslint-plugin-regexp](https://www.npmjs.com/package/eslint-plugin-regexp)
+- [eslint-plugin-i18next](https://www.npmjs.com/package/eslint-plugin-i18next)
+- [eslint-plugin-mdx](https://www.npmjs.com/package/eslint-plugin-mdx)
+- [eslint-config-prettier](https://www.npmjs.com/package/eslint-config-prettier)
+- [eslint-config-expo](https://www.npmjs.com/package/eslint-config-expo)
 - ...and many others
 
 Their ongoing contributions help maintain the high standards of code quality we all strive for.
