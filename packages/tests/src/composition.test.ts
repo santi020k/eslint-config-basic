@@ -172,7 +172,8 @@ describe('eslintConfig Function', () => {
         OptionalOption.Regexp,
         OptionalOption.Prettier,
         OptionalOption.Unicorn,
-        OptionalOption.Sonarjs
+        OptionalOption.Sonarjs,
+        OptionalOption.Playwright
       ]
     })
 
@@ -326,6 +327,16 @@ describe('Deep Rule Assertions (#5)', () => {
 
     expect(rules).toContain('vue/html-self-closing')
   })
+
+  it('should include playwright rules when Playwright optional is enabled', () => {
+    const config = eslintConfig({
+      config: [],
+      optionals: [OptionalOption.Playwright]
+    })
+    const names = extractConfigNames(config as Record<string, unknown>[])
+
+    expect(names).toContain('optionals/playwright')
+  })
 })
 
 describe('Edge-Case & Conflict Tests (#6)', () => {
@@ -432,6 +443,8 @@ describe('Type Exports', () => {
     expect(options).toContain('unicorn')
 
     expect(options).toContain('sonarjs')
+
+    expect(options).toContain('playwright')
   })
 
   it('should have all SettingOption values', () => {

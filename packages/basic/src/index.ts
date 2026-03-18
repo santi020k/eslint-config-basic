@@ -42,7 +42,9 @@ export {
   stencil,
   tailwind,
   unicorn,
-  vitest
+  vitest,
+  playwright,
+  sonarjs
 } from '@santi020k/eslint-config-optionals'
 
 // Import for composition
@@ -65,6 +67,7 @@ import {
   i18next,
   markdown,
   mdx,
+  playwright,
   prettier,
   regexp,
   sonarjs,
@@ -126,6 +129,7 @@ export const eslintConfig = ({
     ...(uniqueOptionals.includes(OptionalOption.Markdown) ? markdown : []),
     ...(uniqueOptionals.includes(OptionalOption.Unicorn) ? unicorn : []),
     ...(uniqueOptionals.includes(OptionalOption.Sonarjs) ? sonarjs : []),
+    ...(uniqueOptionals.includes(OptionalOption.Playwright) ? playwright : []),
 
     // Prettier must be last to override stylistic rules
     ...(uniqueOptionals.includes(OptionalOption.Prettier) ? prettier : [])
