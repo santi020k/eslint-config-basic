@@ -1,3 +1,5 @@
+import type { TSESLint } from '@typescript-eslint/utils'
+
 // Re-export types and utilities from core
 export {
   ConfigOption,
@@ -8,7 +10,8 @@ export {
   hasReactConfig,
   coreConfig,
   jsConfig,
-  gitignore
+  gitignore,
+  detectProjectOptions
 } from '@santi020k/eslint-config-core'
 
 export type {
@@ -44,7 +47,12 @@ export {
   unicorn,
   vitest,
   playwright,
-  sonarjs
+  sonarjs,
+  security,
+  tanstackQuery,
+  tanstackRouter,
+  perfectionist,
+  jsdoc
 } from '@santi020k/eslint-config-optionals'
 
 // Import for composition
@@ -54,6 +62,7 @@ import {
   applyConfigIfOptionPresent,
   ConfigOption,
   coreConfig,
+  detectProjectOptions,
   gitignore,
   hasReactConfig,
   OptionalOption,
@@ -65,14 +74,19 @@ import { nextConfig } from '@santi020k/eslint-config-next'
 import {
   cspell,
   i18next,
+  jsdoc,
   markdown,
   mdx,
+  perfectionist,
   playwright,
   prettier,
   regexp,
+  security,
   sonarjs,
   stencil,
   tailwind,
+  tanstackQuery,
+  tanstackRouter,
   unicorn,
   vitest
 } from '@santi020k/eslint-config-optionals'
@@ -87,11 +101,16 @@ import { vueConfig } from '@santi020k/eslint-config-vue'
  * @param {EslintConfigOptions} options - Configuration and optional settings
  * @returns {FlatConfigArray} The final ESLint configuration array
  */
-export const eslintConfig = ({
-  config = [],
-  optionals = [],
-  settings = []
-}: EslintConfigOptions = {}): FlatConfigArray => {
+export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => {
+  const detected: Partial<EslintConfigOptions> = options === undefined ? detectProjectOptions() : {}
+
+  const {
+    config = (detected.config || []),
+    optionals = (detected.optionals || []),
+    settings = (detected.settings || []),
+    strict = options?.strict || false
+  } = options || {}
+
   // Deduplicate entries to prevent double-applying configs (#4)
   const uniqueConfig = [...new Set(config)]
   const uniqueOptionals = [...new Set(optionals)]
@@ -130,8 +149,27 @@ export const eslintConfig = ({
     ...(uniqueOptionals.includes(OptionalOption.Unicorn) ? unicorn : []),
     ...(uniqueOptionals.includes(OptionalOption.Sonarjs) ? sonarjs : []),
     ...(uniqueOptionals.includes(OptionalOption.Playwright) ? playwright : []),
+    ...(uniqueOptionals.includes(OptionalOption.Security) ? security : []),
+    ...(uniqueOptionals.includes(OptionalOption.TanstackQuery) ? tanstackQuery : []),
+    ...(uniqueOptionals.includes(OptionalOption.TanstackRouter) ? tanstackRouter : []),
+    ...(uniqueOptionals.includes(OptionalOption.Perfectionist) ? perfectionist : []),
+    ...(uniqueOptionals.includes(OptionalOption.Jsdoc) ? jsdoc : []),
 
     // Prettier must be last to override stylistic rules
     ...(uniqueOptionals.includes(OptionalOption.Prettier) ? prettier : [])
-  ]
+  ].map((config: TSESLint.FlatConfig.Config) => {
+    if (strict && config.rules) {
+      const strictRules: TSESLint.FlatConfig.Rules = Object.fromEntries(
+        Object.entries(config.rules).map(([key, value]) => {
+          if (value === 'warn') return [key, 'error']
+
+          return [key, value]
+        })
+      )
+
+      return { ...config, rules: strictRules }
+    }
+
+    return config
+  }) as FlatConfigArray
 }

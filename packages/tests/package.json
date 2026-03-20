@@ -17,6 +17,7 @@
     "@santi020k/eslint-config-typescript": "^0.7.1",
     "@santi020k/eslint-config-vue": "^0.7.1",
     "eslint": "^10.0.3",
+    "@types/node": "^22.10.1",
     "typescript": "^5.9.3",
     "vitest": "^4.1.0"
   }

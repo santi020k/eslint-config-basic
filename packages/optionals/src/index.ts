@@ -22,3 +22,11 @@ export { vitest } from './vitest.js'
 export { sonarjs } from './sonarjs.js'
 
 export { playwright } from './playwright.js'
+
+export { security } from './security.js'
+
+export { tanstackQuery, tanstackRouter } from './tanstack.js'
+
+export { perfectionist } from './perfectionist.js'
+
+export { jsdoc } from './jsdoc.js'

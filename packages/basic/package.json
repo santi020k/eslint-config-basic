@@ -26,6 +26,9 @@
     "prepack": "rm -f README.md && cp ../../README.md ./README.md",
     "postpack": "rm -f README.md && ln -s ../../README.md ./README.md"
   },
+  "bin": {
+    "basic-eslint": "./dist/cli.js"
+  },
   "dependencies": {
     "@santi020k/eslint-config-astro": "^0.7.1",
     "@santi020k/eslint-config-core": "^0.7.1",

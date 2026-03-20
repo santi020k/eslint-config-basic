@@ -26,3 +26,5 @@ export const hasReactConfig = (configs?: ConfigOption[]): boolean => {
 
   return ReactConfigs.some(reactConfig => configs.includes(reactConfig))
 }
+
+export * from './detection.js'

@@ -55,3 +55,48 @@ declare module 'eslint-plugin-playwright' {
 
   export default plugin
 }
+
+declare module 'eslint-plugin-security' {
+  import type { TSESLint } from '@typescript-eslint/utils'
+
+  const plugin: {
+    configs: {
+      recommended: {
+        rules: TSESLint.FlatConfig.Rules
+      }
+    }
+    rules: TSESLint.FlatConfig.Plugin['rules']
+  }
+
+  export default plugin
+}
+
+declare module '@tanstack/eslint-plugin-query' {
+  import type { TSESLint } from '@typescript-eslint/utils'
+
+  const plugin: {
+    configs: {
+      recommended: {
+        rules: TSESLint.FlatConfig.Rules
+      }
+    }
+    rules: TSESLint.FlatConfig.Plugin['rules']
+  }
+
+  export default plugin
+}
+
+declare module '@tanstack/eslint-plugin-router' {
+  import type { TSESLint } from '@typescript-eslint/utils'
+
+  const plugin: {
+    configs: {
+      recommended: {
+        rules: TSESLint.FlatConfig.Rules
+      }
+    }
+    rules: TSESLint.FlatConfig.Plugin['rules']
+  }
+
+  export default plugin
+}

@@ -28,7 +28,12 @@ export enum OptionalOption {
   Regexp = 'regexp',
   Unicorn = 'unicorn',
   Sonarjs = 'sonarjs',
-  Playwright = 'playwright'
+  Playwright = 'playwright',
+  Security = 'security',
+  TanstackQuery = 'tanstack-query',
+  TanstackRouter = 'tanstack-router',
+  Perfectionist = 'perfectionist',
+  Jsdoc = 'jsdoc'
 }
 
 /**
@@ -56,6 +61,7 @@ export interface EslintConfigOptions {
   config?: ConfigOption[]
   optionals?: OptionalOption[]
   settings?: SettingOption[]
+  strict?: boolean
 }
 
 /**
