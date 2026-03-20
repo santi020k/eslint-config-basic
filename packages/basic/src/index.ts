@@ -105,11 +105,11 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
   const detected: Partial<EslintConfigOptions> = options === undefined ? detectProjectOptions() : {}
 
   const {
-    config = (detected.config || []),
-    optionals = (detected.optionals || []),
-    settings = (detected.settings || []),
-    strict = options?.strict || false
-  } = options || {}
+    config = (detected.config ?? []),
+    optionals = (detected.optionals ?? []),
+    settings = (detected.settings ?? []),
+    strict = options?.strict ?? false
+  } = options ?? {}
 
   // Deduplicate entries to prevent double-applying configs (#4)
   const uniqueConfig = [...new Set(config)]
