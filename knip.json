@@ -1,0 +1,14 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "project": ["packages/*/src/**/*.ts"],
+  "ignore": [
+    "**/*.d.ts",
+    "**/dist/**",
+    "packages/playground/**"
+  ],
+  "ignoreDependencies": [
+    "@changesets/changelog-github",
+    "@changesets/cli",
+    "cz-conventional-changelog"
+  ]
+}

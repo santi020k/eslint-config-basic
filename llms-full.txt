@@ -1,0 +1,66 @@
+# Full Technical Context: @santi020k/eslint-config-basic
+
+This document provides deep technical details for AI agents maintenance.
+
+## Dependency Graph
+
+```text
+core → typescript → react → next
+     ↘ astro
+     ↘ expo
+     ↘ ... (other frameworks)
+     ↘ optionals
+basic (composes all above)
+```
+
+## Package Management
+
+- **npm Workspaces**: Manages local packages and shared devDependencies.
+- **Turborepo**: Orchestrates builds, linting, and tests across the monorepo.
+- **Changesets**: Automates semantic versioning and publishing.
+- **npm Overrides**: ensures consistent versions across the plugin ecosystem.
+
+```json
+"overrides": {
+  "eslint": "$eslint",
+  "eslint-plugin-n": "$eslint-plugin-n",
+  "eslint-plugin-promise": "$eslint-plugin-promise"
+}
+```
+
+## Technical Decisions
+
+### 1. Flat Config (ESLint 10+)
+We only supports the Flat Config format. All configurations must be exported as `TSESLint.FlatConfig.ConfigArray`.
+
+### 2. Composable API
+Instead of traditional `extends`, we use a functional composition API:
+```typescript
+eslintConfig({ config, optionals, projectType })
+```
+This allows for dynamic detection and fine-grained control.
+
+### 3. Type Safety
+- Every package must export its config with explicit types.
+- We use `@typescript-eslint/utils` for internal types.
+- `packages/core/src/types.ts` is the single source of truth for enums.
+
+## Development Workflows
+
+### Adding a new Framework Config
+1. Seed new package via `mkdir packages/{name}/src`.
+2. Copy `packages/typescript/package.json` and adjust.
+3. Export config from `src/index.ts`.
+4. Add to `ConfigOption` enum in `packages/core/src/types.ts`.
+5. Wire up in `packages/basic/src/index.ts` using `uniqueConfig.includes()`.
+
+### Adding an Optional Integration
+1. Add new file to `packages/optionals/src/`.
+2. Register in `packages/optionals/src/index.ts`.
+3. Add to `OptionalOption` enum in `packages/core/src/types.ts`.
+4. Wire up in `packages/basic/src/index.ts` using `uniqueOptionals.includes()`.
+
+## Validation & CI
+- **Lint**: ESLint + CSpell + Knip.
+- **Test**: Vitest integration tests in `packages/tests`.
+- **Build**: `tsup` for ESM/CJS bundling.

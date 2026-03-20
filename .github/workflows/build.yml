@@ -22,8 +22,13 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - run: npm ci
+      - name: Spellcheck
+        run: npm run lint:spell
+      - name: Unused code check
+        run: npm run lint:knip
       - run: npm run build
       - run: npm run lint
-      - run: npm run test
+      - name: Run tests with coverage
+        run: npm run test:coverage
       - name: Dry-run publish check
         run: npm publish --dry-run -w packages/basic
