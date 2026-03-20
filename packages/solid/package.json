@@ -1,7 +1,7 @@
 {
-  "name": "@santi020k/eslint-config-react",
+  "name": "@santi020k/eslint-config-solid",
   "version": "0.7.1",
-  "description": "React ESLint configuration with hooks and JSX rules",
+  "description": "SolidJS ESLint configuration",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -22,18 +22,14 @@
     "check:exports": "publint"
   },
   "peerDependencies": {
-    "eslint": "^10.0.3",
-    "react": ">=18.0.0"
+    "eslint": "^10.0.3"
   },
   "peerDependenciesMeta": {
-    "react": { "optional": true }
+    "solid-js": { "optional": true }
   },
   "dependencies": {
     "@santi020k/eslint-config-core": "^0.7.1",
-    "@eslint/compat": "^2.0.3",
-    "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^7.0.1",
-    "globals": "^17.4.0"
+    "eslint-plugin-solid": "^0.14.5"
   },
   "devDependencies": {
     "@typescript-eslint/utils": "^8.57.0",
@@ -48,6 +44,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/santi020k/eslint-config-basic.git",
-    "directory": "packages/react"
+    "directory": "packages/solid"
   }
 }

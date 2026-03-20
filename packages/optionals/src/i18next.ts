@@ -1,19 +1,22 @@
-import { getDirname } from 'cross-dirname'
+import pluginI18next from 'eslint-plugin-i18next'
 
-import { FlatCompat } from '@eslint/eslintrc'
-import { fixupConfigRules } from '@eslint/compat'
 import type { TSESLint } from '@typescript-eslint/utils'
-
-// Initialize FlatCompat with the base directory
-const flatCompat = new FlatCompat({
-  baseDirectory: getDirname(),
-  recommendedConfig: {}
-})
 
 /**
  * i18next ESLint configuration
- * Enables i18next plugin for internationalization
+ * Enables i18next plugin for internationalization best practices
  */
 export const i18next: TSESLint.FlatConfig.ConfigArray = [
-  ...(fixupConfigRules(flatCompat.plugins('i18next')) as unknown as TSESLint.FlatConfig.ConfigArray)
+  {
+    name: 'optionals/i18next',
+    plugins: { i18next: pluginI18next },
+    rules: {
+      'i18next/no-literal-string': ['warn', {
+        mode: 'jsx-text-only',
+        'jsx-attributes': {
+          include: ['label', 'placeholder', 'alt', 'title', 'aria-label']
+        }
+      }]
+    }
+  }
 ]

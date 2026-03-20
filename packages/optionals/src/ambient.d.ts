@@ -23,7 +23,9 @@ declare module 'eslint-plugin-better-tailwindcss' {
 }
 
 declare module 'eslint-plugin-i18next' {
-  const plugin: unknown
+  import type { TSESLint } from '@typescript-eslint/utils'
+
+  const plugin: TSESLint.FlatConfig.Plugin
 
   export default plugin
 }
@@ -96,6 +98,58 @@ declare module '@tanstack/eslint-plugin-router' {
       }
     }
     rules: TSESLint.FlatConfig.Plugin['rules']
+  }
+
+  export default plugin
+}
+
+declare module 'eslint-plugin-jsonc' {
+  import type { TSESLint } from '@typescript-eslint/utils'
+
+  const plugin: {
+    configs: {
+      'flat/recommended-with-jsonc': TSESLint.FlatConfig.ConfigArray
+    }
+    rules: Record<string, unknown>
+  }
+
+  export default plugin
+}
+
+declare module 'eslint-plugin-yml' {
+  import type { TSESLint } from '@typescript-eslint/utils'
+
+  const plugin: {
+    configs: {
+      'flat/recommended': TSESLint.FlatConfig.ConfigArray
+    }
+    rules: Record<string, unknown>
+  }
+
+  export default plugin
+}
+
+declare module 'eslint-plugin-toml' {
+  import type { TSESLint } from '@typescript-eslint/utils'
+
+  const plugin: {
+    configs: {
+      'flat/recommended': TSESLint.FlatConfig.ConfigArray
+    }
+    rules: Record<string, unknown>
+  }
+
+  export default plugin
+}
+
+declare module 'eslint-plugin-storybook' {
+  import type { TSESLint } from '@typescript-eslint/utils'
+
+  const plugin: {
+    configs: {
+      'flat/recommended': TSESLint.FlatConfig.ConfigArray
+    }
+    rules: Record<string, unknown>
   }
 
   export default plugin

@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
-import { ConfigOption, type EslintConfigOptions, OptionalOption } from '../types.js'
+import { ConfigOption, type EslintConfigOptions, OptionalOption, RuntimeOption } from '../types.js'
 
 interface PackageJson {
   dependencies?: Record<string, string | undefined>
@@ -18,7 +18,8 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
 
   const options: EslintConfigOptions = {
     config: [],
-    optionals: []
+    optionals: [],
+    runtime: RuntimeOption.Universal
   }
 
   if (!existsSync(packageJsonPath)) {
@@ -36,17 +37,35 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
     }
 
     // Framework detection
-    if (allDeps.next) options.config?.push(ConfigOption.Next)
+    if (allDeps.next) {
+      options.config?.push(ConfigOption.Next)
+
+      options.runtime = RuntimeOption.Universal // Next.js uses both server and client
+    }
 
     if (allDeps.astro) options.config?.push(ConfigOption.Astro)
 
-    if (allDeps.react) options.config?.push(ConfigOption.React)
+    if (allDeps.react && !allDeps.next && !allDeps.expo && !allDeps['react-native']) {
+      options.config?.push(ConfigOption.React)
 
-    if (allDeps['@nestjs/core']) options.config?.push(ConfigOption.Nest)
+      options.runtime = RuntimeOption.Browser
+    }
+
+    if (allDeps['@nestjs/core']) {
+      options.config?.push(ConfigOption.Nest)
+
+      options.runtime = RuntimeOption.Node
+    }
 
     if (allDeps.vue) options.config?.push(ConfigOption.Vue)
 
     if (allDeps.expo || allDeps['react-native']) options.config?.push(ConfigOption.Expo)
+
+    if (allDeps.svelte) options.config?.push(ConfigOption.Svelte)
+
+    if (allDeps['solid-js']) options.config?.push(ConfigOption.Solid)
+
+    if (allDeps['@angular/core']) options.config?.push(ConfigOption.Angular)
 
     // Default to TS if tsconfig exists
     if (existsSync(join(cwd, 'tsconfig.json'))) {
@@ -58,11 +77,15 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
 
     if (allDeps.vitest) options.optionals?.push(OptionalOption.Vitest)
 
-    if (allDeps.playwright) options.optionals?.push(OptionalOption.Playwright)
+    if (allDeps.playwright || allDeps['@playwright/test']) options.optionals?.push(OptionalOption.Playwright)
 
     if (allDeps.i18next) options.optionals?.push(OptionalOption.I18next)
 
     if (allDeps['@stencil/core']) options.optionals?.push(OptionalOption.Stencil)
+
+    if (allDeps.storybook || allDeps['@storybook/react']) options.optionals?.push(OptionalOption.Storybook)
+
+    if (allDeps['@nestjs/swagger']) options.optionals?.push(OptionalOption.Swagger)
 
     // TanStack
     if (

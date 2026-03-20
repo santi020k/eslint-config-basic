@@ -1,5 +1,4 @@
 import pluginCspell from '@cspell/eslint-plugin'
-
 import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
@@ -9,6 +8,16 @@ import type { TSESLint } from '@typescript-eslint/utils'
 export const cspell: TSESLint.FlatConfig.ConfigArray = [
   {
     name: 'optionals/cspell',
-    plugins: { '@cspell': pluginCspell }
+    plugins: { '@cspell': pluginCspell },
+    rules: {
+      '@cspell/spellchecker': ['warn', {
+        autoFix: false,
+        numSuggestions: 3,
+        checkComments: true,
+        checkIdentifiers: true,
+        checkStrings: true,
+        checkStringTemplates: true
+      }]
+    }
   }
 ]

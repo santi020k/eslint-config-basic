@@ -5,5 +5,10 @@ export default [
   ...eslintConfig({
     config: [ConfigOption.Next, ConfigOption.Ts],
     settings: [SettingOption.Gitignore]
-  })
+  }),
+  {
+    rules: {
+      '@next/next/no-html-link-for-pages': 'off'
+    }
+  }
 ]

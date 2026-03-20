@@ -30,3 +30,13 @@ export { tanstackQuery, tanstackRouter } from './tanstack.js'
 export { perfectionist } from './perfectionist.js'
 
 export { jsdoc } from './jsdoc.js'
+
+export { swagger } from './swagger.js'
+
+export { storybook } from './storybook.js'
+
+export { jsonc } from './jsonc.js'
+
+export { yaml } from './yaml.js'
+
+export { toml } from './toml.js'

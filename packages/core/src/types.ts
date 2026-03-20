@@ -10,7 +10,18 @@ export enum ConfigOption {
   Expo = 'expo',
   Astro = 'astro',
   Nest = 'nest',
-  Vue = 'vue'
+  Vue = 'vue',
+  Svelte = 'svelte',
+  Solid = 'solid',
+  Angular = 'angular'
+}
+
+/**
+ * Next.js mode options
+ */
+export enum NextMode {
+  Pages = 'pages',
+  AppRouter = 'app-router'
 }
 
 /**
@@ -33,7 +44,12 @@ export enum OptionalOption {
   TanstackQuery = 'tanstack-query',
   TanstackRouter = 'tanstack-router',
   Perfectionist = 'perfectionist',
-  Jsdoc = 'jsdoc'
+  Jsdoc = 'jsdoc',
+  Swagger = 'swagger',
+  Storybook = 'storybook',
+  Jsonc = 'jsonc',
+  Yaml = 'yaml',
+  Toml = 'toml'
 }
 
 /**
@@ -42,6 +58,39 @@ export enum OptionalOption {
 export enum SettingOption {
   Gitignore = 'gitignore',
   NoGitignore = 'no-gitignore'
+}
+
+/**
+ * Enum for runtime environment presets
+ */
+export enum RuntimeOption {
+
+  /** Only Node.js globals (process, __dirname, etc.) */
+  Node = 'node',
+
+  /** Only Browser globals (window, document, etc.) */
+  Browser = 'browser',
+
+  /** Both Node.js and Browser globals (default) */
+  Universal = 'universal'
+}
+
+/**
+ * Enum for named presets
+ */
+export enum PresetOption {
+
+  /** Core JS config only */
+  Basic = 'basic',
+
+  /** All configs + all optionals */
+  All = 'all',
+
+  /** Core + TS + Node runtime */
+  Node = 'node',
+
+  /** Core + TS + React + Browser runtime */
+  Browser = 'browser'
 }
 
 /**
@@ -62,6 +111,11 @@ export interface EslintConfigOptions {
   optionals?: OptionalOption[]
   settings?: SettingOption[]
   strict?: boolean
+  runtime?: RuntimeOption
+  preset?: PresetOption
+
+  /** Next.js mode (Pages or App Router) */
+  nextMode?: NextMode
 }
 
 /**

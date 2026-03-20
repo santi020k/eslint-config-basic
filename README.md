@@ -4,151 +4,41 @@
 [![npm version](https://img.shields.io/npm/v/@santi020k/eslint-config-basic.svg)](https://www.npmjs.com/package/@santi020k/eslint-config-basic)
 [![npm downloads](https://img.shields.io/npm/dm/@santi020k/eslint-config-basic.svg)](https://www.npmjs.com/package/@santi020k/eslint-config-basic)
 [![Docs](https://img.shields.io/badge/docs-TypeDoc-blue.svg)](https://santi020k.github.io/eslint-config-basic/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+<!-- [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) -->
+[![license](https://img.shields.io/npm/l/@santi020k/eslint-config-basic.svg)](https://github.com/santi020k/eslint-config-basic/blob/main/LICENSE)
 
-Welcome to **@santi020k/eslint-config-basic**, a comprehensive and opinionated ESLint configuration package for JavaScript, TypeScript, React, and other frameworks. Born from a desire to eliminate bad practices and ensure high-quality code, this configuration automates code quality checks and reduces cognitive load during code reviews by enforcing a consistent coding style across your projects.
 
-## Why Use This Configuration?
+A modern, composable, and opinionated ESLint 9+ (Flat Config) configuration for JavaScript, TypeScript, React, Next.js, and more.
 
-- **Consistency:** Enforces a uniform coding style, reducing code discrepancies and easing collaboration.
-- **Quality:** Promotes best practices and helps avoid common pitfalls in JavaScript, TypeScript, Frameworks, Libraries, Tools and more.
-- **Automation:** Catches issues early in the development process, minimizing manual code review effort.
-- **Customization:** While it comes with strong opinions, you can tailor it to suit your project's specific needs.
+## Features
+
+- **ESLint 9 Flat Config**: Fully native support for the new configuration system.
+- **TypeScript**: Robust rules with type-aware linting.
+- **React & Next.js**: Optimized for modern web development, including App Router support.
+- **Framework Support**: Svelte, Solid, Astro, Vue, Expo, NestJS, and Angular.
+- **Composable**: Opt-in to exactly what you need via simple enums.
+- **Auto-detection**: Zero-config mode that detects your project type.
+- **CLI Utility**: Easily initialize or update your configuration.
+- **Strict Mode**: Optional strict rules for a zero-warning codebase.
+- **Optimized for AI**: Includes specialized context and workflows for AI agents.
 
 ## Installation
 
-Before installing, make sure you have ESLint (version 9.0.0 or 10.0.0 or later) installed:
-
 ```bash
-npm install eslint --save-dev
+npm install -D eslint @santi020k/eslint-config-basic
 ```
 
-Then, install the configuration package. **Important:** I recommend using a fixed version (do not use `^` or `~`), as any new functionality or change may introduce new linter errors that require manual updates.
+## Basic Usage
 
-```bash
-npm install @santi020k/eslint-config-basic --save-dev
-```
-
-## Usage
-
-Create an `eslint.config.js` file (or update your existing one) and extend **@santi020k/eslint-config-basic** based on your project type.
-
-### Zero-Config (Auto-Detection)
-
-Starting from version 1.0.0, the configuration automatically detects your project type (TypeScript, React, Next.js, etc.) and optional plugins (Vitest, Tailwind, etc.) by analyzing your `package.json` and project structure.
+Create an `eslint.config.js` in your project root:
 
 ```js
 import { eslintConfig } from '@santi020k/eslint-config-basic'
 
-export default [
-  ...eslintConfig()
-  // Your custom config
-]
+export default eslintConfig()
 ```
 
-### Manual Configuration
-
-If you prefer to be explicit or need to override the auto-detection:
-
-For projects that require specific configurations (e.g., TypeScript, React, Next.js, ...Etc), use the appropriate options:
-
-```js
-import { ConfigOption, eslintConfig } from '@santi020k/eslint-config-basic'
-
-// TypeScript project
-export default [
-  ...eslintConfig({ config: [ConfigOption.Ts] })
-  // Your custom config
-]
-
-// React project
-export default [
-  ...eslintConfig({ config: [ConfigOption.React] })
-  // Your custom config
-]
-
-// TypeScript and React project
-export default [
-  ...eslintConfig({ config: [ConfigOption.React, ConfigOption.Ts] })
-  // Your custom config
-]
-
-// Next.js project
-export default [
-  ...eslintConfig({ config: [ConfigOption.Next] })
-  // Your custom config
-]
-
-// Expo project
-export default [
-  ...eslintConfig({ config: [ConfigOption.Expo] })
-  // Your custom config
-]
-
-// Astro project (supports Astro with React)
-export default [
-  ...eslintConfig({ config: [ConfigOption.Astro] })
-  // Your custom config
-]
-
-// NestJS project
-export default [
-  ...eslintConfig({ config: [ConfigOption.Nest] })
-  // Your custom config
-]
-
-// Vue project
-export default [
-  ...eslintConfig({ config: [ConfigOption.Vue] })
-  // Your custom config
-]
-```
-
-### Optional Usage
-
-There are additional optional parameters to add support for other front-end/back-end technologies. Many of these are now auto-detected, but you can still enable them manually:
-
-```js
-import { ConfigOption, eslintConfig, OptionalOption } from '@santi020k/eslint-config-basic'
-
-export default [
-  ...eslintConfig({
-    config: [ConfigOption.Next, ConfigOption.Ts],
-    optionals: [
-      // Spell checker
-      OptionalOption.Cspell,
-      // TailwindCss
-      OptionalOption.Tailwind,
-      // Vitest and testing-library
-      OptionalOption.Vitest,
-      // I18next
-      OptionalOption.I18next,
-      // Mdx
-      OptionalOption.Mdx,
-      // Markdown
-      OptionalOption.Markdown,
-      // SonarJS
-      OptionalOption.Sonarjs,
-      // Stencil
-      OptionalOption.Stencil,
-      // Playwright
-      OptionalOption.Playwright,
-      // Prettier
-      OptionalOption.Prettier,
-      // JSDoc support
-      OptionalOption.JSDoc,
-      // Perfectionist (sorting and organization)
-      OptionalOption.Perfectionist,
-      // Security rules (enabled by default)
-      OptionalOption.Security,
-      // TanStack Ecosystem
-      OptionalOption.TanstackQuery,
-      OptionalOption.TanstackRouter
-    ]
-  })
-  // Your custom config
-]
-```
+By default, the config will automatically detect if your project uses TypeScript, React, or Next.js.
 
 ### Strict Mode
 
@@ -162,19 +52,97 @@ export default [
 ]
 ```
 
-### Settings Usage (Experimental)
+## Named Presets
 
-This experimental option allows ESLint to honor your `.gitignore` file:
+For common project types, you can use built-in presets:
 
 ```js
-import { eslintConfig, SettingOption } from '@santi020k/eslint-config-basic'
+import { eslintConfig, PresetOption } from '@santi020k/eslint-config-basic'
+
+export default eslintConfig({
+  preset: PresetOption.Node
+})
+```
+
+| Preset | Purpose |
+| :--- | :--- |
+| `Basic` | Core JavaScript rules only |
+| `Node` | Core + TypeScript + Node.js globals |
+| `Browser` | Core + TypeScript + React + Browser globals |
+| `All` | Enables every available configuration and optional |
+
+## Manual Configuration
+
+If you prefer to be explicit:
+
+```js
+import { ConfigOption, eslintConfig, OptionalOption } from '@santi020k/eslint-config-basic'
+
+export default eslintConfig({
+  config: [
+    ConfigOption.Ts,
+    ConfigOption.React
+  ],
+  optionals: [
+    OptionalOption.Cspell,
+    OptionalOption.Tailwind,
+    OptionalOption.Vitest,
+    OptionalOption.I18next,
+    OptionalOption.Mdx,
+    OptionalOption.Markdown,
+    OptionalOption.Stencil,
+    OptionalOption.Prettier,
+    OptionalOption.Regexp,
+    OptionalOption.Unicorn,
+    OptionalOption.Sonarjs,
+    OptionalOption.Playwright,
+    OptionalOption.Security,
+    OptionalOption.TanstackQuery,
+    OptionalOption.TanstackRouter,
+    OptionalOption.Perfectionist,
+    OptionalOption.Jsdoc,
+    OptionalOption.Swagger,
+    OptionalOption.Storybook,
+    OptionalOption.Jsonc,
+    OptionalOption.Yaml,
+    OptionalOption.Toml
+  ]
+})
+```
+
+### Next.js App Router
+
+Enable specialized rules for the App Router:
+
+```js
+import { ConfigOption, eslintConfig, NextMode } from '@santi020k/eslint-config-basic'
+
+export default eslintConfig({
+  config: [ConfigOption.Next],
+  nextMode: NextMode.AppRouter
+})
+```
+
+## Framework Support
+
+This package uses **lazy loading** for framework-specific dependencies (Svelte, Solid, Angular) to keep the core package light and avoid peer dependency conflicts.
+
+To use them, install the corresponding config package:
+
+```bash
+npm install -D @santi020k/eslint-config-svelte # Or solid / angular
+```
+
+Then load the config:
+
+```js
+import { eslintConfig, loadFrameworkConfig } from '@santi020k/eslint-config-basic'
+
+const svelteConfig = await loadFrameworkConfig('@santi020k/eslint-config-svelte')
 
 export default [
-  ...eslintConfig({
-    // ESLint will ignore files specified in .gitignore
-    settings: [SettingOption.Gitignore]
-  })
-  // Your custom config
+  ...eslintConfig(),
+  ...svelteConfig
 ]
 ```
 
@@ -186,7 +154,35 @@ You can use the built-in CLI to easily initialize or update your configuration:
 npx @santi020k/eslint-config-basic init
 ```
 
-This will guide you through creating an `eslint.config.js` with the best defaults for your project.
+The package also provides a `basic-eslint` binary:
+
+```bash
+npx basic-eslint init    # Initialize eslint.config.js
+```
+
+## Settings
+
+### Gitignore
+
+Gitignore integration is enabled by default. If you need to disable it:
+
+```js
+import { eslintConfig, SettingOption } from '@santi020k/eslint-config-basic'
+
+export default eslintConfig({
+  settings: [SettingOption.NoGitignore]
+})
+```
+
+## Inspector
+
+Visualize your configuration with the built-in inspector:
+
+```bash
+npm run inspector
+```
+
+This opens an interactive UI where you can see all active rules, plugins, and config layers. It's useful for debugging which rules are applied.
 
 ## AI Agent Capabilities
 
@@ -196,16 +192,16 @@ This project is optimized for AI agents and LLM-based tools. It includes an `.ag
 
 This project is a monorepo managed with **Turbo** and **npm Workspaces**.
 
-- `packages/basic`: Main package entry point.
 - `packages/core`: Core logic and shared types.
 - `packages/typescript`: TypeScript specific rules.
 - `packages/react`: React and Hooks rules.
 - `packages/next`: Next.js rules.
 - `packages/astro`: Astro rules.
 - `packages/expo`: Expo/React Native rules.
+- `packages/svelte`: Svelte support.
+- `packages/solid`: Solid support.
+- `packages/angular`: Angular support.
 - `packages/optionals`: Optional configurations (Tailwind, Vitest, etc.).
-- `packages/tests`: Integration tests.
-- `packages/playground`: Testing playground for local development.
 
 ## Development
 
@@ -223,6 +219,7 @@ npm install
 ```
 
 ### Useful Commands
+
 ```bash
 npm run build      # Build all packages using Turbo
 npm run lint       # Lint all packages
@@ -234,46 +231,16 @@ npm run docs       # Generate API documentation
 
 ### Publishing Workflow
 
-This repository uses **Changesets** (`@changesets/cli`) to automatically handle workspace dependency versioning and publishing to npm.
+This repository uses **Changesets** to automatically handle workspace dependency versioning and publishing to npm.
 
-To publish a new version of the packages:
+1. Generate a changeset: `npm run changeset`
+2. Bump versions: `npm run version-packages`
+3. Publish: `npm run release`
 
-1. Make sure you are authenticated with npm in your terminal (`npm login`).
-2. Generate a changeset summarizing your changes:
-   ```bash
-   npm run changeset
-   ```
-3. Consume the changeset to bump package versions automatically:
-   ```bash
-   npm run version-packages
-   ```
-4. Build all packages and publish them to npm:
-   ```bash
-   npm run release
-   ```
-
-### ESLint Config Inspector
-
-You can visually inspect the generated ESLint configuration using the built-in inspector:
-
-```bash
-npm run inspector
-```
-
-This opens an interactive UI where you can see all active rules, plugins, and config layers. It's useful for debugging which rules are applied and understanding the final merged configuration.
-
-### API Documentation
+## API Documentation
 
 Auto-generated API docs are available online:
 [**https://santi020k.github.io/eslint-config-basic/**](https://santi020k.github.io/eslint-config-basic/)
-
-You can also generate them locally:
-
-```bash
-npm run docs
-```
-
-This outputs markdown documentation to the `docs/` directory.
 
 ## Compatibility & Known Issues
 
@@ -282,17 +249,15 @@ This outputs markdown documentation to the `docs/` directory.
 This package includes robust defaults for Astro projects, including:
 
 - Automatic detection of virtual scripts inside `.astro` files.
-- Disabled `react/jsx-no-undef` (Astro handles this).
-- Enforced `never` comma-dangle for Astro templates.
 - Support for JSX/TSX inside Astro components.
 
 ## Opinionated but Flexible
 
-This ESLint configuration is based on my personal preferences and practices, and it may evolve over time. **Important:** I recommend using a fixed version to avoid unexpected changes that might introduce new linter errors. To ensure stability, do not use `^` or `~` when specifying the version. If a rule feels too strict, consider changing it from an error to a warning to allow more flexibility during development.
+This configuration is based on personal best practices and may evolve. I recommend using a fixed version (no `^` or `~`) to avoid unexpected changes. If a rule is too strict, you can always adjust or disable it in your custom config.
 
 ## Scripts
 
-Add the following useful scripts to your `package.json`:
+Add these to your `package.json` for easier workflow:
 
 ```json
 "scripts": {
@@ -301,45 +266,9 @@ Add the following useful scripts to your `package.json`:
 }
 ```
 
-## How to Implement in an Existing Project
-
-1. Install the Dependencies: Ensure that both ESLint and this configuration package are installed.
-2. Update Your ESLint Configuration: Extend **@santi020k/eslint-config-basic** in your ESLint configuration file as shown above.
-3. Run ESLint: Lint your project files and automatically fix issues if possible:
-
-    ```bash
-    npm run lint
-    npm run lint:fix
-    ```
-
-4.  **Adjust as Necessary:** Review and modify the linting rules based on your project's needs. Some rules might be too strict or not applicable; feel free to disable or adjust them.
-
-## CLI Commands
-
-The package provides a `basic-eslint` binary:
-
-```bash
-npx basic-eslint init    # Initialize eslint.config.js
-```
-
-## Future Features
-
-- [x] Testing
-- [x] Refactored rules structure (Monorepo transition)
-- [x] Astro and Expo support
-- [x] Enhanced documentation
-- [x] Additional framework support (contributions welcome!):
-  - [x] Vue
-  - [ ] Angular
-  - [x] NestJS
-
-## Contributing
-
-Contributions are welcome! Please read the [Contributing Guide](CONTRIBUTING.md) for details on setting up the project, adding new configurations, and submitting pull requests.
-
 ## Acknowledgements
 
-Special thanks to the developers and maintainers of the following libraries, which form the backbone of this ESLint configuration:
+Special thanks to the developers and maintainers of these projects:
 
 - [eslint-config-standard](https://www.npmjs.com/package/eslint-config-standard)
 - [eslint-plugin-import](https://www.npmjs.com/package/eslint-plugin-import)
@@ -363,15 +292,21 @@ Special thanks to the developers and maintainers of the following libraries, whi
 - [eslint-plugin-regexp](https://www.npmjs.com/package/eslint-plugin-regexp)
 - [eslint-plugin-i18next](https://www.npmjs.com/package/eslint-plugin-i18next)
 - [eslint-plugin-mdx](https://www.npmjs.com/package/eslint-plugin-mdx)
-- [eslint-config-prettier](https://www.npmjs.com/package/eslint-config-prettier)
-- [eslint-config-expo](https://www.npmjs.com/package/eslint-config-expo)
+- [eslint-plugin-markdown](https://www.npmjs.com/package/eslint-plugin-markdown)
+- [@stencil-community/eslint-plugin](https://www.npmjs.com/package/@stencil-community/eslint-plugin)
 - [eslint-plugin-jsdoc](https://www.npmjs.com/package/eslint-plugin-jsdoc)
 - [eslint-plugin-perfectionist](https://www.npmjs.com/package/eslint-plugin-perfectionist)
 - [eslint-plugin-security](https://www.npmjs.com/package/eslint-plugin-security)
+- [eslint-plugin-storybook](https://www.npmjs.com/package/eslint-plugin-storybook)
+- [eslint-plugin-swagger](https://www.npmjs.com/package/eslint-plugin-swagger)
+- [eslint-plugin-jsonc](https://www.npmjs.com/package/eslint-plugin-jsonc)
+- [eslint-plugin-yml](https://www.npmjs.com/package/eslint-plugin-yml)
+- [eslint-plugin-toml](https://www.npmjs.com/package/eslint-plugin-toml)
 - [@tanstack/eslint-plugin-query](https://www.npmjs.com/package/@tanstack/eslint-plugin-query)
 - [@tanstack/eslint-plugin-router](https://www.npmjs.com/package/@tanstack/eslint-plugin-router)
-- ...and many others
+- [eslint-config-prettier](https://www.npmjs.com/package/eslint-config-prettier)
+- [eslint-config-expo](https://www.npmjs.com/package/eslint-config-expo)
 
-Their ongoing contributions help maintain the high standards of code quality we all strive for.
+## License
 
-Thank you for using **@santi020k/eslint-config-basic**. Together, let's write cleaner, more maintainable code!
+MIT

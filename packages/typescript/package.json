@@ -23,7 +23,10 @@
   },
   "peerDependencies": {
     "eslint": "^10.0.3",
-    "typescript": "^5.9.3"
+    "typescript": ">=5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "typescript": { "optional": true }
   },
   "dependencies": {
     "@santi020k/eslint-config-core": "^0.7.1",

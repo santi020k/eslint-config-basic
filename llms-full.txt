@@ -20,6 +20,8 @@ basic (composes all above)
 - **Changesets**: Automates semantic versioning and publishing.
 - **npm Overrides**: ensures consistent versions across the plugin ecosystem.
 
+- **Lazy Loading**: Frameworks like Svelte, Solid, and Angular are lazy-loaded in `packages/basic` to prevent peer dependency conflicts when not in use.
+
 ```json
 "overrides": {
   "eslint": "$eslint",
@@ -30,7 +32,7 @@ basic (composes all above)
 
 ## Technical Decisions
 
-### 1. Flat Config (ESLint 10+)
+### 1. Flat Config (ESLint 9+)
 We only supports the Flat Config format. All configurations must be exported as `TSESLint.FlatConfig.ConfigArray`.
 
 ### 2. Composable API
@@ -59,7 +61,7 @@ This allows for dynamic detection, strict mode enforcement, and fine-grained con
 2. Register in `packages/optionals/src/index.ts`.
 3. Add to `OptionalOption` enum in `packages/core/src/types.ts`.
 4. Wire up in `packages/basic/src/index.ts` using `uniqueOptionals.includes()`.
-5. Supported Optionals: `Cspell`, `Tailwind`, `Vitest`, `I18next`, `Mdx`, `Markdown`, `Sonarjs`, `Stencil`, `Playwright`, `Prettier`, `JSDoc`, `Perfectionist`, `Security`, `TanstackQuery`, `TanstackRouter`.
+5. Supported Optionals: `Cspell`, `Tailwind`, `Vitest`, `I18next`, `Mdx`, `Markdown`, `Sonarjs`, `Stencil`, `Playwright`, `Prettier`, `JSDoc`, `Perfectionist`, `Security`, `TanstackQuery`, `TanstackRouter`, `Jsonc`, `Yaml`, `Toml`, `Storybook`, `Swagger`.
 
 ## Validation & CI
 - **Lint**: ESLint + CSpell + Knip.

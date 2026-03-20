@@ -7,10 +7,17 @@ import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
  * TypeScript ESLint configuration
- * Extends typescript-eslint stylistic config with custom rules
+ * Extends typescript-eslint strict + stylistic type-checked presets with custom rules
  */
 export const typescriptConfig: TSESLint.FlatConfig.ConfigArray = [
-  ...tsEslint.configs.stylistic as TSESLint.FlatConfig.ConfigArray,
+  ...(tsEslint.configs.strictTypeChecked as TSESLint.FlatConfig.ConfigArray).map(c => ({
+    ...c,
+    files: ['**/*.{ts,tsx,mts,cts}']
+  })),
+  ...(tsEslint.configs.stylisticTypeChecked as TSESLint.FlatConfig.ConfigArray).map(c => ({
+    ...c,
+    files: ['**/*.{ts,tsx,mts,cts}']
+  })),
   {
     name: 'eslint-config-typescript/rules',
     files: ['**/*.{ts,tsx,mts,cts}'],
