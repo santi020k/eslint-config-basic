@@ -1,10 +1,10 @@
 // @ts-check
-import react from '@santi020k/eslint-config-react'
+import svelte from '@santi020k/eslint-config-svelte'
 import { ConfigOption, eslintConfig } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
-  config: [ConfigOption.React, ConfigOption.Ts],
+  config: [ConfigOption.Svelte, ConfigOption.Ts],
   frameworks: {
-    react
+    svelte
   }
 })

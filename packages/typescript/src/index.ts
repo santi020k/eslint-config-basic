@@ -37,3 +37,5 @@ export { typescriptConfig as tsConfig }
 
 // Re-export rules for direct access
 export { rules }
+
+export default typescriptConfig

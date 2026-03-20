@@ -1,9 +1,10 @@
 // @ts-check
-import { eslintConfig, OptionalOption, SettingOption } from '@santi020k/eslint-config-basic'
+import { eslintConfig, OptionalOption } from '@santi020k/eslint-config-basic'
 
-export default [
-  ...eslintConfig({
-    optionals: [OptionalOption.Vitest],
-    settings: [SettingOption.Gitignore]
-  })
-]
+/** @type {import('../../basic/src/index.js').eslintConfig} */
+const composer = eslintConfig
+
+export default composer({
+  config: [],
+  optionals: [OptionalOption.Vitest]
+})

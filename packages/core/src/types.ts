@@ -98,10 +98,14 @@ export enum PresetOption {
  */
 export const ReactConfigs: ConfigOption[] = [
   ConfigOption.React,
-  ConfigOption.Astro,
   ConfigOption.Next,
   ConfigOption.Expo
 ]
+
+/**
+ * Type to handle both direct config arrays and imported modules with a default export.
+ */
+export type ImportedFramework = FlatConfigArray | { default: FlatConfigArray }
 
 /**
  * ESLint configuration interface
@@ -113,9 +117,20 @@ export interface EslintConfigOptions {
   strict?: boolean
   runtime?: RuntimeOption
   preset?: PresetOption
-
-  /** Next.js mode (Pages or App Router) */
   nextMode?: NextMode
+
+  // Framework Configurations (Modularized)
+  frameworks?: {
+    react?: ImportedFramework
+    next?: ImportedFramework
+    astro?: ImportedFramework
+    expo?: ImportedFramework
+    vue?: ImportedFramework
+    svelte?: ImportedFramework
+    solid?: ImportedFramework
+    angular?: ImportedFramework
+    nest?: ImportedFramework
+  }
 }
 
 /**

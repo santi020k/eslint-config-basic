@@ -1,10 +1,10 @@
 // @ts-check
-import react from '@santi020k/eslint-config-react'
+import angular from '@santi020k/eslint-config-angular'
 import { ConfigOption, eslintConfig } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
-  config: [ConfigOption.React, ConfigOption.Ts],
+  config: [ConfigOption.Angular, ConfigOption.Ts],
   frameworks: {
-    react
+    angular
   }
 })

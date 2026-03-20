@@ -22,3 +22,5 @@ export const angularConfig: TSESLint.FlatConfig.ConfigArray = [
     }
   }
 ]
+
+export default angularConfig

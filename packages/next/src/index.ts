@@ -29,3 +29,5 @@ export const nextConfig: TSESLint.FlatConfig.ConfigArray = [
 
 // Re-export rules for direct access
 export { rules }
+
+export default nextConfig

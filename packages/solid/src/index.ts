@@ -9,6 +9,8 @@ import type { TSESLint } from '@typescript-eslint/utils'
 export const solidConfig: TSESLint.FlatConfig.ConfigArray = [
   {
     name: 'eslint-config-solid/rules',
-    ...(pluginSolid.configs['flat/recommended'])
+    ...(pluginSolid.configs['flat/recommended'] as any)
   }
 ]
+
+export default solidConfig

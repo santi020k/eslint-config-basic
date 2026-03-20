@@ -1,10 +1,10 @@
 // @ts-check
-import react from '@santi020k/eslint-config-react'
+import solid from '@santi020k/eslint-config-solid'
 import { ConfigOption, eslintConfig } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
-  config: [ConfigOption.React, ConfigOption.Ts],
+  config: [ConfigOption.Solid, ConfigOption.Ts],
   frameworks: {
-    react
+    solid
   }
 })

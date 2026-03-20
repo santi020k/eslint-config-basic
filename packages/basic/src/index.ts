@@ -1,82 +1,12 @@
-import type { TSESLint } from '@typescript-eslint/utils'
-
-// Re-export types and utilities from core
-export {
-  ConfigOption,
-  OptionalOption,
-  SettingOption,
-  RuntimeOption,
-  PresetOption,
-  NextMode,
-  ReactConfigs,
-  applyConfigIfOptionPresent,
-  hasReactConfig,
-  coreConfig,
-  createCoreConfig,
-  getGlobalsForRuntime,
-  jsConfig,
-  gitignore,
-  detectProjectOptions
-} from '@santi020k/eslint-config-core'
-
-export type {
-  EslintConfigOptions,
-  FlatConfigArray
-} from '@santi020k/eslint-config-core'
-
-// Re-export framework configs
-export { typescriptConfig, tsConfig } from '@santi020k/eslint-config-typescript'
-
-export { reactConfig } from '@santi020k/eslint-config-react'
-
-export { nextConfig } from '@santi020k/eslint-config-next'
-
-export { astroConfig } from '@santi020k/eslint-config-astro'
-
-export { expoConfig } from '@santi020k/eslint-config-expo'
-
-export { nestConfig } from '@santi020k/eslint-config-nest'
-
-export { vueConfig } from '@santi020k/eslint-config-vue'
-
-// Re-export optionals
-export {
-  cspell,
-  i18next,
-  markdown,
-  mdx,
-  prettier,
-  regexp,
-  stencil,
-  tailwind,
-  unicorn,
-  vitest,
-  playwright,
-  sonarjs,
-  security,
-  tanstackQuery,
-  tanstackRouter,
-  perfectionist,
-  jsdoc,
-  swagger,
-  storybook,
-  jsonc,
-  yaml,
-  toml
-} from '@santi020k/eslint-config-optionals'
-
-// Import for composition
-import { astroConfig } from '@santi020k/eslint-config-astro'
-import type {
-  EslintConfigOptions,
-  FlatConfigArray
-} from '@santi020k/eslint-config-core'
 import {
   applyConfigIfOptionPresent,
   ConfigOption,
   coreConfig,
   createCoreConfig,
   detectProjectOptions,
+  type EslintConfigOptions as CoreOptions,
+  type FlatConfigArray,
+  type ImportedFramework,
   gitignore,
   hasReactConfig,
   NextMode,
@@ -85,9 +15,6 @@ import {
   RuntimeOption,
   SettingOption
 } from '@santi020k/eslint-config-core'
-import { expoConfig } from '@santi020k/eslint-config-expo'
-import { nestConfig } from '@santi020k/eslint-config-nest'
-import { nextConfig } from '@santi020k/eslint-config-next'
 import {
   cspell,
   i18next,
@@ -112,29 +39,84 @@ import {
   vitest,
   yaml
 } from '@santi020k/eslint-config-optionals'
-import { reactConfig } from '@santi020k/eslint-config-react'
 import { typescriptConfig } from '@santi020k/eslint-config-typescript'
-import { vueConfig } from '@santi020k/eslint-config-vue'
+import type { TSESLint } from '@typescript-eslint/utils'
+
+// Re-export core types and utilities
+export {
+  ConfigOption,
+  OptionalOption,
+  SettingOption,
+  RuntimeOption,
+  PresetOption,
+  NextMode,
+  ReactConfigs,
+  applyConfigIfOptionPresent,
+  hasReactConfig,
+  coreConfig,
+  createCoreConfig,
+  getGlobalsForRuntime,
+  jsConfig,
+  gitignore,
+  detectProjectOptions
+} from '@santi020k/eslint-config-core'
 
 /**
- * Safely loads a framework config at runtime.
- * Returns empty array if the framework's peer deps aren't installed.
+ * Enhanced options for the basic package while types are syncing in the monorepo.
+ * This extends the core options with explicit framework parameters.
  */
-const loadFrameworkConfig = async (
-  packageName: string
-): Promise<TSESLint.FlatConfig.ConfigArray> => {
-  try {
-    const mod = await import(packageName) as Record<string, TSESLint.FlatConfig.ConfigArray>
-
-    // Return the first exported config array
-    const key = Object.keys(mod).find(
-      k => k !== 'default' && Array.isArray(mod[k])
-    )
-
-    return key ? mod[key] : []
-  } catch {
-    return []
+export interface EslintConfigOptions extends CoreOptions {
+  frameworks?: {
+    react?: ImportedFramework
+    next?: ImportedFramework
+    astro?: ImportedFramework
+    expo?: ImportedFramework
+    vue?: ImportedFramework
+    svelte?: ImportedFramework
+    solid?: ImportedFramework
+    angular?: ImportedFramework
+    nest?: ImportedFramework
   }
+}
+
+export type { FlatConfigArray }
+
+// Re-export framework configs
+export { typescriptConfig, tsConfig } from '@santi020k/eslint-config-typescript'
+
+// Re-export optionals
+export {
+  cspell,
+  i18next,
+  jsdoc,
+  jsonc,
+  markdown,
+  mdx,
+  perfectionist,
+  playwright,
+  prettier,
+  regexp,
+  security,
+  sonarjs,
+  stencil,
+  storybook,
+  swagger,
+  tailwind,
+  tanstackQuery,
+  tanstackRouter,
+  toml,
+  unicorn,
+  vitest,
+  yaml
+} from '@santi020k/eslint-config-optionals'
+
+/**
+ * Resolves an imported framework (either array or default export) into a config array.
+ */
+const resolveFramework = (framework?: ImportedFramework): FlatConfigArray => {
+  if (!framework) return []
+
+  return Array.isArray(framework) ? framework : framework.default
 }
 
 /**
@@ -186,14 +168,44 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     settings = (detected.settings ?? []),
     strict = options?.strict ?? false,
     runtime = (presetDefaults.runtime ?? detected.runtime ?? RuntimeOption.Universal),
-    nextMode = (presetDefaults.nextMode ?? detected.nextMode ?? NextMode.Pages)
+    nextMode = (presetDefaults.nextMode ?? detected.nextMode ?? NextMode.Pages),
+
+    frameworks = options?.frameworks ?? {}
   } = options ?? {}
+
+  const {
+    react: reactParamRaw = frameworks.react,
+    next: nextParamRaw = frameworks.next,
+    astro: astroParamRaw = frameworks.astro,
+    expo: expoParamRaw = frameworks.expo,
+    nest: nestParamRaw = frameworks.nest,
+    vue: vueParamRaw = frameworks.vue,
+    svelte: svelteParamRaw = frameworks.svelte,
+    solid: solidParamRaw = frameworks.solid,
+    angular: angularParamRaw = frameworks.angular
+  } = frameworks
+
+  const reactParam = resolveFramework(reactParamRaw)
+  const nextParam = resolveFramework(nextParamRaw)
+  const astroParam = resolveFramework(astroParamRaw)
+  const expoParam = resolveFramework(expoParamRaw)
+  const nestParam = resolveFramework(nestParamRaw)
+  const vueParam = resolveFramework(vueParamRaw)
+  const svelteParam = resolveFramework(svelteParamRaw)
+  const solidParam = resolveFramework(solidParamRaw)
+  const angularParam = resolveFramework(angularParamRaw)
 
   // Deduplicate entries to prevent double-applying configs (#4)
   const uniqueConfig = [...new Set(config)]
   const uniqueOptionals = [...new Set(optionals)]
   const uniqueSettings = [...new Set(settings)]
-  const hasReact = hasReactConfig(uniqueConfig)
+
+  // React is needed if any React-based framework option is present OR if a config is passed
+  const hasReact = hasReactConfig(uniqueConfig) ||
+    reactParam.length > 0 ||
+    nextParam.length > 0 ||
+    expoParam.length > 0
+
   // Gitignore is enabled by default unless NoGitignore is specified (#8)
   const useGitignore = !uniqueSettings.includes(SettingOption.NoGitignore)
 
@@ -202,19 +214,19 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     createCoreConfig(runtime) :
     coreConfig
 
-  return [
+  return (([
     // Settings
     ...(useGitignore ? gitignore : []),
 
     // Core JS config with runtime-aware globals
     ...runtimeCoreConfig,
 
-    // React config (included if any React-based framework is used)
-    ...(hasReact ? reactConfig : []),
+    // React config (included if any React-based framework is used/passed)
+    ...(hasReact ? reactParam : []),
 
-    // Framework-specific configs
+    // Framework-specific configs (Modularized)
     ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Ts, typescriptConfig),
-    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Next, nextConfig),
+    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Next, nextParam),
 
     // Next.js App Router overrides (#12)
     ...(uniqueConfig.includes(ConfigOption.Next) && nextMode === NextMode.AppRouter ?
@@ -229,12 +241,15 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
       ] :
       []),
 
-    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Astro, astroConfig),
-    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Expo, expoConfig),
-    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Nest, nestConfig),
-    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Vue, vueConfig),
+    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Astro, astroParam),
+    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Expo, expoParam),
+    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Nest, nestParam),
+    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Vue, vueParam),
+    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Svelte, svelteParam),
+    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Solid, solidParam),
+    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Angular, angularParam),
 
-    // Optionals
+    // Optionals (Still synchronous as they are direct dependencies)
     ...(uniqueOptionals.includes(OptionalOption.Cspell) ? cspell : []),
     ...(uniqueOptionals.includes(OptionalOption.Tailwind) ? tailwind : []),
     ...(uniqueOptionals.includes(OptionalOption.Vitest) ? vitest : []),
@@ -278,7 +293,7 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
         '@typescript-eslint/require-await': 'off'
       }
     } as TSESLint.FlatConfig.Config
-  ].map((config: TSESLint.FlatConfig.Config) => {
+  ] as TSESLint.FlatConfig.ConfigArray).map((config: TSESLint.FlatConfig.Config) => {
     if (strict && config.rules) {
       const strictRules: TSESLint.FlatConfig.Rules = Object.fromEntries(
         Object.entries(config.rules).map(([key, value]) => {
@@ -292,9 +307,5 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     }
 
     return config
-  }) as FlatConfigArray
+  })) as FlatConfigArray
 }
-
-// Lazy-loaded framework configs for frameworks with heavy peer dependencies
-// These are exported as async getters to avoid breaking when peer deps aren't installed
-export { loadFrameworkConfig }

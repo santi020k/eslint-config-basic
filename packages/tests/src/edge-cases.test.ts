@@ -17,7 +17,7 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
     // Both should trigger React configs
     const names = extractConfigNames(config as Record<string, unknown>[])
 
-    expect(names.some(n => n?.includes('react'))).toBe(true)
+    expect(names.some(n => n.includes('react'))).toBe(true)
   })
 
   it('should include React config when Next is specified (implicit React)', () => {

@@ -22,15 +22,37 @@ A modern, composable, and opinionated ESLint 9+ (Flat Config) configuration for 
 - **Strict Mode**: Optional strict rules for a zero-warning codebase.
 - **Optimized for AI**: Includes specialized context and workflows for AI agents.
 
-## Installation
+## Installation & Configuration
+
+Create an `eslint.config.mjs` (or `.js` with `type: module`) in your project root.
+
+### 1. Basic Installation
 
 ```bash
 npm install -D eslint @santi020k/eslint-config-basic
 ```
 
-## Basic Usage
+### 2. Modular Framework Support
 
-Create an `eslint.config.js` in your project root:
+As of v0.8.0, framework-specific configurations are now optional and must be installed separately. This keeps the base package light and avoids dependency conflicts.
+
+```bash
+# For React projects
+npm install -D @santi020k/eslint-config-react
+
+# For Next.js projects
+npm install -D @santi020k/eslint-config-next
+
+# For Astro projects
+npm install -D @santi020k/eslint-config-astro
+
+# For Vue projects
+npm install -D @santi020k/eslint-config-vue
+```
+
+### 3. Basic Usage
+
+By default, the config will automatically detect if your project uses TypeScript, React, or Next.js (if they are installed).
 
 ```js
 import { eslintConfig } from '@santi020k/eslint-config-basic'
@@ -38,21 +60,7 @@ import { eslintConfig } from '@santi020k/eslint-config-basic'
 export default eslintConfig()
 ```
 
-By default, the config will automatically detect if your project uses TypeScript, React, or Next.js.
-
-### Strict Mode
-
-Enable strict mode to promote all warnings to errors, ensuring a zero-warning codebase:
-
-```js
-import { eslintConfig } from '@santi020k/eslint-config-basic'
-
-export default [
-  ...eslintConfig({ strict: true })
-]
-```
-
-## Named Presets
+### 4. Named Presets
 
 For common project types, you can use built-in presets:
 
@@ -71,11 +79,12 @@ export default eslintConfig({
 | `Browser` | Core + TypeScript + React + Browser globals |
 | `All` | Enables every available configuration and optional |
 
-## Manual Configuration
+### 5. Manual Configuration
 
-If you prefer to be explicit:
+If you want to be explicit about which configurations and optionals to enable:
 
 ```js
+import react from '@santi020k/eslint-config-react'
 import { ConfigOption, eslintConfig, OptionalOption } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
@@ -83,6 +92,9 @@ export default eslintConfig({
     ConfigOption.Ts,
     ConfigOption.React
   ],
+  frameworks: {
+    react // Pass the framework config here
+  },
   optionals: [
     OptionalOption.Cspell,
     OptionalOption.Tailwind,
@@ -110,40 +122,33 @@ export default eslintConfig({
 })
 ```
 
-### Next.js App Router
+### 6. Strict Mode
+
+Enable strict mode to promote all warnings to errors, ensuring a zero-warning codebase:
+
+```js
+import { eslintConfig } from '@santi020k/eslint-config-basic'
+
+export default eslintConfig({ strict: true })
+```
+
+### 7. Next.js App Router
 
 Enable specialized rules for the App Router:
 
 ```js
+import next from '@santi020k/eslint-config-next'
+import react from '@santi020k/eslint-config-react'
 import { ConfigOption, eslintConfig, NextMode } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
   config: [ConfigOption.Next],
-  nextMode: NextMode.AppRouter
+  nextMode: NextMode.AppRouter,
+  frameworks: {
+    next,
+    react
+  }
 })
-```
-
-## Framework Support
-
-This package uses **lazy loading** for framework-specific dependencies (Svelte, Solid, Angular) to keep the core package light and avoid peer dependency conflicts.
-
-To use them, install the corresponding config package:
-
-```bash
-npm install -D @santi020k/eslint-config-svelte # Or solid / angular
-```
-
-Then load the config:
-
-```js
-import { eslintConfig, loadFrameworkConfig } from '@santi020k/eslint-config-basic'
-
-const svelteConfig = await loadFrameworkConfig('@santi020k/eslint-config-svelte')
-
-export default [
-  ...eslintConfig(),
-  ...svelteConfig
-]
 ```
 
 ## CLI Utility

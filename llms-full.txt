@@ -10,17 +10,20 @@ core → typescript → react → next
      ↘ expo
      ↘ ... (other frameworks)
      ↘ optionals
-basic (composes all above)
+basic (composes all above asynchronously)
 ```
+
+## Modular Frameworks (v0.8.0+)
+
+Framework-specific configurations are now optional peer dependencies. They are dynamically imported by `eslintConfig` only when requested and installed.
 
 ## Package Management
 
 - **npm Workspaces**: Manages local packages and shared devDependencies.
 - **Turborepo**: Orchestrates builds, linting, and tests across the monorepo.
 - **Changesets**: Automates semantic versioning and publishing.
-- **npm Overrides**: ensures consistent versions across the plugin ecosystem.
-
-- **Lazy Loading**: Frameworks like Svelte, Solid, and Angular are lazy-loaded in `packages/basic` to prevent peer dependency conflicts when not in use.
+- **npm Overrides**: Ensures consistent versions across the plugin ecosystem.
+- **Modular Frameworks**: Frameworks like Svelte, Solid, Astro, Vue, and Angular are dynamically loaded in `packages/basic` to prevent peer dependency conflicts and reduce installation footprint.
 
 ```json
 "overrides": {
@@ -35,12 +38,12 @@ basic (composes all above)
 ### 1. Flat Config (ESLint 9+)
 We only supports the Flat Config format. All configurations must be exported as `TSESLint.FlatConfig.ConfigArray`.
 
-### 2. Composable API
-Instead of traditional `extends`, we use a functional composition API:
+### 2. Composable Async API
+Instead of traditional `extends`, we use a functional, asynchronous composition API:
 ```typescript
-eslintConfig({ config, optionals, projectType, strict: true })
+await eslintConfig({ config, optionals, projectType, strict: true })
 ```
-This allows for dynamic detection, strict mode enforcement, and fine-grained control.
+This allows for dynamic detection, strict mode enforcement, and modular framework loading.
 
 ### 3. Type Safety
 - Every package must export its config with explicit types.
@@ -51,10 +54,10 @@ This allows for dynamic detection, strict mode enforcement, and fine-grained con
 
 ### Adding a new Framework Config
 1. Seed new package via `mkdir packages/{name}/src`.
-2. Copy `packages/typescript/package.json` and adjust.
+2. Copy `packages/typescript/package.json` and adjust (add to peerDependencies).
 3. Export config from `src/index.ts`.
 4. Add to `ConfigOption` enum in `packages/core/src/types.ts`.
-5. Wire up in `packages/basic/src/index.ts` using `uniqueConfig.includes()`.
+5. Register in the `loadFrameworkConfig` logic in `packages/basic/src/index.ts`.
 
 ### Adding an Optional Integration
 1. Add new file to `packages/optionals/src/`.

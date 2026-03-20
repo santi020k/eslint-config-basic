@@ -167,4 +167,18 @@ describe('eslintConfig Function', () => {
 
     expect(config.length).toBeGreaterThan(0)
   })
+
+  it('should handle nested frameworks objects', () => {
+    const mockConfig = [{ name: 'mock-framework/rules', rules: {} }] as Record<string, unknown>[]
+    const config = eslintConfig({
+      config: [ConfigOption.React],
+      // @ts-expect-error - Properties exist in source but not in stale dist
+      frameworks: {
+        react: mockConfig as any
+      }
+    })
+    const names = extractConfigNames(config as Record<string, unknown>[])
+
+    expect(names).toContain('mock-framework/rules')
+  })
 })

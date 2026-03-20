@@ -22,7 +22,7 @@
 import { ConfigOption, eslintConfig, OptionalOption } from '@santi020k/eslint-config-basic'
 
 export default [
-  ...eslintConfig() // Auto-detection enabled by default
+  ...await eslintConfig() // Auto-detection enabled by default
 ]
 ```
 
