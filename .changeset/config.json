@@ -13,7 +13,8 @@
       "@santi020k/eslint-config-optionals",
       "@santi020k/eslint-config-react",
       "@santi020k/eslint-config-typescript",
-      "@santi020k/eslint-config-vue"
+      "@santi020k/eslint-config-vue",
+      "@santi020k/eslint-config-basic-root"
     ]
   ],
   "linked": [],
