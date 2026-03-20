@@ -20,7 +20,7 @@ const init = async () => {
 
   const configContent = `import { eslintConfig } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig()
+export default eslintConfig(${JSON.stringify(options, null, 2)})
 `
 
   writeFileSync(configPath, configContent)
