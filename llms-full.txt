@@ -36,9 +36,9 @@ We only supports the Flat Config format. All configurations must be exported as 
 ### 2. Composable API
 Instead of traditional `extends`, we use a functional composition API:
 ```typescript
-eslintConfig({ config, optionals, projectType })
+eslintConfig({ config, optionals, projectType, strict: true })
 ```
-This allows for dynamic detection and fine-grained control.
+This allows for dynamic detection, strict mode enforcement, and fine-grained control.
 
 ### 3. Type Safety
 - Every package must export its config with explicit types.
@@ -59,6 +59,7 @@ This allows for dynamic detection and fine-grained control.
 2. Register in `packages/optionals/src/index.ts`.
 3. Add to `OptionalOption` enum in `packages/core/src/types.ts`.
 4. Wire up in `packages/basic/src/index.ts` using `uniqueOptionals.includes()`.
+5. Supported Optionals: `Cspell`, `Tailwind`, `Vitest`, `I18next`, `Mdx`, `Markdown`, `Sonarjs`, `Stencil`, `Playwright`, `Prettier`, `JSDoc`, `Perfectionist`, `Security`, `TanstackQuery`, `TanstackRouter`.
 
 ## Validation & CI
 - **Lint**: ESLint + CSpell + Knip.

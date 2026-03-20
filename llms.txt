@@ -7,8 +7,10 @@
 **Role**: Senior Software Engineer / Maintenance Agent.
 **Goal**: Ensure code quality, type safety, and seamless Developer Experience (DX).
 **Conventions**: 
-- Strictly Flat Config (no legacy `.eslintrc`).
+- strictly Flat Config (no legacy `.eslintrc`).
 - Composable design via enums (`ConfigOption`, `OptionalOption`).
+- **Zero-Config Auto-Detection**: Automatically detects frameworks and plugins.
+- **Strict Mode**: `strict: true` promotes all warnings to errors.
 - Monorepo using Turborepo and npm Workspaces.
 - Dependency alignment via npm `overrides` with `$` references.
 
@@ -18,10 +20,7 @@
 import { ConfigOption, eslintConfig, OptionalOption } from '@santi020k/eslint-config-basic'
 
 export default [
-  ...eslintConfig({
-    config: [ConfigOption.React, ConfigOption.Ts],
-    optionals: [OptionalOption.Tailwind, OptionalOption.Vitest]
-  })
+  ...eslintConfig() // Auto-detection enabled by default
 ]
 ```
 
@@ -47,6 +46,7 @@ npm run build       # Build all packages with Turbo
 npm run lint        # Run ESLint + Spellcheck + Knip
 npm run test        # Run integration tests (+ coverage)
 npm run inspector   # Open ESLint config visualizer
+npx santi-eslint init # Initialize project configuration
 ```
 
 ## Implementation Workflow

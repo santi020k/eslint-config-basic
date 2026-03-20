@@ -33,9 +33,9 @@ npm install @santi020k/eslint-config-basic --save-dev
 
 Create an `eslint.config.js` file (or update your existing one) and extend **@santi020k/eslint-config-basic** based on your project type.
 
-### Basic Usage
+### Zero-Config (Auto-Detection)
 
-For a basic JavaScript/Node.js project:
+Starting from version 1.0.0, the configuration automatically detects your project type (TypeScript, React, Next.js, etc.) and optional plugins (Vitest, Tailwind, etc.) by analyzing your `package.json` and project structure.
 
 ```js
 import { eslintConfig } from '@santi020k/eslint-config-basic'
@@ -46,7 +46,9 @@ export default [
 ]
 ```
 
-### Advanced Usage
+### Manual Configuration
+
+If you prefer to be explicit or need to override the auto-detection:
 
 For projects that require specific configurations (e.g., TypeScript, React, Next.js, ...Etc), use the appropriate options:
 
@@ -104,7 +106,7 @@ export default [
 
 ### Optional Usage
 
-There are additional optional parameters to add support for other front-end/back-end technologies. This enables you to extend support as needed:
+There are additional optional parameters to add support for other front-end/back-end technologies. Many of these are now auto-detected, but you can still enable them manually:
 
 ```js
 import { ConfigOption, eslintConfig, OptionalOption } from '@santi020k/eslint-config-basic'
@@ -132,10 +134,31 @@ export default [
       // Playwright
       OptionalOption.Playwright,
       // Prettier
-      OptionalOption.Prettier
+      OptionalOption.Prettier,
+      // JSDoc support
+      OptionalOption.JSDoc,
+      // Perfectionist (sorting and organization)
+      OptionalOption.Perfectionist,
+      // Security rules (enabled by default)
+      OptionalOption.Security,
+      // TanStack Ecosystem
+      OptionalOption.TanstackQuery,
+      OptionalOption.TanstackRouter
     ]
   })
   // Your custom config
+]
+```
+
+### Strict Mode
+
+Enable strict mode to promote all warnings to errors, ensuring a zero-warning codebase:
+
+```js
+import { eslintConfig } from '@santi020k/eslint-config-basic'
+
+export default [
+  ...eslintConfig({ strict: true })
 ]
 ```
 
@@ -154,6 +177,16 @@ export default [
   // Your custom config
 ]
 ```
+
+## CLI Utility
+
+You can use the built-in CLI to easily initialize or update your configuration:
+
+```bash
+npx @santi020k/eslint-config-basic init
+```
+
+This will guide you through creating an `eslint.config.js` with the best defaults for your project.
 
 ## AI Agent Capabilities
 
@@ -281,6 +314,14 @@ Add the following useful scripts to your `package.json`:
 
 4.  **Adjust as Necessary:** Review and modify the linting rules based on your project's needs. Some rules might be too strict or not applicable; feel free to disable or adjust them.
 
+## CLI Commands
+
+The package provides a `basic-eslint` binary:
+
+```bash
+npx basic-eslint init    # Initialize eslint.config.js
+```
+
 ## Future Features
 
 - [x] Testing
@@ -324,6 +365,11 @@ Special thanks to the developers and maintainers of the following libraries, whi
 - [eslint-plugin-mdx](https://www.npmjs.com/package/eslint-plugin-mdx)
 - [eslint-config-prettier](https://www.npmjs.com/package/eslint-config-prettier)
 - [eslint-config-expo](https://www.npmjs.com/package/eslint-config-expo)
+- [eslint-plugin-jsdoc](https://www.npmjs.com/package/eslint-plugin-jsdoc)
+- [eslint-plugin-perfectionist](https://www.npmjs.com/package/eslint-plugin-perfectionist)
+- [eslint-plugin-security](https://www.npmjs.com/package/eslint-plugin-security)
+- [@tanstack/eslint-plugin-query](https://www.npmjs.com/package/@tanstack/eslint-plugin-query)
+- [@tanstack/eslint-plugin-router](https://www.npmjs.com/package/@tanstack/eslint-plugin-router)
 - ...and many others
 
 Their ongoing contributions help maintain the high standards of code quality we all strive for.
