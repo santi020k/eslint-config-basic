@@ -7,6 +7,6 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-basic": "*",
-    "eslint": "^10.0.3"
+    "eslint": "^9.6.0"
   }
 }

@@ -1,9 +1,9 @@
 // @ts-check
-import { ConfigOption, eslintConfig } from '@santi020k/eslint-config-basic'
+import { eslintConfig } from '@santi020k/eslint-config-basic'
 
 /** @type {import('../../basic/src/index.js').eslintConfig} */
 const composer = eslintConfig
 
 export default composer({
-  config: [ConfigOption.Ts]
+  typescript: true
 })

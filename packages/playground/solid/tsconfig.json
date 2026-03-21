@@ -5,7 +5,8 @@
     "moduleResolution": "Bundler",
     "target": "ESNext",
     "allowJs": true,
-    "noEmit": true
+    "noEmit": true,
+    "jsx": "preserve"
   },
-  "include": ["eslint.config.js"]
+  "include": ["src/**/*", "eslint.config.js"]
 }

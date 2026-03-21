@@ -12,15 +12,15 @@ import type { TSESLint } from '@typescript-eslint/utils'
 export const typescriptConfig: TSESLint.FlatConfig.ConfigArray = [
   ...(tsEslint.configs.strictTypeChecked as TSESLint.FlatConfig.ConfigArray).map(c => ({
     ...c,
-    files: ['**/*.{ts,tsx,mts,cts}']
+    files: ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts']
   })),
   ...(tsEslint.configs.stylisticTypeChecked as TSESLint.FlatConfig.ConfigArray).map(c => ({
     ...c,
-    files: ['**/*.{ts,tsx,mts,cts}']
+    files: ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts']
   })),
   {
     name: 'eslint-config-typescript/rules',
-    files: ['**/*.{ts,tsx,mts,cts}'],
+    files: ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts'],
     rules,
     languageOptions: {
       parser: tsParser,

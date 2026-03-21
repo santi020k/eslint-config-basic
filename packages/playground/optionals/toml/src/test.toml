@@ -1,0 +1,4 @@
+[a]
+b = 1
+# eslint-disable-next-line toml/no-mixed-type-in-array
+c = [1, "a"]

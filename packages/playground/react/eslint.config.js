@@ -1,9 +1,9 @@
 // @ts-check
+import { eslintConfig } from '@santi020k/eslint-config-basic'
 import react from '@santi020k/eslint-config-react'
-import { ConfigOption, eslintConfig } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
-  config: [ConfigOption.React, ConfigOption.Ts],
+  typescript: true,
   frameworks: {
     react
   }

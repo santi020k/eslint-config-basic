@@ -118,17 +118,17 @@ export const rules: TSESLint.FlatConfig.Rules = {
   'no-empty': 'warn',
   'no-nested-ternary': 'warn',
   'no-undef': 'warn',
-  'unused-imports/no-unused-vars': [
-    'warn',
-    {
-      vars: 'all',
-      varsIgnorePattern: '^_',
-      args: 'after-used',
-      argsIgnorePattern: '^_',
-      destructuredArrayIgnorePattern: '^_',
-      ignoreRestSiblings: true
-    }
-  ],
+  'no-unused-vars': ['error', {
+    args: 'after-used',
+    argsIgnorePattern: '^_',
+    ignoreRestSiblings: true,
+    vars: 'all',
+    varsIgnorePattern: '^_'
+  }],
+  'no-unassigned-vars': 'error',
+  'no-useless-assignment': 'error',
+  'preserve-caught-error': 'error',
+  'no-use-before-define': 'warn',
   'no-void': 'warn',
   camelcase: 'warn',
   'array-callback-return': 'warn',
@@ -139,7 +139,6 @@ export const rules: TSESLint.FlatConfig.Rules = {
   'import/no-duplicates': 'warn',
   'valid-typeof': 'warn',
   'no-constant-condition': 'warn',
-  'no-use-before-define': 'warn',
   '@stylistic/implicit-arrow-linebreak': 'warn',
   'import/export': 'warn',
   'no-useless-escape': 'warn',

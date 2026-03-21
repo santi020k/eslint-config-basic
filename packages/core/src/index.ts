@@ -53,7 +53,7 @@ export const createCoreConfig = (runtime: RuntimeOption = RuntimeOption.Universa
 
   return [
     {
-      name: 'eslint-config/recommended',
+      name: '@eslint/js/recommended',
       ...eslint.configs.recommended
     },
     {

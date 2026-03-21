@@ -2,26 +2,25 @@ import { describe, expect, it } from 'vitest'
 
 import { extractConfigNames } from './test-utils.js'
 
-import { ConfigOption, eslintConfig, OptionalOption, SettingOption } from '@santi020k/eslint-config-basic'
+import { eslintConfig, OptionalOption, SettingOption } from '@santi020k/eslint-config-basic'
 
 describe('eslintConfig Function', () => {
   it('should return an array when called with minimal options', () => {
-    const config = eslintConfig({ config: [] })
+    const config = eslintConfig({})
 
     expect(Array.isArray(config)).toBe(true)
   })
 
-  it('should return config with TypeScript when Ts option is specified', () => {
-    const config = eslintConfig({ config: [ConfigOption.Ts] })
+  it('should return config with TypeScript when typescript option is true', () => {
+    const config = eslintConfig({ typescript: true })
 
     expect(Array.isArray(config)).toBe(true)
 
     expect(config.length).toBeGreaterThan(0)
   })
 
-  it('should return config with React when React option is specified', () => {
+  it('should return config with React when react framework is specified', () => {
     const config = eslintConfig({
-      config: [ConfigOption.React],
       frameworks: { react: [{ name: 'mock-react', rules: {} }] }
     })
 
@@ -30,9 +29,8 @@ describe('eslintConfig Function', () => {
     expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-react')
   })
 
-  it('should return config with Next when Next option is specified', () => {
+  it('should return config with Next when next framework is specified', () => {
     const config = eslintConfig({
-      config: [ConfigOption.Next],
       frameworks: { next: [{ name: 'mock-next', rules: {} }] }
     })
 
@@ -41,9 +39,8 @@ describe('eslintConfig Function', () => {
     expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-next')
   })
 
-  it('should return config with Nest when Next option is specified', () => {
+  it('should return config with Nest when nest framework is specified', () => {
     const config = eslintConfig({
-      config: [ConfigOption.Nest],
       frameworks: { nest: [{ name: 'mock-nest', rules: {} }] }
     })
 
@@ -52,9 +49,8 @@ describe('eslintConfig Function', () => {
     expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-nest')
   })
 
-  it('should return config with Vue when Vue option is specified', () => {
+  it('should return config with Vue when vue framework is specified', () => {
     const config = eslintConfig({
-      config: [ConfigOption.Vue],
       frameworks: { vue: [{ name: 'mock-vue', rules: {} }] }
     })
 
@@ -64,7 +60,7 @@ describe('eslintConfig Function', () => {
   })
 
   it('should include gitignore by default', () => {
-    const config = eslintConfig({ config: [] })
+    const config = eslintConfig({})
     const names = extractConfigNames(config as Record<string, unknown>[])
 
     expect(names.some(n => n.toLowerCase().includes('gitignore'))).toBe(true)
@@ -72,7 +68,6 @@ describe('eslintConfig Function', () => {
 
   it('should exclude gitignore when NoGitignore setting is specified', () => {
     const config = eslintConfig({
-      config: [],
       settings: [SettingOption.NoGitignore]
     })
     const names = extractConfigNames(config as Record<string, unknown>[])
@@ -82,7 +77,7 @@ describe('eslintConfig Function', () => {
 
   it('should handle multiple framework configs', () => {
     const config = eslintConfig({
-      config: [ConfigOption.Ts, ConfigOption.React],
+      typescript: true,
       frameworks: { react: [{ name: 'mock-react', rules: {} }] }
     })
 
@@ -93,7 +88,7 @@ describe('eslintConfig Function', () => {
 
   it('should handle optionals', () => {
     const config = eslintConfig({
-      config: [ConfigOption.Ts],
+      typescript: true,
       optionals: [OptionalOption.Tailwind]
     })
 
@@ -110,15 +105,7 @@ describe('eslintConfig Function', () => {
 
   it('should handle all framework configs combined', () => {
     const config = eslintConfig({
-      config: [
-        ConfigOption.Ts,
-        ConfigOption.React,
-        ConfigOption.Next,
-        ConfigOption.Astro,
-        ConfigOption.Expo,
-        ConfigOption.Nest,
-        ConfigOption.Vue
-      ],
+      typescript: true,
       frameworks: {
         react: [{ name: 'mock-react', rules: {} }],
         next: [{ name: 'mock-next', rules: {} }],
@@ -139,7 +126,7 @@ describe('eslintConfig Function', () => {
 
   it('should handle all optionals combined', () => {
     const config = eslintConfig({
-      config: [ConfigOption.Ts],
+      typescript: true,
       optionals: [
         OptionalOption.Cspell,
         OptionalOption.Tailwind,
@@ -161,28 +148,20 @@ describe('eslintConfig Function', () => {
     expect(config.length).toBeGreaterThan(0)
   })
 
-  it('should handle duplicate config entries without doubling config blocks (#4)', () => {
+  it('should handle duplicate optional entries without doubling config blocks', () => {
     const single = eslintConfig({
-      config: [ConfigOption.Ts]
+      optionals: [OptionalOption.Vitest]
     })
     const doubled = eslintConfig({
-      config: [ConfigOption.Ts, ConfigOption.Ts]
+      optionals: [OptionalOption.Vitest, OptionalOption.Vitest]
     })
 
     expect(single).toHaveLength(doubled.length)
   })
 
-  it('should not crash with unknown enum values', () => {
-    const config = eslintConfig({
-      config: ['unknown-config' as ConfigOption]
-    })
-
-    expect(Array.isArray(config)).toBe(true)
-  })
-
   it('should handle full kitchen-sink configuration', () => {
     const config = eslintConfig({
-      config: [ConfigOption.Ts, ConfigOption.React, ConfigOption.Next],
+      typescript: true,
       frameworks: {
         react: [{ name: 'mock-react', rules: {} }],
         next: [{ name: 'mock-next', rules: {} }]
@@ -201,9 +180,8 @@ describe('eslintConfig Function', () => {
   it('should handle nested frameworks objects', () => {
     const mockConfig = [{ name: 'mock-framework/rules', rules: {} }] as Record<string, unknown>[]
     const config = eslintConfig({
-      config: [ConfigOption.React],
       frameworks: {
-        react: mockConfig
+        react: mockConfig as any
       }
     })
     const names = extractConfigNames(config as Record<string, unknown>[])

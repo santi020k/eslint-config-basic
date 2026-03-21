@@ -6,5 +6,5 @@ const composer = eslintConfig
 
 export default composer({
   config: [],
-  optionals: [OptionalOption.I18Next]
+  optionals: [OptionalOption.I18next]
 })

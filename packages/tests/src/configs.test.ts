@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest'
 
 import { astroConfig } from '@santi020k/eslint-config-astro'
 import {
-  ConfigOption,
   coreConfig,
   OptionalOption,
   SettingOption
@@ -101,39 +100,17 @@ describe('Vue Config', () => {
 })
 
 describe('Config Enums', () => {
-  it('should export ConfigOption enum with expected values', () => {
-    expect(ConfigOption.Ts).toBeDefined()
-
-    expect(ConfigOption.React).toBeDefined()
-
-    expect(ConfigOption.Next).toBeDefined()
-
-    expect(ConfigOption.Astro).toBeDefined()
-
-    expect(ConfigOption.Expo).toBeDefined()
-
-    expect(ConfigOption.Nest).toBeDefined()
-
-    expect(ConfigOption.Vue).toBeDefined()
-  })
-
   it('should export OptionalOption enum with expected values', () => {
     expect(OptionalOption.Tailwind).toBeDefined()
-
     expect(OptionalOption.Vitest).toBeDefined()
-
     expect(OptionalOption.Cspell).toBeDefined()
-
     expect(OptionalOption.Prettier).toBeDefined()
-
     expect(OptionalOption.Unicorn).toBeDefined()
-
     expect(OptionalOption.Sonarjs).toBeDefined()
   })
 
   it('should export SettingOption enum with expected values', () => {
     expect(SettingOption.Gitignore).toBeDefined()
-
     expect(SettingOption.NoGitignore).toBeDefined()
   })
 })

@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
-import { ConfigOption, type EslintConfigOptions, OptionalOption, RuntimeOption } from '../types.js'
+import { type EslintConfigOptions, OptionalOption, RuntimeOption } from '../types.js'
 
 interface PackageJson {
   dependencies?: Record<string, string | undefined>
@@ -17,7 +17,8 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
   const packageJsonPath = join(cwd, 'package.json')
 
   const options: EslintConfigOptions = {
-    config: [],
+    typescript: false,
+    frameworks: {},
     optionals: [],
     runtime: RuntimeOption.Universal
   }
@@ -36,40 +37,39 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
       ...devDependencies
     }
 
+    const frameworks = options.frameworks!
+
     // Framework detection
     if (allDeps.next) {
-      options.config?.push(ConfigOption.Next)
-
-      options.runtime = RuntimeOption.Universal // Next.js uses both server and client
+      frameworks.next = true
+      options.runtime = RuntimeOption.Universal
     }
 
-    if (allDeps.astro) options.config?.push(ConfigOption.Astro)
+    if (allDeps.astro) frameworks.astro = true
 
     if (allDeps.react && !allDeps.next && !allDeps.expo && !allDeps['react-native']) {
-      options.config?.push(ConfigOption.React)
-
+      frameworks.react = true
       options.runtime = RuntimeOption.Browser
     }
 
     if (allDeps['@nestjs/core']) {
-      options.config?.push(ConfigOption.Nest)
-
+      frameworks.nest = true
       options.runtime = RuntimeOption.Node
     }
 
-    if (allDeps.vue) options.config?.push(ConfigOption.Vue)
+    if (allDeps.vue) frameworks.vue = true
 
-    if (allDeps.expo || allDeps['react-native']) options.config?.push(ConfigOption.Expo)
+    if (allDeps.expo || allDeps['react-native']) frameworks.expo = true
 
-    if (allDeps.svelte) options.config?.push(ConfigOption.Svelte)
+    if (allDeps.svelte) frameworks.svelte = true
 
-    if (allDeps['solid-js']) options.config?.push(ConfigOption.Solid)
+    if (allDeps['solid-js']) frameworks.solid = true
 
-    if (allDeps['@angular/core']) options.config?.push(ConfigOption.Angular)
+    if (allDeps['@angular/core']) frameworks.angular = true
 
     // Default to TS if tsconfig exists
     if (existsSync(join(cwd, 'tsconfig.json'))) {
-      options.config?.push(ConfigOption.Ts)
+      options.typescript = true
     }
 
     // Optional detection
@@ -108,9 +108,6 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
 
     // Auto-enable security plugin (Professional default)
     options.optionals?.push(OptionalOption.Security)
-
-    // Deduplicate in case of multi-framework matches
-    options.config = [...new Set(options.config)]
 
     options.optionals = [...new Set(options.optionals)]
 

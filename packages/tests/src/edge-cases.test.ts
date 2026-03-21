@@ -2,12 +2,12 @@ import { describe, expect, it } from 'vitest'
 
 import { extractConfigNames, extractRuleNames, getEffectiveRuleValue } from './test-utils.js'
 
-import { ConfigOption, eslintConfig, OptionalOption } from '@santi020k/eslint-config-basic'
+import { eslintConfig, OptionalOption } from '@santi020k/eslint-config-basic'
 
 describe('Edge-Case & Conflict Tests (#6)', () => {
   it('should handle Expo + Next together without crashing', () => {
     const config = eslintConfig({
-      config: [ConfigOption.Expo, ConfigOption.Next, ConfigOption.Ts],
+      typescript: true,
       frameworks: {
         expo: [{ name: 'mock-expo', rules: { 'react/jsx-pascal-case': 'error' } }],
         next: [{ name: 'mock-next', rules: {} }],
@@ -25,9 +25,8 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
     expect(names.some(n => n.includes('react'))).toBe(true)
   })
 
-  it('should include React config when Next is specified (implicit React)', () => {
+  it('should include React config when next framework is specified (implicit React)', () => {
     const config = eslintConfig({
-      config: [ConfigOption.Next],
       frameworks: {
         next: [{ name: 'mock-next', rules: {} }],
         react: [{ name: 'mock-react', rules: { 'react/jsx-pascal-case': 'error' } }]
@@ -38,9 +37,8 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
     expect(rules).toContain('react/jsx-pascal-case')
   })
 
-  it('should include React config when Expo is specified (implicit React)', () => {
+  it('should include React config when expo framework is specified (implicit React)', () => {
     const config = eslintConfig({
-      config: [ConfigOption.Expo],
       frameworks: {
         expo: [{ name: 'mock-expo', rules: {} }],
         react: [{ name: 'mock-react', rules: { 'react/jsx-pascal-case': 'error' } }]
@@ -51,9 +49,8 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
     expect(rules).toContain('react/jsx-pascal-case')
   })
 
-  it('should handle Astro configuration with React passed', () => {
+  it('should handle Astro configuration with react framework passed', () => {
     const config = eslintConfig({
-      config: [ConfigOption.Astro],
       frameworks: {
         astro: [{ name: 'mock-astro', rules: {} }],
         react: [{ name: 'mock-react', rules: { 'react/jsx-pascal-case': 'error' } }]
@@ -64,17 +61,15 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
     expect(rules).toContain('react/jsx-pascal-case')
   })
 
-  it('should include new Astro-specific default rules', () => {
+  it('should include Astro-specific rules logic', () => {
+    // Note: Astro rules are in the astro package, but we test composition here
     const config = eslintConfig({
-      config: [ConfigOption.Astro],
       frameworks: {
         astro: [{
           name: 'mock-astro',
           rules: {
             'react/jsx-no-undef': 'off',
-            '@stylistic/comma-dangle': ['warn', 'never'],
-            'react/no-unescaped-entities': 'off',
-            '@stylistic/quote-props': ['warn', 'as-needed']
+            '@stylistic/comma-dangle': ['warn', 'never']
           }
         }]
       }
@@ -82,17 +77,13 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
 
     expect(getEffectiveRuleValue(config as Record<string, unknown>[], 'react/jsx-no-undef')).toBe('off')
     expect(getEffectiveRuleValue(config as Record<string, unknown>[], '@stylistic/comma-dangle')).toEqual(['warn', 'never'])
-    expect(getEffectiveRuleValue(config as Record<string, unknown>[], 'react/no-unescaped-entities')).toBe('off')
-    expect(getEffectiveRuleValue(config as Record<string, unknown>[], '@stylistic/quote-props')).toEqual(['warn', 'as-needed'])
   })
 
   it('should handle duplicate optionals without doubling', () => {
     const single = eslintConfig({
-      config: [],
       optionals: [OptionalOption.Tailwind]
     })
     const doubled = eslintConfig({
-      config: [],
       optionals: [OptionalOption.Tailwind, OptionalOption.Tailwind]
     })
 
@@ -101,7 +92,7 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
 
   it('Prettier optional should be applied last', () => {
     const config = eslintConfig({
-      config: [ConfigOption.Ts],
+      typescript: true,
       optionals: [OptionalOption.Prettier, OptionalOption.Tailwind]
     })
     const names = extractConfigNames(config as Record<string, unknown>[])
@@ -114,7 +105,7 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
   })
 
   it('should disable no-undef for TypeScript configs (#3)', () => {
-    const config = eslintConfig({ config: [ConfigOption.Ts] })
+    const config = eslintConfig({ typescript: true })
     const effectiveValue = getEffectiveRuleValue(
       config as Record<string, unknown>[], 'no-undef'
     )

@@ -17,42 +17,23 @@ const init = () => {
   console.log('🔍 Detecting project settings...')
 
   const options = detectProjectOptions(cwd)
+  const imports: string[] = ['import { eslintConfig } from \'@santi020k/eslint-config-basic\'']
 
-  const imports: string[] = ["import { eslintConfig } from '@santi020k/eslint-config-basic'"]
-  const frameworkMappings: Record<string, string> = {
-    react: 'react',
-    next: 'next',
-    astro: 'astro',
-    expo: 'expo',
-    vue: 'vue',
-    svelte: 'svelte',
-    solid: 'solid',
-    angular: 'angular',
-    nest: 'nest'
-  }
-
-  const frameworks: Record<string, string> = {}
-
-  options.config?.forEach(opt => {
-    if (frameworkMappings[opt]) {
-      imports.push(`import ${opt} from '@santi020k/eslint-config-${frameworkMappings[opt]}'`)
-      frameworks[opt] = opt
-    }
-  })
-
-  let frameworksStr = ''
-  if (Object.keys(frameworks).length > 0) {
-    frameworksStr = `\n  frameworks: {
-    ${Object.entries(frameworks).map(([k, v]) => `${k}: ${v}`).join(',\n    ')}
-  },`
+  if (options.frameworks) {
+    Object.keys(options.frameworks).forEach(key => {
+      imports.push(`import ${key} from '@santi020k/eslint-config-${key}'`)
+    })
   }
 
   const configContent = `${imports.join('\n')}
 
 export default eslintConfig({
-  config: ${JSON.stringify(options.config, null, 2)},
+  typescript: ${options.typescript},
+  frameworks: {
+    ${Object.keys(options.frameworks ?? {}).map(key => `${key}: ${key}`).join(',\n    ')}
+  },
   optionals: ${JSON.stringify(options.optionals, null, 2)},
-  runtime: '${options.runtime}',${frameworksStr}
+  runtime: '${options.runtime}',
   settings: ${JSON.stringify(options.settings ?? [], null, 2)}
 })
 `

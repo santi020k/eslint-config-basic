@@ -358,7 +358,6 @@ exports[`Config Snapshots — Rule Names > core config rules should match snapsh
   "template-tag-spacing",
   "unicode-bom",
   "unused-imports/no-unused-imports",
-  "unused-imports/no-unused-vars",
   "use-isnan",
   "valid-typeof",
   "wrap-iife",

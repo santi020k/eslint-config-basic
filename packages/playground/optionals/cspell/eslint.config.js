@@ -6,5 +6,5 @@ const composer = eslintConfig
 
 export default composer({
   config: [],
-  optionals: [OptionalOption.CSpell]
+  optionals: [OptionalOption.Cspell]
 })

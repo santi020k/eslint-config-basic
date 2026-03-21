@@ -1,7 +1,7 @@
 import * as fs from 'node:fs'
 import { describe, expect, it, vi } from 'vitest'
 
-import { ConfigOption, detectProjectOptions, OptionalOption, RuntimeOption } from '@santi020k/eslint-config-basic'
+import { detectProjectOptions, OptionalOption, RuntimeOption } from '@santi020k/eslint-config-basic'
 
 vi.mock('node:fs')
 
@@ -11,7 +11,7 @@ describe('detectProjectOptions', () => {
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({ dependencies: {} }))
 
     const options = detectProjectOptions()
-    expect(options.config).toContain(ConfigOption.Ts)
+    expect(options.typescript).toBe(true)
   })
 
   it('should detect React if react is a dependency', () => {
@@ -21,7 +21,7 @@ describe('detectProjectOptions', () => {
     }))
 
     const options = detectProjectOptions()
-    expect(options.config).toContain(ConfigOption.React)
+    expect(options.frameworks?.react).toBe(true)
   })
 
   it('should detect Next.js if next is a dependency', () => {
@@ -31,7 +31,7 @@ describe('detectProjectOptions', () => {
     }))
 
     const options = detectProjectOptions()
-    expect(options.config).toContain(ConfigOption.Next)
+    expect(options.frameworks?.next).toBe(true)
   })
 
   it('should detect Tailwind if tailwindcss is a dependency', () => {
@@ -76,7 +76,8 @@ describe('detectProjectOptions', () => {
 
     const options = detectProjectOptions()
     expect(options).toEqual({
-      config: [],
+      typescript: false,
+      frameworks: {},
       optionals: [],
       runtime: RuntimeOption.Universal
     })

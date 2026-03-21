@@ -1,19 +1,18 @@
 import {
-  applyConfigIfOptionPresent,
-  ConfigOption,
   coreConfig,
   createCoreConfig,
   detectProjectOptions,
-  type EslintConfigOptions as CoreOptions,
+  type EslintConfigOptions,
   type FlatConfigArray,
-  type ImportedFramework,
   gitignore,
   hasReactConfig,
+  type ImportedFramework,
   NextMode,
   OptionalOption,
   PresetOption,
   RuntimeOption,
-  SettingOption
+  SettingOption,
+  ReactConfigKeys
 } from '@santi020k/eslint-config-core'
 import {
   cspell,
@@ -44,14 +43,12 @@ import type { TSESLint } from '@typescript-eslint/utils'
 
 // Re-export core types and utilities
 export {
-  ConfigOption,
   OptionalOption,
   SettingOption,
   RuntimeOption,
   PresetOption,
   NextMode,
-  ReactConfigs,
-  applyConfigIfOptionPresent,
+  ReactConfigKeys,
   hasReactConfig,
   coreConfig,
   createCoreConfig,
@@ -61,25 +58,7 @@ export {
   detectProjectOptions
 } from '@santi020k/eslint-config-core'
 
-/**
- * Enhanced options for the basic package while types are syncing in the monorepo.
- * This extends the core options with explicit framework parameters.
- */
-export interface EslintConfigOptions extends CoreOptions {
-  frameworks?: {
-    react?: ImportedFramework
-    next?: ImportedFramework
-    astro?: ImportedFramework
-    expo?: ImportedFramework
-    vue?: ImportedFramework
-    svelte?: ImportedFramework
-    solid?: ImportedFramework
-    angular?: ImportedFramework
-    nest?: ImportedFramework
-  }
-}
-
-export type { FlatConfigArray }
+export type { FlatConfigArray, EslintConfigOptions, ImportedFramework }
 
 // Re-export framework configs
 export { typescriptConfig, tsConfig } from '@santi020k/eslint-config-typescript'
@@ -114,13 +93,13 @@ export {
  * Resolves an imported framework (either array or default export) into a config array.
  */
 const resolveFramework = (framework?: ImportedFramework): FlatConfigArray => {
-  if (!framework) return []
+  if (!framework || typeof framework === 'boolean') return []
 
   return Array.isArray(framework) ? framework : framework.default
 }
 
 /**
- * Resolves a preset into config and optional arrays
+ * Resolves a preset into options
  */
 const resolvePreset = (preset: PresetOption): Partial<EslintConfigOptions> => {
   switch (preset) {
@@ -129,21 +108,31 @@ const resolvePreset = (preset: PresetOption): Partial<EslintConfigOptions> => {
 
     case PresetOption.Node:
       return {
-        config: [ConfigOption.Ts],
+        typescript: true,
         runtime: RuntimeOption.Node
       }
 
     case PresetOption.Browser:
       return {
-        config: [ConfigOption.Ts, ConfigOption.React],
+        typescript: true,
+        frameworks: { react: true },
         runtime: RuntimeOption.Browser
       }
 
     case PresetOption.All:
       return {
-        config: Object.values(ConfigOption),
+        typescript: true,
         optionals: Object.values(OptionalOption),
-        runtime: RuntimeOption.Universal
+        runtime: RuntimeOption.Universal,
+        frameworks: {
+          react: true,
+          next: true,
+          astro: true,
+          vue: true,
+          svelte: true,
+          solid: true,
+          angular: true
+        }
       }
 
     default:
@@ -163,14 +152,14 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
   const presetDefaults = options?.preset ? resolvePreset(options.preset) : {}
 
   const {
-    config = (presetDefaults.config ?? detected.config ?? []),
+    typescript = (presetDefaults.typescript ?? detected.typescript ?? false),
     optionals = (presetDefaults.optionals ?? detected.optionals ?? []),
     settings = (detected.settings ?? []),
     strict = options?.strict ?? false,
     runtime = (presetDefaults.runtime ?? detected.runtime ?? RuntimeOption.Universal),
     nextMode = (presetDefaults.nextMode ?? detected.nextMode ?? NextMode.Pages),
 
-    frameworks = options?.frameworks ?? {}
+    frameworks = { ...presetDefaults.frameworks, ...options?.frameworks }
   } = options ?? {}
 
   const {
@@ -195,16 +184,12 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
   const solidParam = resolveFramework(solidParamRaw)
   const angularParam = resolveFramework(angularParamRaw)
 
-  // Deduplicate entries to prevent double-applying configs (#4)
-  const uniqueConfig = [...new Set(config)]
+  // Deduplicate entries
   const uniqueOptionals = [...new Set(optionals)]
   const uniqueSettings = [...new Set(settings)]
 
-  // React is needed if any React-based framework option is present OR if a config is passed
-  const hasReact = hasReactConfig(uniqueConfig) ||
-    reactParam.length > 0 ||
-    nextParam.length > 0 ||
-    expoParam.length > 0
+  // React is needed if any React-based framework option is present
+  const hasReact = hasReactConfig({ frameworks })
 
   // Gitignore is enabled by default unless NoGitignore is specified (#8)
   const useGitignore = !uniqueSettings.includes(SettingOption.NoGitignore)
@@ -225,11 +210,11 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     ...(hasReact ? reactParam : []),
 
     // Framework-specific configs (Modularized)
-    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Ts, typescriptConfig),
-    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Next, nextParam),
+    ...(typescript ? typescriptConfig : []),
+    ...nextParam,
 
     // Next.js App Router overrides (#12)
-    ...(uniqueConfig.includes(ConfigOption.Next) && nextMode === NextMode.AppRouter ?
+    ...(frameworks.next && nextMode === NextMode.AppRouter ?
       [
         {
           name: 'eslint-config-next/app-router-overrides',
@@ -241,13 +226,13 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
       ] :
       []),
 
-    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Astro, astroParam),
-    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Expo, expoParam),
-    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Nest, nestParam),
-    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Vue, vueParam),
-    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Svelte, svelteParam),
-    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Solid, solidParam),
-    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Angular, angularParam),
+    ...astroParam,
+    ...expoParam,
+    ...nestParam,
+    ...vueParam,
+    ...svelteParam,
+    ...solidParam,
+    ...angularParam,
 
     // Optionals (Still synchronous as they are direct dependencies)
     ...(uniqueOptionals.includes(OptionalOption.Cspell) ? cspell : []),
@@ -255,8 +240,8 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     ...(uniqueOptionals.includes(OptionalOption.Vitest) ? vitest : []),
     ...(uniqueOptionals.includes(OptionalOption.I18next) ? i18next : []),
     ...(uniqueOptionals.includes(OptionalOption.Stencil) ? stencil : []),
-    ...(uniqueOptionals.includes(OptionalOption.Regexp) ? regexp : []),
     ...(uniqueOptionals.includes(OptionalOption.Mdx) ? mdx : []),
+    ...(uniqueOptionals.includes(OptionalOption.Regexp) ? regexp : []),
     ...(uniqueOptionals.includes(OptionalOption.Markdown) ? markdown : []),
     ...(uniqueOptionals.includes(OptionalOption.Unicorn) ? unicorn : []),
     ...(uniqueOptionals.includes(OptionalOption.Sonarjs) ? sonarjs : []),
@@ -272,12 +257,11 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     ...(uniqueOptionals.includes(OptionalOption.Yaml) ? yaml : []),
     ...(uniqueOptionals.includes(OptionalOption.Toml) ? toml : []),
 
-    ...(uniqueOptionals.includes(OptionalOption.Prettier) ? prettier : []),
-
     // Global overrides for non-TS files to prevent typed rules errors (#15)
+    // Must be BEFORE Prettier to allow Prettier to override formatting
     {
       name: 'eslint-config-basic/typed-rules-overrides',
-      files: ['**/*.js', '**/*.jsx', '**/*.mjs', '**/*.cjs', '**/*.md', '**/*.mdx'],
+      files: ['**/*.js', '**/*.jsx', '**/*.mjs', '**/*.cjs', '**/*.md', '**/*.mdx', '**/*.astro/*.js', '**/*.astro/*.ts'],
       rules: {
         '@typescript-eslint/await-thenable': 'off',
         '@typescript-eslint/no-floating-promises': 'off',
@@ -292,7 +276,9 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
         '@typescript-eslint/unbound-method': 'off',
         '@typescript-eslint/require-await': 'off'
       }
-    } as TSESLint.FlatConfig.Config
+    } as TSESLint.FlatConfig.Config,
+
+    ...(uniqueOptionals.includes(OptionalOption.Prettier) ? prettier : [])
   ] as TSESLint.FlatConfig.ConfigArray).map((config: TSESLint.FlatConfig.Config) => {
     if (strict && config.rules) {
       const strictRules: TSESLint.FlatConfig.Rules = Object.fromEntries(

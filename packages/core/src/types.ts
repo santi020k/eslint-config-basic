@@ -1,23 +1,7 @@
 import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
- * Enum for configuration options in ESLint
- */
-export enum ConfigOption {
-  Ts = 'ts',
-  React = 'react',
-  Next = 'next',
-  Expo = 'expo',
-  Astro = 'astro',
-  Nest = 'nest',
-  Vue = 'vue',
-  Svelte = 'svelte',
-  Solid = 'solid',
-  Angular = 'angular'
-}
-
-/**
- * Next.js mode options
+ * Enum for Next.js mode options
  */
 export enum NextMode {
   Pages = 'pages',
@@ -95,31 +79,56 @@ export enum PresetOption {
 
 /**
  * Array of configurations that require React
+ * Note: These are now used internally for auto-detection and globals
  */
-export const ReactConfigs: ConfigOption[] = [
-  ConfigOption.React,
-  ConfigOption.Next,
-  ConfigOption.Expo
-]
+export const ReactConfigKeys = [
+  'react',
+  'next',
+  'expo'
+] as const
 
 /**
  * Type to handle both direct config arrays and imported modules with a default export.
+ * Also allows a boolean flag for auto-detection/enabling without passing the config object.
  */
-export type ImportedFramework = FlatConfigArray | { default: FlatConfigArray }
+export type ImportedFramework = FlatConfigArray | { default: FlatConfigArray } | boolean
+
+/**
+ * TypeScript configuration options
+ */
+export interface TsOptions {
+  project?: boolean | string | string[]
+}
 
 /**
  * ESLint configuration interface
  */
 export interface EslintConfigOptions {
-  config?: ConfigOption[]
+  /** Enable TypeScript support with optional settings */
+  typescript?: boolean | TsOptions
+
+  /** List of optional pluggable configurations */
   optionals?: OptionalOption[]
+
+  /** List of global settings and behavioral flags */
   settings?: SettingOption[]
+
+  /** If true, all 'warn' rules are promoted to 'error' */
   strict?: boolean
+
+  /** Runtime environment preset (Node, Browser, Universal) */
   runtime?: RuntimeOption
+
+  /** High-level configuration preset */
   preset?: PresetOption
+
+  /** Next.js specific routing mode */
   nextMode?: NextMode
 
-  // Framework Configurations (Modularized)
+  /**
+   * Framework and library specific configurations.
+   * If a value is provided, its rules and globals are automatically enabled.
+   */
   frameworks?: {
     react?: ImportedFramework
     next?: ImportedFramework
