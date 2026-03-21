@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { extractConfigNames } from './test-utils.js'
 
-import { eslintConfig, Extension, Library, Setting, Testing, Tool } from '@santi020k/eslint-config-basic'
+import { eslintConfig, Extension, Format, Library, Setting, Testing, Tool } from '@santi020k/eslint-config-basic'
 
 describe('eslintConfig Function', () => {
   it('should return an array when called with minimal options', () => {
@@ -154,6 +154,25 @@ describe('eslintConfig Function', () => {
     expect(Array.isArray(config)).toBe(true)
 
     expect(config.length).toBeGreaterThan(0)
+  })
+
+  it('should handle roadmap options (Jest, Cypress, TestingLibrary, GraphQL)', () => {
+    const config = eslintConfig({
+      testing: [Testing.Jest, Testing.Cypress, Testing.TestingLibrary],
+      formats: [Format.Graphql]
+    })
+
+    expect(Array.isArray(config)).toBe(true)
+
+    const names = extractConfigNames(config as Record<string, unknown>[])
+
+    expect(names).toContain('optionals/jest')
+
+    expect(names).toContain('optionals/cypress')
+
+    expect(names).toContain('optionals/testing-library')
+
+    expect(names).toContain('optionals/graphql')
   })
 
   it('should handle duplicate optional entries without doubling config blocks', () => {

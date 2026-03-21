@@ -25,6 +25,12 @@ export { vitest } from './testing/vitest.js'
 
 export { playwright } from './testing/playwright.js'
 
+export { jest } from './testing/jest.js'
+
+export { cypress } from './testing/cypress.js'
+
+export { testingLibrary } from './testing/testing-library.js'
+
 // Formats
 export { mdx } from './formats/mdx.js'
 
@@ -35,6 +41,8 @@ export { jsonc } from './formats/jsonc.js'
 export { yaml } from './formats/yaml.js'
 
 export { toml } from './formats/toml.js'
+
+export { graphql } from './formats/graphql.js'
 
 // Extensions
 export { unicorn } from './extensions/unicorn.js'

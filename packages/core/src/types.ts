@@ -25,11 +25,10 @@ export enum Library {
  */
 export enum Testing {
   Vitest = 'vitest',
-  Playwright = 'playwright'
-  // TODO: Add support for Jest, Cypress, TestingLibrary
-  // Jest = 'jest',
-  // Cypress = 'cypress',
-  // TestingLibrary = 'testing-library'
+  Playwright = 'playwright',
+  Jest = 'jest',
+  Cypress = 'cypress',
+  TestingLibrary = 'testing-library'
 }
 
 /**
@@ -40,9 +39,8 @@ export enum Format {
   Markdown = 'markdown',
   Jsonc = 'jsonc',
   Yaml = 'yaml',
-  Toml = 'toml'
-  // TODO: Add support for GraphQL
-  // Graphql = 'graphql'
+  Toml = 'toml',
+  Graphql = 'graphql'
 }
 
 /**

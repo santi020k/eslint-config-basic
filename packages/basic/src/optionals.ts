@@ -8,7 +8,10 @@ import {
 } from '@santi020k/eslint-config-core'
 import {
   cspell,
+  cypress,
+  graphql,
   i18next,
+  jest,
   jsdoc,
   jsonc,
   markdown,
@@ -25,6 +28,7 @@ import {
   tailwind,
   tanstackQuery,
   tanstackRouter,
+  testingLibrary,
   toml,
   unicorn,
   vitest,
@@ -65,6 +69,12 @@ export const getOptionalConfigs = (
 
   if (testing.includes(Testing.Playwright)) configs.push(...playwright)
 
+  if (testing.includes(Testing.Jest)) configs.push(...jest)
+
+  if (testing.includes(Testing.Cypress)) configs.push(...cypress)
+
+  if (testing.includes(Testing.TestingLibrary)) configs.push(...testingLibrary)
+
   // Formats
   if (formats.includes(Format.Mdx)) configs.push(...mdx)
 
@@ -75,6 +85,8 @@ export const getOptionalConfigs = (
   if (formats.includes(Format.Yaml)) configs.push(...yaml)
 
   if (formats.includes(Format.Toml)) configs.push(...toml)
+
+  if (formats.includes(Format.Graphql)) configs.push(...graphql)
 
   // Extensions
   if (extensions.includes(Extension.Regexp)) configs.push(...regexp)
