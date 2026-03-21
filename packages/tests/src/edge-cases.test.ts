@@ -81,12 +81,12 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
 
   it('should handle duplicate optionals without doubling', () => {
     const single = eslintConfig({
-      libraries: [LibraryOption],
-      tools: [ToolOption.Tailwind]
+      libraries: [LibraryOption.Tailwind],
+      tools: [ToolOption.Prettier]
     })
     const doubled = eslintConfig({
-      libraries: [LibraryOption, LibraryOption],
-      tools: [ToolOption.Tailwind, ToolOption.Tailwind]
+      libraries: [LibraryOption.Tailwind, LibraryOption.Tailwind],
+      tools: [ToolOption.Prettier, ToolOption.Prettier]
     })
 
     expect(single).toHaveLength(doubled.length)
@@ -95,8 +95,8 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
   it('Prettier optional should be applied last', () => {
     const config = eslintConfig({
       typescript: true,
-      libraries: [LibraryOption, LibraryOption],
-      tools: [ToolOption.Prettier, ToolOption.Tailwind]
+      libraries: [LibraryOption.Tailwind, LibraryOption.Vitest],
+      tools: [ToolOption.Prettier, ToolOption.Mdx]
     })
     const names = extractConfigNames(config as Record<string, unknown>[])
     const prettierIndex = names.lastIndexOf('eslint-config/prettier')

@@ -1,4 +1,4 @@
-import { plugin as nestjsTypedPlugin } from '@darraghor/eslint-plugin-nestjs-typed'
+import nestjsTypedPlugin from '@darraghor/eslint-plugin-nestjs-typed'
 import type { TSESLint } from '@typescript-eslint/utils'
 
 /**

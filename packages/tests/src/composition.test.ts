@@ -89,8 +89,9 @@ describe('eslintConfig Function', () => {
   it('should handle optionals', () => {
     const config = eslintConfig({
       typescript: true,
-      libraries: [LibraryOption, ToolOption],
-      extensions: [ExtensionOption.Tailwind]
+      libraries: [LibraryOption.Tailwind, LibraryOption.Vitest],
+      tools: [ToolOption.Prettier],
+      extensions: [ExtensionOption.Unicorn]
     })
 
     expect(Array.isArray(config)).toBe(true)
@@ -140,10 +141,10 @@ describe('eslintConfig Function', () => {
 
   it('should handle duplicate optional entries without doubling config blocks', () => {
     const single = eslintConfig({
-      extensions: [ExtensionOption.Vitest]
+      libraries: [LibraryOption.Vitest]
     })
     const doubled = eslintConfig({
-      extensions: [ExtensionOption.Vitest, ExtensionOption.Vitest]
+      libraries: [LibraryOption.Vitest, LibraryOption.Vitest]
     })
 
     expect(single).toHaveLength(doubled.length)
@@ -156,9 +157,8 @@ describe('eslintConfig Function', () => {
         react: [{ name: 'mock-react', rules: {} }],
         next: [{ name: 'mock-next', rules: {} }]
       },
-      libraries: [LibraryOption.Vitest],
+      libraries: [LibraryOption.Vitest, LibraryOption.Tailwind],
       tools: [ToolOption.Cspell],
-      extensions: [ExtensionOption.Tailwind],
       settings: [SettingOption.Gitignore]
     })
 
