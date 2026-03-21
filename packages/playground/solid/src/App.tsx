@@ -1,6 +1,6 @@
-import { createSignal, createEffect, onMount } from 'solid-js'
+import { createEffect, createSignal, onMount } from 'solid-js'
 
-function App() {
+const App = () => {
   const [count, setCount] = createSignal(0)
 
   createEffect(() => {
@@ -14,7 +14,10 @@ function App() {
   return (
     <div>
       <h1>Solid Playground</h1>
-      <p>Count: {count()}</p>
+      <p>
+        Count:
+        {count()}
+      </p>
       <button onClick={() => setCount(count() + 1)}>
         Increment
       </button>

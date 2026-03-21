@@ -1,79 +1,79 @@
 version: "0.2"
 language: en
 words:
-  - santi
-  - santi020k
-  - cspell
-  - vitest
-  - knip
-  - darraghor
-  - multilines
-  - canonicalurl
-  - fetchcontent
-  - getentrybyslug
-  - nonconstructor
-  - nonoctal
-  - isnan
-  - polyfillio
-  - textnodes
-  - scopedslots
-  - TSES
-  - TSESLint
-  - llm
-  - llms
-  - postpack
-  - commonmark
-  - stnl
-  - st
-  - vdom
-  - dts
-  - tsconfig
-  - tsup
-  - nodejs
   - app-router
-  - root-dir
-  - gitignore
-  - nogitignore
-  - project-type
-  - flat-config
-  - eslint-config
-  - stylistic
-  - jsx
-  - tsx
-  - nextjs
-  - vue
-  - svelte
-  - solidjs
-  - nestjs
   - astro
-  - expo
-  - sonarjs
   - better-tailwindcss
-  - mdx
-  - jsonc
-  - toml
-  - linter
-  - linted
-  - monorepo
-  - peerdep
-  - peer-dependency
-  - dev-dependency
+  - canonicalurl
   - changeset
   - changesets
-  - commitizen
-  - lint-staged
   - codecov
+  - commitizen
+  - commonmark
+  - cspell
+  - darraghor
+  - dev-dependency
+  - dts
+  - eslint-config
+  - expo
+  - fetchcontent
+  - flat-config
+  - getentrybyslug
+  - gitignore
+  - isnan
   - istanbul
-  - v8
-  - typedoc
+  - jsonc
+  - jsx
+  - knip
+  - lint-staged
+  - linted
+  - linter
+  - llm
+  - llms
+  - mdx
+  - monorepo
+  - multilines
   - myframework
   - myoptional
+  - nestjs
+  - nextjs
+  - nodejs
+  - nogitignore
+  - nonconstructor
+  - nonoctal
   - orchestrates
   - packagemanager
+  - peer-dependency
+  - peerdep
+  - polyfillio
+  - postpack
+  - project-type
+  - root-dir
+  - santi
+  - santi020k
+  - scopedslots
+  - solidjs
+  - sonarjs
+  - st
+  - stnl
+  - stylistic
+  - svelte
+  - Tanstack
+  - textnodes
+  - toml
+  - tsconfig
+  - TSES
+  - TSESLint
+  - tsup
+  - tsx
+  - turborepo
+  - typedoc
+  - v8
+  - vdom
+  - vitest
+  - vue
   - workspace
   - workspaces
-  - turborepo
-
 ignorePaths:
   - node_modules
   - dist
@@ -89,3 +89,4 @@ ignorePaths:
   - "**/*.test.ts.snap"
   - packages/playground/**
   - packages/tests/src/__snapshots__/**
+  - .vscode

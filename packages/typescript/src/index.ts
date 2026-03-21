@@ -24,12 +24,18 @@ export const typescriptConfig: TSESLint.FlatConfig.ConfigArray = [
     languageOptions: {
       parser: tsParser,
       parserOptions: {
-        project: true
+        projectService: true,
+        extraFileExtensions: ['.astro', '.svelte', '.vue']
       },
       ecmaVersion: 'latest'
     },
     rules
   }
+  // {
+  //   name: 'eslint-config-typescript/disable-type-checked',
+  //   files: ['**/*.astro/*.ts', '*.astro/*.ts', '**/*.vue/*.ts', '*.vue/*.ts', '**/*.svelte/*.ts', '*.svelte/*.ts'],
+  //   ...tsEslint.configs.disableTypeChecked
+  // }
 ]
 
 // Legacy export for backwards compatibility

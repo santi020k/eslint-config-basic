@@ -6,5 +6,12 @@ import { Component, Prop } from '@stencil/core'
   shadow: true
 })
 export class MyComponent {
-  @Prop() first: string = ''
+  /**
+   * The first name of the person.
+   */
+  @Prop() readonly _first: string = 'Santi'
+
+  public get first(): string {
+    return this._first
+  }
 }
