@@ -10,7 +10,7 @@ const rules: TSESLint.Linter.RulesRecord = {
   'no-unused-vars': 'off',
   '@stylistic/indent': 'off',
   '@stylistic/jsx-closing-bracket-location': 'off',
-  'indent': 'off',
+  indent: 'off',
   'no-multi-spaces': 'off',
   '@stylistic/no-multi-spaces': 'off',
   'comma-dangle': 'off',

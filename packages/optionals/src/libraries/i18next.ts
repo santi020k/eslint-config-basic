@@ -1,6 +1,6 @@
-import { fixupPluginRules } from '@eslint/compat'
 import pluginI18next from 'eslint-plugin-i18next'
 
+import { fixupPluginRules } from '@eslint/compat'
 import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
@@ -10,6 +10,7 @@ import type { TSESLint } from '@typescript-eslint/utils'
 export const i18next: TSESLint.FlatConfig.ConfigArray = [
   {
     name: 'optionals/i18next',
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     plugins: { i18next: fixupPluginRules(pluginI18next as any) as unknown as TSESLint.FlatConfig.Plugin },
     rules: {
       'i18next/no-literal-string': ['warn', {

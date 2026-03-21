@@ -7,5 +7,5 @@ import type { TSESLint } from '@typescript-eslint/utils'
  * Enforces Tailwind CSS best practices using eslint-plugin-better-tailwindcss
  */
 export const tailwind: TSESLint.FlatConfig.ConfigArray = [
-  pluginTailwind.configs.recommended as TSESLint.FlatConfig.Config
+  pluginTailwind.configs.recommended
 ]

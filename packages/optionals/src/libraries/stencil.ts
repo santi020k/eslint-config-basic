@@ -11,6 +11,7 @@ export const stencil: TSESLint.FlatConfig.ConfigArray = [
     name: 'optionals/stencil',
     files: ['**/*.{tsx,ts}'],
     plugins: {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       '@stencil-community': fixupPluginRules(stencilPlugin as any) as unknown as TSESLint.FlatConfig.Plugin
     },
     rules: {

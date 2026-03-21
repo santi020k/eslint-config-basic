@@ -11,11 +11,12 @@ export const regexp: TSESLint.FlatConfig.ConfigArray = [
   {
     name: 'optionals/regexp',
     plugins: {
-      regexp: pluginRegexp as unknown as TSESLint.FlatConfig.Plugin
+      regexp: pluginRegexp as TSESLint.FlatConfig.Plugin
     },
     rules: {
       // Use recommended rules as base
-      ...(pluginRegexp.configs?.['flat/recommended'] as TSESLint.FlatConfig.Config)?.rules,
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      ...pluginRegexp.configs?.['flat/recommended']?.rules,
 
       // Downgrade some rules to warnings for a smoother adoption
       'regexp/no-unused-capturing-group': 'warn',

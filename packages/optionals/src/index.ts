@@ -1,42 +1,48 @@
-// Re-export all optional configurations
-export { cspell } from './cspell.js'
+// Re-export all optional configurations from categorized subdirectories
 
-export { i18next } from './i18next.js'
+// Tools
+export { cspell } from './tools/cspell.js'
 
-export { markdown } from './markdown.js'
+export { jsdoc } from './tools/jsdoc.js'
 
-export { mdx } from './mdx.js'
+export { prettier } from './tools/prettier.js'
 
-export { prettier } from './prettier.js'
+export { swagger } from './tools/swagger.js'
 
-export { stencil } from './stencil.js'
+// Libraries
+export { i18next } from './libraries/i18next.js'
 
-export { tailwind } from './tailwind.js'
+export { stencil } from './libraries/stencil.js'
 
-export { unicorn } from './unicorn.js'
+export { tailwind } from './libraries/tailwind.js'
 
-export { regexp } from './regexp.js'
+export { tanstackQuery, tanstackRouter } from './libraries/tanstack.js'
 
-export { vitest } from './vitest.js'
+export { storybook } from './libraries/storybook.js'
 
-export { sonarjs } from './sonarjs.js'
+// Testing
+export { vitest } from './testing/vitest.js'
 
-export { playwright } from './playwright.js'
+export { playwright } from './testing/playwright.js'
 
-export { security } from './security.js'
+// Formats
+export { mdx } from './formats/mdx.js'
 
-export { tanstackQuery, tanstackRouter } from './tanstack.js'
+export { markdown } from './formats/markdown.js'
 
-export { perfectionist } from './perfectionist.js'
+export { jsonc } from './formats/jsonc.js'
 
-export { jsdoc } from './jsdoc.js'
+export { yaml } from './formats/yaml.js'
 
-export { swagger } from './swagger.js'
+export { toml } from './formats/toml.js'
 
-export { storybook } from './storybook.js'
+// Extensions
+export { unicorn } from './extensions/unicorn.js'
 
-export { jsonc } from './jsonc.js'
+export { regexp } from './extensions/regexp.js'
 
-export { yaml } from './yaml.js'
+export { sonarjs } from './extensions/sonarjs.js'
 
-export { toml } from './toml.js'
+export { security } from './extensions/security.js'
+
+export { perfectionist } from './extensions/perfectionist.js'
