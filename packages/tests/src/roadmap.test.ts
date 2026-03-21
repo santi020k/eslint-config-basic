@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { extractRuleNames } from './test-utils.js'
 
-import { eslintConfig, OptionalOption } from '@santi020k/eslint-config-basic'
+import { eslintConfig, ExtensionOption, LibraryOption, ToolOption } from '@santi020k/eslint-config-basic'
 
 describe('v1.0.0 Roadmap Features', () => {
   it('should apply strict mode (warnings to errors)', () => {
@@ -18,25 +18,25 @@ describe('v1.0.0 Roadmap Features', () => {
   })
 
   it('should include Security plugin rules', () => {
-    const config = eslintConfig({ optionals: [OptionalOption.Security] })
+    const config = eslintConfig({ extensions: [ExtensionOption.Security] })
     const rules = extractRuleNames(config)
     expect(rules).toContain('security/detect-object-injection')
   })
 
   it('should include TanStack Query rules', () => {
-    const config = eslintConfig({ optionals: [OptionalOption.TanstackQuery] })
+    const config = eslintConfig({ libraries: [LibraryOption.TanstackQuery] })
     const rules = extractRuleNames(config)
     expect(rules).toContain('@tanstack/query/exhaustive-deps')
   })
 
   it('should include Perfectionist rules', () => {
-    const config = eslintConfig({ optionals: [OptionalOption.Perfectionist] })
+    const config = eslintConfig({ extensions: [ExtensionOption.Perfectionist] })
     const rules = extractRuleNames(config)
     expect(rules).toContain('perfectionist/sort-imports')
   })
 
   it('should include JSDoc rules', () => {
-    const config = eslintConfig({ optionals: [OptionalOption.Jsdoc] })
+    const config = eslintConfig({ tools: [ToolOption.Jsdoc] })
     const rules = extractRuleNames(config)
     expect(rules).toContain('jsdoc/check-access')
   })

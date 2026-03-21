@@ -28,12 +28,14 @@ const init = () => {
   const configContent = `${imports.join('\n')}
 
 export default eslintConfig({
-  typescript: ${options.typescript},
+  typescript: ${JSON.stringify(options.typescript ?? false)},
   frameworks: {
     ${Object.keys(options.frameworks ?? {}).map(key => `${key}: ${key}`).join(',\n    ')}
   },
-  optionals: ${JSON.stringify(options.optionals, null, 2)},
-  runtime: '${options.runtime}',
+  libraries: ${JSON.stringify(options.libraries ?? [], null, 2)},
+  tools: ${JSON.stringify(options.tools ?? [], null, 2)},
+  extensions: ${JSON.stringify(options.extensions ?? [], null, 2)},
+  runtime: ${JSON.stringify(options.runtime ?? 'universal')},
   settings: ${JSON.stringify(options.settings ?? [], null, 2)}
 })
 `

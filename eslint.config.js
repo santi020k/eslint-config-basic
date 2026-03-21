@@ -1,10 +1,9 @@
-// @ts-check
-import { eslintConfig, OptionalOption } from '@santi020k/eslint-config-basic'
+import { eslintConfig, LibraryOption } from '@santi020k/eslint-config-basic'
 
 export default [
   ...eslintConfig({
     typescript: true,
-    optionals: [OptionalOption.Mdx, OptionalOption.Markdown, OptionalOption.Vitest]
+    libraries: [LibraryOption.Mdx, LibraryOption.Markdown, LibraryOption.Vitest]
   }),
   {
     name: 'local-config',

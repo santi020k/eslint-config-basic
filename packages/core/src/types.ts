@@ -9,31 +9,43 @@ export enum NextMode {
 }
 
 /**
- * Enum for optional features that can be included in ESLint
+ * Enum for library features that can be auto-detected or included manually
  */
-export enum OptionalOption {
-  Cspell = 'cspell',
+export enum LibraryOption {
   Tailwind = 'tailwind',
   Vitest = 'vitest',
   I18next = 'i18next',
-  Mdx = 'mdx',
-  Markdown = 'markdown',
   Stencil = 'stencil',
-  Prettier = 'prettier',
-  Regexp = 'regexp',
-  Unicorn = 'unicorn',
-  Sonarjs = 'sonarjs',
   Playwright = 'playwright',
-  Security = 'security',
   TanstackQuery = 'tanstack-query',
   TanstackRouter = 'tanstack-router',
-  Perfectionist = 'perfectionist',
+  Storybook = 'storybook'
+}
+
+/**
+ * Enum for tool features for linting non-JS formats or external documentation
+ */
+export enum ToolOption {
+  Mdx = 'mdx',
+  Markdown = 'markdown',
+  Cspell = 'cspell',
+  Prettier = 'prettier',
   Jsdoc = 'jsdoc',
   Swagger = 'swagger',
-  Storybook = 'storybook',
   Jsonc = 'jsonc',
   Yaml = 'yaml',
   Toml = 'toml'
+}
+
+/**
+ * Enum for specialized ESLint extensions and strict rule sets
+ */
+export enum ExtensionOption {
+  Regexp = 'regexp',
+  Unicorn = 'unicorn',
+  Sonarjs = 'sonarjs',
+  Security = 'security',
+  Perfectionist = 'perfectionist'
 }
 
 /**
@@ -104,11 +116,18 @@ export interface TsOptions {
  * ESLint configuration interface
  */
 export interface EslintConfigOptions {
+
   /** Enable TypeScript support with optional settings */
   typescript?: boolean | TsOptions
 
-  /** List of optional pluggable configurations */
-  optionals?: OptionalOption[]
+  /** List of library-specific configurations */
+  libraries?: LibraryOption[]
+
+  /** List of integrations for non-JS/TS tools or formats */
+  tools?: ToolOption[]
+
+  /** List of specialized ESLint rules and extensions */
+  extensions?: ExtensionOption[]
 
   /** List of global settings and behavioral flags */
   settings?: SettingOption[]

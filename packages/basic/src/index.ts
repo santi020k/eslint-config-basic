@@ -3,16 +3,17 @@ import {
   createCoreConfig,
   detectProjectOptions,
   type EslintConfigOptions,
+  ExtensionOption,
   type FlatConfigArray,
   gitignore,
   hasReactConfig,
   type ImportedFramework,
+  LibraryOption,
   NextMode,
-  OptionalOption,
   PresetOption,
   RuntimeOption,
   SettingOption,
-  ReactConfigKeys
+  ToolOption
 } from '@santi020k/eslint-config-core'
 import {
   cspell,
@@ -43,7 +44,9 @@ import type { TSESLint } from '@typescript-eslint/utils'
 
 // Re-export core types and utilities
 export {
-  OptionalOption,
+  LibraryOption,
+  ToolOption,
+  ExtensionOption,
   SettingOption,
   RuntimeOption,
   PresetOption,
@@ -122,7 +125,9 @@ const resolvePreset = (preset: PresetOption): Partial<EslintConfigOptions> => {
     case PresetOption.All:
       return {
         typescript: true,
-        optionals: Object.values(OptionalOption),
+        libraries: Object.values(LibraryOption),
+        tools: Object.values(ToolOption),
+        extensions: Object.values(ExtensionOption),
         runtime: RuntimeOption.Universal,
         frameworks: {
           react: true,
@@ -153,7 +158,9 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
 
   const {
     typescript = (presetDefaults.typescript ?? detected.typescript ?? false),
-    optionals = (presetDefaults.optionals ?? detected.optionals ?? []),
+    libraries = (presetDefaults.libraries ?? detected.libraries ?? []),
+    tools = (presetDefaults.tools ?? detected.tools ?? []),
+    extensions = (presetDefaults.extensions ?? detected.extensions ?? []),
     settings = (detected.settings ?? []),
     strict = options?.strict ?? false,
     runtime = (presetDefaults.runtime ?? detected.runtime ?? RuntimeOption.Universal),
@@ -183,14 +190,13 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
   const svelteParam = resolveFramework(svelteParamRaw)
   const solidParam = resolveFramework(solidParamRaw)
   const angularParam = resolveFramework(angularParamRaw)
-
   // Deduplicate entries
-  const uniqueOptionals = [...new Set(optionals)]
+  const uniqueLibraries = [...new Set(libraries)]
+  const uniqueTools = [...new Set(tools)]
+  const uniqueExtensions = [...new Set(extensions)]
   const uniqueSettings = [...new Set(settings)]
-
   // React is needed if any React-based framework option is present
   const hasReact = hasReactConfig({ frameworks })
-
   // Gitignore is enabled by default unless NoGitignore is specified (#8)
   const useGitignore = !uniqueSettings.includes(SettingOption.NoGitignore)
 
@@ -235,27 +241,27 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     ...angularParam,
 
     // Optionals (Still synchronous as they are direct dependencies)
-    ...(uniqueOptionals.includes(OptionalOption.Cspell) ? cspell : []),
-    ...(uniqueOptionals.includes(OptionalOption.Tailwind) ? tailwind : []),
-    ...(uniqueOptionals.includes(OptionalOption.Vitest) ? vitest : []),
-    ...(uniqueOptionals.includes(OptionalOption.I18next) ? i18next : []),
-    ...(uniqueOptionals.includes(OptionalOption.Stencil) ? stencil : []),
-    ...(uniqueOptionals.includes(OptionalOption.Mdx) ? mdx : []),
-    ...(uniqueOptionals.includes(OptionalOption.Regexp) ? regexp : []),
-    ...(uniqueOptionals.includes(OptionalOption.Markdown) ? markdown : []),
-    ...(uniqueOptionals.includes(OptionalOption.Unicorn) ? unicorn : []),
-    ...(uniqueOptionals.includes(OptionalOption.Sonarjs) ? sonarjs : []),
-    ...(uniqueOptionals.includes(OptionalOption.Playwright) ? playwright : []),
-    ...(uniqueOptionals.includes(OptionalOption.Security) ? security : []),
-    ...(uniqueOptionals.includes(OptionalOption.TanstackQuery) ? tanstackQuery : []),
-    ...(uniqueOptionals.includes(OptionalOption.TanstackRouter) ? tanstackRouter : []),
-    ...(uniqueOptionals.includes(OptionalOption.Perfectionist) ? perfectionist : []),
-    ...(uniqueOptionals.includes(OptionalOption.Jsdoc) ? jsdoc : []),
-    ...(uniqueOptionals.includes(OptionalOption.Swagger) ? swagger : []),
-    ...(uniqueOptionals.includes(OptionalOption.Storybook) ? storybook : []),
-    ...(uniqueOptionals.includes(OptionalOption.Jsonc) ? jsonc : []),
-    ...(uniqueOptionals.includes(OptionalOption.Yaml) ? yaml : []),
-    ...(uniqueOptionals.includes(OptionalOption.Toml) ? toml : []),
+    ...(uniqueTools.includes(ToolOption.Cspell) ? cspell : []),
+    ...(uniqueLibraries.includes(LibraryOption.Tailwind) ? tailwind : []),
+    ...(uniqueLibraries.includes(LibraryOption.Vitest) ? vitest : []),
+    ...(uniqueLibraries.includes(LibraryOption.I18next) ? i18next : []),
+    ...(uniqueLibraries.includes(LibraryOption.Stencil) ? stencil : []),
+    ...(uniqueTools.includes(ToolOption.Mdx) ? mdx : []),
+    ...(uniqueExtensions.includes(ExtensionOption.Regexp) ? regexp : []),
+    ...(uniqueTools.includes(ToolOption.Markdown) ? markdown : []),
+    ...(uniqueExtensions.includes(ExtensionOption.Unicorn) ? unicorn : []),
+    ...(uniqueExtensions.includes(ExtensionOption.Sonarjs) ? sonarjs : []),
+    ...(uniqueLibraries.includes(LibraryOption.Playwright) ? playwright : []),
+    ...(uniqueExtensions.includes(ExtensionOption.Security) ? security : []),
+    ...(uniqueLibraries.includes(LibraryOption.TanstackQuery) ? tanstackQuery : []),
+    ...(uniqueLibraries.includes(LibraryOption.TanstackRouter) ? tanstackRouter : []),
+    ...(uniqueExtensions.includes(ExtensionOption.Perfectionist) ? perfectionist : []),
+    ...(uniqueTools.includes(ToolOption.Jsdoc) ? jsdoc : []),
+    ...(uniqueTools.includes(ToolOption.Swagger) ? swagger : []),
+    ...(uniqueLibraries.includes(LibraryOption.Storybook) ? storybook : []),
+    ...(uniqueTools.includes(ToolOption.Jsonc) ? jsonc : []),
+    ...(uniqueTools.includes(ToolOption.Yaml) ? yaml : []),
+    ...(uniqueTools.includes(ToolOption.Toml) ? toml : []),
 
     // Global overrides for non-TS files to prevent typed rules errors (#15)
     // Must be BEFORE Prettier to allow Prettier to override formatting
@@ -278,7 +284,7 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
       }
     } as TSESLint.FlatConfig.Config,
 
-    ...(uniqueOptionals.includes(OptionalOption.Prettier) ? prettier : [])
+    ...(uniqueTools.includes(ToolOption.Prettier) ? prettier : [])
   ] as TSESLint.FlatConfig.ConfigArray).map((config: TSESLint.FlatConfig.Config) => {
     if (strict && config.rules) {
       const strictRules: TSESLint.FlatConfig.Rules = Object.fromEntries(

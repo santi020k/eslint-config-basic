@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
-import react from '@santi020k/eslint-config-react'
-import vue from '@santi020k/eslint-config-vue'
 import { extractConfigNames, extractRuleNames } from './test-utils.js'
 
-import { eslintConfig, OptionalOption } from '@santi020k/eslint-config-basic'
+import { eslintConfig, ExtensionOption, LibraryOption, ToolOption } from '@santi020k/eslint-config-basic'
+import react from '@santi020k/eslint-config-react'
+import vue from '@santi020k/eslint-config-vue'
 
 describe('Deep Rule Assertions (#5)', () => {
   it('should include React-specific rules when React is enabled', () => {
@@ -58,7 +58,7 @@ describe('Deep Rule Assertions (#5)', () => {
 
   it('should include unicorn rules when Unicorn optional is enabled', () => {
     const config = eslintConfig({
-      optionals: [OptionalOption.Unicorn]
+      extensions: [ExtensionOption.Unicorn]
     })
     const rules = extractRuleNames(config as Record<string, unknown>[])
 
@@ -69,7 +69,7 @@ describe('Deep Rule Assertions (#5)', () => {
 
   it('should include sonarjs rules when Sonarjs optional is enabled', () => {
     const config = eslintConfig({
-      optionals: [OptionalOption.Sonarjs]
+      extensions: [ExtensionOption.Sonarjs]
     })
     const rules = extractRuleNames(config as Record<string, unknown>[])
 
@@ -80,7 +80,7 @@ describe('Deep Rule Assertions (#5)', () => {
 
   it('should include prettier config when Prettier optional is enabled', () => {
     const config = eslintConfig({
-      optionals: [OptionalOption.Prettier]
+      tools: [ToolOption.Prettier]
     })
     const names = extractConfigNames(config as Record<string, unknown>[])
 
@@ -89,7 +89,7 @@ describe('Deep Rule Assertions (#5)', () => {
 
   it('should include regexp rules when Regexp optional is enabled', () => {
     const config = eslintConfig({
-      optionals: [OptionalOption.Regexp]
+      extensions: [ExtensionOption.Regexp]
     })
     const rules = extractRuleNames(config as Record<string, unknown>[])
 
@@ -109,7 +109,7 @@ describe('Deep Rule Assertions (#5)', () => {
 
   it('should include playwright rules when Playwright optional is enabled', () => {
     const config = eslintConfig({
-      optionals: [OptionalOption.Playwright]
+      libraries: [LibraryOption.Playwright]
     })
     const names = extractConfigNames(config as Record<string, unknown>[])
 

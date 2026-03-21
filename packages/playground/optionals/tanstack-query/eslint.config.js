@@ -1,6 +1,6 @@
 // @ts-check
-import { eslintConfig, OptionalOption } from '@santi020k/eslint-config-basic'
+import { eslintConfig, LibraryOption } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
-  optionals: [OptionalOption.TanstackQuery]
+  libraries: [LibraryOption.TanstackQuery]
 })

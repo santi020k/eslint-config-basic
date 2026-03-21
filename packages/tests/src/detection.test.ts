@@ -1,7 +1,7 @@
 import * as fs from 'node:fs'
 import { describe, expect, it, vi } from 'vitest'
 
-import { detectProjectOptions, OptionalOption, RuntimeOption } from '@santi020k/eslint-config-basic'
+import { detectProjectOptions, LibraryOption, RuntimeOption } from '@santi020k/eslint-config-basic'
 
 vi.mock('node:fs')
 
@@ -41,7 +41,7 @@ describe('detectProjectOptions', () => {
     }))
 
     const options = detectProjectOptions()
-    expect(options.optionals).toContain(OptionalOption.Tailwind)
+    expect(options.libraries).toContain(LibraryOption.Tailwind)
   })
 
   it('should detect Vitest if vitest is a dependency', () => {
@@ -51,7 +51,7 @@ describe('detectProjectOptions', () => {
     }))
 
     const options = detectProjectOptions()
-    expect(options.optionals).toContain(OptionalOption.Vitest)
+    expect(options.libraries).toContain(LibraryOption.Vitest)
   })
 
   it('should detect TanStack Query/Router', () => {
@@ -64,8 +64,8 @@ describe('detectProjectOptions', () => {
     }))
 
     const options = detectProjectOptions()
-    expect(options.optionals).toContain(OptionalOption.TanstackQuery)
-    expect(options.optionals).toContain(OptionalOption.TanstackRouter)
+    expect(options.libraries).toContain(LibraryOption.TanstackQuery)
+    expect(options.libraries).toContain(LibraryOption.TanstackRouter)
   })
 
   it('should handle missing package.json gracefully', () => {
@@ -78,7 +78,9 @@ describe('detectProjectOptions', () => {
     expect(options).toEqual({
       typescript: false,
       frameworks: {},
-      optionals: [],
+      libraries: [],
+      tools: [],
+      extensions: [],
       runtime: RuntimeOption.Universal
     })
   })

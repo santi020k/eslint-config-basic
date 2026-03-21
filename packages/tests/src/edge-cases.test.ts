@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { extractConfigNames, extractRuleNames, getEffectiveRuleValue } from './test-utils.js'
 
-import { eslintConfig, OptionalOption } from '@santi020k/eslint-config-basic'
+import { eslintConfig, LibraryOption, ToolOption } from '@santi020k/eslint-config-basic'
 
 describe('Edge-Case & Conflict Tests (#6)', () => {
   it('should handle Expo + Next together without crashing', () => {
@@ -81,10 +81,12 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
 
   it('should handle duplicate optionals without doubling', () => {
     const single = eslintConfig({
-      optionals: [OptionalOption.Tailwind]
+      libraries: [LibraryOption],
+      tools: [ToolOption.Tailwind]
     })
     const doubled = eslintConfig({
-      optionals: [OptionalOption.Tailwind, OptionalOption.Tailwind]
+      libraries: [LibraryOption, LibraryOption],
+      tools: [ToolOption.Tailwind, ToolOption.Tailwind]
     })
 
     expect(single).toHaveLength(doubled.length)
@@ -93,7 +95,8 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
   it('Prettier optional should be applied last', () => {
     const config = eslintConfig({
       typescript: true,
-      optionals: [OptionalOption.Prettier, OptionalOption.Tailwind]
+      libraries: [LibraryOption, LibraryOption],
+      tools: [ToolOption.Prettier, ToolOption.Tailwind]
     })
     const names = extractConfigNames(config as Record<string, unknown>[])
     const prettierIndex = names.lastIndexOf('eslint-config/prettier')
