@@ -1,3 +1,10 @@
-import { Component } from "@stencil/core";
-// eslint-disable-next-line @stencil-community/strict-boolean-conditions
-if ("") {}
+import { Component, Prop } from '@stencil/core'
+
+@Component({
+  tag: 'my-component',
+  styleUrl: 'my-component.css',
+  shadow: true
+})
+export class MyComponent {
+  @Prop() first: string = ''
+}

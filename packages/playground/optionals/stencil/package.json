@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-basic": "*",
-    "eslint": "^9.6.0"
+    "eslint": "^9.6.0",
+    "@stencil/core": "^4.0.0"
   }
 }

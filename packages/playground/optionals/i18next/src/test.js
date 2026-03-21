@@ -1,3 +1,5 @@
-import i18next from "i18next";
-// eslint-disable-next-line i18next/no-literal-string
-const a = "translated string";
+// eslint-disable-next-line no-unused-vars, unused-imports/no-unused-imports
+import i18next from 'i18next'
+
+const a = 'translated string'
+console.log("🚀 ~ a:", a)

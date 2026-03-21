@@ -1,15 +1,15 @@
-import { createSignal, createEffect, onMount } from "solid-js";
+import { createSignal, createEffect, onMount } from 'solid-js'
 
 function App() {
-  const [count, setCount] = createSignal(0);
+  const [count, setCount] = createSignal(0)
 
   createEffect(() => {
-    console.log("Count is now", count());
-  });
+    console.log('Count is now', count())
+  })
 
   onMount(() => {
-    console.log("Solid App mounted");
-  });
+    console.log('Solid App mounted')
+  })
 
   return (
     <div>
@@ -19,7 +19,7 @@ function App() {
         Increment
       </button>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

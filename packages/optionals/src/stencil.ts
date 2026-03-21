@@ -11,9 +11,7 @@ export const stencil: TSESLint.FlatConfig.ConfigArray = [
     name: 'optionals/stencil',
     files: ['**/*.{tsx,ts}'],
     plugins: {
-      '@stencil-community': fixupPluginRules({
-        rules: stencilPlugin.rules as Record<string, unknown>
-      } as Parameters<typeof fixupPluginRules>[0]) as unknown as TSESLint.FlatConfig.Plugin
+      '@stencil-community': fixupPluginRules(stencilPlugin as any) as unknown as TSESLint.FlatConfig.Plugin
     },
     rules: {
       '@stencil-community/async-methods': 'error',

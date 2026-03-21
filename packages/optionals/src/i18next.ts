@@ -1,3 +1,4 @@
+import { fixupPluginRules } from '@eslint/compat'
 import pluginI18next from 'eslint-plugin-i18next'
 
 import type { TSESLint } from '@typescript-eslint/utils'
@@ -9,7 +10,7 @@ import type { TSESLint } from '@typescript-eslint/utils'
 export const i18next: TSESLint.FlatConfig.ConfigArray = [
   {
     name: 'optionals/i18next',
-    plugins: { i18next: pluginI18next },
+    plugins: { i18next: fixupPluginRules(pluginI18next as any) as unknown as TSESLint.FlatConfig.Plugin },
     rules: {
       'i18next/no-literal-string': ['warn', {
         mode: 'jsx-text-only',
