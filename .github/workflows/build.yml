@@ -24,6 +24,8 @@ jobs:
       - run: npm ci
       - name: Spellcheck
         run: npm run lint:spell
+      - name: TypeScript check
+        run: npm run typecheck
       - name: Unused code check
         run: npm run lint:knip
       - run: npm run build

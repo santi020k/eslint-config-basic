@@ -24,12 +24,6 @@
     "packages/core/src/ambient.d.ts",
     "packages/react/src/ambient.d.ts",
     "packages/optionals/src/ambient.d.ts",
-    "packages/astro/src/ambient.d.ts",
-    "packages/expo/src/ambient.d.ts",
-    "packages/nest/src/ambient.d.ts",
-    "packages/angular/src/ambient.d.ts",
-    "packages/solid/src/ambient.d.ts",
-    "packages/svelte/src/ambient.d.ts",
-    "packages/vue/src/ambient.d.ts"
+    "packages/expo/src/ambient.d.ts"
   ]
 }

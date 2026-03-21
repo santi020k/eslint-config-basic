@@ -24,7 +24,8 @@
     "clean": "rm -rf dist",
     "check:exports": "publint",
     "prepack": "rm -f README.md && cp ../../README.md ./README.md",
-    "postpack": "rm -f README.md && ln -s ../../README.md ./README.md"
+    "postpack": "rm -f README.md && ln -s ../../README.md ./README.md",
+    "typecheck": "tsc --noEmit"
   },
   "bin": {
     "basic-eslint": "./dist/cli.js"

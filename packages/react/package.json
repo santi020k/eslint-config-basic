@@ -19,14 +19,17 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "clean": "rm -rf dist",
-    "check:exports": "publint"
+    "check:exports": "publint",
+    "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
     "eslint": "^10.0.3",
     "react": ">=18.0.0"
   },
   "peerDependenciesMeta": {
-    "react": { "optional": true }
+    "react": {
+      "optional": true
+    }
   },
   "dependencies": {
     "@santi020k/eslint-config-core": "^0.7.1",
