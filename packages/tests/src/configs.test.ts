@@ -3,9 +3,9 @@ import { describe, expect, it } from 'vitest'
 import { astroConfig } from '@santi020k/eslint-config-astro'
 import {
   coreConfig,
-  ExtensionOption,
-  LibraryOption, SettingOption,
-  TestingOption, ToolOption
+  Extension,
+  Library, Setting,
+  Testing, Tool
 } from '@santi020k/eslint-config-core'
 import { expoConfig } from '@santi020k/eslint-config-expo'
 import { nestConfig } from '@santi020k/eslint-config-nest'
@@ -102,22 +102,22 @@ describe('Vue Config', () => {
 
 describe('Config Enums', () => {
   it('should export config enums with expected values', () => {
-    expect(LibraryOption.Tailwind).toBeDefined()
+    expect(Library.Tailwind).toBeDefined()
 
-    expect(TestingOption.Vitest).toBeDefined()
+    expect(Testing.Vitest).toBeDefined()
 
-    expect(ToolOption.Cspell).toBeDefined()
+    expect(Tool.Cspell).toBeDefined()
 
-    expect(ToolOption.Prettier).toBeDefined()
+    expect(Tool.Prettier).toBeDefined()
 
-    expect(ExtensionOption.Unicorn).toBeDefined()
+    expect(Extension.Unicorn).toBeDefined()
 
-    expect(ExtensionOption.Sonarjs).toBeDefined()
+    expect(Extension.Sonarjs).toBeDefined()
   })
 
-  it('should export SettingOption enum with expected values', () => {
-    expect(SettingOption.Gitignore).toBeDefined()
+  it('should export Setting enum with expected values', () => {
+    expect(Setting.Gitignore).toBeDefined()
 
-    expect(SettingOption.NoGitignore).toBeDefined()
+    expect(Setting.NoGitignore).toBeDefined()
   })
 })

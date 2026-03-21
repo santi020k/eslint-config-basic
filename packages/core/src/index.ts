@@ -10,7 +10,7 @@ import globals from 'globals'
 
 import { rules } from './rules.js'
 import {
-  RuntimeOption
+  Runtime
 } from './types.js'
 
 import eslint from '@eslint/js'
@@ -25,15 +25,15 @@ export * from './utils/index.js'
 /**
  * Returns the appropriate globals for the given runtime option
  */
-export const getGlobalsForRuntime = (runtime: RuntimeOption = RuntimeOption.Universal): TSESLint.FlatConfig.LanguageOptions['globals'] => {
+export const getGlobalsForRuntime = (runtime: Runtime = Runtime.Universal): TSESLint.FlatConfig.LanguageOptions['globals'] => {
   switch (runtime) {
-    case RuntimeOption.Node:
+    case Runtime.Node:
       return { ...globals.node }
 
-    case RuntimeOption.Browser:
+    case Runtime.Browser:
       return { ...globals.browser }
 
-    case RuntimeOption.Universal:
+    case Runtime.Universal:
 
     default:
       return {
@@ -46,7 +46,7 @@ export const getGlobalsForRuntime = (runtime: RuntimeOption = RuntimeOption.Univ
 /**
  * Creates the core config with the specified runtime globals
  */
-export const createCoreConfig = (runtime: RuntimeOption = RuntimeOption.Universal): TSESLint.FlatConfig.ConfigArray => {
+export const createCoreConfig = (runtime: Runtime = Runtime.Universal): TSESLint.FlatConfig.ConfigArray => {
   const languageOptions: TSESLint.FlatConfig.LanguageOptions = {
     ecmaVersion: 'latest',
     sourceType: 'module',

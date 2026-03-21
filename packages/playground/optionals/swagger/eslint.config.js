@@ -1,6 +1,6 @@
 // @ts-check
-import { eslintConfig, LibraryOption } from '@santi020k/eslint-config-basic'
+import { eslintConfig, Library } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
-  libraries: [LibraryOption.Swagger]
+  libraries: [Library.Swagger]
 })

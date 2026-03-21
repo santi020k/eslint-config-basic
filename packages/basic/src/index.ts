@@ -3,19 +3,19 @@ import {
   createCoreConfig,
   detectProjectOptions,
   type EslintConfigOptions,
-  ExtensionOption,
+  Extension,
   type FlatConfigArray,
-  FormatOption,
+  Format,
   gitignore,
   hasReactConfig,
   type ImportedFramework,
-  LibraryOption,
+  Library,
   NextMode,
-  PresetOption,
-  RuntimeOption,
-  SettingOption,
-  TestingOption,
-  ToolOption
+  Preset,
+  Runtime,
+  Setting,
+  Testing,
+  Tool
 } from '@santi020k/eslint-config-core'
 import {
   cspell,
@@ -46,14 +46,14 @@ import type { TSESLint } from '@typescript-eslint/utils'
 
 // Re-export core types and utilities
 export {
-  LibraryOption,
-  ToolOption,
-  ExtensionOption,
-  SettingOption,
-  RuntimeOption,
-  PresetOption,
-  TestingOption,
-  FormatOption,
+  Library,
+  Tool,
+  Extension,
+  Setting,
+  Runtime,
+  Preset,
+  Testing,
+  Format,
   NextMode,
   ReactConfigKeys,
   hasReactConfig,
@@ -108,33 +108,33 @@ const resolveFramework = (framework?: ImportedFramework): FlatConfigArray => {
 /**
  * Resolves a preset into options
  */
-const resolvePreset = (preset: PresetOption): Partial<EslintConfigOptions> => {
+const resolvePreset = (preset: Preset): Partial<EslintConfigOptions> => {
   switch (preset) {
-    case PresetOption.Basic:
-      return { runtime: RuntimeOption.Universal }
+    case Preset.Basic:
+      return { runtime: Runtime.Universal }
 
-    case PresetOption.Node:
+    case Preset.Node:
       return {
         typescript: true,
-        runtime: RuntimeOption.Node
+        runtime: Runtime.Node
       }
 
-    case PresetOption.Browser:
+    case Preset.Browser:
       return {
         typescript: true,
         frameworks: { react: true },
-        runtime: RuntimeOption.Browser
+        runtime: Runtime.Browser
       }
 
-    case PresetOption.All:
+    case Preset.All:
       return {
         typescript: true,
-        libraries: Object.values(LibraryOption),
-        tools: Object.values(ToolOption),
-        testing: Object.values(TestingOption),
-        formats: Object.values(FormatOption),
-        extensions: Object.values(ExtensionOption),
-        runtime: RuntimeOption.Universal,
+        libraries: Object.values(Library),
+        tools: Object.values(Tool),
+        testing: Object.values(Testing),
+        formats: Object.values(Format),
+        extensions: Object.values(Extension),
+        runtime: Runtime.Universal,
         frameworks: {
           react: true,
           next: true,
@@ -171,7 +171,7 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     extensions = (presetDefaults.extensions ?? detected.extensions ?? []),
     settings = (detected.settings ?? []),
     strict = options?.strict ?? false,
-    runtime = (presetDefaults.runtime ?? detected.runtime ?? RuntimeOption.Universal),
+    runtime = (presetDefaults.runtime ?? detected.runtime ?? Runtime.Universal),
     nextMode = (presetDefaults.nextMode ?? detected.nextMode ?? NextMode.Pages),
 
     frameworks = { ...presetDefaults.frameworks, ...options?.frameworks }
@@ -208,10 +208,10 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
   // React is needed if any React-based framework option is present
   const hasReact = hasReactConfig({ frameworks })
   // Gitignore is enabled by default unless NoGitignore is specified (#8)
-  const useGitignore = !uniqueSettings.includes(SettingOption.NoGitignore)
+  const useGitignore = !uniqueSettings.includes(Setting.NoGitignore)
 
   // Use runtime-aware core config
-  const runtimeCoreConfig = runtime !== RuntimeOption.Universal ?
+  const runtimeCoreConfig = runtime !== Runtime.Universal ?
     createCoreConfig(runtime) :
     coreConfig
 
@@ -251,27 +251,27 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     ...angularParam,
 
     // Optionals (Still synchronous as they are direct dependencies)
-    ...(uniqueTools.includes(ToolOption.Cspell) ? cspell : []),
-    ...(uniqueLibraries.includes(LibraryOption.Tailwind) ? tailwind : []),
-    ...(uniqueTesting.includes(TestingOption.Vitest) ? vitest : []),
-    ...(uniqueLibraries.includes(LibraryOption.I18next) ? i18next : []),
-    ...(uniqueLibraries.includes(LibraryOption.Stencil) ? stencil : []),
-    ...(uniqueFormats.includes(FormatOption.Mdx) ? mdx : []),
-    ...(uniqueExtensions.includes(ExtensionOption.Regexp) ? regexp : []),
-    ...(uniqueFormats.includes(FormatOption.Markdown) ? markdown : []),
-    ...(uniqueExtensions.includes(ExtensionOption.Unicorn) ? unicorn : []),
-    ...(uniqueExtensions.includes(ExtensionOption.Sonarjs) ? sonarjs : []),
-    ...(uniqueTesting.includes(TestingOption.Playwright) ? playwright : []),
-    ...(uniqueExtensions.includes(ExtensionOption.Security) ? security : []),
-    ...(uniqueLibraries.includes(LibraryOption.TanstackQuery) ? tanstackQuery : []),
-    ...(uniqueLibraries.includes(LibraryOption.TanstackRouter) ? tanstackRouter : []),
-    ...(uniqueExtensions.includes(ExtensionOption.Perfectionist) ? perfectionist : []),
-    ...(uniqueTools.includes(ToolOption.Jsdoc) ? jsdoc : []),
-    ...(uniqueTools.includes(ToolOption.Swagger) ? swagger : []),
-    ...(uniqueLibraries.includes(LibraryOption.Storybook) ? storybook : []),
-    ...(uniqueFormats.includes(FormatOption.Jsonc) ? jsonc : []),
-    ...(uniqueFormats.includes(FormatOption.Yaml) ? yaml : []),
-    ...(uniqueFormats.includes(FormatOption.Toml) ? toml : []),
+    ...(uniqueTools.includes(Tool.Cspell) ? cspell : []),
+    ...(uniqueLibraries.includes(Library.Tailwind) ? tailwind : []),
+    ...(uniqueTesting.includes(Testing.Vitest) ? vitest : []),
+    ...(uniqueLibraries.includes(Library.I18next) ? i18next : []),
+    ...(uniqueLibraries.includes(Library.Stencil) ? stencil : []),
+    ...(uniqueFormats.includes(Format.Mdx) ? mdx : []),
+    ...(uniqueExtensions.includes(Extension.Regexp) ? regexp : []),
+    ...(uniqueFormats.includes(Format.Markdown) ? markdown : []),
+    ...(uniqueExtensions.includes(Extension.Unicorn) ? unicorn : []),
+    ...(uniqueExtensions.includes(Extension.Sonarjs) ? sonarjs : []),
+    ...(uniqueTesting.includes(Testing.Playwright) ? playwright : []),
+    ...(uniqueExtensions.includes(Extension.Security) ? security : []),
+    ...(uniqueLibraries.includes(Library.TanstackQuery) ? tanstackQuery : []),
+    ...(uniqueLibraries.includes(Library.TanstackRouter) ? tanstackRouter : []),
+    ...(uniqueExtensions.includes(Extension.Perfectionist) ? perfectionist : []),
+    ...(uniqueTools.includes(Tool.Jsdoc) ? jsdoc : []),
+    ...(uniqueTools.includes(Tool.Swagger) ? swagger : []),
+    ...(uniqueLibraries.includes(Library.Storybook) ? storybook : []),
+    ...(uniqueFormats.includes(Format.Jsonc) ? jsonc : []),
+    ...(uniqueFormats.includes(Format.Yaml) ? yaml : []),
+    ...(uniqueFormats.includes(Format.Toml) ? toml : []),
 
     // Global overrides for non-TS files to prevent typed rules errors (#15)
     // Must be BEFORE Prettier to allow Prettier to override formatting
@@ -294,7 +294,7 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
       }
     } as TSESLint.FlatConfig.Config,
 
-    ...(uniqueTools.includes(ToolOption.Prettier) ? prettier : [])
+    ...(uniqueTools.includes(Tool.Prettier) ? prettier : [])
   ] as TSESLint.FlatConfig.ConfigArray).map((config: TSESLint.FlatConfig.Config) => {
     if (strict && config.rules) {
       const strictRules: TSESLint.FlatConfig.Rules = Object.fromEntries(

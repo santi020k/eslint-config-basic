@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { extractConfigNames } from './test-utils.js'
 
-import { eslintConfig, ExtensionOption, LibraryOption, SettingOption, TestingOption, ToolOption } from '@santi020k/eslint-config-basic'
+import { eslintConfig, Extension, Library, Setting, Testing, Tool } from '@santi020k/eslint-config-basic'
 
 describe('eslintConfig Function', () => {
   it('should return an array when called with minimal options', () => {
@@ -76,7 +76,7 @@ describe('eslintConfig Function', () => {
 
   it('should exclude gitignore when NoGitignore setting is specified', () => {
     const config = eslintConfig({
-      settings: [SettingOption.NoGitignore]
+      settings: [Setting.NoGitignore]
     })
 
     const names = extractConfigNames(config as Record<string, unknown>[])
@@ -100,10 +100,10 @@ describe('eslintConfig Function', () => {
   it('should handle optionals', () => {
     const config = eslintConfig({
       typescript: true,
-      libraries: [LibraryOption.Tailwind],
-      testing: [TestingOption.Vitest],
-      tools: [ToolOption.Prettier],
-      extensions: [ExtensionOption.Unicorn]
+      libraries: [Library.Tailwind],
+      testing: [Testing.Vitest],
+      tools: [Tool.Prettier],
+      extensions: [Extension.Unicorn]
     })
 
     expect(Array.isArray(config)).toBe(true)
@@ -146,9 +146,9 @@ describe('eslintConfig Function', () => {
   it('should handle all optionals combined', () => {
     const config = eslintConfig({
       typescript: true,
-      libraries: Object.values(LibraryOption),
-      tools: Object.values(ToolOption),
-      extensions: Object.values(ExtensionOption)
+      libraries: Object.values(Library),
+      tools: Object.values(Tool),
+      extensions: Object.values(Extension)
     })
 
     expect(Array.isArray(config)).toBe(true)
@@ -158,11 +158,11 @@ describe('eslintConfig Function', () => {
 
   it('should handle duplicate optional entries without doubling config blocks', () => {
     const single = eslintConfig({
-      testing: [TestingOption.Vitest]
+      testing: [Testing.Vitest]
     })
 
     const doubled = eslintConfig({
-      testing: [TestingOption.Vitest, TestingOption.Vitest]
+      testing: [Testing.Vitest, Testing.Vitest]
     })
 
     expect(single).toHaveLength(doubled.length)
@@ -175,9 +175,9 @@ describe('eslintConfig Function', () => {
         react: [{ name: 'mock-react', rules: {} }],
         next: [{ name: 'mock-next', rules: {} }]
       },
-      testing: [TestingOption.Vitest],
-      tools: [ToolOption.Cspell],
-      settings: [SettingOption.Gitignore]
+      testing: [Testing.Vitest],
+      tools: [Tool.Cspell],
+      settings: [Setting.Gitignore]
     })
 
     expect(Array.isArray(config)).toBe(true)

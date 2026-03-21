@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { extractConfigNames, extractRuleNames, getEffectiveRuleValue } from './test-utils.js'
 
-import { eslintConfig, FormatOption, LibraryOption, TestingOption, ToolOption } from '@santi020k/eslint-config-basic'
+import { eslintConfig, Format, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
 
 describe('Edge-Case & Conflict Tests (#6)', () => {
   it('should handle Expo + Next together without crashing', () => {
@@ -85,14 +85,13 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
 
   it('should handle duplicate optionals without doubling', () => {
     const single = eslintConfig({
-      libraries: [LibraryOption.Tailwind],
-      tools: [ToolOption.Prettier]
+      libraries: [Library.Tailwind],
+      tools: [Tool.Prettier]
     })
 
     const doubled = eslintConfig({
-      libraries: [LibraryOption.Tailwind, LibraryOption.Tailwind],
-      tools: [ToolOption.Prettier, ToolOption.Prettier],
-      formats: [FormatOption.Jsonc, FormatOption.Markdown]
+      libraries: [Library.Tailwind, Library.Tailwind],
+      tools: [Tool.Prettier, Tool.Prettier]
     })
 
     expect(single).toHaveLength(doubled.length)
@@ -101,10 +100,10 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
   it('Prettier optional should be applied last', () => {
     const config = eslintConfig({
       typescript: true,
-      libraries: [LibraryOption.Tailwind],
-      testing: [TestingOption.Vitest],
-      tools: [ToolOption.Prettier],
-      formats: [FormatOption.Mdx]
+      libraries: [Library.Tailwind],
+      testing: [Testing.Vitest],
+      tools: [Tool.Prettier],
+      formats: [Format.Mdx]
     })
 
     const names = extractConfigNames(config as Record<string, unknown>[])

@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
-import { type EslintConfigOptions, ExtensionOption, LibraryOption, RuntimeOption, TestingOption, ToolOption } from '../types.js'
+import { type EslintConfigOptions, Extension, Library, Runtime, Testing, Tool } from '../types.js'
 
 interface PackageJson {
   dependencies?: Record<string, string | undefined>
@@ -24,7 +24,7 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
     formats: [],
     tools: [],
     extensions: [],
-    runtime: RuntimeOption.Universal
+    runtime: Runtime.Universal
   }
 
   if (!existsSync(packageJsonPath)) {
@@ -49,7 +49,7 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
     if (allDeps.next) {
       frameworks.next = true
 
-      options.runtime = RuntimeOption.Universal
+      options.runtime = Runtime.Universal
     }
 
     if (allDeps.astro) frameworks.astro = true
@@ -57,13 +57,13 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
     if (allDeps.react && !allDeps.next && !allDeps.expo && !allDeps['react-native']) {
       frameworks.react = true
 
-      options.runtime = RuntimeOption.Browser
+      options.runtime = Runtime.Browser
     }
 
     if (allDeps['@nestjs/core']) {
       frameworks.nest = true
 
-      options.runtime = RuntimeOption.Node
+      options.runtime = Runtime.Node
     }
 
     if (allDeps.vue) frameworks.vue = true
@@ -82,19 +82,19 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
     }
 
     // Optional detection
-    if (allDeps.tailwindcss) options.libraries?.push(LibraryOption.Tailwind)
+    if (allDeps.tailwindcss) options.libraries?.push(Library.Tailwind)
 
-    if (allDeps.vitest) options.testing?.push(TestingOption.Vitest)
+    if (allDeps.vitest) options.testing?.push(Testing.Vitest)
 
-    if (allDeps.playwright || allDeps['@playwright/test']) options.testing?.push(TestingOption.Playwright)
+    if (allDeps.playwright || allDeps['@playwright/test']) options.testing?.push(Testing.Playwright)
 
-    if (allDeps.i18next) options.libraries?.push(LibraryOption.I18next)
+    if (allDeps.i18next) options.libraries?.push(Library.I18next)
 
-    if (allDeps['@stencil/core']) options.libraries?.push(LibraryOption.Stencil)
+    if (allDeps['@stencil/core']) options.libraries?.push(Library.Stencil)
 
-    if (allDeps.storybook || allDeps['@storybook/react']) options.libraries?.push(LibraryOption.Storybook)
+    if (allDeps.storybook || allDeps['@storybook/react']) options.libraries?.push(Library.Storybook)
 
-    if (allDeps['@nestjs/swagger']) options.tools?.push(ToolOption.Swagger)
+    if (allDeps['@nestjs/swagger']) options.tools?.push(Tool.Swagger)
 
     // TanStack
     if (
@@ -104,7 +104,7 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
       allDeps['@tanstack/angular-query'] ||
       allDeps['@tanstack/eslint-plugin-query']
     ) {
-      options.libraries?.push(LibraryOption.TanstackQuery)
+      options.libraries?.push(Library.TanstackQuery)
     }
 
     if (
@@ -112,11 +112,11 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
       allDeps['@tanstack/vue-router'] ||
       allDeps['@tanstack/eslint-plugin-router']
     ) {
-      options.libraries?.push(LibraryOption.TanstackRouter)
+      options.libraries?.push(Library.TanstackRouter)
     }
 
     // Auto-enable security plugin (Professional default)
-    options.extensions?.push(ExtensionOption.Security)
+    options.extensions?.push(Extension.Security)
 
     options.libraries = [...new Set(options.libraries)]
 

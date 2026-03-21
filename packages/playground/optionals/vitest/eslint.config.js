@@ -1,6 +1,6 @@
 // @ts-check
-import { eslintConfig, TestingOption } from '@santi020k/eslint-config-basic'
+import { eslintConfig, Testing } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
-  testing: [TestingOption.Vitest]
+  testing: [Testing.Vitest]
 })

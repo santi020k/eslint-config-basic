@@ -1,6 +1,6 @@
 // @ts-check
-import { eslintConfig, ExtensionOption } from '@santi020k/eslint-config-basic'
+import { eslintConfig, Extension } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
-  extensions: [ExtensionOption.Unicorn]
+  extensions: [Extension.Unicorn]
 })

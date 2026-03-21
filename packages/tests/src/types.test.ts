@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
-import { ExtensionOption, FormatOption, LibraryOption, SettingOption, TestingOption, ToolOption } from '@santi020k/eslint-config-basic'
+import { Extension, Format, Library, Setting, Testing, Tool } from '@santi020k/eslint-config-basic'
 
 describe('Type Exports', () => {
-  it('should have all LibraryOption values', () => {
-    const options = Object.values(LibraryOption)
+  it('should have all Library values', () => {
+    const options = Object.values(Library)
 
     expect(options).toContain('tailwind')
 
@@ -19,8 +19,8 @@ describe('Type Exports', () => {
     expect(options).toContain('storybook')
   })
 
-  it('should have all ToolOption values', () => {
-    const options = Object.values(ToolOption)
+  it('should have all Tool values', () => {
+    const options = Object.values(Tool)
 
     expect(options).toContain('cspell')
 
@@ -31,16 +31,16 @@ describe('Type Exports', () => {
     expect(options).toContain('swagger')
   })
 
-  it('should have all TestingOption values', () => {
-    const options = Object.values(TestingOption)
+  it('should have all Testing values', () => {
+    const options = Object.values(Testing)
 
     expect(options).toContain('vitest')
 
     expect(options).toContain('playwright')
   })
 
-  it('should have all FormatOption values', () => {
-    const options = Object.values(FormatOption)
+  it('should have all Format values', () => {
+    const options = Object.values(Format)
 
     expect(options).toContain('mdx')
 
@@ -53,8 +53,8 @@ describe('Type Exports', () => {
     expect(options).toContain('toml')
   })
 
-  it('should have all ExtensionOption values', () => {
-    const options = Object.values(ExtensionOption)
+  it('should have all Extension values', () => {
+    const options = Object.values(Extension)
 
     expect(options).toContain('regexp')
 
@@ -67,8 +67,8 @@ describe('Type Exports', () => {
     expect(options).toContain('perfectionist')
   })
 
-  it('should have all SettingOption values', () => {
-    const options = Object.values(SettingOption)
+  it('should have all Setting values', () => {
+    const options = Object.values(Setting)
 
     expect(options).toContain('gitignore')
 

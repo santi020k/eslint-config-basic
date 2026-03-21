@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { extractConfigNames, extractRuleNames } from './test-utils.js'
 
-import { eslintConfig, ExtensionOption, TestingOption, ToolOption } from '@santi020k/eslint-config-basic'
+import { eslintConfig, Extension, Testing, Tool } from '@santi020k/eslint-config-basic'
 import react from '@santi020k/eslint-config-react'
 import vue from '@santi020k/eslint-config-vue'
 
@@ -58,7 +58,7 @@ describe('Deep Rule Assertions (#5)', () => {
 
   it('should include unicorn rules when Unicorn optional is enabled', () => {
     const config = eslintConfig({
-      extensions: [ExtensionOption.Unicorn]
+      extensions: [Extension.Unicorn]
     })
 
     const rules = extractRuleNames(config as Record<string, unknown>[])
@@ -70,7 +70,7 @@ describe('Deep Rule Assertions (#5)', () => {
 
   it('should include sonarjs rules when Sonarjs optional is enabled', () => {
     const config = eslintConfig({
-      extensions: [ExtensionOption.Sonarjs]
+      extensions: [Extension.Sonarjs]
     })
 
     const rules = extractRuleNames(config as Record<string, unknown>[])
@@ -82,7 +82,7 @@ describe('Deep Rule Assertions (#5)', () => {
 
   it('should include prettier config when Prettier optional is enabled', () => {
     const config = eslintConfig({
-      tools: [ToolOption.Prettier]
+      tools: [Tool.Prettier]
     })
 
     const names = extractConfigNames(config as Record<string, unknown>[])
@@ -92,7 +92,7 @@ describe('Deep Rule Assertions (#5)', () => {
 
   it('should include regexp rules when Regexp optional is enabled', () => {
     const config = eslintConfig({
-      extensions: [ExtensionOption.Regexp]
+      extensions: [Extension.Regexp]
     })
 
     const rules = extractRuleNames(config as Record<string, unknown>[])
@@ -113,7 +113,7 @@ describe('Deep Rule Assertions (#5)', () => {
 
   it('should include playwright rules when Playwright optional is enabled', () => {
     const config = eslintConfig({
-      testing: [TestingOption.Playwright]
+      testing: [Testing.Playwright]
     })
 
     const names = extractConfigNames(config as Record<string, unknown>[])

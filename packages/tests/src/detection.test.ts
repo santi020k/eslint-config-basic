@@ -1,7 +1,7 @@
 import * as fs from 'node:fs'
 import { describe, expect, it, vi } from 'vitest'
 
-import { detectProjectOptions, LibraryOption, RuntimeOption, TestingOption } from '@santi020k/eslint-config-basic'
+import { detectProjectOptions, Library, Runtime, Testing } from '@santi020k/eslint-config-basic'
 
 vi.mock('node:fs')
 
@@ -49,7 +49,7 @@ describe('detectProjectOptions', () => {
 
     const options = detectProjectOptions()
 
-    expect(options.libraries).toContain(LibraryOption.Tailwind)
+    expect(options.libraries).toContain(Library.Tailwind)
   })
 
   it('should detect Vitest if vitest is a dependency', () => {
@@ -61,7 +61,7 @@ describe('detectProjectOptions', () => {
 
     const options = detectProjectOptions()
 
-    expect(options.testing).toContain(TestingOption.Vitest)
+    expect(options.testing).toContain(Testing.Vitest)
   })
 
   it('should detect TanStack Query/Router', () => {
@@ -76,9 +76,9 @@ describe('detectProjectOptions', () => {
 
     const options = detectProjectOptions()
 
-    expect(options.libraries).toContain(LibraryOption.TanstackQuery)
+    expect(options.libraries).toContain(Library.TanstackQuery)
 
-    expect(options.libraries).toContain(LibraryOption.TanstackRouter)
+    expect(options.libraries).toContain(Library.TanstackRouter)
   })
 
   it('should handle missing package.json gracefully', () => {
@@ -98,7 +98,7 @@ describe('detectProjectOptions', () => {
       formats: [],
       tools: [],
       extensions: [],
-      runtime: RuntimeOption.Universal
+      runtime: Runtime.Universal
     })
   })
 })

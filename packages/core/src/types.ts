@@ -11,7 +11,7 @@ export enum NextMode {
 /**
  * Enum for application-level runtime dependencies and styling
  */
-export enum LibraryOption {
+export enum Library {
   Tailwind = 'tailwind',
   I18next = 'i18next',
   Stencil = 'stencil',
@@ -23,7 +23,7 @@ export enum LibraryOption {
 /**
  * Enum for testing frameworks and environments
  */
-export enum TestingOption {
+export enum Testing {
   Vitest = 'vitest',
   Playwright = 'playwright'
   // TODO: Add support for Jest, Cypress, TestingLibrary
@@ -35,7 +35,7 @@ export enum TestingOption {
 /**
  * Enum for linting non-JS/TS file formats
  */
-export enum FormatOption {
+export enum Format {
   Mdx = 'mdx',
   Markdown = 'markdown',
   Jsonc = 'jsonc',
@@ -48,7 +48,7 @@ export enum FormatOption {
 /**
  * Enum for integrating external standalone utilities
  */
-export enum ToolOption {
+export enum Tool {
   Prettier = 'prettier',
   Cspell = 'cspell',
   Jsdoc = 'jsdoc',
@@ -58,7 +58,7 @@ export enum ToolOption {
 /**
  * Enum for specialized ESLint extensions and strict rule sets
  */
-export enum ExtensionOption {
+export enum Extension {
   Regexp = 'regexp',
   Unicorn = 'unicorn',
   Sonarjs = 'sonarjs',
@@ -69,7 +69,7 @@ export enum ExtensionOption {
 /**
  * Enum for settings options in ESLint
  */
-export enum SettingOption {
+export enum Setting {
   Gitignore = 'gitignore',
   NoGitignore = 'no-gitignore'
 }
@@ -77,7 +77,7 @@ export enum SettingOption {
 /**
  * Enum for runtime environment presets
  */
-export enum RuntimeOption {
+export enum Runtime {
 
   /** Only Node.js globals (process, __dirname, etc.) */
   Node = 'node',
@@ -92,7 +92,7 @@ export enum RuntimeOption {
 /**
  * Enum for named presets
  */
-export enum PresetOption {
+export enum Preset {
 
   /** Core JS config only */
   Basic = 'basic',
@@ -139,31 +139,31 @@ export interface EslintConfigOptions {
   typescript?: boolean | TsOptions
 
   /** List of application-level dependencies configurations */
-  libraries?: LibraryOption[]
+  libraries?: Library[]
 
   /** List of testing frameworks and testing environments */
-  testing?: TestingOption[]
+  testing?: Testing[]
 
   /** Additional non-JS/TS file formats to lint */
-  formats?: FormatOption[]
+  formats?: Format[]
 
   /** List of integrations for external standalone tools */
-  tools?: ToolOption[]
+  tools?: Tool[]
 
   /** List of specialized ESLint rules and extensions */
-  extensions?: ExtensionOption[]
+  extensions?: Extension[]
 
   /** List of global settings and behavioral flags */
-  settings?: SettingOption[]
+  settings?: Setting[]
 
   /** If true, all 'warn' rules are promoted to 'error' */
   strict?: boolean
 
   /** Runtime environment preset (Node, Browser, Universal) */
-  runtime?: RuntimeOption
+  runtime?: Runtime
 
   /** High-level configuration preset */
-  preset?: PresetOption
+  preset?: Preset
 
   /** Next.js specific routing mode */
   nextMode?: NextMode
