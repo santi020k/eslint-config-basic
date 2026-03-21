@@ -41,7 +41,7 @@ We only supports the Flat Config format. All configurations must be exported as 
 ### 2. Composable Async API
 Instead of traditional `extends`, we use a functional, asynchronous composition API:
 ```typescript
-await eslintConfig({ config, optionals, projectType, strict: true })
+eslintConfig({ typescript: true, optionals, frameworks: { react: true }, strict: true })
 ```
 This allows for dynamic detection, strict mode enforcement, and modular framework loading.
 
@@ -56,8 +56,7 @@ This allows for dynamic detection, strict mode enforcement, and modular framewor
 1. Seed new package via `mkdir packages/{name}/src`.
 2. Copy `packages/typescript/package.json` and adjust (add to peerDependencies).
 3. Export config from `src/index.ts`.
-4. Add to `ConfigOption` enum in `packages/core/src/types.ts`.
-5. Register in the `loadFrameworkConfig` logic in `packages/basic/src/index.ts`.
+4. Compose in `packages/basic/src/index.ts`.
 
 ### Adding an Optional Integration
 1. Add new file to `packages/optionals/src/`.

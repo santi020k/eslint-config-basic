@@ -39,9 +39,9 @@ core → typescript → react → next
 This package only supports ESLint 9+ flat config format. No legacy `.eslintrc` support.
 
 ### Composable Design
-Users select configs via enums rather than extending named configs:
+Users select configs via direct options rather than extending named configs:
 ```js
-eslintConfig({ config: [ConfigOption.React, ConfigOption.Ts] })
+eslintConfig({ typescript: true, frameworks: { react: true } })
 ```
 
 ### Dependency Alignment
@@ -68,8 +68,8 @@ All commands must pass before considering work complete.
 ### When adding a new framework config (as a package):
 1. Create `packages/{name}/` with `package.json`, `tsconfig.json`, `tsup.config.ts`
 2. Create `packages/{name}/src/index.ts` exporting the config
-3. Add to `ConfigOption` enum in `packages/core/src/types.ts`
-4. Wire into `eslintConfig()` function in `src/index.ts`
+3. Add to `frameworks` type in `packages/core/src/types.ts`
+4. Wire into `eslintConfig()` function in `packages/basic/src/index.ts`
 
 ### When adding a new optional:
 1. Create `src/optionals/{name}.ts`

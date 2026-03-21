@@ -24,7 +24,7 @@ The project is a Turborepo monorepo using npm Workspaces. It exports a composabl
 - `.agent/rules/context.md` - Context, architecture decisions, and known gotchas
 - `.agent/rules/guidelines.md` - Detailed coding guidelines and structure rules
 - `packages/basic/src/index.ts` - Main entry point that composes configurations
-- `packages/core/src/types.ts` - Contains enums for `ConfigOption`, `OptionalOption`, `SettingOption`
+- `packages/core/src/types.ts` - Contains enums for `OptionalOption`, `SettingOption`
 
 ## 3. Modification Patterns
 
@@ -32,7 +32,7 @@ The project is a Turborepo monorepo using npm Workspaces. It exports a composabl
 
 1. Create `packages/{name}/` with `package.json`, `tsconfig.json`, `tsup.config.ts`.
 2. Create `packages/{name}/src/index.ts` to export the new rule configuration array.
-3. Add the framework enum to `ConfigOption` in `packages/core/src/types.ts`.
+3. Add the framework to the `frameworks` type in `packages/core/src/types.ts`.
 4. Import and wire it into the `eslintConfig()` function inside `packages/basic/src/index.ts`.
 
 ### When adding a new Optional Config:

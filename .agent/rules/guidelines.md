@@ -32,7 +32,7 @@ The project is a **monorepo** using Turborepo and npm Workspaces.
 - Use explicit type annotations for exports
 - Explicit return types on exported functions
 - Use `type` imports when importing only types (`import type { X } from 'y'`)
-- Follow the existing enum patterns (`ConfigOption`, `OptionalOption`, `SettingOption`)
+- Follow the existing enum patterns (`OptionalOption`, `SettingOption`)
 - Prefer `const` assertions where appropriate
 
 ### Imports
@@ -41,7 +41,7 @@ The project is a **monorepo** using Turborepo and npm Workspaces.
 
 ### Naming Conventions
 - Config arrays: `camelCaseConfig` (e.g., `reactConfig`, `tsConfig`)
-- Enums: `PascalCase` (e.g., `ConfigOption`, `OptionalOption`)
+- Enums: `PascalCase` (e.g., `OptionalOption`)
 - Files: `kebab-case.ts` or `index.ts` for main exports
 
 ### ESLint Configs
@@ -84,8 +84,8 @@ mkdir -p packages/myframework/src
 # 3. Create tsconfig.json extending base
 # 4. Create tsup.config.ts
 # 5. Create src/index.ts with config
-# 6. Add enum value to packages/core/src/types.ts
-# 7. Wire into src/index.ts eslintConfig()
+# 6. Add framework to `frameworks` type in `packages/core/src/types.ts`
+# 7. Wire into `eslintConfig()` function in `packages/basic/src/index.ts`
 ```
 
 ### New Optional
@@ -98,7 +98,7 @@ export const myoptional: TSESLint.FlatConfig.ConfigArray = [
 ]
 
 // Add to src/optionals/index.ts
-// Add enum value to packages/core/src/types.ts
+// Add enum value to `OptionalOption` in `packages/core/src/types.ts`
 ```
 
 ## Verification Commands

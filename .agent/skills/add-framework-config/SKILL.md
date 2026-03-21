@@ -86,11 +86,11 @@ export const myframeworkConfig: TSESLint.FlatConfig.ConfigArray = [
 
 ## 5. Wire into the Core Project
 
-1. Update `packages/core/src/types.ts` and add the framework to the `ConfigOption` enum.
+1. Add your framework to the `frameworks` type in `packages/core/src/types.ts`.
 2. Update `packages/basic/src/index.ts`:
    - Import the new config from `@santi020k/eslint-config-myframework`.
    - Export it from `packages/basic`.
-   - Add it to the composed config array returned by `eslintConfig()` using `applyConfigIfOptionPresent`.
+   - Wire it into the `eslintConfig()` function in `packages/basic/src/index.ts` by adding it to the `frameworks` object handling.
 
 ## 6. Validate
 

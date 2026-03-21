@@ -84,14 +84,11 @@ export default eslintConfig({
 If you want to be explicit about which configurations and optionals to enable:
 
 ```js
-import { ConfigOption, eslintConfig, OptionalOption } from '@santi020k/eslint-config-basic'
+import { eslintConfig, OptionalOption } from '@santi020k/eslint-config-basic'
 import react from '@santi020k/eslint-config-react'
 
 export default eslintConfig({
-  config: [
-    ConfigOption.Ts,
-    ConfigOption.React
-  ],
+  typescript: true,
   frameworks: {
     react // Pass the framework config here
   },
@@ -115,7 +112,7 @@ export default eslintConfig({
     OptionalOption.Jsdoc,
     OptionalOption.Swagger,
     OptionalOption.Storybook,
-    OptionalOption.Json,
+    OptionalOption.Jsonc,
     OptionalOption.Yaml,
     OptionalOption.Toml
   ]
@@ -170,12 +167,12 @@ export default eslintConfig({ strict: true })
 Enable specialized rules for the App Router:
 
 ```js
-import { ConfigOption, eslintConfig, NextMode } from '@santi020k/eslint-config-basic'
+import { eslintConfig, NextMode } from '@santi020k/eslint-config-basic'
 import next from '@santi020k/eslint-config-next'
 import react from '@santi020k/eslint-config-react'
 
 export default eslintConfig({
-  config: [ConfigOption.Next],
+  typescript: true,
   nextMode: NextMode.AppRouter,
   frameworks: {
     next,

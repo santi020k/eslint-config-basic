@@ -1,9 +1,9 @@
 // @ts-check
-import { ConfigOption, eslintConfig, OptionalOption } from '@santi020k/eslint-config-basic'
+import { eslintConfig, OptionalOption } from '@santi020k/eslint-config-basic'
 
 export default [
-  ...await eslintConfig({
-    config: [ConfigOption.Ts],
+  ...eslintConfig({
+    typescript: true,
     optionals: [OptionalOption.Mdx, OptionalOption.Markdown, OptionalOption.Vitest]
   }),
   {

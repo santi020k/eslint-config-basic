@@ -21,14 +21,14 @@ export const typescriptConfig: TSESLint.FlatConfig.ConfigArray = [
   {
     name: 'eslint-config-typescript/rules',
     files: ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts'],
-    rules,
     languageOptions: {
       parser: tsParser,
       parserOptions: {
         project: true
       },
       ecmaVersion: 'latest'
-    }
+    },
+    rules
   }
 ]
 
