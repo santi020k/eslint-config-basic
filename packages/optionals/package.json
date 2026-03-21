@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@cspell/eslint-plugin": "^9.7.0",
+    "@darraghor/eslint-plugin-nestjs-typed": "^7.1.0",
     "@eslint/compat": "^2.0.3",
     "@eslint/eslintrc": "^3.3.5",
     "@eslint/markdown": "^7.5.1",

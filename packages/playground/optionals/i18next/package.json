@@ -1,0 +1,12 @@
+{
+  "name": "@playground/i18next",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@santi020k/eslint-config-basic": "*",
+    "eslint": "^10.0.3"
+  }
+}

@@ -20,35 +20,47 @@ describe('eslintConfig Function', () => {
   })
 
   it('should return config with React when React option is specified', () => {
-    const config = eslintConfig({ config: [ConfigOption.React] })
+    const config = eslintConfig({
+      config: [ConfigOption.React],
+      frameworks: { react: [{ name: 'mock-react', rules: {} }] }
+    })
 
     expect(Array.isArray(config)).toBe(true)
-
     expect(config.length).toBeGreaterThan(0)
+    expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-react')
   })
 
   it('should return config with Next when Next option is specified', () => {
-    const config = eslintConfig({ config: [ConfigOption.Next] })
+    const config = eslintConfig({
+      config: [ConfigOption.Next],
+      frameworks: { next: [{ name: 'mock-next', rules: {} }] }
+    })
 
     expect(Array.isArray(config)).toBe(true)
-
     expect(config.length).toBeGreaterThan(0)
+    expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-next')
   })
 
   it('should return config with Nest when Next option is specified', () => {
-    const config = eslintConfig({ config: [ConfigOption.Nest] })
+    const config = eslintConfig({
+      config: [ConfigOption.Nest],
+      frameworks: { nest: [{ name: 'mock-nest', rules: {} }] }
+    })
 
     expect(Array.isArray(config)).toBe(true)
-
     expect(config.length).toBeGreaterThan(0)
+    expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-nest')
   })
 
   it('should return config with Vue when Vue option is specified', () => {
-    const config = eslintConfig({ config: [ConfigOption.Vue] })
+    const config = eslintConfig({
+      config: [ConfigOption.Vue],
+      frameworks: { vue: [{ name: 'mock-vue', rules: {} }] }
+    })
 
     expect(Array.isArray(config)).toBe(true)
-
     expect(config.length).toBeGreaterThan(0)
+    expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-vue')
   })
 
   it('should include gitignore by default', () => {
@@ -70,12 +82,13 @@ describe('eslintConfig Function', () => {
 
   it('should handle multiple framework configs', () => {
     const config = eslintConfig({
-      config: [ConfigOption.Ts, ConfigOption.React]
+      config: [ConfigOption.Ts, ConfigOption.React],
+      frameworks: { react: [{ name: 'mock-react', rules: {} }] }
     })
 
     expect(Array.isArray(config)).toBe(true)
-
     expect(config.length).toBeGreaterThan(0)
+    expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-react')
   })
 
   it('should handle optionals', () => {
@@ -105,12 +118,23 @@ describe('eslintConfig Function', () => {
         ConfigOption.Expo,
         ConfigOption.Nest,
         ConfigOption.Vue
-      ]
+      ],
+      frameworks: {
+        react: [{ name: 'mock-react', rules: {} }],
+        next: [{ name: 'mock-next', rules: {} }],
+        astro: [{ name: 'mock-astro', rules: {} }],
+        expo: [{ name: 'mock-expo', rules: {} }],
+        nest: [{ name: 'mock-nest', rules: {} }],
+        vue: [{ name: 'mock-vue', rules: {} }]
+      }
     })
 
     expect(Array.isArray(config)).toBe(true)
-
     expect(config.length).toBeGreaterThan(0)
+    const names = extractConfigNames(config as Record<string, unknown>[])
+    expect(names).toContain('mock-react')
+    expect(names).toContain('mock-next')
+    expect(names).toContain('mock-astro')
   })
 
   it('should handle all optionals combined', () => {
@@ -159,22 +183,27 @@ describe('eslintConfig Function', () => {
   it('should handle full kitchen-sink configuration', () => {
     const config = eslintConfig({
       config: [ConfigOption.Ts, ConfigOption.React, ConfigOption.Next],
+      frameworks: {
+        react: [{ name: 'mock-react', rules: {} }],
+        next: [{ name: 'mock-next', rules: {} }]
+      },
       optionals: [OptionalOption.Tailwind, OptionalOption.Vitest, OptionalOption.Cspell],
       settings: [SettingOption.Gitignore]
     })
 
     expect(Array.isArray(config)).toBe(true)
-
     expect(config.length).toBeGreaterThan(0)
+    const names = extractConfigNames(config as Record<string, unknown>[])
+    expect(names).toContain('mock-react')
+    expect(names).toContain('mock-next')
   })
 
   it('should handle nested frameworks objects', () => {
     const mockConfig = [{ name: 'mock-framework/rules', rules: {} }] as Record<string, unknown>[]
     const config = eslintConfig({
       config: [ConfigOption.React],
-      // @ts-expect-error - Properties exist in source but not in stale dist
       frameworks: {
-        react: mockConfig as any
+        react: mockConfig
       }
     })
     const names = extractConfigNames(config as Record<string, unknown>[])

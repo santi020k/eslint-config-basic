@@ -1,6 +1,6 @@
 import type { TSESLint } from '@typescript-eslint/utils'
 
-export const rules: TSESLint.Linter.RulesRecord = {
+export const rules: TSESLint.FlatConfig.Rules = {
   // Disable rules that conflict with TypeScript
   semi: 'off',
   'no-unused-vars': 'off',
@@ -58,4 +58,4 @@ export const rules: TSESLint.Linter.RulesRecord = {
     prefer: 'type-imports',
     fixStyle: 'inline-type-imports'
   }]
-}
+} satisfies TSESLint.FlatConfig.Rules

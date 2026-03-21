@@ -1,10 +1,15 @@
+import fs from 'node:fs'
+import path from 'node:path'
+
 import { includeIgnoreFile } from '@eslint/compat'
 import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
  * Gitignore ESLint configuration
- * Automatically ignores files from .gitignore
+ * Automatically ignores files from .gitignore if it exists
  */
-export const gitignore: TSESLint.FlatConfig.ConfigArray = [
-  includeIgnoreFile(`${process.cwd()}/.gitignore`) as TSESLint.FlatConfig.Config
-]
+const gitignorePath = path.resolve(process.cwd(), '.gitignore')
+
+export const gitignore: TSESLint.FlatConfig.ConfigArray = fs.existsSync(gitignorePath) ?
+  [includeIgnoreFile(gitignorePath) as TSESLint.FlatConfig.Config] :
+  []

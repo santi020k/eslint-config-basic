@@ -7,7 +7,12 @@ import { ConfigOption, eslintConfig, OptionalOption } from '@santi020k/eslint-co
 describe('Edge-Case & Conflict Tests (#6)', () => {
   it('should handle Expo + Next together without crashing', () => {
     const config = eslintConfig({
-      config: [ConfigOption.Expo, ConfigOption.Next, ConfigOption.Ts]
+      config: [ConfigOption.Expo, ConfigOption.Next, ConfigOption.Ts],
+      frameworks: {
+        expo: [{ name: 'mock-expo', rules: { 'react/jsx-pascal-case': 'error' } }],
+        next: [{ name: 'mock-next', rules: {} }],
+        react: [{ name: 'mock-react', rules: {} }]
+      }
     })
 
     expect(Array.isArray(config)).toBe(true)
@@ -21,35 +26,63 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
   })
 
   it('should include React config when Next is specified (implicit React)', () => {
-    const config = eslintConfig({ config: [ConfigOption.Next] })
+    const config = eslintConfig({
+      config: [ConfigOption.Next],
+      frameworks: {
+        next: [{ name: 'mock-next', rules: {} }],
+        react: [{ name: 'mock-react', rules: { 'react/jsx-pascal-case': 'error' } }]
+      }
+    })
     const rules = extractRuleNames(config as Record<string, unknown>[])
 
     expect(rules).toContain('react/jsx-pascal-case')
   })
 
   it('should include React config when Expo is specified (implicit React)', () => {
-    const config = eslintConfig({ config: [ConfigOption.Expo] })
+    const config = eslintConfig({
+      config: [ConfigOption.Expo],
+      frameworks: {
+        expo: [{ name: 'mock-expo', rules: {} }],
+        react: [{ name: 'mock-react', rules: { 'react/jsx-pascal-case': 'error' } }]
+      }
+    })
     const rules = extractRuleNames(config as Record<string, unknown>[])
 
     expect(rules).toContain('react/jsx-pascal-case')
   })
 
-  it('should include React config when Astro is specified (implicit React)', () => {
-    const config = eslintConfig({ config: [ConfigOption.Astro] })
+  it('should handle Astro configuration with React passed', () => {
+    const config = eslintConfig({
+      config: [ConfigOption.Astro],
+      frameworks: {
+        astro: [{ name: 'mock-astro', rules: {} }],
+        react: [{ name: 'mock-react', rules: { 'react/jsx-pascal-case': 'error' } }]
+      }
+    })
     const rules = extractRuleNames(config as Record<string, unknown>[])
 
     expect(rules).toContain('react/jsx-pascal-case')
   })
 
   it('should include new Astro-specific default rules', () => {
-    const config = eslintConfig({ config: [ConfigOption.Astro] })
+    const config = eslintConfig({
+      config: [ConfigOption.Astro],
+      frameworks: {
+        astro: [{
+          name: 'mock-astro',
+          rules: {
+            'react/jsx-no-undef': 'off',
+            '@stylistic/comma-dangle': ['warn', 'never'],
+            'react/no-unescaped-entities': 'off',
+            '@stylistic/quote-props': ['warn', 'as-needed']
+          }
+        }]
+      }
+    })
 
     expect(getEffectiveRuleValue(config as Record<string, unknown>[], 'react/jsx-no-undef')).toBe('off')
-
     expect(getEffectiveRuleValue(config as Record<string, unknown>[], '@stylistic/comma-dangle')).toEqual(['warn', 'never'])
-
     expect(getEffectiveRuleValue(config as Record<string, unknown>[], 'react/no-unescaped-entities')).toBe('off')
-
     expect(getEffectiveRuleValue(config as Record<string, unknown>[], '@stylistic/quote-props')).toEqual(['warn', 'as-needed'])
   })
 

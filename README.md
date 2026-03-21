@@ -84,8 +84,8 @@ export default eslintConfig({
 If you want to be explicit about which configurations and optionals to enable:
 
 ```js
-import react from '@santi020k/eslint-config-react'
 import { ConfigOption, eslintConfig, OptionalOption } from '@santi020k/eslint-config-basic'
+import react from '@santi020k/eslint-config-react'
 
 export default eslintConfig({
   config: [
@@ -115,12 +115,45 @@ export default eslintConfig({
     OptionalOption.Jsdoc,
     OptionalOption.Swagger,
     OptionalOption.Storybook,
-    OptionalOption.Jsonc,
+    OptionalOption.Json,
     OptionalOption.Yaml,
     OptionalOption.Toml
   ]
 })
 ```
+
+## Supported Frameworks
+
+Every framework is supported via a dedicated package and has a corresponding playground for verification.
+
+| Framework | Package | Playground |
+| :--- | :--- | :--- |
+| **TypeScript** | `@santi020k/eslint-config-typescript` | [Playground](packages/playground/typescript/) |
+| **React** | `@santi020k/eslint-config-react` | [Playground](packages/playground/react/) |
+| **Next.js** | `@santi020k/eslint-config-next` | [Playground](packages/playground/next/) |
+| **Astro** | `@santi020k/eslint-config-astro` | [Playground](packages/playground/astro/) |
+| **Vue** | `@santi020k/eslint-config-vue` | [Playground](packages/playground/vue/) |
+| **Svelte** | `@santi020k/eslint-config-svelte` | [Playground](packages/playground/svelte/) |
+| **Solid** | `@santi020k/eslint-config-solid` | [Playground](packages/playground/solid/) |
+| **Angular** | `@santi020k/eslint-config-angular` | [Playground](packages/playground/angular/) |
+| **NestJS** | `@santi020k/eslint-config-nest` | [Playground](packages/playground/nest/) |
+| **Expo** | `@santi020k/eslint-config-expo` | [Playground](packages/playground/expo/) |
+
+## Optional Tooling
+
+We support 23+ optional configurations that can be toggled via the `optionals` array.
+
+| Tool | Option | Playground |
+| :--- | :--- | :--- |
+| **CSpell** | `OptionalOption.Cspell` | [Playground](packages/playground/optionals/cspell/) |
+| **Tailwind CSS** | `OptionalOption.Tailwind` | [Playground](packages/playground/optionals/tailwind/) |
+| **Vitest** | `OptionalOption.Vitest` | [Playground](packages/playground/optionals/vitest/) |
+| **I18n** | `OptionalOption.I18next` | [Playground](packages/playground/optionals/i18next/) |
+| **Markdown** | `OptionalOption.Markdown` | [Playground](packages/playground/optionals/markdown/) |
+| **Others** | `Mdx`, `Storybook`, `Playwright`, etc. | [All Others Playground](packages/playground/optionals/all-others/) |
+
+> [!TIP]
+> Use the **All Others Playground** to see examples of the 18+ additional optional configurations including Tanstack Query, Stencil, SonarJS, and more.
 
 ### 6. Strict Mode
 
@@ -137,9 +170,9 @@ export default eslintConfig({ strict: true })
 Enable specialized rules for the App Router:
 
 ```js
+import { ConfigOption, eslintConfig, NextMode } from '@santi020k/eslint-config-basic'
 import next from '@santi020k/eslint-config-next'
 import react from '@santi020k/eslint-config-react'
-import { ConfigOption, eslintConfig, NextMode } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
   config: [ConfigOption.Next],

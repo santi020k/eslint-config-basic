@@ -32,7 +32,7 @@ const groups = [
   ['^.+\\.?(css|scss)$']
 ]
 
-export const rules: TSESLint.Linter.RulesRecord = {
+export const rules: TSESLint.FlatConfig.Rules = {
   'unused-imports/no-unused-imports': 'warn',
   indent: 'off',
   'brace-style': 'off',
@@ -152,6 +152,6 @@ export const rules: TSESLint.Linter.RulesRecord = {
   'space-before-function-paren': 'off',
   'operator-linebreak': 'off',
   '@stylistic/operator-linebreak': ['error', 'after']
-}
+} satisfies TSESLint.FlatConfig.Rules
 
 export { groups }

@@ -1,0 +1,35 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@santi020k/eslint-config-basic": ["packages/basic/src/index.ts"],
+      "@santi020k/eslint-config-core": ["packages/core/src/index.ts"],
+      "@santi020k/eslint-config-core/types": ["packages/core/src/types.ts"],
+      "@santi020k/eslint-config-core/utils": ["packages/core/src/utils/index.ts"],
+      "@santi020k/eslint-config-typescript": ["packages/typescript/src/index.ts"],
+      "@santi020k/eslint-config-react": ["packages/react/src/index.ts"],
+      "@santi020k/eslint-config-next": ["packages/next/src/index.ts"],
+      "@santi020k/eslint-config-astro": ["packages/astro/src/index.ts"],
+      "@santi020k/eslint-config-expo": ["packages/expo/src/index.ts"],
+      "@santi020k/eslint-config-vue": ["packages/vue/src/index.ts"],
+      "@santi020k/eslint-config-svelte": ["packages/svelte/src/index.ts"],
+      "@santi020k/eslint-config-solid": ["packages/solid/src/index.ts"],
+      "@santi020k/eslint-config-angular": ["packages/angular/src/index.ts"],
+      "@santi020k/eslint-config-nest": ["packages/nest/src/index.ts"],
+      "@santi020k/eslint-config-optionals": ["packages/optionals/src/index.ts"]
+    }
+  },
+  "files": [
+    "packages/core/src/ambient.d.ts",
+    "packages/react/src/ambient.d.ts",
+    "packages/optionals/src/ambient.d.ts",
+    "packages/astro/src/ambient.d.ts",
+    "packages/expo/src/ambient.d.ts",
+    "packages/nest/src/ambient.d.ts",
+    "packages/angular/src/ambient.d.ts",
+    "packages/solid/src/ambient.d.ts",
+    "packages/svelte/src/ambient.d.ts",
+    "packages/vue/src/ambient.d.ts"
+  ]
+}

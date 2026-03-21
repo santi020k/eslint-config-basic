@@ -1,9 +1,10 @@
 // @ts-check
-import nest from '@santi020k/eslint-config-nest'
+
 import { ConfigOption, eslintConfig, RuntimeOption } from '@santi020k/eslint-config-basic'
+import nest from '@santi020k/eslint-config-nest'
 
 export default eslintConfig({
-  config: [ConfigOption.Ts],
+  config: [ConfigOption.Nest, ConfigOption.Ts],
   runtime: RuntimeOption.Node,
   frameworks: {
     nest

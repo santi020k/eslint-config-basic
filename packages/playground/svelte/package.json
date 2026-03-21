@@ -1,0 +1,14 @@
+{
+  "name": "@playground/svelte",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@santi020k/eslint-config-basic": "*",
+    "@santi020k/eslint-config-svelte": "*",
+    "eslint": "^10.0.3",
+    "svelte": "^5.0.0"
+  }
+}
