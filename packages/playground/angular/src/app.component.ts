@@ -17,6 +17,7 @@ export class AppComponent {
   constructor() {
     // Intentional non-standard constructor for testing
     const x = 1
+
     console.log(x)
   }
 }

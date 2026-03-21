@@ -1,2 +1,3 @@
-// eslint-disable-next-line unicorn/no-null
-const a = null;
+const a = null
+
+console.log('🚀 ~ a:', a)

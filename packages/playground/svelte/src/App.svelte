@@ -1,7 +1,7 @@
 <script>
   let count = $state(0)
 
-  function increment() {
+  const increment = () => {
     count += 1
   }
 
@@ -12,7 +12,7 @@
 
 <main>
   <h1>Svelte Playground</h1>
-  <button on:click={increment}>
+  <button onclick={increment}>
     Count: {count}
   </button>
 </main>

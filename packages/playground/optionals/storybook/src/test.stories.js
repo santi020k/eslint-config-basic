@@ -1,2 +1,3 @@
-// eslint-disable-next-line storybook/default-exports
-export const foo = 1;
+export default {}
+
+export const Foo = 1

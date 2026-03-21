@@ -1,5 +1,8 @@
-/** 
- * @param {string} foo 
- * // eslint-disable-next-line jsdoc/require-returns
+/**
+ * @param {string} foo description
+ * @description description
+ * @returns {string} description
  */
-function bar(foo) { return foo; }
+const bar = foo => foo
+
+console.log('🚀 ~ bar:', bar('foo'))

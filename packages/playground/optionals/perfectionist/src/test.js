@@ -1,2 +1,3 @@
-// eslint-disable-next-line perfectionist/sort-objects
-const a = { z: 1, a: 2 };
+const a = { a: 2, z: 1 }
+
+console.log(a)

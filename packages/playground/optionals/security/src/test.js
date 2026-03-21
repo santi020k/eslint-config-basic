@@ -1,2 +1,2 @@
-// eslint-disable-next-line security/detect-eval-with-expression
-eval("a = 1");
+// eslint-disable-next-line no-eval
+eval('a = 1')

@@ -2,4 +2,5 @@
 import i18next from 'i18next'
 
 const a = 'translated string'
-console.log("🚀 ~ a:", a)
+
+console.log('🚀 ~ a:', a)
