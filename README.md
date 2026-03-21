@@ -7,7 +7,6 @@
 <!-- [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) -->
 [![license](https://img.shields.io/npm/l/@santi020k/eslint-config-basic.svg)](https://github.com/santi020k/eslint-config-basic/blob/main/LICENSE)
 
-
 A modern, composable, and opinionated ESLint 9+ (Flat Config) configuration for JavaScript, TypeScript, React, Next.js, and more.
 
 ## Features
@@ -65,10 +64,10 @@ export default eslintConfig()
 For common project types, you can use built-in presets:
 
 ```js
-import { eslintConfig, PresetOption } from '@santi020k/eslint-config-basic'
+import { eslintConfig, Preset } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
-  preset: PresetOption.Node
+  preset: Preset.Node
 })
 ```
 
@@ -84,7 +83,7 @@ export default eslintConfig({
 If you want to be explicit about which configurations and optionals to enable:
 
 ```js
-import { eslintConfig, OptionalOption } from '@santi020k/eslint-config-basic'
+import { eslintConfig, Extension, Format, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
 import react from '@santi020k/eslint-config-react'
 
 export default eslintConfig({
@@ -92,29 +91,37 @@ export default eslintConfig({
   frameworks: {
     react // Pass the framework config here
   },
-  optionals: [
-    OptionalOption.Cspell,
-    OptionalOption.Tailwind,
-    OptionalOption.Vitest,
-    OptionalOption.I18next,
-    OptionalOption.Mdx,
-    OptionalOption.Markdown,
-    OptionalOption.Stencil,
-    OptionalOption.Prettier,
-    OptionalOption.Regexp,
-    OptionalOption.Unicorn,
-    OptionalOption.Sonarjs,
-    OptionalOption.Playwright,
-    OptionalOption.Security,
-    OptionalOption.TanstackQuery,
-    OptionalOption.TanstackRouter,
-    OptionalOption.Perfectionist,
-    OptionalOption.Jsdoc,
-    OptionalOption.Swagger,
-    OptionalOption.Storybook,
-    OptionalOption.Jsonc,
-    OptionalOption.Yaml,
-    OptionalOption.Toml
+  libraries: [
+    Library.Tailwind,
+    Library.I18next,
+    Library.Stencil,
+    Library.TanstackQuery,
+    Library.TanstackRouter,
+    Library.Storybook
+  ],
+  tools: [
+    Tool.Cspell,
+    Tool.Prettier,
+    Tool.Jsdoc,
+    Tool.Swagger
+  ],
+  testing: [
+    Testing.Vitest,
+    Testing.Playwright
+  ],
+  formats: [
+    Format.Mdx,
+    Format.Markdown,
+    Format.Jsonc,
+    Format.Yaml,
+    Format.Toml
+  ],
+  extensions: [
+    Extension.Regexp,
+    Extension.Unicorn,
+    Extension.Sonarjs,
+    Extension.Security,
+    Extension.Perfectionist
   ]
 })
 ```
@@ -142,15 +149,15 @@ We support 23+ optional configurations that can be toggled via the `optionals` a
 
 | Tool | Option | Playground |
 | :--- | :--- | :--- |
-| **CSpell** | `OptionalOption.Cspell` | [Playground](packages/playground/optionals/cspell/) |
-| **Tailwind CSS** | `OptionalOption.Tailwind` | [Playground](packages/playground/optionals/tailwind/) |
-| **Vitest** | `OptionalOption.Vitest` | [Playground](packages/playground/optionals/vitest/) |
-| **I18n** | `OptionalOption.I18next` | [Playground](packages/playground/optionals/i18next/) |
-| **Markdown** | `OptionalOption.Markdown` | [Playground](packages/playground/optionals/markdown/) |
-| **Others** | `Mdx`, `Storybook`, `Playwright`, etc. | [All Others Playground](packages/playground/optionals/all-others/) |
+| **CSpell** | `Tool.Cspell` | [Playground](packages/playground/tools/cspell/) |
+| **Tailwind CSS** | `Library.Tailwind` | [Playground](packages/playground/libraries/tailwind/) |
+| **Vitest** | `Testing.Vitest` | [Playground](packages/playground/testing/vitest/) |
+| **I18n** | `Library.I18next` | [Playground](packages/playground/libraries/i18next/) |
+| **Markdown** | `Format.Markdown` | [Playground](packages/playground/formats/markdown/) |
+| **Others** | `Mdx`, `Storybook`, `Playwright`, etc. | [Formats Playground](packages/playground/formats/) |
 
 > [!TIP]
-> Use the **All Others Playground** to see examples of the 18+ additional optional configurations including Tanstack Query, Stencil, SonarJS, and more.
+> Use the **categorized playgrounds** (libraries, testing, formats, tools, extensions) to see examples of the 18+ additional optional configurations including Tanstack Query, Stencil, SonarJS, and more.
 
 ### 6. Strict Mode
 
@@ -202,10 +209,10 @@ npx basic-eslint init    # Initialize eslint.config.js
 Gitignore integration is enabled by default. If you need to disable it:
 
 ```js
-import { eslintConfig, SettingOption } from '@santi020k/eslint-config-basic'
+import { eslintConfig, Setting } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
-  settings: [SettingOption.NoGitignore]
+  settings: [Setting.NoGitignore]
 })
 ```
 

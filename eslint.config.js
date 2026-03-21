@@ -1,9 +1,10 @@
-import { eslintConfig, Library } from '@santi020k/eslint-config-basic'
+import { eslintConfig, Format, Testing } from '@santi020k/eslint-config-basic'
 
 export default [
   ...eslintConfig({
     typescript: true,
-    libraries: [Library.Mdx, Library.Markdown, Library.Vitest]
+    formats: [Format.Mdx, Format.Markdown],
+    testing: [Testing.Vitest]
   }),
   {
     name: 'local-config',

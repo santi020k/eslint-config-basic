@@ -12,7 +12,11 @@
   "workspaces": [
     "packages/*",
     "packages/playground/*",
-    "packages/playground/optionals/*"
+    "packages/playground/libraries/*",
+    "packages/playground/testing/*",
+    "packages/playground/formats/*",
+    "packages/playground/tools/*",
+    "packages/playground/extensions/*"
   ],
   "repository": {
     "type": "git",
