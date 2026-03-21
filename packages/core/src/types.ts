@@ -9,32 +9,50 @@ export enum NextMode {
 }
 
 /**
- * Enum for library features that can be auto-detected or included manually
+ * Enum for application-level runtime dependencies and styling
  */
 export enum LibraryOption {
   Tailwind = 'tailwind',
-  Vitest = 'vitest',
   I18next = 'i18next',
   Stencil = 'stencil',
-  Playwright = 'playwright',
   TanstackQuery = 'tanstack-query',
   TanstackRouter = 'tanstack-router',
   Storybook = 'storybook'
 }
 
 /**
- * Enum for tool features for linting non-JS formats or external documentation
+ * Enum for testing frameworks and environments
  */
-export enum ToolOption {
+export enum TestingOption {
+  Vitest = 'vitest',
+  Playwright = 'playwright'
+  // TODO: Add support for Jest, Cypress, TestingLibrary
+  // Jest = 'jest',
+  // Cypress = 'cypress',
+  // TestingLibrary = 'testing-library'
+}
+
+/**
+ * Enum for linting non-JS/TS file formats
+ */
+export enum FormatOption {
   Mdx = 'mdx',
   Markdown = 'markdown',
-  Cspell = 'cspell',
-  Prettier = 'prettier',
-  Jsdoc = 'jsdoc',
-  Swagger = 'swagger',
   Jsonc = 'jsonc',
   Yaml = 'yaml',
   Toml = 'toml'
+  // TODO: Add support for GraphQL
+  // Graphql = 'graphql'
+}
+
+/**
+ * Enum for integrating external standalone utilities
+ */
+export enum ToolOption {
+  Prettier = 'prettier',
+  Cspell = 'cspell',
+  Jsdoc = 'jsdoc',
+  Swagger = 'swagger'
 }
 
 /**
@@ -120,10 +138,16 @@ export interface EslintConfigOptions {
   /** Enable TypeScript support with optional settings */
   typescript?: boolean | TsOptions
 
-  /** List of library-specific configurations */
+  /** List of application-level dependencies configurations */
   libraries?: LibraryOption[]
 
-  /** List of integrations for non-JS/TS tools or formats */
+  /** List of testing frameworks and testing environments */
+  testing?: TestingOption[]
+
+  /** Additional non-JS/TS file formats to lint */
+  formats?: FormatOption[]
+
+  /** List of integrations for external standalone tools */
   tools?: ToolOption[]
 
   /** List of specialized ESLint rules and extensions */

@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
-import { type EslintConfigOptions, ExtensionOption, LibraryOption, RuntimeOption, ToolOption } from '../types.js'
+import { type EslintConfigOptions, ExtensionOption, LibraryOption, RuntimeOption, TestingOption, ToolOption } from '../types.js'
 
 interface PackageJson {
   dependencies?: Record<string, string | undefined>
@@ -20,6 +20,8 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
     typescript: false,
     frameworks: {},
     libraries: [],
+    testing: [],
+    formats: [],
     tools: [],
     extensions: [],
     runtime: RuntimeOption.Universal
@@ -82,9 +84,9 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
     // Optional detection
     if (allDeps.tailwindcss) options.libraries?.push(LibraryOption.Tailwind)
 
-    if (allDeps.vitest) options.libraries?.push(LibraryOption.Vitest)
+    if (allDeps.vitest) options.testing?.push(TestingOption.Vitest)
 
-    if (allDeps.playwright || allDeps['@playwright/test']) options.libraries?.push(LibraryOption.Playwright)
+    if (allDeps.playwright || allDeps['@playwright/test']) options.testing?.push(TestingOption.Playwright)
 
     if (allDeps.i18next) options.libraries?.push(LibraryOption.I18next)
 
@@ -117,6 +119,10 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
     options.extensions?.push(ExtensionOption.Security)
 
     options.libraries = [...new Set(options.libraries)]
+
+    options.testing = [...new Set(options.testing)]
+
+    options.formats = [...new Set(options.formats)]
 
     options.tools = [...new Set(options.tools)]
 

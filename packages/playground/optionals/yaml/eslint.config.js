@@ -1,6 +1,6 @@
 // @ts-check
-import { eslintConfig, ToolOption } from '@santi020k/eslint-config-basic'
+import { eslintConfig, FormatOption } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
-  tools: [ToolOption.Yaml]
+  formats: [FormatOption.Yaml]
 })

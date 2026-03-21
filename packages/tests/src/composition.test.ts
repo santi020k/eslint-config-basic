@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { extractConfigNames } from './test-utils.js'
 
-import { eslintConfig, ExtensionOption, LibraryOption, SettingOption, ToolOption } from '@santi020k/eslint-config-basic'
+import { eslintConfig, ExtensionOption, LibraryOption, SettingOption, TestingOption, ToolOption } from '@santi020k/eslint-config-basic'
 
 describe('eslintConfig Function', () => {
   it('should return an array when called with minimal options', () => {
@@ -25,7 +25,9 @@ describe('eslintConfig Function', () => {
     })
 
     expect(Array.isArray(config)).toBe(true)
+
     expect(config.length).toBeGreaterThan(0)
+
     expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-react')
   })
 
@@ -35,7 +37,9 @@ describe('eslintConfig Function', () => {
     })
 
     expect(Array.isArray(config)).toBe(true)
+
     expect(config.length).toBeGreaterThan(0)
+
     expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-next')
   })
 
@@ -45,7 +49,9 @@ describe('eslintConfig Function', () => {
     })
 
     expect(Array.isArray(config)).toBe(true)
+
     expect(config.length).toBeGreaterThan(0)
+
     expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-nest')
   })
 
@@ -55,7 +61,9 @@ describe('eslintConfig Function', () => {
     })
 
     expect(Array.isArray(config)).toBe(true)
+
     expect(config.length).toBeGreaterThan(0)
+
     expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-vue')
   })
 
@@ -70,6 +78,7 @@ describe('eslintConfig Function', () => {
     const config = eslintConfig({
       settings: [SettingOption.NoGitignore]
     })
+
     const names = extractConfigNames(config as Record<string, unknown>[])
 
     expect(names.some(n => n.toLowerCase().includes('gitignore'))).toBe(false)
@@ -82,14 +91,17 @@ describe('eslintConfig Function', () => {
     })
 
     expect(Array.isArray(config)).toBe(true)
+
     expect(config.length).toBeGreaterThan(0)
+
     expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-react')
   })
 
   it('should handle optionals', () => {
     const config = eslintConfig({
       typescript: true,
-      libraries: [LibraryOption.Tailwind, LibraryOption.Vitest],
+      libraries: [LibraryOption.Tailwind],
+      testing: [TestingOption.Vitest],
       tools: [ToolOption.Prettier],
       extensions: [ExtensionOption.Unicorn]
     })
@@ -119,10 +131,15 @@ describe('eslintConfig Function', () => {
     })
 
     expect(Array.isArray(config)).toBe(true)
+
     expect(config.length).toBeGreaterThan(0)
+
     const names = extractConfigNames(config as Record<string, unknown>[])
+
     expect(names).toContain('mock-react')
+
     expect(names).toContain('mock-next')
+
     expect(names).toContain('mock-astro')
   })
 
@@ -141,10 +158,11 @@ describe('eslintConfig Function', () => {
 
   it('should handle duplicate optional entries without doubling config blocks', () => {
     const single = eslintConfig({
-      libraries: [LibraryOption.Vitest]
+      testing: [TestingOption.Vitest]
     })
+
     const doubled = eslintConfig({
-      libraries: [LibraryOption.Vitest, LibraryOption.Vitest]
+      testing: [TestingOption.Vitest, TestingOption.Vitest]
     })
 
     expect(single).toHaveLength(doubled.length)
@@ -157,25 +175,31 @@ describe('eslintConfig Function', () => {
         react: [{ name: 'mock-react', rules: {} }],
         next: [{ name: 'mock-next', rules: {} }]
       },
-      libraries: [LibraryOption.Vitest, LibraryOption.Tailwind],
+      testing: [TestingOption.Vitest],
       tools: [ToolOption.Cspell],
       settings: [SettingOption.Gitignore]
     })
 
     expect(Array.isArray(config)).toBe(true)
+
     expect(config.length).toBeGreaterThan(0)
+
     const names = extractConfigNames(config as Record<string, unknown>[])
+
     expect(names).toContain('mock-react')
+
     expect(names).toContain('mock-next')
   })
 
   it('should handle nested frameworks objects', () => {
     const mockConfig = [{ name: 'mock-framework/rules', rules: {} }] as Record<string, unknown>[]
+
     const config = eslintConfig({
       frameworks: {
         react: mockConfig as any
       }
     })
+
     const names = extractConfigNames(config as Record<string, unknown>[])
 
     expect(names).toContain('mock-framework/rules')

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { extractConfigNames, extractRuleNames } from './test-utils.js'
 
-import { eslintConfig, ExtensionOption, LibraryOption, ToolOption } from '@santi020k/eslint-config-basic'
+import { eslintConfig, ExtensionOption, TestingOption, ToolOption } from '@santi020k/eslint-config-basic'
 import react from '@santi020k/eslint-config-react'
 import vue from '@santi020k/eslint-config-vue'
 
@@ -60,6 +60,7 @@ describe('Deep Rule Assertions (#5)', () => {
     const config = eslintConfig({
       extensions: [ExtensionOption.Unicorn]
     })
+
     const rules = extractRuleNames(config as Record<string, unknown>[])
 
     expect(rules).toContain('unicorn/better-regex')
@@ -71,6 +72,7 @@ describe('Deep Rule Assertions (#5)', () => {
     const config = eslintConfig({
       extensions: [ExtensionOption.Sonarjs]
     })
+
     const rules = extractRuleNames(config as Record<string, unknown>[])
 
     expect(rules).toContain('sonarjs/no-duplicate-string')
@@ -82,6 +84,7 @@ describe('Deep Rule Assertions (#5)', () => {
     const config = eslintConfig({
       tools: [ToolOption.Prettier]
     })
+
     const names = extractConfigNames(config as Record<string, unknown>[])
 
     expect(names).toContain('eslint-config/prettier')
@@ -91,6 +94,7 @@ describe('Deep Rule Assertions (#5)', () => {
     const config = eslintConfig({
       extensions: [ExtensionOption.Regexp]
     })
+
     const rules = extractRuleNames(config as Record<string, unknown>[])
 
     expect(rules).toContain('regexp/no-super-linear-backtracking')
@@ -109,8 +113,9 @@ describe('Deep Rule Assertions (#5)', () => {
 
   it('should include playwright rules when Playwright optional is enabled', () => {
     const config = eslintConfig({
-      libraries: [LibraryOption.Playwright]
+      testing: [TestingOption.Playwright]
     })
+
     const names = extractConfigNames(config as Record<string, unknown>[])
 
     expect(names).toContain('optionals/playwright')

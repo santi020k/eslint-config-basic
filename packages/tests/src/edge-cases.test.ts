@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { extractConfigNames, extractRuleNames, getEffectiveRuleValue } from './test-utils.js'
 
-import { eslintConfig, LibraryOption, ToolOption } from '@santi020k/eslint-config-basic'
+import { eslintConfig, FormatOption, LibraryOption, TestingOption, ToolOption } from '@santi020k/eslint-config-basic'
 
 describe('Edge-Case & Conflict Tests (#6)', () => {
   it('should handle Expo + Next together without crashing', () => {
@@ -32,6 +32,7 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
         react: [{ name: 'mock-react', rules: { 'react/jsx-pascal-case': 'error' } }]
       }
     })
+
     const rules = extractRuleNames(config as Record<string, unknown>[])
 
     expect(rules).toContain('react/jsx-pascal-case')
@@ -44,6 +45,7 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
         react: [{ name: 'mock-react', rules: { 'react/jsx-pascal-case': 'error' } }]
       }
     })
+
     const rules = extractRuleNames(config as Record<string, unknown>[])
 
     expect(rules).toContain('react/jsx-pascal-case')
@@ -56,6 +58,7 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
         react: [{ name: 'mock-react', rules: { 'react/jsx-pascal-case': 'error' } }]
       }
     })
+
     const rules = extractRuleNames(config as Record<string, unknown>[])
 
     expect(rules).toContain('react/jsx-pascal-case')
@@ -76,6 +79,7 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
     })
 
     expect(getEffectiveRuleValue(config as Record<string, unknown>[], 'react/jsx-no-undef')).toBe('off')
+
     expect(getEffectiveRuleValue(config as Record<string, unknown>[], '@stylistic/comma-dangle')).toEqual(['warn', 'never'])
   })
 
@@ -84,9 +88,11 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
       libraries: [LibraryOption.Tailwind],
       tools: [ToolOption.Prettier]
     })
+
     const doubled = eslintConfig({
       libraries: [LibraryOption.Tailwind, LibraryOption.Tailwind],
-      tools: [ToolOption.Prettier, ToolOption.Prettier]
+      tools: [ToolOption.Prettier, ToolOption.Prettier],
+      formats: [FormatOption.Jsonc, FormatOption.Markdown]
     })
 
     expect(single).toHaveLength(doubled.length)
@@ -95,11 +101,15 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
   it('Prettier optional should be applied last', () => {
     const config = eslintConfig({
       typescript: true,
-      libraries: [LibraryOption.Tailwind, LibraryOption.Vitest],
-      tools: [ToolOption.Prettier, ToolOption.Mdx]
+      libraries: [LibraryOption.Tailwind],
+      testing: [TestingOption.Vitest],
+      tools: [ToolOption.Prettier],
+      formats: [FormatOption.Mdx]
     })
+
     const names = extractConfigNames(config as Record<string, unknown>[])
     const prettierIndex = names.lastIndexOf('eslint-config/prettier')
+
     const maxNonPrettierIndex = names.reduce(
       (max, name, idx) => name !== 'eslint-config/prettier' ? Math.max(max, idx) : max, -1
     )
@@ -109,6 +119,7 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
 
   it('should disable no-undef for TypeScript configs (#3)', () => {
     const config = eslintConfig({ typescript: true })
+
     const effectiveValue = getEffectiveRuleValue(
       config as Record<string, unknown>[], 'no-undef'
     )

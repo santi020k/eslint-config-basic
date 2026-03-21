@@ -33,6 +33,8 @@ export default eslintConfig({
     ${Object.keys(options.frameworks ?? {}).map(key => `${key}: ${key}`).join(',\n    ')}
   },
   libraries: ${JSON.stringify(options.libraries ?? [], null, 2)},
+  testing: ${JSON.stringify(options.testing ?? [], null, 2)},
+  formats: ${JSON.stringify(options.formats ?? [], null, 2)},
   tools: ${JSON.stringify(options.tools ?? [], null, 2)},
   extensions: ${JSON.stringify(options.extensions ?? [], null, 2)},
   runtime: ${JSON.stringify(options.runtime ?? 'universal')},

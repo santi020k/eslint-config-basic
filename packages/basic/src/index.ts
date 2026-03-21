@@ -5,6 +5,7 @@ import {
   type EslintConfigOptions,
   ExtensionOption,
   type FlatConfigArray,
+  FormatOption,
   gitignore,
   hasReactConfig,
   type ImportedFramework,
@@ -13,6 +14,7 @@ import {
   PresetOption,
   RuntimeOption,
   SettingOption,
+  TestingOption,
   ToolOption
 } from '@santi020k/eslint-config-core'
 import {
@@ -50,6 +52,8 @@ export {
   SettingOption,
   RuntimeOption,
   PresetOption,
+  TestingOption,
+  FormatOption,
   NextMode,
   ReactConfigKeys,
   hasReactConfig,
@@ -127,6 +131,8 @@ const resolvePreset = (preset: PresetOption): Partial<EslintConfigOptions> => {
         typescript: true,
         libraries: Object.values(LibraryOption),
         tools: Object.values(ToolOption),
+        testing: Object.values(TestingOption),
+        formats: Object.values(FormatOption),
         extensions: Object.values(ExtensionOption),
         runtime: RuntimeOption.Universal,
         frameworks: {
@@ -159,6 +165,8 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
   const {
     typescript = (presetDefaults.typescript ?? detected.typescript ?? false),
     libraries = (presetDefaults.libraries ?? detected.libraries ?? []),
+    testing = (presetDefaults.testing ?? detected.testing ?? []),
+    formats = (presetDefaults.formats ?? detected.formats ?? []),
     tools = (presetDefaults.tools ?? detected.tools ?? []),
     extensions = (presetDefaults.extensions ?? detected.extensions ?? []),
     settings = (detected.settings ?? []),
@@ -192,6 +200,8 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
   const angularParam = resolveFramework(angularParamRaw)
   // Deduplicate entries
   const uniqueLibraries = [...new Set(libraries)]
+  const uniqueTesting = [...new Set(testing)]
+  const uniqueFormats = [...new Set(formats)]
   const uniqueTools = [...new Set(tools)]
   const uniqueExtensions = [...new Set(extensions)]
   const uniqueSettings = [...new Set(settings)]
@@ -243,15 +253,15 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     // Optionals (Still synchronous as they are direct dependencies)
     ...(uniqueTools.includes(ToolOption.Cspell) ? cspell : []),
     ...(uniqueLibraries.includes(LibraryOption.Tailwind) ? tailwind : []),
-    ...(uniqueLibraries.includes(LibraryOption.Vitest) ? vitest : []),
+    ...(uniqueTesting.includes(TestingOption.Vitest) ? vitest : []),
     ...(uniqueLibraries.includes(LibraryOption.I18next) ? i18next : []),
     ...(uniqueLibraries.includes(LibraryOption.Stencil) ? stencil : []),
-    ...(uniqueTools.includes(ToolOption.Mdx) ? mdx : []),
+    ...(uniqueFormats.includes(FormatOption.Mdx) ? mdx : []),
     ...(uniqueExtensions.includes(ExtensionOption.Regexp) ? regexp : []),
-    ...(uniqueTools.includes(ToolOption.Markdown) ? markdown : []),
+    ...(uniqueFormats.includes(FormatOption.Markdown) ? markdown : []),
     ...(uniqueExtensions.includes(ExtensionOption.Unicorn) ? unicorn : []),
     ...(uniqueExtensions.includes(ExtensionOption.Sonarjs) ? sonarjs : []),
-    ...(uniqueLibraries.includes(LibraryOption.Playwright) ? playwright : []),
+    ...(uniqueTesting.includes(TestingOption.Playwright) ? playwright : []),
     ...(uniqueExtensions.includes(ExtensionOption.Security) ? security : []),
     ...(uniqueLibraries.includes(LibraryOption.TanstackQuery) ? tanstackQuery : []),
     ...(uniqueLibraries.includes(LibraryOption.TanstackRouter) ? tanstackRouter : []),
@@ -259,9 +269,9 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     ...(uniqueTools.includes(ToolOption.Jsdoc) ? jsdoc : []),
     ...(uniqueTools.includes(ToolOption.Swagger) ? swagger : []),
     ...(uniqueLibraries.includes(LibraryOption.Storybook) ? storybook : []),
-    ...(uniqueTools.includes(ToolOption.Jsonc) ? jsonc : []),
-    ...(uniqueTools.includes(ToolOption.Yaml) ? yaml : []),
-    ...(uniqueTools.includes(ToolOption.Toml) ? toml : []),
+    ...(uniqueFormats.includes(FormatOption.Jsonc) ? jsonc : []),
+    ...(uniqueFormats.includes(FormatOption.Yaml) ? yaml : []),
+    ...(uniqueFormats.includes(FormatOption.Toml) ? toml : []),
 
     // Global overrides for non-TS files to prevent typed rules errors (#15)
     // Must be BEFORE Prettier to allow Prettier to override formatting

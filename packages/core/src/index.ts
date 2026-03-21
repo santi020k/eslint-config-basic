@@ -9,7 +9,9 @@ import pluginUnusedImport from 'eslint-plugin-unused-imports'
 import globals from 'globals'
 
 import { rules } from './rules.js'
-import { RuntimeOption } from './types.js'
+import {
+  RuntimeOption
+} from './types.js'
 
 import eslint from '@eslint/js'
 import pluginStylistic from '@stylistic/eslint-plugin'
