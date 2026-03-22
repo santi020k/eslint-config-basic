@@ -47,7 +47,10 @@ export { typescriptConfig, tsConfig } from '@santi020k/eslint-config-typescript'
 // Re-export optionals
 export {
   cspell,
+  cypress,
+  graphql,
   i18next,
+  jest,
   jsdoc,
   jsonc,
   markdown,
@@ -64,6 +67,7 @@ export {
   tailwind,
   tanstackQuery,
   tanstackRouter,
+  testingLibrary,
   toml,
   unicorn,
   vitest,
@@ -102,16 +106,23 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
   const uniqueTools = [...new Set(tools)]
   const uniqueExtensions = [...new Set(extensions)]
   const uniqueSettings = [...new Set(settings)]
+
+  if ((frameworks.next || frameworks.expo) && !frameworks.react) {
+    throw new TypeError(
+      'Next and Expo configurations require frameworks.react. Import @santi020k/eslint-config-react and pass it via frameworks.react.'
+    )
+  }
+
   // Resolve Frameworks
-  const reactParam = resolveFramework(frameworks.react)
-  const nextParam = resolveFramework(frameworks.next)
-  const astroParam = resolveFramework(frameworks.astro)
-  const expoParam = resolveFramework(frameworks.expo)
-  const nestParam = resolveFramework(frameworks.nest)
-  const vueParam = resolveFramework(frameworks.vue)
-  const svelteParam = resolveFramework(frameworks.svelte)
-  const solidParam = resolveFramework(frameworks.solid)
-  const angularParam = resolveFramework(frameworks.angular)
+  const reactParam = resolveFramework('react', frameworks.react)
+  const nextParam = resolveFramework('next', frameworks.next)
+  const astroParam = resolveFramework('astro', frameworks.astro)
+  const expoParam = resolveFramework('expo', frameworks.expo)
+  const nestParam = resolveFramework('nest', frameworks.nest)
+  const vueParam = resolveFramework('vue', frameworks.vue)
+  const svelteParam = resolveFramework('svelte', frameworks.svelte)
+  const solidParam = resolveFramework('solid', frameworks.solid)
+  const angularParam = resolveFramework('angular', frameworks.angular)
   const hasReact = hasReactConfig({ frameworks })
   const useGitignore = !uniqueSettings.includes(Setting.NoGitignore)
 

@@ -5,6 +5,21 @@ import { rules } from './rules.js'
 import tsParser from '@typescript-eslint/parser'
 import type { TSESLint } from '@typescript-eslint/utils'
 
+const typedFiles = ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts']
+
+const virtualTypeCheckedFiles = [
+  '**/*.astro/*.{ts,tsx,mts,cts}',
+  '*.astro/*.{ts,tsx,mts,cts}',
+  '**/*.vue/*.{ts,tsx,mts,cts}',
+  '*.vue/*.{ts,tsx,mts,cts}',
+  '**/*.svelte/*.{ts,tsx,mts,cts}',
+  '*.svelte/*.{ts,tsx,mts,cts}',
+  '**/*.md/*.{ts,tsx,mts,cts}',
+  '*.md/*.{ts,tsx,mts,cts}',
+  '**/*.mdx/*.{ts,tsx,mts,cts}',
+  '*.mdx/*.{ts,tsx,mts,cts}'
+]
+
 /**
  * TypeScript ESLint configuration
  * Extends typescript-eslint strict + stylistic type-checked presets with custom rules
@@ -12,15 +27,15 @@ import type { TSESLint } from '@typescript-eslint/utils'
 export const typescriptConfig: TSESLint.FlatConfig.ConfigArray = [
   ...(tsEslint.configs.strictTypeChecked as TSESLint.FlatConfig.ConfigArray).map(c => ({
     ...c,
-    files: ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts']
+    files: typedFiles
   })),
   ...(tsEslint.configs.stylisticTypeChecked as TSESLint.FlatConfig.ConfigArray).map(c => ({
     ...c,
-    files: ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts']
+    files: typedFiles
   })),
   {
     name: 'eslint-config-typescript/rules',
-    files: ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts'],
+    files: typedFiles,
     languageOptions: {
       parser: tsParser,
       parserOptions: {
@@ -33,8 +48,8 @@ export const typescriptConfig: TSESLint.FlatConfig.ConfigArray = [
   }
   // {
   //   name: 'eslint-config-typescript/disable-type-checked',
-  //   files: ['**/*.astro/*.ts', '*.astro/*.ts', '**/*.vue/*.ts', '*.vue/*.ts', '**/*.svelte/*.ts', '*.svelte/*.ts'],
-  //   ...tsEslint.configs.disableTypeChecked
+  //   files: virtualTypeCheckedFiles,
+  //   ...(tsEslint.configs.disableTypeChecked as TSESLint.FlatConfig.Config)
   // }
 ]
 

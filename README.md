@@ -7,16 +7,16 @@
 <!-- [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) -->
 [![license](https://img.shields.io/npm/l/@santi020k/eslint-config-basic.svg)](https://github.com/santi020k/eslint-config-basic/blob/main/LICENSE)
 
-A modern, composable, and opinionated ESLint 9+ (Flat Config) configuration for JavaScript, TypeScript, React, Next.js, and more.
+A modern, composable, and opinionated ESLint 10+ flat-config toolchain for JavaScript and TypeScript, with optional framework packages for React, Next.js, Astro, Vue, and more.
 
 ## Features
 
-- **ESLint 9 Flat Config**: Fully native support for the new configuration system.
+- **ESLint 10 Flat Config**: Fully native support for the current configuration system.
 - **TypeScript**: Robust rules with type-aware linting.
 - **React & Next.js**: Optimized for modern web development, including App Router support.
 - **Framework Support**: Svelte, Solid, Astro, Vue, Expo, NestJS, and Angular.
 - **Composable**: Opt-in to exactly what you need via simple enums.
-- **Auto-detection**: Zero-config mode that detects your project type.
+- **Auto-detection**: Detects TypeScript, runtime, and supported optional integrations from `package.json`.
 - **CLI Utility**: Easily initialize or update your configuration.
 - **Strict Mode**: Optional strict rules for a zero-warning codebase.
 - **Optimized for AI**: Includes specialized context and workflows for AI agents.
@@ -33,7 +33,7 @@ npm install -D eslint @santi020k/eslint-config-basic
 
 ### 2. Modular Framework Support
 
-As of v0.8.0, framework-specific configurations are now optional and must be installed separately. This keeps the base package light and avoids dependency conflicts.
+Framework-specific configurations are optional and must be installed separately. This keeps the base package light and avoids dependency conflicts.
 
 ```bash
 # For React projects
@@ -51,7 +51,7 @@ npm install -D @santi020k/eslint-config-vue
 
 ### 3. Basic Usage
 
-By default, the config will automatically detect if your project uses TypeScript, React, or Next.js (if they are installed).
+By default, the config auto-detects TypeScript, runtime, and supported optional integrations from your `package.json`. Framework configs remain explicit imports, or can be scaffolded with the CLI.
 
 ```js
 import { eslintConfig } from '@santi020k/eslint-config-basic'
@@ -75,8 +75,11 @@ export default eslintConfig({
 | :--- | :--- |
 | `Basic` | Core JavaScript rules only |
 | `Node` | Core + TypeScript + Node.js globals |
-| `Browser` | Core + TypeScript + React + Browser globals |
-| `All` | Enables every available configuration and optional |
+| `Browser` | Core + TypeScript + Browser globals |
+| `All` | Enables all bundled optionals and TypeScript support |
+
+> [!NOTE]
+> Framework packages such as React, Next.js, Astro, Vue, and Expo are still passed explicitly through the `frameworks` option.
 
 ### 5. Manual Configuration
 
@@ -132,29 +135,29 @@ Every framework is supported via a dedicated package and has a corresponding pla
 
 | Framework | Package | Playground |
 | :--- | :--- | :--- |
-| **TypeScript** | `@santi020k/eslint-config-typescript` | [Playground](packages/playground/typescript/) |
-| **React** | `@santi020k/eslint-config-react` | [Playground](packages/playground/react/) |
-| **Next.js** | `@santi020k/eslint-config-next` | [Playground](packages/playground/next/) |
-| **Astro** | `@santi020k/eslint-config-astro` | [Playground](packages/playground/astro/) |
-| **Vue** | `@santi020k/eslint-config-vue` | [Playground](packages/playground/vue/) |
-| **Svelte** | `@santi020k/eslint-config-svelte` | [Playground](packages/playground/svelte/) |
-| **Solid** | `@santi020k/eslint-config-solid` | [Playground](packages/playground/solid/) |
-| **Angular** | `@santi020k/eslint-config-angular` | [Playground](packages/playground/angular/) |
-| **NestJS** | `@santi020k/eslint-config-nest` | [Playground](packages/playground/nest/) |
-| **Expo** | `@santi020k/eslint-config-expo` | [Playground](packages/playground/expo/) |
+| **TypeScript** | `@santi020k/eslint-config-typescript` | [Playground](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/typescript) |
+| **React** | `@santi020k/eslint-config-react` | [Playground](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/react) |
+| **Next.js** | `@santi020k/eslint-config-next` | [Playground](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/next) |
+| **Astro** | `@santi020k/eslint-config-astro` | [Playground](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/astro) |
+| **Vue** | `@santi020k/eslint-config-vue` | [Playground](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/vue) |
+| **Svelte** | `@santi020k/eslint-config-svelte` | [Playground](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/svelte) |
+| **Solid** | `@santi020k/eslint-config-solid` | [Playground](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/solid) |
+| **Angular** | `@santi020k/eslint-config-angular` | [Playground](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/angular) |
+| **NestJS** | `@santi020k/eslint-config-nest` | [Playground](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/nest) |
+| **Expo** | `@santi020k/eslint-config-expo` | [Playground](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/expo) |
 
 ## Optional Tooling
 
-We support 23+ optional configurations that can be toggled via the `optionals` array.
+We support 23+ optional configurations across the `libraries`, `testing`, `formats`, `tools`, and `extensions` options.
 
 | Tool | Option | Playground |
 | :--- | :--- | :--- |
-| **CSpell** | `Tool.Cspell` | [Playground](packages/playground/tools/cspell/) |
-| **Tailwind CSS** | `Library.Tailwind` | [Playground](packages/playground/libraries/tailwind/) |
-| **Vitest** | `Testing.Vitest` | [Playground](packages/playground/testing/vitest/) |
-| **I18n** | `Library.I18next` | [Playground](packages/playground/libraries/i18next/) |
-| **Markdown** | `Format.Markdown` | [Playground](packages/playground/formats/markdown/) |
-| **Others** | `Mdx`, `Storybook`, `Playwright`, etc. | [Formats Playground](packages/playground/formats/) |
+| **CSpell** | `Tool.Cspell` | [Playground](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/tools/cspell) |
+| **Tailwind CSS** | `Library.Tailwind` | [Playground](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/libraries/tailwind) |
+| **Vitest** | `Testing.Vitest` | [Playground](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/testing/vitest) |
+| **I18n** | `Library.I18next` | [Playground](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/libraries/i18next) |
+| **Markdown** | `Format.Markdown` | [Playground](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/formats/markdown) |
+| **Others** | `Mdx`, `Storybook`, `Playwright`, etc. | [Formats Playground](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/formats) |
 
 > [!TIP]
 > Use the **categorized playgrounds** (libraries, testing, formats, tools, extensions) to see examples of the 18+ additional optional configurations including Tanstack Query, Stencil, SonarJS, and more.
@@ -190,7 +193,7 @@ export default eslintConfig({
 
 ## CLI Utility
 
-You can use the built-in CLI to easily initialize or update your configuration:
+You can use the built-in CLI to initialize a config or refresh an existing one:
 
 ```bash
 npx @santi020k/eslint-config-basic init
@@ -199,8 +202,11 @@ npx @santi020k/eslint-config-basic init
 The package also provides a `basic-eslint` binary:
 
 ```bash
-npx basic-eslint init    # Initialize eslint.config.js
+npx basic-eslint init    # Create eslint.config.js or eslint.config.mjs
+npx basic-eslint update  # Refresh the detected config
 ```
+
+The CLI writes `eslint.config.js` for ESM projects (`"type": "module"`) and `eslint.config.mjs` otherwise.
 
 ## Settings
 
@@ -251,8 +257,16 @@ If you want to contribute or modify the configurations:
 
 ### Prerequisites
 
-- Node.js (version specified in `.nvmrc`)
+- Node.js 18.18+ (CI currently runs on Node.js 20 and 22)
 - npm
+
+## Versioning Policy
+
+This project aims to follow SemVer intent even while it is still below `1.0.0`.
+
+- Patch releases focus on bug fixes, packaging fixes, docs updates, and non-breaking DX improvements.
+- Minor releases may add new presets, new optional integrations, or adjust rule sets in a documented way.
+- Breaking API or policy changes are called out clearly in the changelog and migration notes.
 
 ### Setup
 

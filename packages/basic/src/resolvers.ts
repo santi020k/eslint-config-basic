@@ -14,8 +14,14 @@ import {
 /**
  * Resolves an imported framework (either array or default export) into a config array.
  */
-export const resolveFramework = (framework?: ImportedFramework): FlatConfigArray => {
-  if (!framework || typeof framework === 'boolean') return []
+export const resolveFramework = (frameworkName: string, framework?: ImportedFramework): FlatConfigArray => {
+  if (!framework) return []
+
+  if (framework === true) {
+    throw new TypeError(
+      `Framework "${frameworkName}" requires an imported config. Install @santi020k/eslint-config-${frameworkName} and pass it via frameworks.${frameworkName}.`
+    )
+  }
 
   return Array.isArray(framework) ? framework : framework.default
 }
@@ -37,7 +43,6 @@ export const resolvePreset = (preset: Preset): Partial<EslintConfigOptions> => {
     case Preset.Browser:
       return {
         typescript: true,
-        frameworks: { react: true },
         runtime: Runtime.Browser
       }
 
@@ -49,16 +54,7 @@ export const resolvePreset = (preset: Preset): Partial<EslintConfigOptions> => {
         testing: Object.values(Testing),
         formats: Object.values(Format),
         extensions: Object.values(Extension),
-        runtime: Runtime.Universal,
-        frameworks: {
-          react: true,
-          next: true,
-          astro: true,
-          vue: true,
-          svelte: true,
-          solid: true,
-          angular: true
-        }
+        runtime: Runtime.Universal
       }
 
     default:

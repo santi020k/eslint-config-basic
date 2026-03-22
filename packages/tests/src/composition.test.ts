@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import { extractConfigNames } from './test-utils.js'
+import { extractConfigNames, extractRuleNames } from './test-utils.js'
 
-import { eslintConfig, Extension, Format, Library, Setting, Testing, Tool } from '@santi020k/eslint-config-basic'
+import { eslintConfig, Extension, Format, Library, Preset, Setting, Testing, Tool } from '@santi020k/eslint-config-basic'
 
 describe('eslintConfig Function', () => {
   it('should return an array when called with minimal options', () => {
@@ -31,9 +31,12 @@ describe('eslintConfig Function', () => {
     expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-react')
   })
 
-  it('should return config with Next when next framework is specified', () => {
+  it('should return config with Next when next and react frameworks are specified', () => {
     const config = eslintConfig({
-      frameworks: { next: [{ name: 'mock-next', rules: {} }] }
+      frameworks: {
+        react: [{ name: 'mock-react', rules: {} }],
+        next: [{ name: 'mock-next', rules: {} }]
+      }
     })
 
     expect(Array.isArray(config)).toBe(true)
@@ -222,5 +225,43 @@ describe('eslintConfig Function', () => {
     const names = extractConfigNames(config as Record<string, unknown>[])
 
     expect(names).toContain('mock-framework/rules')
+  })
+
+  it('should throw when a framework boolean is passed manually', () => {
+    expect(() => eslintConfig({
+      frameworks: {
+        react: true
+      }
+    })).toThrow(/requires an imported config/)
+  })
+
+  it('should require the React config when Next.js is enabled', () => {
+    expect(() => eslintConfig({
+      frameworks: {
+        next: [{ name: 'mock-next', rules: {} }]
+      }
+    })).toThrow(/frameworks\.react/)
+  })
+
+  it('should keep the Browser preset free of implicit React rules', () => {
+    const config = eslintConfig({
+      preset: Preset.Browser
+    })
+
+    const rules = extractRuleNames(config)
+
+    expect(rules).not.toContain('react/jsx-pascal-case')
+  })
+
+  it('should keep the All preset focused on bundled configs', () => {
+    const config = eslintConfig({
+      preset: Preset.All
+    })
+
+    const names = extractConfigNames(config)
+
+    expect(names).toContain('eslint-config/prettier')
+    expect(names).toContain('optionals/graphql')
+    expect(names).not.toContain('eslint-config-react/recommended')
   })
 })

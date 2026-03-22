@@ -1,36 +1,57 @@
 #!/usr/bin/env node
-import { existsSync, writeFileSync } from 'node:fs'
-import { join } from 'node:path'
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
+import { basename, join } from 'node:path'
 
 import { detectProjectOptions } from './index.js'
 
-const init = () => {
-  const cwd = process.cwd()
-  const configPath = join(cwd, 'eslint.config.js')
+const getDefaultConfigFilename = (cwd: string): string => {
+  const packageJsonPath = join(cwd, 'package.json')
 
-  if (existsSync(configPath)) {
-    console.warn('⚠️  eslint.config.js already exists. Skipping...')
+  if (!existsSync(packageJsonPath)) return 'eslint.config.mjs'
 
-    return
+  try {
+    const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8')) as { type?: string }
+
+    return packageJson.type === 'module' ? 'eslint.config.js' : 'eslint.config.mjs'
+  } catch {
+    return 'eslint.config.mjs'
+  }
+}
+
+const resolveConfigPath = (cwd: string): string => {
+  const existingConfigPath = [
+    'eslint.config.js',
+    'eslint.config.mjs'
+  ].map(filename => join(cwd, filename)).find(existsSync)
+
+  return existingConfigPath ?? join(cwd, getDefaultConfigFilename(cwd))
+}
+
+const getFrameworkKeys = (frameworks?: Record<string, unknown>): string[] => {
+  const frameworkKeys = new Set(Object.keys(frameworks ?? {}))
+
+  if (frameworkKeys.has('next') || frameworkKeys.has('expo')) {
+    frameworkKeys.add('react')
   }
 
-  console.log('🔍 Detecting project settings...')
+  return [...frameworkKeys]
+}
 
+const createConfigContent = (cwd: string): { configPath: string, configContent: string } => {
   const options = detectProjectOptions(cwd)
+  const frameworkKeys = getFrameworkKeys(options.frameworks)
   const imports: string[] = ['import { eslintConfig } from \'@santi020k/eslint-config-basic\'']
 
-  if (options.frameworks) {
-    Object.keys(options.frameworks).forEach(key => {
-      imports.push(`import ${key} from '@santi020k/eslint-config-${key}'`)
-    })
-  }
+  frameworkKeys.forEach(key => {
+    imports.push(`import ${key} from '@santi020k/eslint-config-${key}'`)
+  })
 
   const configContent = `${imports.join('\n')}
 
 export default eslintConfig({
   typescript: ${JSON.stringify(options.typescript ?? false)},
   frameworks: {
-    ${Object.keys(options.frameworks ?? {}).map(key => `${key}: ${key}`).join(',\n    ')}
+    ${frameworkKeys.map(key => `${key}: ${key}`).join(',\n    ')}
   },
   libraries: ${JSON.stringify(options.libraries ?? [], null, 2)},
   testing: ${JSON.stringify(options.testing ?? [], null, 2)},
@@ -42,9 +63,43 @@ export default eslintConfig({
 })
 `
 
+  return {
+    configPath: resolveConfigPath(cwd),
+    configContent
+  }
+}
+
+const init = () => {
+  const cwd = process.cwd()
+  const configPath = resolveConfigPath(cwd)
+
+  if (existsSync(configPath)) {
+    console.warn(`⚠️  ${basename(configPath)} already exists. Skipping...`)
+
+    return
+  }
+
+  console.log('🔍 Detecting project settings...')
+
+  const { configContent } = createConfigContent(cwd)
+
   writeFileSync(configPath, configContent)
 
-  console.log('✅ Created eslint.config.js with auto-detected settings!')
+  console.log(`✅ Created ${basename(configPath)} with auto-detected settings!`)
+
+  console.log('🚀 Ready to lint!')
+}
+
+const update = () => {
+  const cwd = process.cwd()
+
+  console.log('🔍 Detecting project settings...')
+
+  const { configPath, configContent } = createConfigContent(cwd)
+
+  writeFileSync(configPath, configContent)
+
+  console.log(`✅ Updated ${basename(configPath)} with auto-detected settings!`)
 
   console.log('🚀 Ready to lint!')
 }
@@ -53,6 +108,8 @@ const command = process.argv[2]
 
 if (command === 'init') {
   init()
+} else if (command === 'update') {
+  update()
 } else {
-  console.log('Usage: santi-eslint init')
+  console.log('Usage: basic-eslint <init|update>')
 }

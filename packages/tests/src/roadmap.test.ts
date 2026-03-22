@@ -1,20 +1,21 @@
 import { describe, expect, it } from 'vitest'
 
-import { extractRuleNames } from './test-utils.js'
+import { extractRuleNames, getEffectiveRuleValue } from './test-utils.js'
 
 import { eslintConfig, Extension, Library, Tool } from '@santi020k/eslint-config-basic'
 
 describe('v1.0.0 Roadmap Features', () => {
   it('should apply strict mode (warnings to errors)', () => {
-    // We need a config that has a 'warn' rule. coreConfig has some.
     const config = eslintConfig({ strict: true })
-    const configsWithRules = config.filter(c => 'rules' in c)
-    // Check if any rule that was 'warn' is now 'error'
-    // This is a bit tricky to test without knowing exactly which rule is 'warn' by default.
-    // Let's check some common ones or just verify the mapping logic worked.
+    const configsWithRules = config.filter(c => 'rules' in c && c.rules)
     const allRules = configsWithRules.flatMap(c => Object.values(c.rules ?? {}))
+    const arrayWarnings = allRules.filter(
+      rule => Array.isArray(rule) && (rule[0] === 'warn' || rule[0] === 1)
+    )
 
     expect(allRules).not.toContain('warn')
+    expect(arrayWarnings).toHaveLength(0)
+    expect(getEffectiveRuleValue(config, '@stylistic/quotes')).toEqual(['error', 'single'])
   })
 
   it('should include Security plugin rules', () => {

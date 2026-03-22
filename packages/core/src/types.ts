@@ -101,7 +101,7 @@ export enum Preset {
   /** Core + TS + Node runtime */
   Node = 'node',
 
-  /** Core + TS + React + Browser runtime */
+  /** Core + TS + Browser runtime */
   Browser = 'browser'
 }
 
@@ -117,7 +117,8 @@ export const ReactConfigKeys = [
 
 /**
  * Type to handle both direct config arrays and imported modules with a default export.
- * Also allows a boolean flag for auto-detection/enabling without passing the config object.
+ * A boolean flag may appear in detected project options, but user-facing framework options
+ * should pass imported config arrays/modules explicitly.
  */
 export type ImportedFramework = FlatConfigArray | { default: FlatConfigArray } | boolean
 
