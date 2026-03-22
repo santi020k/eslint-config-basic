@@ -17,7 +17,9 @@ const virtualTypeCheckedFiles = [
   '**/*.md/*.{ts,tsx,mts,cts}',
   '*.md/*.{ts,tsx,mts,cts}',
   '**/*.mdx/*.{ts,tsx,mts,cts}',
-  '*.mdx/*.{ts,tsx,mts,cts}'
+  '*.mdx/*.{ts,tsx,mts,cts}',
+  '**/.vitepress/**/*.ts',
+  '**/.vitepress/**/*.mts'
 ]
 
 /**
@@ -45,12 +47,12 @@ export const typescriptConfig: TSESLint.FlatConfig.ConfigArray = [
       ecmaVersion: 'latest'
     },
     rules
+  },
+  {
+    name: 'eslint-config-typescript/disable-type-checked',
+    files: virtualTypeCheckedFiles,
+    ...(tsEslint.configs.disableTypeChecked as TSESLint.FlatConfig.Config)
   }
-  // {
-  //   name: 'eslint-config-typescript/disable-type-checked',
-  //   files: virtualTypeCheckedFiles,
-  //   ...(tsEslint.configs.disableTypeChecked as TSESLint.FlatConfig.Config)
-  // }
 ]
 
 // Legacy export for backwards compatibility
