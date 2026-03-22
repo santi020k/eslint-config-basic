@@ -24,6 +24,8 @@ export const applyStrictMode = (configs: FlatConfigArray, strict: boolean): Flat
   }) as FlatConfigArray
 }
 
+import tsEslint from 'typescript-eslint'
+
 /**
  * Returns global overrides for non-TS files to prevent typed rules errors (#15).
  */
@@ -41,7 +43,11 @@ export const getTypedRulesOverrides = (): TSESLint.FlatConfig.Config => ({
     '**/*.mdx/*.ts',
     '**/*.mdx/*.tsx',
     '**/*.astro/*.js',
-    '**/*.astro/*.ts'
+    '**/*.astro/*.ts',
+    '**/*.vue/*.ts',
+    '**/*.vue/*.tsx',
+    '**/*.svelte/*.ts',
+    '**/*.svelte/*.tsx'
   ],
   languageOptions: {
     parserOptions: {
@@ -52,18 +58,7 @@ export const getTypedRulesOverrides = (): TSESLint.FlatConfig.Config => ({
     }
   },
   rules: {
-    '@typescript-eslint/await-thenable': 'off',
-    '@typescript-eslint/no-floating-promises': 'off',
-    '@typescript-eslint/no-misused-promises': 'off',
-    '@typescript-eslint/no-unnecessary-type-assertion': 'off',
-    '@typescript-eslint/no-unsafe-assignment': 'off',
-    '@typescript-eslint/no-unsafe-call': 'off',
-    '@typescript-eslint/no-unsafe-member-access': 'off',
-    '@typescript-eslint/no-unsafe-return': 'off',
-    '@typescript-eslint/no-unsafe-argument': 'off',
-    '@typescript-eslint/restrict-template-expressions': 'off',
-    '@typescript-eslint/unbound-method': 'off',
-    '@typescript-eslint/require-await': 'off',
+    ...tsEslint.configs.disableTypeChecked.rules,
     'no-unused-expressions': 'off',
     '@typescript-eslint/no-unused-expressions': 'off'
   }
