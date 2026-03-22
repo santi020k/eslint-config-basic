@@ -6,10 +6,38 @@ This package contains the optional integrations consumed by the main package thr
 
 ## Categories
 
-- `libraries`: Tailwind, I18next, Storybook, Stencil, TanStack Query, TanStack Router
-- `testing`: Vitest, Jest, Cypress, Playwright, Testing Library
-- `formats`: Markdown, MDX, JSONC, YAML, TOML, GraphQL
-- `tools`: Prettier, CSpell, JSDoc, Swagger
-- `extensions`: RegExp, Unicorn, SonarJS, Security, Perfectionist
+- Libraries: Tailwind, I18next, Storybook, Stencil, TanStack Query, TanStack Router.
+- Testing: Vitest, Jest, Cypress, Playwright, Testing Library.
+- Formats: Markdown, MDX, JSONC, YAML, TOML, GraphQL.
+- Tools: Prettier, CSpell, JSDoc, Swagger.
+- Extensions: RegExp, Unicorn, SonarJS, Security, Perfectionist.
 
-Use the main package unless you have a strong reason to import the optionals package directly.
+## How to Use It
+
+Most projects use the main package and enable optionals through enums rather than importing `@santi020k/eslint-config-optionals` directly.
+
+```js
+import { eslintConfig, Extension, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
+
+export default eslintConfig({
+  libraries: [Library.Tailwind],
+  testing: [Testing.Vitest],
+  tools: [Tool.Prettier],
+  extensions: [Extension.Unicorn]
+})
+```
+
+## Repository Links
+
+- Source Package: [packages/optionals](https://github.com/santi020k/eslint-config-basic/tree/main/packages/optionals)
+- Playground Root: [packages/playground](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground)
+
+## Related Pages
+
+- [Basic Package](/packages/basic)
+- [Tooling Overview](/tooling/overview)
+- [Libraries](/tooling/libraries)
+- [Testing](/tooling/testing)
+- [Formats](/tooling/formats)
+- [Tools](/tooling/tools)
+- [Extensions](/tooling/extensions)

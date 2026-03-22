@@ -28,7 +28,8 @@ export default defineConfig({
     nav: [
       { text: 'Guide', link: '/guide/getting-started' },
       { text: 'Frameworks', link: '/frameworks/typescript' },
-      { text: 'Packages', link: '/packages/core' },
+      { text: 'Tooling', link: '/tooling/overview' },
+      { text: 'Packages', link: '/packages/basic' },
       { text: 'API', link: '/api/' },
       { text: 'GitHub', link: 'https://github.com/santi020k/eslint-config-basic' },
       { text: 'Website', link: 'https://santi020k.me' }
@@ -42,6 +43,7 @@ export default defineConfig({
             { text: 'Installation', link: '/guide/installation' },
             { text: 'Configuration', link: '/guide/configuration' },
             { text: 'CLI', link: '/guide/cli' },
+            { text: 'Inspector', link: '/guide/inspector' },
             { text: 'Playgrounds', link: '/guide/playgrounds' }
           ]
         }
@@ -63,10 +65,24 @@ export default defineConfig({
           ]
         }
       ],
+      '/tooling/': [
+        {
+          text: 'Optional Tooling',
+          items: [
+            { text: 'Overview', link: '/tooling/overview' },
+            { text: 'Libraries', link: '/tooling/libraries' },
+            { text: 'Testing', link: '/tooling/testing' },
+            { text: 'Formats', link: '/tooling/formats' },
+            { text: 'Tools', link: '/tooling/tools' },
+            { text: 'Extensions', link: '/tooling/extensions' }
+          ]
+        }
+      ],
       '/packages/': [
         {
           text: 'Package Docs',
           items: [
+            { text: 'Basic', link: '/packages/basic' },
             { text: 'Core', link: '/packages/core' },
             { text: 'Optionals', link: '/packages/optionals' },
             { text: 'Playground', link: '/packages/playground' },
