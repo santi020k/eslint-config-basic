@@ -28,14 +28,14 @@ The project is a Turborepo monorepo using npm Workspaces. It exports a composabl
 
 ## 3. Modification Patterns
 
-### When adding a new Framework Config (as a new package):
+### When adding a new Framework Config (as a new package)
 
 1. Create `packages/{name}/` with `package.json`, `tsconfig.json`, `tsup.config.ts`.
 2. Create `packages/{name}/src/index.ts` to export the new rule configuration array.
 3. Add the framework to the `frameworks` type in `packages/core/src/types.ts`.
 4. Import and wire it into the `eslintConfig()` function inside `packages/basic/src/index.ts`.
 
-### When adding a new Optional Config:
+### When adding a new Optional Config
 
 1. Create the new optional in `packages/optionals/src/{name}.ts`.
 2. Export the optional from `packages/optionals/src/index.ts`.
@@ -44,7 +44,7 @@ The project is a Turborepo monorepo using npm Workspaces. It exports a composabl
 
 ## 4. Code Conventions
 
-- **TypeScript:** Use explicit type annotations for exports to prevent `TS2742` errors. Extract and export types explicitly.
+- **Types:** Before adding an `ambient.d.ts` declaration for a library or plugin, ALWAYS check if official types are available (built-in or via `@types/*` packages). Use ambient declarations ONLY as a last resort.
 - **ESLint Plugins:** Use direct plugin object references (not string-based resolution) to avoid `FlatCompat` issues.
 - **Dependencies:** Ensure peer dependency versions align across the plugin ecosystem. Use `$` references in package.json `overrides` when adding new ESLint plugins.
 - **Configs:** Every configuration must return a `TSESLint.FlatConfig.ConfigArray`.

@@ -36,9 +36,21 @@ export const getTypedRulesOverrides = (): TSESLint.FlatConfig.Config => ({
     '**/*.cjs',
     '**/*.md',
     '**/*.mdx',
+    '**/*.md/*.ts',
+    '**/*.md/*.tsx',
+    '**/*.mdx/*.ts',
+    '**/*.mdx/*.tsx',
     '**/*.astro/*.js',
     '**/*.astro/*.ts'
   ],
+  languageOptions: {
+    parserOptions: {
+      project: null,
+      program: null,
+      projectService: false,
+      allowDefaultProject: true
+    }
+  },
   rules: {
     '@typescript-eslint/await-thenable': 'off',
     '@typescript-eslint/no-floating-promises': 'off',
@@ -51,6 +63,8 @@ export const getTypedRulesOverrides = (): TSESLint.FlatConfig.Config => ({
     '@typescript-eslint/no-unsafe-argument': 'off',
     '@typescript-eslint/restrict-template-expressions': 'off',
     '@typescript-eslint/unbound-method': 'off',
-    '@typescript-eslint/require-await': 'off'
+    '@typescript-eslint/require-await': 'off',
+    'no-unused-expressions': 'off',
+    '@typescript-eslint/no-unused-expressions': 'off'
   }
 } as TSESLint.FlatConfig.Config)

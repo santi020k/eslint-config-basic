@@ -24,7 +24,7 @@ export const myOptionalConfig: TSESLint.FlatConfig.ConfigArray = [
 ]
 ```
 
-*Note: You may need to create an `ambient.d.ts` if the plugin you are using does not export TS types.*
+*Note: Before creating an `ambient.d.ts`, you MUST check if the library has its own types or a `@types/*` package. Ambient declarations should be a last resort.*
 
 ## 2. Export the Config
 

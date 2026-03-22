@@ -1,3 +1,5 @@
+import tsEslint from 'typescript-eslint'
+
 import pluginMarkdown from '@eslint/markdown'
 import type { TSESLint } from '@typescript-eslint/utils'
 
@@ -51,16 +53,21 @@ export const markdown: TSESLint.FlatConfig.ConfigArray = [
       '@typescript-eslint/unbound-method': 'off',
       // Disable other rules that don't make sense for code snippets
       'import/no-unresolved': 'off',
+      ...tsEslint.configs.disableTypeChecked.rules,
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
       'no-undef': 'off',
       '@typescript-eslint/consistent-type-imports': 'off',
-      '@typescript-eslint/no-explicit-any': 'off'
+      '@typescript-eslint/no-explicit-any': 'off',
+      'no-unused-expressions': 'off',
+      '@typescript-eslint/no-unused-expressions': 'off'
     },
     languageOptions: {
       parserOptions: {
         project: null,
-        program: null
+        program: null,
+        projectService: false,
+        allowDefaultProject: true
       }
     }
   }
