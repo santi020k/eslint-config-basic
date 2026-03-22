@@ -12,7 +12,7 @@ Composable ESLint 10+ flat-config tooling for JavaScript and TypeScript projects
 
 - Docs site: [santi020k.github.io/eslint-config-basic](https://santi020k.github.io/eslint-config-basic/)
 - Repository: [github.com/santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)
-- Website: [santi020k.me](https://santi020k.me)
+- Author: [santi020k](https://santi020k.me)
 
 > [!NOTE]
 > The docs site is built with VitePress. The planned production hostname is `eslint.santi020k.me`.

@@ -24,4 +24,4 @@ The generated reference is meant to complement the guide pages, not replace them
 ## Repository Links
 
 - Project Repository: [santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)
-- Website: [santi020k.me](https://santi020k.me)
+- Author: [santi020k](https://santi020k.me)
