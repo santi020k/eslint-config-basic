@@ -57,7 +57,13 @@ export const getTypedRulesOverrides = (): TSESLint.FlatConfig.Config => ({
     '**/*.vue/*.ts',
     '**/*.vue/*.tsx',
     '**/*.svelte/*.ts',
-    '**/*.svelte/*.tsx'
+    '**/*.svelte/*.tsx',
+    '**/.vitepress/**/*.ts',
+    '**/.vitepress/**/*.mts',
+    '**/.vitepress/**/*.tsx',
+    '**/.vitepress/**/*.js',
+    '**/.vitepress/**/*.mjs',
+    '**/.vitepress/**/*.jsx'
   ],
   languageOptions: {
     parserOptions: {

@@ -1,10 +1,10 @@
-# @santi020k/eslint-config-vue
+# @santi020k/eslint-config-angular
 
-Vue single-file component support for the shared toolchain.
+Angular support as an optional framework package.
 
 This package is part of the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.
 
-- Docs: [Vue guide](https://santi020k.github.io/eslint-config-basic/frameworks/vue.html)
+- Docs: [Angular guide](https://santi020k.github.io/eslint-config-basic/frameworks/angular.html)
 - Repository: [santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)
 - Website: [santi020k.me](https://santi020k.me)
 

@@ -1,5 +1,11 @@
 # @santi020k/eslint-config-tests
 
-This package is part of the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.
+Internal integration and snapshot coverage for the monorepo.
 
-For full usage instructions, installation guides, and documentation, please see the [Main Repository README](https://github.com/santi020k/eslint-config-basic/blob/main/README.md).
+This internal package is maintained inside the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.
+
+- Docs: [Tests package](https://santi020k.github.io/eslint-config-basic/packages/tests.html)
+- Repository: [santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)
+- Website: [santi020k.me](https://santi020k.me)
+
+The canonical documentation lives on the VitePress site, so this README intentionally stays short to avoid duplication.

@@ -74,6 +74,7 @@ words:
   - vue
   - workspace
   - workspaces
+  - vitepress
 ignorePaths:
   - node_modules
   - dist

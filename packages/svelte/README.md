@@ -1,10 +1,10 @@
-# @santi020k/eslint-config-vue
+# @santi020k/eslint-config-svelte
 
-Vue single-file component support for the shared toolchain.
+Svelte framework integration within the modular config stack.
 
 This package is part of the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.
 
-- Docs: [Vue guide](https://santi020k.github.io/eslint-config-basic/frameworks/vue.html)
+- Docs: [Svelte guide](https://santi020k.github.io/eslint-config-basic/frameworks/svelte.html)
 - Repository: [santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)
 - Website: [santi020k.me](https://santi020k.me)
 

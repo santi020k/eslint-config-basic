@@ -1,10 +1,10 @@
-# @santi020k/eslint-config-vue
+# @santi020k/eslint-config-solid
 
-Vue single-file component support for the shared toolchain.
+SolidJS support for projects using the shared linting baseline.
 
 This package is part of the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.
 
-- Docs: [Vue guide](https://santi020k.github.io/eslint-config-basic/frameworks/vue.html)
+- Docs: [Solid guide](https://santi020k.github.io/eslint-config-basic/frameworks/solid.html)
 - Repository: [santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)
 - Website: [santi020k.me](https://santi020k.me)
 
