@@ -1,32 +1,33 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
-  "project": ["packages/*/src/**/*.ts"],
   "ignore": [
-    "**/*.d.ts",
-    "**/dist/**",
     "packages/playground/**",
     "config/docs-packages.mjs",
     "typedoc.markdown.mjs"
   ],
   "ignoreDependencies": [
-    "@changesets/changelog-github",
-    "@changesets/cli",
-    "cz-conventional-changelog",
     "eslint-config-standard",
     "eslint-plugin-n",
     "eslint-plugin-promise",
     "typedoc-plugin-markdown",
-    "tailwindcss",
-    "commitizen",
-    "typescript"
+    "tailwindcss"
   ],
   "ignoreExportsUsedInFile": true,
   "rules": {
     "duplicates": "off"
   },
   "workspaces": {
+    ".": {
+      "entry": ["config/*.mjs"]
+    },
+    "packages/*": {
+      "project": ["src/**/*.ts"]
+    },
     "packages/basic": {
-      "ignoreDependencies": ["typescript"]
+      "ignoreDependencies": []
+    },
+    "packages/expo": {
+      "ignoreDependencies": ["eslint-config-expo"]
     }
   }
 }

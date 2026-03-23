@@ -34,7 +34,8 @@
     "@santi020k/eslint-config-core": "^0.7.1",
     "@santi020k/eslint-config-optionals": "^0.7.1",
     "@santi020k/eslint-config-typescript": "^0.7.1",
-    "eslint": "^10.0.3"
+    "eslint": "^10.0.3",
+    "typescript-eslint": "^8.24.1"
   },
   "peerDependencies": {
     "@santi020k/eslint-config-angular": "^0.7.1",
