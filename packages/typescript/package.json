@@ -1,6 +1,6 @@
 {
   "name": "@santi020k/eslint-config-typescript",
-  "version": "0.7.1",
+  "version": "0.8.1",
   "description": "TypeScript ESLint configuration",
   "type": "module",
   "main": "./dist/index.js",
@@ -27,7 +27,9 @@
     "typescript": ">=5.0.0"
   },
   "peerDependenciesMeta": {
-    "typescript": { "optional": true }
+    "typescript": {
+      "optional": true
+    }
   },
   "dependencies": {
     "@typescript-eslint/parser": "^8.57.0",
