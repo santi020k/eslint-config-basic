@@ -14,6 +14,7 @@ export const nextConfig: TSESLint.FlatConfig.ConfigArray = [
       '@next/next': pluginNext
     },
     rules: {
+      ...(pluginNext.configs.recommended.rules as TSESLint.FlatConfig.Rules),
       ...(pluginNext.configs['core-web-vitals'].rules as TSESLint.FlatConfig.Rules)
     }
   },
