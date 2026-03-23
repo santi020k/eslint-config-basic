@@ -17,8 +17,6 @@ jobs:
         with:
           node-version: '22'
           cache: 'npm'
-      - name: Enable Corepack
-        run: corepack enable
       - run: npm ci
       - name: Run npm audit
         continue-on-error: true
