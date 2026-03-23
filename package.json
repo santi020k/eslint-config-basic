@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "homepage": "https://santi020k.github.io/eslint-config-basic/",
+  "homepage": "https://eslint.santi020k.me/",
   "version": "0.8.1",
   "type": "module",
   "license": "MIT",

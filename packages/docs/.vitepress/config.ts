@@ -1,7 +1,7 @@
 import { defineConfig } from 'vitepress'
 
 const base = process.env.DOCS_BASE ?? '/'
-const site = process.env.DOCS_SITE_URL ?? 'https://santi020k.github.io/eslint-config-basic'
+const site = process.env.DOCS_SITE_URL ?? 'https://eslint.santi020k.me'
 
 export default defineConfig({
   title: 'Santi020k ESLint',
