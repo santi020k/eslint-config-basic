@@ -14,10 +14,12 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Use Node.js 22.x
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v4
         with:
           node-version: 22.x
           cache: 'npm'
+      - name: Enable Corepack
+        run: corepack enable
       - uses: pkg-size/action@v1
         with:
           build-command: npm run build
