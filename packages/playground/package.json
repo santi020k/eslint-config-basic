@@ -1,12 +1,13 @@
 {
   "name": "@santi020k/playground",
+  "version": "0.8.1",
   "private": true,
   "description": "Playground environments for testing the ESLint configuration",
   "scripts": {
     "lint": "turbo run lint --filter=\"@playground/*\" --",
     "dev": "echo \"No dev step required\"",
     "clean": "rm -rf dist node_modules",
-    "check:exports": "publint"
+    "check:exports": "echo \"No exports to check\""
   },
   "author": "santi020k",
   "license": "MIT",
