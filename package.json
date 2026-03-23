@@ -64,7 +64,6 @@
     "husky": "^9.1.7",
     "knip": "^6.0.0",
     "lint-staged": "^16.4.0",
-    "publint": "^0.3.18",
     "turbo": "^2.8.18",
     "typedoc": "^0.28.17",
     "typedoc-plugin-markdown": "^4.10.0"
@@ -76,5 +75,6 @@
     "*.{js,jsx,ts,tsx,md}": [
       "eslint --fix --no-warn-ignored"
     ]
-  }
+  },
+  "author": "santi020k"
 }
