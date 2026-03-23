@@ -23,10 +23,12 @@ const virtualTypeCheckedFiles = [
 ]
 
 /**
- * TypeScript ESLint configuration
+ * TypeScript ESLint configuration factory
  * Extends typescript-eslint strict + stylistic type-checked presets with custom rules
  */
-export const typescriptConfig: TSESLint.FlatConfig.ConfigArray = [
+export const createTypescriptConfig = (
+  options: { tsconfigRootDir?: string } = {}
+): TSESLint.FlatConfig.ConfigArray => [
   ...(tsEslint.configs.strictTypeChecked as TSESLint.FlatConfig.ConfigArray).map(c => ({
     ...c,
     files: typedFiles
@@ -42,7 +44,8 @@ export const typescriptConfig: TSESLint.FlatConfig.ConfigArray = [
       parser: tsParser,
       parserOptions: {
         projectService: true,
-        extraFileExtensions: ['.astro', '.svelte', '.vue']
+        extraFileExtensions: ['.astro', '.svelte', '.vue'],
+        tsconfigRootDir: options.tsconfigRootDir
       },
       ecmaVersion: 'latest'
     },
@@ -54,6 +57,8 @@ export const typescriptConfig: TSESLint.FlatConfig.ConfigArray = [
     ...(tsEslint.configs.disableTypeChecked as TSESLint.FlatConfig.Config)
   }
 ]
+
+export const typescriptConfig = createTypescriptConfig()
 
 // Legacy export for backwards compatibility
 export { typescriptConfig as tsConfig }

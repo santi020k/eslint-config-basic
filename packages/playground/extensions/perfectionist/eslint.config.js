@@ -2,5 +2,6 @@
 import { eslintConfig, Extension } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
-  extensions: [Extension.Perfectionist]
+  extensions: [Extension.Perfectionist],
+  tsconfigRootDir: import.meta.dirname
 })

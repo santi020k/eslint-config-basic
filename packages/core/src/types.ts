@@ -134,6 +134,12 @@ export interface TsOptions {
  */
 export interface EslintConfigOptions {
 
+  /**
+   * Root directory of the project.
+   * Required if multiple candidate TSConfigRootDirs are present.
+   */
+  tsconfigRootDir?: string
+
   /** Enable TypeScript support with optional settings */
   typescript?: boolean | TsOptions
 

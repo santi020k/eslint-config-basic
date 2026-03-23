@@ -15,7 +15,7 @@ import {
   Runtime,
   Setting
 } from '@santi020k/eslint-config-core'
-import { typescriptConfig } from '@santi020k/eslint-config-typescript'
+import { createTypescriptConfig } from '@santi020k/eslint-config-typescript'
 import type { TSESLint } from '@typescript-eslint/utils'
 
 // Re-export core types and utilities
@@ -95,6 +95,7 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     settings = (detected.settings ?? []),
     strict = options?.strict ?? false,
     runtime = (presetDefaults.runtime ?? detected.runtime ?? Runtime.Universal),
+    tsconfigRootDir = options?.tsconfigRootDir,
     nextMode = (presetDefaults.nextMode ?? detected.nextMode ?? NextMode.Pages),
     frameworks = { ...presetDefaults.frameworks, ...options?.frameworks }
   } = options ?? {}
@@ -135,6 +136,18 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     // Settings
     ...(useGitignore ? gitignore : []),
 
+    // Global TSConfig Root Dir fix
+    ...(tsconfigRootDir ?
+      [{
+        name: 'eslint-config-basic/tsconfig-root-dir',
+        languageOptions: {
+          parserOptions: {
+            tsconfigRootDir
+          }
+        }
+      }] :
+      []),
+
     // Core JS config with runtime-aware globals
     ...runtimeCoreConfig,
 
@@ -142,7 +155,7 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     ...(hasReact ? reactParam : []),
 
     // Framework-specific configs (Modularized)
-    ...(typescript ? typescriptConfig : []),
+    ...(typescript ? createTypescriptConfig({ tsconfigRootDir }) : []),
     ...nextParam,
 
     // Next.js App Router overrides (#12)
