@@ -22,7 +22,7 @@
     "check:exports": "publint"
   },
   "peerDependencies": {
-    "eslint": "^10.0.3"
+    "eslint": "^9.0.0 || ^10.0.0"
   },
   "dependencies": {
     "@santi020k/eslint-config-core": "^0.8.1",

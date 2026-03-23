@@ -76,58 +76,5 @@
     "*.{js,jsx,ts,tsx,md}": [
       "eslint --fix --no-warn-ignored"
     ]
-  },
-  "overrides": {
-    "eslint": "$eslint",
-    "**": {
-      "eslint": "$eslint"
-    },
-    "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-promise": {
-      ".": "^7.2.1",
-      "eslint": "$eslint"
-    },
-    "eslint-plugin-n": {
-      ".": "^17.24.0",
-      "eslint": "$eslint"
-    },
-    "eslint-plugin-react": {
-      "eslint": "$eslint"
-    },
-    "eslint-plugin-react-hooks": {
-      "eslint": "$eslint"
-    },
-    "eslint-plugin-solid": {
-      "eslint": "$eslint"
-    },
-    "eslint-plugin-svelte": {
-      "eslint": "$eslint"
-    },
-    "eslint-plugin-vue": {
-      "eslint": "$eslint"
-    },
-    "eslint-plugin-astro": {
-      "eslint": "$eslint"
-    },
-    "eslint-plugin-expo": {
-      "eslint": "$eslint"
-    },
-    "eslint-plugin-unicorn": {
-      "eslint": "$eslint"
-    },
-    "eslint-plugin-import-x": {
-      "eslint": "$eslint"
-    },
-    "@next/eslint-plugin-next": {
-      "eslint": "$eslint"
-    },
-    "@angular-eslint/eslint-plugin": {
-      "eslint": "$eslint"
-    },
-    "@typescript-eslint/utils": "^8.57.1",
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
-    "@types/react": "19.2.14",
-    "@types/react-dom": "19.2.14"
   }
 }

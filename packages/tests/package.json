@@ -17,7 +17,7 @@
     "@santi020k/eslint-config-react": "^0.8.1",
     "@santi020k/eslint-config-typescript": "^0.8.1",
     "@santi020k/eslint-config-vue": "^0.8.1",
-    "eslint": "^10.1.0",
+    "eslint": "^9.0.0 || ^10.0.0",
     "@types/node": "^25.5.0",
     "@vitest/coverage-v8": "^4.1.0",
     "typescript": "^5.9.3",
