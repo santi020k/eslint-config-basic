@@ -29,8 +29,8 @@ jobs:
       - name: Unused code check
         run: npm run lint:knip
       - run: npm run build
-      - run: npm run lint
+      - run: npm run lint -- --verbose
       - name: Run tests with coverage
-        run: npm run test:coverage
+        run: npm run test:coverage -- --verbose
       - name: Dry-run publish check
         run: npm publish --dry-run -w packages/basic
