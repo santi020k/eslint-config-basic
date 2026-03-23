@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { basename, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 import { detectProjectOptions } from './index.js'
 
@@ -69,8 +70,7 @@ export default eslintConfig({
   }
 }
 
-const init = () => {
-  const cwd = process.cwd()
+export const handleInit = (cwd: string = process.cwd()) => {
   const configPath = resolveConfigPath(cwd)
 
   if (existsSync(configPath)) {
@@ -90,9 +90,7 @@ const init = () => {
   console.log('🚀 Ready to lint!')
 }
 
-const update = () => {
-  const cwd = process.cwd()
-
+export const handleUpdate = (cwd: string = process.cwd()) => {
   console.log('🔍 Detecting project settings...')
 
   const { configPath, configContent } = createConfigContent(cwd)
@@ -104,12 +102,23 @@ const update = () => {
   console.log('🚀 Ready to lint!')
 }
 
-const command = process.argv[2]
+const run = () => {
+  const command = process.argv[2]
 
-if (command === 'init') {
-  init()
-} else if (command === 'update') {
-  update()
-} else {
-  console.log('Usage: basic-eslint <init|update>')
+  if (command === 'init') {
+    handleInit()
+  } else if (command === 'update') {
+    handleUpdate()
+  } else {
+    console.log('Usage: basic-eslint <init|update>')
+  }
+}
+
+// Only run if this is the entry point
+if (process.argv[1] && (
+  process.argv[1] === fileURLToPath(import.meta.url) ||
+  process.argv[1].endsWith('cli.js') ||
+  process.argv[1].endsWith('cli.ts')
+)) {
+  run()
 }
