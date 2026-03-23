@@ -14,14 +14,27 @@ Composable ESLint 10+ flat-config tooling for JavaScript and TypeScript projects
 - Repository: [github.com/santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)
 - Author: [santi020k](https://santi020k.me)
 
-> [!NOTE]
-> The docs site is built with VitePress. The planned production hostname is `eslint.santi020k.me`.
+## ✨ Key Features
 
-## Quick Start
+- **🎯 Composable & Modular**: Mix and match configurations for different frameworks and tools using a clean, options-based API.
+- **🔍 Zero-Config Auto-Detection**: Automatically detects your project's frameworks, libraries, and tools to provide a sensible default configuration.
+- **⚡ Lazy Loading**: Framework-specific configurations are loaded only when needed, ensuring maximum performance and avoiding unnecessary peer dependency conflicts.
+- **🛡️ Strict Mode**: Opt-in `strict: true` to promote all warnings to errors, perfect for CI/CD and maintaining high code standards.
+- **🌐 Smart Runtime Support**: Built-in support for Node.js, Browser, or Universal runtimes with appropriate globals and rules.
+- **💅 Prettier Integrated**: Seamlessly integrated with Prettier out of the box for consistent code formatting.
+- **🧩 Extensive Plugin Support**: Tailored rules for Tailwind CSS, Vitest, Testing Library, Storybook, TanStack (Query/Router), and more.
+
+## 🚀 Quick Start
+
+### Installation
 
 ```bash
 npm install -D eslint @santi020k/eslint-config-basic
 ```
+
+### Usage
+
+Create an `eslint.config.js` in your project root:
 
 ```js
 import { eslintConfig } from '@santi020k/eslint-config-basic'
@@ -45,7 +58,11 @@ export default eslintConfig()
 ## Development
 
 ```bash
-npm run docs:dev
+npm run build   # Build all packages
+npm run test    # Run integration tests
+npm run lint    # Run linting checks
 ```
 
-That command regenerates the API markdown and starts the VitePress site from [`packages/docs`](/Users/smith/Projects/santi020k/eslint-config-basic/packages/docs).
+---
+
+*Authored with ❤️ by [santi020k](https://santi020k.me)*
