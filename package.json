@@ -59,9 +59,7 @@
     "@eslint/config-inspector": "^1.5.0",
     "@santi020k/eslint-config-basic": "workspace:*",
     "@types/node": "^22.10.1",
-    "commitizen": "^4.3.1",
     "cspell": "^9.7.0",
-    "cz-conventional-changelog": "^3.3.0",
     "@typescript-eslint/utils": "^8.57.1",
     "eslint": "^10.0.3",
     "eslint-config-standard": "^17.1.0",
@@ -85,11 +83,6 @@
     "*.{js,jsx,ts,tsx,md}": [
       "eslint --fix --no-warn-ignored"
     ]
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
   },
   "overrides": {
     "eslint": "$eslint",
