@@ -21,6 +21,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
+      - name: Ensure npm version
+        run: npm install -g npm@10.8.3
       - run: npm ci
       - name: Spellcheck
         run: npm run lint:spell
