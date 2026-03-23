@@ -31,7 +31,6 @@
     }
   },
   "dependencies": {
-    "@santi020k/eslint-config-core": "^0.7.1",
     "eslint-plugin-solid": "^0.14.5"
   },
   "devDependencies": {

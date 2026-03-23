@@ -27,7 +27,6 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-core": "^0.7.1",
-    "@eslint/compat": "^2.0.3",
     "@eslint/eslintrc": "^3.3.5",
     "cross-dirname": "^0.1.0",
     "eslint-config-expo": "^55.0.0"

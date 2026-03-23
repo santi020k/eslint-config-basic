@@ -57,6 +57,7 @@
     "@changesets/changelog-github": "^0.6.0",
     "@changesets/cli": "^2.30.0",
     "@eslint/config-inspector": "^1.5.0",
+    "@santi020k/eslint-config-basic": "workspace:*",
     "@types/node": "^22.10.1",
     "commitizen": "^4.3.1",
     "cspell": "^9.7.0",
@@ -92,16 +93,49 @@
   },
   "overrides": {
     "eslint": "$eslint",
+    "**": {
+      "eslint": "$eslint"
+    },
     "eslint-config-standard": "$eslint-config-standard",
-    "eslint-plugin-promise": "$eslint-plugin-promise",
-    "eslint-plugin-n": "$eslint-plugin-n",
+    "eslint-plugin-promise": {
+      ".": "$eslint-plugin-promise",
+      "eslint": "$eslint"
+    },
+    "eslint-plugin-n": {
+      ".": "$eslint-plugin-n",
+      "eslint": "$eslint"
+    },
+    "eslint-plugin-react": {
+      "eslint": "$eslint"
+    },
     "eslint-plugin-react-hooks": {
       "eslint": "$eslint"
     },
     "eslint-plugin-solid": {
       "eslint": "$eslint"
     },
+    "eslint-plugin-svelte": {
+      "eslint": "$eslint"
+    },
+    "eslint-plugin-vue": {
+      "eslint": "$eslint"
+    },
+    "eslint-plugin-astro": {
+      "eslint": "$eslint"
+    },
     "eslint-plugin-expo": {
+      "eslint": "$eslint"
+    },
+    "eslint-plugin-unicorn": {
+      "eslint": "$eslint"
+    },
+    "eslint-plugin-import-x": {
+      "eslint": "$eslint"
+    },
+    "@next/eslint-plugin-next": {
+      "eslint": "$eslint"
+    },
+    "@angular-eslint/eslint-plugin": {
       "eslint": "$eslint"
     },
     "@typescript-eslint/utils": "^8.57.1"

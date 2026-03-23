@@ -19,6 +19,7 @@
     "@santi020k/eslint-config-vue": "^0.7.1",
     "eslint": "^10.0.3",
     "@types/node": "^22.10.1",
+    "@vitest/coverage-v8": "^4.1.0",
     "typescript": "^5.9.3",
     "vitest": "^4.1.0"
   }

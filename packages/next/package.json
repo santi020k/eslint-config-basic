@@ -32,9 +32,8 @@
     }
   },
   "dependencies": {
-    "@santi020k/eslint-config-core": "^0.7.1",
-    "@santi020k/eslint-config-react": "^0.7.1",
-    "@next/eslint-plugin-next": "^16.1.6"
+    "@next/eslint-plugin-next": "^15.1.0",
+    "@santi020k/eslint-config-core": "^0.7.1"
   },
   "devDependencies": {
     "@typescript-eslint/utils": "^8.57.0",

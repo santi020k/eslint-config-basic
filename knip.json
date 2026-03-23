@@ -4,11 +4,29 @@
   "ignore": [
     "**/*.d.ts",
     "**/dist/**",
-    "packages/playground/**"
+    "packages/playground/**",
+    "config/docs-packages.mjs",
+    "typedoc.markdown.mjs"
   ],
   "ignoreDependencies": [
     "@changesets/changelog-github",
     "@changesets/cli",
-    "cz-conventional-changelog"
-  ]
+    "cz-conventional-changelog",
+    "eslint-config-standard",
+    "eslint-plugin-n",
+    "eslint-plugin-promise",
+    "typedoc-plugin-markdown",
+    "tailwindcss",
+    "commitizen",
+    "typescript"
+  ],
+  "ignoreExportsUsedInFile": true,
+  "rules": {
+    "duplicates": "off"
+  },
+  "workspaces": {
+    "packages/basic": {
+      "ignoreDependencies": ["typescript"]
+    }
+  }
 }
