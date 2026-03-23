@@ -31,8 +31,8 @@
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "inspector": "eslint-config-inspector",
-    "test": "npm run build && vitest run packages/tests",
-    "test:coverage": "npm run build && vitest run packages/tests --coverage",
+    "test": "npm run build && npm run test -w packages/tests",
+    "test:coverage": "npm run build && npm run test:coverage -w packages/tests",
     "clean": "turbo run clean && rm -rf node_modules",
     "prepare": "husky config/.husky",
     "lint:spell": "cspell \"**\" --gitignore --cache --show-suggestions --show-context",
@@ -60,21 +60,14 @@
     "@santi020k/eslint-config-basic": "^0.8.1",
     "@types/node": "^22.10.1",
     "cspell": "^9.7.0",
-    "@typescript-eslint/utils": "^8.57.1",
     "eslint": "^10.0.3",
-    "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-n": "^17.24.0",
-    "eslint-plugin-promise": "^7.2.1",
     "husky": "^9.1.7",
     "knip": "^6.0.0",
     "lint-staged": "^16.4.0",
     "publint": "^0.3.18",
     "turbo": "^2.8.18",
     "typedoc": "^0.28.17",
-    "typedoc-plugin-markdown": "^4.10.0",
-    "tailwindcss": "^3.4.17",
-    "vitepress": "^1.6.4",
-    "vitest": "^4.1.0"
+    "typedoc-plugin-markdown": "^4.10.0"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,md,json,yaml,yml}": [
@@ -89,13 +82,13 @@
     "**": {
       "eslint": "$eslint"
     },
-    "eslint-config-standard": "$eslint-config-standard",
+    "eslint-config-standard": "^17.1.0",
     "eslint-plugin-promise": {
-      ".": "$eslint-plugin-promise",
+      ".": "^7.2.1",
       "eslint": "$eslint"
     },
     "eslint-plugin-n": {
-      ".": "$eslint-plugin-n",
+      ".": "^17.24.0",
       "eslint": "$eslint"
     },
     "eslint-plugin-react": {

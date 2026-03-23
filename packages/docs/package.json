@@ -10,6 +10,9 @@
     "docs:preview": "vitepress preview .",
     "docs:clean": "rm -rf .vitepress/dist .vitepress/cache api/reference"
   },
+  "devDependencies": {
+    "vitepress": "^1.6.4"
+  },
   "engines": {
     "node": ">=18.18.0"
   }
