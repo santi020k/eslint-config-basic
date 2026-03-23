@@ -1,6 +1,6 @@
 {
   "name": "@santi020k/eslint-config-react",
-  "version": "0.7.1",
+  "version": "0.8.1",
   "description": "React ESLint configuration with hooks and JSX rules",
   "type": "module",
   "main": "./dist/index.js",
@@ -23,8 +23,8 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "eslint": "^10.0.3",
-    "react": ">=18.0.0"
+    "eslint": "^10.1.0",
+    "react": ">=19.2.4"
   },
   "peerDependenciesMeta": {
     "react": {
@@ -32,14 +32,14 @@
     }
   },
   "dependencies": {
-    "@santi020k/eslint-config-core": "^0.7.1",
+    "@santi020k/eslint-config-core": "^0.8.1",
     "@eslint/compat": "^2.0.3",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "globals": "^17.4.0"
   },
   "devDependencies": {
-    "@typescript-eslint/utils": "^8.57.0",
+    "@typescript-eslint/utils": "^8.57.1",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   },
