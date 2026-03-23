@@ -1,74 +1,61 @@
 # @santi020k/eslint-config-basic
 
-> A comprehensive ESLint configuration package for JavaScript, TypeScript, React, Next.js, Astro, and Expo projects.
+> A comprehensive, composable ESLint 9+ Flat Config package for JavaScript, TypeScript, React, Next.js, Astro, Expo, Vue, Svelte, Solid, and Angular.
 
 ## AI Assistant Context
-**Role**: You are a senior software engineer maintaining this high-quality ESLint config package.
-**Goal**: Ensure code quality, type safety, and seamless developer experience (DX).
-**Style**: Strict but practical. Prefer correctness over brevity.
+
+**Role**: Senior Software Engineer / Maintenance Agent.
+**Goal**: Ensure code quality, type safety, and seamless Developer Experience (DX).
+**Conventions**: 
+- strictly Flat Config (no legacy `.eslintrc`).
+- Composable design via direct options (`typescript`, `frameworks`, `optionals`).
+- **Zero-Config Auto-Detection**: Automatically detects frameworks and plugins.
+- **Next.js App Router**: Optimized rules for the `app/` directory.
+- **Lazy Loading**: Framework-specific configs are lazy-loaded to prevent peer dep issues.
+- **Strict Mode**: `strict: true` promotes all warnings to errors.
+- Monorepo using Turborepo and npm Workspaces.
+- Dependency alignment via npm `overrides` with `$` references.
 
 ## Quick Start
 
 ```js
-import { ConfigOption, eslintConfig, OptionalOption } from '@santi020k/eslint-config-basic'
+import { eslintConfig } from '@santi020k/eslint-config-basic'
 
-export default [
-  ...eslintConfig({
-    config: [ConfigOption.React, ConfigOption.Ts],
-    optionals: [OptionalOption.Tailwind, OptionalOption.Vitest]
-  })
-]
+export default eslintConfig() // Auto-detection enabled by default
 ```
 
-## Architecture
+## Project Architecture
 
-This is a monorepo-style ESLint config package using ESLint 9 Flat Config format.
+This is a monorepo containing multiple config packages.
 
-### Directory Structure
+- [Full Architecture & Context](./llms-full.txt)
+- [Project Overview](./README.md)
+- [.agent/skills/](./.agent/skills/) - Specialized workflows for agents.
 
-packages/
-├── basic/            # Main entry point (@santi020k/eslint-config-basic)
-│   ├── src/index.ts  # Exports eslintConfig()
-│   └── dist/         # Build artifacts
-├── core/             # Core logic and shared types
-├── typescript/       # TypeScript config
-├── react/            # React config
-├── next/             # Next.js config
-├── astro/            # Astro config
-├── expo/             # Expo config
-├── nest/             # NestJS config
-├── vue/              # Vue config
-├── optionals/        # Optional feature configs
-├── playground/       # Internal testing playground
-└── tests/            # Integration tests
+### Core Structure
 
-### Key Enums
-
-- **ConfigOption**: `Ts`, `React`, `Next`, `Expo`, `Astro`, `Nest`, `Vue`
-- **OptionalOption**: `Cspell`, `Tailwind`, `Vitest`, `I18next`, `Mdx`, `Markdown`, `Stencil`, `Prettier`, `Unicorn`
-- **SettingOption**: `Gitignore`, `NoGitignore`
+- `packages/core/`: Base JS config, utilities, and shared types.
+- `packages/typescript/`, `packages/react/`, etc.: Framework-specific rules.
+- `packages/optionals/`: Integration configs (Tailwind, Vitest, CSpell, etc.).
+- `packages/basic/`: Main entry point composing all packages.
 
 ## Commands
 
 ```bash
-npm run build       # Build with tsup
-npm run lint        # Run ESLint
-npm run lint:fix    # Fix linting issues
-npm run dev         # Watch mode development
-npm run inspector   # Open ESLint config inspector
+npm run build       # Build all packages with Turbo
+npm run lint        # Run ESLint + Spellcheck + Knip
+npm run test        # Run integration tests (+ coverage)
+npm run inspector   # Open ESLint config visualizer
+npx santi-eslint init # Initialize project configuration
 ```
 
-## Adding New Configurations
+## Implementation Workflow
 
-1. Create a new package under `packages/` (e.g. `packages/vue`).
-2. Implement the config in `src/index.ts` of that package.
-3. Export it from the package's entry point.
-4. Add to `ConfigOption` enum in `packages/core/src/types.ts`.
-5. Wire up in `packages/basic/src/index.ts`.
+1. Create package in `packages/{name}` with `src/index.ts`.
+2. Define rules as `TSESLint.FlatConfig.ConfigArray`.
+3. Define rules as `TSESLint.FlatConfig.ConfigArray`.
+4. Compose in `packages/basic/src/index.ts`.
 
-## Tech Stack
+---
 
-- **Build**: tsup, TypeScript
-- **ESLint**: v9+ Flat Config format
-- **Package Manager**: npm/pnpm
-- **Node**: ^18.18.0 || ^20.9.0 || >=21.1.0
+[See llms-full.txt for deep technical details](./llms-full.txt)

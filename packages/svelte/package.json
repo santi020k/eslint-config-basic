@@ -1,0 +1,54 @@
+{
+  "name": "@santi020k/eslint-config-svelte",
+  "version": "0.7.1",
+  "description": "Svelte ESLint configuration",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "clean": "rm -rf dist",
+    "check:exports": "publint",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "eslint": "^10.0.3"
+  },
+  "peerDependenciesMeta": {
+    "svelte": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "eslint-plugin-svelte": "^3.16.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/utils": "^8.57.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18.18.0"
+  },
+  "license": "MIT",
+  "author": "santi020k",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/santi020k/eslint-config-basic.git",
+    "directory": "packages/svelte"
+  }
+}

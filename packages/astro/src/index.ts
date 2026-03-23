@@ -9,7 +9,7 @@ import type { TSESLint } from '@typescript-eslint/utils'
  * Includes Astro plugin recommended rules and custom overrides
  */
 export const astroConfig: TSESLint.FlatConfig.ConfigArray = [
-  ...(pluginAstro.configs.recommended as TSESLint.FlatConfig.ConfigArray),
+  ...pluginAstro.configs.recommended,
   {
     name: 'eslint-config-astro/custom',
     files: ['**/*.astro'],
@@ -24,3 +24,8 @@ export const astroConfig: TSESLint.FlatConfig.ConfigArray = [
     }
   }
 ]
+
+// Re-export rules for direct access
+export { rules }
+
+export default astroConfig

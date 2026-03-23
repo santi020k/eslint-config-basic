@@ -1,0 +1,130 @@
+---
+import Card from '../components/Card.astro'
+
+const title = 'Astro Playground'
+const items = ['Astro', 'ESLint', 'Playground']
+
+const features = [
+  {
+    title: 'Documentation',
+    body: 'Learn how Astro works and explore the official API docs.',
+    href: 'https://docs.astro.build/'
+  },
+  {
+    title: 'Integrations',
+    body: 'Supercharge your project with new frameworks and libraries.',
+    href: 'https://astro.build/integrations/'
+  },
+  {
+    title: 'Themes',
+    body: 'Explore a galaxy of community-built starter themes.',
+    href: 'https://astro.build/themes/'
+  }
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <main>
+      <h1>Welcome to <span class="text-gradient">{title}</span></h1>
+      <p class="instructions">
+        To get started, open the directory <code>src/pages</code> in your IDE.<br />
+        <strong>Code Challenge:</strong> Tweak the "Welcome to Astro" message above.
+      </p>
+      <ul role="list" class="link-card-grid">
+        {
+          features.map(feature => (
+            <Card
+              href={feature.href}
+              title={feature.title}
+              body={feature.body}
+            />
+          ))
+        }
+      </ul>
+
+      <h2>Current Items:</h2>
+      <ul>
+        {items.map(item => <li>{item}</li>)}
+      </ul>
+    </main>
+
+    <style>
+      :root {
+        --accent: 136, 58, 234;
+        --accent-light: 224, 204, 250;
+        --accent-dark: 49, 10, 101;
+        --accent-gradient: linear-gradient(
+          45deg,
+          rgb(var(--accent)),
+          rgb(var(--accent-light)) 30%,
+          white 60%
+        );
+      }
+      main {
+        margin: auto;
+        padding: 1rem;
+        width: 800px;
+        max-width: calc(100% - 2rem);
+        color: white;
+        font-size: 20px;
+        line-height: 1.6;
+      }
+      h1 {
+        font-size: 4rem;
+        font-weight: 700;
+        line-height: 1;
+        text-align: center;
+        margin-bottom: 1em;
+      }
+      .text-gradient {
+        background-image: var(--accent-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-size: 400%;
+        background-position: 0%;
+      }
+      .instructions {
+        margin-bottom: 2rem;
+        border: 1px solid rgba(var(--accent-light), 25%);
+        background: linear-gradient(
+          rgba(var(--accent-dark), 66%),
+          rgba(var(--accent-dark), 33%)
+        );
+        padding: 1.5rem;
+        border-radius: 8px;
+      }
+      .instructions code {
+        font-size: 0.8em;
+        font-weight: bold;
+        background: rgba(var(--accent-light), 12%);
+        color: rgb(var(--accent-light));
+        border-radius: 4px;
+        padding: 0.3em 0.45em;
+      }
+      .instructions strong {
+        color: rgb(var(--accent-light));
+      }
+      .link-card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
+        gap: 2rem;
+        padding: 0;
+      }
+    </style>
+
+    <script>
+      // Component script test
+      const message = 'Hello from Astro!'
+
+      console.log(message)
+    </script>
+  </body>
+</html>

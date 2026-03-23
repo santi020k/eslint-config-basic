@@ -1,0 +1,71 @@
+# Full Technical Context: @santi020k/eslint-config-basic
+
+This document provides deep technical details for AI agents maintenance.
+
+## Dependency Graph
+
+```text
+core → typescript → react → next
+     ↘ astro
+     ↘ expo
+     ↘ ... (other frameworks)
+     ↘ optionals
+basic (composes all above asynchronously)
+```
+
+## Modular Frameworks (v0.8.0+)
+
+Framework-specific configurations are now optional peer dependencies. They are dynamically imported by `eslintConfig` only when requested and installed.
+
+## Package Management
+
+- **npm Workspaces**: Manages local packages and shared devDependencies.
+- **Turborepo**: Orchestrates builds, linting, and tests across the monorepo.
+- **Changesets**: Automates semantic versioning and publishing.
+- **npm Overrides**: Ensures consistent versions across the plugin ecosystem.
+- **Modular Frameworks**: Frameworks like Svelte, Solid, Astro, Vue, and Angular are dynamically loaded in `packages/basic` to prevent peer dependency conflicts and reduce installation footprint.
+
+```json
+"overrides": {
+  "eslint": "$eslint",
+  "eslint-plugin-n": "$eslint-plugin-n",
+  "eslint-plugin-promise": "$eslint-plugin-promise"
+}
+```
+
+## Technical Decisions
+
+### 1. Flat Config (ESLint 9+)
+We only supports the Flat Config format. All configurations must be exported as `TSESLint.FlatConfig.ConfigArray`.
+
+### 2. Composable Async API
+Instead of traditional `extends`, we use a functional, asynchronous composition API:
+```typescript
+eslintConfig({ typescript: true, optionals, frameworks: { react: true }, strict: true })
+```
+This allows for dynamic detection, strict mode enforcement, and modular framework loading.
+
+### 3. Type Safety
+- Every package must export its config with explicit types.
+- We use `@typescript-eslint/utils` for internal types.
+- `packages/core/src/types.ts` is the single source of truth for enums.
+
+## Development Workflows
+
+### Adding a new Framework Config
+1. Seed new package via `mkdir packages/{name}/src`.
+2. Copy `packages/typescript/package.json` and adjust (add to peerDependencies).
+3. Export config from `src/index.ts`.
+4. Compose in `packages/basic/src/index.ts`.
+
+### Adding an Optional Integration
+1. Add new file to `packages/optionals/src/`.
+2. Register in `packages/optionals/src/index.ts`.
+3. Add to `OptionalOption` enum in `packages/core/src/types.ts`.
+4. Wire up in `packages/basic/src/index.ts` using `uniqueOptionals.includes()`.
+5. Supported Optionals: `Cspell`, `Tailwind`, `Vitest`, `I18next`, `Mdx`, `Markdown`, `Sonarjs`, `Stencil`, `Playwright`, `Prettier`, `JSDoc`, `Perfectionist`, `Security`, `TanstackQuery`, `TanstackRouter`, `Jsonc`, `Yaml`, `Toml`, `Storybook`, `Swagger`.
+
+## Validation & CI
+- **Lint**: ESLint + CSpell + Knip.
+- **Test**: Vitest integration tests in `packages/tests`.
+- **Build**: `tsup` for ESM/CJS bundling.

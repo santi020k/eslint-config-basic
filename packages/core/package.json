@@ -27,7 +27,8 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "clean": "rm -rf dist",
-    "check:exports": "publint"
+    "check:exports": "publint",
+    "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
     "eslint": "^10.0.0"
@@ -36,6 +37,7 @@
     "@eslint/compat": "^2.0.3",
     "@eslint/js": "^10.0.1",
     "@stylistic/eslint-plugin": "^5.10.0",
+    "@typescript-eslint/utils": "^8.57.1",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
@@ -43,15 +45,18 @@
     "eslint-plugin-promise": "^7.2.1",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-unused-imports": "^4.4.1",
-    "globals": "^17.4.0",
-    "@typescript-eslint/utils": "^8.57.0"
+    "globals": "^17.4.0"
   },
   "devDependencies": {
+    "@types/eslint-plugin-jsx-a11y": "^6.10.1",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   },
   "publishConfig": {
     "access": "public"
+  },
+  "engines": {
+    "node": ">=18.18.0"
   },
   "license": "MIT",
   "author": "santi020k",

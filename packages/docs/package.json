@@ -1,0 +1,16 @@
+{
+  "name": "@santi020k/eslint-config-docs",
+  "private": true,
+  "version": "0.0.0",
+  "description": "VitePress documentation site for the @santi020k/eslint-config-basic monorepo",
+  "type": "module",
+  "scripts": {
+    "docs:build": "vitepress build .",
+    "docs:dev": "vitepress dev .",
+    "docs:preview": "vitepress preview .",
+    "docs:clean": "rm -rf .vitepress/dist .vitepress/cache api/reference"
+  },
+  "engines": {
+    "node": ">=18.18.0"
+  }
+}

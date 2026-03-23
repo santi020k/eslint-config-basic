@@ -27,3 +27,5 @@ export const vueConfig: TSESLint.FlatConfig.ConfigArray = [
 
 // Re-export rules for direct access
 export { rules }
+
+export default vueConfig

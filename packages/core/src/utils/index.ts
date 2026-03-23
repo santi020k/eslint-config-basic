@@ -1,28 +1,21 @@
-import type { FlatConfigArray } from '../types.js'
-import { ConfigOption, ReactConfigs } from '../types.js'
+import { type EslintConfigOptions, ReactConfigKeys } from '../types.js'
 
 /**
- * Adds a specific configuration if the given option is present in the configs array.
+ * Checks if the provided EslintConfigOptions includes any React-specific configurations.
  *
- * @param configs - An array of configuration options.
- * @param option - The option to check for.
- * @param configToAdd - The configuration to add if the option is present.
- * @returns The configuration to add if the option is present, otherwise an empty array.
+ * @param options - ESLint configuration options.
+ * @returns True if any React configuration is detected, false otherwise.
  */
-export const applyConfigIfOptionPresent = (
-  configs: ConfigOption[],
-  option: ConfigOption,
-  configToAdd: FlatConfigArray
-): FlatConfigArray => configs.includes(option) ? configToAdd : []
+export const hasReactConfig = (options?: EslintConfigOptions): boolean => {
+  if (!options) return false
 
-/**
- * Checks if the provided configs array includes any React-specific configurations.
- *
- * @param configs - An optional array of configuration options.
- * @returns True if any React configuration is found, false otherwise.
- */
-export const hasReactConfig = (configs?: ConfigOption[]): boolean => {
-  if (!configs) return false
+  const frameworks = options.frameworks ?? {}
 
-  return ReactConfigs.some(reactConfig => configs.includes(reactConfig))
+  return ReactConfigKeys.some(key => {
+    const value = frameworks[key as keyof typeof frameworks]
+
+    return value !== undefined && value !== false
+  })
 }
+
+export * from './detection.js'

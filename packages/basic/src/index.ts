@@ -1,84 +1,78 @@
-// Re-export types and utilities from core
+import { applyStrictMode, getTypedRulesOverrides } from './compose.js'
+import { getOptionalConfigs, getPrettierConfig } from './optionals.js'
+import { resolveFramework, resolvePreset } from './resolvers.js'
+
+import {
+  coreConfig,
+  createCoreConfig,
+  detectProjectOptions,
+  type EslintConfigOptions,
+  type FlatConfigArray,
+  gitignore,
+  hasReactConfig,
+  type ImportedFramework,
+  NextMode,
+  Runtime,
+  Setting
+} from '@santi020k/eslint-config-core'
+import { createTypescriptConfig } from '@santi020k/eslint-config-typescript'
+import type { TSESLint } from '@typescript-eslint/utils'
+
+// Re-export core types and utilities
 export {
-  ConfigOption,
-  OptionalOption,
-  SettingOption,
-  ReactConfigs,
-  applyConfigIfOptionPresent,
+  Library,
+  Tool,
+  Extension,
+  Setting,
+  Runtime,
+  Preset,
+  Testing,
+  Format,
+  NextMode,
+  ReactConfigKeys,
   hasReactConfig,
   coreConfig,
+  createCoreConfig,
+  getGlobalsForRuntime,
   jsConfig,
-  gitignore
+  gitignore,
+  detectProjectOptions
 } from '@santi020k/eslint-config-core'
 
-export type {
-  EslintConfigOptions,
-  FlatConfigArray
-} from '@santi020k/eslint-config-core'
+export type { FlatConfigArray, EslintConfigOptions, ImportedFramework }
 
 // Re-export framework configs
 export { typescriptConfig, tsConfig } from '@santi020k/eslint-config-typescript'
 
-export { reactConfig } from '@santi020k/eslint-config-react'
-
-export { nextConfig } from '@santi020k/eslint-config-next'
-
-export { astroConfig } from '@santi020k/eslint-config-astro'
-
-export { expoConfig } from '@santi020k/eslint-config-expo'
-
-export { nestConfig } from '@santi020k/eslint-config-nest'
-
-export { vueConfig } from '@santi020k/eslint-config-vue'
-
 // Re-export optionals
 export {
   cspell,
+  cypress,
+  graphql,
   i18next,
+  jest,
+  jsdoc,
+  jsonc,
   markdown,
   mdx,
-  prettier,
-  regexp,
-  stencil,
-  tailwind,
-  unicorn,
-  vitest,
-  playwright,
-  sonarjs
-} from '@santi020k/eslint-config-optionals'
-
-// Import for composition
-import { astroConfig } from '@santi020k/eslint-config-astro'
-import type { EslintConfigOptions, FlatConfigArray } from '@santi020k/eslint-config-core'
-import {
-  applyConfigIfOptionPresent,
-  ConfigOption,
-  coreConfig,
-  gitignore,
-  hasReactConfig,
-  OptionalOption,
-  SettingOption
-} from '@santi020k/eslint-config-core'
-import { expoConfig } from '@santi020k/eslint-config-expo'
-import { nestConfig } from '@santi020k/eslint-config-nest'
-import { nextConfig } from '@santi020k/eslint-config-next'
-import {
-  cspell,
-  i18next,
-  markdown,
-  mdx,
+  perfectionist,
   playwright,
   prettier,
   regexp,
+  security,
   sonarjs,
   stencil,
+  storybook,
+  swagger,
   tailwind,
+  tanstackQuery,
+  tanstackRouter,
+  testingLibrary,
+  toml,
   unicorn,
-  vitest
+  vitest,
+  yaml
 } from '@santi020k/eslint-config-optionals'
-import { reactConfig } from '@santi020k/eslint-config-react'
-import { typescriptConfig } from '@santi020k/eslint-config-typescript'
-import { vueConfig } from '@santi020k/eslint-config-vue'
 
 /**
  * Generates the ESLint configuration array, applying configurations
@@ -87,51 +81,115 @@ import { vueConfig } from '@santi020k/eslint-config-vue'
  * @param {EslintConfigOptions} options - Configuration and optional settings
  * @returns {FlatConfigArray} The final ESLint configuration array
  */
-export const eslintConfig = ({
-  config = [],
-  optionals = [],
-  settings = []
-}: EslintConfigOptions = {}): FlatConfigArray => {
-  // Deduplicate entries to prevent double-applying configs (#4)
-  const uniqueConfig = [...new Set(config)]
-  const uniqueOptionals = [...new Set(optionals)]
-  const uniqueSettings = [...new Set(settings)]
-  const hasReact = hasReactConfig(uniqueConfig)
-  // Gitignore is enabled by default unless NoGitignore is specified (#8)
-  const useGitignore = !uniqueSettings.includes(SettingOption.NoGitignore)
+export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => {
+  const detected: Partial<EslintConfigOptions> = options === undefined ? detectProjectOptions() : {}
+  const presetDefaults = options?.preset ? resolvePreset(options.preset) : {}
 
-  return [
+  const {
+    typescript = (presetDefaults.typescript ?? detected.typescript ?? false),
+    libraries = (presetDefaults.libraries ?? detected.libraries ?? []),
+    testing = (presetDefaults.testing ?? detected.testing ?? []),
+    formats = (presetDefaults.formats ?? detected.formats ?? []),
+    tools = (presetDefaults.tools ?? detected.tools ?? []),
+    extensions = (presetDefaults.extensions ?? detected.extensions ?? []),
+    settings = (detected.settings ?? []),
+    strict = options?.strict ?? false,
+    runtime = (presetDefaults.runtime ?? detected.runtime ?? Runtime.Universal),
+    tsconfigRootDir = options?.tsconfigRootDir,
+    nextMode = (presetDefaults.nextMode ?? detected.nextMode ?? NextMode.Pages),
+    frameworks = { ...presetDefaults.frameworks, ...options?.frameworks }
+  } = options ?? {}
+
+  // Deduplicate and filter entries
+  const uniqueLibraries = [...new Set(libraries)]
+  const uniqueTesting = [...new Set(testing)]
+  const uniqueFormats = [...new Set(formats)]
+  const uniqueTools = [...new Set(tools)]
+  const uniqueExtensions = [...new Set(extensions)]
+  const uniqueSettings = [...new Set(settings)]
+
+  if ((frameworks.next || frameworks.expo) && !frameworks.react) {
+    throw new TypeError(
+      'Next and Expo configurations require frameworks.react. Import @santi020k/eslint-config-react and pass it via frameworks.react.'
+    )
+  }
+
+  // Resolve Frameworks
+  const reactParam = resolveFramework('react', frameworks.react)
+  const nextParam = resolveFramework('next', frameworks.next)
+  const astroParam = resolveFramework('astro', frameworks.astro)
+  const expoParam = resolveFramework('expo', frameworks.expo)
+  const nestParam = resolveFramework('nest', frameworks.nest)
+  const vueParam = resolveFramework('vue', frameworks.vue)
+  const svelteParam = resolveFramework('svelte', frameworks.svelte)
+  const solidParam = resolveFramework('solid', frameworks.solid)
+  const angularParam = resolveFramework('angular', frameworks.angular)
+  const hasReact = hasReactConfig({ frameworks })
+  const useGitignore = !uniqueSettings.includes(Setting.NoGitignore)
+
+  // Use runtime-aware core config
+  const runtimeCoreConfig = runtime !== Runtime.Universal ?
+    createCoreConfig(runtime) :
+    coreConfig
+
+  const configs: FlatConfigArray = [
     // Settings
     ...(useGitignore ? gitignore : []),
 
-    // Core JS config (always included)
-    ...coreConfig,
+    // Global TSConfig Root Dir fix
+    ...(tsconfigRootDir ?
+      [{
+        name: 'eslint-config-basic/tsconfig-root-dir',
+        languageOptions: {
+          parserOptions: {
+            tsconfigRootDir
+          }
+        }
+      }] :
+      []),
 
-    // React config (included if any React-based framework is used)
-    ...(hasReact ? reactConfig : []),
+    // Core JS config with runtime-aware globals
+    ...runtimeCoreConfig,
 
-    // Framework-specific configs
-    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Ts, typescriptConfig),
-    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Next, nextConfig),
-    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Astro, astroConfig),
-    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Expo, expoConfig),
-    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Nest, nestConfig),
-    ...applyConfigIfOptionPresent(uniqueConfig, ConfigOption.Vue, vueConfig),
+    // React config (included if any React-based framework is used/passed)
+    ...(hasReact ? reactParam : []),
+
+    // Framework-specific configs (Modularized)
+    ...(typescript ? createTypescriptConfig({ tsconfigRootDir }) : []),
+    ...nextParam,
+
+    // Next.js App Router overrides (#12)
+    ...(frameworks.next && nextMode === NextMode.AppRouter ?
+      [
+        {
+          name: 'eslint-config-next/app-router-overrides',
+          files: ['app/**/*.{ts,tsx}'],
+          rules: {
+            '@next/next/no-html-link-for-pages': 'off'
+          }
+        } as TSESLint.FlatConfig.Config
+      ] :
+      []),
+
+    ...astroParam,
+    ...expoParam,
+    ...nestParam,
+    ...vueParam,
+    ...svelteParam,
+    ...solidParam,
+    ...angularParam,
 
     // Optionals
-    ...(uniqueOptionals.includes(OptionalOption.Cspell) ? cspell : []),
-    ...(uniqueOptionals.includes(OptionalOption.Tailwind) ? tailwind : []),
-    ...(uniqueOptionals.includes(OptionalOption.Vitest) ? vitest : []),
-    ...(uniqueOptionals.includes(OptionalOption.I18next) ? i18next : []),
-    ...(uniqueOptionals.includes(OptionalOption.Stencil) ? stencil : []),
-    ...(uniqueOptionals.includes(OptionalOption.Regexp) ? regexp : []),
-    ...(uniqueOptionals.includes(OptionalOption.Mdx) ? mdx : []),
-    ...(uniqueOptionals.includes(OptionalOption.Markdown) ? markdown : []),
-    ...(uniqueOptionals.includes(OptionalOption.Unicorn) ? unicorn : []),
-    ...(uniqueOptionals.includes(OptionalOption.Sonarjs) ? sonarjs : []),
-    ...(uniqueOptionals.includes(OptionalOption.Playwright) ? playwright : []),
+    ...getOptionalConfigs(
+      uniqueLibraries, uniqueTools, uniqueTesting, uniqueFormats, uniqueExtensions
+    ),
 
-    // Prettier must be last to override stylistic rules
-    ...(uniqueOptionals.includes(OptionalOption.Prettier) ? prettier : [])
+    // Global overrides for non-TS files
+    getTypedRulesOverrides(),
+
+    // Prettier always last
+    ...getPrettierConfig(uniqueTools)
   ]
+
+  return applyStrictMode(configs, strict)
 }

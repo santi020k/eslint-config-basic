@@ -6,7 +6,7 @@
     "declaration": true,
     "declarationMap": true,
     "moduleResolution": "Node16",
-    "esModuleInterop": false,
+    "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -14,7 +14,8 @@
     "isolatedModules": true,
     "resolveJsonModule": true,
     "noEmit": true,
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": true,
+    "baseUrl": "."
   },
   "exclude": ["node_modules", "dist"]
 }

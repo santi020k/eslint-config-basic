@@ -108,13 +108,9 @@ export const myframeworkConfig: TSESLint.FlatConfig.ConfigArray = [
 ]
 ```
 
-6. **Add to `ConfigOption` enum** in `packages/core/src/types.ts`.
+6. **Compose in `packages/basic/src/index.ts`.**
 
-7. **Wire into `eslintConfig()`** in `packages/basic/src/index.ts`.
-
-8. **Add tests** in `packages/tests/src/`.
-9. **Update `ConfigOption` enum** in `packages/core/src/types.ts`.
-10. **Wire into `eslintConfig()`** in `packages/basic/src/index.ts`.
+7. **Add tests** in `packages/tests/src/`.
 
 ### Specific Framework Guides
 
@@ -137,8 +133,7 @@ These are already implemented. See their respective `packages/` for reference.
 
 1. Create `packages/optionals/src/configs/myoptional.ts` with your config.
 2. Export from `packages/optionals/src/index.ts`.
-3. Add to `OptionalOption` enum in `packages/core/src/types.ts`.
-4. Wire into `eslintConfig()` in `packages/basic/src/index.ts`.
+3. Compose in `packages/basic/src/index.ts`.
 
 ## Available Commands
 
