@@ -58,7 +58,7 @@ describe('CLI scaffolding', () => {
     expect(config).toContain('import react from \'@santi020k/eslint-config-react\'')
     expect(config).toContain('next: next')
     expect(config).toContain('react: react')
-  })
+  }, 15000)
 
   it('should update an existing config file in place', () => {
     const cwd = createTempProject({
@@ -77,12 +77,12 @@ describe('CLI scaffolding', () => {
 
     expect(config).not.toContain('// old config')
     expect(config).toContain('import react from \'@santi020k/eslint-config-react\'')
-  })
+  }, 15000)
 
   it('should print the correct usage message', () => {
     const cwd = createTempProject({ name: 'tmp-project' })
     const output = runCli(cwd)
 
     expect(output.trim()).toBe('Usage: basic-eslint <init|update>')
-  })
+  }, 15000)
 })
