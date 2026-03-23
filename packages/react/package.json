@@ -1,6 +1,6 @@
 {
   "name": "@santi020k/eslint-config-react",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "description": "React ESLint configuration with hooks and JSX rules",
   "type": "module",
   "main": "./dist/index.js",
@@ -32,7 +32,7 @@
     }
   },
   "dependencies": {
-    "@santi020k/eslint-config-core": "^0.8.1",
+    "@santi020k/eslint-config-core": "^0.9.0",
     "@eslint/compat": "^2.0.3",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",

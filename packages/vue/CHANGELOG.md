@@ -1,5 +1,9 @@
 # @santi020k/eslint-config-vue
 
+## 0.9.0
+
+- Coordinated release stabilization and version jump.
+
 ## 0.8.1
 
 ### Minor Changes

@@ -1,6 +1,6 @@
 {
   "name": "@santi020k/eslint-config-basic",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "description": "A comprehensive ESLint configuration package for JavaScript, TypeScript, and React projects.",
   "type": "module",
   "main": "./dist/index.js",
@@ -31,22 +31,22 @@
     "basic-eslint": "./dist/cli.js"
   },
   "dependencies": {
-    "@santi020k/eslint-config-core": "^0.8.1",
-    "@santi020k/eslint-config-optionals": "^0.8.1",
-    "@santi020k/eslint-config-typescript": "^0.8.1",
+    "@santi020k/eslint-config-core": "^0.9.0",
+    "@santi020k/eslint-config-optionals": "^0.9.0",
+    "@santi020k/eslint-config-typescript": "^0.9.0",
     "eslint": "^10.1.0",
     "typescript-eslint": "^8.57.1"
   },
   "peerDependencies": {
-    "@santi020k/eslint-config-angular": "^0.8.1",
-    "@santi020k/eslint-config-astro": "^0.8.1",
-    "@santi020k/eslint-config-expo": "^0.8.1",
-    "@santi020k/eslint-config-nest": "^0.8.1",
-    "@santi020k/eslint-config-next": "^0.8.1",
-    "@santi020k/eslint-config-react": "^0.8.1",
-    "@santi020k/eslint-config-solid": "^0.8.1",
-    "@santi020k/eslint-config-svelte": "^0.8.1",
-    "@santi020k/eslint-config-vue": "^0.8.1",
+    "@santi020k/eslint-config-angular": "^0.9.0",
+    "@santi020k/eslint-config-astro": "^0.9.0",
+    "@santi020k/eslint-config-expo": "^0.9.0",
+    "@santi020k/eslint-config-nest": "^0.9.0",
+    "@santi020k/eslint-config-next": "^0.9.0",
+    "@santi020k/eslint-config-react": "^0.9.0",
+    "@santi020k/eslint-config-solid": "^0.9.0",
+    "@santi020k/eslint-config-svelte": "^0.9.0",
+    "@santi020k/eslint-config-vue": "^0.9.0",
     "eslint": "^10.1.0"
   },
   "peerDependenciesMeta": {
