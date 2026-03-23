@@ -84,13 +84,21 @@ export const myframeworkConfig: TSESLint.FlatConfig.ConfigArray = [
 ]
 ```
 
-## 5. Wire into the Core Project
+## 5. Handle Types and Ambient Declarations
 
-1. Update `packages/core/src/types.ts` and add the framework to the `ConfigOption` enum.
+If the framework or its plugins don't have built-in TypeScript types:
+
+1. **Search for official types**: Check if a `@types/*` package exists for the library or plugin.
+2. **Install types**: If available, install them as a dev dependency in the package.
+3. **Use Ambient Declarations ONLY as a last resort**: Only create a `packages/myframework/src/ambient.d.ts` file if no official types are available.
+
+## 6. Wire into the Core Project
+
+1. Add your framework to the `frameworks` type in `packages/core/src/types.ts`.
 2. Update `packages/basic/src/index.ts`:
    - Import the new config from `@santi020k/eslint-config-myframework`.
    - Export it from `packages/basic`.
-   - Add it to the composed config array returned by `eslintConfig()` using `applyConfigIfOptionPresent`.
+   - Wire it into the `eslintConfig()` function in `packages/basic/src/index.ts` by adding it to the `frameworks` object handling.
 
 ## 6. Validate
 

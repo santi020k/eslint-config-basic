@@ -1,0 +1,14 @@
+{
+  "name": "@playground/tailwind",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@santi020k/eslint-config-basic": "*",
+    "eslint": "^10.0.3",
+    "react": "19.2.4",
+    "tailwindcss": "^3.4.17"
+  }
+}

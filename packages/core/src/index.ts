@@ -9,6 +9,9 @@ import pluginUnusedImport from 'eslint-plugin-unused-imports'
 import globals from 'globals'
 
 import { rules } from './rules.js'
+import {
+  Runtime
+} from './types.js'
 
 import eslint from '@eslint/js'
 import pluginStylistic from '@stylistic/eslint-plugin'
@@ -19,50 +22,75 @@ export * from './types.js'
 
 export * from './utils/index.js'
 
-const languageOptions: TSESLint.FlatConfig.LanguageOptions = {
-  ecmaVersion: 'latest',
-  sourceType: 'module',
-  globals: {
-    ...globals.browser,
-    ...globals.node
+/**
+ * Returns the appropriate globals for the given runtime option
+ */
+export const getGlobalsForRuntime = (runtime: Runtime = Runtime.Universal): TSESLint.FlatConfig.LanguageOptions['globals'] => {
+  switch (runtime) {
+    case Runtime.Node:
+      return { ...globals.node }
+
+    case Runtime.Browser:
+      return { ...globals.browser }
+
+    case Runtime.Universal:
+
+    default:
+      return {
+        ...globals.browser,
+        ...globals.node
+      }
   }
 }
 
 /**
- * Core JavaScript ESLint configuration
+ * Creates the core config with the specified runtime globals
+ */
+export const createCoreConfig = (runtime: Runtime = Runtime.Universal): TSESLint.FlatConfig.ConfigArray => {
+  const languageOptions: TSESLint.FlatConfig.LanguageOptions = {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    globals: getGlobalsForRuntime(runtime)
+  }
+
+  return [
+    {
+      name: '@eslint/js/recommended',
+      ...eslint.configs.recommended
+    },
+    {
+      name: 'eslint-config/plugins',
+      plugins: {
+        n: pluginN,
+        promise: pluginPromise,
+        import: { rules: pluginImport.rules },
+        'simple-import-sort': pluginSimpleImport,
+        'jsx-a11y': pluginJsxA11y,
+        'unused-imports': pluginUnusedImport
+      },
+      languageOptions,
+      rules: {
+        ...configStandard.rules,
+        'import/first': 'off'
+      }
+    },
+    {
+      name: 'eslint-config/stylistic',
+      ...pluginStylistic.configs.recommended
+    },
+    {
+      name: 'eslint-config/custom-rules',
+      languageOptions,
+      rules
+    }
+  ]
+}
+
+/**
+ * Core JavaScript ESLint configuration (Universal runtime by default)
  * This is included by default in all configurations
  */
-export const coreConfig: TSESLint.FlatConfig.ConfigArray = [
-  {
-    name: 'eslint-config/recommended',
-    ...eslint.configs.recommended
-  },
-  {
-    name: 'eslint-config/plugins',
-    plugins: {
-      n: pluginN,
-      promise: pluginPromise,
-      import: { rules: pluginImport.rules },
-      'simple-import-sort': pluginSimpleImport,
-      'jsx-a11y': pluginJsxA11y,
-      'unused-imports': pluginUnusedImport
-    },
-    languageOptions,
-    rules: {
-      ...configStandard.rules,
-      'import/first': 'off'
-    }
-  },
-  {
-    name: 'eslint-config/stylistic',
-    ...pluginStylistic.configs.recommended
-  },
-  {
-    name: 'eslint-config/custom-rules',
-    languageOptions,
-    rules
-  }
-]
+export const coreConfig: TSESLint.FlatConfig.ConfigArray = createCoreConfig()
 
 // Legacy export for backwards compatibility
 export { coreConfig as jsConfig }

@@ -19,16 +19,21 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "clean": "rm -rf dist",
-    "check:exports": "publint"
+    "check:exports": "publint",
+    "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
     "eslint": "^10.0.3",
-    "next": ">=16.1.6"
+    "next": ">=14.0.0"
+  },
+  "peerDependenciesMeta": {
+    "next": {
+      "optional": true
+    }
   },
   "dependencies": {
-    "@santi020k/eslint-config-core": "^0.7.1",
-    "@santi020k/eslint-config-react": "^0.7.1",
-    "@next/eslint-plugin-next": "^16.1.6"
+    "@next/eslint-plugin-next": "^15.1.0",
+    "@santi020k/eslint-config-core": "^0.7.1"
   },
   "devDependencies": {
     "@typescript-eslint/utils": "^8.57.0",
@@ -37,6 +42,9 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "engines": {
+    "node": ">=18.18.0"
   },
   "license": "MIT",
   "author": "santi020k",

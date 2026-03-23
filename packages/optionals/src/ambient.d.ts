@@ -22,35 +22,16 @@ declare module 'eslint-plugin-better-tailwindcss' {
   export default plugin
 }
 
-declare module 'eslint-plugin-i18next' {
-  const plugin: unknown
-
-  export default plugin
-}
-
-declare module 'eslint-config-prettier' {
-  import type { TSESLint } from '@typescript-eslint/utils'
-
-  const config: TSESLint.FlatConfig.Config
-
-  export default config
-}
-
-declare module 'eslint-plugin-unicorn' {
-  const plugin: {
-    rules: Record<string, unknown>
-  }
-
-  export default plugin
-}
-
-declare module 'eslint-plugin-playwright' {
+declare module 'eslint-plugin-security' {
   import type { TSESLint } from '@typescript-eslint/utils'
 
   const plugin: {
     configs: {
-      'flat/recommended': TSESLint.FlatConfig.Config
+      recommended: {
+        rules: TSESLint.FlatConfig.Rules
+      }
     }
+    rules: TSESLint.FlatConfig.Plugin['rules']
   }
 
   export default plugin

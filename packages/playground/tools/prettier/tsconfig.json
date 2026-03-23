@@ -1,0 +1,9 @@
+{
+  "extends": "../../../../tsconfig.dev.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "target": "ESNext"
+  },
+  "include": ["eslint.config.js", "src/**/*"]
+}

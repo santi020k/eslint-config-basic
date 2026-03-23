@@ -24,25 +24,59 @@
     "clean": "rm -rf dist",
     "check:exports": "publint",
     "prepack": "rm -f README.md && cp ../../README.md ./README.md",
-    "postpack": "rm -f README.md && ln -s ../../README.md ./README.md"
+    "postpack": "rm -f README.md && ln -s ../../README.md ./README.md",
+    "typecheck": "tsc --noEmit"
+  },
+  "bin": {
+    "basic-eslint": "./dist/cli.js"
   },
   "dependencies": {
-    "@santi020k/eslint-config-astro": "^0.7.1",
     "@santi020k/eslint-config-core": "^0.7.1",
+    "@santi020k/eslint-config-optionals": "^0.7.1",
+    "@santi020k/eslint-config-typescript": "^0.7.1",
+    "eslint": "^10.0.3",
+    "typescript-eslint": "^8.24.1"
+  },
+  "peerDependencies": {
+    "@santi020k/eslint-config-angular": "^0.7.1",
+    "@santi020k/eslint-config-astro": "^0.7.1",
     "@santi020k/eslint-config-expo": "^0.7.1",
     "@santi020k/eslint-config-nest": "^0.7.1",
     "@santi020k/eslint-config-next": "^0.7.1",
-    "@santi020k/eslint-config-optionals": "^0.7.1",
     "@santi020k/eslint-config-react": "^0.7.1",
-    "@santi020k/eslint-config-typescript": "^0.7.1",
+    "@santi020k/eslint-config-solid": "^0.7.1",
+    "@santi020k/eslint-config-svelte": "^0.7.1",
     "@santi020k/eslint-config-vue": "^0.7.1",
-    "@eslint/compat": "^2.0.3",
-    "@eslint/js": "^10.0.1",
-    "@typescript-eslint/eslint-plugin": "^8.57.0",
-    "@typescript-eslint/type-utils": "^8.57.0",
-    "cross-dirname": "^0.1.0",
-    "eslint": "^10.0.3",
-    "typescript-eslint": "^8.57.0"
+    "eslint": "^10.0.3"
+  },
+  "peerDependenciesMeta": {
+    "@santi020k/eslint-config-angular": {
+      "optional": true
+    },
+    "@santi020k/eslint-config-astro": {
+      "optional": true
+    },
+    "@santi020k/eslint-config-expo": {
+      "optional": true
+    },
+    "@santi020k/eslint-config-nest": {
+      "optional": true
+    },
+    "@santi020k/eslint-config-next": {
+      "optional": true
+    },
+    "@santi020k/eslint-config-react": {
+      "optional": true
+    },
+    "@santi020k/eslint-config-solid": {
+      "optional": true
+    },
+    "@santi020k/eslint-config-svelte": {
+      "optional": true
+    },
+    "@santi020k/eslint-config-vue": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "tsup": "^8.5.1",
@@ -51,6 +85,9 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "engines": {
+    "node": ">=18.18.0"
   },
   "license": "MIT",
   "author": "santi020k",

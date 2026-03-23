@@ -10,7 +10,10 @@
     "typescriptreact",
     "markdown",
     "md",
-    "mdx"
+    "mdx",
+    "astro",
+    "svelte",
+    "vue"
   ],
   // required to make the extension pickup the flat config
   "eslint.useFlatConfig": true,

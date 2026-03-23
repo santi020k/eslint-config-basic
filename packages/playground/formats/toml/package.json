@@ -1,0 +1,12 @@
+{
+  "name": "@playground/toml",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@santi020k/eslint-config-basic": "*",
+    "eslint": "^9.6.0"
+  }
+}

@@ -42,7 +42,7 @@ When adding a **new framework configuration** or a **new optional configuration*
    Import your generated configuration array and verify it has length > 0.
 
 2. **Composition Tests (`composition.test.ts`):**
-   Add a test case where you call `eslintConfig({ config: [ConfigOption.YourFramework] })` or `eslintConfig({ optionals: [OptionalOption.YourOptional] })` and assert that your specific config `name` property is included in the output array.
+   Add a test case where you call `eslintConfig({ frameworks: { yourframework: true } })` or `eslintConfig({ optionals: [OptionalOption.YourOptional] })` and assert that your specific config `name` property is included in the output array.
 
 3. **Snapshots (`snapshots.test.ts`):**
    If you created a new composition scenario, add it to the snapshot tests. Run `npx vitest -u packages/tests` to update the snapshots before committing.

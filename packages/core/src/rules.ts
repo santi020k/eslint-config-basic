@@ -32,7 +32,7 @@ const groups = [
   ['^.+\\.?(css|scss)$']
 ]
 
-export const rules: TSESLint.Linter.RulesRecord = {
+export const rules: TSESLint.FlatConfig.Rules = {
   'unused-imports/no-unused-imports': 'warn',
   indent: 'off',
   'brace-style': 'off',
@@ -118,17 +118,17 @@ export const rules: TSESLint.Linter.RulesRecord = {
   'no-empty': 'warn',
   'no-nested-ternary': 'warn',
   'no-undef': 'warn',
-  'unused-imports/no-unused-vars': [
-    'warn',
-    {
-      vars: 'all',
-      varsIgnorePattern: '^_',
-      args: 'after-used',
-      argsIgnorePattern: '^_',
-      destructuredArrayIgnorePattern: '^_',
-      ignoreRestSiblings: true
-    }
-  ],
+  'no-unused-vars': ['error', {
+    args: 'after-used',
+    argsIgnorePattern: '^_',
+    ignoreRestSiblings: true,
+    vars: 'all',
+    varsIgnorePattern: '^_'
+  }],
+  'no-unassigned-vars': 'error',
+  'no-useless-assignment': 'error',
+  'preserve-caught-error': 'error',
+  'no-use-before-define': 'warn',
   'no-void': 'warn',
   camelcase: 'warn',
   'array-callback-return': 'warn',
@@ -139,7 +139,6 @@ export const rules: TSESLint.Linter.RulesRecord = {
   'import/no-duplicates': 'warn',
   'valid-typeof': 'warn',
   'no-constant-condition': 'warn',
-  'no-use-before-define': 'warn',
   '@stylistic/implicit-arrow-linebreak': 'warn',
   'import/export': 'warn',
   'no-useless-escape': 'warn',
@@ -152,6 +151,6 @@ export const rules: TSESLint.Linter.RulesRecord = {
   'space-before-function-paren': 'off',
   'operator-linebreak': 'off',
   '@stylistic/operator-linebreak': ['error', 'after']
-}
+} satisfies TSESLint.FlatConfig.Rules
 
 export { groups }

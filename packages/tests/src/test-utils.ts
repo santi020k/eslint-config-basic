@@ -1,7 +1,9 @@
+import type { TSESLint } from '@typescript-eslint/utils'
+
 /**
  * Helper: collect all rule names from a composed config
  */
-export const extractRuleNames = (config: Record<string, unknown>[]): string[] => {
+export const extractRuleNames = (config: readonly TSESLint.FlatConfig.Config[]): string[] => {
   const ruleNames = new Set<string>()
 
   for (const entry of config) {
@@ -20,8 +22,8 @@ export const extractRuleNames = (config: Record<string, unknown>[]): string[] =>
 /**
  * Helper: collect all config entry names from a composed config
  */
-export const extractConfigNames = (config: Record<string, unknown>[]): string[] => config
-  .map(entry => entry.name as string | undefined)
+export const extractConfigNames = (config: readonly TSESLint.FlatConfig.Config[]): string[] => config
+  .map(entry => entry.name)
   .filter((name): name is string => typeof name === 'string')
 
 /**
@@ -29,7 +31,7 @@ export const extractConfigNames = (config: Record<string, unknown>[]): string[] 
  * (last definition wins, just like ESLint merging)
  */
 export const getEffectiveRuleValue = (
-  config: Record<string, unknown>[],
+  config: readonly TSESLint.FlatConfig.Config[],
   ruleName: string
 ): unknown => {
   let value: unknown

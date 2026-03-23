@@ -1,7 +1,7 @@
 import { groups } from '@santi020k/eslint-config-core'
 import type { TSESLint } from '@typescript-eslint/utils'
 
-export const rules: TSESLint.Linter.RulesRecord = {
+export const rules: TSESLint.FlatConfig.Rules = {
   'react/react-in-jsx-scope': 'off',
   'react/jsx-max-depth': ['warn', { max: 7 }],
   'react/prop-types': 'off',
@@ -44,4 +44,4 @@ export const rules: TSESLint.Linter.RulesRecord = {
       ]
     }
   ]
-}
+} satisfies TSESLint.FlatConfig.Rules

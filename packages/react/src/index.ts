@@ -11,7 +11,7 @@ import type { TSESLint } from '@typescript-eslint/utils'
 const languageOptions: TSESLint.FlatConfig.LanguageOptions = {
   ecmaVersion: 'latest',
   sourceType: 'module',
-  ...(pluginReactConfig.languageOptions as TSESLint.FlatConfig.LanguageOptions),
+  ...(pluginReactConfig.languageOptions ?? {}),
   globals: {
     ...globals.browser,
     ...globals.node
@@ -50,3 +50,5 @@ export const reactConfig: TSESLint.FlatConfig.ConfigArray = [
 
 // Re-export rules for direct access
 export { rules }
+
+export default reactConfig

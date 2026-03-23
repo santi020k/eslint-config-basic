@@ -1,11 +1,12 @@
 import type { TSESLint } from '@typescript-eslint/utils'
 
-export const rules: TSESLint.Linter.RulesRecord = {
+export const rules: TSESLint.FlatConfig.Rules = {
   // Disable rules that conflict with TypeScript
   semi: 'off',
   'no-unused-vars': 'off',
   'no-undef': 'off',
   '@typescript-eslint/indent': 'off',
+
   // TypeScript-specific rules
   '@typescript-eslint/no-unused-vars': [
     'warn',
@@ -30,5 +31,31 @@ export const rules: TSESLint.Linter.RulesRecord = {
   '@typescript-eslint/no-dynamic-delete': 'warn',
   '@typescript-eslint/no-useless-constructor': 'warn',
   '@typescript-eslint/prefer-for-of': 'warn',
-  '@typescript-eslint/no-duplicate-enum-values': 'warn'
-}
+  '@typescript-eslint/no-duplicate-enum-values': 'warn',
+
+  // Type-aware correctness rules (high-value, require parserOptions.project)
+  '@typescript-eslint/no-floating-promises': 'error',
+  '@typescript-eslint/no-misused-promises': ['error', {
+    checksVoidReturn: { attributes: false }
+  }],
+  '@typescript-eslint/await-thenable': 'error',
+  '@typescript-eslint/require-await': 'warn',
+  '@typescript-eslint/no-unnecessary-type-assertion': 'warn',
+  '@typescript-eslint/no-unsafe-assignment': 'warn',
+  '@typescript-eslint/no-unsafe-member-access': 'warn',
+  '@typescript-eslint/no-unsafe-call': 'warn',
+  '@typescript-eslint/no-unsafe-return': 'warn',
+  '@typescript-eslint/no-unsafe-argument': 'warn',
+  '@typescript-eslint/restrict-template-expressions': ['warn', {
+    allowNumber: true,
+    allowBoolean: true,
+    allowNullish: false
+  }],
+  '@typescript-eslint/unbound-method': ['warn', {
+    ignoreStatic: true
+  }],
+  '@typescript-eslint/consistent-type-imports': ['warn', {
+    prefer: 'type-imports',
+    fixStyle: 'inline-type-imports'
+  }]
+} satisfies TSESLint.FlatConfig.Rules

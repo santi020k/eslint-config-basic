@@ -57,3 +57,8 @@ export const expoConfig: TSESLint.FlatConfig.ConfigArray = [
     rules
   }
 ]
+
+// Re-export rules for direct access
+export { rules }
+
+export default expoConfig

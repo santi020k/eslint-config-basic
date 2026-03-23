@@ -9,7 +9,7 @@ import type { TSESLint } from '@typescript-eslint/utils'
  */
 export const nestConfig: TSESLint.FlatConfig.ConfigArray = [
   // Spread the recommended flat config from the plugin
-  ...(nestPlugin.configs.flatRecommended as TSESLint.FlatConfig.ConfigArray).map(config => ({
+  ...nestPlugin.configs.flatRecommended.map(config => ({
     ...config,
     files: ['**/*.ts', '**/*.mts', '**/*.cts', '**/*.tsx']
   })),
@@ -22,3 +22,5 @@ export const nestConfig: TSESLint.FlatConfig.ConfigArray = [
 
 // Re-export rules for direct access
 export { rules }
+
+export default nestConfig

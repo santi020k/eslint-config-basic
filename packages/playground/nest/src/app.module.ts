@@ -7,4 +7,5 @@ import { AppController } from './app.controller'
   controllers: [AppController],
   providers: []
 })
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class AppModule {}

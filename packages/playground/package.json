@@ -3,6 +3,6 @@
   "private": true,
   "description": "Playground environments for testing the ESLint configuration",
   "scripts": {
-    "lint": "turbo run lint --filter=\"@playground/*\""
+    "lint": "turbo run lint --filter=\"@playground/*\" --"
   }
 }

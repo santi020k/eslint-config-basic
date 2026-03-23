@@ -1,0 +1,14 @@
+{
+  // Test comment for JSONC
+  "name": "jsonc-playground",
+  "version": "1.0.0",
+  "description": "Testing eslint-plugin-jsonc with comments",
+  "configs": {
+    "enabled": true,
+    "options": [
+      1,
+      2,
+      3
+    ]
+  }
+}

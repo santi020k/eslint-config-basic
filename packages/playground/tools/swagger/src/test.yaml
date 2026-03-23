@@ -1,0 +1,6 @@
+swagger: "2.0"
+info:
+  title: Test
+  version: 1.0.0
+# eslint-disable-next-line swagger/valid-swagger
+bad: true
