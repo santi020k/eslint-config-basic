@@ -6,8 +6,7 @@
     "lint": "turbo run lint --filter=\"@playground/*\" --",
     "dev": "echo \"No dev step required\"",
     "clean": "rm -rf dist node_modules",
-    "check:exports": "publint",
-    "typecheck": "tsc --noEmit"
+    "check:exports": "publint"
   },
   "author": "santi020k",
   "license": "MIT",

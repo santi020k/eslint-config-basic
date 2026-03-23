@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-basic": "*",
+    "@tanstack/react-router": "^1.92.5",
+    "@types/react": "^19.0.2",
     "eslint": "^9.6.0"
   },
   "author": "santi020k",

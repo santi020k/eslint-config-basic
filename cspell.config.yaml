@@ -72,6 +72,8 @@ words:
   - vdom
   - vitest
   - vue
+  - esmodule
+  - nonwords
   - workspace
   - workspaces
   - vitepress

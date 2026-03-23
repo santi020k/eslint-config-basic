@@ -3,7 +3,8 @@
   "compilerOptions": {
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "target": "ESNext"
+    "target": "ESNext",
+    "jsx": "react-jsx"
   },
   "include": ["eslint.config.js", "src/**/*"]
 }

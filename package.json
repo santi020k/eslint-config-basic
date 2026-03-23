@@ -28,15 +28,18 @@
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
-    "inspector": "eslint-config-inspector",
-    "test": "npm run build && npm run test -w packages/tests",
-    "test:coverage": "npm run build && npm run test:coverage -w packages/tests",
-    "clean": "turbo run clean && rm -rf node_modules",
-    "prepare": "husky config/.husky",
     "lint:spell": "cspell \"**\" --gitignore --cache --show-suggestions --show-context",
     "lint:knip": "knip",
+    "test": "npm run build && npm run test -w packages/tests",
+    "test:coverage": "npm run build && npm run test:coverage -w packages/tests",
+    "check:exports": "turbo run check:exports",
+    "inspector": "eslint-config-inspector",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "prepare": "husky config/.husky",
+    "ok": "npm install && npm run build && npm run test && npm run lint && npm run typecheck",
     "pre-commit": "lint-staged",
     "pre-push": "npm run test && npm run lint && npm run build && npm run check:exports",
     "docs": "npm run docs:build",
@@ -47,11 +50,9 @@
     "docs:md": "npm run docs:api",
     "docs:sync-readmes": "node scripts/generate-package-readmes.mjs",
     "docs:clean": "npm run docs:clean -w packages/docs",
-    "check:exports": "turbo run check:exports",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "turbo run build && changeset publish",
-    "typecheck": "turbo run typecheck"
+    "release": "turbo run build && changeset publish"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.6.0",
@@ -66,7 +67,13 @@
     "lint-staged": "^16.4.0",
     "turbo": "^2.8.18",
     "typedoc": "^0.28.17",
-    "typedoc-plugin-markdown": "^4.10.0"
+    "typedoc-plugin-markdown": "^4.10.0",
+    "typescript": "^5.9.3"
+  },
+  "overrides": {
+    "eslint": "$eslint",
+    "glob": "^11.0.0",
+    "rimraf": "^6.0.0"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,md,json,yaml,yml}": [
