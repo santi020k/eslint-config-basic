@@ -3,7 +3,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "build": "echo \"No build step required\"",
+    "dev": "echo \"No build step required\"",
+    "clean": "rm -rf dist node_modules",
+    "check:exports": "echo \"No exports to check\"",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@nestjs/swagger": "11.2.6",
@@ -11,5 +16,18 @@
     "eslint": "^10.0.3",
     "eslint-plugin-unicorn": "63.0.0",
     "vitest": "^4.1.0"
+  },
+  "author": "santi020k",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/santi020k/eslint-config-basic.git",
+    "directory": "packages/playground/testing/vitest"
   }
 }

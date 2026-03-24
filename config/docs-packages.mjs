@@ -104,5 +104,12 @@ export const packageDocs = [
     description: 'Internal integration and snapshot coverage for the monorepo.',
     docsPath: '/packages/tests.html',
     isPrivate: true
+  },
+  {
+    packageName: '@santi020k/eslint-config-basic',
+    packagePath: 'packages/basic',
+    title: 'Main package',
+    description: 'The primary entry point that composes all feature-specific configurations.',
+    docsPath: '/packages/basic.html'
   }
 ]

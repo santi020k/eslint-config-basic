@@ -1,13 +1,12 @@
 import { defineConfig } from 'vitepress'
 
 const base = process.env.DOCS_BASE ?? '/'
-const site = process.env.DOCS_SITE_URL ?? 'https://santi020k.github.io/eslint-config-basic'
+const site = process.env.DOCS_SITE_URL ?? 'https://eslint.santi020k.me'
 
 export default defineConfig({
   title: 'Santi020k ESLint',
   description: 'Composable ESLint 10+ flat-config documentation for the @santi020k/eslint-config-basic monorepo.',
   base,
-  site,
   cleanUrls: true,
   lastUpdated: true,
   head: [
@@ -19,9 +18,7 @@ export default defineConfig({
     hostname: site
   },
   themeConfig: {
-    logo: {
-      text: 'Santi020k ESLint'
-    },
+    siteTitle: 'Santi020k ESLint',
     search: {
       provider: 'local'
     },

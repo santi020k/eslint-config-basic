@@ -1,8 +1,26 @@
 {
   "name": "@santi020k/playground",
+  "version": "0.8.1",
   "private": true,
   "description": "Playground environments for testing the ESLint configuration",
   "scripts": {
-    "lint": "turbo run lint --filter=\"@playground/*\" --"
+    "lint": "turbo run lint --filter=\"@playground/*\" --",
+    "dev": "echo \"No dev step required\"",
+    "clean": "rm -rf dist node_modules",
+    "check:exports": "echo \"No exports to check\""
+  },
+  "author": "santi020k",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/santi020k/eslint-config-basic.git",
+    "directory": "packages/playground"
   }
 }

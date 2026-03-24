@@ -2,15 +2,10 @@
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "ignore": [
     "packages/playground/**",
-    "config/docs-packages.mjs",
     "typedoc.markdown.mjs"
   ],
   "ignoreDependencies": [
-    "eslint-config-standard",
-    "eslint-plugin-n",
-    "eslint-plugin-promise",
-    "typedoc-plugin-markdown",
-    "tailwindcss"
+    "typedoc-plugin-markdown"
   ],
   "ignoreExportsUsedInFile": true,
   "rules": {
@@ -23,6 +18,12 @@
     "packages/*": {
       "project": ["src/**/*.ts"]
     },
+    "packages/playground/*": {
+      "project": ["src/**/*.{ts,tsx,vue,svelte,astro}"]
+    },
+    "packages/docs": {
+      "project": [".vitepress/**/*.ts", "typedoc.markdown.mjs"]
+    },
     "packages/basic": {
       "ignoreDependencies": []
     },
@@ -30,4 +31,5 @@
       "ignoreDependencies": ["eslint-config-expo"]
     }
   }
+
 }

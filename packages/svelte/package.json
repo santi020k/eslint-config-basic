@@ -23,7 +23,7 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "eslint": "^10.0.3"
+    "eslint": "^9.0.0 || ^10.0.0"
   },
   "peerDependenciesMeta": {
     "svelte": {
@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "@typescript-eslint/utils": "^8.57.0",
+    "publint": "^0.3.18",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   },
@@ -42,7 +43,7 @@
     "access": "public"
   },
   "engines": {
-    "node": ">=18.18.0"
+    "node": ">=22.12.0"
   },
   "license": "MIT",
   "author": "santi020k",

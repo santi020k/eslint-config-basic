@@ -1,6 +1,7 @@
 # @santi020k/eslint-config-basic
 
-> A comprehensive, composable ESLint 9+ Flat Config package for JavaScript, TypeScript, React, Next.js, Astro, Expo, Vue, Svelte, Solid, and Angular.
+> A comprehensive, composable ESLint 9/10+ Flat Config package for JavaScript, TypeScript, React, Next.js, Astro, Expo, Vue, Svelte, Solid, and Angular.
+
 
 ## AI Assistant Context
 

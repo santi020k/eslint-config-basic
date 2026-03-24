@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": [
+    ".vitepress/config.ts",
+    ".vitepress/theme/index.ts"
+  ],
+  "exclude": ["node_modules", ".vitepress/dist", ".vitepress/cache"]
+}
