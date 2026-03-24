@@ -13,7 +13,7 @@
   "dependencies": {
     "@santi020k/eslint-config-basic": "*",
     "@santi020k/eslint-config-angular": "*",
-    "eslint": "^10.0.3",
+    "eslint": "^10.1.0",
     "@angular/core": "21.2.5",
     "@angular/router": "21.2.5"
   },

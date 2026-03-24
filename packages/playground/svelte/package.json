@@ -13,7 +13,7 @@
   "dependencies": {
     "@santi020k/eslint-config-basic": "*",
     "@santi020k/eslint-config-svelte": "*",
-    "eslint": "^10.0.3",
+    "eslint": "^10.1.0",
     "svelte": "^5.0.0"
   },
   "author": "santi020k",

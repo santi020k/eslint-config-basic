@@ -13,7 +13,7 @@
   "dependencies": {
     "@santi020k/eslint-config-basic": "*",
     "@santi020k/eslint-config-solid": "*",
-    "eslint": "^10.0.3",
+    "eslint": "^10.1.0",
     "solid-js": "^1.9.11"
   },
   "author": "santi020k",

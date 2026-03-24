@@ -13,7 +13,7 @@
   "dependencies": {
     "@nestjs/swagger": "11.2.6",
     "@santi020k/eslint-config-basic": "*",
-    "eslint": "^10.0.3",
+    "eslint": "^10.1.0",
     "eslint-plugin-unicorn": "63.0.0",
     "vitest": "^4.1.0"
   },

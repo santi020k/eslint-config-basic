@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-basic": "*",
-    "eslint": "^10.0.3",
+    "eslint": "^10.1.0",
     "react": "19.2.4",
     "tailwindcss": "^3.4.17"
   },
