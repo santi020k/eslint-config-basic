@@ -8,11 +8,9 @@
 "@santi020k/eslint-config-nest": patch
 "@santi020k/eslint-config-next": patch
 "@santi020k/eslint-config-optionals": patch
-"@santi020k/playground": patch
 "@santi020k/eslint-config-react": patch
 "@santi020k/eslint-config-solid": patch
 "@santi020k/eslint-config-svelte": patch
-"@santi020k/eslint-config-tests": patch
 "@santi020k/eslint-config-typescript": patch
 "@santi020k/eslint-config-vue": patch
 ---
