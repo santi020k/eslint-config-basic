@@ -59,10 +59,10 @@ This allows for dynamic detection, strict mode enforcement, and modular framewor
 4. Compose in `packages/basic/src/index.ts`.
 
 ### Adding an Optional Integration
-1. Add new file to `packages/optionals/src/`.
+1. Add new file to `packages/optionals/src/{category}/` (category = `tools`, `libraries`, `testing`, `formats`, or `extensions`).
 2. Register in `packages/optionals/src/index.ts`.
-3. Add to `OptionalOption` enum in `packages/core/src/types.ts`.
-4. Wire up in `packages/basic/src/index.ts` using `uniqueOptionals.includes()`.
+3. Add enum value to the appropriate enum in `packages/core/src/types.ts` (`Tool`, `Library`, `Testing`, `Format`, or `Extension`).
+4. Wire up in `packages/basic/src/optionals.ts` using the matching enum check (e.g. `libraries.includes(Library.X)`).
 5. Supported Optionals: `Cspell`, `Tailwind`, `Vitest`, `I18next`, `Mdx`, `Markdown`, `Sonarjs`, `Stencil`, `Playwright`, `Prettier`, `JSDoc`, `Perfectionist`, `Security`, `TanstackQuery`, `TanstackRouter`, `Jsonc`, `Yaml`, `Toml`, `Storybook`, `Swagger`.
 
 ## Validation & CI

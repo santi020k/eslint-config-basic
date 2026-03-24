@@ -54,7 +54,7 @@ npx santi-eslint init # Initialize project configuration
 
 1. Create package in `packages/{name}` with `src/index.ts`.
 2. Define rules as `TSESLint.FlatConfig.ConfigArray`.
-3. Define rules as `TSESLint.FlatConfig.ConfigArray`.
+3. Add enums/types to `packages/core/src/types.ts`.
 4. Compose in `packages/basic/src/index.ts`.
 
 ---

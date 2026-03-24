@@ -7,8 +7,9 @@ trigger: always_on
 ## Priority Reading Order
 
 1. **`llms.txt`** - Project overview and architecture
-2. **`../../src/index.ts`** - Main entry point with enums and config function
-3. **`./guidelines.md`** - Detailed coding guidelines
+2. **`packages/basic/src/index.ts`** - Main entry point composing all configs
+3. **`packages/core/src/types.ts`** - All enums (Library, Testing, Format, Tool, Extension, Runtime, Preset, etc.)
+4. **`./guidelines.md`** - Detailed coding guidelines
 
 ## Project Summary
 
@@ -77,7 +78,7 @@ All commands must pass before considering work complete.
 
 ### When adding a new optional
 
-1. Create `src/optionals/{name}.ts`
-2. Export from `src/optionals/index.ts`
-3. Add to `OptionalOption` enum in `packages/core/src/types.ts`
-4. Wire into `eslintConfig()` function
+1. Create `packages/optionals/src/{category}/{name}.ts` (category = `tools`, `libraries`, `testing`, `formats`, or `extensions`)
+2. Export from `packages/optionals/src/index.ts`
+3. Add to the appropriate enum in `packages/core/src/types.ts` (`Tool`, `Library`, `Testing`, `Format`, or `Extension`)
+4. Wire into `packages/basic/src/optionals.ts` using the matching enum check (e.g. `libraries.includes(Library.X)`)
