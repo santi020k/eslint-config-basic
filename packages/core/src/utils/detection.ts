@@ -88,13 +88,42 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
 
     if (allDeps.playwright || allDeps['@playwright/test']) options.testing?.push(Testing.Playwright)
 
+    if (allDeps.jest || allDeps['@jest/core'] || allDeps['jest-circus']) options.testing?.push(Testing.Jest)
+
+    if (allDeps.cypress) options.testing?.push(Testing.Cypress)
+
+    if (
+      allDeps['@testing-library/react'] ||
+      allDeps['@testing-library/vue'] ||
+      allDeps['@testing-library/angular'] ||
+      allDeps['@testing-library/svelte'] ||
+      allDeps['@testing-library/user-event'] ||
+      allDeps['@testing-library/jest-dom'] ||
+      allDeps['@testing-library/dom']
+    ) {
+      options.testing?.push(Testing.TestingLibrary)
+    }
+
     if (allDeps.i18next) options.libraries?.push(Library.I18next)
 
     if (allDeps['@stencil/core']) options.libraries?.push(Library.Stencil)
 
-    if (allDeps.storybook || allDeps['@storybook/react']) options.libraries?.push(Library.Storybook)
+    if (
+      allDeps.storybook ||
+      allDeps['@storybook/react'] ||
+      allDeps['@storybook/core'] ||
+      allDeps['@storybook/nextjs'] ||
+      allDeps['@storybook/vue3'] ||
+      allDeps['@storybook/svelte'] ||
+      allDeps['@storybook/angular'] ||
+      allDeps['@storybook/experimental-nextjs-vite']
+    ) {
+      options.libraries?.push(Library.Storybook)
+    }
 
     if (allDeps['@nestjs/swagger']) options.tools?.push(Tool.Swagger)
+
+    if (allDeps.prettier) options.tools?.push(Tool.Prettier)
 
     // TanStack
     if (

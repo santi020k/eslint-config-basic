@@ -1,7 +1,7 @@
 import * as fs from 'node:fs'
 import { describe, expect, it, vi } from 'vitest'
 
-import { detectProjectOptions, Library, Runtime, Testing } from '@santi020k/eslint-config-basic'
+import { detectProjectOptions, Library, Runtime, Testing, Tool } from '@santi020k/eslint-config-basic'
 
 vi.mock('node:fs')
 
@@ -79,6 +79,66 @@ describe('detectProjectOptions', () => {
     expect(options.libraries).toContain(Library.TanstackQuery)
 
     expect(options.libraries).toContain(Library.TanstackRouter)
+  })
+
+  it('should detect Jest if jest is a dependency', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      devDependencies: { jest: 'latest' }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.testing).toContain(Testing.Jest)
+  })
+
+  it('should detect Cypress if cypress is a dependency', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      devDependencies: { cypress: 'latest' }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.testing).toContain(Testing.Cypress)
+  })
+
+  it('should detect Testing Library if @testing-library/react is a dependency', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      devDependencies: { '@testing-library/react': 'latest' }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.testing).toContain(Testing.TestingLibrary)
+  })
+
+  it('should detect Prettier if prettier is a dependency', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      devDependencies: { prettier: 'latest' }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.tools).toContain(Tool.Prettier)
+  })
+
+  it('should detect Storybook via @storybook/core', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      devDependencies: { '@storybook/core': 'latest' }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.libraries).toContain(Library.Storybook)
   })
 
   it('should handle missing package.json gracefully', () => {

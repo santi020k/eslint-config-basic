@@ -184,8 +184,8 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
       uniqueLibraries, uniqueTools, uniqueTesting, uniqueFormats, uniqueExtensions
     ),
 
-    // Global overrides for non-TS files
-    getTypedRulesOverrides(),
+    // Global overrides for non-TS files (only needed when TypeScript rules are loaded)
+    ...(typescript ? [getTypedRulesOverrides()] : []),
 
     // Prettier always last
     ...getPrettierConfig(uniqueTools)

@@ -125,4 +125,20 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
 
     expect(effectiveValue).toBe('off')
   })
+
+  it('should NOT include typed-rules-overrides when typescript is disabled', () => {
+    const config = eslintConfig({ typescript: false })
+
+    const names = extractConfigNames(config as Record<string, unknown>[])
+
+    expect(names).not.toContain('eslint-config-basic/typed-rules-overrides')
+  })
+
+  it('should include typed-rules-overrides when typescript is enabled', () => {
+    const config = eslintConfig({ typescript: true })
+
+    const names = extractConfigNames(config as Record<string, unknown>[])
+
+    expect(names).toContain('eslint-config-basic/typed-rules-overrides')
+  })
 })

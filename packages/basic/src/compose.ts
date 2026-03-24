@@ -1,3 +1,5 @@
+import tsEslint from 'typescript-eslint'
+
 import type { FlatConfigArray } from '@santi020k/eslint-config-core'
 import type { TSESLint } from '@typescript-eslint/utils'
 
@@ -33,8 +35,6 @@ export const applyStrictMode = (configs: FlatConfigArray, strict: boolean): Flat
     return config
   }) as FlatConfigArray
 }
-
-import tsEslint from 'typescript-eslint'
 
 /**
  * Returns global overrides for non-TS files to prevent typed rules errors (#15).

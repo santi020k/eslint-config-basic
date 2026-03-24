@@ -1,7 +1,7 @@
 {
   "name": "@santi020k/eslint-config-basic",
   "version": "0.8.1",
-  "description": "A comprehensive ESLint configuration package for JavaScript, TypeScript, and React projects.",
+  "description": "A composable ESLint 9/10+ Flat Config package for JavaScript, TypeScript, React, Next.js, Vue, Svelte, Solid, Angular, Astro, Expo, and NestJS.",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
