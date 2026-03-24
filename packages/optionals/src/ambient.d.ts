@@ -36,3 +36,17 @@ declare module 'eslint-plugin-security' {
 
   export default plugin
 }
+
+declare module 'eslint-plugin-cypress' {
+  import type { TSESLint } from '@typescript-eslint/utils'
+
+  const plugin: {
+    configs: {
+      recommended: {
+        rules: TSESLint.FlatConfig.Rules
+      }
+    }
+  }
+
+  export default plugin
+}

@@ -6,7 +6,7 @@ import { docsOrigin, packageDocs } from '../config/docs-packages.mjs'
 /**
  * Generate a standard README.md content for a package.
  */
-const generateReadmeContent = (pkg) => {
+const generateReadmeContent = pkg => {
   const { packageName, title, description, docsPath } = pkg
 
   return `# ${packageName}
@@ -26,7 +26,7 @@ The canonical documentation lives on the VitePress site, so this README intentio
 // Ensure scripts are run from the root
 const rootDir = process.cwd()
 
-packageDocs.forEach((pkg) => {
+packageDocs.forEach(pkg => {
   if (pkg.isPrivate) return // Skip private packages if desired
 
   const readmePath = join(rootDir, pkg.packagePath, 'README.md')
@@ -34,6 +34,7 @@ packageDocs.forEach((pkg) => {
 
   try {
     writeFileSync(readmePath, content, 'utf8')
+
     console.log(`✅ Generated README for ${pkg.packageName} at ${pkg.packagePath}`)
   } catch (error) {
     console.error(`❌ Failed to generate README for ${pkg.packageName}:`, error.message)

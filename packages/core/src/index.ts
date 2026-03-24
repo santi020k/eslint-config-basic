@@ -1,5 +1,4 @@
 // @ts-check
-import configStandard from 'eslint-config-standard'
 import pluginImport from 'eslint-plugin-import'
 import pluginJsxA11y from 'eslint-plugin-jsx-a11y'
 import pluginN from 'eslint-plugin-n'
@@ -9,6 +8,7 @@ import pluginUnusedImport from 'eslint-plugin-unused-imports'
 import globals from 'globals'
 
 import { rules } from './rules.js'
+import { rules as standardRules } from './standard.js'
 import {
   Runtime
 } from './types.js'
@@ -70,7 +70,7 @@ export const createCoreConfig = (runtime: Runtime = Runtime.Universal): TSESLint
       },
       languageOptions,
       rules: {
-        ...configStandard.rules,
+        ...standardRules,
         'import/first': 'off'
       }
     },

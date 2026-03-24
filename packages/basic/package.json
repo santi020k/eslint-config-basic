@@ -34,7 +34,6 @@
     "@santi020k/eslint-config-core": "^0.8.1",
     "@santi020k/eslint-config-optionals": "^0.8.1",
     "@santi020k/eslint-config-typescript": "^0.8.1",
-    "eslint": "^10.1.0",
     "typescript-eslint": "^8.57.1"
   },
   "peerDependencies": {
@@ -47,7 +46,7 @@
     "@santi020k/eslint-config-solid": "^0.8.1",
     "@santi020k/eslint-config-svelte": "^0.8.1",
     "@santi020k/eslint-config-vue": "^0.8.1",
-    "eslint": "^10.1.0"
+    "eslint": "^9.0.0 || ^10.0.0"
   },
   "peerDependenciesMeta": {
     "@santi020k/eslint-config-angular": {
@@ -79,6 +78,7 @@
     }
   },
   "devDependencies": {
+    "publint": "^0.3.18",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
     "@typescript-eslint/utils": "^8.57.0"
@@ -87,7 +87,7 @@
     "access": "public"
   },
   "engines": {
-    "node": ">=18.18.0"
+    "node": ">=22.12.0"
   },
   "license": "MIT",
   "author": "santi020k",

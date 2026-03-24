@@ -31,14 +31,12 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "eslint": "^10.0.0"
+    "eslint": "^9.0.0 || ^10.0.0"
   },
   "dependencies": {
     "@eslint/compat": "^2.0.3",
     "@eslint/js": "^10.0.1",
     "@stylistic/eslint-plugin": "^5.10.0",
-    "@typescript-eslint/utils": "^8.57.1",
-    "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-n": "^17.24.0",
@@ -49,14 +47,16 @@
   },
   "devDependencies": {
     "@types/eslint-plugin-jsx-a11y": "^6.10.1",
+    "publint": "^0.3.18",
     "tsup": "^8.5.1",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "@typescript-eslint/utils": "^8.57.1"
   },
   "publishConfig": {
     "access": "public"
   },
   "engines": {
-    "node": ">=18.18.0"
+    "node": ">=22.12.0"
   },
   "license": "MIT",
   "author": "santi020k",
