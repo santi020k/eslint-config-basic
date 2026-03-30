@@ -15,7 +15,7 @@
     "@santi020k/eslint-config-basic": "*",
     "eslint": "^10.0.3",
     "eslint-plugin-unicorn": "63.0.0",
-    "vitest": "^4.1.0"
+    "vitest": "^4.1.2"
   },
   "author": "santi020k",
   "license": "MIT",
