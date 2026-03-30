@@ -14,7 +14,7 @@
     "@santi020k/eslint-config-basic": "*",
     "@santi020k/eslint-config-solid": "*",
     "eslint": "^10.0.3",
-    "solid-js": "^1.9.11"
+    "solid-js": "^1.9.12"
   },
   "author": "santi020k",
   "license": "MIT",
