@@ -1,3 +1,6 @@
+import eslint from '@eslint/js'
+import pluginStylistic from '@stylistic/eslint-plugin'
+import type { TSESLint } from '@typescript-eslint/utils'
 import pluginImport from 'eslint-plugin-import'
 import pluginJsxA11y from 'eslint-plugin-jsx-a11y'
 import pluginN from 'eslint-plugin-n'
@@ -5,17 +8,9 @@ import pluginPromise from 'eslint-plugin-promise'
 import pluginSimpleImport from 'eslint-plugin-simple-import-sort'
 import pluginUnusedImport from 'eslint-plugin-unused-imports'
 import globals from 'globals'
-import neostandard from 'neostandard'
 
 import { rules } from './rules.js'
 import { Runtime } from './types.js'
-
-import eslint from '@eslint/js'
-import pluginStylistic from '@stylistic/eslint-plugin'
-import type { TSESLint } from '@typescript-eslint/utils'
-
-const neo = neostandard()
-const standardRules = neo[0].rules as TSESLint.FlatConfig.Rules
 
 // Re-export types and utilities
 export * from './types.js'
@@ -58,11 +53,15 @@ export const createCoreConfig = (runtime: Runtime = Runtime.Universal): TSESLint
       name: '@eslint/js/recommended',
       ...eslint.configs.recommended
     },
+    pluginN.configs['flat/recommended'],
+    pluginPromise.configs['flat/recommended'],
+    {
+      name: 'eslint-config/stylistic',
+      ...pluginStylistic.configs.recommended
+    },
     {
       name: 'eslint-config/plugins',
       plugins: {
-        n: pluginN,
-        promise: pluginPromise,
         import: { rules: pluginImport.rules },
         'simple-import-sort': pluginSimpleImport,
         'jsx-a11y': pluginJsxA11y,
@@ -70,13 +69,9 @@ export const createCoreConfig = (runtime: Runtime = Runtime.Universal): TSESLint
       },
       languageOptions,
       rules: {
-        ...standardRules,
-        'import/first': 'off'
+        'import/first': 'off',
+        'import/order': 'off'
       }
-    },
-    {
-      name: 'eslint-config/stylistic',
-      ...pluginStylistic.configs.recommended
     },
     {
       name: 'eslint-config/custom-rules',
