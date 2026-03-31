@@ -6,7 +6,7 @@
 [![Docs](https://img.shields.io/badge/docs-VitePress-114d66.svg)](https://eslint.santi020k.me/)
 [![license](https://img.shields.io/npm/l/@santi020k/eslint-config-basic.svg)](https://github.com/santi020k/eslint-config-basic/blob/main/LICENSE)
 
-Composable ESLint 10+ flat-config tooling for JavaScript and TypeScript projects, with optional framework packages for React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, and Expo.
+Composable ESLint 10+ flat-config tooling for JavaScript and TypeScript projects, with optional framework packages for React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Expo, Qwik, and Remix.
 
 ## Canonical Docs
 
@@ -54,6 +54,8 @@ export default eslintConfig()
 - Angular: [`@santi020k/eslint-config-angular`](https://eslint.santi020k.me/frameworks/angular.html)
 - NestJS: [`@santi020k/eslint-config-nest`](https://eslint.santi020k.me/frameworks/nest.html)
 - Expo: [`@santi020k/eslint-config-expo`](https://eslint.santi020k.me/frameworks/expo.html)
+- Qwik: [`@santi020k/eslint-config-qwik`](https://eslint.santi020k.me/frameworks/qwik.html)
+- Remix: [`@santi020k/eslint-config-remix`](https://eslint.santi020k.me/frameworks/remix.html)
 
 ## Development
 

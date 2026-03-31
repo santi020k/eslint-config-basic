@@ -1,7 +1,7 @@
 {
   "name": "@santi020k/eslint-config-basic",
   "version": "0.8.1",
-  "description": "A composable ESLint 9/10+ Flat Config package for JavaScript, TypeScript, React, Next.js, Vue, Svelte, Solid, Angular, Astro, Expo, and NestJS.",
+  "description": "A composable ESLint 9/10+ Flat Config package for JavaScript, TypeScript, React, Next.js, Vue, Svelte, Solid, Angular, Astro, Expo, NestJS, Qwik, and Remix.",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -46,6 +46,8 @@
     "@santi020k/eslint-config-solid": "^0.8.1",
     "@santi020k/eslint-config-svelte": "^0.8.1",
     "@santi020k/eslint-config-vue": "^0.8.1",
+    "@santi020k/eslint-config-qwik": "^0.8.1",
+    "@santi020k/eslint-config-remix": "^0.8.1",
     "eslint": "^9.0.0 || ^10.0.0"
   },
   "peerDependenciesMeta": {
@@ -74,6 +76,12 @@
       "optional": true
     },
     "@santi020k/eslint-config-vue": {
+      "optional": true
+    },
+    "@santi020k/eslint-config-qwik": {
+      "optional": true
+    },
+    "@santi020k/eslint-config-remix": {
       "optional": true
     }
   },

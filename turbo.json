@@ -23,6 +23,41 @@
     },
     "clean": {
       "cache": false
-    }
+    },
+
+    "@playground/angular#build": { "outputs": [] },
+    "@playground/astro#build": { "outputs": [] },
+    "@playground/cspell#build": { "outputs": [] },
+    "@playground/expo#build": { "outputs": [] },
+    "@playground/i18next#build": { "outputs": [] },
+    "@playground/jsdoc#build": { "outputs": [] },
+    "@playground/jsonc#build": { "outputs": [] },
+    "@playground/markdown#build": { "outputs": [] },
+    "@playground/mdx#build": { "outputs": [] },
+    "@playground/nest#build": { "outputs": [] },
+    "@playground/next#build": { "outputs": [] },
+    "@playground/perfectionist#build": { "outputs": [] },
+    "@playground/playwright#build": { "outputs": [] },
+    "@playground/prettier#build": { "outputs": [] },
+    "@playground/react#build": { "outputs": [] },
+    "@playground/regexp#build": { "outputs": [] },
+    "@playground/security#build": { "outputs": [] },
+    "@playground/solid#build": { "outputs": [] },
+    "@playground/sonarjs#build": { "outputs": [] },
+    "@playground/stencil#build": { "outputs": [] },
+    "@playground/storybook#build": { "outputs": [] },
+    "@playground/svelte#build": { "outputs": [] },
+    "@playground/swagger#build": { "outputs": [] },
+    "@playground/tailwind#build": { "outputs": [] },
+    "@playground/tanstack-query#build": { "outputs": [] },
+    "@playground/tanstack-router#build": { "outputs": [] },
+    "@playground/toml#build": { "outputs": [] },
+    "@playground/typescript#build": { "outputs": [] },
+    "@playground/unicorn#build": { "outputs": [] },
+    "@playground/vitest#build": { "outputs": [] },
+    "@playground/vue#build": { "outputs": [] },
+    "@playground/yaml#build": { "outputs": [] },
+    "@santi020k/eslint-config-docs#build": { "outputs": [] },
+    "@santi020k/eslint-config-tests#build": { "outputs": [] }
   }
 }
