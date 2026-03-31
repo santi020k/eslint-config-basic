@@ -1,4 +1,4 @@
-import { applyStrictMode, getTypedRulesOverrides } from './compose.js'
+import { applyStrictMode } from './compose.js'
 import { getOptionalConfigs, getPrettierConfig } from './optionals.js'
 import { resolveFramework, resolvePreset } from './resolvers.js'
 
@@ -124,6 +124,8 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
   const svelteParam = resolveFramework('svelte', frameworks.svelte)
   const solidParam = resolveFramework('solid', frameworks.solid)
   const angularParam = resolveFramework('angular', frameworks.angular)
+  const qwikParam = resolveFramework('qwik', frameworks.qwik)
+  const remixParam = resolveFramework('remix', frameworks.remix)
   const hasReact = hasReactConfig({ frameworks })
   const useGitignore = !uniqueSettings.includes(Setting.NoGitignore)
 
@@ -178,14 +180,13 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     ...svelteParam,
     ...solidParam,
     ...angularParam,
+    ...qwikParam,
+    ...remixParam,
 
     // Optionals
     ...getOptionalConfigs(
       uniqueLibraries, uniqueTools, uniqueTesting, uniqueFormats, uniqueExtensions
     ),
-
-    // Global overrides for non-TS files (only needed when TypeScript rules are loaded)
-    ...(typescript ? [getTypedRulesOverrides()] : []),
 
     // Prettier always last
     ...getPrettierConfig(uniqueTools)

@@ -1,4 +1,3 @@
-// @ts-check
 import pluginImport from 'eslint-plugin-import'
 import pluginJsxA11y from 'eslint-plugin-jsx-a11y'
 import pluginN from 'eslint-plugin-n'
@@ -6,16 +5,17 @@ import pluginPromise from 'eslint-plugin-promise'
 import pluginSimpleImport from 'eslint-plugin-simple-import-sort'
 import pluginUnusedImport from 'eslint-plugin-unused-imports'
 import globals from 'globals'
+import neostandard from 'neostandard'
 
 import { rules } from './rules.js'
-import { rules as standardRules } from './standard.js'
-import {
-  Runtime
-} from './types.js'
+import { Runtime } from './types.js'
 
 import eslint from '@eslint/js'
 import pluginStylistic from '@stylistic/eslint-plugin'
 import type { TSESLint } from '@typescript-eslint/utils'
+
+const neo = neostandard()
+const standardRules = neo[0].rules as TSESLint.FlatConfig.Rules
 
 // Re-export types and utilities
 export * from './types.js'

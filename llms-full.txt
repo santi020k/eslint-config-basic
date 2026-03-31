@@ -23,7 +23,7 @@ Framework-specific configurations are now optional peer dependencies. They are d
 - **Turborepo**: Orchestrates builds, linting, and tests across the monorepo.
 - **Changesets**: Automates semantic versioning and publishing.
 - **npm Overrides**: Ensures consistent versions across the plugin ecosystem.
-- **Modular Frameworks**: Frameworks like Svelte, Solid, Astro, Vue, and Angular are dynamically loaded in `packages/basic` to prevent peer dependency conflicts and reduce installation footprint.
+- **Modular Frameworks**: Frameworks like Svelte, Solid, Astro, Vue, Angular, Qwik, and Remix are dynamically loaded in `packages/basic` to prevent peer dependency conflicts and reduce installation footprint.
 
 ```json
 "overrides": {

@@ -1,4 +1,5 @@
 import * as pluginMdx from 'eslint-plugin-mdx'
+import tsEslint from 'typescript-eslint'
 
 import type { TSESLint } from '@typescript-eslint/utils'
 
@@ -36,5 +37,22 @@ export const mdx: TSESLint.FlatConfig.ConfigArray = [
     files: ['**/*.mdx'],
     ...pluginMdx.flatCodeBlocks,
     rules
+  } as TSESLint.FlatConfig.Config,
+  {
+    name: 'eslint-config-mdx/disable-type-checked',
+    files: ['**/*.mdx/*.ts', '**/*.mdx/*.tsx'],
+    languageOptions: {
+      parserOptions: {
+        project: null,
+        program: null,
+        projectService: false,
+        allowDefaultProject: true
+      }
+    },
+    rules: {
+      ...tsEslint.configs.disableTypeChecked.rules,
+      'no-unused-expressions': 'off',
+      '@typescript-eslint/no-unused-expressions': 'off'
+    }
   } as TSESLint.FlatConfig.Config
 ]

@@ -1,5 +1,3 @@
-import tsEslint from 'typescript-eslint'
-
 import type { FlatConfigArray } from '@santi020k/eslint-config-core'
 import type { TSESLint } from '@typescript-eslint/utils'
 
@@ -35,47 +33,3 @@ export const applyStrictMode = (configs: FlatConfigArray, strict: boolean): Flat
     return config
   }) as FlatConfigArray
 }
-
-/**
- * Returns global overrides for non-TS files to prevent typed rules errors (#15).
- */
-export const getTypedRulesOverrides = (): TSESLint.FlatConfig.Config => ({
-  name: 'eslint-config-basic/typed-rules-overrides',
-  files: [
-    '**/*.js',
-    '**/*.jsx',
-    '**/*.mjs',
-    '**/*.cjs',
-    '**/*.md',
-    '**/*.mdx',
-    '**/*.md/*.ts',
-    '**/*.md/*.tsx',
-    '**/*.mdx/*.ts',
-    '**/*.mdx/*.tsx',
-    '**/*.astro/*.js',
-    '**/*.astro/*.ts',
-    '**/*.vue/*.ts',
-    '**/*.vue/*.tsx',
-    '**/*.svelte/*.ts',
-    '**/*.svelte/*.tsx',
-    '**/.vitepress/**/*.ts',
-    '**/.vitepress/**/*.mts',
-    '**/.vitepress/**/*.tsx',
-    '**/.vitepress/**/*.js',
-    '**/.vitepress/**/*.mjs',
-    '**/.vitepress/**/*.jsx'
-  ],
-  languageOptions: {
-    parserOptions: {
-      project: null,
-      program: null,
-      projectService: false,
-      allowDefaultProject: true
-    }
-  },
-  rules: {
-    ...tsEslint.configs.disableTypeChecked.rules,
-    'no-unused-expressions': 'off',
-    '@typescript-eslint/no-unused-expressions': 'off'
-  }
-} as TSESLint.FlatConfig.Config)

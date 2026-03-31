@@ -112,7 +112,8 @@ export enum Preset {
 export const ReactConfigKeys = [
   'react',
   'next',
-  'expo'
+  'expo',
+  'remix'
 ] as const
 
 /**
@@ -187,6 +188,8 @@ export interface EslintConfigOptions {
     solid?: ImportedFramework
     angular?: ImportedFramework
     nest?: ImportedFramework
+    qwik?: ImportedFramework
+    remix?: ImportedFramework
   }
 }
 

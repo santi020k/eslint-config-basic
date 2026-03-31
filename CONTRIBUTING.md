@@ -34,6 +34,12 @@ This project uses **Turborepo** with **npm Workspaces**. Each ESLint config live
 | `@santi020k/eslint-config-next` | `packages/next` | Next.js rules |
 | `@santi020k/eslint-config-astro` | `packages/astro` | Astro rules |
 | `@santi020k/eslint-config-expo` | `packages/expo` | Expo/React Native rules |
+| `@santi020k/eslint-config-vue` | `packages/vue` | Vue.js rules |
+| `@santi020k/eslint-config-svelte` | `packages/svelte` | Svelte rules |
+| `@santi020k/eslint-config-solid` | `packages/solid` | Solid.js rules |
+| `@santi020k/eslint-config-angular` | `packages/angular` | Angular rules |
+| `@santi020k/eslint-config-qwik` | `packages/qwik` | Qwik rules |
+| `@santi020k/eslint-config-remix` | `packages/remix` | Remix rules |
 | `@santi020k/eslint-config-optionals` | `packages/optionals` | Optional configs (Tailwind, Vitest, etc.) |
 
 ## Adding a New Framework Config
@@ -95,18 +101,18 @@ This project uses **Turborepo** with **npm Workspaces**. Each ESLint config live
 
 5. **Create `packages/myframework/src/index.ts`:**
 
-```typescript
-import type { TSESLint } from '@typescript-eslint/utils'
+    ```typescript
+    import type { TSESLint } from '@typescript-eslint/utils'
 
-export const myframeworkConfig: TSESLint.FlatConfig.ConfigArray = [
-  {
-    name: 'eslint-config/myframework',
-    rules: {
-      // Add your rules here
-    }
-  }
-]
-```
+    export const myframeworkConfig: TSESLint.FlatConfig.ConfigArray = [
+      {
+        name: 'eslint-config/myframework',
+        rules: {
+          // Add your rules here
+        }
+      }
+    ]
+    ```
 
 6. **Compose in `packages/basic/src/index.ts`.**
 
@@ -114,20 +120,9 @@ export const myframeworkConfig: TSESLint.FlatConfig.ConfigArray = [
 
 ### Specific Framework Guides
 
-#### React, Next.js, Astro, Expo, NestJS
+#### React, Next.js, Astro, Expo, NestJS, Vue, Svelte, Solid, Angular, Qwik, Remix
+
 These are already implemented. See their respective `packages/` for reference.
-
-#### Vue (Future)
-1. Create `packages/vue`.
-2. Extend `eslint-plugin-vue` configs.
-3. Ensure TS compatibility.
-
-#### Angular (Future)
-1. Create `packages/angular`.
-2. Use `angular-eslint` capabilities.
-3. Note: Angular often requires a specific `builder` context.
-
-
 
 ## Adding a New Optional
 
@@ -177,9 +172,11 @@ npx cz
 
 1. Fork the repository and create your branch from `main`.
 2. Make sure all checks pass:
-   ```bash
-   npm run build && npm run lint && npm run test
-   ```
+
+    ```bash
+      npm run build && npm run lint && npm run test
+    ```
+
 3. Write clear, descriptive commit messages following conventional commits.
 4. Update documentation if you're changing public APIs.
 5. Add tests for new functionality.

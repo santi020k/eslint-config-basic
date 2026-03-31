@@ -76,6 +76,10 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
 
     if (allDeps['@angular/core']) frameworks.angular = true
 
+    if (allDeps['@builder.io/qwik']) frameworks.qwik = true
+
+    if (allDeps['@remix-run/react'] || allDeps['@remix-run/node']) frameworks.remix = true
+
     // Default to TS if tsconfig exists
     if (existsSync(join(cwd, 'tsconfig.json'))) {
       options.typescript = true
@@ -158,7 +162,11 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
     options.extensions = [...new Set(options.extensions)]
 
     return options
-  } catch {
+  } catch (err) {
+    if (process.env.ESLINT_BASIC_DEBUG) {
+      console.warn('[ESLint Basic] Failed to detect project options from package.json:', err)
+    }
+
     return options
   }
 }
