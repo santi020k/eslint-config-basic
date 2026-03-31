@@ -2,7 +2,17 @@ import { describe, expect, it } from 'vitest'
 
 import { extractConfigNames, extractRuleNames } from './test-utils.js'
 
-import { eslintConfig, Extension, Format, Library, Preset, Setting, Testing, Tool } from '@santi020k/eslint-config-basic'
+import {
+  eslintConfig,
+  Extension,
+  Format,
+  type ImportedFramework,
+  Library,
+  Preset,
+  Setting,
+  Testing,
+  Tool
+} from '@santi020k/eslint-config-basic'
 
 describe('eslintConfig Function', () => {
   it('should return an array when called with minimal options', () => {
@@ -218,7 +228,7 @@ describe('eslintConfig Function', () => {
 
     const config = eslintConfig({
       frameworks: {
-        react: mockConfig as any
+        react: mockConfig as ImportedFramework
       }
     })
 
