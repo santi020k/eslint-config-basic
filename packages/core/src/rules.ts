@@ -150,7 +150,16 @@ export const rules: TSESLint.FlatConfig.Rules = {
   '@stylistic/multiline-comment-style': 'off',
   'space-before-function-paren': 'off',
   'operator-linebreak': 'off',
-  '@stylistic/operator-linebreak': ['error', 'after']
+  '@stylistic/operator-linebreak': ['error', 'after'],
+
+  // Node rules
+  'n/no-extraneous-import': 'off',
+  'n/no-unsupported-features/node-builtins': 'off',
+  'n/no-missing-import': 'off',
+
+  // Promise rules
+  'promise/always-return': 'warn',
+  'promise/catch-or-return': 'warn'
 } satisfies TSESLint.FlatConfig.Rules
 
 export { groups }

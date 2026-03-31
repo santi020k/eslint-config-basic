@@ -1,2 +1,2 @@
-npm run typecheck
-npm run pre-commit
+pnpm run typecheck
+pnpm run pre-commit

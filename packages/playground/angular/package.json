@@ -11,11 +11,15 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@santi020k/eslint-config-basic": "*",
-    "@santi020k/eslint-config-angular": "*",
+    "@santi020k/eslint-config-basic": "workspace:^",
+    "@santi020k/eslint-config-angular": "workspace:^",
     "eslint": "^10.0.3",
     "@angular/core": "21.2.5",
     "@angular/router": "21.2.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "typescript": "^5.8.2"
   },
   "author": "santi020k",
   "license": "MIT",

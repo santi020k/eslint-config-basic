@@ -13,7 +13,7 @@
   "dependencies": {
     "@nestjs/common": "^11.1.16",
     "@nestjs/swagger": "^11.2.6",
-    "@santi020k/eslint-config-basic": "*",
+    "@santi020k/eslint-config-basic": "workspace:^",
     "eslint": "^10.0.3"
   },
   "author": "santi020k",
