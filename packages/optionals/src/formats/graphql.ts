@@ -16,7 +16,8 @@ export const graphql: TSESLint.FlatConfig.ConfigArray = [
       '@graphql-eslint': graphqlPlugin
     },
     rules: {
-      ...graphqlPlugin.configs['flat/schema-recommended'].rules
+      ...graphqlPlugin.configs['flat/schema-recommended'].rules,
+      '@graphql-eslint/no-unreachable-types': 'off'
     }
   },
   {

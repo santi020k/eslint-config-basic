@@ -30,7 +30,7 @@ export const reactConfig: TSESLint.FlatConfig.ConfigArray = [
     languageOptions,
     settings: {
       react: {
-        version: '19.0'
+        version: 'detect'
       }
     }
   })) as unknown as TSESLint.FlatConfig.ConfigArray),
