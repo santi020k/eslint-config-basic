@@ -1,7 +1,7 @@
 import * as fs from 'node:fs'
 import { describe, expect, it, vi } from 'vitest'
 
-import { detectProjectOptions, Library, Runtime, Testing, Tool } from '@santi020k/eslint-config-basic'
+import { detectProjectOptions, Format, Library, Runtime, Testing, Tool } from '@santi020k/eslint-config-basic'
 
 vi.mock('node:fs')
 
@@ -139,6 +139,28 @@ describe('detectProjectOptions', () => {
     const options = detectProjectOptions()
 
     expect(options.libraries).toContain(Library.Storybook)
+  })
+
+  it('should detect GraphQL when graphql is a dependency', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      dependencies: { graphql: 'latest' }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.formats).toContain(Format.Graphql)
+  })
+
+  it('should detect GraphQL when schema.graphql exists', () => {
+    vi.mocked(fs.existsSync).mockImplementation(path => path.toString().includes('schema.graphql') || path.toString().includes('package.json'))
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({ dependencies: {} }))
+
+    const options = detectProjectOptions()
+
+    expect(options.formats).toContain(Format.Graphql)
   })
 
   it('should handle missing package.json gracefully', () => {
