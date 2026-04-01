@@ -1,6 +1,6 @@
-# @santi020k/eslint-config-solid
+# @santi020k/eslint-config-qwik
 
-## 1.0.0
+## 0.8.2
 
 ### Patch Changes
 
@@ -28,32 +28,3 @@
   - **Turbo Optimizations**: Configured Turborepo to output in `errors-only` mode with `errorsOnlyShowHash` enabled, significantly reducing terminal noise during build and lint tasks.
   - **Integration Test Improvements**: Enhanced integration tests to be more robust, including proper `tsconfigRootDir` handling and better React version validation.
   - **Playground Synchronization**: Updated all playground packages to maintain parity with the latest framework rules.
-
-- [#55](https://github.com/santi020k/eslint-config-basic/pull/55) [`d8e4b4a`](https://github.com/santi020k/eslint-config-basic/commit/d8e4b4a61c2739dbffa3c823d8742ea234c5b731) Thanks [@santi020k](https://github.com/santi020k)! - feat: add standard ESLint configuration and resolve typecheck/hook failures
-
-  This release introduces a new standard configuration in `@santi020k/eslint-config-core` and addresses several technical issues:
-
-  - Fixed global typecheck failures across the monorepo.
-  - Resolved pre-commit hook issues with cspell.
-  - Fixed pre-push hook failures related to publint in the playground package.
-  - Added missing test coverage scripts and fixed CI build failures.
-
-## 0.8.1
-
-### Minor Changes
-
-- 13e8e5a: # Release 0.8.0
-
-  - **Snippet Fixes**: Resolved ESLint parsing errors in virtual TypeScript files within Markdown, Astro, and VitePress code blocks by disabling type-aware rules for those snippets.
-  - **Standalone TS Support**: Restored `disableTypeChecked` configuration in the TypeScript package, ensuring it remains fully functional and parsing-error-free when used without the main composer.
-  - **Documentation Reorganization**: Significantly expanded and restructured the documentation site, adding new pages for the Inspector, CLI Tooling, Extensions, and better framework-specific guides.
-  - **Branding Update**: Updated the author link label from "Website" to "Author" across all documentation files for improved brand identity.
-  - **Composition Improvements**: Refactored the configuration composer to be more robust when handling virtual snippets and framework contracts.
-
-### Patch Changes
-
-- # CI & Workflow Stabilization
-
-  - Fixed invalid `actions/setup-node` version from `@v6` to `@v4` in Release and Docs workflows.
-  - Improved CLI test performance and reliability by refactoring integration tests into fast in-memory unit tests.
-  - Enabled Turborepo caching in GitHub Actions to significantly reduce PR build times.
