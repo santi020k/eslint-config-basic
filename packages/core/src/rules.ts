@@ -32,7 +32,7 @@ const groups: string[][] = [
   ['^.+\\.?(css|scss)$']
 ]
 
-export const rules: TSESLint.FlatConfig.Rules = {
+export const rules: TSESLint.Linter.RulesRecord = {
   'unused-imports/no-unused-imports': 'warn',
   indent: 'off',
   'brace-style': 'off',
@@ -162,6 +162,6 @@ export const rules: TSESLint.FlatConfig.Rules = {
   // Promise rules
   'promise/always-return': 'warn',
   'promise/catch-or-return': 'warn'
-} satisfies TSESLint.FlatConfig.Rules
+}
 
 export { groups }
