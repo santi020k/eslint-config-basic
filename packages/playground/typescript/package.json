@@ -11,7 +11,7 @@
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
     "eslint": "^10.0.3",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.2"
   },
   "author": "santi020k",
   "license": "MIT",

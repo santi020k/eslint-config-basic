@@ -61,7 +61,7 @@
     "publint": "^0.3.18",
     "tailwindcss": "^4.2.2",
     "tsup": "^8.5.1",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.2",
     "@typescript-eslint/utils": "^8.57.2"
   },
   "publishConfig": {
