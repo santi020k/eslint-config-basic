@@ -54,7 +54,13 @@ export const expoConfig: TSESLint.FlatConfig.ConfigArray = [
   ...sanitizedConfigs,
   {
     name: 'eslint-config-expo/custom',
-    rules
+    settings: {
+      'import/ignore': ['react-native']
+    },
+    rules: {
+      ...rules,
+      'no-use-before-define': ['error', { variables: false }]
+    }
   }
 ]
 

@@ -43,6 +43,9 @@ importers:
       lint-staged:
         specifier: ^16.4.0
         version: 16.4.0
+      tailwindcss:
+        specifier: ^4.2.2
+        version: 4.2.2
       ts-json-schema-generator:
         specifier: ^2.9.0
         version: 2.9.0
@@ -797,6 +800,9 @@ importers:
       '@santi020k/eslint-config-basic':
         specifier: workspace:^
         version: link:../../basic
+      '@santi020k/eslint-config-react':
+        specifier: workspace:^
+        version: link:../../react
       '@santi020k/eslint-config-remix':
         specifier: workspace:^
         version: link:../../remix
