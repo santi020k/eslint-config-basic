@@ -13,7 +13,8 @@
     "mdx",
     "astro",
     "svelte",
-    "vue"
+    "vue",
+    "graphql"
   ],
   // required to make the extension pickup the flat config
   "eslint.useFlatConfig": true,

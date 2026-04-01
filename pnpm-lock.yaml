@@ -683,6 +683,12 @@ importers:
       '@santi020k/eslint-config-basic':
         specifier: workspace:^
         version: link:../../../basic
+      '@santi020k/eslint-config-react':
+        specifier: workspace:^
+        version: link:../../../react
+      '@santi020k/eslint-config-typescript':
+        specifier: workspace:^
+        version: link:../../../typescript
       '@tanstack/react-router':
         specifier: ^1.92.5
         version: 1.168.10(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -692,6 +698,9 @@ importers:
       eslint:
         specifier: ^10.0.3
         version: 10.1.0(jiti@2.6.1)
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
 
   packages/playground/nest:
     dependencies:

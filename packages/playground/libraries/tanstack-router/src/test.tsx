@@ -1,4 +1,3 @@
-import { Link } from "@tanstack/react-router";
+import { Link } from '@tanstack/react-router'
 
-// eslint-disable-next-line @tanstack/router/missing-to
 export const a = () => <Link to=".">foo</Link>
