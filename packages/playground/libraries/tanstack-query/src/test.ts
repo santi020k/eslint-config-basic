@@ -1,3 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
-// eslint-disable-next-line @tanstack/query/exhaustive-deps
-useQuery({ queryKey: ["foo"], queryFn: () => {} });
+import { useQuery } from '@tanstack/react-query'
+
+useQuery({ queryKey: ['foo'], queryFn: () => 'bar' })
