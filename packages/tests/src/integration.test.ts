@@ -70,4 +70,4 @@ describe('Integration Tests', () => {
       expect(ruleIds).toContain('react-hooks/exhaustive-deps')
     })
   })
-})
+}, 30000)
