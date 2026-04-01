@@ -409,6 +409,7 @@ exports[`Config Snapshots — Rule Names > expo config rules should match snapsh
   "no-unused-expressions",
   "no-unused-labels",
   "no-unused-vars",
+  "no-use-before-define",
   "no-useless-constructor",
   "no-var",
   "no-with",
