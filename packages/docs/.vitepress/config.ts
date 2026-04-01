@@ -1,5 +1,8 @@
+import { createRequire } from 'node:module'
 import { defineConfig } from 'vitepress'
 
+const require = createRequire(import.meta.url)
+const pkg = require('../../basic/package.json') as { version: string }
 const base = process.env.DOCS_BASE ?? '/'
 const site = process.env.DOCS_SITE_URL ?? 'https://eslint.santi020k.me'
 
@@ -28,6 +31,7 @@ export default defineConfig({
       { text: 'Tooling', link: '/tooling/overview' },
       { text: 'Packages', link: '/packages/basic' },
       { text: 'API', link: '/api/' },
+      { text: `v${pkg.version}`, link: 'https://www.npmjs.com/package/@santi020k/eslint-config-basic' },
       { text: 'GitHub', link: 'https://github.com/santi020k/eslint-config-basic' },
       { text: 'Website', link: 'https://santi020k.me' }
     ],

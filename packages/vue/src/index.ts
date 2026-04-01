@@ -1,5 +1,4 @@
 import pluginVue from 'eslint-plugin-vue'
-import tsEslint from 'typescript-eslint'
 import vueParser from 'vue-eslint-parser'
 
 import { rules } from './rules.js'
@@ -25,18 +24,11 @@ export const vueConfig: TSESLint.FlatConfig.ConfigArray = [
     rules
   },
   {
-    name: 'eslint-config-vue/disable-type-checked',
+    // Disable rules that cause false positives in Vue virtual script blocks.
+    // Type-checked rule disabling is handled by @santi020k/eslint-config-typescript.
+    name: 'eslint-config-vue/virtual-script-rules',
     files: ['**/*.vue/*.ts', '**/*.vue/*.tsx'],
-    languageOptions: {
-      parserOptions: {
-        project: null,
-        program: null,
-        projectService: false,
-        allowDefaultProject: true
-      }
-    },
     rules: {
-      ...tsEslint.configs.disableTypeChecked.rules,
       'no-unused-expressions': 'off',
       '@typescript-eslint/no-unused-expressions': 'off'
     }

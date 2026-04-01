@@ -7,7 +7,7 @@ import pluginUnusedImport from 'eslint-plugin-unused-imports'
 import globals from 'globals'
 
 import { rules } from './rules.js'
-import { GLOB_JS_TS, Runtime } from './types.js'
+import { GLOB_JS_TS_ALL, Runtime } from './types.js'
 
 import eslint from '@eslint/js'
 import pluginStylistic from '@stylistic/eslint-plugin'
@@ -29,6 +29,7 @@ export const getGlobalsForRuntime = (runtime: Runtime = Runtime.Universal): TSES
       return { ...globals.browser }
 
     case Runtime.Universal:
+      break
 
     default:
       return {
@@ -76,7 +77,7 @@ export const createCoreConfig = (runtime: Runtime = Runtime.Universal): TSESLint
     }
   ] as TSESLint.FlatConfig.Config[]).map(config => ({
     ...config,
-    files: config.files ?? GLOB_JS_TS
+    files: config.files ?? GLOB_JS_TS_ALL
   }))
 
   return [

@@ -1,13 +1,8 @@
 <script>
   let count = $state(0)
-  let elem
 
   const increment = () => {
     count += 1
-  }
-
-  const setContent = () => {
-    if (elem) elem.innerHTML = '<p>test</p>'
   }
 
   $effect(() => {

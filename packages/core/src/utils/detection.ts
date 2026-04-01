@@ -99,8 +99,7 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
     // Default to TS if tsconfig exists
     if (
       existsSync(join(cwd, 'tsconfig.json')) ||
-      existsSync(join(cwd, 'tsconfig.base.json')) ||
-      existsSync(join(cwd, 'tsconfig.dev.json'))
+      existsSync(join(cwd, 'tsconfig.base.json'))
     ) {
       options.typescript = true
     }

@@ -1,5 +1,4 @@
 import pluginAstro from 'eslint-plugin-astro'
-import tsEslint from 'typescript-eslint'
 
 import { rules } from './rules.js'
 
@@ -21,22 +20,9 @@ export const astroConfig: TSESLint.FlatConfig.ConfigArray = [
     files: ['**/*.astro/*.js', '*.astro/*.js', '**/*.astro/*.ts', '*.astro/*.ts'],
     languageOptions: { sourceType: 'module' },
     rules: {
-      'prettier/prettier': 'off'
-    }
-  },
-  {
-    name: 'eslint-config-astro/disable-type-checked',
-    files: ['**/*.astro/*.js', '**/*.astro/*.ts'],
-    languageOptions: {
-      parserOptions: {
-        project: null,
-        program: null,
-        projectService: false,
-        allowDefaultProject: true
-      }
-    },
-    rules: {
-      ...tsEslint.configs.disableTypeChecked.rules,
+      'prettier/prettier': 'off',
+      // Disable rules that cause false positives in Astro virtual script blocks.
+      // Type-checked rule disabling is handled by @santi020k/eslint-config-typescript.
       'no-unused-expressions': 'off',
       '@typescript-eslint/no-unused-expressions': 'off'
     }
