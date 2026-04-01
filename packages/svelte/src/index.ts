@@ -1,5 +1,4 @@
 import pluginSvelte from 'eslint-plugin-svelte'
-import tsEslint from 'typescript-eslint'
 
 import type { TSESLint } from '@typescript-eslint/utils'
 
@@ -18,18 +17,11 @@ export const svelteConfig: TSESLint.FlatConfig.ConfigArray = [
     }
   },
   {
-    name: 'eslint-config-svelte/disable-type-checked',
+    // Disable rules that cause false positives in Svelte virtual script blocks.
+    // Type-checked rule disabling is handled by @santi020k/eslint-config-typescript.
+    name: 'eslint-config-svelte/virtual-script-rules',
     files: ['**/*.svelte/*.ts', '**/*.svelte/*.tsx'],
-    languageOptions: {
-      parserOptions: {
-        project: null,
-        program: null,
-        projectService: false,
-        allowDefaultProject: true
-      }
-    },
     rules: {
-      ...tsEslint.configs.disableTypeChecked.rules,
       'no-unused-expressions': 'off',
       '@typescript-eslint/no-unused-expressions': 'off'
     }

@@ -1,6 +1,6 @@
 import type { TSESLint } from '@typescript-eslint/utils'
 
-export const rules: TSESLint.Linter.RulesRecord = {
+export const standardRules: TSESLint.Linter.RulesRecord = {
   // Disable rules that conflict with TypeScript
   semi: 'off',
   'no-unused-vars': 'off',
@@ -31,8 +31,10 @@ export const rules: TSESLint.Linter.RulesRecord = {
   '@typescript-eslint/no-dynamic-delete': 'warn',
   '@typescript-eslint/no-useless-constructor': 'warn',
   '@typescript-eslint/prefer-for-of': 'warn',
-  '@typescript-eslint/no-duplicate-enum-values': 'warn',
+  '@typescript-eslint/no-duplicate-enum-values': 'warn'
+}
 
+export const typeCheckedRules: TSESLint.Linter.RulesRecord = {
   // Type-aware correctness rules (high-value, require parserOptions.project)
   '@typescript-eslint/no-floating-promises': 'error',
   '@typescript-eslint/no-misused-promises': ['error', {
@@ -58,4 +60,9 @@ export const rules: TSESLint.Linter.RulesRecord = {
     prefer: 'type-imports',
     fixStyle: 'inline-type-imports'
   }]
+}
+
+export const rules: TSESLint.Linter.RulesRecord = {
+  ...standardRules,
+  ...typeCheckedRules
 }
