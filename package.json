@@ -5,7 +5,7 @@
     "access": "public"
   },
   "homepage": "https://eslint.santi020k.me/",
-  "version": "0.8.1",
+  "version": "1.0.0",
   "type": "module",
   "license": "MIT",
   "engines": {
