@@ -28,6 +28,16 @@ describe('Core Config', () => {
 
     expect(hasNames).toBe(true)
   })
+
+  it('should include core plugins', () => {
+    const plugins = coreConfig.flatMap(c => Object.keys(c.plugins ?? {}))
+    expect(plugins).toContain('n')
+    expect(plugins).toContain('promise')
+    expect(plugins).toContain('import')
+    expect(plugins).toContain('simple-import-sort')
+    expect(plugins).toContain('unused-imports')
+    expect(plugins).toContain('@stylistic')
+  })
 })
 
 describe('TypeScript Config', () => {
@@ -38,6 +48,11 @@ describe('TypeScript Config', () => {
   it('should have at least one config entry', () => {
     expect(typescriptConfig.length).toBeGreaterThan(0)
   })
+
+  it('should include typescript-eslint plugin', () => {
+    const plugins = typescriptConfig.flatMap(c => Object.keys(c.plugins ?? {}))
+    expect(plugins).toContain('@typescript-eslint')
+  })
 })
 
 describe('React Config', () => {
@@ -47,6 +62,12 @@ describe('React Config', () => {
 
   it('should have at least one config entry', () => {
     expect(reactConfig.length).toBeGreaterThan(0)
+  })
+
+  it('should include react-related plugins', () => {
+    const plugins = reactConfig.flatMap(c => Object.keys(c.plugins ?? {}))
+    expect(plugins).toContain('react')
+    expect(plugins).toContain('react-hooks')
   })
 })
 

@@ -5,5 +5,4 @@ export default eslintConfig({
   tsconfigRootDir: import.meta.dirname,
   typescript: true,
   libraries: [Library.Stencil]
-
 })

@@ -4,14 +4,13 @@
   "type": "module",
   "scripts": {
     "lint": "eslint .",
-    "build": "echo \"No build step required\"",
-    "dev": "echo \"No build step required\"",
     "clean": "rm -rf dist node_modules",
     "check:exports": "echo \"No exports to check\"",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@santi020k/eslint-config-basic": "*",
+    "@nestjs/common": "^11.1.17",
+    "@santi020k/eslint-config-basic": "workspace:^",
     "eslint": "^9.6.0"
   },
   "author": "santi020k",

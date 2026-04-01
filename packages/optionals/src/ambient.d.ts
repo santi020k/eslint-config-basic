@@ -1,7 +1,3 @@
-declare module 'cross-dirname' {
-  export function getDirname(): string
-}
-
 declare module '@stencil-community/eslint-plugin' {
   const plugin: {
     rules: Record<string, unknown>
@@ -32,20 +28,6 @@ declare module 'eslint-plugin-security' {
       }
     }
     rules: TSESLint.FlatConfig.Plugin['rules']
-  }
-
-  export default plugin
-}
-
-declare module 'eslint-plugin-cypress' {
-  import type { TSESLint } from '@typescript-eslint/utils'
-
-  const plugin: {
-    configs: {
-      recommended: {
-        rules: TSESLint.FlatConfig.Rules
-      }
-    }
   }
 
   export default plugin

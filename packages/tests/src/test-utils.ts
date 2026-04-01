@@ -1,3 +1,5 @@
+import { ESLint } from 'eslint'
+import type { Linter } from 'eslint'
 import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
@@ -45,4 +47,35 @@ export const getEffectiveRuleValue = (
   }
 
   return value
+}
+
+/**
+ * Helper: lint a string of code with a given config
+ */
+export const lintText = async (
+  code: string,
+  config: readonly TSESLint.FlatConfig.Config[],
+  fileName = 'test.ts'
+): Promise<ESLint.LintResult[]> => {
+  const eslint = new ESLint({
+    overrideConfigFile: true,
+    overrideConfig: config as Linter.Config[],
+  })
+
+  return await eslint.lintText(code, { filePath: fileName })
+}
+
+/**
+ * Helper: lint a file with a given config
+ */
+export const lintFile = async (
+  filePath: string,
+  config: readonly TSESLint.FlatConfig.Config[]
+): Promise<ESLint.LintResult[]> => {
+  const eslint = new ESLint({
+    overrideConfigFile: true,
+    overrideConfig: config as Linter.Config[],
+  })
+
+  return await eslint.lintFiles([filePath])
 }

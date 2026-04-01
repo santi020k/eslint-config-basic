@@ -6,7 +6,7 @@
 [![Docs](https://img.shields.io/badge/docs-VitePress-114d66.svg)](https://eslint.santi020k.me/)
 [![license](https://img.shields.io/npm/l/@santi020k/eslint-config-basic.svg)](https://github.com/santi020k/eslint-config-basic/blob/main/LICENSE)
 
-Composable ESLint 10+ flat-config tooling for JavaScript and TypeScript projects, with optional framework packages for React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, and Expo.
+Composable ESLint 10+ flat-config tooling for JavaScript and TypeScript projects, with optional framework packages for React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Expo, Qwik, and Remix.
 
 ## Canonical Docs
 
@@ -17,7 +17,7 @@ Composable ESLint 10+ flat-config tooling for JavaScript and TypeScript projects
 ## ✨ Key Features
 
 - **🎯 Composable & Modular**: Mix and match configurations for different frameworks and tools using a clean, options-based API.
-- **🔍 Zero-Config Auto-Detection**: Automatically detects your project's frameworks, libraries, and tools to provide a sensible default configuration.
+- **🔍 Deep Auto-Detection**: Automatically detects your project's frameworks, libraries, and tools. Core features like TypeScript and runtime presets are enabled by default if detected.
 - **⚡ Lazy Loading**: Framework-specific configurations are loaded only when needed, ensuring maximum performance and avoiding unnecessary peer dependency conflicts.
 - **🛡️ Strict Mode**: Opt-in `strict: true` to promote all warnings to errors, perfect for CI/CD and maintaining high code standards.
 - **🌐 Smart Runtime Support**: Built-in support for Node.js, Browser, or Universal runtimes with appropriate globals and rules.
@@ -34,12 +34,43 @@ npm install -D eslint @santi020k/eslint-config-basic
 
 ### Usage
 
-Create an `eslint.config.js` in your project root:
+Create an `eslint.config.js` in your project root. By default, it will detect your project settings:
 
 ```js
 import { eslintConfig } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig()
+```
+
+### Comprehensive Example
+
+Here is an example with many features activated. Note that many of these are automatically detected if the corresponding packages are in your `package.json`.
+
+```js
+import { eslintConfig, Extension, Format, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
+import next from '@santi020k/eslint-config-next'
+import react from '@santi020k/eslint-config-react'
+
+export default eslintConfig({
+  // Explicitly enable TypeScript (auto-detected if tsconfig.json exists)
+  typescript: true,
+
+  // Strict mode: warnings become errors
+  strict: true,
+
+  // Frameworks (imports are lazy-loaded)
+  frameworks: {
+    react,
+    next
+  },
+
+  // Optional integrations
+  libraries: [Library.Tailwind, Library.TanstackQuery],
+  testing: [Testing.Vitest, Testing.Playwright, Testing.TestingLibrary],
+  formats: [Format.Mdx, Format.Jsonc, Format.Graphql],
+  tools: [Tool.Prettier, Tool.Cspell],
+  extensions: [Extension.Unicorn, Extension.Sonarjs, Extension.Perfectionist]
+})
 ```
 
 ## Framework packages
@@ -54,13 +85,17 @@ export default eslintConfig()
 - Angular: [`@santi020k/eslint-config-angular`](https://eslint.santi020k.me/frameworks/angular.html)
 - NestJS: [`@santi020k/eslint-config-nest`](https://eslint.santi020k.me/frameworks/nest.html)
 - Expo: [`@santi020k/eslint-config-expo`](https://eslint.santi020k.me/frameworks/expo.html)
+- Qwik: [`@santi020k/eslint-config-qwik`](https://eslint.santi020k.me/frameworks/qwik.html)
+- Remix: [`@santi020k/eslint-config-remix`](https://eslint.santi020k.me/frameworks/remix.html)
 
 ## Development
 
 ```bash
-npm run build   # Build all packages
-npm run test    # Run integration tests
-npm run lint    # Run linting checks
+pnpm install    # Install dependencies
+pnpm run build  # Build all packages
+pnpm run test   # Run integration tests
+pnpm run lint   # Run linting checks
+pnpm run ok     # Run all checks
 ```
 
 ---

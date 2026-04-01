@@ -1,8 +1,11 @@
 version: "0.2"
 language: en
 words:
+  - activedescendant
   - app-router
   - astro
+  - asyncgenerator
+  - asynciterable
   - better-tailwindcss
   - canonicalurl
   - changeset
@@ -15,11 +18,13 @@ words:
   - dev-dependency
   - dts
   - eslint-config
+  - esmodule
   - expo
   - fetchcontent
   - flat-config
   - getentrybyslug
   - gitignore
+  - importscripts
   - isnan
   - istanbul
   - jsonc
@@ -41,6 +46,7 @@ words:
   - nogitignore
   - nonconstructor
   - nonoctal
+  - nonwords
   - orchestrates
   - packagemanager
   - peer-dependency
@@ -48,6 +54,8 @@ words:
   - polyfillio
   - postpack
   - project-type
+  - proptypes
+  - qwik
   - root-dir
   - santi
   - santi020k
@@ -56,6 +64,7 @@ words:
   - sonarjs
   - st
   - stnl
+  - stringly
   - stylistic
   - svelte
   - Tanstack
@@ -67,16 +76,17 @@ words:
   - tsup
   - tsx
   - turborepo
+  - typedarrays
   - typedoc
+  - urql
   - v8
   - vdom
+  - vitepress
   - vitest
   - vue
-  - esmodule
-  - nonwords
+  - weakref
   - workspace
   - workspaces
-  - vitepress
 ignorePaths:
   - node_modules
   - dist
@@ -84,7 +94,7 @@ ignorePaths:
   - .turbo
   - .git
   - .changeset
-  - package-lock.json
+  - pnpm-lock.yaml
   - "*.log"
   - docs
   - docs-md

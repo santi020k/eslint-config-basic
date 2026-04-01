@@ -4,15 +4,13 @@
   "type": "module",
   "scripts": {
     "lint": "eslint .",
-    "build": "echo \"No build step required\"",
-    "dev": "echo \"No build step required\"",
     "clean": "rm -rf dist node_modules",
     "check:exports": "echo \"No exports to check\"",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@nestjs/swagger": "11.2.6",
-    "@santi020k/eslint-config-basic": "*",
+    "@santi020k/eslint-config-basic": "workspace:^",
     "eslint": "^10.0.3",
     "eslint-plugin-unicorn": "63.0.0",
     "vitest": "^4.1.0"

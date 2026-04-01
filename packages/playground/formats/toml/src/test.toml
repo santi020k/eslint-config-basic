@@ -1,3 +1,5 @@
 [a]
 b = 1
 c = [1, "a"]
+# eslint-disable-next-line toml/no-unreadable-number-separator
+d = 1_2_3

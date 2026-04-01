@@ -4,8 +4,6 @@
   "type": "module",
   "scripts": {
     "lint": "eslint .",
-    "build": "echo \"No build step required\"",
-    "dev": "echo \"No build step required\"",
     "clean": "rm -rf dist node_modules",
     "check:exports": "echo \"No exports to check\"",
     "typecheck": "tsc --noEmit"
@@ -13,7 +11,7 @@
   "dependencies": {
     "@nestjs/common": "^11.1.16",
     "@nestjs/swagger": "^11.2.6",
-    "@santi020k/eslint-config-basic": "*",
+    "@santi020k/eslint-config-basic": "workspace:^",
     "eslint": "^10.0.3"
   },
   "author": "santi020k",

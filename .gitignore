@@ -6,3 +6,6 @@ dist/
 .turbo/
 /docs/
 /docs-md/
+
+# npm lock file (project uses pnpm)
+package-lock.json

@@ -7,13 +7,21 @@ description: How to add a new optional ESLint configuration to the @santi020k/es
 
 Follow these steps to add a new optional configuration to the project. Optional configs are extensions (e.g., Prettier, Tailwind, Vitest) that users can choose to activate.
 
+Optionals are categorized into five types. Choose the right category before starting:
+
+| Category | Enum | Examples |
+| :--- | :--- | :--- |
+| `tools` | `Tool` | Prettier, Cspell, Jsdoc, Swagger |
+| `libraries` | `Library` | Tailwind, I18next, Stencil, TanstackQuery, TanstackRouter, Storybook |
+| `testing` | `Testing` | Vitest, Playwright, Jest, Cypress, TestingLibrary |
+| `formats` | `Format` | Mdx, Markdown, Jsonc, Yaml, Toml, Graphql |
+| `extensions` | `Extension` | Regexp, Unicorn, Sonarjs, Security, Perfectionist |
+
 ## 1. Create the Configuration File
 
-Create a new file in `packages/optionals/src/configs/{name}.ts`.
+Create a new file in `packages/optionals/src/{category}/{name}.ts`.
 
 ```typescript
-import type { TSESLint } from '@typescript-eslint/utils'
-
 export const myOptionalConfig: TSESLint.FlatConfig.ConfigArray = [
   {
     name: 'eslint-config/myoptional',
@@ -31,41 +39,32 @@ export const myOptionalConfig: TSESLint.FlatConfig.ConfigArray = [
 In `packages/optionals/src/index.ts`, export the new optional config you created:
 
 ```typescript
-export * from './configs/myoptional.ts' // Make sure you export the config array
+export { myOptionalConfig } from './{category}/{name}.js'
 ```
 
 ## 3. Register the Optional in the Core Enums
 
-Open `packages/core/src/types.ts` and locate the `OptionalOption` enum. Add your new optional to the enum.
+Open `packages/core/src/types.ts` and locate the appropriate enum for your category. Add your new optional as a new enum value:
+
+- For a library → add to `Library` enum: `MyLib = 'mylib'`
+- For a tool → add to `Tool` enum: `MyTool = 'mytool'`
+- For a testing framework → add to `Testing` enum: `MyTest = 'mytest'`
+- For a file format → add to `Format` enum: `MyFormat = 'myformat'`
+- For an extension → add to `Extension` enum: `MyExt = 'myext'`
+
+## 4. Wire the Optional into the Optionals Module
+
+Open `packages/basic/src/optionals.ts`. Add an import at the top of the file alongside the existing imports from `@santi020k/eslint-config-optionals`. Then add the conditional push in the appropriate section of `getOptionalConfigs()`:
 
 ```typescript
-export enum OptionalOption {
-  // ... existing optionals
-  MyOptional = 'myoptional'
-}
+// Example: for a Library
+if (libraries.includes(Library.MyLib)) configs.push(...myOptionalConfig)
+
+// Example: for a Tool (non-Prettier)
+if (tools.includes(Tool.MyTool)) configs.push(...myOptionalConfig)
 ```
 
-## 4. Wire the Optional into the Main Config
-
-Open `packages/basic/src/index.ts` and modify the `eslintConfig` function.
-
-Ensure you're importing the new optional:
-
-```typescript
-// eslint-disable-next-line unused-imports/no-unused-imports
-import { myOptionalConfig } from '@santi020k/eslint-config-optionals'
-```
-
-And add it to the final array that the `eslintConfig()` function returns, making sure to spread the array if the option is passed:
-
-```typescript
-[
-  // ...
-  ...(uniqueOptionals.includes(OptionalOption.MyOptional) ? myOptionalConfig : [])
-]
-```
-
-*Note: Ensure `Prettier` remains the last config applied.*
+*Note: Ensure `Prettier` remains the last config applied (it goes through `getPrettierConfig()`, not `getOptionalConfigs()`).*
 
 ## 5. Verify the Changes
 

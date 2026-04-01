@@ -98,9 +98,9 @@ If the framework or its plugins don't have built-in TypeScript types:
 2. Update `packages/basic/src/index.ts`:
    - Import the new config from `@santi020k/eslint-config-myframework`.
    - Export it from `packages/basic`.
-   - Wire it into the `eslintConfig()` function in `packages/basic/src/index.ts` by adding it to the `frameworks` object handling.
+   - Wire it into the `eslintConfig()` function in `packages/basic/src/index.ts` by adding it to the `frameworks` object handling via `resolveFramework('myframework', frameworks.myframework)`.
 
-## 6. Validate
+## 7. Validate
 
 Run the validation commands from the repo root to ensure everything connects perfectly:
 

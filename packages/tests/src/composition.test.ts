@@ -2,7 +2,17 @@ import { describe, expect, it } from 'vitest'
 
 import { extractConfigNames, extractRuleNames } from './test-utils.js'
 
-import { eslintConfig, Extension, Format, Library, Preset, Setting, Testing, Tool } from '@santi020k/eslint-config-basic'
+import {
+  eslintConfig,
+  Extension,
+  Format,
+  type ImportedFramework,
+  Library,
+  Preset,
+  Setting,
+  Testing,
+  Tool
+} from '@santi020k/eslint-config-basic'
 
 describe('eslintConfig Function', () => {
   it('should return an array when called with minimal options', () => {
@@ -175,7 +185,8 @@ describe('eslintConfig Function', () => {
 
     expect(names).toContain('optionals/testing-library')
 
-    expect(names).toContain('optionals/graphql')
+    expect(names).toContain('optionals/graphql/schema')
+    expect(names).toContain('optionals/graphql/operations')
   })
 
   it('should handle duplicate optional entries without doubling config blocks', () => {
@@ -218,7 +229,7 @@ describe('eslintConfig Function', () => {
 
     const config = eslintConfig({
       frameworks: {
-        react: mockConfig as any
+        react: mockConfig as ImportedFramework
       }
     })
 
@@ -261,7 +272,8 @@ describe('eslintConfig Function', () => {
     const names = extractConfigNames(config)
 
     expect(names).toContain('eslint-config/prettier')
-    expect(names).toContain('optionals/graphql')
+    expect(names).toContain('optionals/graphql/schema')
+    expect(names).toContain('optionals/graphql/operations')
     expect(names).not.toContain('eslint-config-react/recommended')
   })
 })

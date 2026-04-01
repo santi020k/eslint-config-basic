@@ -6,13 +6,20 @@ export default defineConfig({
   splitting: true,
   clean: true, // clean up the dist folder
   dts: true, // generate dts files
+  bundle: false,
   format: ['esm'], // generate esm files
   minify: false,
   // bundle: env === 'production',
   skipNodeModulesBundle: true,
-  entryPoints: ['src/index.ts'],
+  entryPoints: ["src/index.ts"],
   watch: env === 'development',
   target: 'es2020',
   outDir: 'dist',
-  entry: ['src/**/*.ts'] // include all files under src
+  entry: [
+    'src/index.ts',
+    'src/compose.ts',
+    'src/optionals.ts',
+    'src/resolvers.ts',
+    'src/cli.ts'
+  ]
 })

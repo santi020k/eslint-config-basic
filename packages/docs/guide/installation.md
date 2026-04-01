@@ -37,6 +37,8 @@ Other supported packages are documented in the [Framework guides](/frameworks/ty
 | Solid | `eslint`, `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-solid` | Combine with TypeScript as needed. |
 | Angular | `eslint`, `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-angular` | Usually paired with TypeScript. |
 | NestJS | `eslint`, `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-nest` | Commonly paired with `Preset.Node` or `Runtime.Node`. |
+| Qwik | `eslint`, `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-qwik` | Optimized for Qwik resumability. |
+| Remix | `eslint`, `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-remix`, `@santi020k/eslint-config-react` | React is required. |
 | Expo | `eslint`, `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-expo`, `@santi020k/eslint-config-react` | React is required. |
 
 ## Optional Tooling Matrix

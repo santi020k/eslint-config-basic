@@ -1,0 +1,23 @@
+"""
+User object representing a profile
+"""
+type User {
+  id: ID!
+  """
+  Full name of the user
+  """
+  name: String!
+  email: String!
+}
+
+"""
+Root Query type
+"""
+type Query {
+  """
+  Fetch a user by ID
+  """
+  user(id: ID!): User
+  # eslint-disable-next-line @graphql-eslint/naming-convention, @graphql-eslint/no-typename-prefix, @graphql-eslint/require-description
+  queryData: String
+}

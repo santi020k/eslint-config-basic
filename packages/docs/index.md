@@ -22,7 +22,7 @@ features:
   - title: Playground Driven
     details: Every major integration is checked against a real playground package, not only config snapshots.
   - title: Explicit Framework Contracts
-    details: React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Expo, and TypeScript all have dedicated setup pages.
+    details: React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Expo, Qwik, Remix, and TypeScript all have dedicated setup pages.
   - title: Monorepo Transparency
     details: Guides point back to the repository, package folders, and playground examples so the documentation stays grounded in the real codebase.
   - title: API Reference Included

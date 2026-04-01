@@ -1,8 +1,13 @@
 <script>
   let count = $state(0)
+  let elem
 
   const increment = () => {
     count += 1
+  }
+
+  const setContent = () => {
+    if (elem) elem.innerHTML = '<p>test</p>'
   }
 
   $effect(() => {
@@ -18,6 +23,7 @@
 </main>
 
 <style>
+  /* Test: color rule is active - svelte-specific linting rule */
   main {
     padding: 1rem;
   }

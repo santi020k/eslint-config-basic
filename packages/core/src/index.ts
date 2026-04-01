@@ -1,5 +1,4 @@
-// @ts-check
-import pluginImport from 'eslint-plugin-import'
+import pluginImport from 'eslint-plugin-import-x'
 import pluginJsxA11y from 'eslint-plugin-jsx-a11y'
 import pluginN from 'eslint-plugin-n'
 import pluginPromise from 'eslint-plugin-promise'
@@ -8,10 +7,7 @@ import pluginUnusedImport from 'eslint-plugin-unused-imports'
 import globals from 'globals'
 
 import { rules } from './rules.js'
-import { rules as standardRules } from './standard.js'
-import {
-  Runtime
-} from './types.js'
+import { GLOB_JS_TS, Runtime } from './types.js'
 
 import eslint from '@eslint/js'
 import pluginStylistic from '@stylistic/eslint-plugin'
@@ -19,7 +15,6 @@ import type { TSESLint } from '@typescript-eslint/utils'
 
 // Re-export types and utilities
 export * from './types.js'
-
 export * from './utils/index.js'
 
 /**
@@ -53,37 +48,50 @@ export const createCoreConfig = (runtime: Runtime = Runtime.Universal): TSESLint
     globals: getGlobalsForRuntime(runtime)
   }
 
-  return [
+  const coreConfigs = ([
     {
       name: '@eslint/js/recommended',
       ...eslint.configs.recommended
     },
-    {
-      name: 'eslint-config/plugins',
-      plugins: {
-        n: pluginN,
-        promise: pluginPromise,
-        import: { rules: pluginImport.rules },
-        'simple-import-sort': pluginSimpleImport,
-        'jsx-a11y': pluginJsxA11y,
-        'unused-imports': pluginUnusedImport
-      },
-      languageOptions,
-      rules: {
-        ...standardRules,
-        'import/first': 'off'
-      }
-    },
+    pluginN.configs['flat/recommended'],
+    pluginPromise.configs['flat/recommended'],
     {
       name: 'eslint-config/stylistic',
       ...pluginStylistic.configs.recommended
+    },
+    {
+      name: 'eslint-config/plugins-rules',
+      languageOptions,
+      rules: {
+        'import/first': 'error',
+        'simple-import-sort/imports': 'error',
+        'simple-import-sort/exports': 'error',
+        'unused-imports/no-unused-imports': 'error'
+      }
     },
     {
       name: 'eslint-config/custom-rules',
       languageOptions,
       rules
     }
-  ]
+  ] as TSESLint.FlatConfig.Config[]).map(config => ({
+    ...config,
+    files: config.files ?? GLOB_JS_TS
+  }))
+
+  return [
+    {
+      name: 'eslint-config/plugins',
+      plugins: {
+        import: pluginImport,
+        '@stylistic': pluginStylistic,
+        'simple-import-sort': pluginSimpleImport,
+        'jsx-a11y': pluginJsxA11y,
+        'unused-imports': pluginUnusedImport
+      }
+    },
+    ...coreConfigs
+  ] as TSESLint.FlatConfig.ConfigArray
 }
 
 /**
@@ -96,7 +104,7 @@ export const coreConfig: TSESLint.FlatConfig.ConfigArray = createCoreConfig()
 export { coreConfig as jsConfig }
 
 // Export rules and groups for use by other packages
-export { rules, groups } from './rules.js'
+export { groups, rules } from './rules.js'
 
 // Export settings
 export { gitignore } from './settings/index.js'

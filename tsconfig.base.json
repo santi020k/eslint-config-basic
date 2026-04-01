@@ -15,7 +15,31 @@
     "resolveJsonModule": true,
     "noEmit": true,
     "allowImportingTsExtensions": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "@santi020k/eslint-config-basic": ["packages/basic/src/index.ts"],
+      "@santi020k/eslint-config-core": ["packages/core/src/index.ts"],
+      "@santi020k/eslint-config-core/types": ["packages/core/src/types.ts"],
+      "@santi020k/eslint-config-core/utils": ["packages/core/src/utils/index.ts"],
+      "@santi020k/eslint-config-typescript": ["packages/typescript/src/index.ts"],
+      "@santi020k/eslint-config-react": ["packages/react/src/index.ts"],
+      "@santi020k/eslint-config-next": ["packages/next/src/index.ts"],
+      "@santi020k/eslint-config-astro": ["packages/astro/src/index.ts"],
+      "@santi020k/eslint-config-expo": ["packages/expo/src/index.ts"],
+      "@santi020k/eslint-config-vue": ["packages/vue/src/index.ts"],
+      "@santi020k/eslint-config-svelte": ["packages/svelte/src/index.ts"],
+      "@santi020k/eslint-config-solid": ["packages/solid/src/index.ts"],
+      "@santi020k/eslint-config-angular": ["packages/angular/src/index.ts"],
+      "@santi020k/eslint-config-nest": ["packages/nest/src/index.ts"],
+      "@santi020k/eslint-config-optionals": ["packages/optionals/src/index.ts"],
+      "eslint-plugin-promise": ["packages/core/src/ambient.d.ts"],
+      "@stencil-community/eslint-plugin": ["packages/optionals/src/ambient.d.ts"],
+      "eslint-plugin-better-tailwindcss": ["packages/optionals/src/ambient.d.ts"],
+      "eslint-plugin-security": ["packages/optionals/src/ambient.d.ts"],
+      "cross-dirname": ["packages/expo/src/ambient.d.ts"],
+      "eslint-plugin-qwik": ["packages/qwik/src/ambient.d.ts"],
+      "eslint-plugin-react/configs/recommended.js": ["packages/react/src/ambient.d.ts"]
+    }
   },
   "exclude": ["node_modules", "dist"]
 }

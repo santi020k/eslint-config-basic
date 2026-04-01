@@ -1,0 +1,51 @@
+{
+  "name": "@santi020k/eslint-config-remix",
+  "version": "0.8.1",
+  "description": "Remix ESLint configuration",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "clean": "rm -rf dist",
+    "check:exports": "publint",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "eslint": "^9.0.0 || ^10.0.0"
+  },
+  "dependencies": {
+    "typescript-eslint": "^8.57.1"
+  },
+  "devDependencies": {
+    "@typescript-eslint/utils": "^8.57.1",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "publint": "^0.3.18",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "license": "MIT",
+  "author": "santi020k",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/santi020k/eslint-config-basic.git",
+    "directory": "packages/remix"
+  }
+}
