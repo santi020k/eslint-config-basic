@@ -1,8 +1,19 @@
-<script>
+<script lang="ts">
   let count = $state(0)
+  const unused = 123
+  let x: string = 'hello'
+  console.log("🚀 ~ x:", x)
+  async function foo() {}
+  foo()
+
+  let elem
 
   const increment = () => {
     count += 1
+  }
+
+  const setContent = () => {
+    if (elem) elem.innerHTML = '<p>test</p>'
   }
 
   $effect(() => {

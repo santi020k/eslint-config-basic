@@ -5,7 +5,7 @@ description: How to add a new optional ESLint configuration to the @santi020k/es
 
 # Adding a New Optional Config
 
-Follow these steps to add a new optional configuration to the project. Optional configs are extensions (e.g., Prettier, Tailwind, Vitest) that users can choose to activate.
+Follow these steps to add a new optional configuration to the project. Optional configs are integrations that users explicitly opt into (e.g., Tailwind, Vitest, Jest, i18next, YAML).
 
 Optionals are categorized into five types. Choose the right category before starting:
 
@@ -19,57 +19,97 @@ Optionals are categorized into five types. Choose the right category before star
 
 ## 1. Create the Configuration File
 
-Create a new file in `packages/optionals/src/{category}/{name}.ts`.
+Create `packages/optionals/src/{category}/{name}.ts`:
 
 ```typescript
-export const myOptionalConfig: TSESLint.FlatConfig.ConfigArray = [
+import pluginMyOptional from 'eslint-plugin-myoptional'
+
+import type { TSESLint } from '@typescript-eslint/utils'
+
+/**
+ * MyOptional ESLint configuration
+ * Brief description of what this integration provides.
+ */
+export const myOptional: TSESLint.FlatConfig.ConfigArray = [
   {
-    name: 'eslint-config/myoptional',
+    name: 'optionals/myoptional',
+    plugins: {
+      myoptional: pluginMyOptional
+    },
     rules: {
-      // optional rules go here
+      ...pluginMyOptional.configs.recommended.rules
+      // override specific rules if needed
     }
   }
 ]
 ```
 
-*Note: Before creating an `ambient.d.ts`, you MUST check if the library has its own types or a `@types/*` package. Ambient declarations should be a last resort.*
+**Before creating an `ambient.d.ts`**: ALWAYS check if the library has its own types or a `@types/*` package. Ambient declarations are a last resort.
+
+**Plugin naming note**: Some plugins use unexpected names in their configs. For example, `better-tailwindcss` recommended config entries do not include "tailwind" in their names — always check the actual plugin config object to verify entry names and rule prefixes.
 
 ## 2. Export the Config
 
-In `packages/optionals/src/index.ts`, export the new optional config you created:
+In `packages/optionals/src/index.ts`, add an export:
 
 ```typescript
-export { myOptionalConfig } from './{category}/{name}.js'
+export { myOptional } from './{category}/{name}.js'
 ```
 
 ## 3. Register the Optional in the Core Enums
 
-Open `packages/core/src/types.ts` and locate the appropriate enum for your category. Add your new optional as a new enum value:
+Open `packages/core/src/types.ts` and add a value to the appropriate enum:
 
-- For a library → add to `Library` enum: `MyLib = 'mylib'`
-- For a tool → add to `Tool` enum: `MyTool = 'mytool'`
-- For a testing framework → add to `Testing` enum: `MyTest = 'mytest'`
-- For a file format → add to `Format` enum: `MyFormat = 'myformat'`
-- For an extension → add to `Extension` enum: `MyExt = 'myext'`
+```typescript
+// For a library:
+export enum Library {
+  // ... existing values
+  MyLib = 'mylib'
+}
+
+// For a tool:
+export enum Tool {
+  MyTool = 'mytool'
+}
+
+// etc.
+```
 
 ## 4. Wire the Optional into the Optionals Module
 
-Open `packages/basic/src/optionals.ts`. Add an import at the top of the file alongside the existing imports from `@santi020k/eslint-config-optionals`. Then add the conditional push in the appropriate section of `getOptionalConfigs()`:
+Open `packages/basic/src/optionals.ts`. Add the import and the conditional push in the matching section of `getOptionalConfigs()`:
 
 ```typescript
-// Example: for a Library
-if (libraries.includes(Library.MyLib)) configs.push(...myOptionalConfig)
+// At the top of the file, add to imports:
+import { myOptional } from '@santi020k/eslint-config-optionals'
 
-// Example: for a Tool (non-Prettier)
-if (tools.includes(Tool.MyTool)) configs.push(...myOptionalConfig)
+// In getOptionalConfigs(), in the appropriate section:
+if (libraries.includes(Library.MyLib)) configs.push(...myOptional)
+
+// For a tool (non-Prettier):
+if (tools.includes(Tool.MyTool)) configs.push(...myOptional)
 ```
 
-*Note: Ensure `Prettier` remains the last config applied (it goes through `getPrettierConfig()`, not `getOptionalConfigs()`).*
+**Important**: Prettier must always be the last config applied. It goes through `getPrettierConfig()`, not `getOptionalConfigs()`. Never push Prettier inside `getOptionalConfigs()`.
 
-## 5. Verify the Changes
+## 5. Update Tests
 
-Run the monorepo validations:
+Read `.agent/skills/testing/SKILL.md` for full details. In summary:
+
+- **`options.test.ts`** — Add a rule assertion: call `eslintConfig({ libraries: [Library.MyLib] })` (or the right category) and assert a specific rule from the plugin is present. **Check the actual plugin rule names** — don't assume based on the plugin package name (e.g., `better-tailwindcss/` prefix, not `tailwindcss/`).
+
+- **`detection.test.ts`** — If the optional can be auto-detected from `package.json` dependencies, add a detection test asserting the correct enum value is returned.
+
+- **`composition.test.ts`** — Add a test asserting the optional config entry name appears in the composed output.
+
+- **`public-api.test.ts`** — If re-exporting a new enum value, verify it's accessible from the main package.
+
+## 6. Validate
+
+Run all checks from the repo root before considering the task done:
 
 ```bash
-npm run build && npm run lint && npm run test
+pnpm run build && pnpm run lint && pnpm run test
 ```
+
+All three must pass.

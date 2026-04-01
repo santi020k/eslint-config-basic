@@ -1,16 +1,16 @@
 # @santi020k/eslint-config-basic
 
-> A comprehensive, composable ESLint 9/10+ Flat Config package for JavaScript, TypeScript, React, Next.js, Astro, Expo, Vue, Svelte, Solid, and Angular.
+> A comprehensive, composable ESLint 9/10+ Flat Config package for JavaScript, TypeScript, React, Next.js, Astro, Expo, Vue, Svelte, Solid, Angular, NestJS, Qwik, and Remix.
 
 
 ## AI Assistant Context
 
 **Role**: Senior Software Engineer / Maintenance Agent.
 **Goal**: Ensure code quality, type safety, and seamless Developer Experience (DX).
-**Conventions**: 
-- strictly Flat Config (no legacy `.eslintrc`).
+**Conventions**:
+- Strictly Flat Config (no legacy `.eslintrc`).
 - Composable design via direct options (`typescript`, `frameworks`, `optionals`).
-- **Zero-Config Auto-Detection**: Automatically detects frameworks and plugins.
+- **Zero-Config Auto-Detection**: Automatically detects frameworks and plugins from `package.json`.
 - **Next.js App Router**: Optimized rules for the `app/` directory.
 - **Lazy Loading**: Framework-specific configs are lazy-loaded to prevent peer dep issues.
 - **Strict Mode**: `strict: true` promotes all warnings to errors.
@@ -31,20 +31,50 @@ This is a monorepo containing multiple config packages.
 
 - [Full Architecture & Context](./llms-full.txt)
 - [Project Overview](./README.md)
-- [.agent/skills/](./.agent/skills/) - Specialized workflows for agents.
+- [CLAUDE.md](./CLAUDE.md) - Claude-specific AI agent guide
+- [.agent/skills/](./.agent/skills/) - Specialized workflows for agents
 
 ### Core Structure
 
-- `packages/core/`: Base JS config, utilities, and shared types.
-- `packages/typescript/`, `packages/react/`, etc.: Framework-specific rules.
-- `packages/optionals/`: Integration configs (Tailwind, Vitest, CSpell, etc.).
-- `packages/basic/`: Main entry point composing all packages.
+- `packages/core/` — Base JS config, utilities, and shared types/enums
+- `packages/typescript/` — TypeScript rules
+- `packages/react/`, `packages/next/` — React ecosystem
+- `packages/astro/`, `packages/vue/`, `packages/svelte/`, `packages/solid/` — Frontend frameworks
+- `packages/angular/`, `packages/nest/` — Enterprise/backend frameworks
+- `packages/expo/` — React Native / Expo
+- `packages/qwik/`, `packages/remix/` — Modern meta-frameworks
+- `packages/optionals/` — All optional integrations (tools, libraries, testing, formats, extensions)
+- `packages/basic/` — Main entry point composing all packages
+
+### Supported Frameworks
+
+| Framework | Package |
+| :--- | :--- |
+| React | `@santi020k/eslint-config-react` |
+| Next.js | `@santi020k/eslint-config-next` |
+| Astro | `@santi020k/eslint-config-astro` |
+| Vue | `@santi020k/eslint-config-vue` |
+| Svelte | `@santi020k/eslint-config-svelte` |
+| SolidJS | `@santi020k/eslint-config-solid` |
+| Angular | `@santi020k/eslint-config-angular` |
+| NestJS | `@santi020k/eslint-config-nest` |
+| Expo | `@santi020k/eslint-config-expo` |
+| Qwik | `@santi020k/eslint-config-qwik` |
+| Remix | `@santi020k/eslint-config-remix` |
+
+### Supported Optionals
+
+**Testing**: Vitest, Jest, Playwright, Cypress, TestingLibrary
+**Tools**: Prettier, CSpell, JSDoc, Swagger
+**Libraries**: Tailwind (via `better-tailwindcss`), i18next, Stencil, TanStack Query, TanStack Router, Storybook
+**Formats**: MDX, Markdown, JSONC, YAML, TOML, GraphQL
+**Extensions**: Regexp, Unicorn, SonarJS, Security, Perfectionist
 
 ## Commands
 
 ```bash
 pnpm run build       # Build all packages with Turbo
-pnpm run lint        # Run ESLint + Spellcheck + Knip
+pnpm run lint        # Run ESLint + CSpell + Knip
 pnpm run test        # Run integration tests (+ coverage)
 pnpm run inspector   # Open ESLint config visualizer
 npx santi-eslint init # Initialize project configuration
@@ -56,6 +86,8 @@ npx santi-eslint init # Initialize project configuration
 2. Define rules as `TSESLint.FlatConfig.ConfigArray`.
 3. Add enums/types to `packages/core/src/types.ts`.
 4. Compose in `packages/basic/src/index.ts`.
+5. Add playground under `packages/playground/{name}/`.
+6. Update tests in `packages/tests/src/`.
 
 ---
 
