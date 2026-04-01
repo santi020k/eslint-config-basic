@@ -7,8 +7,22 @@ import type { TSESLint } from '@typescript-eslint/utils'
  */
 export const graphql: TSESLint.FlatConfig.ConfigArray = [
   {
-    name: 'optionals/graphql',
+    name: 'optionals/graphql/schema',
+    files: ['**/*.schema.graphql', '**/*.schema.gql', '**/schema.graphql', '**/schema.gql'],
+    languageOptions: {
+      parser: graphqlPlugin.parser
+    },
+    plugins: {
+      '@graphql-eslint': graphqlPlugin
+    },
+    rules: {
+      ...graphqlPlugin.configs['flat/schema-recommended'].rules
+    }
+  },
+  {
+    name: 'optionals/graphql/operations',
     files: ['**/*.graphql', '**/*.gql'],
+    ignores: ['**/*.schema.graphql', '**/*.schema.gql', '**/schema.graphql', '**/schema.gql'],
     languageOptions: {
       parser: graphqlPlugin.parser
     },

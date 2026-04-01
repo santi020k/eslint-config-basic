@@ -78,6 +78,7 @@ words:
   - turborepo
   - typedarrays
   - typedoc
+  - urql
   - v8
   - vdom
   - vitepress

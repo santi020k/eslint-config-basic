@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
-import { type EslintConfigOptions, Extension, Library, Runtime, Testing, Tool } from '../types.js'
+import { type EslintConfigOptions, Extension, Format, Library, Runtime, Testing, Tool } from '../types.js'
 
 interface PackageJson {
   dependencies?: Record<string, string | undefined>
@@ -146,6 +146,19 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
       allDeps['@tanstack/eslint-plugin-router']
     ) {
       options.libraries?.push(Library.TanstackRouter)
+    }
+
+    if (
+      allDeps.graphql ||
+      allDeps['@apollo/client'] ||
+      allDeps['relay-runtime'] ||
+      allDeps.urql ||
+      allDeps['graphql-tag'] ||
+      allDeps['@graphql-typed-document-node/core'] ||
+      existsSync(join(cwd, 'schema.graphql')) ||
+      existsSync(join(cwd, 'schema.gql'))
+    ) {
+      options.formats?.push(Format.Graphql)
     }
 
     // Auto-enable security plugin (Professional default)
