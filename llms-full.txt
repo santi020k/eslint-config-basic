@@ -1,29 +1,34 @@
 # Full Technical Context: @santi020k/eslint-config-basic
 
-This document provides deep technical details for AI agents maintenance.
+This document provides deep technical details for AI agents performing maintenance on this monorepo.
 
 ## Dependency Graph
 
 ```text
 core → typescript → react → next
      ↘ astro
+     ↘ vue
+     ↘ svelte
+     ↘ solid
+     ↘ angular
+     ↘ nest
      ↘ expo
-     ↘ ... (other frameworks)
+     ↘ qwik
+     ↘ remix
      ↘ optionals
-basic (composes all above asynchronously)
+basic (composes all above)
 ```
 
 ## Modular Frameworks (v0.8.0+)
 
-Framework-specific configurations are now optional peer dependencies. They are dynamically imported by `eslintConfig` only when requested and installed.
+Framework-specific configurations are optional peer dependencies. They are dynamically imported by `eslintConfig()` only when requested and installed. This keeps the core installation footprint small and prevents peer dependency conflicts.
 
 ## Package Management
 
 - **pnpm Workspaces**: Manages local packages and shared devDependencies.
 - **Turborepo**: Orchestrates builds, linting, and tests across the monorepo.
 - **Changesets**: Automates semantic versioning and publishing.
-- **pnpm Overrides**: Ensures consistent versions across the plugin ecosystem.
-- **Modular Frameworks**: Frameworks like Svelte, Solid, Astro, Vue, Angular, Qwik, and Remix are dynamically loaded in `packages/basic` to prevent peer dependency conflicts and reduce installation footprint.
+- **pnpm Overrides**: Ensures consistent plugin versions across the ecosystem.
 
 ```json
 "overrides": {
@@ -36,36 +41,87 @@ Framework-specific configurations are now optional peer dependencies. They are d
 ## Technical Decisions
 
 ### 1. Flat Config (ESLint 9+)
-We only supports the Flat Config format. All configurations must be exported as `TSESLint.FlatConfig.ConfigArray`.
+Only supports the Flat Config format. All configurations must be exported as `TSESLint.FlatConfig.ConfigArray`. No legacy `.eslintrc` support.
 
-### 2. Composable Async API
-Instead of traditional `extends`, we use a functional, asynchronous composition API:
+### 2. Composable API
+Instead of traditional `extends`, a functional composition API is used:
 ```typescript
-eslintConfig({ typescript: true, optionals, frameworks: { react: true }, strict: true })
+eslintConfig({ typescript: true, frameworks: { react: reactConfig }, strict: true })
 ```
-This allows for dynamic detection, strict mode enforcement, and modular framework loading.
+This enables dynamic detection, strict mode enforcement, and modular framework loading.
+
+**Important**: Framework values must be the imported config object — passing `true` throws. Users must do:
+```ts
+import reactConfig from '@santi020k/eslint-config-react'
+eslintConfig({ frameworks: { react: reactConfig } })
+```
 
 ### 3. Type Safety
-- Every package must export its config with explicit types.
-- We use `@typescript-eslint/utils` for internal types.
-- `packages/core/src/types.ts` is the single source of truth for enums.
+- Every package exports its config with explicit types.
+- `@typescript-eslint/utils` is used for internal types.
+- `packages/core/src/types.ts` is the **single source of truth** for all enums.
+
+### 4. Virtual Script Files
+Framework files (.svelte, .astro, .vue, .qwik, Remix .tsx) generate virtual TypeScript script files during ESLint parsing. Each framework package that has embedded scripts must include a dedicated config block:
+
+```typescript
+{
+  name: 'eslint-config-svelte/virtual-script-rules',
+  files: ['**/*.svelte/*.ts', '**/*.svelte/*.tsx'],
+  rules: {
+    'no-unused-expressions': 'off',
+    '@typescript-eslint/no-unused-expressions': 'off'
+  }
+}
+```
+
+**Do NOT** add `allowDefaultProject: true` or re-apply `disableTypeChecked` in framework packages — the `typescript` package already handles `virtualTypeCheckedFiles`.
+
+### 5. Auto-Detection
+`packages/core/src/utils/detection.ts` reads `package.json` dependencies and checks for tsconfig files to auto-detect the user's stack. Detection checks:
+- Presence of `tsconfig.json` or `tsconfig.base.json` → activates TypeScript
+- Framework packages in deps → activates matching framework config
+- Optional tool/library packages in deps → activates matching optional
+
+## All Supported Optionals
+
+**Testing**: `Testing.Vitest`, `Testing.Jest`, `Testing.Playwright`, `Testing.Cypress`, `Testing.TestingLibrary`
+**Tools**: `Tool.Prettier`, `Tool.Cspell`, `Tool.Jsdoc`, `Tool.Swagger`
+**Libraries**: `Library.Tailwind` (via `better-tailwindcss`), `Library.I18next`, `Library.Stencil`, `Library.TanstackQuery`, `Library.TanstackRouter`, `Library.Storybook`
+**Formats**: `Format.Mdx`, `Format.Markdown`, `Format.Jsonc`, `Format.Yaml`, `Format.Toml`, `Format.Graphql`
+**Extensions**: `Extension.Regexp`, `Extension.Unicorn`, `Extension.Sonarjs`, `Extension.Security`, `Extension.Perfectionist`
+
+**Plugin naming note**: Some plugins use unexpected config entry names. For example, `better-tailwindcss` recommended config entries do not contain "tailwind" in their names — check for rule prefix `better-tailwindcss/` when asserting the config is active.
+
+## Integration Tests — Key Gotcha
+
+When writing integration tests that call `lintText()` in `packages/tests/src/integration.test.ts`, do not rely on auto-detection for TypeScript if using virtual file paths. Auto-detection finds `packages/tests/tsconfig.json` and activates TypeScript `projectService`, which rejects virtual paths not in any real tsconfig.
+
+Always pass `typescript: false` when the test doesn't need TS-specific rule checking:
+```ts
+const config = eslintConfig({ typescript: false, frameworks: { react: reactConfig } })
+```
 
 ## Development Workflows
 
 ### Adding a new Framework Config
-1. Seed new package via `mkdir packages/{name}/src`.
-2. Copy `packages/typescript/package.json` and adjust (add to peerDependencies).
-3. Export config from `src/index.ts`.
-4. Compose in `packages/basic/src/index.ts`.
+1. Create `packages/{name}/src/index.ts` exporting `TSESLint.FlatConfig.ConfigArray`
+2. Add `package.json`, `tsconfig.json` (extending `../../tsconfig.base.json`), `tsup.config.ts`
+3. Add the framework to `frameworks` type in `packages/core/src/types.ts`
+4. Compose in `packages/basic/src/index.ts` + add as optional peer dep in `packages/basic/package.json`
+5. Add playground under `packages/playground/{name}/`
+6. Update tests (configs, composition, snapshots, options, detection)
 
 ### Adding an Optional Integration
-1. Add new file to `packages/optionals/src/{category}/` (category = `tools`, `libraries`, `testing`, `formats`, or `extensions`).
-2. Register in `packages/optionals/src/index.ts`.
-3. Add enum value to the appropriate enum in `packages/core/src/types.ts` (`Tool`, `Library`, `Testing`, `Format`, or `Extension`).
-4. Wire up in `packages/basic/src/optionals.ts` using the matching enum check (e.g. `libraries.includes(Library.X)`).
-5. Supported Optionals: `Cspell`, `Tailwind`, `Vitest`, `I18next`, `Mdx`, `Markdown`, `Sonarjs`, `Stencil`, `Playwright`, `Prettier`, `JSDoc`, `Perfectionist`, `Security`, `TanstackQuery`, `TanstackRouter`, `Jsonc`, `Yaml`, `Toml`, `Storybook`, `Swagger`.
+1. Create `packages/optionals/src/{category}/{name}.ts`
+2. Export from `packages/optionals/src/index.ts`
+3. Add enum value to the appropriate enum in `packages/core/src/types.ts`
+4. Wire in `packages/basic/src/optionals.ts` via enum check
+5. Update tests (options.test.ts, detection.test.ts if auto-detectable)
 
 ## Validation & CI
-- **Lint**: ESLint + CSpell + Knip.
-- **Test**: Vitest integration tests in `packages/tests`.
-- **Build**: `tsup` for ESM/CJS bundling.
+
+- **Lint**: ESLint + CSpell + Knip (run from root only)
+- **Test**: Vitest integration tests in `packages/tests` (11 test files)
+- **Build**: `tsup` for ESM bundling per package
+- **CI**: GitHub Actions — build, lint, test, CodeQL, audit, dry-run publish on every PR

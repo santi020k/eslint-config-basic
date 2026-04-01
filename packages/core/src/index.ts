@@ -7,7 +7,7 @@ import pluginUnusedImport from 'eslint-plugin-unused-imports'
 import globals from 'globals'
 
 import { rules } from './rules.js'
-import { GLOB_JS_TS_ALL, Runtime } from './types.js'
+import { GLOB_JS_TS, GLOB_JS_TS_ALL, GLOB_SLOT, Runtime } from './types.js'
 
 import eslint from '@eslint/js'
 import pluginStylistic from '@stylistic/eslint-plugin'
@@ -49,15 +49,22 @@ export const createCoreConfig = (runtime: Runtime = Runtime.Universal): TSESLint
     globals: getGlobalsForRuntime(runtime)
   }
 
-  const coreConfigs = ([
+  // Define the base sets of configurations we want to wrap
+  const baseConfigs: TSESLint.FlatConfig.Config[] = [
     {
       name: '@eslint/js/recommended',
       ...eslint.configs.recommended
     },
-    pluginN.configs['flat/recommended'],
-    pluginPromise.configs['flat/recommended'],
     {
-      name: 'eslint-config/stylistic',
+      name: 'n/recommended',
+      ...pluginN.configs['flat/recommended']
+    },
+    {
+      name: 'promise/recommended',
+      ...pluginPromise.configs['flat/recommended']
+    },
+    {
+      name: 'stylistic/recommended',
       ...pluginStylistic.configs.recommended
     },
     {
@@ -75,24 +82,43 @@ export const createCoreConfig = (runtime: Runtime = Runtime.Universal): TSESLint
       languageOptions,
       rules
     }
-  ] as TSESLint.FlatConfig.Config[]).map(config => ({
-    ...config,
-    files: config.files ?? GLOB_JS_TS_ALL
-  }))
+  ]
 
+  // Map them to JS/TS files and Slots
+  const mappedConfigs: TSESLint.FlatConfig.ConfigArray = baseConfigs.flatMap(config => [
+    {
+      ...config,
+      files: GLOB_JS_TS
+    },
+    ...(config.rules ?
+      [
+        {
+          name: `${config.name ?? 'core'}/slots`,
+          files: GLOB_SLOT,
+          rules: config.rules
+        }
+      ] :
+      [])
+  ])
+
+  // Return final array with global plugin setup
   return [
     {
-      name: 'eslint-config/plugins',
+      name: 'eslint-config/core-plugins',
+      files: GLOB_JS_TS_ALL, // Ensure plugins are available for all compatible files
       plugins: {
         import: pluginImport,
+        n: pluginN,
+        promise: pluginPromise,
+        stylistic: pluginStylistic,
         '@stylistic': pluginStylistic,
         'simple-import-sort': pluginSimpleImport,
         'jsx-a11y': pluginJsxA11y,
         'unused-imports': pluginUnusedImport
       }
     },
-    ...coreConfigs
-  ] as TSESLint.FlatConfig.ConfigArray
+    ...mappedConfigs
+  ]
 }
 
 /**

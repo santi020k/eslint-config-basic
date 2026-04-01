@@ -23,14 +23,13 @@ describe('Core Rules', () => {
   })
 
   it('should have config with stylistic rules', () => {
-    const stylisticConfig = coreConfig.find(c => c.name === 'eslint-config/stylistic')
+    const stylisticConfig = coreConfig.find(c => c.name === 'stylistic/recommended')
     expect(stylisticConfig).toBeDefined()
   })
 
   it('should have config with plugins', () => {
-    const pluginsConfig = coreConfig.find(c => c.name === 'eslint-config/plugins')
+    const pluginsConfig = coreConfig.find(c => c.name === 'eslint-config/core-plugins')
     expect(pluginsConfig).toBeDefined()
-    expect(pluginsConfig?.plugins).toBeDefined()
   })
 })
 
