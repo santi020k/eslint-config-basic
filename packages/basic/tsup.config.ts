@@ -6,6 +6,7 @@ export default defineConfig({
   splitting: true,
   clean: true, // clean up the dist folder
   dts: true, // generate dts files
+  bundle: false,
   format: ['esm'], // generate esm files
   minify: false,
   // bundle: env === 'production',

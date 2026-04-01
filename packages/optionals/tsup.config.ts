@@ -8,10 +8,10 @@ export default defineConfig({
     'src/formats/*.ts',
     'src/extensions/*.ts'
   ],
+  bundle: false,
   format: ['esm'],
   dts: true,
   clean: true,
-  bundle: false,
   sourcemap: true,
   target: 'es2022'
 })
