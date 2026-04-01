@@ -1,6 +1,15 @@
 import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
+ * Global file patterns for JavaScript-compatible files
+ */
+export const GLOB_JS = ['**/*.js', '**/*.mjs', '**/*.cjs', '**/*.jsx']
+
+export const GLOB_TS = ['**/*.ts', '**/*.mts', '**/*.cts', '**/*.tsx']
+
+export const GLOB_JS_TS = [...GLOB_JS, ...GLOB_TS]
+
+/**
  * Enum for Next.js mode options
  */
 export enum NextMode {

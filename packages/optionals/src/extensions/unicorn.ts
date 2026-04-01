@@ -1,5 +1,6 @@
 import pluginUnicorn from 'eslint-plugin-unicorn'
 
+import { GLOB_JS_TS } from '@santi020k/eslint-config-core'
 import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
@@ -9,6 +10,7 @@ import type { TSESLint } from '@typescript-eslint/utils'
 export const unicorn: TSESLint.FlatConfig.ConfigArray = [
   {
     name: 'eslint-config/unicorn',
+    files: GLOB_JS_TS,
     plugins: {
       unicorn: pluginUnicorn as unknown as TSESLint.FlatConfig.Plugin
     },

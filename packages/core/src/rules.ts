@@ -91,6 +91,8 @@ export const rules: TSESLint.FlatConfig.Rules = {
     'warn',
     { blankLine: 'always', prev: '*', next: '*' },
     { blankLine: 'any', prev: 'import', next: 'import' },
+    { blankLine: 'any', prev: 'export', next: 'export' },
+    { blankLine: 'any', prev: 'cjs-export', next: 'cjs-export' },
     {
       blankLine: 'always',
       prev: ['const', 'let', 'var'],

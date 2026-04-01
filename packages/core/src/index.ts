@@ -1,7 +1,4 @@
-import eslint from '@eslint/js'
-import pluginStylistic from '@stylistic/eslint-plugin'
-import type { TSESLint } from '@typescript-eslint/utils'
-import pluginImport from 'eslint-plugin-import'
+import pluginImport from 'eslint-plugin-import-x'
 import pluginJsxA11y from 'eslint-plugin-jsx-a11y'
 import pluginN from 'eslint-plugin-n'
 import pluginPromise from 'eslint-plugin-promise'
@@ -10,11 +7,14 @@ import pluginUnusedImport from 'eslint-plugin-unused-imports'
 import globals from 'globals'
 
 import { rules } from './rules.js'
-import { Runtime } from './types.js'
+import { GLOB_JS_TS, Runtime } from './types.js'
+
+import eslint from '@eslint/js'
+import pluginStylistic from '@stylistic/eslint-plugin'
+import type { TSESLint } from '@typescript-eslint/utils'
 
 // Re-export types and utilities
 export * from './types.js'
-
 export * from './utils/index.js'
 
 /**
@@ -48,7 +48,7 @@ export const createCoreConfig = (runtime: Runtime = Runtime.Universal): TSESLint
     globals: getGlobalsForRuntime(runtime)
   }
 
-  return [
+  return ([
     {
       name: '@eslint/js/recommended',
       ...eslint.configs.recommended
@@ -62,15 +62,17 @@ export const createCoreConfig = (runtime: Runtime = Runtime.Universal): TSESLint
     {
       name: 'eslint-config/plugins',
       plugins: {
-        import: { rules: pluginImport.rules },
+        import: pluginImport,
         'simple-import-sort': pluginSimpleImport,
         'jsx-a11y': pluginJsxA11y,
         'unused-imports': pluginUnusedImport
       },
       languageOptions,
       rules: {
-        'import/first': 'off',
-        'import/order': 'off'
+        'import/first': 'error',
+        'simple-import-sort/imports': 'error',
+        'simple-import-sort/exports': 'error',
+        'unused-imports/no-unused-imports': 'error'
       }
     },
     {
@@ -78,7 +80,10 @@ export const createCoreConfig = (runtime: Runtime = Runtime.Universal): TSESLint
       languageOptions,
       rules
     }
-  ]
+  ] as TSESLint.FlatConfig.Config[]).map(config => ({
+    ...config,
+    files: config.files ?? GLOB_JS_TS
+  })) as TSESLint.FlatConfig.ConfigArray
 }
 
 /**
@@ -91,7 +96,7 @@ export const coreConfig: TSESLint.FlatConfig.ConfigArray = createCoreConfig()
 export { coreConfig as jsConfig }
 
 // Export rules and groups for use by other packages
-export { rules, groups } from './rules.js'
+export { groups, rules } from './rules.js'
 
 // Export settings
 export { gitignore } from './settings/index.js'
