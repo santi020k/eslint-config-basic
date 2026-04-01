@@ -1,4 +1,6 @@
 // Valid regular expressions testing various rules
+// eslint-disable-next-line regexp/no-empty-group, regexp/no-empty-capturing-group, no-unused-vars
+const testRegex = /()/
 const digitRegex = /\d+/u
 const wordRegex = /\w+/u
 const hexRegex = /^[0-9a-f]+$/iu

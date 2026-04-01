@@ -20,6 +20,11 @@ const increment = () => {
       <button @click="increment">
         Increment
       </button>
+
+      <!-- eslint-disable-next-line vue/no-multi-spaces-in-methoddef -->
+      <div v-if="count > 5">
+        Count is greater than 5
+      </div>
     </div>
   </div>
 </template>

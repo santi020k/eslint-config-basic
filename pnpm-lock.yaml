@@ -933,6 +933,9 @@ importers:
 
   packages/playground/tools/swagger:
     dependencies:
+      '@nestjs/common':
+        specifier: ^11.1.17
+        version: 11.1.17(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       '@santi020k/eslint-config-basic':
         specifier: workspace:^
         version: link:../../../basic
@@ -10542,6 +10545,20 @@ snapshots:
       uid: 2.0.2
     optionalDependencies:
       class-validator: 0.14.4
+    transitivePeerDependencies:
+      - supports-color
+
+  '@nestjs/common@11.1.17(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2)':
+    dependencies:
+      file-type: 21.3.2
+      iterare: 1.2.1
+      load-esm: 1.0.3
+      reflect-metadata: 0.2.2
+      rxjs: 7.8.2
+      tslib: 2.8.1
+      uid: 2.0.2
+    optionalDependencies:
+      class-validator: 0.15.1
     transitivePeerDependencies:
       - supports-color
 

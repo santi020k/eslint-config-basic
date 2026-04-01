@@ -15,7 +15,16 @@
     "resolveJsonModule": true,
     "noEmit": true,
     "allowImportingTsExtensions": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "eslint-plugin-promise": ["packages/core/src/ambient.d.ts"],
+      "@stencil-community/eslint-plugin": ["packages/optionals/src/ambient.d.ts"],
+      "eslint-plugin-better-tailwindcss": ["packages/optionals/src/ambient.d.ts"],
+      "eslint-plugin-security": ["packages/optionals/src/ambient.d.ts"],
+      "cross-dirname": ["packages/expo/src/ambient.d.ts"],
+      "eslint-plugin-qwik": ["packages/qwik/src/ambient.d.ts"],
+      "eslint-plugin-react/configs/recommended.js": ["packages/react/src/ambient.d.ts"]
+    }
   },
   "exclude": ["node_modules", "dist"]
 }

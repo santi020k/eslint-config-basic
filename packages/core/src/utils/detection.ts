@@ -97,7 +97,11 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
     if (allDeps['@remix-run/react'] || allDeps['@remix-run/node']) frameworks.remix = true
 
     // Default to TS if tsconfig exists
-    if (existsSync(join(cwd, 'tsconfig.json'))) {
+    if (
+      existsSync(join(cwd, 'tsconfig.json')) ||
+      existsSync(join(cwd, 'tsconfig.base.json')) ||
+      existsSync(join(cwd, 'tsconfig.dev.json'))
+    ) {
       options.typescript = true
     }
 

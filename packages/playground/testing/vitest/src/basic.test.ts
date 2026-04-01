@@ -15,6 +15,7 @@ describe('Comprehensive Test Suite', () => {
   })
 
   it('should handle asynchronous functions', async () => {
+    // eslint-disable-next-line @typescript-eslint/require-await
     const asyncFn = async () => 'hello'
     const result = await asyncFn()
 
@@ -22,6 +23,7 @@ describe('Comprehensive Test Suite', () => {
   })
 
   it('should work with mocks', () => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const result = mockFn()
 
     expect(mockFn).toHaveBeenCalledOnce()

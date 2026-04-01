@@ -33,6 +33,9 @@ export type UserUpdate = PartialExcept<User, 'id'>
  * @returns A promise that resolves to an ApiResponse.
  */
 export const fetchData = async <T>(url: string): Promise<ApiResponse<T>> => {
+  // eslint-disable-next-line no-var, @typescript-eslint/no-unused-vars
+  var x = 1
+
   try {
     const response = await fetch(url)
 

@@ -16,7 +16,8 @@ export class AppComponent {
 
   constructor() {
     // Intentional non-standard constructor for testing
-    const x = 1
+    // eslint-disable-next-line no-var
+    var x = 1
 
     console.log(x)
   }
