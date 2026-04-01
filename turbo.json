@@ -3,19 +3,24 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**"],
+      "outputLogs": "errors-only"
     },
     "lint": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "outputLogs": "errors-only"
     },
     "lint:fix": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "outputLogs": "errors-only"
     },
     "typecheck": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "outputLogs": "errors-only"
     },
     "check:exports": {
-      "dependsOn": ["build"]
+      "dependsOn": ["build"],
+      "outputLogs": "errors-only"
     },
     "dev": {
       "cache": false,
@@ -61,5 +66,8 @@
     "@playground/yaml#build": { "outputs": [] },
     "@santi020k/eslint-config-docs#build": { "outputs": [] },
     "@santi020k/eslint-config-tests#build": { "outputs": [] }
+  },
+  "futureFlags": {
+    "errorsOnlyShowHash": true
   }
 }
