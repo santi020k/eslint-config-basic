@@ -34,9 +34,6 @@ importers:
       eslint:
         specifier: ^10.0.3
         version: 10.1.0(jiti@2.6.1)
-      graphql:
-        specifier: ^16.13.2
-        version: 16.13.2
       husky:
         specifier: ^9.1.7
         version: 9.1.7
@@ -46,9 +43,6 @@ importers:
       lint-staged:
         specifier: ^16.4.0
         version: 16.4.0
-      storybook:
-        specifier: ^10.3.3
-        version: 10.3.3(@testing-library/dom@10.4.1)(prettier@2.8.8)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       ts-json-schema-generator:
         specifier: ^2.9.0
         version: 2.9.0
@@ -159,16 +153,13 @@ importers:
       '@santi020k/eslint-config-vue':
         specifier: workspace:^
         version: link:../vue
-      eslint:
-        specifier: ^10.0.3
-        version: 10.1.0(jiti@2.6.1)
-      typescript-eslint:
-        specifier: ^8.57.1
-        version: 8.58.0(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3)
-    devDependencies:
       '@typescript-eslint/utils':
         specifier: ^8.57.0
         version: 8.58.0(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3)
+      eslint:
+        specifier: ^10.0.3
+        version: 10.1.0(jiti@2.6.1)
+    devDependencies:
       publint:
         specifier: ^0.3.18
         version: 0.3.18
@@ -235,7 +226,7 @@ importers:
     devDependencies:
       vitepress:
         specifier: ^1.6.4
-        version: 1.6.4(@algolia/client-search@5.50.0)(@types/node@25.5.0)(change-case@5.4.4)(postcss@8.5.8)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(search-insights@2.17.3)(terser@5.46.1)(typescript@5.9.3)
+        version: 1.6.4(@algolia/client-search@5.50.0)(@types/node@25.5.0)(change-case@5.4.4)(postcss@8.5.8)(search-insights@2.17.3)(terser@5.46.1)(typescript@5.9.3)
 
   packages/expo:
     dependencies:
@@ -952,9 +943,6 @@ importers:
 
   packages/qwik:
     dependencies:
-      '@santi020k/eslint-config-core':
-        specifier: workspace:^
-        version: link:../core
       eslint:
         specifier: ^10.0.3
         version: 10.1.0(jiti@2.6.1)
@@ -1017,9 +1005,6 @@ importers:
 
   packages/remix:
     dependencies:
-      '@santi020k/eslint-config-core':
-        specifier: workspace:^
-        version: link:../core
       eslint:
         specifier: ^10.0.3
         version: 10.1.0(jiti@2.6.1)
@@ -1033,12 +1018,6 @@ importers:
       eslint-plugin-jsx-a11y:
         specifier: ^6.10.2
         version: 6.10.2(eslint@10.1.0(jiti@2.6.1))
-      eslint-plugin-react:
-        specifier: ^7.37.5
-        version: 7.37.5(eslint@10.1.0(jiti@2.6.1))
-      eslint-plugin-react-hooks:
-        specifier: ^7.0.1
-        version: 7.0.1(eslint@10.1.0(jiti@2.6.1))
       publint:
         specifier: ^0.3.18
         version: 0.3.18
@@ -9692,9 +9671,9 @@ snapshots:
 
   '@docsearch/css@3.8.2': {}
 
-  '@docsearch/js@3.8.2(@algolia/client-search@5.50.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(search-insights@2.17.3)':
+  '@docsearch/js@3.8.2(@algolia/client-search@5.50.0)(search-insights@2.17.3)':
     dependencies:
-      '@docsearch/react': 3.8.2(@algolia/client-search@5.50.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(search-insights@2.17.3)
+      '@docsearch/react': 3.8.2(@algolia/client-search@5.50.0)(search-insights@2.17.3)
       preact: 10.29.0
     transitivePeerDependencies:
       - '@algolia/client-search'
@@ -9703,15 +9682,13 @@ snapshots:
       - react-dom
       - search-insights
 
-  '@docsearch/react@3.8.2(@algolia/client-search@5.50.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(search-insights@2.17.3)':
+  '@docsearch/react@3.8.2(@algolia/client-search@5.50.0)(search-insights@2.17.3)':
     dependencies:
       '@algolia/autocomplete-core': 1.17.7(@algolia/client-search@5.50.0)(algoliasearch@5.50.0)(search-insights@2.17.3)
       '@algolia/autocomplete-preset-algolia': 1.17.7(@algolia/client-search@5.50.0)(algoliasearch@5.50.0)
       '@docsearch/css': 3.8.2
       algoliasearch: 5.50.0
     optionalDependencies:
-      react: 19.2.4
-      react-dom: 19.2.4(react@19.2.4)
       search-insights: 2.17.3
     transitivePeerDependencies:
       - '@algolia/client-search'
@@ -17411,10 +17388,10 @@ snapshots:
     optionalDependencies:
       vite: 7.3.1(@types/node@25.5.0)(jiti@2.6.1)(terser@5.46.1)(yaml@2.8.3)
 
-  vitepress@1.6.4(@algolia/client-search@5.50.0)(@types/node@25.5.0)(change-case@5.4.4)(postcss@8.5.8)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(search-insights@2.17.3)(terser@5.46.1)(typescript@5.9.3):
+  vitepress@1.6.4(@algolia/client-search@5.50.0)(@types/node@25.5.0)(change-case@5.4.4)(postcss@8.5.8)(search-insights@2.17.3)(terser@5.46.1)(typescript@5.9.3):
     dependencies:
       '@docsearch/css': 3.8.2
-      '@docsearch/js': 3.8.2(@algolia/client-search@5.50.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(search-insights@2.17.3)
+      '@docsearch/js': 3.8.2(@algolia/client-search@5.50.0)(search-insights@2.17.3)
       '@iconify-json/simple-icons': 1.2.76
       '@shikijs/core': 2.5.0
       '@shikijs/transformers': 2.5.0

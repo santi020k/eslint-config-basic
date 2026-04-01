@@ -34,7 +34,7 @@
     "@santi020k/eslint-config-core": "workspace:^",
     "@santi020k/eslint-config-optionals": "workspace:^",
     "@santi020k/eslint-config-typescript": "workspace:^",
-    "typescript-eslint": "^8.57.1"
+    "@typescript-eslint/utils": "^8.57.0"
   },
   "peerDependencies": {
     "@santi020k/eslint-config-angular": "workspace:^",
@@ -88,8 +88,7 @@
   "devDependencies": {
     "publint": "^0.3.18",
     "tsup": "^8.5.1",
-    "typescript": "^5.9.3",
-    "@typescript-eslint/utils": "^8.57.0"
+    "typescript": "^5.9.3"
   },
   "publishConfig": {
     "access": "public"
