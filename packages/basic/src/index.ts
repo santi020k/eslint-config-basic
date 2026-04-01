@@ -82,8 +82,9 @@ export {
  * @returns {FlatConfigArray} The final ESLint configuration array
  */
 export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => {
-  const detected: Partial<EslintConfigOptions> = options === undefined ? detectProjectOptions() : {}
-  const presetDefaults = options?.preset ? resolvePreset(options.preset) : {}
+  const detected = detectProjectOptions()
+  const preset = options?.preset ?? detected.preset
+  const presetDefaults = preset ? resolvePreset(preset) : {}
 
   const {
     typescript = (presetDefaults.typescript ?? detected.typescript ?? false),
@@ -92,7 +93,7 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     formats = (presetDefaults.formats ?? detected.formats ?? []),
     tools = (presetDefaults.tools ?? detected.tools ?? []),
     extensions = (presetDefaults.extensions ?? detected.extensions ?? []),
-    settings = (detected.settings ?? []),
+    settings = options?.settings ?? detected.settings ?? [],
     strict = options?.strict ?? false,
     runtime = (presetDefaults.runtime ?? detected.runtime ?? Runtime.Universal),
     tsconfigRootDir = options?.tsconfigRootDir,

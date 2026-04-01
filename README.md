@@ -17,7 +17,7 @@ Composable ESLint 10+ flat-config tooling for JavaScript and TypeScript projects
 ## ✨ Key Features
 
 - **🎯 Composable & Modular**: Mix and match configurations for different frameworks and tools using a clean, options-based API.
-- **🔍 Zero-Config Auto-Detection**: Automatically detects your project's frameworks, libraries, and tools to provide a sensible default configuration.
+- **🔍 Deep Auto-Detection**: Automatically detects your project's frameworks, libraries, and tools. Core features like TypeScript and runtime presets are enabled by default if detected.
 - **⚡ Lazy Loading**: Framework-specific configurations are loaded only when needed, ensuring maximum performance and avoiding unnecessary peer dependency conflicts.
 - **🛡️ Strict Mode**: Opt-in `strict: true` to promote all warnings to errors, perfect for CI/CD and maintaining high code standards.
 - **🌐 Smart Runtime Support**: Built-in support for Node.js, Browser, or Universal runtimes with appropriate globals and rules.
@@ -34,12 +34,43 @@ npm install -D eslint @santi020k/eslint-config-basic
 
 ### Usage
 
-Create an `eslint.config.js` in your project root:
+Create an `eslint.config.js` in your project root. By default, it will detect your project settings:
 
 ```js
 import { eslintConfig } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig()
+```
+
+### Comprehensive Example
+
+Here is an example with many features activated. Note that many of these are automatically detected if the corresponding packages are in your `package.json`.
+
+```js
+import { eslintConfig, Extension, Format, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
+import next from '@santi020k/eslint-config-next'
+import react from '@santi020k/eslint-config-react'
+
+export default eslintConfig({
+  // Explicitly enable TypeScript (auto-detected if tsconfig.json exists)
+  typescript: true,
+
+  // Strict mode: warnings become errors
+  strict: true,
+
+  // Frameworks (imports are lazy-loaded)
+  frameworks: {
+    react,
+    next
+  },
+
+  // Optional integrations
+  libraries: [Library.Tailwind, Library.TanstackQuery],
+  testing: [Testing.Vitest, Testing.Playwright, Testing.TestingLibrary],
+  formats: [Format.Mdx, Format.Jsonc, Format.Graphql],
+  tools: [Tool.Prettier, Tool.Cspell],
+  extensions: [Extension.Unicorn, Extension.Sonarjs, Extension.Perfectionist]
+})
 ```
 
 ## Framework packages

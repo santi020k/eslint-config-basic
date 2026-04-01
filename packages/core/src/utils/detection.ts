@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
-import { type EslintConfigOptions, Extension, Format, Library, Runtime, Testing, Tool } from '../types.js'
+import { type EslintConfigOptions, Extension, Format, Library, Preset, Runtime, Testing, Tool } from '../types.js'
 
 interface PackageJson {
   dependencies?: Record<string, string | undefined>
@@ -66,15 +66,31 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
       options.runtime = Runtime.Node
     }
 
-    if (allDeps.vue) frameworks.vue = true
+    if (allDeps.vue) {
+      frameworks.vue = true
+
+      options.runtime = Runtime.Browser
+    }
 
     if (allDeps.expo || allDeps['react-native']) frameworks.expo = true
 
-    if (allDeps.svelte) frameworks.svelte = true
+    if (allDeps.svelte) {
+      frameworks.svelte = true
 
-    if (allDeps['solid-js']) frameworks.solid = true
+      options.runtime = Runtime.Browser
+    }
 
-    if (allDeps['@angular/core']) frameworks.angular = true
+    if (allDeps['solid-js']) {
+      frameworks.solid = true
+
+      options.runtime = Runtime.Browser
+    }
+
+    if (allDeps['@angular/core']) {
+      frameworks.angular = true
+
+      options.runtime = Runtime.Browser
+    }
 
     if (allDeps['@builder.io/qwik']) frameworks.qwik = true
 
@@ -163,6 +179,17 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
 
     // Auto-enable security plugin (Professional default)
     options.extensions?.push(Extension.Security)
+
+    // Preset detection logic
+    if (options.typescript) {
+      if (options.runtime === Runtime.Node) {
+        options.preset = Preset.Node
+      } else if (options.runtime === Runtime.Browser) {
+        options.preset = Preset.Browser
+      }
+    } else {
+      options.preset = Preset.Basic
+    }
 
     options.libraries = [...new Set(options.libraries)]
 
