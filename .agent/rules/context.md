@@ -7,18 +7,20 @@ trigger: always_on
 ## Priority Reading Order
 
 1. **`llms.txt`** - Project overview and architecture
-2. **`../../src/index.ts`** - Main entry point with enums and config function
-3. **`./guidelines.md`** - Detailed coding guidelines
+2. **`packages/basic/src/index.ts`** - Main entry point composing all configs
+3. **`packages/core/src/types.ts`** - All enums (Library, Testing, Format, Tool, Extension, Runtime, Preset, etc.)
+4. **`./guidelines.md`** - Detailed coding guidelines
 
 ## Project Summary
 
 This is `@santi020k/eslint-config-basic`, a composable ESLint 9 Flat Config package supporting:
+
 - JavaScript, TypeScript, React, Next.js, Astro, Expo
 - Optional integrations: Tailwind, Vitest, cspell, i18next, MDX, Markdown, Stencil
 
 ## Monorepo Architecture
 
-This project uses **Turborepo** with **npm Workspaces** for modular package management.
+This project uses **Turborepo** with **pnpm Workspaces** for modular package management.
 
 ### Package Structure
 
@@ -38,22 +40,26 @@ core → typescript → react → next
 ## Key Architecture Decisions
 
 ### Flat Config Only
+
 This package only supports ESLint 9+ flat config format. No legacy `.eslintrc` support.
 
 ### Composable Design
+
 Users select configs via direct options rather than extending named configs:
+
 ```js
 eslintConfig({ typescript: true, frameworks: { react: true } })
 ```
 
 ### Dependency Alignment
-Uses npm `overrides` with `$` references to align peer dependency versions across the plugin ecosystem. Prioritize official type packages over ambient declarations.
+
+Uses pnpm `overrides` with `$` references to align peer dependency versions across the plugin ecosystem. Prioritize official type packages over ambient declarations.
 
 ## Validation Workflow
 
 Always validate changes with:
 ```bash
-npm run build && npm run lint && npm run test
+pnpm run build && pnpm run lint && pnpm run test
 ```
 
 All commands must pass before considering work complete.
@@ -77,7 +83,7 @@ All commands must pass before considering work complete.
 
 ### When adding a new optional
 
-1. Create `src/optionals/{name}.ts`
-2. Export from `src/optionals/index.ts`
-3. Add to `OptionalOption` enum in `packages/core/src/types.ts`
-4. Wire into `eslintConfig()` function
+1. Create `packages/optionals/src/{category}/{name}.ts` (category = `tools`, `libraries`, `testing`, `formats`, or `extensions`)
+2. Export from `packages/optionals/src/index.ts`
+3. Add to the appropriate enum in `packages/core/src/types.ts` (`Tool`, `Library`, `Testing`, `Format`, or `Extension`)
+4. Wire into `packages/basic/src/optionals.ts` using the matching enum check (e.g. `libraries.includes(Library.X)`)

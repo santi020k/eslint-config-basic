@@ -3,19 +3,24 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "outputs": [],
+      "outputLogs": "errors-only"
     },
     "lint": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "outputLogs": "errors-only"
     },
     "lint:fix": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "outputLogs": "errors-only"
     },
     "typecheck": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "outputLogs": "errors-only"
     },
     "check:exports": {
-      "dependsOn": ["build"]
+      "dependsOn": ["build"],
+      "outputLogs": "errors-only"
     },
     "dev": {
       "cache": false,
@@ -23,6 +28,25 @@
     },
     "clean": {
       "cache": false
-    }
+    },
+
+    "@santi020k/eslint-config-angular#build": { "outputs": ["dist/**"] },
+    "@santi020k/eslint-config-astro#build": { "outputs": ["dist/**"] },
+    "@santi020k/eslint-config-basic#build": { "outputs": ["dist/**"] },
+    "@santi020k/eslint-config-core#build": { "outputs": ["dist/**"] },
+    "@santi020k/eslint-config-expo#build": { "outputs": ["dist/**"] },
+    "@santi020k/eslint-config-nest#build": { "outputs": ["dist/**"] },
+    "@santi020k/eslint-config-next#build": { "outputs": ["dist/**"] },
+    "@santi020k/eslint-config-optionals#build": { "outputs": ["dist/**"] },
+    "@santi020k/eslint-config-qwik#build": { "outputs": ["dist/**"] },
+    "@santi020k/eslint-config-react#build": { "outputs": ["dist/**"] },
+    "@santi020k/eslint-config-remix#build": { "outputs": ["dist/**"] },
+    "@santi020k/eslint-config-solid#build": { "outputs": ["dist/**"] },
+    "@santi020k/eslint-config-svelte#build": { "outputs": ["dist/**"] },
+    "@santi020k/eslint-config-typescript#build": { "outputs": ["dist/**"] },
+    "@santi020k/eslint-config-vue#build": { "outputs": ["dist/**"] }
+  },
+  "futureFlags": {
+    "errorsOnlyShowHash": true
   }
 }

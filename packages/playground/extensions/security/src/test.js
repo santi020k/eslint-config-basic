@@ -1,2 +1,4 @@
-// eslint-disable-next-line no-eval
-eval('a = 1')
+const userInput = 'a = 1'
+
+// eslint-disable-next-line security/detect-eval-with-expression
+eval(userInput)

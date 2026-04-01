@@ -1,0 +1,33 @@
+{
+  "name": "@playground/qwik",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "clean": "rm -rf dist node_modules",
+    "check:exports": "echo \"No exports to check\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@santi020k/eslint-config-basic": "workspace:^",
+    "@santi020k/eslint-config-qwik": "workspace:^",
+    "eslint": "^10.0.3",
+    "@builder.io/qwik": "^1.19.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  },
+  "author": "santi020k",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/santi020k/eslint-config-basic.git",
+    "directory": "packages/playground/qwik"
+  }
+}

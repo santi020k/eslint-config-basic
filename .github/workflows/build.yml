@@ -16,11 +16,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          cache: "pnpm"
       - name: Turborepo Cache
         uses: actions/cache@v4
         with:
@@ -28,16 +30,16 @@ jobs:
           key: ${{ runner.os }}-turbo-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-turbo-
-      - run: npm ci
+      - run: pnpm install --frozen-lockfile
       - name: Spellcheck
-        run: npm run lint:spell
+        run: pnpm run lint:spell
       - name: TypeScript check
-        run: npm run typecheck
+        run: pnpm run typecheck
       - name: Unused code check
-        run: npm run lint:knip
-      - run: npm run build
-      - run: npm run lint
+        run: pnpm run lint:knip
+      - run: pnpm run build
+      - run: pnpm run lint
       - name: Run tests with coverage
-        run: npm run test:coverage
+        run: pnpm run test:coverage
       - name: Dry-run publish check
-        run: npm publish --dry-run -w packages/basic
+        run: pnpm --filter @santi020k/eslint-config-basic publish --dry-run --no-git-checks

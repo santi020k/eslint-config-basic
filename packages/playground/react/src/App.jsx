@@ -21,6 +21,8 @@ const fetchTodos = () => new Promise(resolve => {
 
 const TodoApp = () => {
   const { theme, toggleTheme } = useTheme()
+  // eslint-disable-next-line no-unused-vars
+  const [unusedState, setUnusedState] = useState('test')
   const [todos, setTodos] = useState([])
   const [filter, setFilter] = useState('all')
   const [sortOrder, setSortOrder] = useState('asc')

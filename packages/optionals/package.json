@@ -26,6 +26,7 @@
     "eslint": "^9.0.0 || ^10.0.0"
   },
   "dependencies": {
+    "@santi020k/eslint-config-core": "workspace:*",
     "@cspell/eslint-plugin": "^9.7.0",
     "@darraghor/eslint-plugin-nestjs-typed": "^7.1.27",
     "@eslint/compat": "^2.0.3",

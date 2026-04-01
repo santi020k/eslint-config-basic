@@ -1,4 +1,5 @@
 import pluginVue from 'eslint-plugin-vue'
+import tsEslint from 'typescript-eslint'
 import vueParser from 'vue-eslint-parser'
 
 import { rules } from './rules.js'
@@ -22,6 +23,23 @@ export const vueConfig: TSESLint.FlatConfig.ConfigArray = [
       }
     },
     rules
+  },
+  {
+    name: 'eslint-config-vue/disable-type-checked',
+    files: ['**/*.vue/*.ts', '**/*.vue/*.tsx'],
+    languageOptions: {
+      parserOptions: {
+        project: null,
+        program: null,
+        projectService: false,
+        allowDefaultProject: true
+      }
+    },
+    rules: {
+      ...tsEslint.configs.disableTypeChecked.rules,
+      'no-unused-expressions': 'off',
+      '@typescript-eslint/no-unused-expressions': 'off'
+    }
   }
 ]
 

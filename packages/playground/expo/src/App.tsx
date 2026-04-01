@@ -1,13 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Expo Playground</Text>
-    </View>
-  )
-}
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -16,3 +8,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   }
 })
+
+export default function App() {
+  return (
+    <View style={styles.container}>
+      <Text>Expo Playground</Text>
+    </View>
+  )
+}

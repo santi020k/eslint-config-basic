@@ -7,6 +7,9 @@ export class AppController {
   @Get()
   @ApiOkResponse({ description: 'Hello world' })
   getHello(): string {
+    // eslint-disable-next-line no-var, @typescript-eslint/no-unused-vars
+    var x = 1
+
     return 'Hello World!'
   }
 }

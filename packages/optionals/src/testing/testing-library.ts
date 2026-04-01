@@ -16,8 +16,9 @@ export const testingLibrary: TSESLint.FlatConfig.ConfigArray = [
       '**/__tests__/**/*.{js,ts,jsx,tsx}'
     ],
     plugins: {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      'testing-library': fixupPluginRules(pluginTestingLibrary as any) as unknown as TSESLint.FlatConfig.Plugin
+      'testing-library': fixupPluginRules(
+        pluginTestingLibrary as unknown as Record<string, unknown>
+      )
     },
     rules: {
       // Testing Library recommended rules

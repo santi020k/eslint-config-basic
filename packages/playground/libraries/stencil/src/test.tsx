@@ -12,6 +12,9 @@ export class MyComponent {
   @Prop() readonly _first: string = 'Santi'
 
   public get first(): string {
-    return this._first
+    // eslint-disable-next-line no-var
+    var testVar = 'stencil test'
+
+    return this._first + testVar
   }
 }

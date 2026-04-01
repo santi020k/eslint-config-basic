@@ -4,17 +4,18 @@
   "type": "module",
   "scripts": {
     "lint": "eslint .",
-    "build": "echo \"No build step required\"",
-    "dev": "echo \"No build step required\"",
     "clean": "rm -rf dist node_modules",
     "check:exports": "echo \"No exports to check\"",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@santi020k/eslint-config-basic": "*",
+    "@santi020k/eslint-config-basic": "workspace:^",
+    "@santi020k/eslint-config-react": "workspace:^",
+    "@santi020k/eslint-config-typescript": "workspace:^",
     "@tanstack/react-router": "^1.92.5",
     "@types/react": "^19.0.2",
-    "eslint": "^9.6.0"
+    "eslint": "^9.6.0",
+    "react": "^19.0.0"
   },
   "author": "santi020k",
   "license": "MIT",

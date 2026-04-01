@@ -24,10 +24,26 @@ export default eslintConfig({
 
 This package also handles the virtual-file story used by frameworks like Astro, Vue, Svelte, Markdown, and MDX by disabling type-checked rules in generated embedded files where appropriate.
 
+## Auto-Detection & Priority
+
+The `@santi020k/eslint-config-basic` package automatically enables TypeScript support if a `tsconfig.json` file is found in your project root.
+
+- **Implicit**: If you call `eslintConfig()` without options, TypeScript is enabled if detected.
+- **Explicit Priority**: If you provide `typescript: true` or `typescript: false` in the options, your choice **always** overrides the auto-detection.
+- **Advanced Options**: You can pass an object to `typescript` to configure specific behaviors like the project path:
+
+```js
+export default eslintConfig({
+  typescript: {
+    project: './tsconfig.lint.json'
+  }
+})
+```
+
 ## Notes
 
-- If the repository has a `tsconfig.json`, the main package can detect TypeScript automatically.
 - Strict mode can still promote TypeScript warning rules to errors on top of the base config.
+- Many framework packages (like Angular or NestJS) will also trigger TypeScript support automatically.
 
 ## Repository Links
 

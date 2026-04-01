@@ -1,11 +1,11 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "ignore": [
-    "packages/playground/**",
-    "typedoc.markdown.mjs"
+    "packages/playground/**"
   ],
   "ignoreDependencies": [
-    "typedoc-plugin-markdown"
+    "typedoc-plugin-markdown",
+    "tailwindcss"
   ],
   "ignoreExportsUsedInFile": true,
   "rules": {
@@ -13,16 +13,20 @@
   },
   "workspaces": {
     ".": {
-      "entry": ["config/*.mjs"]
+      "entry": ["config/*.mjs", "typedoc.markdown.mjs"]
     },
     "packages/*": {
       "project": ["src/**/*.ts"]
     },
+    "packages/playground": {
+      "project": []
+    },
     "packages/playground/*": {
-      "project": ["src/**/*.{ts,tsx,vue,svelte,astro}"]
+      "project": ["src/**/*.{js,jsx,ts,tsx,vue,svelte,astro}"]
     },
     "packages/docs": {
-      "project": [".vitepress/**/*.ts", "typedoc.markdown.mjs"]
+      "project": [".vitepress/**/*.ts"],
+      "entry": []
     },
     "packages/basic": {
       "ignoreDependencies": []

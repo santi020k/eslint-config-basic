@@ -15,6 +15,7 @@ export default [
       '**/tsup.config.ts',
       'docs/*',
       'docs-md/*',
+      'packages/tests/fixtures/**/*',
       'typedoc.config.mjs',
       'typedoc.markdown.mjs'
     ]

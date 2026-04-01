@@ -1,4 +1,4 @@
-import nestjsTypedPlugin from '@darraghor/eslint-plugin-nestjs-typed'
+import { plugin as nestjsTypedPlugin } from '@darraghor/eslint-plugin-nestjs-typed'
 import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
@@ -9,7 +9,7 @@ export const swagger: TSESLint.FlatConfig.ConfigArray = [
   {
     name: 'optionals/swagger',
     plugins: {
-      '@darraghor/nestjs-typed': nestjsTypedPlugin as TSESLint.FlatConfig.Plugin
+      '@darraghor/nestjs-typed': nestjsTypedPlugin
     },
     rules: {
       '@darraghor/nestjs-typed/api-method-should-specify-api-response': 'warn',

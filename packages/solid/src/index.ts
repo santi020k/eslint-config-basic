@@ -9,7 +9,7 @@ import type { TSESLint } from '@typescript-eslint/utils'
 export const solidConfig: TSESLint.FlatConfig.ConfigArray = [
   {
     name: 'eslint-config-solid/rules',
-    ...(pluginSolid.configs['flat/recommended'] as any)
+    ...(pluginSolid.configs['flat/recommended'] as Record<string, unknown>)
   }
 ]
 

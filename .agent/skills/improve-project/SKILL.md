@@ -37,10 +37,10 @@ The project is a Turborepo monorepo using npm Workspaces. It exports a composabl
 
 ### When adding a new Optional Config
 
-1. Create the new optional in `packages/optionals/src/{name}.ts`.
+1. Create the new optional in `packages/optionals/src/{category}/{name}.ts` (category = `tools`, `libraries`, `testing`, `formats`, or `extensions`).
 2. Export the optional from `packages/optionals/src/index.ts`.
-3. Add the optional enum to `OptionalOption` in `packages/core/src/types.ts`.
-4. Import and wire it into the `eslintConfig()` function inside `packages/basic/src/index.ts`.
+3. Add the enum value to the appropriate enum in `packages/core/src/types.ts` (`Tool`, `Library`, `Testing`, `Format`, or `Extension`).
+4. Import and wire it into `packages/basic/src/optionals.ts` using the matching enum check (e.g. `libraries.includes(Library.X)`).
 
 ## 4. Code Conventions
 

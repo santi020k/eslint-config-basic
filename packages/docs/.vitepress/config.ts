@@ -58,7 +58,9 @@ export default defineConfig({
             { text: 'Solid', link: '/frameworks/solid' },
             { text: 'Angular', link: '/frameworks/angular' },
             { text: 'NestJS', link: '/frameworks/nest' },
-            { text: 'Expo', link: '/frameworks/expo' }
+            { text: 'Expo', link: '/frameworks/expo' },
+            { text: 'Qwik', link: '/frameworks/qwik' },
+            { text: 'Remix', link: '/frameworks/remix' }
           ]
         }
       ],

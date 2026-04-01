@@ -1,6 +1,6 @@
 import type { TSESLint } from '@typescript-eslint/utils'
 
-const groups = [
+const groups: string[][] = [
   // Internal packages.
   // Atomic Design and components
   ['^(components|@/components|@components)(/.*|$)'],
@@ -32,7 +32,7 @@ const groups = [
   ['^.+\\.?(css|scss)$']
 ]
 
-export const rules: TSESLint.FlatConfig.Rules = {
+export const rules: TSESLint.Linter.RulesRecord = {
   'unused-imports/no-unused-imports': 'warn',
   indent: 'off',
   'brace-style': 'off',
@@ -91,6 +91,8 @@ export const rules: TSESLint.FlatConfig.Rules = {
     'warn',
     { blankLine: 'always', prev: '*', next: '*' },
     { blankLine: 'any', prev: 'import', next: 'import' },
+    { blankLine: 'any', prev: 'export', next: 'export' },
+    { blankLine: 'any', prev: 'cjs-export', next: 'cjs-export' },
     {
       blankLine: 'always',
       prev: ['const', 'let', 'var'],
@@ -150,7 +152,16 @@ export const rules: TSESLint.FlatConfig.Rules = {
   '@stylistic/multiline-comment-style': 'off',
   'space-before-function-paren': 'off',
   'operator-linebreak': 'off',
-  '@stylistic/operator-linebreak': ['error', 'after']
-} satisfies TSESLint.FlatConfig.Rules
+  '@stylistic/operator-linebreak': ['error', 'after'],
+
+  // Node rules
+  'n/no-extraneous-import': 'off',
+  'n/no-unsupported-features/node-builtins': 'off',
+  'n/no-missing-import': 'off',
+
+  // Promise rules
+  'promise/always-return': 'warn',
+  'promise/catch-or-return': 'warn'
+}
 
 export { groups }

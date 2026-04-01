@@ -15,7 +15,9 @@ export const cypress: TSESLint.FlatConfig.ConfigArray = [
       '**/*.cy.{js,ts,jsx,tsx}'
     ],
     plugins: {
-      cypress: fixupPluginRules(pluginCypress as any) as unknown as TSESLint.FlatConfig.Plugin
+      cypress: fixupPluginRules(
+        pluginCypress as unknown as Record<string, unknown>
+      )
     },
     rules: {
       ...pluginCypress.configs.recommended.rules

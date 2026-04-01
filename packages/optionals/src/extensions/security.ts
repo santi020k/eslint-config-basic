@@ -1,5 +1,6 @@
 import pluginSecurity from 'eslint-plugin-security'
 
+import { GLOB_JS_TS } from '@santi020k/eslint-config-core'
 import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
@@ -9,6 +10,7 @@ import type { TSESLint } from '@typescript-eslint/utils'
 export const security: TSESLint.FlatConfig.ConfigArray = [
   {
     name: 'eslint-config-optionals/security',
+    files: GLOB_JS_TS,
     plugins: {
       security: pluginSecurity
     },

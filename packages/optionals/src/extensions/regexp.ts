@@ -1,5 +1,6 @@
 import * as pluginRegexp from 'eslint-plugin-regexp'
 
+import { GLOB_JS_TS } from '@santi020k/eslint-config-core'
 import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
@@ -10,6 +11,7 @@ import type { TSESLint } from '@typescript-eslint/utils'
 export const regexp: TSESLint.FlatConfig.ConfigArray = [
   {
     name: 'optionals/regexp',
+    files: GLOB_JS_TS,
     plugins: {
       regexp: pluginRegexp as TSESLint.FlatConfig.Plugin
     },

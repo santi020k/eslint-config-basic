@@ -5,7 +5,8 @@ Thank you for your interest in contributing! This guide will help you get starte
 ## Prerequisites
 
 - Node.js (version specified in `.nvmrc`)
-- npm
+- pnpm (version specified in `packageManager` of `package.json`)
+- corepack (to auto-manage pnpm version)
 
 ## Setup
 
@@ -14,19 +15,23 @@ Thank you for your interest in contributing! This guide will help you get starte
 git clone https://github.com/santi020k/eslint-config-basic.git
 cd eslint-config-basic
 
+# Enable corepack
+corepack enable
+corepack use pnpm@10.33.0
+
 # Install dependencies
-npm install
+pnpm install
 
 # Build all packages
-npm run build
+pnpm run build
 ```
 
 ## Monorepo Structure
 
-This project uses **Turborepo** with **npm Workspaces**. Each ESLint config lives in its own package under `packages/`:
+This project uses **Turborepo** with **pnpm Workspaces**. Each ESLint config lives in its own package under `packages/`:
 
 | Package | Path | Description |
-|---------|------|-------------|
+| :--- | :--- | :--- |
 | `@santi020k/eslint-config-basic` | `packages/basic` | Main entry point, composes all configs |
 | `@santi020k/eslint-config-core` | `packages/core` | Core JS rules, types, utilities |
 | `@santi020k/eslint-config-typescript` | `packages/typescript` | TypeScript rules |
@@ -34,6 +39,12 @@ This project uses **Turborepo** with **npm Workspaces**. Each ESLint config live
 | `@santi020k/eslint-config-next` | `packages/next` | Next.js rules |
 | `@santi020k/eslint-config-astro` | `packages/astro` | Astro rules |
 | `@santi020k/eslint-config-expo` | `packages/expo` | Expo/React Native rules |
+| `@santi020k/eslint-config-vue` | `packages/vue` | Vue.js rules |
+| `@santi020k/eslint-config-svelte` | `packages/svelte` | Svelte rules |
+| `@santi020k/eslint-config-solid` | `packages/solid` | Solid.js rules |
+| `@santi020k/eslint-config-angular` | `packages/angular` | Angular rules |
+| `@santi020k/eslint-config-qwik` | `packages/qwik` | Qwik rules |
+| `@santi020k/eslint-config-remix` | `packages/remix` | Remix rules |
 | `@santi020k/eslint-config-optionals` | `packages/optionals` | Optional configs (Tailwind, Vitest, etc.) |
 
 ## Adding a New Framework Config
@@ -95,18 +106,18 @@ This project uses **Turborepo** with **npm Workspaces**. Each ESLint config live
 
 5. **Create `packages/myframework/src/index.ts`:**
 
-```typescript
-import type { TSESLint } from '@typescript-eslint/utils'
+    ```typescript
+    import type { TSESLint } from '@typescript-eslint/utils'
 
-export const myframeworkConfig: TSESLint.FlatConfig.ConfigArray = [
-  {
-    name: 'eslint-config/myframework',
-    rules: {
-      // Add your rules here
-    }
-  }
-]
-```
+    export const myframeworkConfig: TSESLint.FlatConfig.ConfigArray = [
+      {
+        name: 'eslint-config/myframework',
+        rules: {
+          // Add your rules here
+        }
+      }
+    ]
+    ```
 
 6. **Compose in `packages/basic/src/index.ts`.**
 
@@ -114,20 +125,9 @@ export const myframeworkConfig: TSESLint.FlatConfig.ConfigArray = [
 
 ### Specific Framework Guides
 
-#### React, Next.js, Astro, Expo, NestJS
+#### React, Next.js, Astro, Expo, NestJS, Vue, Svelte, Solid, Angular, Qwik, Remix
+
 These are already implemented. See their respective `packages/` for reference.
-
-#### Vue (Future)
-1. Create `packages/vue`.
-2. Extend `eslint-plugin-vue` configs.
-3. Ensure TS compatibility.
-
-#### Angular (Future)
-1. Create `packages/angular`.
-2. Use `angular-eslint` capabilities.
-3. Note: Angular often requires a specific `builder` context.
-
-
 
 ## Adding a New Optional
 
@@ -138,13 +138,12 @@ These are already implemented. See their respective `packages/` for reference.
 ## Available Commands
 
 ```bash
-npm run build      # Build all packages (Turborepo)
-npm run lint       # Lint entire monorepo
-npm run lint:fix   # Fix lint issues
-npm run test       # Run tests (Vitest)
-npm run dev        # Watch mode
-npm run dev        # Watch mode
-npm run inspector  # Visual ESLint config inspector
+pnpm run build      # Build all packages (Turborepo)
+pnpm run lint       # Lint entire monorepo
+pnpm run lint:fix   # Fix lint issues
+pnpm run test       # Run tests (Vitest)
+pnpm run dev        # Watch mode
+pnpm run inspector  # Visual ESLint config inspector
 ```
 
 ## Documentation
@@ -177,9 +176,11 @@ npx cz
 
 1. Fork the repository and create your branch from `main`.
 2. Make sure all checks pass:
-   ```bash
-   npm run build && npm run lint && npm run test
-   ```
+
+    ```bash
+      pnpm run build && pnpm run lint && pnpm run test
+    ```
+
 3. Write clear, descriptive commit messages following conventional commits.
 4. Update documentation if you're changing public APIs.
 5. Add tests for new functionality.

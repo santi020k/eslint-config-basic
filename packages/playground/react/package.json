@@ -4,17 +4,20 @@
   "type": "module",
   "scripts": {
     "lint": "eslint .",
-    "build": "echo \"No build step required\"",
-    "dev": "echo \"No build step required\"",
     "clean": "rm -rf dist node_modules",
     "check:exports": "echo \"No exports to check\"",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@santi020k/eslint-config-basic": "*",
+    "@santi020k/eslint-config-basic": "workspace:^",
     "eslint": "^10.0.3",
     "react": "19.2.4",
     "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "typescript": "^5.8.2"
   },
   "author": "santi020k",
   "license": "MIT",

@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
-import { type EslintConfigOptions, Extension, Library, Runtime, Testing, Tool } from '../types.js'
+import { type EslintConfigOptions, Extension, Format, Library, Preset, Runtime, Testing, Tool } from '../types.js'
 
 interface PackageJson {
   dependencies?: Record<string, string | undefined>
@@ -66,18 +66,42 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
       options.runtime = Runtime.Node
     }
 
-    if (allDeps.vue) frameworks.vue = true
+    if (allDeps.vue) {
+      frameworks.vue = true
+
+      options.runtime = Runtime.Browser
+    }
 
     if (allDeps.expo || allDeps['react-native']) frameworks.expo = true
 
-    if (allDeps.svelte) frameworks.svelte = true
+    if (allDeps.svelte) {
+      frameworks.svelte = true
 
-    if (allDeps['solid-js']) frameworks.solid = true
+      options.runtime = Runtime.Browser
+    }
 
-    if (allDeps['@angular/core']) frameworks.angular = true
+    if (allDeps['solid-js']) {
+      frameworks.solid = true
+
+      options.runtime = Runtime.Browser
+    }
+
+    if (allDeps['@angular/core']) {
+      frameworks.angular = true
+
+      options.runtime = Runtime.Browser
+    }
+
+    if (allDeps['@builder.io/qwik']) frameworks.qwik = true
+
+    if (allDeps['@remix-run/react'] || allDeps['@remix-run/node']) frameworks.remix = true
 
     // Default to TS if tsconfig exists
-    if (existsSync(join(cwd, 'tsconfig.json'))) {
+    if (
+      existsSync(join(cwd, 'tsconfig.json')) ||
+      existsSync(join(cwd, 'tsconfig.base.json')) ||
+      existsSync(join(cwd, 'tsconfig.dev.json'))
+    ) {
       options.typescript = true
     }
 
@@ -88,13 +112,42 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
 
     if (allDeps.playwright || allDeps['@playwright/test']) options.testing?.push(Testing.Playwright)
 
+    if (allDeps.jest || allDeps['@jest/core'] || allDeps['jest-circus']) options.testing?.push(Testing.Jest)
+
+    if (allDeps.cypress) options.testing?.push(Testing.Cypress)
+
+    if (
+      allDeps['@testing-library/react'] ||
+      allDeps['@testing-library/vue'] ||
+      allDeps['@testing-library/angular'] ||
+      allDeps['@testing-library/svelte'] ||
+      allDeps['@testing-library/user-event'] ||
+      allDeps['@testing-library/jest-dom'] ||
+      allDeps['@testing-library/dom']
+    ) {
+      options.testing?.push(Testing.TestingLibrary)
+    }
+
     if (allDeps.i18next) options.libraries?.push(Library.I18next)
 
     if (allDeps['@stencil/core']) options.libraries?.push(Library.Stencil)
 
-    if (allDeps.storybook || allDeps['@storybook/react']) options.libraries?.push(Library.Storybook)
+    if (
+      allDeps.storybook ||
+      allDeps['@storybook/react'] ||
+      allDeps['@storybook/core'] ||
+      allDeps['@storybook/nextjs'] ||
+      allDeps['@storybook/vue3'] ||
+      allDeps['@storybook/svelte'] ||
+      allDeps['@storybook/angular'] ||
+      allDeps['@storybook/experimental-nextjs-vite']
+    ) {
+      options.libraries?.push(Library.Storybook)
+    }
 
     if (allDeps['@nestjs/swagger']) options.tools?.push(Tool.Swagger)
+
+    if (allDeps.prettier) options.tools?.push(Tool.Prettier)
 
     // TanStack
     if (
@@ -115,8 +168,32 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
       options.libraries?.push(Library.TanstackRouter)
     }
 
+    if (
+      allDeps.graphql ||
+      allDeps['@apollo/client'] ||
+      allDeps['relay-runtime'] ||
+      allDeps.urql ||
+      allDeps['graphql-tag'] ||
+      allDeps['@graphql-typed-document-node/core'] ||
+      existsSync(join(cwd, 'schema.graphql')) ||
+      existsSync(join(cwd, 'schema.gql'))
+    ) {
+      options.formats?.push(Format.Graphql)
+    }
+
     // Auto-enable security plugin (Professional default)
     options.extensions?.push(Extension.Security)
+
+    // Preset detection logic
+    if (options.typescript) {
+      if (options.runtime === Runtime.Node) {
+        options.preset = Preset.Node
+      } else if (options.runtime === Runtime.Browser) {
+        options.preset = Preset.Browser
+      }
+    } else {
+      options.preset = Preset.Basic
+    }
 
     options.libraries = [...new Set(options.libraries)]
 
@@ -129,7 +206,11 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
     options.extensions = [...new Set(options.extensions)]
 
     return options
-  } catch {
+  } catch (err) {
+    if (process.env.ESLINT_BASIC_DEBUG) {
+      console.warn('[ESLint Basic] Failed to detect project options from package.json:', err)
+    }
+
     return options
   }
 }

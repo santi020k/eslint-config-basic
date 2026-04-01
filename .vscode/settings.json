@@ -13,7 +13,17 @@
     "mdx",
     "astro",
     "svelte",
-    "vue"
+    "vue",
+    "graphql",
+    "json",
+    "jsonc",
+    "json5",
+    "yaml",
+    "toml",
+    "html",
+    "css",
+    "scss",
+    "less"
   ],
   // required to make the extension pickup the flat config
   "eslint.useFlatConfig": true,

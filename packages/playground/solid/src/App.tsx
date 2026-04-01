@@ -1,6 +1,8 @@
 import { createEffect, createSignal, onMount } from 'solid-js'
 
 const App = () => {
+  // eslint-disable-next-line no-var, @typescript-eslint/no-unused-vars
+  var x = 1
   const [count, setCount] = createSignal(0)
 
   createEffect(() => {
@@ -11,6 +13,7 @@ const App = () => {
     console.log('Solid App mounted')
   })
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return (
     <div>
       <h1>Solid Playground</h1>

@@ -25,6 +25,9 @@ const features: Feature[] = [
 ]
 
 export default function Page() {
+  // eslint-disable-next-line no-var, @typescript-eslint/no-unused-vars
+  var x = 1
+
   return (
     <div className="page-wrapper">
       <h1>Next.js Playground</h1>

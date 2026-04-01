@@ -3,7 +3,8 @@
   "compilerOptions": {
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "target": "ESNext"
+    "target": "ESNext",
+    "experimentalDecorators": true
   },
   "include": ["eslint.config.js", "src/**/*"]
 }

@@ -1,0 +1,1248 @@
+{
+  "$ref": "#/definitions/EslintConfigOptions",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "CacheDurationSeconds": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "const": "Infinity",
+          "type": "string"
+        }
+      ]
+    },
+    "DebugLevel": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "items": {
+            "enum": [
+              "eslint",
+              "typescript",
+              "typescript-eslint"
+            ],
+            "type": "string"
+          },
+          "type": "array"
+        }
+      ]
+    },
+    "EcmaVersion": {
+      "anyOf": [
+        {
+          "const": 3,
+          "type": "number"
+        },
+        {
+          "const": 5,
+          "type": "number"
+        },
+        {
+          "const": 6,
+          "type": "number"
+        },
+        {
+          "const": 7,
+          "type": "number"
+        },
+        {
+          "const": 8,
+          "type": "number"
+        },
+        {
+          "const": 9,
+          "type": "number"
+        },
+        {
+          "const": 10,
+          "type": "number"
+        },
+        {
+          "const": 11,
+          "type": "number"
+        },
+        {
+          "const": 12,
+          "type": "number"
+        },
+        {
+          "const": 13,
+          "type": "number"
+        },
+        {
+          "const": 14,
+          "type": "number"
+        },
+        {
+          "const": 15,
+          "type": "number"
+        },
+        {
+          "const": 16,
+          "type": "number"
+        },
+        {
+          "const": 17,
+          "type": "number"
+        },
+        {
+          "const": 2015,
+          "type": "number"
+        },
+        {
+          "const": 2016,
+          "type": "number"
+        },
+        {
+          "const": 2017,
+          "type": "number"
+        },
+        {
+          "const": 2018,
+          "type": "number"
+        },
+        {
+          "const": 2019,
+          "type": "number"
+        },
+        {
+          "const": 2020,
+          "type": "number"
+        },
+        {
+          "const": 2021,
+          "type": "number"
+        },
+        {
+          "const": 2022,
+          "type": "number"
+        },
+        {
+          "const": 2023,
+          "type": "number"
+        },
+        {
+          "const": 2024,
+          "type": "number"
+        },
+        {
+          "const": 2025,
+          "type": "number"
+        },
+        {
+          "const": 2026,
+          "type": "number"
+        },
+        {
+          "const": "latest",
+          "type": "string"
+        },
+        {
+          "not": {}
+        }
+      ]
+    },
+    "EslintConfigOptions": {
+      "additionalProperties": false,
+      "description": "ESLint configuration interface",
+      "properties": {
+        "extensions": {
+          "description": "List of specialized ESLint rules and extensions",
+          "items": {
+            "$ref": "#/definitions/Extension"
+          },
+          "type": "array"
+        },
+        "formats": {
+          "description": "Additional non-JS/TS file formats to lint",
+          "items": {
+            "$ref": "#/definitions/Format"
+          },
+          "type": "array"
+        },
+        "frameworks": {
+          "additionalProperties": false,
+          "description": "Framework and library specific configurations. If a value is provided, its rules and globals are automatically enabled.",
+          "properties": {
+            "angular": {
+              "$ref": "#/definitions/ImportedFramework"
+            },
+            "astro": {
+              "$ref": "#/definitions/ImportedFramework"
+            },
+            "expo": {
+              "$ref": "#/definitions/ImportedFramework"
+            },
+            "nest": {
+              "$ref": "#/definitions/ImportedFramework"
+            },
+            "next": {
+              "$ref": "#/definitions/ImportedFramework"
+            },
+            "qwik": {
+              "$ref": "#/definitions/ImportedFramework"
+            },
+            "react": {
+              "$ref": "#/definitions/ImportedFramework"
+            },
+            "remix": {
+              "$ref": "#/definitions/ImportedFramework"
+            },
+            "solid": {
+              "$ref": "#/definitions/ImportedFramework"
+            },
+            "svelte": {
+              "$ref": "#/definitions/ImportedFramework"
+            },
+            "vue": {
+              "$ref": "#/definitions/ImportedFramework"
+            }
+          },
+          "type": "object"
+        },
+        "libraries": {
+          "description": "List of application-level dependencies configurations",
+          "items": {
+            "$ref": "#/definitions/Library"
+          },
+          "type": "array"
+        },
+        "nextMode": {
+          "$ref": "#/definitions/NextMode",
+          "description": "Next.js specific routing mode"
+        },
+        "preset": {
+          "$ref": "#/definitions/Preset",
+          "description": "High-level configuration preset"
+        },
+        "runtime": {
+          "$ref": "#/definitions/Runtime",
+          "description": "Runtime environment preset (Node, Browser, Universal)"
+        },
+        "settings": {
+          "description": "List of global settings and behavioral flags",
+          "items": {
+            "$ref": "#/definitions/Setting"
+          },
+          "type": "array"
+        },
+        "strict": {
+          "description": "If true, all 'warn' rules are promoted to 'error'",
+          "type": "boolean"
+        },
+        "testing": {
+          "description": "List of testing frameworks and testing environments",
+          "items": {
+            "$ref": "#/definitions/Testing"
+          },
+          "type": "array"
+        },
+        "tools": {
+          "description": "List of integrations for external standalone tools",
+          "items": {
+            "$ref": "#/definitions/Tool"
+          },
+          "type": "array"
+        },
+        "tsconfigRootDir": {
+          "description": "Root directory of the project. Required if multiple candidate TSConfigRootDirs are present.",
+          "type": "string"
+        },
+        "typescript": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "$ref": "#/definitions/TsOptions"
+            }
+          ],
+          "description": "Enable TypeScript support with optional settings"
+        }
+      },
+      "type": "object"
+    },
+    "Extension": {
+      "description": "Enum for specialized ESLint extensions and strict rule sets",
+      "enum": [
+        "regexp",
+        "unicorn",
+        "sonarjs",
+        "security",
+        "perfectionist"
+      ],
+      "type": "string"
+    },
+    "FlatConfig.Config": {
+      "additionalProperties": false,
+      "properties": {
+        "basePath": {
+          "description": "The base path for files and ignores.\n\nNote that this is not permitted inside an `extends` array.\n\nSince ESLint 9.30.0",
+          "type": "string"
+        },
+        "files": {
+          "description": "An array of glob patterns indicating the files that the configuration object should apply to. If not specified, the configuration object applies to all files matched by any other configuration object.",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        "ignores": {
+          "description": "An array of glob patterns indicating the files that the configuration object should not apply to. If not specified, the configuration object applies to all files matched by files.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "language": {
+          "description": "Language specifier in the form `namespace/language-name` where `namespace` is a plugin name set in the `plugins` field.",
+          "type": "string"
+        },
+        "languageOptions": {
+          "$ref": "#/definitions/FlatConfig.LanguageOptions",
+          "description": "An object containing settings related to how JavaScript is configured for linting."
+        },
+        "linterOptions": {
+          "$ref": "#/definitions/FlatConfig.LinterOptions",
+          "description": "An object containing settings related to the linting process."
+        },
+        "name": {
+          "description": "An string to identify the configuration object. Used in error messages and inspection tools.",
+          "type": "string"
+        },
+        "plugins": {
+          "$ref": "#/definitions/FlatConfig.Plugins",
+          "description": "An object containing a name-value mapping of plugin names to plugin objects. When `files` is specified, these plugins are only available to the matching files."
+        },
+        "processor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/definitions/FlatConfig.Processor"
+            }
+          ],
+          "description": "Either an object containing `preprocess()` and `postprocess()` methods or a string indicating the name of a processor inside of a plugin (i.e., `\"pluginName/processorName\"`)."
+        },
+        "rules": {
+          "$ref": "#/definitions/FlatConfig.Rules",
+          "description": "An object containing the configured rules. When `files` or `ignores` are specified, these rule configurations are only available to the matching files."
+        },
+        "settings": {
+          "$ref": "#/definitions/FlatConfig.Settings",
+          "description": "An object containing name-value pairs of information that should be available to all rules."
+        }
+      },
+      "type": "object"
+    },
+    "FlatConfig.ConfigArray": {
+      "items": {
+        "$ref": "#/definitions/FlatConfig.Config"
+      },
+      "type": "array"
+    },
+    "FlatConfig.EcmaVersion": {
+      "$ref": "#/definitions/EcmaVersion"
+    },
+    "FlatConfig.GlobalsConfig": {
+      "$ref": "#/definitions/SharedConfig.GlobalsConfig"
+    },
+    "FlatConfig.LanguageOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "ecmaVersion": {
+          "$ref": "#/definitions/FlatConfig.EcmaVersion",
+          "default": "latest",
+          "description": "The version of ECMAScript to support. May be any year (i.e., `2022`) or version (i.e., `5`). Set to `\"latest\"` for the most recent supported version."
+        },
+        "globals": {
+          "$ref": "#/definitions/FlatConfig.GlobalsConfig",
+          "description": "An object specifying additional objects that should be added to the global scope during linting."
+        },
+        "parser": {
+          "$ref": "#/definitions/FlatConfig.Parser",
+          "default": "```\n// https://github.com/eslint/espree\nrequire('espree')\n```",
+          "description": "An object containing a `parse()` method or a `parseForESLint()` method."
+        },
+        "parserOptions": {
+          "$ref": "#/definitions/FlatConfig.ParserOptions",
+          "description": "An object specifying additional options that are passed directly to the parser. The available options are parser-dependent."
+        },
+        "sourceType": {
+          "$ref": "#/definitions/FlatConfig.SourceType",
+          "default": "```\n// for `.js` and `.mjs` files\n\"module\"\n// for `.cjs` files\n\"commonjs\"\n```",
+          "description": "The type of JavaScript source code. Possible values are `\"script\"` for traditional script files, `\"module\"` for ECMAScript modules (ESM), and `\"commonjs\"` for CommonJS files."
+        }
+      },
+      "type": "object"
+    },
+    "FlatConfig.LinterOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "noInlineConfig": {
+          "description": "A Boolean value indicating if inline configuration is allowed.",
+          "type": "boolean"
+        },
+        "reportUnusedDisableDirectives": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "$ref": "#/definitions/SharedConfig.Severity"
+            },
+            {
+              "$ref": "#/definitions/SharedConfig.SeverityString"
+            }
+          ],
+          "default": "warn",
+          "description": "A severity string indicating if and how unused disable and enable directives should be tracked and reported. For legacy compatibility, `true` is equivalent to `\"warn\"` and `false` is equivalent to `\"off\"`."
+        },
+        "reportUnusedInlineConfigs": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/SharedConfig.Severity"
+            },
+            {
+              "$ref": "#/definitions/SharedConfig.SeverityString"
+            }
+          ],
+          "default": "off",
+          "description": "A severity string indicating if and how unused inline directives should be tracked and reported.\n\nsince ESLint 9.19.0"
+        }
+      },
+      "type": "object"
+    },
+    "FlatConfig.Parser": {
+      "$ref": "#/definitions/Parser.LooseParserModule"
+    },
+    "FlatConfig.ParserOptions": {
+      "$ref": "#/definitions/SharedConfig.ParserOptions"
+    },
+    "FlatConfig.Plugins": {
+      "additionalProperties": {
+        "additionalProperties": false,
+        "description": "We intentionally omit the `configs` key from this object because it avoids type conflicts with old plugins that haven't updated their configs to flat configs yet. It's valid to reference these old plugins because ESLint won't access the `.config` property of a plugin when evaluating a flat config.",
+        "properties": {
+          "meta": {
+            "additionalProperties": false,
+            "description": "Metadata about your plugin for easier debugging and more effective caching of plugins.",
+            "properties": {
+              "name": {
+                "description": "The meta.name property should match the npm package name for your plugin.",
+                "type": "string"
+              },
+              "namespace": {
+                "description": "If you followed the classic style to name your package (e.g. `eslint-plugin-X`, `@X/eslint-plugin`, or `@X/eslint-plugin-Y`), then this should match the classic namespace inferred for your package (e.g. `X`, `@X`, or `@X/Y`, respectively).",
+                "type": "string"
+              },
+              "version": {
+                "description": "The meta.version property should match the npm package version for your plugin.",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "processors": {
+            "additionalProperties": {
+              "$ref": "#/definitions/FlatConfig.Processor"
+            },
+            "description": "The definition of plugin processors. Users can stringly reference the processor using the key in their config (i.e., `\"pluginName/processorName\"`).",
+            "type": "object"
+          },
+          "rules": {
+            "additionalProperties": {
+              "$ref": "#/definitions/LooseRuleDefinition"
+            },
+            "description": "The definition of plugin rules. The key must be the name of the rule that users will use Users can stringly reference the rule using the key they registered the plugin under combined with the rule name. i.e. for the user config `plugins: { foo: pluginReference }` - the reference would be `\"foo/ruleName\"`.",
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "type": "object"
+    },
+    "FlatConfig.Processor": {
+      "$ref": "#/definitions/Processor.LooseProcessorModule"
+    },
+    "FlatConfig.Rules": {
+      "$ref": "#/definitions/SharedConfig.RulesRecord"
+    },
+    "FlatConfig.Settings": {
+      "$ref": "#/definitions/SharedConfigurationSettings"
+    },
+    "FlatConfig.SourceType": {
+      "anyOf": [
+        {
+          "const": "commonjs",
+          "type": "string"
+        },
+        {
+          "$ref": "#/definitions/SourceType"
+        }
+      ]
+    },
+    "FlatConfigArray": {
+      "$ref": "#/definitions/FlatConfig.ConfigArray",
+      "description": "Type alias for ESLint flat config array"
+    },
+    "Format": {
+      "description": "Enum for linting non-JS/TS file formats",
+      "enum": [
+        "mdx",
+        "markdown",
+        "jsonc",
+        "yaml",
+        "toml",
+        "graphql"
+      ],
+      "type": "string"
+    },
+    "ImportedFramework": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/FlatConfigArray"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "default": {
+              "$ref": "#/definitions/FlatConfigArray"
+            }
+          },
+          "required": [
+            "default"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "boolean"
+        }
+      ],
+      "description": "Type to handle both direct config arrays and imported modules with a default export. A boolean flag may appear in detected project options, but user-facing framework options should pass imported config arrays/modules explicitly."
+    },
+    "JSDocParsingMode": {
+      "enum": [
+        "all",
+        "none",
+        "type-info"
+      ],
+      "type": "string"
+    },
+    "Lib": {
+      "enum": [
+        "decorators",
+        "decorators.legacy",
+        "dom",
+        "dom.asynciterable",
+        "dom.iterable",
+        "es5",
+        "es6",
+        "es7",
+        "es2015",
+        "es2015.collection",
+        "es2015.core",
+        "es2015.generator",
+        "es2015.iterable",
+        "es2015.promise",
+        "es2015.proxy",
+        "es2015.reflect",
+        "es2015.symbol",
+        "es2015.symbol.wellknown",
+        "es2016",
+        "es2016.array.include",
+        "es2016.full",
+        "es2016.intl",
+        "es2017",
+        "es2017.arraybuffer",
+        "es2017.date",
+        "es2017.full",
+        "es2017.intl",
+        "es2017.object",
+        "es2017.sharedmemory",
+        "es2017.string",
+        "es2017.typedarrays",
+        "es2018",
+        "es2018.asyncgenerator",
+        "es2018.asynciterable",
+        "es2018.full",
+        "es2018.intl",
+        "es2018.promise",
+        "es2018.regexp",
+        "es2019",
+        "es2019.array",
+        "es2019.full",
+        "es2019.intl",
+        "es2019.object",
+        "es2019.string",
+        "es2019.symbol",
+        "es2020",
+        "es2020.bigint",
+        "es2020.date",
+        "es2020.full",
+        "es2020.intl",
+        "es2020.number",
+        "es2020.promise",
+        "es2020.sharedmemory",
+        "es2020.string",
+        "es2020.symbol.wellknown",
+        "es2021",
+        "es2021.full",
+        "es2021.intl",
+        "es2021.promise",
+        "es2021.string",
+        "es2021.weakref",
+        "es2022",
+        "es2022.array",
+        "es2022.error",
+        "es2022.full",
+        "es2022.intl",
+        "es2022.object",
+        "es2022.regexp",
+        "es2022.string",
+        "es2023",
+        "es2023.array",
+        "es2023.collection",
+        "es2023.full",
+        "es2023.intl",
+        "es2024",
+        "es2024.arraybuffer",
+        "es2024.collection",
+        "es2024.full",
+        "es2024.object",
+        "es2024.promise",
+        "es2024.regexp",
+        "es2024.sharedmemory",
+        "es2024.string",
+        "esnext",
+        "esnext.array",
+        "esnext.asynciterable",
+        "esnext.bigint",
+        "esnext.collection",
+        "esnext.decorators",
+        "esnext.disposable",
+        "esnext.error",
+        "esnext.float16",
+        "esnext.full",
+        "esnext.intl",
+        "esnext.iterator",
+        "esnext.object",
+        "esnext.promise",
+        "esnext.regexp",
+        "esnext.sharedmemory",
+        "esnext.string",
+        "esnext.symbol",
+        "esnext.weakref",
+        "lib",
+        "scripthost",
+        "webworker",
+        "webworker.asynciterable",
+        "webworker.importscripts",
+        "webworker.iterable"
+      ],
+      "type": "string"
+    },
+    "Library": {
+      "description": "Enum for application-level runtime dependencies and styling",
+      "enum": [
+        "tailwind",
+        "i18next",
+        "stencil",
+        "tanstack-query",
+        "tanstack-router",
+        "storybook"
+      ],
+      "type": "string"
+    },
+    "LooseRuleCreateFunction": {
+      "$comment": "(context: any) => Record<string, Function | undefined>",
+      "properties": {
+        "namedArgs": {
+          "additionalProperties": false,
+          "properties": {
+            "context": {}
+          },
+          "required": [
+            "context"
+          ],
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "LooseRuleDefinition": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/LooseRuleCreateFunction"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "create": {
+              "$ref": "#/definitions/LooseRuleCreateFunction"
+            },
+            "meta": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "create"
+          ],
+          "type": "object"
+        }
+      ],
+      "description": "A loose definition of the RuleModule type for use with configs. This type is intended to relax validation of types so that we can have basic validation without being overly strict about nitty gritty details matching.\n\nFor example the plugin might be declared using an old version of our types or they might use the DefinitelyTyped eslint types. Ultimately we don't need super strict validation in a config - a loose shape match is \"good enough\" to help validate the config is correct."
+    },
+    "NextMode": {
+      "description": "Enum for Next.js mode options",
+      "enum": [
+        "pages",
+        "app-router"
+      ],
+      "type": "string"
+    },
+    "Parser.LooseParserModule": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "meta": {
+              "additionalProperties": false,
+              "description": "Information about the parser to uniquely identify it when serializing.",
+              "properties": {
+                "name": {
+                  "description": "The unique name of the parser.",
+                  "type": "string"
+                },
+                "version": {
+                  "description": "The a string identifying the version of the parser.",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "parseForESLint": {
+              "additionalProperties": false,
+              "properties": {
+                "ast": {},
+                "scopeManager": {},
+                "services": {},
+                "visitorKeys": {}
+              },
+              "required": [
+                "ast",
+                "scopeManager",
+                "services",
+                "visitorKeys"
+              ],
+              "type": "object"
+            }
+          },
+          "required": [
+            "parseForESLint"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "meta": {
+              "additionalProperties": false,
+              "description": "Information about the parser to uniquely identify it when serializing.",
+              "properties": {
+                "name": {
+                  "description": "The unique name of the parser.",
+                  "type": "string"
+                },
+                "version": {
+                  "description": "The a string identifying the version of the parser.",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "parse": {}
+          },
+          "required": [
+            "parse"
+          ],
+          "type": "object"
+        }
+      ],
+      "description": "A loose definition of the ParserModule type for use with configs This type intended to relax validation of configs so that parsers that have different AST types or scope managers can still be passed to configs"
+    },
+    "ParserOptions": {
+      "additionalProperties": {},
+      "properties": {
+        "cacheLifetime": {
+          "additionalProperties": false,
+          "properties": {
+            "glob": {
+              "$ref": "#/definitions/CacheDurationSeconds"
+            }
+          },
+          "type": "object"
+        },
+        "debugLevel": {
+          "$ref": "#/definitions/DebugLevel"
+        },
+        "ecmaFeatures": {
+          "additionalProperties": {},
+          "properties": {
+            "globalReturn": {
+              "type": "boolean"
+            },
+            "jsx": {
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        },
+        "ecmaVersion": {
+          "enum": [
+            3,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            2015,
+            2016,
+            2017,
+            2018,
+            2019,
+            2020,
+            2021,
+            2022,
+            2023,
+            2024,
+            2025,
+            2026,
+            "latest"
+          ],
+          "type": [
+            "number",
+            "string"
+          ]
+        },
+        "emitDecoratorMetadata": {
+          "type": "boolean"
+        },
+        "errorOnTypeScriptSyntacticAndSemanticIssues": {
+          "type": "boolean"
+        },
+        "errorOnUnknownASTType": {
+          "type": "boolean"
+        },
+        "experimentalDecorators": {
+          "type": "boolean"
+        },
+        "extraFileExtensions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "filePath": {
+          "type": "string"
+        },
+        "isolatedDeclarations": {
+          "type": "boolean"
+        },
+        "jsDocParsingMode": {
+          "$ref": "#/definitions/JSDocParsingMode"
+        },
+        "jsxFragmentName": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "jsxPragma": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "lib": {
+          "items": {
+            "$ref": "#/definitions/Lib"
+          },
+          "type": "array"
+        },
+        "programs": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/definitions/ts.Program"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "project": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projectFolderIgnoreList": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "projectService": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "$ref": "#/definitions/ProjectServiceOptions"
+            }
+          ]
+        },
+        "range": {
+          "type": "boolean"
+        },
+        "sourceType": {
+          "$ref": "#/definitions/SourceType"
+        },
+        "tokens": {
+          "type": "boolean"
+        },
+        "tsconfigRootDir": {
+          "type": "string"
+        },
+        "warnOnUnsupportedTypeScriptVersion": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "Preset": {
+      "description": "Enum for named presets",
+      "enum": [
+        "basic",
+        "all",
+        "node",
+        "browser"
+      ],
+      "type": "string"
+    },
+    "Processor.LooseProcessorModule": {
+      "additionalProperties": false,
+      "description": "A loose definition of the ParserModule type for use with configs This type intended to relax validation of configs so that parsers that have different AST types or scope managers can still be passed to configs",
+      "properties": {
+        "meta": {
+          "additionalProperties": false,
+          "description": "Information about the processor to uniquely identify it when serializing.",
+          "properties": {
+            "name": {
+              "description": "The unique name of the processor.",
+              "type": "string"
+            },
+            "version": {
+              "description": "The a string identifying the version of the processor.",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "postprocess": {
+          "$comment": "(messagesList: any, filename: string) => any",
+          "description": "The function to merge messages.",
+          "properties": {
+            "namedArgs": {
+              "additionalProperties": false,
+              "properties": {
+                "filename": {
+                  "type": "string"
+                },
+                "messagesList": {}
+              },
+              "required": [
+                "messagesList",
+                "filename"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "object"
+        },
+        "preprocess": {
+          "$comment": "(text: string, filename: string) => any",
+          "description": "The function to extract code blocks.",
+          "properties": {
+            "namedArgs": {
+              "additionalProperties": false,
+              "properties": {
+                "filename": {
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "text",
+                "filename"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "object"
+        },
+        "supportsAutofix": {
+          "description": "If `true` then it means the processor supports autofix.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "ProjectServiceOptions": {
+      "additionalProperties": false,
+      "description": "Granular options to configure the project service.",
+      "properties": {
+        "allowDefaultProject": {
+          "description": "Globs of files to allow running with the default project compiler options despite not being matched by the project service.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "defaultProject": {
+          "default": "tsconfig.json",
+          "description": "Path to a TSConfig to use instead of TypeScript's default project configuration.",
+          "type": "string"
+        },
+        "loadTypeScriptPlugins": {
+          "description": "Whether to allow TypeScript plugins as configured in the TSConfig.",
+          "type": "boolean"
+        },
+        "maximumDefaultProjectFileMatchCount_THIS_WILL_SLOW_DOWN_LINTING": {
+          "default": 8,
+          "description": "The maximum number of files  {@link  allowDefaultProject }  may match. Each file match slows down linting, so if you do need to use this, please file an informative issue on typescript-eslint explaining why - so we can help you avoid using it!",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "Runtime": {
+      "description": "Enum for runtime environment presets",
+      "enum": [
+        "node",
+        "browser",
+        "universal"
+      ],
+      "type": "string"
+    },
+    "Setting": {
+      "description": "Enum for settings options in ESLint",
+      "enum": [
+        "gitignore",
+        "no-gitignore"
+      ],
+      "type": "string"
+    },
+    "SharedConfig.GlobalVariableOption": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/SharedConfig.GlobalVariableOptionBase"
+        },
+        {
+          "$ref": "#/definitions/SharedConfig.GlobalVariableOptionBoolean"
+        }
+      ]
+    },
+    "SharedConfig.GlobalVariableOptionBase": {
+      "enum": [
+        "off",
+        "readable",
+        "readonly",
+        "writable",
+        "writeable"
+      ],
+      "type": "string"
+    },
+    "SharedConfig.GlobalVariableOptionBoolean": {
+      "enum": [
+        false,
+        true
+      ],
+      "type": "boolean"
+    },
+    "SharedConfig.GlobalsConfig": {
+      "additionalProperties": {
+        "$ref": "#/definitions/SharedConfig.GlobalVariableOption"
+      },
+      "type": "object"
+    },
+    "SharedConfig.ParserOptions": {
+      "$ref": "#/definitions/ParserOptions"
+    },
+    "SharedConfig.RuleEntry": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/SharedConfig.RuleLevel"
+        },
+        {
+          "$ref": "#/definitions/SharedConfig.RuleLevelAndOptions"
+        }
+      ]
+    },
+    "SharedConfig.RuleLevel": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/SharedConfig.Severity"
+        },
+        {
+          "$ref": "#/definitions/SharedConfig.SeverityString"
+        }
+      ]
+    },
+    "SharedConfig.RuleLevelAndOptions": {
+      "additionalItems": {},
+      "items": [
+        {
+          "$ref": "#/definitions/SharedConfig.RuleLevel"
+        }
+      ],
+      "minItems": 1,
+      "type": "array"
+    },
+    "SharedConfig.RulesRecord": {
+      "additionalProperties": {
+        "$ref": "#/definitions/SharedConfig.RuleEntry"
+      },
+      "type": "object"
+    },
+    "SharedConfig.Severity": {
+      "enum": [
+        0,
+        1,
+        2
+      ],
+      "type": "number"
+    },
+    "SharedConfig.SeverityString": {
+      "enum": [
+        "error",
+        "off",
+        "warn"
+      ],
+      "type": "string"
+    },
+    "SharedConfigurationSettings": {
+      "additionalProperties": {},
+      "description": "Plugins can add their settings using declaration merging against this interface.",
+      "type": "object"
+    },
+    "SourceType": {
+      "anyOf": [
+        {
+          "const": "commonjs",
+          "type": "string"
+        },
+        {
+          "$ref": "#/definitions/SourceTypeClassic"
+        }
+      ]
+    },
+    "SourceTypeClassic": {
+      "enum": [
+        "module",
+        "script"
+      ],
+      "type": "string"
+    },
+    "Testing": {
+      "description": "Enum for testing frameworks and environments",
+      "enum": [
+        "vitest",
+        "playwright",
+        "jest",
+        "cypress",
+        "testing-library"
+      ],
+      "type": "string"
+    },
+    "Tool": {
+      "description": "Enum for integrating external standalone utilities",
+      "enum": [
+        "prettier",
+        "cspell",
+        "jsdoc",
+        "swagger"
+      ],
+      "type": "string"
+    },
+    "TsOptions": {
+      "additionalProperties": false,
+      "description": "TypeScript configuration options",
+      "properties": {
+        "project": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          ]
+        }
+      },
+      "type": "object"
+    },
+    "ts.Program": {
+      "additionalProperties": false,
+      "properties": {},
+      "type": "object"
+    }
+  }
+}

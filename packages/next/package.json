@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@next/eslint-plugin-next": "^16.2.1",
-    "@santi020k/eslint-config-core": "^0.8.1"
+    "@santi020k/eslint-config-core": "workspace:^"
   },
   "devDependencies": {
     "@typescript-eslint/utils": "^8.57.1",
