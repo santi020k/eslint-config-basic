@@ -41,7 +41,8 @@ describe('Integration Tests', () => {
   describe('TypeScript', () => {
     it('should report TypeScript-specific issues', async () => {
       const config = eslintConfig({
-        typescript: true
+        typescript: true,
+        tsconfigRootDir: FIXTURES_DIR
       })
       const filePath = join(FIXTURES_DIR, 'typescript.ts')
       const results = await lintFile(filePath, config)
