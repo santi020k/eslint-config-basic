@@ -185,7 +185,8 @@ describe('eslintConfig Function', () => {
 
     expect(names).toContain('optionals/testing-library')
 
-    expect(names).toContain('optionals/graphql')
+    expect(names).toContain('optionals/graphql/schema')
+    expect(names).toContain('optionals/graphql/operations')
   })
 
   it('should handle duplicate optional entries without doubling config blocks', () => {
@@ -271,7 +272,8 @@ describe('eslintConfig Function', () => {
     const names = extractConfigNames(config)
 
     expect(names).toContain('eslint-config/prettier')
-    expect(names).toContain('optionals/graphql')
+    expect(names).toContain('optionals/graphql/schema')
+    expect(names).toContain('optionals/graphql/operations')
     expect(names).not.toContain('eslint-config-react/recommended')
   })
 })
