@@ -44,7 +44,7 @@ describe('Deep Rule Assertions (#5)', () => {
 
     expect(names).toContain('@eslint/js/recommended')
 
-    expect(names).toContain('eslint-config-typescript/rules')
+    expect(names).toContain('eslint-config-typescript/standard-rules')
   })
 
   it('should NOT include React rules when only typescript is enabled', () => {
