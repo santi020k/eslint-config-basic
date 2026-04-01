@@ -1,6 +1,6 @@
 {
   "name": "@santi020k/eslint-config-nest",
-  "version": "0.8.1",
+  "version": "1.0.0",
   "description": "NestJS ESLint configuration",
   "type": "module",
   "main": "./dist/index.js",
