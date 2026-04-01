@@ -1,11 +1,11 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "ignore": [
-    "packages/playground/**",
-    "typedoc.markdown.mjs"
+    "packages/playground/**"
   ],
   "ignoreDependencies": [
-    "typedoc-plugin-markdown"
+    "typedoc-plugin-markdown",
+    "tailwindcss"
   ],
   "ignoreExportsUsedInFile": true,
   "rules": {
@@ -26,7 +26,7 @@
     },
     "packages/docs": {
       "project": [".vitepress/**/*.ts"],
-      "entry": ["typedoc.markdown.mjs"]
+      "entry": []
     },
     "packages/basic": {
       "ignoreDependencies": []
