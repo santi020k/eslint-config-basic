@@ -260,6 +260,26 @@ describe('Optional Rule Assertions — Libraries', () => {
 
     expect(names.some(n => n.toLowerCase().includes('storybook'))).toBe(true)
   })
+
+  it('should include Stencil rules when Stencil library is enabled', () => {
+    const config = eslintConfig({
+      libraries: [Library.Stencil]
+    })
+
+    const rules = extractRuleNames(config as Record<string, unknown>[])
+
+    expect(rules).toContain('@stencil-community/async-methods')
+  })
+
+  it('should include TanStack Query rules when TanstackQuery library is enabled', () => {
+    const config = eslintConfig({
+      libraries: [Library.TanstackQuery]
+    })
+
+    const rules = extractRuleNames(config as Record<string, unknown>[])
+
+    expect(rules.some(r => r.startsWith('@tanstack/query/'))).toBe(true)
+  })
 })
 
 describe('Optional Rule Assertions — Tools', () => {
@@ -335,6 +355,29 @@ describe('Optional Rule Assertions — Formats', () => {
     const names = extractConfigNames(config as Record<string, unknown>[])
 
     expect(names.some(n => n.toLowerCase().includes('mdx'))).toBe(true)
+  })
+
+  it('should include TOML config when Toml format is enabled', () => {
+    const config = eslintConfig({
+      formats: [Format.Toml]
+    })
+
+    const rules = extractRuleNames(config as Record<string, unknown>[])
+
+    // eslint-plugin-toml rules use the 'toml/' prefix
+    expect(rules.some(r => r.startsWith('toml/'))).toBe(true)
+  })
+
+  it('should include GraphQL config when Graphql format is enabled', () => {
+    const config = eslintConfig({
+      formats: [Format.Graphql]
+    })
+
+    const names = extractConfigNames(config as Record<string, unknown>[])
+
+    expect(names).toContain('optionals/graphql/schema')
+
+    expect(names).toContain('optionals/graphql/operations')
   })
 })
 

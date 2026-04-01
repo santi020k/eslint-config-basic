@@ -279,6 +279,30 @@ describe('eslintConfig Function', () => {
 })
 
 describe('Framework Composition — remaining frameworks', () => {
+  it('should return config with Astro when astro framework is specified', () => {
+    const config = eslintConfig({
+      frameworks: { astro: [{ name: 'mock-astro', rules: {} }] }
+    })
+
+    expect(Array.isArray(config)).toBe(true)
+
+    expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-astro')
+  })
+
+  it('should return config with Expo when expo framework is specified', () => {
+    // Expo requires react — pass a mock react config alongside
+    const config = eslintConfig({
+      frameworks: {
+        react: [{ name: 'mock-react', rules: {} }],
+        expo: [{ name: 'mock-expo', rules: {} }]
+      }
+    })
+
+    expect(Array.isArray(config)).toBe(true)
+
+    expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-expo')
+  })
+
   it('should return config with Svelte when svelte framework is specified', () => {
     const config = eslintConfig({
       frameworks: { svelte: [{ name: 'mock-svelte', rules: {} }] }

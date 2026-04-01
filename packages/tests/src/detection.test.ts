@@ -184,6 +184,18 @@ describe('detectProjectOptions', () => {
     })
   })
 
+  it('should detect Astro if astro is a dependency', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      dependencies: { astro: 'latest' }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.frameworks?.astro).toBe(true)
+  })
+
   it('should detect Svelte if svelte is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
