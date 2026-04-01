@@ -1,5 +1,11 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`Config Snapshots — Entry Names > angular config entries should match snapshot 1`] = `
+[
+  "eslint-config-angular/rules",
+]
+`;
+
 exports[`Config Snapshots — Entry Names > astro config entries should match snapshot 1`] = `
 [
   "astro/base",
@@ -46,10 +52,41 @@ exports[`Config Snapshots — Entry Names > next config entries should match sna
 ]
 `;
 
+exports[`Config Snapshots — Entry Names > qwik config entries should match snapshot 1`] = `
+[
+  "eslint-config-qwik/disable-type-checked",
+  "eslint-config-qwik/rules",
+]
+`;
+
 exports[`Config Snapshots — Entry Names > react config entries should match snapshot 1`] = `
 [
   "eslint-config-react/custom",
   "eslint-config-react/recommended",
+]
+`;
+
+exports[`Config Snapshots — Entry Names > remix config entries should match snapshot 1`] = `
+[
+  "eslint-config-remix/disable-type-checked",
+  "eslint-config-remix/jsx-a11y",
+]
+`;
+
+exports[`Config Snapshots — Entry Names > solid config entries should match snapshot 1`] = `
+[
+  "eslint-config-solid/rules",
+]
+`;
+
+exports[`Config Snapshots — Entry Names > svelte config entries should match snapshot 1`] = `
+[
+  "eslint-config-svelte/rules",
+  "eslint-config-svelte/virtual-script-rules",
+  "svelte:base:setup-for-svelte",
+  "svelte:base:setup-for-svelte-script",
+  "svelte:base:setup-plugin",
+  "svelte:recommended:rules",
 ]
 `;
 
@@ -77,6 +114,17 @@ exports[`Config Snapshots — Entry Names > vue config entries should match snap
   "vue/essential/rules",
   "vue/recommended/rules",
   "vue/strongly-recommended/rules",
+]
+`;
+
+exports[`Config Snapshots — Rule Names > angular config rules should match snapshot 1`] = `
+[
+  "@angular-eslint/component-class-suffix",
+  "@angular-eslint/directive-class-suffix",
+  "@angular-eslint/no-empty-lifecycle-method",
+  "@angular-eslint/no-output-native",
+  "@angular-eslint/use-lifecycle-interface",
+  "@angular-eslint/use-pipe-transform-interface",
 ]
 `;
 
@@ -444,6 +492,86 @@ exports[`Config Snapshots — Rule Names > next config rules should match snapsh
 ]
 `;
 
+exports[`Config Snapshots — Rule Names > qwik config rules should match snapshot 1`] = `
+[
+  "@typescript-eslint/await-thenable",
+  "@typescript-eslint/consistent-return",
+  "@typescript-eslint/consistent-type-exports",
+  "@typescript-eslint/dot-notation",
+  "@typescript-eslint/naming-convention",
+  "@typescript-eslint/no-array-delete",
+  "@typescript-eslint/no-base-to-string",
+  "@typescript-eslint/no-confusing-void-expression",
+  "@typescript-eslint/no-deprecated",
+  "@typescript-eslint/no-duplicate-type-constituents",
+  "@typescript-eslint/no-floating-promises",
+  "@typescript-eslint/no-for-in-array",
+  "@typescript-eslint/no-implied-eval",
+  "@typescript-eslint/no-meaningless-void-operator",
+  "@typescript-eslint/no-misused-promises",
+  "@typescript-eslint/no-misused-spread",
+  "@typescript-eslint/no-mixed-enums",
+  "@typescript-eslint/no-redundant-type-constituents",
+  "@typescript-eslint/no-unnecessary-boolean-literal-compare",
+  "@typescript-eslint/no-unnecessary-condition",
+  "@typescript-eslint/no-unnecessary-qualifier",
+  "@typescript-eslint/no-unnecessary-template-expression",
+  "@typescript-eslint/no-unnecessary-type-arguments",
+  "@typescript-eslint/no-unnecessary-type-assertion",
+  "@typescript-eslint/no-unnecessary-type-conversion",
+  "@typescript-eslint/no-unnecessary-type-parameters",
+  "@typescript-eslint/no-unsafe-argument",
+  "@typescript-eslint/no-unsafe-assignment",
+  "@typescript-eslint/no-unsafe-call",
+  "@typescript-eslint/no-unsafe-enum-comparison",
+  "@typescript-eslint/no-unsafe-member-access",
+  "@typescript-eslint/no-unsafe-return",
+  "@typescript-eslint/no-unsafe-type-assertion",
+  "@typescript-eslint/no-unsafe-unary-minus",
+  "@typescript-eslint/no-unused-expressions",
+  "@typescript-eslint/no-useless-default-assignment",
+  "@typescript-eslint/non-nullable-type-assertion-style",
+  "@typescript-eslint/only-throw-error",
+  "@typescript-eslint/prefer-destructuring",
+  "@typescript-eslint/prefer-find",
+  "@typescript-eslint/prefer-includes",
+  "@typescript-eslint/prefer-nullish-coalescing",
+  "@typescript-eslint/prefer-optional-chain",
+  "@typescript-eslint/prefer-promise-reject-errors",
+  "@typescript-eslint/prefer-readonly",
+  "@typescript-eslint/prefer-readonly-parameter-types",
+  "@typescript-eslint/prefer-reduce-type-parameter",
+  "@typescript-eslint/prefer-regexp-exec",
+  "@typescript-eslint/prefer-return-this-type",
+  "@typescript-eslint/prefer-string-starts-ends-with",
+  "@typescript-eslint/promise-function-async",
+  "@typescript-eslint/related-getter-setter-pairs",
+  "@typescript-eslint/require-array-sort-compare",
+  "@typescript-eslint/require-await",
+  "@typescript-eslint/restrict-plus-operands",
+  "@typescript-eslint/restrict-template-expressions",
+  "@typescript-eslint/return-await",
+  "@typescript-eslint/strict-boolean-expressions",
+  "@typescript-eslint/strict-void-return",
+  "@typescript-eslint/switch-exhaustiveness-check",
+  "@typescript-eslint/unbound-method",
+  "@typescript-eslint/use-unknown-in-catch-callback-variable",
+  "no-unused-expressions",
+  "qwik/jsx-a",
+  "qwik/jsx-img",
+  "qwik/jsx-key",
+  "qwik/jsx-no-script-url",
+  "qwik/loader-location",
+  "qwik/no-async-prevent-default",
+  "qwik/no-react-props",
+  "qwik/no-use-visible-task",
+  "qwik/prefer-classlist",
+  "qwik/unused-server",
+  "qwik/use-method-usage",
+  "qwik/valid-lexical-scope",
+]
+`;
+
 exports[`Config Snapshots — Rule Names > react config rules should match snapshot 1`] = `
 [
   "react-hooks/component-hook-factories",
@@ -504,6 +632,179 @@ exports[`Config Snapshots — Rule Names > react config rules should match snaps
   "react/require-render-return",
   "react/self-closing-comp",
   "simple-import-sort/imports",
+]
+`;
+
+exports[`Config Snapshots — Rule Names > remix config rules should match snapshot 1`] = `
+[
+  "@typescript-eslint/await-thenable",
+  "@typescript-eslint/consistent-return",
+  "@typescript-eslint/consistent-type-exports",
+  "@typescript-eslint/dot-notation",
+  "@typescript-eslint/naming-convention",
+  "@typescript-eslint/no-array-delete",
+  "@typescript-eslint/no-base-to-string",
+  "@typescript-eslint/no-confusing-void-expression",
+  "@typescript-eslint/no-deprecated",
+  "@typescript-eslint/no-duplicate-type-constituents",
+  "@typescript-eslint/no-floating-promises",
+  "@typescript-eslint/no-for-in-array",
+  "@typescript-eslint/no-implied-eval",
+  "@typescript-eslint/no-meaningless-void-operator",
+  "@typescript-eslint/no-misused-promises",
+  "@typescript-eslint/no-misused-spread",
+  "@typescript-eslint/no-mixed-enums",
+  "@typescript-eslint/no-redundant-type-constituents",
+  "@typescript-eslint/no-unnecessary-boolean-literal-compare",
+  "@typescript-eslint/no-unnecessary-condition",
+  "@typescript-eslint/no-unnecessary-qualifier",
+  "@typescript-eslint/no-unnecessary-template-expression",
+  "@typescript-eslint/no-unnecessary-type-arguments",
+  "@typescript-eslint/no-unnecessary-type-assertion",
+  "@typescript-eslint/no-unnecessary-type-conversion",
+  "@typescript-eslint/no-unnecessary-type-parameters",
+  "@typescript-eslint/no-unsafe-argument",
+  "@typescript-eslint/no-unsafe-assignment",
+  "@typescript-eslint/no-unsafe-call",
+  "@typescript-eslint/no-unsafe-enum-comparison",
+  "@typescript-eslint/no-unsafe-member-access",
+  "@typescript-eslint/no-unsafe-return",
+  "@typescript-eslint/no-unsafe-type-assertion",
+  "@typescript-eslint/no-unsafe-unary-minus",
+  "@typescript-eslint/no-unused-expressions",
+  "@typescript-eslint/no-useless-default-assignment",
+  "@typescript-eslint/non-nullable-type-assertion-style",
+  "@typescript-eslint/only-throw-error",
+  "@typescript-eslint/prefer-destructuring",
+  "@typescript-eslint/prefer-find",
+  "@typescript-eslint/prefer-includes",
+  "@typescript-eslint/prefer-nullish-coalescing",
+  "@typescript-eslint/prefer-optional-chain",
+  "@typescript-eslint/prefer-promise-reject-errors",
+  "@typescript-eslint/prefer-readonly",
+  "@typescript-eslint/prefer-readonly-parameter-types",
+  "@typescript-eslint/prefer-reduce-type-parameter",
+  "@typescript-eslint/prefer-regexp-exec",
+  "@typescript-eslint/prefer-return-this-type",
+  "@typescript-eslint/prefer-string-starts-ends-with",
+  "@typescript-eslint/promise-function-async",
+  "@typescript-eslint/related-getter-setter-pairs",
+  "@typescript-eslint/require-array-sort-compare",
+  "@typescript-eslint/require-await",
+  "@typescript-eslint/restrict-plus-operands",
+  "@typescript-eslint/restrict-template-expressions",
+  "@typescript-eslint/return-await",
+  "@typescript-eslint/strict-boolean-expressions",
+  "@typescript-eslint/strict-void-return",
+  "@typescript-eslint/switch-exhaustiveness-check",
+  "@typescript-eslint/unbound-method",
+  "@typescript-eslint/use-unknown-in-catch-callback-variable",
+  "jsx-a11y/alt-text",
+  "jsx-a11y/anchor-ambiguous-text",
+  "jsx-a11y/anchor-has-content",
+  "jsx-a11y/anchor-is-valid",
+  "jsx-a11y/aria-activedescendant-has-tabindex",
+  "jsx-a11y/aria-props",
+  "jsx-a11y/aria-proptypes",
+  "jsx-a11y/aria-role",
+  "jsx-a11y/aria-unsupported-elements",
+  "jsx-a11y/autocomplete-valid",
+  "jsx-a11y/click-events-have-key-events",
+  "jsx-a11y/control-has-associated-label",
+  "jsx-a11y/heading-has-content",
+  "jsx-a11y/html-has-lang",
+  "jsx-a11y/iframe-has-title",
+  "jsx-a11y/img-redundant-alt",
+  "jsx-a11y/interactive-supports-focus",
+  "jsx-a11y/label-has-associated-control",
+  "jsx-a11y/label-has-for",
+  "jsx-a11y/media-has-caption",
+  "jsx-a11y/mouse-events-have-key-events",
+  "jsx-a11y/no-access-key",
+  "jsx-a11y/no-autofocus",
+  "jsx-a11y/no-distracting-elements",
+  "jsx-a11y/no-interactive-element-to-noninteractive-role",
+  "jsx-a11y/no-noninteractive-element-interactions",
+  "jsx-a11y/no-noninteractive-element-to-interactive-role",
+  "jsx-a11y/no-noninteractive-tabindex",
+  "jsx-a11y/no-redundant-roles",
+  "jsx-a11y/no-static-element-interactions",
+  "jsx-a11y/role-has-required-aria-props",
+  "jsx-a11y/role-supports-aria-props",
+  "jsx-a11y/scope",
+  "jsx-a11y/tabindex-no-positive",
+  "no-unused-expressions",
+]
+`;
+
+exports[`Config Snapshots — Rule Names > solid config rules should match snapshot 1`] = `
+[
+  "solid/components-return-once",
+  "solid/event-handlers",
+  "solid/imports",
+  "solid/jsx-no-duplicate-props",
+  "solid/jsx-no-script-url",
+  "solid/jsx-no-undef",
+  "solid/jsx-uses-vars",
+  "solid/no-array-handlers",
+  "solid/no-destructure",
+  "solid/no-innerhtml",
+  "solid/no-proxy-apis",
+  "solid/no-react-deps",
+  "solid/no-react-specific-props",
+  "solid/no-unknown-namespaces",
+  "solid/prefer-classlist",
+  "solid/prefer-for",
+  "solid/prefer-show",
+  "solid/reactivity",
+  "solid/self-closing-comp",
+  "solid/style-prop",
+]
+`;
+
+exports[`Config Snapshots — Rule Names > svelte config rules should match snapshot 1`] = `
+[
+  "@typescript-eslint/no-unused-expressions",
+  "no-inner-declarations",
+  "no-self-assign",
+  "no-unused-expressions",
+  "svelte/comment-directive",
+  "svelte/infinite-reactive-loop",
+  "svelte/no-at-debug-tags",
+  "svelte/no-at-html-tags",
+  "svelte/no-dom-manipulating",
+  "svelte/no-dupe-else-if-blocks",
+  "svelte/no-dupe-on-directives",
+  "svelte/no-dupe-style-properties",
+  "svelte/no-dupe-use-directives",
+  "svelte/no-export-load-in-svelte-module-in-kit-pages",
+  "svelte/no-immutable-reactive-statements",
+  "svelte/no-inner-declarations",
+  "svelte/no-inspect",
+  "svelte/no-navigation-without-resolve",
+  "svelte/no-not-function-handler",
+  "svelte/no-object-in-text-mustaches",
+  "svelte/no-raw-special-elements",
+  "svelte/no-reactive-functions",
+  "svelte/no-reactive-literals",
+  "svelte/no-reactive-reassign",
+  "svelte/no-shorthand-style-property-overrides",
+  "svelte/no-store-async",
+  "svelte/no-svelte-internal",
+  "svelte/no-unknown-style-directive-property",
+  "svelte/no-unnecessary-state-wrap",
+  "svelte/no-unused-props",
+  "svelte/no-unused-svelte-ignore",
+  "svelte/no-useless-children-snippet",
+  "svelte/no-useless-mustaches",
+  "svelte/prefer-svelte-reactivity",
+  "svelte/prefer-writable-derived",
+  "svelte/require-each-key",
+  "svelte/require-event-dispatcher-types",
+  "svelte/require-store-reactive-access",
+  "svelte/system",
+  "svelte/valid-each-key",
+  "svelte/valid-prop-names-in-kit-pages",
 ]
 `;
 
