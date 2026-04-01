@@ -16,8 +16,7 @@
       "@santi020k/eslint-config-vue",
       "@santi020k/eslint-config-svelte",
       "@santi020k/eslint-config-solid",
-      "@santi020k/eslint-config-angular",
-      "@santi020k/eslint-config-tests"
+      "@santi020k/eslint-config-angular"
     ]
   ],
   "linked": [],

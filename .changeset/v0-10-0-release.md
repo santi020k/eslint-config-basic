@@ -15,7 +15,6 @@
 "@santi020k/eslint-config-svelte": patch
 "@santi020k/eslint-config-typescript": patch
 "@santi020k/eslint-config-vue": patch
-"@santi020k/eslint-config-tests": patch
 ---
 
 # v0.10.0 Release
