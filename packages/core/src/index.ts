@@ -48,7 +48,7 @@ export const createCoreConfig = (runtime: Runtime = Runtime.Universal): TSESLint
     globals: getGlobalsForRuntime(runtime)
   }
 
-  return ([
+  const coreConfigs = ([
     {
       name: '@eslint/js/recommended',
       ...eslint.configs.recommended
@@ -60,13 +60,7 @@ export const createCoreConfig = (runtime: Runtime = Runtime.Universal): TSESLint
       ...pluginStylistic.configs.recommended
     },
     {
-      name: 'eslint-config/plugins',
-      plugins: {
-        import: pluginImport,
-        'simple-import-sort': pluginSimpleImport,
-        'jsx-a11y': pluginJsxA11y,
-        'unused-imports': pluginUnusedImport
-      },
+      name: 'eslint-config/plugins-rules',
       languageOptions,
       rules: {
         'import/first': 'error',
@@ -83,7 +77,21 @@ export const createCoreConfig = (runtime: Runtime = Runtime.Universal): TSESLint
   ] as TSESLint.FlatConfig.Config[]).map(config => ({
     ...config,
     files: config.files ?? GLOB_JS_TS
-  })) as TSESLint.FlatConfig.ConfigArray
+  }))
+
+  return [
+    {
+      name: 'eslint-config/plugins',
+      plugins: {
+        import: pluginImport,
+        '@stylistic': pluginStylistic,
+        'simple-import-sort': pluginSimpleImport,
+        'jsx-a11y': pluginJsxA11y,
+        'unused-imports': pluginUnusedImport
+      }
+    },
+    ...coreConfigs
+  ] as TSESLint.FlatConfig.ConfigArray
 }
 
 /**

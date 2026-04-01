@@ -18,6 +18,7 @@ exports[`Config Snapshots — Entry Names > core config entries should match sna
   "@eslint/js/recommended",
   "eslint-config/custom-rules",
   "eslint-config/plugins",
+  "eslint-config/plugins-rules",
   "eslint-config/stylistic",
   "node/flat/recommended-module",
   "promise/flat/recommended",
