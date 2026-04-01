@@ -95,9 +95,6 @@ importers:
       eslint-plugin-astro:
         specifier: ^1.6.0
         version: 1.6.0(eslint@10.1.0(jiti@2.6.1))
-      typescript-eslint:
-        specifier: ^8.57.0
-        version: 8.58.0(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3)
     devDependencies:
       '@typescript-eslint/utils':
         specifier: ^8.57.0
@@ -1091,9 +1088,6 @@ importers:
       eslint-plugin-svelte:
         specifier: ^3.16.0
         version: 3.16.0(eslint@10.1.0(jiti@2.6.1))(svelte@5.55.1)
-      typescript-eslint:
-        specifier: ^8.57.0
-        version: 8.58.0(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3)
     devDependencies:
       '@typescript-eslint/utils':
         specifier: ^8.57.0
@@ -1195,9 +1189,6 @@ importers:
       eslint-plugin-vue:
         specifier: ^10.8.0
         version: 10.8.0(@stylistic/eslint-plugin@5.10.0(eslint@10.1.0(jiti@2.6.1)))(@typescript-eslint/parser@8.58.0(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3))(eslint@10.1.0(jiti@2.6.1))(vue-eslint-parser@10.4.0(eslint@10.1.0(jiti@2.6.1)))
-      typescript-eslint:
-        specifier: ^8.57.0
-        version: 8.58.0(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3)
       vue-eslint-parser:
         specifier: ^10.4.0
         version: 10.4.0(eslint@10.1.0(jiti@2.6.1))
