@@ -42,4 +42,4 @@ jobs:
       - name: Run tests with coverage
         run: pnpm run test:coverage
       - name: Dry-run publish check
-        run: pnpm --filter @santi020k/eslint-config-basic publish --dry-run
+        run: pnpm --filter @santi020k/eslint-config-basic publish --dry-run --no-git-checks
