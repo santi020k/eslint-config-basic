@@ -93,7 +93,7 @@ ignorePaths:
   - .turbo
   - .git
   - .changeset
-  - package-lock.json
+  - pnpm-lock.yaml
   - "*.log"
   - docs
   - docs-md

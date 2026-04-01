@@ -14,12 +14,13 @@ trigger: always_on
 ## Project Summary
 
 This is `@santi020k/eslint-config-basic`, a composable ESLint 9 Flat Config package supporting:
+
 - JavaScript, TypeScript, React, Next.js, Astro, Expo
 - Optional integrations: Tailwind, Vitest, cspell, i18next, MDX, Markdown, Stencil
 
 ## Monorepo Architecture
 
-This project uses **Turborepo** with **npm Workspaces** for modular package management.
+This project uses **Turborepo** with **pnpm Workspaces** for modular package management.
 
 ### Package Structure
 
@@ -39,22 +40,26 @@ core → typescript → react → next
 ## Key Architecture Decisions
 
 ### Flat Config Only
+
 This package only supports ESLint 9+ flat config format. No legacy `.eslintrc` support.
 
 ### Composable Design
+
 Users select configs via direct options rather than extending named configs:
+
 ```js
 eslintConfig({ typescript: true, frameworks: { react: true } })
 ```
 
 ### Dependency Alignment
-Uses npm `overrides` with `$` references to align peer dependency versions across the plugin ecosystem. Prioritize official type packages over ambient declarations.
+
+Uses pnpm `overrides` with `$` references to align peer dependency versions across the plugin ecosystem. Prioritize official type packages over ambient declarations.
 
 ## Validation Workflow
 
 Always validate changes with:
 ```bash
-npm run build && npm run lint && npm run test
+pnpm run build && pnpm run lint && pnpm run test
 ```
 
 All commands must pass before considering work complete.

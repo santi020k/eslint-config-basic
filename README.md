@@ -60,9 +60,11 @@ export default eslintConfig()
 ## Development
 
 ```bash
-npm run build   # Build all packages
-npm run test    # Run integration tests
-npm run lint    # Run linting checks
+pnpm install    # Install dependencies
+pnpm run build  # Build all packages
+pnpm run test   # Run integration tests
+pnpm run lint   # Run linting checks
+pnpm run ok     # Run all checks
 ```
 
 ---

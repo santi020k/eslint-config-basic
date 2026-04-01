@@ -1,6 +1,6 @@
 import type { TSESLint } from '@typescript-eslint/utils'
 
-const groups = [
+const groups: string[][] = [
   // Internal packages.
   // Atomic Design and components
   ['^(components|@/components|@components)(/.*|$)'],

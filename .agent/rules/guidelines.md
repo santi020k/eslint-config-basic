@@ -2,7 +2,7 @@
 
 This is an ESLint configuration package using **ESLint 9 Flat Config** format. It exports a composable `eslintConfig()` function.
 
-The project is a **monorepo** using Turborepo and npm Workspaces.
+The project is a **monorepo** using Turborepo and pnpm Workspaces.
 
 ## Key Files to Understand
 
@@ -136,10 +136,10 @@ export { myoptional } from './{category}/{name}.js'
 ## Verification Commands
 
 ```bash
-npm run build      # Turborepo builds all packages
-npm run lint       # Lints entire monorepo from root
-npm run test       # Runs Vitest (packages/tests)
-npm run inspector  # Visual config inspection
+pnpm run build      # Turborepo builds all packages
+pnpm run lint       # Lints entire monorepo from root
+pnpm run test       # Runs Vitest (packages/tests)
+pnpm run inspector  # Visual config inspection
 ```
 
 ## Common Pitfalls

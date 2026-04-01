@@ -5,7 +5,8 @@ Thank you for your interest in contributing! This guide will help you get starte
 ## Prerequisites
 
 - Node.js (version specified in `.nvmrc`)
-- npm
+- pnpm (version specified in `packageManager` of `package.json`)
+- corepack (to auto-manage pnpm version)
 
 ## Setup
 
@@ -14,19 +15,23 @@ Thank you for your interest in contributing! This guide will help you get starte
 git clone https://github.com/santi020k/eslint-config-basic.git
 cd eslint-config-basic
 
+# Enable corepack
+corepack enable
+corepack use pnpm@10.33.0
+
 # Install dependencies
-npm install
+pnpm install
 
 # Build all packages
-npm run build
+pnpm run build
 ```
 
 ## Monorepo Structure
 
-This project uses **Turborepo** with **npm Workspaces**. Each ESLint config lives in its own package under `packages/`:
+This project uses **Turborepo** with **pnpm Workspaces**. Each ESLint config lives in its own package under `packages/`:
 
 | Package | Path | Description |
-|---------|------|-------------|
+| :--- | :--- | :--- |
 | `@santi020k/eslint-config-basic` | `packages/basic` | Main entry point, composes all configs |
 | `@santi020k/eslint-config-core` | `packages/core` | Core JS rules, types, utilities |
 | `@santi020k/eslint-config-typescript` | `packages/typescript` | TypeScript rules |
@@ -133,13 +138,12 @@ These are already implemented. See their respective `packages/` for reference.
 ## Available Commands
 
 ```bash
-npm run build      # Build all packages (Turborepo)
-npm run lint       # Lint entire monorepo
-npm run lint:fix   # Fix lint issues
-npm run test       # Run tests (Vitest)
-npm run dev        # Watch mode
-npm run dev        # Watch mode
-npm run inspector  # Visual ESLint config inspector
+pnpm run build      # Build all packages (Turborepo)
+pnpm run lint       # Lint entire monorepo
+pnpm run lint:fix   # Fix lint issues
+pnpm run test       # Run tests (Vitest)
+pnpm run dev        # Watch mode
+pnpm run inspector  # Visual ESLint config inspector
 ```
 
 ## Documentation
@@ -174,7 +178,7 @@ npx cz
 2. Make sure all checks pass:
 
     ```bash
-      npm run build && npm run lint && npm run test
+      pnpm run build && pnpm run lint && pnpm run test
     ```
 
 3. Write clear, descriptive commit messages following conventional commits.

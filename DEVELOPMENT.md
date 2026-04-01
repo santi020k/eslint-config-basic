@@ -3,32 +3,36 @@
 ## Quick Start
 
 ```bash
+# Enable corepack and use pnpm
+corepack enable
+corepack use pnpm@10.33.0
+
 # Install dependencies
-npm install
+pnpm install
 
 # Build all packages
-npm run build
+pnpm run build
 
 # Run tests
-npm run test
+pnpm run test
 ```
 
 ## Common Commands
 
 | Command | Description |
-|---------|-------------|
-| `npm run build` | Build all packages (Turborepo) |
-| `npm run dev` | Watch mode for development |
-| `npm run lint` | Lint the entire monorepo |
-| `npm run lint:fix` | Auto-fix lint issues |
-| `npm run test` | Run integration tests (Vitest) |
-| `npm run inspector` | Open ESLint config inspector UI |
-| `npm run docs` | Generate API docs (TypeDoc) |
-| `npm run clean` | Remove all `dist/` and `node_modules/` |
+| :--- | :--- |
+| `pnpm run build` | Build all packages (Turborepo) |
+| `pnpm run dev` | Watch mode for development |
+| `pnpm run lint` | Lint the entire monorepo |
+| `pnpm run lint:fix` | Auto-fix lint issues |
+| `pnpm run test` | Run integration tests (Vitest) |
+| `pnpm run inspector` | Open ESLint config inspector UI |
+| `pnpm run docs` | Generate API docs (TypeDoc) |
+| `pnpm run clean` | Remove all `dist/` and `node_modules/` |
 
 ## Project Structure
 
-This is a **monorepo** using Turborepo + npm Workspaces. Each config lives under `packages/`:
+This is a **monorepo** using Turborepo + pnpm Workspaces. Each config lives under `packages/`:
 
 - `packages/basic` — Main entry point, composes all configs
 - `packages/core` — Core JS rules, types, utilities
@@ -48,7 +52,7 @@ This is a **monorepo** using Turborepo + npm Workspaces. Each config lives under
 Always validate your changes before submitting:
 
 ```bash
-npm run build && npm run lint && npm run test
+pnpm run build && pnpm run lint && pnpm run test
 ```
 
 For full contributing guidelines, see **[CONTRIBUTING.md](CONTRIBUTING.md)**.

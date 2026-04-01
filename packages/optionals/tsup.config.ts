@@ -1,11 +1,17 @@
 import { defineConfig } from 'tsup'
-
 export default defineConfig({
-  entry: ['src/index.ts'],
+  entry: [
+    'src/index.ts',
+    'src/tools/*.ts',
+    'src/libraries/*.ts',
+    'src/testing/*.ts',
+    'src/formats/*.ts',
+    'src/extensions/*.ts'
+  ],
   format: ['esm'],
   dts: true,
-  splitting: false,
-  sourcemap: true,
   clean: true,
+  bundle: false,
+  sourcemap: true,
   target: 'es2022'
 })

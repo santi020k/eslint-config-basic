@@ -14,8 +14,8 @@
 - **Next.js App Router**: Optimized rules for the `app/` directory.
 - **Lazy Loading**: Framework-specific configs are lazy-loaded to prevent peer dep issues.
 - **Strict Mode**: `strict: true` promotes all warnings to errors.
-- Monorepo using Turborepo and npm Workspaces.
-- Dependency alignment via npm `overrides` with `$` references.
+- Monorepo using Turborepo and pnpm Workspaces.
+- Dependency alignment via pnpm `overrides` with `$` references.
 
 ## Quick Start
 
@@ -43,10 +43,10 @@ This is a monorepo containing multiple config packages.
 ## Commands
 
 ```bash
-npm run build       # Build all packages with Turbo
-npm run lint        # Run ESLint + Spellcheck + Knip
-npm run test        # Run integration tests (+ coverage)
-npm run inspector   # Open ESLint config visualizer
+pnpm run build       # Build all packages with Turbo
+pnpm run lint        # Run ESLint + Spellcheck + Knip
+pnpm run test        # Run integration tests (+ coverage)
+pnpm run inspector   # Open ESLint config visualizer
 npx santi-eslint init # Initialize project configuration
 ```
 
