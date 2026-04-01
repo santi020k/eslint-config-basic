@@ -30,7 +30,7 @@
     "inspector": "eslint-config-inspector",
     "clean": "turbo run clean && rm -rf node_modules",
     "prepare": "husky config/.husky",
-    "ok": "pnpm install && pnpm run build && pnpm run test && pnpm run lint && pnpm run typecheck",
+    "ok": "pnpm install --reporter=silent && TURBO_LOG_ORDER=grouped pnpm run build && pnpm run test --silent && TURBO_LOG_ORDER=grouped pnpm run lint && TURBO_LOG_ORDER=grouped pnpm run typecheck",
     "pre-commit": "lint-staged",
     "pre-push": "pnpm run lint:knip && pnpm run test && pnpm run lint && pnpm run build && pnpm run check:exports",
     "docs": "npm run docs:build",
