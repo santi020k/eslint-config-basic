@@ -27,5 +27,8 @@
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
   "ignore": ["@santi020k/eslint-config-tests", "@santi020k/playground", "@playground/*"],
+  "___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH": {
+    "onlyUpdatePeerDependentsWhenOutOfRange": true
+  },
   "___experimentalUnsafeOptions_useCalculatedMajorFor0.x": false
 }
