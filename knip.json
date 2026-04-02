@@ -5,7 +5,8 @@
   ],
   "ignoreDependencies": [
     "typedoc-plugin-markdown",
-    "tailwindcss"
+    "tailwindcss",
+    "typescript-eslint"
   ],
   "ignoreExportsUsedInFile": true,
   "rules": {
