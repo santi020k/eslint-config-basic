@@ -11,7 +11,7 @@
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
     "astro": "^6.0.4",
-    "eslint": "^10.0.3"
+    "eslint": "^10.1.0"
   },
   "author": "santi020k",
   "license": "MIT",
