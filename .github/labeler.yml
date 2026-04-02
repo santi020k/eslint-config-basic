@@ -44,3 +44,7 @@ docs:
           - '*.md'
           - 'packages/*/README.md'
           - 'llms.txt'
+
+# Apply this label manually to PRs that don't need a changeset (chores, CI, docs-only)
+skip-changelog:
+  - head-branch: ['chore/*', 'ci/*', 'docs/*', 'renovate/*']
