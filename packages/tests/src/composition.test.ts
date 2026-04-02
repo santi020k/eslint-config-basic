@@ -31,7 +31,10 @@ describe('eslintConfig Function', () => {
 
   it('should return config with React when react framework is specified', () => {
     const config = eslintConfig({
-      frameworks: { react: [{ name: 'mock-react', rules: {} }] }
+      frameworks: {
+        react: [{ name: 'mock-react', rules: {} }],
+        expo: [{ name: 'mock-expo', rules: {} }]
+      }
     })
 
     expect(Array.isArray(config)).toBe(true)
