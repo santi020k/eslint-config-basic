@@ -9,7 +9,6 @@ import {
   type EslintConfigOptions,
   type FlatConfigArray,
   gitignore,
-  hasReactConfig,
   type ImportedFramework,
   NextMode,
   Runtime,
@@ -20,29 +19,29 @@ import type { TSESLint } from '@typescript-eslint/utils'
 
 // Re-export core types and utilities
 export {
-  Library,
-  Tool,
-  Extension,
-  Setting,
-  Runtime,
-  Preset,
-  Testing,
-  Format,
-  NextMode,
-  ReactConfigKeys,
-  hasReactConfig,
   coreConfig,
   createCoreConfig,
+  detectProjectOptions,
+  Extension,
+  Format,
   getGlobalsForRuntime,
-  jsConfig,
   gitignore,
-  detectProjectOptions
+  hasReactConfig,
+  jsConfig,
+  Library,
+  NextMode,
+  Preset,
+  ReactConfigKeys,
+  Runtime,
+  Setting,
+  Testing,
+  Tool
 } from '@santi020k/eslint-config-core'
 
-export type { FlatConfigArray, EslintConfigOptions, ImportedFramework }
+export type { EslintConfigOptions, FlatConfigArray, ImportedFramework }
 
 // Re-export framework configs
-export { typescriptConfig, tsConfig } from '@santi020k/eslint-config-typescript'
+export { tsConfig, typescriptConfig } from '@santi020k/eslint-config-typescript'
 
 // Re-export optionals
 export {
@@ -115,10 +114,22 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     )
   }
 
+  const hasReact = !!frameworks.react
+  const hasVue = !!frameworks.vue
+  const hasSvelte = !!frameworks.svelte
+  const hasSolid = !!frameworks.solid
+  const useGitignore = !uniqueSettings.includes(Setting.NoGitignore)
   // Resolve Frameworks
   const reactParam = resolveFramework('react', frameworks.react)
   const nextParam = resolveFramework('next', frameworks.next)
-  const astroParam = resolveFramework('astro', frameworks.astro)
+
+  const astroParam = resolveFramework('astro', frameworks.astro, {
+    hasReact,
+    hasVue,
+    hasSvelte,
+    hasSolid
+  })
+
   const expoParam = resolveFramework('expo', frameworks.expo)
   const nestParam = resolveFramework('nest', frameworks.nest)
   const vueParam = resolveFramework('vue', frameworks.vue)
@@ -127,8 +138,6 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
   const angularParam = resolveFramework('angular', frameworks.angular)
   const qwikParam = resolveFramework('qwik', frameworks.qwik)
   const remixParam = resolveFramework('remix', frameworks.remix)
-  const hasReact = hasReactConfig({ frameworks })
-  const useGitignore = !uniqueSettings.includes(Setting.NoGitignore)
 
   // Use runtime-aware core config
   const runtimeCoreConfig = runtime !== Runtime.Universal ?
@@ -157,9 +166,18 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     // React config (included if any React-based framework is used/passed)
     ...(hasReact ? reactParam : []),
 
-    // Framework-specific configs (Modularized)
-    ...(typescript ? createTypescriptConfig({ tsconfigRootDir }) : []),
     ...nextParam,
+    ...astroParam,
+    ...expoParam,
+    ...nestParam,
+    ...vueParam,
+    ...svelteParam,
+    ...solidParam,
+    ...angularParam,
+    ...qwikParam,
+    ...remixParam,
+
+    ...(typescript ? createTypescriptConfig({ tsconfigRootDir }) : []),
 
     // Next.js App Router overrides (#12)
     ...(frameworks.next && nextMode === NextMode.AppRouter ?
@@ -173,16 +191,6 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
         } as TSESLint.FlatConfig.Config
       ] :
       []),
-
-    ...astroParam,
-    ...expoParam,
-    ...nestParam,
-    ...vueParam,
-    ...svelteParam,
-    ...solidParam,
-    ...angularParam,
-    ...qwikParam,
-    ...remixParam,
 
     // Optionals
     ...getOptionalConfigs(

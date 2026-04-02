@@ -1,49 +1,42 @@
 import pluginAstro from 'eslint-plugin-astro'
-import tsEslint from 'typescript-eslint'
 
-import { rules } from './rules.js'
+import { type AstroOptions, getRules } from './rules.js'
 
 import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
- * Astro ESLint configuration
- * Includes Astro plugin recommended rules and custom overrides
+ * Creates Astro ESLint configuration based on enabled frameworks
+ *
+ * @param options - Framework-specific options for Astro files
+ * @returns {TSESLint.FlatConfig.ConfigArray} The Astro configuration array
  */
-export const astroConfig: TSESLint.FlatConfig.ConfigArray = [
+export const createAstroConfig = (options?: AstroOptions): TSESLint.FlatConfig.ConfigArray => [
   ...pluginAstro.configs.recommended,
   {
     name: 'eslint-config-astro/custom',
     files: ['**/*.astro'],
-    rules
+    rules: getRules(options)
   },
   {
     name: 'eslint-config-astro/virtual-scripts',
     files: ['**/*.astro/*.js', '*.astro/*.js', '**/*.astro/*.ts', '*.astro/*.ts'],
     languageOptions: { sourceType: 'module' },
     rules: {
-      'prettier/prettier': 'off'
-    }
-  },
-  {
-    name: 'eslint-config-astro/disable-type-checked',
-    files: ['**/*.astro/*.js', '**/*.astro/*.ts'],
-    languageOptions: {
-      parserOptions: {
-        project: null,
-        program: null,
-        projectService: false,
-        allowDefaultProject: true
-      }
-    },
-    rules: {
-      ...tsEslint.configs.disableTypeChecked.rules,
+      'prettier/prettier': 'off',
+      // Disable rules that cause false positives in Astro virtual script blocks.
+      // Type-checked rule disabling is handled by @santi020k/eslint-config-typescript.
       'no-unused-expressions': 'off',
       '@typescript-eslint/no-unused-expressions': 'off'
     }
   }
 ]
 
-// Re-export rules for direct access
-export { rules }
+// Default export as factory function
+export default createAstroConfig
 
-export default astroConfig
+// Static config for backwards compatibility (no frameworks by default)
+export const astroConfig = createAstroConfig()
+
+// Re-export types and utilities
+export { getRules }
+export type { AstroOptions }

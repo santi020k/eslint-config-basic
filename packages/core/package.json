@@ -1,6 +1,6 @@
 {
   "name": "@santi020k/eslint-config-core",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Core ESLint configuration with base JavaScript rules and shared utilities",
   "type": "module",
   "main": "./dist/index.js",
@@ -38,12 +38,10 @@
     "check:exports": "publint",
     "typecheck": "tsc --noEmit"
   },
-  "peerDependencies": {
-    "eslint": "^9.0.0 || ^10.0.0"
-  },
   "dependencies": {
+    "eslint": "^9.0.0 || ^10.0.0",
     "@eslint/compat": "^2.0.3",
-    "@eslint/js": "^10.0.1",
+    "@eslint/js": "^9.0.0 || ^10.0.0",
     "@stylistic/eslint-plugin": "^5.10.0",
     "eslint-plugin-import-x": "^4.16.2",
     "eslint-plugin-jsx-a11y": "^6.10.2",

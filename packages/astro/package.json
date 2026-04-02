@@ -1,6 +1,6 @@
 {
   "name": "@santi020k/eslint-config-astro",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Astro ESLint configuration",
   "type": "module",
   "main": "./dist/index.js",
@@ -27,8 +27,7 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-core": "workspace:^",
-    "eslint-plugin-astro": "^1.6.0",
-    "typescript-eslint": "^8.57.0"
+    "eslint-plugin-astro": "^1.6.0"
   },
   "devDependencies": {
     "@typescript-eslint/utils": "^8.57.0",

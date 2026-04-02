@@ -1,6 +1,6 @@
 {
   "name": "@santi020k/eslint-config-remix",
-  "version": "0.8.2",
+  "version": "2.0.0",
   "description": "Remix ESLint configuration",
   "type": "module",
   "main": "./dist/index.js",
@@ -24,9 +24,6 @@
   },
   "peerDependencies": {
     "eslint": "^9.0.0 || ^10.0.0"
-  },
-  "dependencies": {
-    "typescript-eslint": "^8.57.1"
   },
   "devDependencies": {
     "@typescript-eslint/utils": "^8.57.1",

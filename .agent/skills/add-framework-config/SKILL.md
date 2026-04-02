@@ -9,15 +9,13 @@ Follow these strictly defined steps to add a new framework ESLint configuration 
 
 ## 1. Create the Package Structure
 
-Create a new directory under `packages/` (e.g., `packages/myframework/src`):
-
 ```bash
 mkdir -p packages/myframework/src
 ```
 
 ## 2. Setup `package.json`
 
-Create `packages/myframework/package.json`. Make sure to include `@santi020k/eslint-config-core` as a dependency and the required dev dependencies:
+Create `packages/myframework/package.json`. Copy the structure from an existing framework like `packages/svelte/package.json` and adjust the name and peer dependencies:
 
 ```json
 {
@@ -41,7 +39,11 @@ Create `packages/myframework/package.json`. Make sure to include `@santi020k/esl
   "dependencies": {
     "@santi020k/eslint-config-core": "*"
   },
+  "peerDependencies": {
+    "eslint-plugin-myframework": ">=1.0.0"
+  },
   "devDependencies": {
+    "eslint-plugin-myframework": "...",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
     "@typescript-eslint/utils": "^8.54.0"
@@ -51,7 +53,7 @@ Create `packages/myframework/package.json`. Make sure to include `@santi020k/esl
 
 ## 3. Setup TypeScript and Build Configs
 
-Create `tsconfig.json`:
+Create `packages/myframework/tsconfig.json`:
 
 ```json
 {
@@ -65,45 +67,117 @@ Create `tsconfig.json`:
 }
 ```
 
-Create `tsup.config.ts` (You can copy this from an existing package like `packages/react/tsup.config.ts`).
+Create `packages/myframework/tsup.config.ts` (copy from an existing package like `packages/svelte/tsup.config.ts`).
 
-## 4. Implement the Configuration
+## 4. Handle Types and Ambient Declarations
 
-Create `packages/myframework/src/index.ts`. Ensure it returns a `TSESLint.FlatConfig.ConfigArray`:
+If the framework plugin doesn't have built-in TypeScript types:
+
+1. **Search for official types**: Check if a `@types/*` package exists.
+2. **Install types**: If available, add as a dev dependency.
+3. **Ambient declarations as last resort**: Only create `packages/myframework/src/ambient.d.ts` if no official types exist anywhere.
+
+## 5. Implement the Configuration
+
+Create `packages/myframework/src/index.ts`. All configs must return `TSESLint.FlatConfig.ConfigArray`:
 
 ```typescript
+import pluginMyframework from 'eslint-plugin-myframework'
+
 import type { TSESLint } from '@typescript-eslint/utils'
 
 export const myframeworkConfig: TSESLint.FlatConfig.ConfigArray = [
+  ...pluginMyframework.configs['flat/recommended'],
   {
-    name: 'eslint-config/myframework',
+    name: 'eslint-config-myframework/rules',
+    files: ['**/*.myext'],
     rules: {
-      // framework specific rules
+      'myframework/some-rule': 'warn'
     }
   }
 ]
 ```
 
-## 5. Handle Types and Ambient Declarations
+### If the framework generates virtual script files (e.g., `.svelte`, `.astro`, `.vue`, `.qwik`)
 
-If the framework or its plugins don't have built-in TypeScript types:
+Add a dedicated block for virtual TypeScript files. **Do NOT** add `allowDefaultProject: true` or re-apply `disableTypeChecked` — the `typescript` package already handles this:
 
-1. **Search for official types**: Check if a `@types/*` package exists for the library or plugin.
-2. **Install types**: If available, install them as a dev dependency in the package.
-3. **Use Ambient Declarations ONLY as a last resort**: Only create a `packages/myframework/src/ambient.d.ts` file if no official types are available.
+```typescript
+export default {
+  name: 'eslint-config-myframework/virtual-script-rules',
+  files: ['**/*.myext/*.ts', '**/*.myext/*.tsx'],
+  rules: {
+    'no-unused-expressions': 'off',
+    '@typescript-eslint/no-unused-expressions': 'off'
+  }
+}
+```
 
 ## 6. Wire into the Core Project
 
-1. Add your framework to the `frameworks` type in `packages/core/src/types.ts`.
-2. Update `packages/basic/src/index.ts`:
-   - Import the new config from `@santi020k/eslint-config-myframework`.
-   - Export it from `packages/basic`.
-   - Wire it into the `eslintConfig()` function in `packages/basic/src/index.ts` by adding it to the `frameworks` object handling via `resolveFramework('myframework', frameworks.myframework)`.
+### `packages/core/src/types.ts`
 
-## 7. Validate
+Add the new framework to the `frameworks` interface:
 
-Run the validation commands from the repo root to ensure everything connects perfectly:
+```typescript
+export interface FrameworkOptions {
+  // ... existing frameworks
+  myframework?: TSESLint.FlatConfig.ConfigArray
+}
+```
+
+### `packages/basic/src/index.ts`
+
+Import and wire the framework:
+
+```typescript
+// Add to imports section
+// (framework configs are resolved lazily — follow the existing pattern)
+
+// Add to eslintConfig() frameworks handling
+configs.push(...resolveFramework('myframework', frameworks.myframework))
+```
+
+### `packages/basic/package.json`
+
+Add the new package as an optional peer dependency:
+
+```json
+"peerDependencies": {
+  "@santi020k/eslint-config-myframework": "*"
+},
+"peerDependenciesMeta": {
+  "@santi020k/eslint-config-myframework": { "optional": true }
+}
+```
+
+## 7. Add a Playground
+
+Create a minimal playground at `packages/playground/myframework/` to allow manual validation. Copy the structure from an existing playground (e.g., `packages/playground/svelte/`) and adjust for the new framework.
+
+The playground must have:
+
+- `package.json` with the framework as a dependency
+- `eslint.config.js` using `eslintConfig({ frameworks: { myframework: myframeworkConfig } })`
+- At least one sample file in the framework's format
+
+## 8. Update Tests
+
+Read `.agent/skills/testing/SKILL.md` for full details. In summary, update:
+
+- **`packages/tests/package.json`** — add `@santi020k/eslint-config-myframework` as a devDependency
+- **`configs.test.ts`** — import the config and assert it has length > 0
+- **`composition.test.ts`** — assert the config entry name appears when the framework is passed
+- **`snapshots.test.ts`** — add rule name and entry name snapshot tests
+- **`options.test.ts`** — assert a framework-specific rule is present
+- **`detection.test.ts`** — add a detection test if the framework is auto-detectable
+
+## 9. Validate
+
+Run all checks from the repo root before considering the task done:
 
 ```bash
-npm run build && npm run lint && npm run test
+pnpm run build && pnpm run lint && pnpm run test
 ```
+
+All three must pass.

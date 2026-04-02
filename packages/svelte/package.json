@@ -1,6 +1,6 @@
 {
   "name": "@santi020k/eslint-config-svelte",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Svelte ESLint configuration",
   "type": "module",
   "main": "./dist/index.js",
@@ -31,8 +31,7 @@
     }
   },
   "dependencies": {
-    "eslint-plugin-svelte": "^3.16.0",
-    "typescript-eslint": "^8.57.0"
+    "eslint-plugin-svelte": "^3.16.0"
   },
   "devDependencies": {
     "@typescript-eslint/utils": "^8.57.0",

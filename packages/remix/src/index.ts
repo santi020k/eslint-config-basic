@@ -1,5 +1,4 @@
 import pluginJsxA11y from 'eslint-plugin-jsx-a11y'
-import tsEslint from 'typescript-eslint'
 
 import type { TSESLint } from '@typescript-eslint/utils'
 
@@ -14,18 +13,11 @@ export const remix: TSESLint.FlatConfig.ConfigArray = [
     }
   },
   {
-    name: 'eslint-config-remix/disable-type-checked',
+    // Disable rules that cause false positives in Remix virtual script blocks.
+    // Type-checked rule disabling is handled by @santi020k/eslint-config-typescript.
+    name: 'eslint-config-remix/virtual-script-rules',
     files: ['**/*.tsx/*.ts', '**/*.ts/*.ts'],
-    languageOptions: {
-      parserOptions: {
-        project: null,
-        program: null,
-        projectService: false,
-        allowDefaultProject: true
-      }
-    },
     rules: {
-      ...tsEslint.configs.disableTypeChecked.rules,
       'no-unused-expressions': 'off',
       '@typescript-eslint/no-unused-expressions': 'off'
     }

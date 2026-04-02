@@ -1,11 +1,16 @@
 import { describe, expect, it } from 'vitest'
 
+import { angularConfig } from '@santi020k/eslint-config-angular'
 import { astroConfig } from '@santi020k/eslint-config-astro'
 import { coreConfig } from '@santi020k/eslint-config-core'
 import { expoConfig } from '@santi020k/eslint-config-expo'
 import { nestConfig } from '@santi020k/eslint-config-nest'
 import { nextConfig } from '@santi020k/eslint-config-next'
+import { qwik as qwikConfig } from '@santi020k/eslint-config-qwik'
 import { reactConfig } from '@santi020k/eslint-config-react'
+import { remix as remixConfig } from '@santi020k/eslint-config-remix'
+import { solidConfig } from '@santi020k/eslint-config-solid'
+import { svelteConfig } from '@santi020k/eslint-config-svelte'
 import { typescriptConfig } from '@santi020k/eslint-config-typescript'
 import { vueConfig } from '@santi020k/eslint-config-vue'
 
@@ -86,6 +91,36 @@ describe('Config Snapshots — Rule Names', () => {
 
     expect(rules).toMatchSnapshot()
   })
+
+  it('svelte config rules should match snapshot', () => {
+    const rules = extractRuleNames(svelteConfig as Record<string, unknown>[])
+
+    expect(rules).toMatchSnapshot()
+  })
+
+  it('solid config rules should match snapshot', () => {
+    const rules = extractRuleNames(solidConfig as Record<string, unknown>[])
+
+    expect(rules).toMatchSnapshot()
+  })
+
+  it('angular config rules should match snapshot', () => {
+    const rules = extractRuleNames(angularConfig as Record<string, unknown>[])
+
+    expect(rules).toMatchSnapshot()
+  })
+
+  it('qwik config rules should match snapshot', () => {
+    const rules = extractRuleNames(qwikConfig as Record<string, unknown>[])
+
+    expect(rules).toMatchSnapshot()
+  })
+
+  it('remix config rules should match snapshot', () => {
+    const rules = extractRuleNames(remixConfig as Record<string, unknown>[])
+
+    expect(rules).toMatchSnapshot()
+  })
 })
 
 describe('Config Snapshots — Entry Names', () => {
@@ -133,6 +168,36 @@ describe('Config Snapshots — Entry Names', () => {
 
   it('vue config entries should match snapshot', () => {
     const names = extractConfigNames(vueConfig as Record<string, unknown>[])
+
+    expect(names).toMatchSnapshot()
+  })
+
+  it('svelte config entries should match snapshot', () => {
+    const names = extractConfigNames(svelteConfig as Record<string, unknown>[])
+
+    expect(names).toMatchSnapshot()
+  })
+
+  it('solid config entries should match snapshot', () => {
+    const names = extractConfigNames(solidConfig as Record<string, unknown>[])
+
+    expect(names).toMatchSnapshot()
+  })
+
+  it('angular config entries should match snapshot', () => {
+    const names = extractConfigNames(angularConfig as Record<string, unknown>[])
+
+    expect(names).toMatchSnapshot()
+  })
+
+  it('qwik config entries should match snapshot', () => {
+    const names = extractConfigNames(qwikConfig as Record<string, unknown>[])
+
+    expect(names).toMatchSnapshot()
+  })
+
+  it('remix config entries should match snapshot', () => {
+    const names = extractConfigNames(remixConfig as Record<string, unknown>[])
 
     expect(names).toMatchSnapshot()
   })

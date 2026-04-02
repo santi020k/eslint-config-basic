@@ -1,26 +1,14 @@
 import tsEslint from 'typescript-eslint'
 
-import { rules } from './rules.js'
+import { standardRules, typeCheckedRules } from './rules.js'
 
+import { GLOB_SLOT, GLOB_TS, GLOB_VIRTUAL_TS } from '@santi020k/eslint-config-core'
 import tsParser from '@typescript-eslint/parser'
 import type { TSESLint } from '@typescript-eslint/utils'
 
-const typedFiles = ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts']
-
-const virtualTypeCheckedFiles = [
-  '**/*.astro/*.{ts,tsx,mts,cts}',
-  '*.astro/*.{ts,tsx,mts,cts}',
-  '**/*.vue/*.{ts,tsx,mts,cts}',
-  '*.vue/*.{ts,tsx,mts,cts}',
-  '**/*.svelte/*.{ts,tsx,mts,cts}',
-  '*.svelte/*.{ts,tsx,mts,cts}',
-  '**/*.md/*.{ts,tsx,mts,cts}',
-  '*.md/*.{ts,tsx,mts,cts}',
-  '**/*.mdx/*.{ts,tsx,mts,cts}',
-  '*.mdx/*.{ts,tsx,mts,cts}',
-  '**/.vitepress/**/*.ts',
-  '**/.vitepress/**/*.mts'
-]
+const typedFiles = [...GLOB_TS, ...GLOB_SLOT]
+const typeCheckedFiles = [...GLOB_TS, ...GLOB_SLOT, ...GLOB_VIRTUAL_TS]
+const virtualTypeCheckedFiles = GLOB_VIRTUAL_TS
 
 /**
  * TypeScript ESLint configuration factory
@@ -29,17 +17,56 @@ const virtualTypeCheckedFiles = [
 export const createTypescriptConfig = (
   options: { tsconfigRootDir?: string } = {}
 ): TSESLint.FlatConfig.ConfigArray => [
-  ...(tsEslint.configs.strictTypeChecked as TSESLint.FlatConfig.ConfigArray).map(c => ({
-    ...c,
-    files: typedFiles
-  })),
-  ...(tsEslint.configs.stylisticTypeChecked as TSESLint.FlatConfig.ConfigArray).map(c => ({
-    ...c,
-    files: typedFiles
-  })),
   {
-    name: 'eslint-config-typescript/rules',
+    name: 'eslint-config-typescript/setup',
     files: typedFiles,
+    plugins: {
+      '@typescript-eslint': tsEslint.plugin
+    },
+    languageOptions: {
+      parserOptions: {
+        parser: tsParser,
+        projectService: true,
+        extraFileExtensions: ['.astro', '.svelte', '.vue'],
+        tsconfigRootDir: options.tsconfigRootDir
+      }
+    }
+  },
+  ...(tsEslint.configs.strictTypeChecked as TSESLint.FlatConfig.ConfigArray).flatMap(c => [
+    {
+      ...c,
+      files: GLOB_TS,
+      ignores: [...(c.ignores ?? []), ...virtualTypeCheckedFiles]
+    },
+    ...(c.rules ?
+      [
+        {
+          name: `${c.name ?? 'ts-strict'}/rules-only`,
+          files: [...GLOB_SLOT, ...GLOB_VIRTUAL_TS],
+          rules: c.rules
+        }
+      ] :
+      [])
+  ]),
+  ...(tsEslint.configs.stylisticTypeChecked as TSESLint.FlatConfig.ConfigArray).flatMap(c => [
+    {
+      ...c,
+      files: GLOB_TS,
+      ignores: [...(c.ignores ?? []), ...virtualTypeCheckedFiles]
+    },
+    ...(c.rules ?
+      [
+        {
+          name: `${c.name ?? 'ts-stylistic'}/rules-only`,
+          files: [...GLOB_SLOT, ...GLOB_VIRTUAL_TS],
+          rules: c.rules
+        }
+      ] :
+      [])
+  ]),
+  {
+    name: 'eslint-config-typescript/parser-setup',
+    files: GLOB_TS,
     languageOptions: {
       parser: tsParser,
       parserOptions: {
@@ -48,13 +75,17 @@ export const createTypescriptConfig = (
         tsconfigRootDir: options.tsconfigRootDir
       },
       ecmaVersion: 'latest'
-    },
-    rules
+    }
   },
   {
-    name: 'eslint-config-typescript/disable-type-checked',
-    files: virtualTypeCheckedFiles,
-    ...(tsEslint.configs.disableTypeChecked as TSESLint.FlatConfig.Config)
+    name: 'eslint-config-typescript/standard-rules',
+    files: typedFiles,
+    rules: standardRules
+  },
+  {
+    name: 'eslint-config-typescript/type-checked-rules',
+    files: typeCheckedFiles,
+    rules: typeCheckedRules
   }
 ]
 
@@ -64,6 +95,6 @@ export const typescriptConfig = createTypescriptConfig()
 export { typescriptConfig as tsConfig }
 
 // Re-export rules for direct access
-export { rules }
+export { standardRules, typeCheckedRules }
 
 export default typescriptConfig
