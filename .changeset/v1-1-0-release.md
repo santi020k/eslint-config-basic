@@ -1,20 +1,25 @@
 ---
-"@santi020k/eslint-config-basic": minor
-"@santi020k/eslint-config-core": minor
-"@santi020k/eslint-config-typescript": minor
-"@santi020k/eslint-config-astro": minor
-"@santi020k/eslint-config-vue": minor
-"@santi020k/eslint-config-optionals": minor
-"@santi020k/eslint-config-qwik": minor
-"@santi020k/eslint-config-remix": minor
+"@santi020k/eslint-config-basic": major
+"@santi020k/eslint-config-core": major
+"@santi020k/eslint-config-typescript": major
+"@santi020k/eslint-config-astro": major
+"@santi020k/eslint-config-vue": major
+"@santi020k/eslint-config-optionals": major
+"@santi020k/eslint-config-qwik": major
+"@santi020k/eslint-config-remix": major
+"@santi020k/eslint-config-angular": major
+"@santi020k/eslint-config-expo": major
+"@santi020k/eslint-config-nest": major
+"@santi020k/eslint-config-next": major
+"@santi020k/eslint-config-react": major
+"@santi020k/eslint-config-solid": major
+"@santi020k/eslint-config-svelte": major
+"@santi020k/eslint-config-docs": major
 ---
 
-# v1.1.0 Release
+# 1.1.0 Release
 
-## Highlights
-- **Framework Support:** Added new configurations for Astro and Qwik, and initialized Expo support.
-- **Testing Enhancements:** Added support for Jest, Cypress, and Testing Library with comprehensive rule assertions.
-- **Refactoring:** Consolidated `typescript-eslint` dependencies, restructured TypeScript config entries, and refined framework resolution logic (added factory function support).
-- **CI/CD:** Migrated to Renovate, enhanced GitHub Action workflows, and improved test coverage.
-- **Maintenance:** Resolved several workspace-wide build/linting issues and stabilized changelog formatting.
-- **Security:** Updated internal dependencies (`lodash`, `esbuild`, `path-to-regexp`) to resolve security vulnerabilities.
+## Update Highlights
+- **ESLint 10 Support**: Harmonized ESLint version to `^10.1.0` across the monorepo and playgrounds.
+- **Security Patches**: Fixed vulnerabilities in `lodash`, `esbuild`, and `path-to-regexp` via root overrides.
+- **Solid Playground Fix**: Resolved `MODULE_NOT_FOUND` error in the Solid playground linting process.
