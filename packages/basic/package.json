@@ -29,6 +29,7 @@
     "basic-eslint": "./dist/cli.js"
   },
   "dependencies": {
+    "eslint": "^9.0.0 || ^10.0.0",
     "@santi020k/eslint-config-core": "workspace:^",
     "@santi020k/eslint-config-optionals": "workspace:^",
     "@santi020k/eslint-config-typescript": "workspace:^",
@@ -45,8 +46,7 @@
     "@santi020k/eslint-config-svelte": "workspace:^",
     "@santi020k/eslint-config-vue": "workspace:^",
     "@santi020k/eslint-config-qwik": "workspace:^",
-    "@santi020k/eslint-config-remix": "workspace:^",
-    "eslint": "^9.0.0 || ^10.0.0"
+    "@santi020k/eslint-config-remix": "workspace:^"
   },
   "peerDependenciesMeta": {
     "@santi020k/eslint-config-angular": {

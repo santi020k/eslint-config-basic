@@ -11,8 +11,19 @@ This file provides Claude-specific guidance for working in this monorepo. Read t
 5. **`.agent/skills/`** — Task-specific workflows (add framework, add optional, testing, release)
 
 ## Quick Project Summary
+ 
+ `@santi020k/eslint-config-basic` is a composable ESLint 9/10+ Flat Config package for JS/TS projects. 
+ 
+## 🎯 Philosophy: DX Above All
 
-`@santi020k/eslint-config-basic` is a composable ESLint 9+ Flat Config package for JS/TS projects. Users opt-in to frameworks and optional integrations rather than getting everything at once.
+This project follows a **DX-First & Stability-First** mission. We prioritize a seamless developer experience and reliable installations. To achieve this:
+
+- **Handled Versioning**: Core packages like `eslint` and `@eslint/js` are included as hard dependencies. This ensures the config "just works" with tested versions, preventing the dreaded "peer dependency hell."
+- **Broad Compatibility**: We support both **ESLint 9** and **ESLint 10** through flexible internal mapping and robust dependency management.
+
+## ✨ Key Features
+
+Users opt-in to frameworks and optional integrations rather than getting everything at once.
 
 ```js
 import { eslintConfig } from '@santi020k/eslint-config-basic'
@@ -79,7 +90,9 @@ Use these for specific tasks — read the relevant SKILL.md before starting:
 
 ## Critical Conventions
 
-- **ESLint 9+ Flat Config only** — no legacy `.eslintrc` support
+- **ESLint 9/10 Flat Config only** — no legacy `.eslintrc` support
+- **DX Above All** — prioritize stability and ease of use over library size
+- **Handled Versioning** — `eslint` and `@eslint/js` are hard dependencies to ensure a vetted baseline
 - **All configs return `TSESLint.FlatConfig.ConfigArray`**
 - **`.js` extensions on all relative imports** (ESM requirement)
 - **`type` imports** for type-only usage
