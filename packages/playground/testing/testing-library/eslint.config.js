@@ -3,5 +3,5 @@ import { eslintConfig, Testing } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
   tsconfigRootDir: import.meta.dirname,
-  testing: [Testing.TestingLibrary]
+  testing: [Testing.TestingLibrary, Testing.Vitest]
 })

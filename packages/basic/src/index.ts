@@ -9,7 +9,6 @@ import {
   type EslintConfigOptions,
   type FlatConfigArray,
   gitignore,
-  hasReactConfig,
   type ImportedFramework,
   NextMode,
   Runtime,
@@ -115,10 +114,22 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     )
   }
 
+  const hasReact = !!frameworks.react
+  const hasVue = !!frameworks.vue
+  const hasSvelte = !!frameworks.svelte
+  const hasSolid = !!frameworks.solid
+  const useGitignore = !uniqueSettings.includes(Setting.NoGitignore)
   // Resolve Frameworks
   const reactParam = resolveFramework('react', frameworks.react)
   const nextParam = resolveFramework('next', frameworks.next)
-  const astroParam = resolveFramework('astro', frameworks.astro)
+
+  const astroParam = resolveFramework('astro', frameworks.astro, {
+    hasReact,
+    hasVue,
+    hasSvelte,
+    hasSolid
+  })
+
   const expoParam = resolveFramework('expo', frameworks.expo)
   const nestParam = resolveFramework('nest', frameworks.nest)
   const vueParam = resolveFramework('vue', frameworks.vue)
@@ -127,8 +138,6 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
   const angularParam = resolveFramework('angular', frameworks.angular)
   const qwikParam = resolveFramework('qwik', frameworks.qwik)
   const remixParam = resolveFramework('remix', frameworks.remix)
-  const hasReact = hasReactConfig({ frameworks })
-  const useGitignore = !uniqueSettings.includes(Setting.NoGitignore)
 
   // Use runtime-aware core config
   const runtimeCoreConfig = runtime !== Runtime.Universal ?

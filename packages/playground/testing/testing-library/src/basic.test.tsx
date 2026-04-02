@@ -1,13 +1,11 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-function Button({ label, onClick }: { label: string; onClick: () => void }) {
-  return <button type="button" onClick={onClick}>{label}</button>
-}
+const Button = ({ label, onClick }: { label: string, onClick: () => void }) => <button type="button" onClick={onClick}>{label}</button>
 
 describe('Testing Library playground', () => {
   it('renders a button', () => {
-    render(<Button label="Click me" onClick={() => {}} />)
+    render(<Button label="Click me" onClick={() => { /* noop */ }} />)
 
     expect(screen.getByRole('button', { name: 'Click me' })).toBeDefined()
   })

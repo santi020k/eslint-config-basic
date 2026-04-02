@@ -9,3 +9,6 @@ dist/
 
 # npm lock file (project uses pnpm)
 package-lock.json
+
+# Turborepo
+.turbo
