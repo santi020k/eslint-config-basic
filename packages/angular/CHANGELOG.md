@@ -1,7 +1,5 @@
 # @santi020k/eslint-config-angular
 
-## 2.0.0
-
 ## 1.0.0
 
 ### Patch Changes
