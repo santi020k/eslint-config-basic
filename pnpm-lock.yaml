@@ -1037,9 +1037,6 @@ importers:
       eslint-plugin-qwik:
         specifier: ^1.11.0
         version: 1.19.2(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3)
-      typescript-eslint:
-        specifier: ^8.57.1
-        version: 8.58.0(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3)
     devDependencies:
       '@typescript-eslint/utils':
         specifier: ^8.57.1
@@ -1096,9 +1093,6 @@ importers:
       eslint:
         specifier: ^10.0.3
         version: 10.1.0(jiti@2.6.1)
-      typescript-eslint:
-        specifier: ^8.57.1
-        version: 8.58.0(eslint@10.1.0(jiti@2.6.1))(typescript@5.9.3)
     devDependencies:
       '@typescript-eslint/utils':
         specifier: ^8.57.1

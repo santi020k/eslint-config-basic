@@ -157,15 +157,6 @@ exports[`Config Snapshots — Rule Names > astro config rules should match snaps
   "no-unused-expressions",
   "no-unused-vars",
   "prettier/prettier",
-  "react/destructuring-assignment",
-  "react/jsx-filename-extension",
-  "react/jsx-key",
-  "react/jsx-no-undef",
-  "react/jsx-props-no-spreading",
-  "react/no-unescaped-entities",
-  "react/no-unknown-property",
-  "react/react-in-jsx-scope",
-  "react/require-default-props",
   "simple-import-sort/imports",
 ]
 `;
