@@ -14,11 +14,18 @@ Composable ESLint 10+ flat-config tooling for JavaScript and TypeScript projects
 - Repository: [github.com/santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)
 - Author: [santi020k](https://santi020k.me)
 
+## 🎯 Philosophy: DX Above All
+
+This project follows a **DX-First & Stability-First** mission. We prioritize a seamless developer experience and reliable installations. To achieve this:
+
+- **Handled Versioning**: Core packages like `eslint` and `@eslint/js` are included as hard dependencies. This ensures the config "just works" with tested versions, preventing the dreaded "peer dependency hell."
+- **Broad Compatibility**: We support both **ESLint 9** and **ESLint 10** through flexible internal mapping and robust dependency management.
+
 ## ✨ Key Features
 
 - **🎯 Composable & Modular**: Mix and match configurations for different frameworks and tools using a clean, options-based API.
 - **🔍 Deep Auto-Detection**: Automatically detects your project's frameworks, libraries, and tools. Core features like TypeScript and runtime presets are enabled by default if detected.
-- **⚡ Lazy Loading**: Framework-specific configurations are loaded only when needed, ensuring maximum performance and avoiding unnecessary peer dependency conflicts.
+- **⚡ Lazy Loading**: Framework-specific configurations are loaded only when needed.
 - **🛡️ Strict Mode**: Opt-in `strict: true` to promote all warnings to errors, perfect for CI/CD and maintaining high code standards.
 - **🌐 Smart Runtime Support**: Built-in support for Node.js, Browser, or Universal runtimes with appropriate globals and rules.
 - **💅 Prettier Integrated**: Seamlessly integrated with Prettier out of the box for consistent code formatting.
@@ -29,8 +36,10 @@ Composable ESLint 10+ flat-config tooling for JavaScript and TypeScript projects
 ### Installation
 
 ```bash
-npm install -D eslint @santi020k/eslint-config-basic
+npm install -D @santi020k/eslint-config-basic
 ```
+
+*(No need to install `eslint` manually; it's handled as a dependency of the config to ensure the best DX!)*
 
 ### Usage
 

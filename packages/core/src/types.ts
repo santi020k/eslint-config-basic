@@ -8,6 +8,26 @@ export const GLOB_JS = ['**/*.js', '**/*.mjs', '**/*.cjs', '**/*.jsx']
 export const GLOB_TS = ['**/*.ts', '**/*.mts', '**/*.cts', '**/*.tsx']
 
 export const GLOB_JS_TS = [...GLOB_JS, ...GLOB_TS]
+export const GLOB_VUE = ['**/*.vue']
+export const GLOB_SVELTE = ['**/*.svelte']
+export const GLOB_ASTRO = ['**/*.astro']
+export const GLOB_SLOT = [...GLOB_VUE, ...GLOB_SVELTE, ...GLOB_ASTRO]
+export const GLOB_JS_TS_ALL = [...GLOB_JS_TS, ...GLOB_SLOT]
+
+export const GLOB_VIRTUAL_TS = [
+  '**/*.astro/*.ts',
+  '**/*.astro/*.tsx',
+  '**/*.vue/*.ts',
+  '**/*.vue/*.tsx',
+  '**/*.svelte/*.ts',
+  '**/*.svelte/*.tsx',
+  '**/*.md/*.ts',
+  '**/*.md/*.tsx',
+  '**/*.mdx/*.ts',
+  '**/*.mdx/*.tsx',
+  '**/.vitepress/**/*.ts',
+  '**/.vitepress/**/*.mts'
+]
 
 /**
  * Enum for Next.js mode options
@@ -130,7 +150,11 @@ export const ReactConfigKeys = [
  * A boolean flag may appear in detected project options, but user-facing framework options
  * should pass imported config arrays/modules explicitly.
  */
-export type ImportedFramework = FlatConfigArray | { default: FlatConfigArray } | boolean
+export type ImportedFramework =
+  FlatConfigArray |
+  { default: FlatConfigArray | ((options?: Record<string, unknown>) => FlatConfigArray) } |
+  ((options?: Record<string, unknown>) => FlatConfigArray) |
+  boolean
 
 /**
  * TypeScript configuration options

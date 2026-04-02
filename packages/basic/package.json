@@ -1,6 +1,6 @@
 {
   "name": "@santi020k/eslint-config-basic",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A composable ESLint 9/10+ Flat Config package for JavaScript, TypeScript, React, Next.js, Vue, Svelte, Solid, Angular, Astro, Expo, NestJS, Qwik, and Remix.",
   "type": "module",
   "main": "./dist/index.js",
@@ -23,14 +23,13 @@
     "dev": "tsup --watch",
     "clean": "rm -rf dist",
     "check:exports": "publint",
-    "prepack": "rm -f README.md && cp ../../README.md ./README.md",
-    "postpack": "rm -f README.md && ln -s ../../README.md ./README.md",
     "typecheck": "tsc --noEmit"
   },
   "bin": {
     "basic-eslint": "./dist/cli.js"
   },
   "dependencies": {
+    "eslint": "^9.0.0 || ^10.0.0",
     "@santi020k/eslint-config-core": "workspace:^",
     "@santi020k/eslint-config-optionals": "workspace:^",
     "@santi020k/eslint-config-typescript": "workspace:^",
@@ -47,8 +46,7 @@
     "@santi020k/eslint-config-svelte": "workspace:^",
     "@santi020k/eslint-config-vue": "workspace:^",
     "@santi020k/eslint-config-qwik": "workspace:^",
-    "@santi020k/eslint-config-remix": "workspace:^",
-    "eslint": "^9.0.0 || ^10.0.0"
+    "@santi020k/eslint-config-remix": "workspace:^"
   },
   "peerDependenciesMeta": {
     "@santi020k/eslint-config-angular": {

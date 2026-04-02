@@ -1,13 +1,11 @@
-<script>
+<script lang="ts">
   let count = $state(0)
-  let elem
+  const x = 'hello'
+
+  console.log('🚀 ~ x:', x)
 
   const increment = () => {
     count += 1
-  }
-
-  const setContent = () => {
-    if (elem) elem.innerHTML = '<p>test</p>'
   }
 
   $effect(() => {
@@ -17,6 +15,7 @@
 
 <main>
   <h1>Svelte Playground</h1>
+
   <button onclick={increment}>
     Count: {count}
   </button>

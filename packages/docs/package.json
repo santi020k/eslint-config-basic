@@ -1,7 +1,7 @@
 {
   "name": "@santi020k/eslint-config-docs",
   "private": true,
-  "version": "0.0.1",
+  "version": "2.0.0",
   "description": "VitePress documentation site for the @santi020k/eslint-config-basic monorepo",
   "type": "module",
   "scripts": {
@@ -19,7 +19,7 @@
     "vitepress": "^1.6.4"
   },
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=24.0.0"
   },
   "author": "santi020k",
   "license": "MIT",

@@ -131,7 +131,7 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
 
     const names = extractConfigNames(config as Record<string, unknown>[])
 
-    expect(names).not.toContain('eslint-config-typescript/rules')
+    expect(names).not.toContain('eslint-config-typescript/standard-rules')
   })
 
   it('should include typescript configs when typescript is enabled', () => {
@@ -139,6 +139,6 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
 
     const names = extractConfigNames(config as Record<string, unknown>[])
 
-    expect(names).toContain('eslint-config-typescript/rules')
+    expect(names).toContain('eslint-config-typescript/standard-rules')
   })
 })

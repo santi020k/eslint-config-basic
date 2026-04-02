@@ -1,5 +1,4 @@
 import pluginQwik from 'eslint-plugin-qwik'
-import tsEslint from 'typescript-eslint'
 
 import type { TSESLint } from '@typescript-eslint/utils'
 
@@ -26,18 +25,11 @@ export const qwik: TSESLint.FlatConfig.ConfigArray = [
     }
   },
   {
-    name: 'eslint-config-qwik/disable-type-checked',
+    // Disable rules that cause false positives in Qwik virtual script blocks.
+    // Type-checked rule disabling is handled by @santi020k/eslint-config-typescript.
+    name: 'eslint-config-qwik/virtual-script-rules',
     files: ['**/*.tsx/*.ts', '**/*.ts/*.ts'],
-    languageOptions: {
-      parserOptions: {
-        project: null,
-        program: null,
-        projectService: false,
-        allowDefaultProject: true
-      }
-    },
     rules: {
-      ...tsEslint.configs.disableTypeChecked.rules,
       'no-unused-expressions': 'off',
       '@typescript-eslint/no-unused-expressions': 'off'
     }

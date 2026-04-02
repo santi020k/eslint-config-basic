@@ -31,7 +31,10 @@ describe('eslintConfig Function', () => {
 
   it('should return config with React when react framework is specified', () => {
     const config = eslintConfig({
-      frameworks: { react: [{ name: 'mock-react', rules: {} }] }
+      frameworks: {
+        react: [{ name: 'mock-react', rules: {} }],
+        expo: [{ name: 'mock-expo', rules: {} }]
+      }
     })
 
     expect(Array.isArray(config)).toBe(true)
@@ -275,5 +278,120 @@ describe('eslintConfig Function', () => {
     expect(names).toContain('optionals/graphql/schema')
     expect(names).toContain('optionals/graphql/operations')
     expect(names).not.toContain('eslint-config-react/recommended')
+  })
+})
+
+describe('Framework Composition — remaining frameworks', () => {
+  it('should return config with Astro when astro framework is specified', () => {
+    const config = eslintConfig({
+      frameworks: { astro: [{ name: 'mock-astro', rules: {} }] }
+    })
+
+    expect(Array.isArray(config)).toBe(true)
+
+    expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-astro')
+  })
+
+  it('should return config with Expo when expo framework is specified', () => {
+    // Expo requires react — pass a mock react config alongside
+    const config = eslintConfig({
+      frameworks: {
+        react: [{ name: 'mock-react', rules: {} }],
+        expo: [{ name: 'mock-expo', rules: {} }]
+      }
+    })
+
+    expect(Array.isArray(config)).toBe(true)
+
+    expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-expo')
+  })
+
+  it('should return config with Svelte when svelte framework is specified', () => {
+    const config = eslintConfig({
+      frameworks: { svelte: [{ name: 'mock-svelte', rules: {} }] }
+    })
+
+    expect(Array.isArray(config)).toBe(true)
+
+    expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-svelte')
+  })
+
+  it('should return config with Solid when solid framework is specified', () => {
+    const config = eslintConfig({
+      frameworks: { solid: [{ name: 'mock-solid', rules: {} }] }
+    })
+
+    expect(Array.isArray(config)).toBe(true)
+
+    expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-solid')
+  })
+
+  it('should return config with Angular when angular framework is specified', () => {
+    const config = eslintConfig({
+      frameworks: { angular: [{ name: 'mock-angular', rules: {} }] }
+    })
+
+    expect(Array.isArray(config)).toBe(true)
+
+    expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-angular')
+  })
+
+  it('should return config with Qwik when qwik framework is specified', () => {
+    const config = eslintConfig({
+      frameworks: { qwik: [{ name: 'mock-qwik', rules: {} }] }
+    })
+
+    expect(Array.isArray(config)).toBe(true)
+
+    expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-qwik')
+  })
+
+  it('should return config with Remix when remix framework is specified', () => {
+    const config = eslintConfig({
+      frameworks: { remix: [{ name: 'mock-remix', rules: {} }] }
+    })
+
+    expect(Array.isArray(config)).toBe(true)
+
+    expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-remix')
+  })
+
+  it('should handle all eleven frameworks combined', () => {
+    const config = eslintConfig({
+      typescript: true,
+      frameworks: {
+        react: [{ name: 'mock-react', rules: {} }],
+        next: [{ name: 'mock-next', rules: {} }],
+        astro: [{ name: 'mock-astro', rules: {} }],
+        expo: [{ name: 'mock-expo', rules: {} }],
+        nest: [{ name: 'mock-nest', rules: {} }],
+        vue: [{ name: 'mock-vue', rules: {} }],
+        svelte: [{ name: 'mock-svelte', rules: {} }],
+        solid: [{ name: 'mock-solid', rules: {} }],
+        angular: [{ name: 'mock-angular', rules: {} }],
+        qwik: [{ name: 'mock-qwik', rules: {} }],
+        remix: [{ name: 'mock-remix', rules: {} }]
+      }
+    })
+
+    expect(Array.isArray(config)).toBe(true)
+
+    const names = extractConfigNames(config as Record<string, unknown>[])
+
+    expect(names).toContain('mock-svelte')
+    expect(names).toContain('mock-solid')
+    expect(names).toContain('mock-angular')
+    expect(names).toContain('mock-qwik')
+    expect(names).toContain('mock-remix')
+  })
+
+  it('should handle all formats combined', () => {
+    const config = eslintConfig({
+      formats: Object.values(Format)
+    })
+
+    expect(Array.isArray(config)).toBe(true)
+
+    expect(config.length).toBeGreaterThan(0)
   })
 })

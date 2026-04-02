@@ -41,5 +41,11 @@
       "eslint-plugin-react/configs/recommended.js": ["packages/react/src/ambient.d.ts"]
     }
   },
+  "files": [
+    "packages/core/src/ambient.d.ts",
+    "packages/react/src/ambient.d.ts",
+    "packages/optionals/src/ambient.d.ts",
+    "packages/expo/src/ambient.d.ts"
+  ],
   "exclude": ["node_modules", "dist"]
 }

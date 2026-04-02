@@ -52,7 +52,11 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
       options.runtime = Runtime.Universal
     }
 
-    if (allDeps.astro) frameworks.astro = true
+    if (allDeps.astro) {
+      frameworks.astro = true
+
+      options.runtime = Runtime.Browser
+    }
 
     if (allDeps.react && !allDeps.next && !allDeps.expo && !allDeps['react-native']) {
       frameworks.react = true
@@ -92,15 +96,22 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
       options.runtime = Runtime.Browser
     }
 
-    if (allDeps['@builder.io/qwik']) frameworks.qwik = true
+    if (allDeps['@builder.io/qwik']) {
+      frameworks.qwik = true
 
-    if (allDeps['@remix-run/react'] || allDeps['@remix-run/node']) frameworks.remix = true
+      options.runtime = Runtime.Browser
+    }
+
+    if (allDeps['@remix-run/react'] || allDeps['@remix-run/node']) {
+      frameworks.remix = true
+
+      options.runtime = Runtime.Browser
+    }
 
     // Default to TS if tsconfig exists
     if (
       existsSync(join(cwd, 'tsconfig.json')) ||
-      existsSync(join(cwd, 'tsconfig.base.json')) ||
-      existsSync(join(cwd, 'tsconfig.dev.json'))
+      existsSync(join(cwd, 'tsconfig.base.json'))
     ) {
       options.typescript = true
     }

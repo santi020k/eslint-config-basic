@@ -1,6 +1,6 @@
 {
   "name": "@santi020k/eslint-config-qwik",
-  "version": "0.8.2",
+  "version": "2.0.0",
   "description": "Qwik ESLint configuration",
   "type": "module",
   "main": "./dist/index.js",
@@ -26,8 +26,7 @@
     "eslint": "^9.0.0 || ^10.0.0"
   },
   "dependencies": {
-    "eslint-plugin-qwik": "^1.11.0",
-    "typescript-eslint": "^8.57.1"
+    "eslint-plugin-qwik": "^1.11.0"
   },
   "devDependencies": {
     "@typescript-eslint/utils": "^8.57.1",

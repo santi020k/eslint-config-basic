@@ -1,38 +1,11 @@
 version: 2
 
-updates:
-  # npm dependencies
-  - package-ecosystem: npm
-    directory: /
-    schedule:
-      interval: weekly
-      day: monday
-    open-pull-requests-limit: 10
-    groups:
-      eslint-plugins:
-        patterns:
-          - 'eslint-*'
-          - '@eslint/*'
-          - '@typescript-eslint/*'
-          - 'typescript-eslint'
-          - '@stylistic/*'
-          - '@cspell/*'
-      build-tools:
-        patterns:
-          - 'tsup'
-          - 'typescript'
-          - 'turbo'
-      testing:
-        patterns:
-          - 'vitest'
-      linting-tools:
-        patterns:
-          - 'husky'
-          - 'lint-staged'
-          - 'commitizen'
-          - 'cz-*'
+# Dependency updates are now managed by Renovate (renovate.json).
+# Dependabot is kept only for GitHub Actions as a fallback,
+# but Renovate's github-actions manager handles this too once installed.
 
-  # GitHub Actions
+updates:
+  # GitHub Actions — Renovate also covers this; keeping as belt-and-suspenders
   - package-ecosystem: github-actions
     directory: /
     schedule:

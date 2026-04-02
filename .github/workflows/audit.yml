@@ -28,5 +28,4 @@ jobs:
             ${{ runner.os }}-turbo-
       - run: pnpm install --frozen-lockfile
       - name: Run pnpm audit
-        continue-on-error: true
-        run: pnpm audit --audit-level=moderate
+        run: pnpm audit --audit-level=high
