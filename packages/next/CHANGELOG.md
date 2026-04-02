@@ -1,12 +1,5 @@
 # @santi020k/eslint-config-next
 
-## 2.0.0
-
-### Patch Changes
-
-- Updated dependencies []:
-  - @santi020k/eslint-config-core@2.0.0
-
 ## 1.0.0
 
 ### Patch Changes

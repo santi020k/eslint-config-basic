@@ -1,20 +1,20 @@
 ---
-"@santi020k/eslint-config-basic": major
-"@santi020k/eslint-config-core": major
-"@santi020k/eslint-config-typescript": major
-"@santi020k/eslint-config-astro": major
-"@santi020k/eslint-config-vue": major
-"@santi020k/eslint-config-optionals": major
-"@santi020k/eslint-config-qwik": major
-"@santi020k/eslint-config-remix": major
-"@santi020k/eslint-config-angular": major
-"@santi020k/eslint-config-expo": major
-"@santi020k/eslint-config-nest": major
-"@santi020k/eslint-config-next": major
-"@santi020k/eslint-config-react": major
-"@santi020k/eslint-config-solid": major
-"@santi020k/eslint-config-svelte": major
-"@santi020k/eslint-config-docs": major
+"@santi020k/eslint-config-basic": minor
+"@santi020k/eslint-config-core": minor
+"@santi020k/eslint-config-typescript": minor
+"@santi020k/eslint-config-astro": minor
+"@santi020k/eslint-config-vue": minor
+"@santi020k/eslint-config-optionals": minor
+"@santi020k/eslint-config-qwik": minor
+"@santi020k/eslint-config-remix": minor
+"@santi020k/eslint-config-angular": minor
+"@santi020k/eslint-config-expo": minor
+"@santi020k/eslint-config-nest": minor
+"@santi020k/eslint-config-next": minor
+"@santi020k/eslint-config-react": minor
+"@santi020k/eslint-config-solid": minor
+"@santi020k/eslint-config-svelte": minor
+"@santi020k/eslint-config-docs": minor
 ---
 
 # 1.1.0 Release

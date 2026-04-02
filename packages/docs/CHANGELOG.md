@@ -1,7 +1,5 @@
 # @santi020k/eslint-config-docs
 
-## 2.0.0
-
 ## 0.0.1
 
 ### Patch Changes

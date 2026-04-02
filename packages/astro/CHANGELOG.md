@@ -1,20 +1,5 @@
 # @santi020k/eslint-config-astro
 
-## 2.0.0
-
-### Minor Changes
-
-- - **Framework Support:** Added new configurations for Astro and Qwik, and initialized Expo support.
-  - **Testing Enhancements:** Added support for Jest, Cypress, and Testing Library with comprehensive rule assertions.
-  - **Refactoring:** Consolidated `typescript-eslint` dependencies, restructured TypeScript config entries, and refined framework resolution logic (added factory function support).
-  - **CI/CD:** Migrated to Renovate, enhanced GitHub Action workflows, and improved test coverage.
-  - **Maintenance:** Simplified virtual script handling in Svelte/Vue and resolved several workspace-wide build/linting issues.
-
-### Patch Changes
-
-- Updated dependencies []:
-  - @santi020k/eslint-config-core@2.0.0
-
 ## 1.0.0
 
 ### Patch Changes
