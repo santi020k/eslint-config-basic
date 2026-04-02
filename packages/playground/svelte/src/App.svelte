@@ -1,19 +1,11 @@
 <script lang="ts">
   let count = $state(0)
-  const unused = 123
-  let x: string = 'hello'
-  console.log("🚀 ~ x:", x)
-  async function foo() {}
-  foo()
+  const x = 'hello'
 
-  let elem
+  console.log('🚀 ~ x:', x)
 
   const increment = () => {
     count += 1
-  }
-
-  const setContent = () => {
-    if (elem) elem.innerHTML = '<p>test</p>'
   }
 
   $effect(() => {
@@ -23,6 +15,7 @@
 
 <main>
   <h1>Svelte Playground</h1>
+
   <button onclick={increment}>
     Count: {count}
   </button>
