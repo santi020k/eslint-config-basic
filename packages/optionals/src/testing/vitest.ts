@@ -1,7 +1,5 @@
-import testingLibrary from 'eslint-plugin-testing-library'
 import globals from 'globals'
 
-import { fixupPluginRules } from '@eslint/compat'
 import type { TSESLint } from '@typescript-eslint/utils'
 import pluginVitest from '@vitest/eslint-plugin'
 
@@ -29,10 +27,7 @@ export const vitest: TSESLint.FlatConfig.ConfigArray = [
       }
     },
     plugins: {
-      vitest: pluginVitest,
-      'testing-library': fixupPluginRules({
-        rules: testingLibrary.rules
-      } as unknown as Parameters<typeof fixupPluginRules>[0]) as unknown as TSESLint.FlatConfig.Plugin
+      vitest: pluginVitest
     },
     rules: {
       // Vitest recommended rules

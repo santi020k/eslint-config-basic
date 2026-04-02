@@ -150,7 +150,11 @@ export const ReactConfigKeys = [
  * A boolean flag may appear in detected project options, but user-facing framework options
  * should pass imported config arrays/modules explicitly.
  */
-export type ImportedFramework = FlatConfigArray | { default: FlatConfigArray } | boolean
+export type ImportedFramework =
+  FlatConfigArray |
+  { default: FlatConfigArray | ((options?: Record<string, unknown>) => FlatConfigArray) } |
+  ((options?: Record<string, unknown>) => FlatConfigArray) |
+  boolean
 
 /**
  * TypeScript configuration options

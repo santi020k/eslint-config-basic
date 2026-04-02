@@ -17,7 +17,6 @@ export default defineConfig({
         '**/*.test.ts',
         '**/*.config.ts'
       ],
-      all: true,
       reportsDirectory: './coverage',
       thresholds: {
         lines: 80,

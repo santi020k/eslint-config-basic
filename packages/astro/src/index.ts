@@ -1,19 +1,21 @@
 import pluginAstro from 'eslint-plugin-astro'
 
-import { rules } from './rules.js'
+import { type AstroOptions, getRules } from './rules.js'
 
 import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
- * Astro ESLint configuration
- * Includes Astro plugin recommended rules and custom overrides
+ * Creates Astro ESLint configuration based on enabled frameworks
+ *
+ * @param options - Framework-specific options for Astro files
+ * @returns {TSESLint.FlatConfig.ConfigArray} The Astro configuration array
  */
-export const astroConfig: TSESLint.FlatConfig.ConfigArray = [
+export const createAstroConfig = (options?: AstroOptions): TSESLint.FlatConfig.ConfigArray => [
   ...pluginAstro.configs.recommended,
   {
     name: 'eslint-config-astro/custom',
     files: ['**/*.astro'],
-    rules
+    rules: getRules(options)
   },
   {
     name: 'eslint-config-astro/virtual-scripts',
@@ -29,7 +31,12 @@ export const astroConfig: TSESLint.FlatConfig.ConfigArray = [
   }
 ]
 
-// Re-export rules for direct access
-export { rules }
+// Default export as factory function
+export default createAstroConfig
 
-export default astroConfig
+// Static config for backwards compatibility (no frameworks by default)
+export const astroConfig = createAstroConfig()
+
+// Re-export types and utilities
+export { getRules }
+export type { AstroOptions }

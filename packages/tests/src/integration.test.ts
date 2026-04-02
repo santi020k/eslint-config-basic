@@ -169,9 +169,7 @@ describe('Integration Tests', () => {
         typescript: false,
         frameworks: { angular: angularConfig }
       })
-      const names = config
-        .filter((c): c is Record<string, unknown> => typeof c === 'object' && c !== null)
-        .flatMap(c => (c.name ? [c.name] : []))
+      const names = config.flatMap(c => (c.name ? [c.name] : []))
 
       expect(names).toContain('eslint-config-angular/rules')
     })
@@ -183,9 +181,7 @@ describe('Integration Tests', () => {
         typescript: false,
         frameworks: { astro: astroConfig }
       })
-      const names = config
-        .filter((c): c is Record<string, unknown> => typeof c === 'object' && c !== null)
-        .flatMap(c => (c.name ? [c.name] : []))
+      const names = config.flatMap(c => (typeof c.name === 'string' ? [c.name] : []))
 
       expect(names.some(n => n.includes('astro'))).toBe(true)
     })
@@ -214,9 +210,7 @@ describe('Integration Tests', () => {
         typescript: false,
         frameworks: { nest: nestConfig }
       })
-      const names = config
-        .filter((c): c is Record<string, unknown> => typeof c === 'object' && c !== null)
-        .flatMap(c => (c.name ? [c.name] : []))
+      const names = config.flatMap(c => (c.name ? [c.name] : []))
 
       expect(names).toContain('eslint-config-nest/custom')
     })
@@ -231,9 +225,7 @@ describe('Integration Tests', () => {
           next: nextConfig
         }
       })
-      const names = config
-        .filter((c): c is Record<string, unknown> => typeof c === 'object' && c !== null)
-        .flatMap(c => (c.name ? [c.name] : []))
+      const names = config.flatMap(c => (c.name ? [c.name] : []))
 
       expect(names).toContain('eslint-config-next/custom')
     })
@@ -245,9 +237,7 @@ describe('Integration Tests', () => {
         typescript: false,
         frameworks: { qwik: qwikConfig }
       })
-      const names = config
-        .filter((c): c is Record<string, unknown> => typeof c === 'object' && c !== null)
-        .flatMap(c => (c.name ? [c.name] : []))
+      const names = config.flatMap(c => (c.name ? [c.name] : []))
 
       expect(names).toContain('eslint-config-qwik/rules')
     })
@@ -259,9 +249,7 @@ describe('Integration Tests', () => {
         typescript: false,
         frameworks: { remix: remixConfig }
       })
-      const names = config
-        .filter((c): c is Record<string, unknown> => typeof c === 'object' && c !== null)
-        .flatMap(c => (c.name ? [c.name] : []))
+      const names = config.flatMap(c => (c.name ? [c.name] : []))
 
       expect(names).toContain('eslint-config-remix/jsx-a11y')
     })

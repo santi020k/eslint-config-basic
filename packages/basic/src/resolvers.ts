@@ -12,18 +12,38 @@ import {
 } from '@santi020k/eslint-config-core'
 
 /**
- * Resolves an imported framework (either array or default export) into a config array.
+ * Resolves an imported framework (either array, object with default, or factory function) into a config array.
  */
-export const resolveFramework = (frameworkName: string, framework?: ImportedFramework): FlatConfigArray => {
+export const resolveFramework = (
+  frameworkName: string,
+  framework?: ImportedFramework,
+  options?: Record<string, unknown>
+): FlatConfigArray => {
   if (!framework) return []
 
   if (framework === true) {
     throw new TypeError(
-      `Framework "${frameworkName}" requires an imported config. Install @santi020k/eslint-config-${frameworkName} and pass it via frameworks.${frameworkName}.`
+      `Framework "${frameworkName}" requires an imported config. ` +
+      `Install @santi020k/eslint-config-${frameworkName} and pass it via frameworks.${frameworkName}.`
     )
   }
 
-  return Array.isArray(framework) ? framework : framework.default
+  // Handle factory functions directly
+  if (typeof framework === 'function') {
+    return (framework as (opts?: Record<string, unknown>) => FlatConfigArray)(options)
+  }
+
+  // Handle modules with default exports
+  if (typeof framework === 'object' && 'default' in framework) {
+    if (typeof framework.default === 'function') {
+      return (framework.default as (opts?: Record<string, unknown>) => FlatConfigArray)(options)
+    }
+
+    return framework.default
+  }
+
+  // Handle config arrays directly
+  return Array.isArray(framework) ? framework : []
 }
 
 /**

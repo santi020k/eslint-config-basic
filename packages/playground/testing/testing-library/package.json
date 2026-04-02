@@ -10,8 +10,16 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
-    "@testing-library/react": "^16.0.0",
-    "eslint": "^9.6.0"
+    "@testing-library/react": "^16.2.0",
+    "@testing-library/user-event": "^14.6.1",
+    "eslint": "^9.21.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "vitest": "^3.0.7"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4"
   },
   "author": "santi020k",
   "license": "MIT",
