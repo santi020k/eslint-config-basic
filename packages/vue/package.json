@@ -1,6 +1,6 @@
 {
   "name": "@santi020k/eslint-config-vue",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Vue ESLint configuration",
   "type": "module",
   "main": "./dist/index.js",
