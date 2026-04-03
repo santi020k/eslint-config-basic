@@ -2,7 +2,7 @@ import { createRequire } from 'node:module'
 import { defineConfig } from 'vitepress'
 
 const require = createRequire(import.meta.url)
-const pkg = require('../../basic/package.json') as { version: string }
+const docsPkg = require('../package.json') as { version: string }
 const base = process.env.DOCS_BASE ?? '/'
 const site = process.env.DOCS_SITE_URL ?? 'https://eslint.santi020k.me'
 const siteName = 'Santi020k ESLint'
@@ -115,14 +115,19 @@ export default defineConfig({
       provider: 'local'
     },
     nav: [
-      { text: 'Start', link: '/guide/getting-started' },
+      { text: 'Guide', link: '/guide/getting-started' },
       { text: 'Frameworks', link: '/frameworks/typescript' },
       { text: 'Tooling', link: '/tooling/overview' },
       { text: 'Packages', link: '/packages/basic' },
       { text: 'API', link: '/api/' },
-      { text: 'npm', link: 'https://www.npmjs.com/package/@santi020k/eslint-config-basic' },
-      { text: 'GitHub', link: 'https://github.com/santi020k/eslint-config-basic' },
-      { text: 'Website', link: 'https://santi020k.me' }
+      {
+        text: 'More',
+        items: [
+          { text: 'GitHub', link: 'https://github.com/santi020k/eslint-config-basic' },
+          { text: 'npm', link: 'https://www.npmjs.com/package/@santi020k/eslint-config-basic' },
+          { text: 'Website', link: 'https://santi020k.me' }
+        ]
+      }
     ],
     sidebar: {
       '/guide/': [
@@ -207,7 +212,7 @@ export default defineConfig({
       next: 'Next'
     },
     footer: {
-      message: `DX-first documentation for @santi020k/eslint-config-basic · v${pkg.version}`,
+      message: `Documentation site v${docsPkg.version} for @santi020k/eslint-config-basic`,
       copyright: 'Designed by Santiago Molina · MIT Licensed'
     }
   }

@@ -3,7 +3,7 @@ import { withBase } from 'vitepress'
 </script>
 
 <template>
-  <section class="santi-home-panel">
+  <section class="santi-home-panel mb-20">
     <div class="santi-home-panel__grid">
       <div>
         <p class="santi-home-eyebrow">Why this library exists</p>

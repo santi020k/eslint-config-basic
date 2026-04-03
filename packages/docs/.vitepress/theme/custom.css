@@ -57,6 +57,8 @@
   --vp-c-default-2: hsl(var(--s2k-surface));
   --vp-c-default-3: hsl(var(--s2k-line));
   --vp-c-default-soft: hsl(var(--s2k-surface-muted));
+  --vp-nav-bg-color: hsl(var(--s2k-surface) / 0.78);
+  --vp-nav-screen-bg-color: hsl(var(--s2k-theme-bg) / 0.94);
 
   --vp-home-hero-name-color: transparent;
   --vp-home-hero-name-background:
@@ -132,6 +134,8 @@ html.dark {
   --vp-c-default-2: hsl(var(--s2k-surface));
   --vp-c-default-3: hsl(var(--s2k-line));
   --vp-c-default-soft: hsl(var(--s2k-surface-muted));
+  --vp-nav-bg-color: hsl(var(--s2k-surface) / 0.86);
+  --vp-nav-screen-bg-color: hsl(var(--s2k-theme-bg) / 0.96);
 
   --vp-button-brand-text: hsl(262 20% 12%);
   --vp-button-alt-text: hsl(var(--s2k-ink));
@@ -275,6 +279,8 @@ html.dark .santi-hero-note {
 
 .VPNavBarTitle .title {
   gap: 0.75rem;
+  min-width: 0;
+  padding-right: 0.5rem;
 }
 
 .VPNavBarTitle .logo {
@@ -288,8 +294,94 @@ html.dark .santi-hero-note {
 }
 
 .VPNavBarTitle .title span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: 0.98rem;
   font-weight: 700;
+}
+
+.VPNavBar .wrapper {
+  padding-inline: 1rem;
+}
+
+.VPNavBar .container {
+  gap: 1rem;
+  max-width: min(100%, calc(var(--vp-layout-max-width) - 2rem));
+}
+
+.VPNavBar .title,
+.VPNavBar .content,
+.VPNavBar .content-body,
+.VPNavBarSearch {
+  min-width: 0;
+}
+
+.VPNavBarMenu {
+  align-items: center;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.VPNavBarMenuLink,
+.VPFlyout .button {
+  border-radius: 999px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.VPNavBarMenuLink {
+  padding-inline: 0.9rem;
+}
+
+.VPNavBarMenuLink.active,
+.VPNavBarMenuLink:hover,
+.VPFlyout:hover .text,
+.VPFlyout.active .text {
+  color: hsl(var(--s2k-brand));
+}
+
+.VPNavBarMenuLink:hover,
+.VPFlyout .button:hover,
+.VPFlyout .button[aria-expanded='true'] {
+  background: hsl(var(--s2k-brand-soft) / 0.72);
+}
+
+.VPFlyout .button {
+  padding-inline: 0.9rem;
+}
+
+.VPFlyout .menu {
+  top: calc(var(--vp-nav-height) - 8px);
+}
+
+.VPMenu {
+  min-width: 15rem;
+  border-radius: 1.35rem;
+  border-color: hsl(var(--s2k-line) / 0.56);
+  background:
+    linear-gradient(
+      180deg,
+      hsl(var(--s2k-surface) / 0.94),
+      hsl(var(--s2k-surface-muted) / 0.84)
+    );
+  box-shadow:
+    0 20px 48px hsl(var(--s2k-shadow) / 0.08),
+    inset 0 1px 0 hsl(0 0% 100% / 0.05);
+  backdrop-filter: blur(18px);
+}
+
+.VPMenu .link {
+  border-radius: 1rem;
+}
+
+.VPMenu .link:hover,
+.VPMenu .link.active {
+  background: hsl(var(--s2k-brand-soft) / 0.82);
 }
 
 .VPNavBarMenuLink,
@@ -307,7 +399,8 @@ html.dark .santi-hero-note {
 }
 
 .DocSearch-Button {
-  min-width: 13rem;
+  min-width: 11.5rem;
+  max-width: 100%;
   background: hsl(var(--s2k-surface) / 0.74) !important;
   border: 1px solid hsl(var(--s2k-line) / 0.52);
   box-shadow: none !important;
@@ -316,6 +409,202 @@ html.dark .santi-hero-note {
 .DocSearch-Button:hover {
   border-color: hsl(var(--s2k-brand) / 0.35);
   background: hsl(var(--s2k-surface));
+}
+
+.VPNavBarHamburger {
+  flex-shrink: 0;
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid hsl(var(--s2k-line) / 0.6);
+  border-radius: 999px;
+  background: hsl(var(--s2k-surface) / 0.76);
+  box-shadow:
+    0 10px 26px hsl(var(--s2k-shadow) / 0.05),
+    inset 0 1px 0 hsl(0 0% 100% / 0.05);
+}
+
+.VPNavBarHamburger:hover {
+  border-color: hsl(var(--s2k-brand) / 0.3);
+  background: hsl(var(--s2k-surface));
+}
+
+.VPNavBarHamburger .top,
+.VPNavBarHamburger .middle,
+.VPNavBarHamburger .bottom {
+  background-color: hsl(var(--s2k-ink));
+}
+
+.VPNavScreen {
+  background:
+    radial-gradient(
+      circle at 18% 0%,
+      hsl(var(--s2k-glow) / 0.08),
+      transparent 20rem
+    ),
+    linear-gradient(
+      180deg,
+      hsl(var(--s2k-surface-muted) / 0.74),
+      hsl(var(--s2k-theme-bg) / 0.96)
+    );
+  backdrop-filter: blur(26px);
+}
+
+.VPNavScreen .container {
+  max-width: min(100%, 28rem);
+  padding: 0.9rem 0 3rem;
+}
+
+.VPNavScreenMenu,
+.VPNavScreenAppearance,
+.VPNavScreenTranslations,
+.VPNavScreenSocialLinks {
+  border: 1px solid hsl(var(--s2k-line) / 0.5);
+  border-radius: 1.55rem;
+  background:
+    linear-gradient(
+      180deg,
+      hsl(var(--s2k-surface) / 0.92),
+      hsl(var(--s2k-surface-muted) / 0.8)
+    );
+  box-shadow:
+    0 18px 44px hsl(var(--s2k-shadow) / 0.08),
+    inset 0 1px 0 hsl(0 0% 100% / 0.04);
+  backdrop-filter: blur(16px);
+}
+
+.VPNavScreenMenu {
+  padding: 0.45rem;
+}
+
+.VPNavScreenMenuLink {
+  margin: 0;
+  border: 1px solid transparent;
+  border-radius: 1.15rem;
+  padding: 0.95rem 1rem;
+  line-height: 1.45;
+  font-size: 0.96rem;
+  font-weight: 600;
+}
+
+.VPNavScreenMenuLink + .VPNavScreenMenuLink {
+  margin-top: 0.3rem;
+}
+
+.VPNavScreenMenuLink:hover {
+  border-color: hsl(var(--s2k-brand) / 0.18);
+  background: hsl(var(--s2k-brand-soft) / 0.78);
+}
+
+.VPNavScreenMenuGroup {
+  margin-top: 0.35rem;
+  border-bottom: 0;
+  border-radius: 1.15rem;
+  background: hsl(var(--s2k-surface-muted) / 0.72);
+  height: 4rem;
+}
+
+.VPNavScreenMenuGroup.open {
+  padding-bottom: 0.45rem;
+  background: hsl(var(--s2k-brand-soft) / 0.5);
+}
+
+.VPNavScreenMenuGroup .button {
+  padding: 1rem 1rem 0.95rem;
+  font-size: 0.96rem;
+  font-weight: 600;
+}
+
+.VPNavScreenMenuGroup.open .button {
+  padding-bottom: 0.7rem;
+}
+
+.VPNavScreenMenuGroup .items {
+  padding: 0 0.45rem 0.1rem;
+}
+
+.VPNavScreenMenuGroupLink {
+  margin-left: 0;
+  border-radius: 1rem;
+  padding: 0.72rem 0.88rem;
+  line-height: 1.45;
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+
+.VPNavScreenMenuGroupLink:hover {
+  color: hsl(var(--s2k-brand));
+  background: hsl(var(--s2k-surface) / 0.88);
+}
+
+.VPNavScreenMenuGroupSection .title {
+  padding: 0.35rem 0.88rem 0.15rem;
+  color: hsl(var(--s2k-ink-muted));
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.VPNavScreenTranslations {
+  margin-top: 1rem;
+  padding: 1rem 1.1rem;
+  height: auto;
+}
+
+.VPNavScreenTranslations .title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  color: hsl(var(--s2k-ink));
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.VPNavScreenTranslations .list {
+  padding: 0.8rem 0 0 0;
+}
+
+.VPNavScreenTranslations .link {
+  display: block;
+  border-radius: 1rem;
+  padding: 0.72rem 0.88rem;
+  line-height: 1.45;
+}
+
+.VPNavScreenTranslations .link:hover {
+  color: hsl(var(--s2k-brand));
+  background: hsl(var(--s2k-brand-soft) / 0.72);
+}
+
+.VPNavScreenAppearance {
+  margin-top: 1rem;
+  padding: 1rem 1.1rem;
+}
+
+.VPNavScreenAppearance .text {
+  color: hsl(var(--s2k-ink-muted));
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.VPNavScreenSocialLinks {
+  margin-top: 1rem;
+  padding: 0.85rem;
+}
+
+.VPNavScreenSocialLinks .VPSocialLinks {
+  gap: 0.6rem;
+}
+
+.VPNavScreenSocialLinks .VPSocialLink {
+  border: 1px solid hsl(var(--s2k-line) / 0.56);
+  border-radius: 999px;
+  background: hsl(var(--s2k-surface) / 0.8);
 }
 
 .VPButton {
@@ -721,6 +1010,36 @@ html.dark .santi-home-chip-list li {
   border-left: none !important;
 }
 
+.VPFooter {
+  border-top: 0;
+  padding-top: 0;
+  padding-inline: 1rem;
+  padding-bottom: 2rem;
+  background: transparent;
+}
+
+.VPFooter .container {
+  max-width: min(100%, calc(var(--vp-layout-max-width) - 2rem));
+  border: 1px solid hsl(var(--s2k-line) / 0.44);
+  border-radius: 1.75rem;
+  padding: 1.3rem 1.4rem;
+  background:
+    linear-gradient(
+      180deg,
+      hsl(var(--s2k-surface) / 0.88),
+      hsl(var(--s2k-surface-muted) / 0.74)
+    );
+  box-shadow:
+    0 16px 40px hsl(var(--s2k-shadow) / 0.045),
+    inset 0 1px 0 hsl(0 0% 100% / 0.05);
+  backdrop-filter: blur(14px);
+}
+
+.VPFooter .message,
+.VPFooter .copyright {
+  line-height: 1.65;
+}
+
 @keyframes santi-spin {
   from {
     transform: rotate(0deg);
@@ -746,6 +1065,40 @@ html.dark .santi-home-chip-list li {
   .santi-home-links,
   .santi-home-metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 768px) and (max-width: 959px) {
+  .VPNavBar .wrapper {
+    padding-inline: 1.25rem;
+  }
+
+  .VPNavBarTitle .title span {
+    max-width: 10rem;
+  }
+
+  .VPNavBarSearch {
+    padding-left: 0.75rem;
+  }
+
+  .DocSearch-Button {
+    min-width: 9.5rem;
+    padding-inline: 0.85rem;
+  }
+
+  .DocSearch-Button .DocSearch-Button-Placeholder {
+    padding-right: 0.55rem;
+    font-size: 0.78rem;
+  }
+
+  .VPNavBarMenuLink,
+  .VPFlyout .text {
+    font-size: 0.8rem;
+  }
+
+  .VPNavBarMenuLink,
+  .VPFlyout .button {
+    padding-inline: 0.68rem;
   }
 }
 
@@ -786,6 +1139,58 @@ html.dark .santi-home-chip-list li {
   }
 }
 
+@media (max-width: 767px) {
+  .VPNavBar .wrapper {
+    padding-inline: 0.9rem;
+  }
+
+  .VPNavBar .container {
+    gap: 0.7rem;
+    max-width: 100%;
+  }
+
+  .VPNavBar .content-body {
+    gap: 0.45rem;
+  }
+
+  .VPNavBarTitle .title {
+    padding-right: 0;
+  }
+
+  .VPNavBarTitle .title span {
+    max-width: min(42vw, 9.25rem);
+    font-size: 0.9rem;
+  }
+
+  .DocSearch-Button {
+    justify-content: center;
+    min-width: 0;
+    width: 2.9rem;
+    height: 2.9rem;
+    border-radius: 999px;
+    padding: 0;
+  }
+
+  .VPNavBarHamburger {
+    width: 2.9rem;
+    height: 2.9rem;
+  }
+
+  .VPNavScreen {
+    padding-inline: 1rem;
+  }
+
+  .VPNavScreen .container {
+    max-width: 100%;
+    padding-bottom: 2.4rem;
+  }
+
+  .VPFooter {
+    padding-inline: 0.9rem;
+    padding-bottom: 1.4rem;
+  }
+}
+
 @media (max-width: 640px) {
   .VPHero {
     padding-bottom: 2.8rem;
@@ -807,6 +1212,24 @@ html.dark .santi-home-chip-list li {
   .santi-home-panel {
     padding: 1.4rem;
   }
+
+  .santi-home-metric strong {
+    font-size: 1.7rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .VPNavBarTitle .title span {
+    max-width: 7.7rem;
+  }
+
+  .VPHero .name {
+    font-size: clamp(2.4rem, 13vw, 3.1rem);
+  }
+
+  .santi-hero-kicker {
+    letter-spacing: 0.12em;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -821,4 +1244,12 @@ html.dark .santi-home-chip-list li {
     transition: none !important;
     transform: none !important;
   }
+}
+
+.mb-10 {
+  margin-bottom: 10px;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
 }
