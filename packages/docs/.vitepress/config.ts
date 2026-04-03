@@ -124,7 +124,7 @@ export default defineConfig({
         text: 'More',
         items: [
           { text: 'GitHub', link: 'https://github.com/santi020k/eslint-config-basic' },
-          { text: 'npm', link: 'https://www.npmjs.com/package/@santi020k/eslint-config-basic' },
+          { text: 'NPM', link: 'https://www.npmjs.com/package/@santi020k/eslint-config-basic' },
           { text: 'Website', link: 'https://santi020k.me' }
         ]
       }

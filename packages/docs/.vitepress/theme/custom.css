@@ -607,6 +607,112 @@ html.dark .santi-hero-note {
   background: hsl(var(--s2k-surface) / 0.8);
 }
 
+.VPSidebar {
+  padding: 1.1rem 0.95rem 1.2rem;
+}
+
+.VPSidebarItem.level-0 {
+  padding-bottom: 1rem;
+}
+
+.VPSidebarItem.collapsed.level-0 {
+  padding-bottom: 0.6rem;
+}
+
+.VPSidebarItem .item {
+  align-items: center;
+}
+
+.VPSidebarItem .indicator {
+  left: -0.8rem;
+  width: 4px;
+}
+
+.VPSidebarItem.level-0 .text {
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: hsl(var(--s2k-ink-muted));
+}
+
+.VPSidebarItem.level-1 .link,
+.VPSidebarItem.level-2 .link,
+.VPSidebarItem.level-3 .link,
+.VPSidebarItem.level-4 .link,
+.VPSidebarItem.level-5 .link {
+  border-radius: 0.95rem;
+  padding-inline: 0.8rem;
+  min-height: 2.5rem;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.VPSidebarItem.level-1 .link:hover,
+.VPSidebarItem.level-2 .link:hover,
+.VPSidebarItem.level-3 .link:hover,
+.VPSidebarItem.level-4 .link:hover,
+.VPSidebarItem.level-5 .link:hover,
+.VPSidebarItem.level-1.is-active > .item .link,
+.VPSidebarItem.level-2.is-active > .item .link,
+.VPSidebarItem.level-3.is-active > .item .link,
+.VPSidebarItem.level-4.is-active > .item .link,
+.VPSidebarItem.level-5.is-active > .item .link {
+  background: hsl(var(--s2k-brand-soft) / 0.74);
+}
+
+.VPSidebarItem.level-1 .items,
+.VPSidebarItem.level-2 .items,
+.VPSidebarItem.level-3 .items,
+.VPSidebarItem.level-4 .items,
+.VPSidebarItem.level-5 .items {
+  margin-left: 0.4rem;
+  padding-left: 0.9rem;
+}
+
+.VPDocAsideOutline .content {
+  border-left: 0;
+  padding-left: 0;
+  font-size: 0.84rem;
+}
+
+.VPDocAsideOutline .outline-title {
+  margin-bottom: 0.55rem;
+  color: hsl(var(--s2k-ink-muted));
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.VPDocAsideOutline .outline-marker {
+  display: none;
+}
+
+.VPDocOutlineItem.root,
+.VPDocOutlineItem.nested {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.VPDocOutlineItem.nested {
+  padding-right: 0;
+  padding-left: 0.85rem;
+}
+
+.VPDocOutlineItem .outline-link {
+  border-radius: 0.95rem;
+  padding: 0.42rem 0.75rem;
+  line-height: 1.45;
+  white-space: normal;
+}
+
+.VPDocOutlineItem .outline-link:hover,
+.VPDocOutlineItem .outline-link.active {
+  background: hsl(var(--s2k-brand-soft) / 0.74);
+  color: hsl(var(--s2k-brand));
+}
+
 .VPButton {
   border-radius: 999px !important;
   font-weight: 700 !important;
@@ -614,11 +720,73 @@ html.dark .santi-hero-note {
 }
 
 .VPFeature {
+  position: relative;
+  overflow: hidden;
   padding: 1.25rem;
   transition:
     transform 0.2s ease,
     border-color 0.2s ease,
     box-shadow 0.2s ease;
+}
+
+.VPFeature::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 100%;
+  height: 1px;
+  background:
+    linear-gradient(
+      90deg,
+      hsl(var(--s2k-brand) / 0.9),
+      hsl(var(--s2k-accent) / 0.18)
+    );
+  opacity: 0.9;
+}
+
+.VPHomeFeatures {
+  margin-top: 1.4rem;
+}
+
+.VPFeatures .items {
+  margin: -10px;
+}
+
+.VPFeatures .item {
+  padding: 10px;
+}
+
+.VPFeature .box {
+  gap: 0.7rem;
+  padding: 0.1rem;
+}
+
+.VPFeature .icon {
+  margin-bottom: 0.3rem;
+  border-radius: 1rem;
+  background: hsl(var(--s2k-brand-soft) / 0.86);
+  color: hsl(var(--s2k-brand));
+  box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.06);
+}
+
+.VPFeature .title {
+  font-size: 1.02rem;
+  line-height: 1.35;
+}
+
+.VPFeature .details {
+  padding-top: 0;
+  line-height: 1.72;
+  font-size: 0.95rem;
+}
+
+.VPFeature .link-text {
+  padding-top: 0.7rem;
+}
+
+.VPFeature .link-text-value {
+  font-weight: 700;
+  letter-spacing: 0.01em;
 }
 
 .VPFeature:hover,
@@ -913,6 +1081,8 @@ html.dark .santi-hero-strip__item {
 
 .santi-link-card {
   display: block;
+  position: relative;
+  overflow: hidden;
   padding: 1.2rem 1.25rem;
   text-decoration: none;
   transition:
@@ -921,11 +1091,46 @@ html.dark .santi-hero-strip__item {
     box-shadow 0.2s ease;
 }
 
+.santi-link-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 100%;
+  height: 1px;
+  background:
+    linear-gradient(
+      90deg,
+      hsl(var(--s2k-brand) / 0.82),
+      hsl(var(--s2k-accent) / 0.12)
+    );
+}
+
 .santi-link-card strong {
   display: block;
   margin-bottom: 0.45rem;
   color: hsl(var(--s2k-ink));
   font-size: 1.08rem;
+}
+
+.santi-link-card__body {
+  margin: 0;
+  line-height: 1.8;
+}
+
+.santi-link-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 1rem;
+  color: hsl(var(--s2k-brand));
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.santi-link-card__cta::after {
+  content: '\2192';
+  font-size: 1rem;
 }
 
 .santi-home-stack {
@@ -979,6 +1184,19 @@ html.dark .santi-home-chip-list li {
   line-height: 1.85;
 }
 
+.vp-doc blockquote {
+  margin: 1.4rem 0;
+  border-left: 4px solid hsl(var(--s2k-brand) / 0.36);
+  border-radius: 0 1.35rem 1.35rem 0;
+  padding: 1rem 1.3rem;
+  background: hsl(var(--s2k-surface-muted) / 0.6);
+  color: hsl(var(--s2k-ink-soft));
+}
+
+.vp-doc blockquote > p {
+  margin: 0;
+}
+
 .vp-doc a {
   text-decoration-color: hsl(var(--s2k-brand) / 0.24);
   text-underline-offset: 0.18em;
@@ -1004,6 +1222,49 @@ html.dark .santi-home-chip-list li {
 
 .vp-doc div[class*='language-'] {
   border-color: hsl(var(--s2k-line) / 0.46);
+}
+
+.vp-doc table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid hsl(var(--s2k-line) / 0.5);
+  border-radius: 1.35rem;
+  background:
+    linear-gradient(
+      180deg,
+      hsl(var(--s2k-surface) / 0.92),
+      hsl(var(--s2k-surface-muted) / 0.82)
+    );
+  overflow: hidden;
+}
+
+.vp-doc thead tr,
+.vp-doc tr:nth-child(2n) {
+  background: transparent;
+}
+
+.vp-doc tr {
+  border-top: 0;
+}
+
+.vp-doc th,
+.vp-doc td {
+  border: 0;
+  border-bottom: 1px solid hsl(var(--s2k-line) / 0.36);
+  padding: 0.95rem 1rem;
+}
+
+.vp-doc th {
+  background: hsl(var(--s2k-brand-soft) / 0.68);
+  color: hsl(var(--s2k-brand));
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.vp-doc tbody tr:last-child td {
+  border-bottom: 0;
 }
 
 .custom-block {

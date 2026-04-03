@@ -48,32 +48,51 @@ import { withBase } from 'vitepress'
     <a class="santi-link-card" :href="withBase('/guide/getting-started')">
       <span class="santi-kicker">Start here</span>
       <strong>Get running in minutes</strong>
-      Learn the base package, the first config file, the auto-detection model, and the right next page for your stack.
+      <p class="santi-link-card__body">
+        Learn the base package, the first config file, the auto-detection model, and the right next page for your
+        stack.
+      </p>
+      <span class="santi-link-card__cta">Open guide</span>
     </a>
     <a class="santi-link-card" :href="withBase('/frameworks/react')">
       <span class="santi-kicker">Frameworks</span>
       <strong>Choose the exact framework package</strong>
-      Every supported framework has its own page with install notes, config examples, and package relationships.
+      <p class="santi-link-card__body">
+        Every supported framework has its own page with install notes, config examples, and package relationships.
+      </p>
+      <span class="santi-link-card__cta">Browse frameworks</span>
     </a>
     <a class="santi-link-card" :href="withBase('/tooling/overview')">
       <span class="santi-kicker">Tooling</span>
       <strong>Layer in optional integrations</strong>
-      Libraries, testing tools, file formats, standalone tools, and extension packs are documented in one place.
+      <p class="santi-link-card__body">
+        Libraries, testing tools, file formats, standalone tools, and extension packs are documented in one place.
+      </p>
+      <span class="santi-link-card__cta">See tooling</span>
     </a>
     <a class="santi-link-card" :href="withBase('/packages/basic')">
       <span class="santi-kicker">Packages</span>
       <strong>Understand the monorepo layout</strong>
-      See what the main package owns, what lives in core or optionals, and how the repo stays composable.
+      <p class="santi-link-card__body">
+        See what the main package owns, what lives in core or optionals, and how the repo stays composable.
+      </p>
+      <span class="santi-link-card__cta">Inspect packages</span>
     </a>
     <a class="santi-link-card" :href="withBase('/guide/playgrounds')">
       <span class="santi-kicker">Examples</span>
       <strong>Validate ideas against playgrounds</strong>
-      Jump into real framework and tooling playground packages before you adopt a new stack or integration.
+      <p class="santi-link-card__body">
+        Jump into real framework and tooling playground packages before you adopt a new stack or integration.
+      </p>
+      <span class="santi-link-card__cta">Open playgrounds</span>
     </a>
     <a class="santi-link-card" :href="withBase('/api/')">
       <span class="santi-kicker">Reference</span>
       <strong>Browse the generated API</strong>
-      Keep guides, package docs, and generated reference in the same place so canonical links stay stable.
+      <p class="santi-link-card__body">
+        Keep guides, package docs, and generated reference in the same place so canonical links stay stable.
+      </p>
+      <span class="santi-link-card__cta">Read API docs</span>
     </a>
   </div>
 
