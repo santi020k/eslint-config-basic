@@ -2,13 +2,15 @@
 
 ## Requirements
 
-- Node.js `>=18.18.0`
-- ESLint `10+`
+- Node.js `>=22.12.0`
+- ESLint `9+`
 
 ## Base Package
 
+The base package already depends on ESLint `^9 || ^10`, so this is the smallest supported install:
+
 ```bash
-npm install -D eslint @santi020k/eslint-config-basic
+npm install -D @santi020k/eslint-config-basic
 ```
 
 ## Framework Packages
@@ -28,18 +30,18 @@ Other supported packages are documented in the [Framework guides](/frameworks/ty
 
 | Project Type | Packages To Install | Notes |
 | :--- | :--- | :--- |
-| TypeScript | `eslint`, `@santi020k/eslint-config-basic` | TypeScript is enabled with `typescript: true` and is auto-detected from `tsconfig.json`. |
-| React | `eslint`, `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-react` | Common browser setup. |
-| Next.js | `eslint`, `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-next`, `@santi020k/eslint-config-react` | React is required. |
-| Astro | `eslint`, `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-astro` | Commonly paired with TypeScript. |
-| Vue | `eslint`, `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-vue` | Supports single-file components. |
-| Svelte | `eslint`, `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-svelte` | Commonly paired with TypeScript. |
-| Solid | `eslint`, `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-solid` | Combine with TypeScript as needed. |
-| Angular | `eslint`, `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-angular` | Usually paired with TypeScript. |
-| NestJS | `eslint`, `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-nest` | Commonly paired with `Preset.Node` or `Runtime.Node`. |
-| Qwik | `eslint`, `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-qwik` | Optimized for Qwik resumability. |
-| Remix | `eslint`, `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-remix`, `@santi020k/eslint-config-react` | React is required. |
-| Expo | `eslint`, `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-expo`, `@santi020k/eslint-config-react` | React is required. |
+| TypeScript | `@santi020k/eslint-config-basic` | TypeScript is enabled with `typescript: true` and is auto-detected from `tsconfig.json`. |
+| React | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-react` | Common browser setup. |
+| Next.js | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-next`, `@santi020k/eslint-config-react` | React is required. |
+| Astro | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-astro` | Commonly paired with TypeScript. |
+| Vue | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-vue` | Supports single-file components. |
+| Svelte | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-svelte` | Commonly paired with TypeScript. |
+| Solid | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-solid` | Combine with TypeScript as needed. |
+| Angular | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-angular` | Usually paired with TypeScript. |
+| NestJS | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-nest` | Commonly paired with `Preset.Node` or `Runtime.Node`. |
+| Qwik | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-qwik` | Optimized for Qwik resumability. |
+| Remix | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-remix`, `@santi020k/eslint-config-react` | React is required. |
+| Expo | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-expo`, `@santi020k/eslint-config-react` | React is required. |
 
 ## Optional Tooling Matrix
 
@@ -61,7 +63,7 @@ export default eslintConfig()
 
 ## Common Installation Paths
 
-- Base JavaScript or TypeScript only: Install `eslint` and `@santi020k/eslint-config-basic`.
+- Base JavaScript or TypeScript only: Install `@santi020k/eslint-config-basic`.
 - React projects: Add `@santi020k/eslint-config-react`.
 - Next.js projects: Add both `@santi020k/eslint-config-next` and `@santi020k/eslint-config-react`.
 - Expo projects: Add both `@santi020k/eslint-config-expo` and `@santi020k/eslint-config-react`.
@@ -83,6 +85,7 @@ export default eslintConfig({
 
 ## Notes
 
+- Install `eslint` manually only if you want to pin it yourself. The base package already carries a compatible version.
 - TypeScript, runtime, and supported optional integrations can be detected automatically from `package.json`.
 - Framework configs stay explicit on purpose.
 - Next.js and Expo require the React package as part of the `frameworks` object.

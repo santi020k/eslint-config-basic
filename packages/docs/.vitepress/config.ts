@@ -5,33 +5,122 @@ const require = createRequire(import.meta.url)
 const pkg = require('../../basic/package.json') as { version: string }
 const base = process.env.DOCS_BASE ?? '/'
 const site = process.env.DOCS_SITE_URL ?? 'https://eslint.santi020k.me'
+const siteName = 'Santi020k ESLint'
+
+const siteDescription =
+  'DX-first ESLint 9/10+ flat-config docs for JavaScript and TypeScript teams using React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Expo, Qwik, Remix, and optional tooling.'
+
+const siteKeywords =
+  'ESLint flat config, JavaScript linting, TypeScript linting, React ESLint, Next.js ESLint, Astro ESLint, Vue ESLint, Svelte ESLint, Solid ESLint, Angular ESLint, NestJS ESLint, Expo ESLint, Qwik ESLint, Remix ESLint, developer experience'
+
+const socialImage = new URL('/cover.webp', site).toString()
+
+const websiteSchema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  description: siteDescription,
+  inLanguage: 'en-US',
+  name: siteName,
+  url: site
+})
+
+const softwareSchema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareSourceCode',
+  author: {
+    '@type': 'Person',
+    name: 'Santiago Molina',
+    url: 'https://santi020k.me'
+  },
+  codeRepository: 'https://github.com/santi020k/eslint-config-basic',
+  description: siteDescription,
+  keywords: siteKeywords,
+  license: 'https://github.com/santi020k/eslint-config-basic/blob/main/LICENSE',
+  name: '@santi020k/eslint-config-basic',
+  programmingLanguage: ['JavaScript', 'TypeScript'],
+  url: site
+})
+
+function resolveCanonicalPath(relativePath: string): string {
+  const normalizedPath = relativePath.replaceAll('\\', '/')
+
+  if (normalizedPath === 'index.md') {
+    return '/'
+  }
+
+  if (normalizedPath.endsWith('/index.md')) {
+    return `/${normalizedPath.slice(0, -'/index.md'.length)}/`
+  }
+
+  return `/${normalizedPath.replace(/\.md$/, '')}`
+}
 
 export default defineConfig({
-  title: 'Santi020k ESLint',
-  description: 'Composable ESLint 10+ flat-config documentation for the @santi020k/eslint-config-basic monorepo.',
+  title: siteName,
+  titleTemplate: ':title | Santi020k ESLint',
+  description: siteDescription,
   base,
   cleanUrls: true,
   lastUpdated: true,
+  useWebFonts: false,
   head: [
-    ['meta', { name: 'theme-color', content: '#114d66' }],
-    ['meta', { property: 'og:site_name', content: 'Santi020k ESLint' }],
-    ['meta', { property: 'og:type', content: 'website' }]
+    ['link', { rel: 'icon', href: '/favicon.png', type: 'image/png' }],
+    ['link', { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' }],
+    ['link', { rel: 'manifest', href: '/manifest.webmanifest' }],
+    ['meta', { name: 'application-name', content: siteName }],
+    ['meta', { name: 'author', content: 'Santiago Molina' }],
+    ['meta', { name: 'color-scheme', content: 'light dark' }],
+    ['meta', { name: 'keywords', content: siteKeywords }],
+    ['meta', { name: 'robots', content: 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1' }],
+    ['meta', { name: 'theme-color', content: '#faf9fb' }],
+    ['meta', { property: 'og:image', content: socialImage }],
+    ['meta', { property: 'og:image:alt', content: 'Santi020k ESLint cover artwork' }],
+    ['meta', { property: 'og:locale', content: 'en_US' }],
+    ['meta', { property: 'og:site_name', content: siteName }],
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
+    ['meta', { name: 'twitter:creator', content: '@santi020k' }],
+    ['meta', { name: 'twitter:image', content: socialImage }],
+    ['meta', { name: 'twitter:image:alt', content: 'Santi020k ESLint cover artwork' }],
+    ['meta', { name: 'twitter:site', content: '@santi020k' }],
+    ['script', { type: 'application/ld+json' }, websiteSchema],
+    ['script', { type: 'application/ld+json' }, softwareSchema]
   ],
   sitemap: {
     hostname: site
   },
+  transformHead({ description, pageData, title }) {
+    if (pageData.isNotFound) {
+      return [['meta', { name: 'robots', content: 'noindex, nofollow' }]]
+    }
+
+    const canonicalUrl = new URL(resolveCanonicalPath(pageData.relativePath), site).toString()
+
+    return [
+      ['link', { rel: 'canonical', href: canonicalUrl }],
+      ['meta', { property: 'og:description', content: description }],
+      ['meta', { property: 'og:title', content: title }],
+      ['meta', { property: 'og:url', content: canonicalUrl }],
+      ['meta', { name: 'twitter:description', content: description }],
+      ['meta', { name: 'twitter:title', content: title }]
+    ]
+  },
   themeConfig: {
-    siteTitle: 'Santi020k ESLint',
+    logo: {
+      alt: 'Santi020k logo',
+      src: '/logo-square.webp'
+    },
+    siteTitle: siteName,
     search: {
       provider: 'local'
     },
     nav: [
-      { text: 'Guide', link: '/guide/getting-started' },
+      { text: 'Start', link: '/guide/getting-started' },
       { text: 'Frameworks', link: '/frameworks/typescript' },
       { text: 'Tooling', link: '/tooling/overview' },
       { text: 'Packages', link: '/packages/basic' },
       { text: 'API', link: '/api/' },
-      { text: `v${pkg.version}`, link: 'https://www.npmjs.com/package/@santi020k/eslint-config-basic' },
+      { text: 'npm', link: 'https://www.npmjs.com/package/@santi020k/eslint-config-basic' },
       { text: 'GitHub', link: 'https://github.com/santi020k/eslint-config-basic' },
       { text: 'Website', link: 'https://santi020k.me' }
     ],
@@ -118,8 +207,8 @@ export default defineConfig({
       next: 'Next'
     },
     footer: {
-      message: 'Built by Santi020k. Repo and personal site linked throughout the docs.',
-      copyright: 'MIT Licensed'
+      message: `DX-first documentation for @santi020k/eslint-config-basic · v${pkg.version}`,
+      copyright: 'Designed by Santiago Molina · MIT Licensed'
     }
   }
 })
