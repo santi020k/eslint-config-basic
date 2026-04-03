@@ -107,8 +107,8 @@ export default defineConfig({
   },
   themeConfig: {
     logo: {
-      alt: 'Santi020k logo',
-      src: '/logo-square.webp'
+      alt: 'Santi020k ESLint emblem',
+      src: '/cover.webp'
     },
     siteTitle: siteName,
     search: {

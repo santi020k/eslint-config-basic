@@ -283,6 +283,8 @@ html.dark .santi-hero-note {
   border-radius: 1rem;
   border: 1px solid hsl(var(--s2k-line) / 0.5);
   box-shadow: 0 10px 24px hsl(var(--s2k-shadow) / 0.08);
+  object-fit: cover;
+  object-position: center;
 }
 
 .VPNavBarTitle .title span {
@@ -498,7 +500,7 @@ html.dark .santi-hero-strip__item {
   top: 50%;
   left: 50%;
   width: min(72%, 18rem);
-  padding: 0.75rem;
+  height: min(72%, 18rem);
   border-radius: 2rem;
   border: 1px solid hsl(var(--s2k-line) / 0.48);
   background:
@@ -510,6 +512,8 @@ html.dark .santi-hero-strip__item {
   box-shadow:
     0 18px 46px hsl(var(--s2k-shadow) / 0.08),
     inset 0 1px 0 hsl(0 0% 100% / 0.05);
+  object-fit: cover;
+  object-position: center;
   transform: translate(-50%, -50%);
 }
 

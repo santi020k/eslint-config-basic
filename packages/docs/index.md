@@ -8,8 +8,8 @@ hero:
   text: Flat config that scales from a starter repo to a real team
   tagline: DX-first documentation for <code>@santi020k/eslint-config-basic</code>, a composable ESLint 9/10+ toolkit for JavaScript and TypeScript teams shipping React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Expo, Qwik, and Remix.
   image:
-    src: /logo-square.webp
-    alt: Santi020k logo
+    src: /cover.webp
+    alt: Santi020k ESLint emblem
   actions:
     - theme: brand
       text: Start with the guide

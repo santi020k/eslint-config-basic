@@ -12,7 +12,7 @@ const isHome = computed(() => frontmatter.value.layout === 'home')
     <template #home-hero-info-before>
       <div v-if="isHome" class="santi-hero-kicker">
         <span class="santi-hero-kicker__dot" aria-hidden="true"></span>
-        <span>Designed in the visual language of santi020k.me</span>
+        <span>Built for JavaScript and TypeScript teams</span>
       </div>
     </template>
 
@@ -33,9 +33,9 @@ const isHome = computed(() => frontmatter.value.layout === 'home')
         <div class="santi-hero-visual__ring santi-hero-visual__ring--inner" aria-hidden="true"></div>
 
         <img
-          alt="Santi020k logo"
+          alt="Santi020k ESLint emblem"
           class="santi-hero-visual__logo"
-          :src="withBase('/logo-square.webp')"
+          :src="withBase('/cover.webp')"
         />
 
         <div class="santi-hero-note santi-hero-note--left">
