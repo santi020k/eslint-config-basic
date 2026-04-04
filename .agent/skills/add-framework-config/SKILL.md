@@ -172,7 +172,24 @@ Read `.agent/skills/testing/SKILL.md` for full details. In summary, update:
 - **`options.test.ts`** — assert a framework-specific rule is present
 - **`detection.test.ts`** — add a detection test if the framework is auto-detectable
 
-## 9. Validate
+## 9. Update Documentation
+
+Documentation updates are required whenever a new framework package is added or a published framework package changes in a user-visible way.
+
+At minimum, review and update:
+
+- **`packages/docs/frameworks/{name}.md`** — add or expand the dedicated framework guide
+- **`packages/docs/guide/installation.md`** — add the package to install examples and the framework matrix
+- **`packages/docs/guide/configuration.md`** — add the framework to the framework matrix and related examples when needed
+- **`packages/docs/api/index.md`** — update covered package lists when docs coverage changes
+- **`packages/docs/index.md`** and **`packages/docs/.vitepress/theme/components/HomePageSections.vue`** — update homepage counts, framework lists, or marketing copy when totals change
+- **`packages/{name}/README.md`** — keep the package README aligned with the canonical docs link
+- **`README.md`** — update public package coverage lists when a new published package is introduced
+- **`packages/docs/CHANGELOG.md`** — add an unreleased documentation note when the docs site meaningfully changes
+
+If a framework package is published, the docs should already explain how to install it, when to combine it with other packages, and where to find its dedicated guide.
+
+## 10. Validate
 
 Run all checks from the repo root before considering the task done:
 

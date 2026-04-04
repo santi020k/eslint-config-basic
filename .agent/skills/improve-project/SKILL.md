@@ -9,7 +9,7 @@ This skill provides the required context and guidelines for working on the `@san
 
 ## 1. Project Architecture
 
-The project is a Turborepo monorepo using npm Workspaces. It exports a composable ESLint 9 Flat Config package.
+The project is a Turborepo monorepo using pnpm workspaces. It exports a composable ESLint 9/10+ Flat Config package.
 
 ### Monorepo Structure
 
@@ -42,7 +42,16 @@ The project is a Turborepo monorepo using npm Workspaces. It exports a composabl
 3. Add the enum value to the appropriate enum in `packages/core/src/types.ts` (`Tool`, `Library`, `Testing`, `Format`, or `Extension`).
 4. Import and wire it into `packages/basic/src/optionals.ts` using the matching enum check (e.g. `libraries.includes(Library.X)`).
 
-## 4. Code Conventions
+## 4. Documentation Is Part of the Feature
+
+Treat documentation as required work, not cleanup.
+
+- If you add or publish a new framework package, update the matching framework guide in `packages/docs/frameworks/`, the install/configuration guides, API coverage page, homepage counts/copy, package README, and root `README.md`.
+- If you add or publish a new optional integration, update the matching tooling page in `packages/docs/tooling/`, the tooling overview, any affected setup guides, homepage counts/copy, and public README summaries.
+- If the docs site changes in a meaningful way, add an entry to `packages/docs/CHANGELOG.md` under `Unreleased`.
+- Do not consider the task done if the package exists but the VitePress docs do not explain how to use it.
+
+## 5. Code Conventions
 
 - **Types:** Before adding an `ambient.d.ts` declaration for a library or plugin, ALWAYS check if official types are available (built-in or via `@types/*` packages). Use ambient declarations ONLY as a last resort.
 - **ESLint Plugins:** Use direct plugin object references (not string-based resolution) to avoid `FlatCompat` issues.
@@ -50,17 +59,17 @@ The project is a Turborepo monorepo using npm Workspaces. It exports a composabl
 - **Configs:** Every configuration must return a `TSESLint.FlatConfig.ConfigArray`.
 - **Imports:** Use `.js` extensions for local relative imports (crucial for ESM compatibility).
 
-## 5. Verification Commands
+## 6. Verification Commands
 
 Before considering ANY task complete, always validate your changes from the root of the repository with:
 
 ```bash
-npm run build      # Turborepo builds all packages
-npm run lint       # Lints the entire monorepo
-npm run test       # Runs the Vitest integration suite
+pnpm run build      # Turborepo builds all packages
+pnpm run lint       # Lints the entire monorepo
+pnpm run test       # Runs the Vitest integration suite
 ```
 
-### 6. Pull Requests
+### 7. Pull Requests
 
 When creating a Pull Request, always use the project's PR template found at `.github/pull_request_template.md`. Fill out all relevant sections (Description, Type of Change, Packages Affected, Changeset, and Checklist) to ensure a smooth review process.
 
