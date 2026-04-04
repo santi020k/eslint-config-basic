@@ -18,6 +18,12 @@ The API reference is generated from the source packages with TypeDoc and rendere
 - `@santi020k/eslint-config-nest`
 - `@santi020k/eslint-config-optionals`
 - `@santi020k/eslint-config-basic`
+- `@santi020k/eslint-config-vue`
+- `@santi020k/eslint-config-svelte`
+- `@santi020k/eslint-config-solid`
+- `@santi020k/eslint-config-angular`
+- `@santi020k/eslint-config-qwik`
+- `@santi020k/eslint-config-remix`
 
 The generated reference is meant to complement the guide pages, not replace them.
 

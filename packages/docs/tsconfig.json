@@ -5,7 +5,8 @@
   },
   "include": [
     ".vitepress/config.ts",
-    ".vitepress/theme/index.ts"
+    ".vitepress/theme/index.ts",
+    "env.d.ts"
   ],
   "exclude": ["node_modules", ".vitepress/dist", ".vitepress/cache"]
 }

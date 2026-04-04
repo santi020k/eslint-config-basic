@@ -6,9 +6,25 @@ Use the Angular package when the project needs Angular-specific linting on top o
 
 ## Install
 
-```bash
+::: code-group
+
+```sh [pnpm]
+pnpm add -D @santi020k/eslint-config-angular
+```
+
+```sh [npm]
 npm install -D @santi020k/eslint-config-angular
 ```
+
+```sh [yarn]
+yarn add -D @santi020k/eslint-config-angular
+```
+
+```sh [bun]
+bun add -d @santi020k/eslint-config-angular
+```
+
+:::
 
 ## Configure
 

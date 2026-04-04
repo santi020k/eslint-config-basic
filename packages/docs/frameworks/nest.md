@@ -6,9 +6,25 @@ Use the NestJS package for server-side TypeScript apps that want the shared rule
 
 ## Install
 
-```bash
+::: code-group
+
+```sh [pnpm]
+pnpm add -D @santi020k/eslint-config-nest
+```
+
+```sh [npm]
 npm install -D @santi020k/eslint-config-nest
 ```
+
+```sh [yarn]
+yarn add -D @santi020k/eslint-config-nest
+```
+
+```sh [bun]
+bun add -d @santi020k/eslint-config-nest
+```
+
+:::
 
 ## Configure
 

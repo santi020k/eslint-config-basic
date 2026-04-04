@@ -104,7 +104,22 @@ Read `.agent/skills/testing/SKILL.md` for full details. In summary:
 
 - **`public-api.test.ts`** — If re-exporting a new enum value, verify it's accessible from the main package.
 
-## 6. Validate
+## 6. Update Documentation
+
+Documentation updates are required whenever a new optional integration is added or a published optional changes in a user-visible way.
+
+At minimum, review and update:
+
+- **`packages/docs/tooling/overview.md`** — keep the overview aligned with the supported optional surface area
+- **`packages/docs/tooling/{category}.md`** — add the new integration to the matching category page (`libraries`, `testing`, `formats`, `tools`, or `extensions`)
+- **`packages/docs/guide/installation.md`** and **`packages/docs/guide/configuration.md`** — update setup examples when the optional affects recommended workflows
+- **`packages/docs/index.md`** and **`packages/docs/.vitepress/theme/components/HomePageSections.vue`** — update homepage counts or marketing copy when optional totals change
+- **`packages/optionals/README.md`** and **`README.md`** — keep public summaries aligned when the supported tooling surface expands
+- **`packages/docs/CHANGELOG.md`** — add an unreleased documentation note when the docs site meaningfully changes
+
+If an optional integration is published, the docs should already show where it lives, which category it belongs to, and how users enable it from the main package.
+
+## 7. Validate
 
 Run all checks from the repo root before considering the task done:
 

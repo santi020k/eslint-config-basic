@@ -1,17 +1,35 @@
 # Getting Started
 
-This library is a modular ESLint 10+ flat-config toolchain. The main entry point is [`@santi020k/eslint-config-basic`](https://www.npmjs.com/package/@santi020k/eslint-config-basic), and framework packages are added explicitly when you need them.
+This library is a DX-first, composable ESLint 9/10+ flat-config toolkit for JavaScript and TypeScript teams. The main entry point is [`@santi020k/eslint-config-basic`](https://www.npmjs.com/package/@santi020k/eslint-config-basic), and framework packages are added explicitly only when the project actually needs them.
 
 ## Requirements
 
-- Node.js `>=18.18.0`
-- ESLint `10+`
+- Node.js `>=22.12.0`
+- ESLint `9+`
 
 ## Install the Base Package
 
-```bash
-npm install -D eslint @santi020k/eslint-config-basic
+The smallest install is the main package itself. It already brings a supported ESLint version.
+
+::: code-group
+
+```sh [pnpm]
+pnpm add -D @santi020k/eslint-config-basic
 ```
+
+```sh [npm]
+npm install -D @santi020k/eslint-config-basic
+```
+
+```sh [yarn]
+yarn add -D @santi020k/eslint-config-basic
+```
+
+```sh [bun]
+bun add -d @santi020k/eslint-config-basic
+```
+
+:::
 
 Create an `eslint.config.mjs` file, or `eslint.config.js` if your project uses `"type": "module"`.
 
@@ -26,6 +44,7 @@ export default eslintConfig()
 - `@santi020k/eslint-config-basic` is the main package.
 - Framework packages such as React, Next.js, Astro, Vue, and NestJS are installed only when needed.
 - Optional integrations are enabled through enums from the main package instead of separate config objects in application code.
+- ESLint can still be installed manually if you want to pin it yourself, as long as you stay on a compatible `^9` or `^10` release.
 
 ## Choose Your Workflow
 

@@ -1,5 +1,14 @@
 # @santi020k/eslint-config-docs
 
+## Unreleased
+
+### Documentation Updates
+
+- Refined the VitePress UI to stay closer to the `santi020k.me` visual language, including footer versioning, responsive navigation improvements, and stronger homepage presentation.
+- Expanded installation guidance to cover every supported framework package with package-manager tabs for `pnpm`, `npm`, `yarn`, and `bun`.
+- Updated CLI examples and package guides so the docs show consistent multi-package-manager commands instead of a single-manager path.
+- Clarified coverage across guide pages and API reference pages so framework support is easier to understand at a glance.
+
 ## 1.1.0
 
 ### Minor Changes

@@ -1,0 +1,21 @@
+{
+  "name": "Santi020k ESLint",
+  "short_name": "Santi ESLint",
+  "description": "DX-first ESLint 9/10+ flat-config docs for JavaScript and TypeScript teams.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FAF9FB",
+  "theme_color": "#FAF9FB",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

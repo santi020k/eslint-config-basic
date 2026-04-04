@@ -88,6 +88,17 @@ Use these for specific tasks — read the relevant SKILL.md before starting:
 | Release & versioning | `.agent/skills/release-process/SKILL.md` |
 | General improvements | `.agent/skills/improve-project/SKILL.md` |
 
+## Documentation Rule
+
+If you add a new published framework package or optional integration, updating the documentation is required in the same task.
+
+- Add or update the dedicated VitePress page in `packages/docs/frameworks/` or `packages/docs/tooling/`
+- Update `packages/docs/guide/installation.md` and `packages/docs/guide/configuration.md` when setup paths change
+- Update `packages/docs/api/index.md` when package coverage changes
+- Update homepage counts or package lists in `packages/docs/index.md` and `packages/docs/.vitepress/theme/components/HomePageSections.vue` when totals change
+- Keep `README.md` and package-level `README.md` files aligned with the published surface area
+- Add an unreleased note to `packages/docs/CHANGELOG.md` when the docs site changes meaningfully
+
 ## Critical Conventions
 
 - **ESLint 9/10 Flat Config only** — no legacy `.eslintrc` support

@@ -6,9 +6,25 @@ Use the Svelte package for Svelte applications that need explicit framework lint
 
 ## Install
 
-```bash
+::: code-group
+
+```sh [pnpm]
+pnpm add -D @santi020k/eslint-config-svelte
+```
+
+```sh [npm]
 npm install -D @santi020k/eslint-config-svelte
 ```
+
+```sh [yarn]
+yarn add -D @santi020k/eslint-config-svelte
+```
+
+```sh [bun]
+bun add -d @santi020k/eslint-config-svelte
+```
+
+:::
 
 ## Configure
 

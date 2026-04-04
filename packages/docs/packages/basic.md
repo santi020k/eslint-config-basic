@@ -61,10 +61,29 @@ The package re-exports the enums and helpers most users need, so consumers rarel
 
 The built-in CLI can scaffold or refresh the config file for a project:
 
-```bash
-npx basic-eslint init
-npx basic-eslint update
+::: code-group
+
+```sh [pnpm]
+pnpm dlx @santi020k/eslint-config-basic init
+pnpm dlx @santi020k/eslint-config-basic update
 ```
+
+```sh [npm]
+npx @santi020k/eslint-config-basic init
+npx @santi020k/eslint-config-basic update
+```
+
+```sh [yarn]
+yarn dlx @santi020k/eslint-config-basic init
+yarn dlx @santi020k/eslint-config-basic update
+```
+
+```sh [bun]
+bunx @santi020k/eslint-config-basic init
+bunx @santi020k/eslint-config-basic update
+```
+
+:::
 
 ### Contracts
 

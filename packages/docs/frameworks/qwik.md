@@ -6,9 +6,25 @@ Use the Qwik package for Qwik applications that need framework-specific linting 
 
 ## Install
 
-```bash
+::: code-group
+
+```sh [pnpm]
+pnpm add -D @santi020k/eslint-config-qwik
+```
+
+```sh [npm]
 npm install -D @santi020k/eslint-config-qwik
 ```
+
+```sh [yarn]
+yarn add -D @santi020k/eslint-config-qwik
+```
+
+```sh [bun]
+bun add -d @santi020k/eslint-config-qwik
+```
+
+:::
 
 ## Configure
 
