@@ -6,9 +6,25 @@ Use the Vue package for projects that rely on Vue single-file components and wan
 
 ## Install
 
-```bash
+::: code-group
+
+```sh [pnpm]
+pnpm add -D @santi020k/eslint-config-vue
+```
+
+```sh [npm]
 npm install -D @santi020k/eslint-config-vue
 ```
+
+```sh [yarn]
+yarn add -D @santi020k/eslint-config-vue
+```
+
+```sh [bun]
+bun add -d @santi020k/eslint-config-vue
+```
+
+:::
 
 ## Configure
 

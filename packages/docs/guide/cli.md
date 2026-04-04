@@ -2,10 +2,29 @@
 
 The main package ships a CLI that can scaffold or refresh the project config.
 
-```bash
-npx basic-eslint init
-npx basic-eslint update
+::: code-group
+
+```sh [pnpm]
+pnpm dlx @santi020k/eslint-config-basic init
+pnpm dlx @santi020k/eslint-config-basic update
 ```
+
+```sh [npm]
+npx @santi020k/eslint-config-basic init
+npx @santi020k/eslint-config-basic update
+```
+
+```sh [yarn]
+yarn dlx @santi020k/eslint-config-basic init
+yarn dlx @santi020k/eslint-config-basic update
+```
+
+```sh [bun]
+bunx @santi020k/eslint-config-basic init
+bunx @santi020k/eslint-config-basic update
+```
+
+:::
 
 ## What It Does
 
@@ -17,21 +36,49 @@ npx basic-eslint update
 
 ## Usage
 
-```bash
+::: code-group
+
+```sh [pnpm]
+pnpm dlx @santi020k/eslint-config-basic init
+```
+
+```sh [npm]
 npx @santi020k/eslint-config-basic init
 ```
 
-or:
-
-```bash
-npx basic-eslint init
+```sh [yarn]
+yarn dlx @santi020k/eslint-config-basic init
 ```
+
+```sh [bun]
+bunx @santi020k/eslint-config-basic init
+```
+
+:::
+
+If the package is already installed locally, the `basic-eslint` bin is also available through your package manager's local binary resolution.
 
 ## Update an Existing Config
 
-```bash
-npx basic-eslint update
+::: code-group
+
+```sh [pnpm]
+pnpm dlx @santi020k/eslint-config-basic update
 ```
+
+```sh [npm]
+npx @santi020k/eslint-config-basic update
+```
+
+```sh [yarn]
+yarn dlx @santi020k/eslint-config-basic update
+```
+
+```sh [bun]
+bunx @santi020k/eslint-config-basic update
+```
+
+:::
 
 Use `update` when you want to regenerate the file after adding or removing dependencies.
 

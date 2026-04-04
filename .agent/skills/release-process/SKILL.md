@@ -14,7 +14,7 @@ When you add a feature, fix a bug, or make changes that should be reflected in t
 Run the interactive CLI:
 
 ```bash
-npm run changeset
+pnpm run changeset
 ```
 
 Follow the prompts:
@@ -42,17 +42,17 @@ Changesets are automatically managed by continuous integration via GitHub Action
 If automated actions fail or you need to test publishing locally, ensure you have ran validations:
 
 ```bash
-npm run build && npm run lint && npm run test
+pnpm run build && pnpm run lint && pnpm run test
 ```
 
 To bump versions:
 
 ```bash
-npm run version-packages
+pnpm run version-packages
 ```
 
 To publish (Assuming you are logged into npm via `npm login`):
 
 ```bash
-npm run release
+pnpm run release
 ```

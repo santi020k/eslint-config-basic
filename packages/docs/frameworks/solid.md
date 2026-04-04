@@ -6,9 +6,25 @@ Use the Solid package for SolidJS applications that need framework-specific lint
 
 ## Install
 
-```bash
+::: code-group
+
+```sh [pnpm]
+pnpm add -D @santi020k/eslint-config-solid
+```
+
+```sh [npm]
 npm install -D @santi020k/eslint-config-solid
 ```
+
+```sh [yarn]
+yarn add -D @santi020k/eslint-config-solid
+```
+
+```sh [bun]
+bun add -d @santi020k/eslint-config-solid
+```
+
+:::
 
 ## Configure
 

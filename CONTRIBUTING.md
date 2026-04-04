@@ -182,7 +182,7 @@ npx cz
     ```
 
 3. Write clear, descriptive commit messages following conventional commits.
-4. Update documentation if you're changing public APIs.
+4. Update documentation whenever you add or change public framework packages, optional integrations, or user-facing setup flows. This includes the relevant VitePress pages in `packages/docs/`, the root `README.md`, and package-level `README.md` files when applicable.
 5. Add tests for new functionality.
 
 ## Questions?
