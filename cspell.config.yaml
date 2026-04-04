@@ -47,6 +47,7 @@ words:
   - nonconstructor
   - nonoctal
   - nonwords
+  - opengraph
   - orchestrates
   - packagemanager
   - peer-dependency
