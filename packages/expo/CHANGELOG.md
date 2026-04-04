@@ -1,5 +1,25 @@
 # @santi020k/eslint-config-expo
 
+## 1.2.0
+
+### Minor Changes
+
+- [#74](https://github.com/santi020k/eslint-config-basic/pull/74) [`c63e902`](https://github.com/santi020k/eslint-config-basic/commit/c63e902ab0107b9d2231a84715f2d220ea283489) Thanks [@santi020k](https://github.com/santi020k)! - # v1.2.0 Release - Documentation Overhaul
+
+  This release focuses on a comprehensive update of the documentation site and branding refresh.
+
+  ## Highlights
+
+  - **VitePress Refresh**: Major updates to the documentation structure, including new guides and improved navigation.
+  - **Branding Assets**: Added new official logos, icons, and social preview images (opengraph) in `packages/docs/public`.
+  - **Theme Enhancements**: Custom styling and component improvements for a more premium documentation experience.
+  - **Improved Installation Guide**: Updated steps for getting started with the latest features.
+
+### Patch Changes
+
+- Updated dependencies [[`c63e902`](https://github.com/santi020k/eslint-config-basic/commit/c63e902ab0107b9d2231a84715f2d220ea283489)]:
+  - @santi020k/eslint-config-core@1.2.0
+
 ## 1.1.0
 
 ### Minor Changes
