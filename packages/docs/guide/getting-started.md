@@ -11,9 +11,25 @@ This library is a DX-first, composable ESLint 9/10+ flat-config toolkit for Java
 
 The smallest install is the main package itself. It already brings a supported ESLint version.
 
-```bash
+::: code-group
+
+```sh [pnpm]
+pnpm add -D @santi020k/eslint-config-basic
+```
+
+```sh [npm]
 npm install -D @santi020k/eslint-config-basic
 ```
+
+```sh [yarn]
+yarn add -D @santi020k/eslint-config-basic
+```
+
+```sh [bun]
+bun add -d @santi020k/eslint-config-basic
+```
+
+:::
 
 Create an `eslint.config.mjs` file, or `eslint.config.js` if your project uses `"type": "module"`.
 

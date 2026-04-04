@@ -9,20 +9,91 @@
 
 The base package already depends on ESLint `^9 || ^10`, so this is the smallest supported install:
 
-```bash
+::: code-group
+
+```sh [pnpm]
+pnpm add -D @santi020k/eslint-config-basic
+```
+
+```sh [npm]
 npm install -D @santi020k/eslint-config-basic
 ```
 
+```sh [yarn]
+yarn add -D @santi020k/eslint-config-basic
+```
+
+```sh [bun]
+bun add -d @santi020k/eslint-config-basic
+```
+
+:::
+
 ## Framework Packages
 
-Install framework packages only when your project needs them.
+Install framework packages only when your project needs them. TypeScript support is enabled through `typescript: true`, not a separate framework package install.
 
-```bash
+::: code-group
+
+```sh [pnpm]
+pnpm add -D @santi020k/eslint-config-react
+pnpm add -D @santi020k/eslint-config-next @santi020k/eslint-config-react
+pnpm add -D @santi020k/eslint-config-astro
+pnpm add -D @santi020k/eslint-config-vue
+pnpm add -D @santi020k/eslint-config-svelte
+pnpm add -D @santi020k/eslint-config-solid
+pnpm add -D @santi020k/eslint-config-angular
+pnpm add -D @santi020k/eslint-config-nest
+pnpm add -D @santi020k/eslint-config-qwik
+pnpm add -D @santi020k/eslint-config-remix @santi020k/eslint-config-react
+pnpm add -D @santi020k/eslint-config-expo @santi020k/eslint-config-react
+```
+
+```sh [npm]
 npm install -D @santi020k/eslint-config-react
-npm install -D @santi020k/eslint-config-next
+npm install -D @santi020k/eslint-config-next @santi020k/eslint-config-react
 npm install -D @santi020k/eslint-config-astro
 npm install -D @santi020k/eslint-config-vue
+npm install -D @santi020k/eslint-config-svelte
+npm install -D @santi020k/eslint-config-solid
+npm install -D @santi020k/eslint-config-angular
+npm install -D @santi020k/eslint-config-nest
+npm install -D @santi020k/eslint-config-qwik
+npm install -D @santi020k/eslint-config-remix @santi020k/eslint-config-react
+npm install -D @santi020k/eslint-config-expo @santi020k/eslint-config-react
 ```
+
+```sh [yarn]
+yarn add -D @santi020k/eslint-config-react
+yarn add -D @santi020k/eslint-config-next @santi020k/eslint-config-react
+yarn add -D @santi020k/eslint-config-astro
+yarn add -D @santi020k/eslint-config-vue
+yarn add -D @santi020k/eslint-config-svelte
+yarn add -D @santi020k/eslint-config-solid
+yarn add -D @santi020k/eslint-config-angular
+yarn add -D @santi020k/eslint-config-nest
+yarn add -D @santi020k/eslint-config-qwik
+yarn add -D @santi020k/eslint-config-remix @santi020k/eslint-config-react
+yarn add -D @santi020k/eslint-config-expo @santi020k/eslint-config-react
+```
+
+```sh [bun]
+bun add -d @santi020k/eslint-config-react
+bun add -d @santi020k/eslint-config-next @santi020k/eslint-config-react
+bun add -d @santi020k/eslint-config-astro
+bun add -d @santi020k/eslint-config-vue
+bun add -d @santi020k/eslint-config-svelte
+bun add -d @santi020k/eslint-config-solid
+bun add -d @santi020k/eslint-config-angular
+bun add -d @santi020k/eslint-config-nest
+bun add -d @santi020k/eslint-config-qwik
+bun add -d @santi020k/eslint-config-remix @santi020k/eslint-config-react
+bun add -d @santi020k/eslint-config-expo @santi020k/eslint-config-react
+```
+
+:::
+
+Next.js and Expo require `@santi020k/eslint-config-react`. Remix projects usually pair `@santi020k/eslint-config-remix` with `@santi020k/eslint-config-react` so React component rules stay explicit, matching the playground.
 
 Other supported packages are documented in the [Framework guides](/frameworks/typescript).
 
@@ -40,7 +111,7 @@ Other supported packages are documented in the [Framework guides](/frameworks/ty
 | Angular | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-angular` | Usually paired with TypeScript. |
 | NestJS | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-nest` | Commonly paired with `Preset.Node` or `Runtime.Node`. |
 | Qwik | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-qwik` | Optimized for Qwik resumability. |
-| Remix | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-remix`, `@santi020k/eslint-config-react` | React is required. |
+| Remix | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-remix`, `@santi020k/eslint-config-react` | React is recommended for Remix component rules. |
 | Expo | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-expo`, `@santi020k/eslint-config-react` | React is required. |
 
 ## Optional Tooling Matrix
@@ -67,6 +138,7 @@ export default eslintConfig()
 - React projects: Add `@santi020k/eslint-config-react`.
 - Next.js projects: Add both `@santi020k/eslint-config-next` and `@santi020k/eslint-config-react`.
 - Expo projects: Add both `@santi020k/eslint-config-expo` and `@santi020k/eslint-config-react`.
+- Remix projects: Add `@santi020k/eslint-config-remix`, and usually `@santi020k/eslint-config-react` too.
 - Other frameworks: Add the specific framework package only when it is needed by the project.
 
 ## React Example

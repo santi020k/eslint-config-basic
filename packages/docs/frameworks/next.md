@@ -6,9 +6,25 @@ Use the Next.js package for applications that need Next-specific linting while k
 
 ## Install
 
-```bash
+::: code-group
+
+```sh [pnpm]
+pnpm add -D @santi020k/eslint-config-next @santi020k/eslint-config-react
+```
+
+```sh [npm]
 npm install -D @santi020k/eslint-config-next @santi020k/eslint-config-react
 ```
+
+```sh [yarn]
+yarn add -D @santi020k/eslint-config-next @santi020k/eslint-config-react
+```
+
+```sh [bun]
+bun add -d @santi020k/eslint-config-next @santi020k/eslint-config-react
+```
+
+:::
 
 Next.js is explicit and requires the React package too.
 

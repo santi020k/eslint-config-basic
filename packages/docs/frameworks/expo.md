@@ -6,9 +6,25 @@ Use the Expo package for Expo or React Native projects that need the shared base
 
 ## Install
 
-```bash
+::: code-group
+
+```sh [pnpm]
+pnpm add -D @santi020k/eslint-config-expo @santi020k/eslint-config-react
+```
+
+```sh [npm]
 npm install -D @santi020k/eslint-config-expo @santi020k/eslint-config-react
 ```
+
+```sh [yarn]
+yarn add -D @santi020k/eslint-config-expo @santi020k/eslint-config-react
+```
+
+```sh [bun]
+bun add -d @santi020k/eslint-config-expo @santi020k/eslint-config-react
+```
+
+:::
 
 Expo requires the React package explicitly.
 

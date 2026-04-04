@@ -6,9 +6,25 @@ Use the Astro package when the project contains `.astro` components and embedded
 
 ## Install
 
-```bash
+::: code-group
+
+```sh [pnpm]
+pnpm add -D @santi020k/eslint-config-astro
+```
+
+```sh [npm]
 npm install -D @santi020k/eslint-config-astro
 ```
+
+```sh [yarn]
+yarn add -D @santi020k/eslint-config-astro
+```
+
+```sh [bun]
+bun add -d @santi020k/eslint-config-astro
+```
+
+:::
 
 ## Configure
 

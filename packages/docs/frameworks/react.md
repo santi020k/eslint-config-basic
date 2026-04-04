@@ -6,9 +6,25 @@ Use the React package for React apps, or as the required React dependency when c
 
 ## Install
 
-```bash
+::: code-group
+
+```sh [pnpm]
+pnpm add -D @santi020k/eslint-config-react
+```
+
+```sh [npm]
 npm install -D @santi020k/eslint-config-react
 ```
+
+```sh [yarn]
+yarn add -D @santi020k/eslint-config-react
+```
+
+```sh [bun]
+bun add -d @santi020k/eslint-config-react
+```
+
+:::
 
 ## Configure
 
