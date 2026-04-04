@@ -1,7 +1,7 @@
 {
   "name": "@santi020k/eslint-config-docs",
   "private": true,
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "VitePress documentation site for the @santi020k/eslint-config-basic monorepo",
   "type": "module",
   "scripts": {
