@@ -14,7 +14,7 @@
     "@santi020k/eslint-config-typescript": "workspace:^",
     "@tanstack/react-router": "^1.92.5",
     "@types/react": "^19.0.2",
-    "eslint": "^9.6.0",
+    "eslint": "^10.2.0",
     "react": "^19.0.0"
   },
   "author": "santi020k",

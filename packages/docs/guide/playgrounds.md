@@ -45,5 +45,5 @@ They give each framework or optional integration a real project where configurat
 ## Related Links
 
 - Repo: [github.com/santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)
-- Author: [santi020k](https://santi020k.me)
+- Author: [santi020k](https://santi020k.com)
 - Playground Package Guide: [Playground Package](/packages/playground)
