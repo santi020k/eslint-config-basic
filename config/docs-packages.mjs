@@ -83,6 +83,20 @@ export const packageDocs = [
     docsPath: '/frameworks/expo.html'
   },
   {
+    packageName: '@santi020k/eslint-config-qwik',
+    packagePath: 'packages/qwik',
+    title: 'Qwik guide',
+    description: 'Qwik support for projects using the shared flat-config toolkit.',
+    docsPath: '/frameworks/qwik.html'
+  },
+  {
+    packageName: '@santi020k/eslint-config-remix',
+    packagePath: 'packages/remix',
+    title: 'Remix guide',
+    description: 'Remix-specific linting support for the shared configuration stack.',
+    docsPath: '/frameworks/remix.html'
+  },
+  {
     packageName: '@santi020k/eslint-config-optionals',
     packagePath: 'packages/optionals',
     title: 'Optionals package',
