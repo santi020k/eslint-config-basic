@@ -17,4 +17,8 @@
 '@santi020k/eslint-config-vue': minor
 ---
 
-Update documentation and package metadata links from `santi020k.me` to `santi020k.com`.
+Refresh package metadata and supporting docs for the `santi020k.com` domain migration.
+
+- Update documentation, canonical URLs, and package links from `santi020k.me` to `santi020k.com`.
+- Sync npm package metadata so published packages point to the correct license, repository, issues page, and documentation URLs.
+- Refresh low-risk ESLint ecosystem and release tooling dependencies.

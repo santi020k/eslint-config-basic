@@ -26,7 +26,7 @@
     "eslint": "^9.0.0 || ^10.0.0"
   },
   "devDependencies": {
-    "@typescript-eslint/utils": "^8.57.1",
+    "@typescript-eslint/utils": "^8.58.2",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "publint": "^0.3.18",
     "tsup": "^8.5.1",
@@ -44,5 +44,9 @@
     "type": "git",
     "url": "git+https://github.com/santi020k/eslint-config-basic.git",
     "directory": "packages/remix"
+  },
+  "homepage": "https://eslint.santi020k.com/frameworks/remix.html",
+  "bugs": {
+    "url": "https://github.com/santi020k/eslint-config-basic/issues"
   }
 }

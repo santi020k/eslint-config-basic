@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
-    "eslint": "^9.6.0"
+    "eslint": "^10.2.0"
   },
   "devDependencies": {
     "typescript": "^5.8.2"

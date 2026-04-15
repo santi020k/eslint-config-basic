@@ -10,10 +10,10 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
-    "eslint": "^9.6.0"
+    "eslint": "^10.2.0"
   },
   "devDependencies": {
-    "@types/node": "^25.5.0",
+    "@types/node": "^25.6.0",
     "typescript": "^5.8.2"
   },
   "author": "santi020k",

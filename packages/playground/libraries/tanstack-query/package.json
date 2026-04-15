@@ -11,7 +11,7 @@
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
     "@tanstack/react-query": "^5.62.7",
-    "eslint": "^9.6.0"
+    "eslint": "^10.2.0"
   },
   "devDependencies": {
     "@types/react": "^19.2.14",

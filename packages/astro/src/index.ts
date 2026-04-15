@@ -15,6 +15,13 @@ export const createAstroConfig = (options?: AstroOptions): TSESLint.FlatConfig.C
   {
     name: 'eslint-config-astro/custom',
     files: ['**/*.astro'],
+    languageOptions: {
+      parserOptions: {
+        project: true,
+        projectService: false,
+        tsconfigRootDir: options?.tsconfigRootDir
+      }
+    },
     rules: getRules(options)
   },
   {

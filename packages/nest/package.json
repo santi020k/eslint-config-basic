@@ -26,11 +26,11 @@
     "eslint": "^9.0.0 || ^10.0.0"
   },
   "dependencies": {
-    "@santi020k/eslint-config-core": "workspace:^",
-    "@darraghor/eslint-plugin-nestjs-typed": "^7.1.27"
+    "@darraghor/eslint-plugin-nestjs-typed": "^7.1.29",
+    "@santi020k/eslint-config-core": "workspace:^"
   },
   "devDependencies": {
-    "@typescript-eslint/utils": "^8.57.1",
+    "@typescript-eslint/utils": "^8.58.2",
     "publint": "^0.3.18",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
@@ -47,5 +47,9 @@
     "type": "git",
     "url": "git+https://github.com/santi020k/eslint-config-basic.git",
     "directory": "packages/nest"
+  },
+  "homepage": "https://eslint.santi020k.com/frameworks/nest.html",
+  "bugs": {
+    "url": "https://github.com/santi020k/eslint-config-basic/issues"
   }
 }

@@ -9,14 +9,14 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@santi020k/eslint-config-basic": "workspace:^",
+    "@angular/core": "21.2.8",
+    "@angular/router": "21.2.8",
     "@santi020k/eslint-config-angular": "workspace:^",
-    "eslint": "^10.1.0",
-    "@angular/core": "21.2.6",
-    "@angular/router": "21.2.5"
+    "@santi020k/eslint-config-basic": "workspace:^",
+    "eslint": "^10.2.0"
   },
   "devDependencies": {
-    "@types/node": "^25.5.0",
+    "@types/node": "^25.6.0",
     "typescript": "^5.8.2"
   },
   "author": "santi020k",

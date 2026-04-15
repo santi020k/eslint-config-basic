@@ -39,21 +39,21 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "eslint": "^9.0.0 || ^10.0.0",
-    "@eslint/compat": "^2.0.3",
+    "@eslint/compat": "^2.0.5",
     "@eslint/js": "^9.0.0 || ^10.0.0",
     "@stylistic/eslint-plugin": "^5.10.0",
+    "eslint": "^10.2.0",
     "eslint-plugin-import-x": "^4.16.2",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-n": "^17.24.0",
     "eslint-plugin-promise": "^7.2.1",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-unused-imports": "^4.4.1",
-    "globals": "^17.4.0"
+    "globals": "^17.5.0"
   },
   "devDependencies": {
     "@types/eslint-plugin-jsx-a11y": "^6.10.1",
-    "@typescript-eslint/utils": "^8.57.1",
+    "@typescript-eslint/utils": "^8.58.2",
     "publint": "^0.3.18",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
@@ -70,5 +70,9 @@
     "type": "git",
     "url": "git+https://github.com/santi020k/eslint-config-basic.git",
     "directory": "packages/core"
+  },
+  "homepage": "https://eslint.santi020k.com/packages/core.html",
+  "bugs": {
+    "url": "https://github.com/santi020k/eslint-config-basic/issues"
   }
 }
