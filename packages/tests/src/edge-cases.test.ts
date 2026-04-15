@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { extractConfigNames, extractRuleNames, getEffectiveRuleValue } from './test-utils.js'
 
+import astro from '@santi020k/eslint-config-astro'
 import { eslintConfig, Format, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
 
 describe('Edge-Case & Conflict Tests (#6)', () => {
@@ -81,6 +82,17 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
     expect(getEffectiveRuleValue(config as Record<string, unknown>[], 'react/jsx-no-undef')).toBe('off')
 
     expect(getEffectiveRuleValue(config as Record<string, unknown>[], '@stylistic/comma-dangle')).toEqual(['warn', 'never'])
+  })
+
+  it('should apply Astro parser and rule workarounds through the framework factory', () => {
+    const config = eslintConfig({
+      typescript: true,
+      tsconfigRootDir: '/tmp/project',
+      frameworks: { astro }
+    })
+
+    expect(getEffectiveRuleValue(config as Record<string, unknown>[], '@typescript-eslint/no-unsafe-return')).toBe('off')
+    expect(getEffectiveRuleValue(config as Record<string, unknown>[], '@stylistic/jsx-indent-props')).toBe('off')
   })
 
   it('should handle duplicate optionals without doubling', () => {

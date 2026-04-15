@@ -142,9 +142,11 @@ exports[`Config Snapshots — Rule Names > astro config rules should match snaps
 [
   "@stylistic/comma-dangle",
   "@stylistic/jsx-indent",
+  "@stylistic/jsx-indent-props",
   "@stylistic/jsx-one-expression-per-line",
   "@stylistic/jsx-tag-spacing",
   "@stylistic/quote-props",
+  "@typescript-eslint/no-unsafe-return",
   "@typescript-eslint/no-unused-expressions",
   "astro/missing-client-only-directive-value",
   "astro/no-conflict-set-directives",

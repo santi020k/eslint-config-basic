@@ -29,11 +29,11 @@
     "basic-eslint": "./dist/cli.js"
   },
   "dependencies": {
-    "eslint": "^9.0.0 || ^10.0.0",
     "@santi020k/eslint-config-core": "workspace:^",
     "@santi020k/eslint-config-optionals": "workspace:^",
     "@santi020k/eslint-config-typescript": "workspace:^",
-    "@typescript-eslint/utils": "^8.57.0"
+    "@typescript-eslint/utils": "^8.58.2",
+    "eslint": "^10.2.0"
   },
   "peerDependencies": {
     "@santi020k/eslint-config-angular": "workspace:^",
@@ -41,12 +41,12 @@
     "@santi020k/eslint-config-expo": "workspace:^",
     "@santi020k/eslint-config-nest": "workspace:^",
     "@santi020k/eslint-config-next": "workspace:^",
+    "@santi020k/eslint-config-qwik": "workspace:^",
     "@santi020k/eslint-config-react": "workspace:^",
+    "@santi020k/eslint-config-remix": "workspace:^",
     "@santi020k/eslint-config-solid": "workspace:^",
     "@santi020k/eslint-config-svelte": "workspace:^",
-    "@santi020k/eslint-config-vue": "workspace:^",
-    "@santi020k/eslint-config-qwik": "workspace:^",
-    "@santi020k/eslint-config-remix": "workspace:^"
+    "@santi020k/eslint-config-vue": "workspace:^"
   },
   "peerDependenciesMeta": {
     "@santi020k/eslint-config-angular": {
@@ -100,5 +100,9 @@
     "type": "git",
     "url": "git+https://github.com/santi020k/eslint-config-basic.git",
     "directory": "packages/basic"
+  },
+  "homepage": "https://eslint.santi020k.com/packages/basic.html",
+  "bugs": {
+    "url": "https://github.com/santi020k/eslint-config-basic/issues"
   }
 }

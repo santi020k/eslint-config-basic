@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest'
 import { lintFile, lintText } from './test-utils.js'
 
 import { angularConfig } from '@santi020k/eslint-config-angular'
-import { astroConfig } from '@santi020k/eslint-config-astro'
+import astro, { astroConfig } from '@santi020k/eslint-config-astro'
 import { eslintConfig } from '@santi020k/eslint-config-basic'
 import { expoConfig } from '@santi020k/eslint-config-expo'
 import { nestConfig } from '@santi020k/eslint-config-nest'
@@ -184,6 +184,20 @@ describe('Integration Tests', () => {
       const names = config.flatMap(c => (typeof c.name === 'string' ? [c.name] : []))
 
       expect(names.some(n => n.includes('astro'))).toBe(true)
+    })
+
+    it('should avoid Astro template false positives when TypeScript is enabled', async () => {
+      const config = eslintConfig({
+        typescript: true,
+        tsconfigRootDir: FIXTURES_DIR,
+        frameworks: { astro }
+      })
+      const filePath = join(FIXTURES_DIR, 'astro.astro')
+      const results = await lintFile(filePath, config)
+      const ruleIds = results[0].messages.map(m => m.ruleId)
+
+      expect(ruleIds).not.toContain('@typescript-eslint/no-unsafe-return')
+      expect(ruleIds).not.toContain(null)
     })
   })
 

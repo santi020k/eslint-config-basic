@@ -167,7 +167,6 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     ...(hasReact ? reactParam : []),
 
     ...nextParam,
-    ...astroParam,
     ...expoParam,
     ...nestParam,
     ...vueParam,
@@ -178,6 +177,10 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     ...remixParam,
 
     ...(typescript ? createTypescriptConfig({ tsconfigRootDir }) : []),
+
+    // Astro needs to run after generic TypeScript so its parser and false-positive
+    // workarounds win for .astro files and embedded expressions.
+    ...astroParam,
 
     // Next.js App Router overrides (#12)
     ...(frameworks.next && nextMode === NextMode.AppRouter ?

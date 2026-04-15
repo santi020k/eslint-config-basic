@@ -11,11 +11,11 @@
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
     "@santi020k/eslint-config-solid": "workspace:^",
-    "eslint": "^10.1.0",
+    "eslint": "^10.2.0",
     "solid-js": "^1.9.11"
   },
   "devDependencies": {
-    "@types/node": "^25.5.0",
+    "@types/node": "^25.6.0",
     "typescript": "^5.8.2"
   },
   "author": "santi020k",

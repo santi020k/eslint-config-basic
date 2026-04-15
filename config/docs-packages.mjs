@@ -1,6 +1,6 @@
-export const docsOrigin = 'https://santi020k.github.io/eslint-config-basic'
+export const docsOrigin = 'https://eslint.santi020k.com'
 
-export const websiteOrigin = 'https://santi020k.me'
+export const websiteOrigin = 'https://santi020k.com'
 
 export const repositoryOrigin = 'https://github.com/santi020k/eslint-config-basic'
 
@@ -81,6 +81,20 @@ export const packageDocs = [
     title: 'Expo guide',
     description: 'Expo and React Native support with explicit React configuration.',
     docsPath: '/frameworks/expo.html'
+  },
+  {
+    packageName: '@santi020k/eslint-config-qwik',
+    packagePath: 'packages/qwik',
+    title: 'Qwik guide',
+    description: 'Qwik support for projects using the shared flat-config toolkit.',
+    docsPath: '/frameworks/qwik.html'
+  },
+  {
+    packageName: '@santi020k/eslint-config-remix',
+    packagePath: 'packages/remix',
+    title: 'Remix guide',
+    description: 'Remix-specific linting support for the shared configuration stack.',
+    docsPath: '/frameworks/remix.html'
   },
   {
     packageName: '@santi020k/eslint-config-optionals',

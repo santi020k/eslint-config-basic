@@ -12,7 +12,7 @@
     "@nestjs/common": "^11.1.16",
     "@nestjs/swagger": "^11.2.6",
     "@santi020k/eslint-config-basic": "workspace:^",
-    "eslint": "^10.1.0"
+    "eslint": "^10.2.0"
   },
   "author": "santi020k",
   "license": "MIT",

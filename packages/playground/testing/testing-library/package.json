@@ -12,10 +12,10 @@
     "@santi020k/eslint-config-basic": "workspace:^",
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^14.6.1",
-    "eslint": "^9.21.0",
+    "eslint": "^10.2.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "vitest": "^3.0.7"
+    "vitest": "^4.1.4"
   },
   "devDependencies": {
     "@types/react": "^19.0.10",

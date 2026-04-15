@@ -6,6 +6,12 @@ import type { TSESLint } from '@typescript-eslint/utils'
  */
 export interface AstroOptions {
 
+  /**
+   * Optional tsconfig root passed through from the main config composer.
+   * This keeps Astro parser project lookup stable when projectService is disabled.
+   */
+  tsconfigRootDir?: string
+
   /** If true, includes React-specific overrides for .astro files */
   hasReact?: boolean
 
@@ -62,10 +68,13 @@ export const getRules = (options: AstroOptions = {}): TSESLint.Linter.RulesRecor
     // Disable rules that conflict with Astro's template syntax or are handled by the parser
     'no-unused-vars': 'off',
     '@stylistic/jsx-indent': 'off',
+    '@stylistic/jsx-indent-props': 'off',
     '@stylistic/jsx-one-expression-per-line': 'off',
     '@stylistic/jsx-tag-spacing': 'off',
     '@stylistic/comma-dangle': ['warn', 'never'],
-    '@stylistic/quote-props': ['warn', 'as-needed']
+    '@stylistic/quote-props': ['warn', 'as-needed'],
+    // Astro template expressions can confuse this rule in otherwise valid markup.
+    '@typescript-eslint/no-unsafe-return': 'off'
   }
 
   // JSX-specific rules shared by React and Solid when used in .astro files
