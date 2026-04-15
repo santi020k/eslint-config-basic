@@ -64,7 +64,7 @@ export default eslintConfig()
 
 - Main package: [`@santi020k/eslint-config-basic`](https://www.npmjs.com/package/@santi020k/eslint-config-basic)
 - Repo: [santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)
-- Author: [santi020k](https://santi020k.me)
+- Author: [santi020k](https://santi020k.com)
 
 ## Next Steps
 

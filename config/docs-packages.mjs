@@ -1,6 +1,6 @@
-export const docsOrigin = 'https://santi020k.github.io/eslint-config-basic'
+export const docsOrigin = 'https://eslint.santi020k.com'
 
-export const websiteOrigin = 'https://santi020k.me'
+export const websiteOrigin = 'https://santi020k.com'
 
 export const repositoryOrigin = 'https://github.com/santi020k/eslint-config-basic'
 

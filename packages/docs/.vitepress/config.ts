@@ -4,7 +4,7 @@ import { defineConfig } from 'vitepress'
 const require = createRequire(import.meta.url)
 const docsPkg = require('../package.json') as { version: string }
 const base = process.env.DOCS_BASE ?? '/'
-const site = process.env.DOCS_SITE_URL ?? 'https://eslint.santi020k.me'
+const site = process.env.DOCS_SITE_URL ?? 'https://eslint.santi020k.com'
 const siteName = 'Santi020k ESLint'
 
 const siteDescription =
@@ -30,7 +30,7 @@ const softwareSchema = JSON.stringify({
   author: {
     '@type': 'Person',
     name: 'Santiago Molina',
-    url: 'https://santi020k.me'
+    url: 'https://santi020k.com'
   },
   codeRepository: 'https://github.com/santi020k/eslint-config-basic',
   description: siteDescription,
@@ -125,7 +125,7 @@ export default defineConfig({
         items: [
           { text: 'GitHub', link: 'https://github.com/santi020k/eslint-config-basic' },
           { text: 'NPM', link: 'https://www.npmjs.com/package/@santi020k/eslint-config-basic' },
-          { text: 'Website', link: 'https://santi020k.me' }
+          { text: 'Website', link: 'https://santi020k.com' }
         ]
       }
     ],
