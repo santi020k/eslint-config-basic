@@ -9,8 +9,12 @@ jobs:
   changeset:
     name: Require changeset
     runs-on: ubuntu-latest
-    # Skip if the PR has a skip-changelog label (for chores, docs, CI changes, etc.)
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'skip-changelog') }}
+    # Skip for version-packages PRs (changesets are consumed) and skip-changelog label
+    if: >-
+      ${{
+        !contains(github.event.pull_request.labels.*.name, 'skip-changelog') &&
+        !startsWith(github.event.pull_request.title, 'chore(release): version packages')
+      }}
 
     steps:
       - uses: actions/checkout@v6
