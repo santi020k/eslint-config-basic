@@ -1,6 +1,6 @@
 {
   "name": "@santi020k/eslint-config-expo",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Expo ESLint configuration",
   "type": "module",
   "main": "./dist/index.js",
