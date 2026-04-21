@@ -1,7 +1,7 @@
 import * as fs from 'node:fs'
 import { describe, expect, it, vi } from 'vitest'
 
-import { detectProjectOptions, Format, Library, Runtime, Testing, Tool } from '@santi020k/eslint-config-basic'
+import { detectProjectOptions, Format, Library, NextMode, Runtime, Testing, Tool } from '@santi020k/eslint-config-basic'
 
 vi.mock('node:fs')
 
@@ -25,7 +25,9 @@ describe('detectProjectOptions', () => {
 
     const options = detectProjectOptions()
 
-    expect(options.frameworks?.react).toBe(true)
+    expect(options.detectedFrameworks).toContain('react')
+    // frameworks object must stay empty — booleans would throw in resolveFramework
+    expect(options.frameworks?.react).toBeUndefined()
   })
 
   it('should detect Next.js if next is a dependency', () => {
@@ -37,7 +39,9 @@ describe('detectProjectOptions', () => {
 
     const options = detectProjectOptions()
 
-    expect(options.frameworks?.next).toBe(true)
+    expect(options.detectedFrameworks).toContain('next')
+    expect(options.detectedFrameworks).toContain('react') // next implies react
+    expect(options.frameworks?.next).toBeUndefined()
   })
 
   it('should detect Tailwind if tailwindcss is a dependency', () => {
@@ -172,16 +176,15 @@ describe('detectProjectOptions', () => {
 
     const options = detectProjectOptions()
 
-    expect(options).toEqual({
-      typescript: false,
-      frameworks: {},
-      libraries: [],
-      testing: [],
-      formats: [],
-      tools: [],
-      extensions: [],
-      runtime: Runtime.Universal
-    })
+    expect(options.typescript).toBe(false)
+    expect(options.frameworks).toEqual({})
+    expect(options.detectedFrameworks).toEqual([])
+    expect(options.libraries).toEqual([])
+    expect(options.testing).toEqual([])
+    expect(options.formats).toEqual([])
+    expect(options.tools).toEqual([])
+    expect(options.extensions).toEqual([])
+    expect(options.runtime).toBe(Runtime.Universal)
   })
 
   it('should detect Astro if astro is a dependency', () => {
@@ -193,7 +196,8 @@ describe('detectProjectOptions', () => {
 
     const options = detectProjectOptions()
 
-    expect(options.frameworks?.astro).toBe(true)
+    expect(options.detectedFrameworks).toContain('astro')
+    expect(options.frameworks?.astro).toBeUndefined()
   })
 
   it('should detect Svelte if svelte is a dependency', () => {
@@ -205,8 +209,8 @@ describe('detectProjectOptions', () => {
 
     const options = detectProjectOptions()
 
-    expect(options.frameworks?.svelte).toBe(true)
-
+    expect(options.detectedFrameworks).toContain('svelte')
+    expect(options.frameworks?.svelte).toBeUndefined()
     expect(options.runtime).toBe(Runtime.Browser)
   })
 
@@ -219,8 +223,8 @@ describe('detectProjectOptions', () => {
 
     const options = detectProjectOptions()
 
-    expect(options.frameworks?.solid).toBe(true)
-
+    expect(options.detectedFrameworks).toContain('solid')
+    expect(options.frameworks?.solid).toBeUndefined()
     expect(options.runtime).toBe(Runtime.Browser)
   })
 
@@ -233,8 +237,8 @@ describe('detectProjectOptions', () => {
 
     const options = detectProjectOptions()
 
-    expect(options.frameworks?.angular).toBe(true)
-
+    expect(options.detectedFrameworks).toContain('angular')
+    expect(options.frameworks?.angular).toBeUndefined()
     expect(options.runtime).toBe(Runtime.Browser)
   })
 
@@ -247,7 +251,8 @@ describe('detectProjectOptions', () => {
 
     const options = detectProjectOptions()
 
-    expect(options.frameworks?.qwik).toBe(true)
+    expect(options.detectedFrameworks).toContain('qwik')
+    expect(options.frameworks?.qwik).toBeUndefined()
   })
 
   it('should detect Remix if @remix-run/react is a dependency', () => {
@@ -259,7 +264,8 @@ describe('detectProjectOptions', () => {
 
     const options = detectProjectOptions()
 
-    expect(options.frameworks?.remix).toBe(true)
+    expect(options.detectedFrameworks).toContain('remix')
+    expect(options.frameworks?.remix).toBeUndefined()
   })
 
   it('should detect Remix if @remix-run/node is a dependency', () => {
@@ -271,7 +277,7 @@ describe('detectProjectOptions', () => {
 
     const options = detectProjectOptions()
 
-    expect(options.frameworks?.remix).toBe(true)
+    expect(options.detectedFrameworks).toContain('remix')
   })
 
   it('should detect Expo if expo is a dependency', () => {
@@ -283,7 +289,9 @@ describe('detectProjectOptions', () => {
 
     const options = detectProjectOptions()
 
-    expect(options.frameworks?.expo).toBe(true)
+    expect(options.detectedFrameworks).toContain('expo')
+    expect(options.detectedFrameworks).toContain('react') // expo implies react
+    expect(options.frameworks?.expo).toBeUndefined()
   })
 
   it('should detect Expo if react-native is a dependency', () => {
@@ -295,7 +303,8 @@ describe('detectProjectOptions', () => {
 
     const options = detectProjectOptions()
 
-    expect(options.frameworks?.expo).toBe(true)
+    expect(options.detectedFrameworks).toContain('expo')
+    expect(options.detectedFrameworks).toContain('react')
   })
 
   it('should detect NestJS and set Node runtime', () => {
@@ -307,8 +316,8 @@ describe('detectProjectOptions', () => {
 
     const options = detectProjectOptions()
 
-    expect(options.frameworks?.nest).toBe(true)
-
+    expect(options.detectedFrameworks).toContain('nest')
+    expect(options.frameworks?.nest).toBeUndefined()
     expect(options.runtime).toBe(Runtime.Node)
   })
 
@@ -442,5 +451,84 @@ describe('detectProjectOptions', () => {
     const options = detectProjectOptions()
 
     expect(options.typescript).toBe(true)
+  })
+
+  describe('NextMode detection', () => {
+    it('should detect NextMode.AppRouter when app/ directory exists', () => {
+      vi.mocked(fs.existsSync).mockImplementation(path => {
+        const p = path.toString()
+
+        return p.includes('package.json') || p.endsWith('/app') || p.endsWith('\\app')
+      })
+
+      vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+        dependencies: { next: 'latest' }
+      }))
+
+      const options = detectProjectOptions()
+
+      expect(options.nextMode).toBe(NextMode.AppRouter)
+    })
+
+    it('should detect NextMode.Pages when only pages/ directory exists (no app/)', () => {
+      vi.mocked(fs.existsSync).mockImplementation(path => {
+        const p = path.toString()
+
+        // Return true for package.json only — no app/ directory present
+        return p.includes('package.json') && !p.endsWith('/app') && !p.endsWith('\\app')
+      })
+
+      vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+        dependencies: { next: 'latest' }
+      }))
+
+      const options = detectProjectOptions()
+
+      expect(options.nextMode).toBe(NextMode.Pages)
+    })
+
+    it('should not set nextMode when next is not a dependency', () => {
+      vi.mocked(fs.existsSync).mockReturnValue(true)
+
+      vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+        dependencies: { react: 'latest' }
+      }))
+
+      const options = detectProjectOptions()
+
+      expect(options.nextMode).toBeUndefined()
+    })
+  })
+
+  describe('detectedFrameworks deduplication', () => {
+    it('should not duplicate react when next is detected (next implies react)', () => {
+      vi.mocked(fs.existsSync).mockReturnValue(true)
+
+      vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+        dependencies: { next: 'latest', react: 'latest' }
+      }))
+
+      const options = detectProjectOptions()
+      const reactCount = options.detectedFrameworks?.filter(f => f === 'react').length ?? 0
+
+      expect(reactCount).toBe(1)
+    })
+  })
+})
+
+describe('detectProjectOptions — does not pollute frameworks with booleans', () => {
+  it('passing detectProjectOptions() result directly to eslintConfig() should not throw', async () => {
+    const { eslintConfig } = await import('@santi020k/eslint-config-basic')
+
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      dependencies: { next: 'latest', svelte: 'latest' }
+    }))
+
+    const detected = detectProjectOptions()
+
+    // Must not throw — previously frameworks.next = true would cause resolveFramework to throw
+    expect(() => eslintConfig(detected)).not.toThrow()
   })
 })

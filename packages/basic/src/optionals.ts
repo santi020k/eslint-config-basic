@@ -7,6 +7,7 @@ import {
   Tool
 } from '@santi020k/eslint-config-core'
 import {
+  bestPractices,
   cspell,
   cypress,
   graphql,
@@ -89,6 +90,8 @@ export const getOptionalConfigs = (
   if (formats.includes(Format.Graphql)) configs.push(...graphql)
 
   // Extensions
+  if (extensions.includes(Extension.BestPractices)) configs.push(...bestPractices)
+
   if (extensions.includes(Extension.Regexp)) configs.push(...regexp)
 
   if (extensions.includes(Extension.Unicorn)) configs.push(...unicorn)

@@ -12,9 +12,9 @@
     "@santi020k/eslint-config-basic": "workspace:^",
     "@santi020k/eslint-config-react": "workspace:^",
     "@santi020k/eslint-config-remix": "workspace:^",
-    "eslint": "^10.2.0",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "eslint": "^10.2.1",
+    "react": "19.2.5",
+    "react-dom": "19.2.5"
   },
   "devDependencies": {
     "@types/react": "^19.2.14",
@@ -24,7 +24,7 @@
   "author": "santi020k",
   "license": "MIT",
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=24.0.0"
   },
   "publishConfig": {
     "access": "public"

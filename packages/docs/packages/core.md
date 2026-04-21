@@ -8,7 +8,7 @@ The core package contains the base JavaScript rules, runtime-aware globals, shar
 
 - Base ESLint and stylistic rules.
 - Runtime helpers and environment globals.
-- `detectProjectOptions`.
+- `detectProjectOptions`: Automatically identifies project settings from `package.json` and project structure. Note that this **no longer populates boolean flags** in the `frameworks` object; instead, it reports names via `detectedFrameworks`.
 - Shared config types and enums.
 - `gitignore` integration.
 

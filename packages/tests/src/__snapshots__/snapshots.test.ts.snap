@@ -404,7 +404,6 @@ exports[`Config Snapshots — Rule Names > expo config rules should match snapsh
   "no-useless-constructor",
   "no-var",
   "no-with",
-  "react-hooks/component-hook-factories",
   "react-hooks/config",
   "react-hooks/error-boundaries",
   "react-hooks/exhaustive-deps",
@@ -516,7 +515,6 @@ exports[`Config Snapshots — Rule Names > qwik config rules should match snapsh
 
 exports[`Config Snapshots — Rule Names > react config rules should match snapshot 1`] = `
 [
-  "react-hooks/component-hook-factories",
   "react-hooks/config",
   "react-hooks/error-boundaries",
   "react-hooks/exhaustive-deps",

@@ -65,6 +65,7 @@ export default eslintConfig()
 - `Runtime.Universal` keeps both environments available.
 - `frameworks.react` is required when `frameworks.next` or `frameworks.expo` is used.
 - `nextMode: NextMode.AppRouter` adds the App Router override for Next.js.
+  - This is **auto-detected** if an `app/` or `src/app/` directory is present.
 - When you write the config manually, pass imported framework packages instead of booleans.
 
 ## Configuration Priority
@@ -140,7 +141,8 @@ export default eslintConfig({
     Extension.Sonarjs,
     Extension.Perfectionist,
     Extension.Security,
-    Extension.Regexp
+    Extension.Regexp,
+    Extension.BestPractices
   ]
 })
 ```

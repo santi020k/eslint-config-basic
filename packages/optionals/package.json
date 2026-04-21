@@ -10,6 +10,26 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./extensions": {
+      "types": "./dist/extensions/index.d.ts",
+      "import": "./dist/extensions/index.js"
+    },
+    "./tools": {
+      "types": "./dist/tools/index.d.ts",
+      "import": "./dist/tools/index.js"
+    },
+    "./libraries": {
+      "types": "./dist/libraries/index.d.ts",
+      "import": "./dist/libraries/index.js"
+    },
+    "./testing": {
+      "types": "./dist/testing/index.d.ts",
+      "import": "./dist/testing/index.js"
+    },
+    "./formats": {
+      "types": "./dist/formats/index.d.ts",
+      "import": "./dist/formats/index.js"
     }
   },
   "files": [
@@ -26,14 +46,14 @@
     "eslint": "^9.0.0 || ^10.0.0"
   },
   "dependencies": {
-    "@cspell/eslint-plugin": "^9.7.0",
-    "@darraghor/eslint-plugin-nestjs-typed": "^7.1.29",
+    "@cspell/eslint-plugin": "^10.0.0",
+    "@darraghor/eslint-plugin-nestjs-typed": "^7.1.30",
     "@eslint/compat": "^2.0.5",
     "@eslint/markdown": "^8.0.1",
     "@graphql-eslint/eslint-plugin": "^4.4.0",
     "@santi020k/eslint-config-core": "workspace:*",
     "@stencil-community/eslint-plugin": "^0.10.0",
-    "@tanstack/eslint-plugin-query": "^5.99.0",
+    "@tanstack/eslint-plugin-query": "^5.99.2",
     "@tanstack/eslint-plugin-router": "^1.161.6",
     "@vitest/eslint-plugin": "^1.6.16",
     "eslint-config-prettier": "^10.1.8",
@@ -44,23 +64,23 @@
     "eslint-plugin-jsdoc": "^62.9.0",
     "eslint-plugin-jsonc": "^3.1.2",
     "eslint-plugin-mdx": "^3.7.0",
-    "eslint-plugin-perfectionist": "^5.7.0",
-    "eslint-plugin-playwright": "^2.10.1",
+    "eslint-plugin-perfectionist": "^5.9.0",
+    "eslint-plugin-playwright": "^2.10.2",
     "eslint-plugin-regexp": "^3.1.0",
     "eslint-plugin-security": "^4.0.0",
-    "eslint-plugin-sonarjs": "^4.0.2",
+    "eslint-plugin-sonarjs": "^4.0.3",
     "eslint-plugin-storybook": "^10.3.5",
     "eslint-plugin-testing-library": "^7.16.1",
     "eslint-plugin-toml": "^1.3.1",
     "eslint-plugin-unicorn": "^64.0.0",
     "eslint-plugin-yml": "^3.3.1",
     "globals": "^17.5.0",
-    "typescript-eslint": "^8.58.2"
+    "typescript-eslint": "^8.59.0"
   },
   "devDependencies": {
-    "@typescript-eslint/utils": "^8.58.2",
+    "@typescript-eslint/utils": "^8.59.0",
     "publint": "^0.3.18",
-    "tailwindcss": "^4.2.2",
+    "tailwindcss": "^4.2.4",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   },
@@ -68,7 +88,7 @@
     "access": "public"
   },
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=24.0.0"
   },
   "license": "MIT",
   "author": "santi020k",

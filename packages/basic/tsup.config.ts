@@ -2,24 +2,32 @@ import { defineConfig } from 'tsup'
 
 const env = process.env.NODE_ENV
 
-export default defineConfig({
+const shared = {
   splitting: true,
-  clean: true, // clean up the dist folder
-  dts: true, // generate dts files
+  clean: true,
+  dts: true,
   bundle: false,
-  format: ['esm'], // generate esm files
+  format: ['esm' as const],
   minify: false,
-  // bundle: env === 'production',
   skipNodeModulesBundle: true,
-  entryPoints: ["src/index.ts"],
   watch: env === 'development',
-  target: 'es2020',
+  target: 'es2020' as const,
   outDir: 'dist',
-  entry: [
-    'src/index.ts',
-    'src/compose.ts',
-    'src/optionals.ts',
-    'src/resolvers.ts',
-    'src/cli.ts'
-  ]
-})
+}
+
+export default defineConfig([
+  {
+    ...shared,
+    entry: [
+      'src/index.ts',
+      'src/compose.ts',
+      'src/optionals.ts',
+      'src/resolvers.ts',
+    ],
+  },
+  {
+    ...shared,
+    entry: ['src/cli.ts'],
+    banner: { js: '#!/usr/bin/env node' },
+  },
+])

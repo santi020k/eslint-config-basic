@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
-    "@tanstack/react-query": "^5.62.7",
-    "eslint": "^10.2.0"
+    "@tanstack/react-query": "^5.99.2",
+    "eslint": "^10.2.1"
   },
   "devDependencies": {
     "@types/react": "^19.2.14",
@@ -21,7 +21,7 @@
   "author": "santi020k",
   "license": "MIT",
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=24.0.0"
   },
   "publishConfig": {
     "access": "public"

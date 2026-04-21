@@ -10,7 +10,7 @@ This package contains the optional integrations consumed by the main package thr
 - Testing: Vitest, Jest, Cypress, Playwright, Testing Library.
 - Formats: Markdown, MDX, JSONC, YAML, TOML, GraphQL.
 - Tools: Prettier, CSpell, JSDoc, Swagger.
-- Extensions: RegExp, Unicorn, SonarJS, Security, Perfectionist.
+- Extensions: RegExp, Unicorn, SonarJS, Security, Perfectionist, BestPractices.
 
 ## How to Use It
 

@@ -49,8 +49,7 @@ describe('Integration Tests', () => {
     it('should report TypeScript-specific issues', async () => {
       const config = eslintConfig({
         typescript: true,
-        tsconfigRootDir: FIXTURES_DIR,
-        frameworks: { react: false } // Explicitly disable React to avoid detection warnings
+        tsconfigRootDir: FIXTURES_DIR
       })
       const filePath = join(FIXTURES_DIR, 'typescript.ts')
       const results = await lintFile(filePath, config)

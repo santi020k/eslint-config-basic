@@ -41,7 +41,7 @@ const softwareSchema = JSON.stringify({
   url: site
 })
 
-function resolveCanonicalPath(relativePath: string): string {
+const resolveCanonicalPath = (relativePath: string): string => {
   const normalizedPath = relativePath.replaceAll('\\', '/')
 
   if (normalizedPath === 'index.md') {
@@ -120,6 +120,7 @@ export default defineConfig({
       { text: 'Tooling', link: '/tooling/overview' },
       { text: 'Packages', link: '/packages/basic' },
       { text: 'API', link: '/api/' },
+      { text: 'Changelog', link: '/guide/changelog' },
       {
         text: 'More',
         items: [
@@ -139,7 +140,8 @@ export default defineConfig({
             { text: 'Configuration', link: '/guide/configuration' },
             { text: 'CLI', link: '/guide/cli' },
             { text: 'Inspector', link: '/guide/inspector' },
-            { text: 'Playgrounds', link: '/guide/playgrounds' }
+            { text: 'Playgrounds', link: '/guide/playgrounds' },
+            { text: 'Changelog', link: '/guide/changelog' }
           ]
         }
       ],

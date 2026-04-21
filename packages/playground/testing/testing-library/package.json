@@ -12,10 +12,10 @@
     "@santi020k/eslint-config-basic": "workspace:^",
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^14.6.1",
-    "eslint": "^10.2.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "vitest": "^4.1.4"
+    "eslint": "^10.2.1",
+    "react": "19.2.5",
+    "react-dom": "19.2.5",
+    "vitest": "^4.1.5"
   },
   "devDependencies": {
     "@types/react": "^19.0.10",
@@ -24,7 +24,7 @@
   "author": "santi020k",
   "license": "MIT",
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=24.0.0"
   },
   "publishConfig": {
     "access": "public"

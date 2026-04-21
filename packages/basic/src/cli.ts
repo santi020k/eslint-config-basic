@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { basename, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -28,19 +27,19 @@ const resolveConfigPath = (cwd: string): string => {
   return existingConfigPath ?? join(cwd, getDefaultConfigFilename(cwd))
 }
 
-const getFrameworkKeys = (frameworks?: Record<string, unknown>): string[] => {
-  const frameworkKeys = new Set(Object.keys(frameworks ?? {}))
+const getFrameworkKeys = (detectedFrameworks?: string[]): string[] => {
+  const frameworkKeys = new Set(detectedFrameworks ?? [])
 
   if (frameworkKeys.has('next') || frameworkKeys.has('expo')) {
     frameworkKeys.add('react')
   }
 
-  return [...frameworkKeys]
+  return [...frameworkKeys].sort()
 }
 
 const createConfigContent = (cwd: string): { configPath: string, configContent: string } => {
   const options = detectProjectOptions(cwd)
-  const frameworkKeys = getFrameworkKeys(options.frameworks)
+  const frameworkKeys = getFrameworkKeys(options.detectedFrameworks)
   const imports: string[] = ['import { eslintConfig } from \'@santi020k/eslint-config-basic\'']
 
   frameworkKeys.forEach(key => {

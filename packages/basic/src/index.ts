@@ -5,6 +5,7 @@ import { resolveFramework, resolvePreset } from './resolvers.js'
 import {
   coreConfig,
   createCoreConfig,
+  type DetectedFrameworkName,
   detectProjectOptions,
   type EslintConfigOptions,
   type FlatConfigArray,
@@ -38,13 +39,14 @@ export {
   Tool
 } from '@santi020k/eslint-config-core'
 
-export type { EslintConfigOptions, FlatConfigArray, ImportedFramework }
+export type { DetectedFrameworkName, EslintConfigOptions, FlatConfigArray, ImportedFramework }
 
 // Re-export framework configs
 export { tsConfig, typescriptConfig } from '@santi020k/eslint-config-typescript'
 
 // Re-export optionals
 export {
+  bestPractices,
   cspell,
   cypress,
   graphql,
