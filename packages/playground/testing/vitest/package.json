@@ -9,16 +9,16 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@nestjs/swagger": "11.2.6",
+    "@nestjs/swagger": "11.3.2",
     "@santi020k/eslint-config-basic": "workspace:^",
-    "eslint": "^10.2.0",
+    "eslint": "^10.2.1",
     "eslint-plugin-unicorn": "64.0.0",
-    "vitest": "^4.1.4"
+    "vitest": "^4.1.5"
   },
   "author": "santi020k",
   "license": "MIT",
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=24.0.0"
   },
   "publishConfig": {
     "access": "public"

@@ -47,6 +47,20 @@ export default eslintConfig({
 })
 ```
 
+## Auto-Detection
+
+The package can automatically identify frameworks and settings from your project structure. You can use `detectProjectOptions()` to see what is detected, or simply call `eslintConfig()` with no arguments to use the defaults.
+
+```js
+import { eslintConfig } from '@santi020k/eslint-config-basic'
+
+// This will automatically detect TypeScript, React, Next.js, etc.
+export default eslintConfig()
+```
+
+> [!IMPORTANT]
+> Since version 1.4.0, detected frameworks are reported via the `detectedFrameworks` field. The `frameworks` object in the detection result remains empty to prevent `TypeError` when spreading it into `eslintConfig()` (as framework options require imported config objects).
+
 ## Main Responsibilities
 
 ### Public Composition API

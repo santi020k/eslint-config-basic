@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
-import { type EslintConfigOptions, Extension, Format, Library, Preset, Runtime, Testing, Tool } from '../types.js'
+import { type EslintConfigOptions, Extension, Format, Library, NextMode, Preset, Runtime, Testing, Tool } from '../types.js'
 
 interface PackageJson {
   dependencies?: Record<string, string | undefined>
@@ -19,6 +19,7 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
   const options: EslintConfigOptions = {
     typescript: false,
     frameworks: {},
+    detectedFrameworks: [],
     libraries: [],
     testing: [],
     formats: [],
@@ -41,71 +42,90 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
       ...devDependencies
     }
 
-    options.frameworks = options.frameworks ?? {}
+    options.detectedFrameworks = options.detectedFrameworks ?? []
 
-    const frameworks = options.frameworks
+    const detected = options.detectedFrameworks
 
-    // Framework detection
+    // Framework detection — populates detectedFrameworks (informational).
+    // To enable linting for a detected framework, import its config package
+    // and pass it via frameworks.<name> in eslintConfig().
     if (allDeps.next) {
-      frameworks.next = true
+      detected.push('next')
+
+      detected.push('react') // next always implies react
 
       options.runtime = Runtime.Universal
     }
 
     if (allDeps.astro) {
-      frameworks.astro = true
+      detected.push('astro')
 
       options.runtime = Runtime.Browser
     }
 
     if (allDeps.react && !allDeps.next && !allDeps.expo && !allDeps['react-native']) {
-      frameworks.react = true
+      detected.push('react')
 
       options.runtime = Runtime.Browser
     }
 
     if (allDeps['@nestjs/core']) {
-      frameworks.nest = true
+      detected.push('nest')
 
       options.runtime = Runtime.Node
     }
 
     if (allDeps.vue) {
-      frameworks.vue = true
+      detected.push('vue')
 
       options.runtime = Runtime.Browser
     }
 
-    if (allDeps.expo || allDeps['react-native']) frameworks.expo = true
+    if (allDeps.expo || allDeps['react-native']) {
+      detected.push('expo')
+
+      detected.push('react') // expo always implies react
+    }
 
     if (allDeps.svelte) {
-      frameworks.svelte = true
+      detected.push('svelte')
 
       options.runtime = Runtime.Browser
     }
 
     if (allDeps['solid-js']) {
-      frameworks.solid = true
+      detected.push('solid')
 
       options.runtime = Runtime.Browser
     }
 
     if (allDeps['@angular/core']) {
-      frameworks.angular = true
+      detected.push('angular')
 
       options.runtime = Runtime.Browser
     }
 
     if (allDeps['@builder.io/qwik']) {
-      frameworks.qwik = true
+      detected.push('qwik')
 
       options.runtime = Runtime.Browser
     }
 
     if (allDeps['@remix-run/react'] || allDeps['@remix-run/node']) {
-      frameworks.remix = true
+      detected.push('remix')
 
       options.runtime = Runtime.Browser
+    }
+
+    options.detectedFrameworks = [...new Set(detected)]
+
+    // Next.js routing mode detection: app/ directory = App Router, pages/ = Pages Router
+    if (allDeps.next) {
+      if (existsSync(join(cwd, 'app')) || existsSync(join(cwd, 'src/app'))) {
+        options.nextMode = NextMode.AppRouter
+      } else {
+        options.nextMode = NextMode.Pages
+      }
     }
 
     // Default to TS if tsconfig exists

@@ -21,7 +21,7 @@ export const resolveFramework = (
 ): FlatConfigArray => {
   if (!framework) return []
 
-  if (framework === true) {
+  if ((framework as unknown) === true) {
     throw new TypeError(
       `Framework "${frameworkName}" requires an imported config. ` +
       `Install @santi020k/eslint-config-${frameworkName} and pass it via frameworks.${frameworkName}.`
@@ -30,13 +30,13 @@ export const resolveFramework = (
 
   // Handle factory functions directly
   if (typeof framework === 'function') {
-    return (framework as (opts?: Record<string, unknown>) => FlatConfigArray)(options)
+    return (framework)(options)
   }
 
   // Handle modules with default exports
   if (typeof framework === 'object' && 'default' in framework) {
     if (typeof framework.default === 'function') {
-      return (framework.default as (opts?: Record<string, unknown>) => FlatConfigArray)(options)
+      return (framework.default)(options)
     }
 
     return framework.default

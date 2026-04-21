@@ -85,7 +85,7 @@ describe('eslintConfig Function', () => {
 
   it('should include gitignore by default', () => {
     const config = eslintConfig({})
-    const names = extractConfigNames(config as Record<string, unknown>[])
+    const names = extractConfigNames(config)
 
     expect(names.some(n => n.toLowerCase().includes('gitignore'))).toBe(true)
   })
@@ -95,7 +95,7 @@ describe('eslintConfig Function', () => {
       settings: [Setting.NoGitignore]
     })
 
-    const names = extractConfigNames(config as Record<string, unknown>[])
+    const names = extractConfigNames(config)
 
     expect(names.some(n => n.toLowerCase().includes('gitignore'))).toBe(false)
   })
@@ -150,7 +150,7 @@ describe('eslintConfig Function', () => {
 
     expect(config.length).toBeGreaterThan(0)
 
-    const names = extractConfigNames(config as Record<string, unknown>[])
+    const names = extractConfigNames(config)
 
     expect(names).toContain('mock-react')
 
@@ -180,7 +180,7 @@ describe('eslintConfig Function', () => {
 
     expect(Array.isArray(config)).toBe(true)
 
-    const names = extractConfigNames(config as Record<string, unknown>[])
+    const names = extractConfigNames(config)
 
     expect(names).toContain('optionals/jest')
 
@@ -220,7 +220,7 @@ describe('eslintConfig Function', () => {
 
     expect(config.length).toBeGreaterThan(0)
 
-    const names = extractConfigNames(config as Record<string, unknown>[])
+    const names = extractConfigNames(config)
 
     expect(names).toContain('mock-react')
 
@@ -236,7 +236,7 @@ describe('eslintConfig Function', () => {
       }
     })
 
-    const names = extractConfigNames(config as Record<string, unknown>[])
+    const names = extractConfigNames(config)
 
     expect(names).toContain('mock-framework/rules')
   })
@@ -244,6 +244,7 @@ describe('eslintConfig Function', () => {
   it('should throw when a framework boolean is passed manually', () => {
     expect(() => eslintConfig({
       frameworks: {
+        // @ts-expect-error intentionally passing invalid type to test runtime guard
         react: true
       }
     })).toThrow(/requires an imported config/)
@@ -376,7 +377,7 @@ describe('Framework Composition — remaining frameworks', () => {
 
     expect(Array.isArray(config)).toBe(true)
 
-    const names = extractConfigNames(config as Record<string, unknown>[])
+    const names = extractConfigNames(config)
 
     expect(names).toContain('mock-svelte')
     expect(names).toContain('mock-solid')

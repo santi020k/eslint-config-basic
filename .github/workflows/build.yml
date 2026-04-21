@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
 jobs:
   build:
@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [24.x]
+        node-version: [ 24.x ]
 
     # Turbo remote cache — set TURBO_TOKEN and TURBO_TEAM in repo secrets for cross-run caching
     # See: https://turbo.build/repo/docs/ci/github-actions#remote-caching
@@ -48,4 +48,5 @@ jobs:
       - name: Run tests with coverage
         run: pnpm run test:coverage
       - name: Dry-run publish check
-        run: pnpm --filter @santi020k/eslint-config-basic publish --dry-run --no-git-checks
+        run: pnpm --filter @santi020k/eslint-config-basic publish --dry-run
+          --no-git-checks
