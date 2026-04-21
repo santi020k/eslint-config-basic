@@ -33,11 +33,11 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-core": "workspace:*",
-    "@typescript-eslint/parser": "^8.58.2",
-    "typescript-eslint": "^8.58.2"
+    "@typescript-eslint/parser": "^8.59.0",
+    "typescript-eslint": "^8.59.0"
   },
   "devDependencies": {
-    "@typescript-eslint/utils": "^8.58.2",
+    "@typescript-eslint/utils": "^8.59.0",
     "publint": "^0.3.18",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
@@ -46,7 +46,7 @@
     "access": "public"
   },
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=24.0.0"
   },
   "license": "MIT",
   "author": "santi020k",

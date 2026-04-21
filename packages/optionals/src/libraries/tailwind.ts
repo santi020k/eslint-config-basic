@@ -7,5 +7,13 @@ import type { TSESLint } from '@typescript-eslint/utils'
  * Enforces Tailwind CSS best practices using eslint-plugin-better-tailwindcss
  */
 export const tailwind: TSESLint.FlatConfig.ConfigArray = [
-  pluginTailwind.configs.recommended
+  {
+    ...pluginTailwind.configs.recommended,
+    name: 'santi020k/tailwind/recommended',
+    settings: {
+      'better-tailwindcss': {
+        // Enable faster resolution in monorepos
+      }
+    }
+  }
 ]

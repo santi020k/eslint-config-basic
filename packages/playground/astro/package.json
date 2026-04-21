@@ -10,13 +10,13 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
-    "astro": "^6.0.4",
-    "eslint": "^10.2.0"
+    "astro": "^6.1.8",
+    "eslint": "^10.2.1"
   },
   "author": "santi020k",
   "license": "MIT",
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=24.0.0"
   },
   "publishConfig": {
     "access": "public"

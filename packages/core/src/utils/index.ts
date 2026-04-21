@@ -14,7 +14,7 @@ export const hasReactConfig = (options?: EslintConfigOptions): boolean => {
   return ReactConfigKeys.some(key => {
     const value = frameworks[key as keyof typeof frameworks]
 
-    return value !== undefined && value !== false
+    return value !== undefined
   })
 }
 

@@ -49,7 +49,7 @@ export default eslintConfig({
 
 - Next.js-specific rules as a dedicated framework package.
 - An explicit React dependency for clearer composition and safer contracts.
-- `NextMode.AppRouter` support for App Router projects.
+- `NextMode.AppRouter` support for App Router projects. This is **auto-detected** if an `app/` or `src/app/` directory is present.
 
 ## Notes
 

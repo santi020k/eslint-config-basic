@@ -90,7 +90,13 @@ export enum Extension {
   Unicorn = 'unicorn',
   Sonarjs = 'sonarjs',
   Security = 'security',
-  Perfectionist = 'perfectionist'
+  Perfectionist = 'perfectionist',
+
+  /**
+   * Built-in best-practice rules: no-console, no-alert, cyclomatic complexity,
+   * max nesting depth. No extra dependencies required.
+   */
+  BestPractices = 'best-practices'
 }
 
 /**
@@ -147,14 +153,31 @@ export const ReactConfigKeys = [
 
 /**
  * Type to handle both direct config arrays and imported modules with a default export.
- * A boolean flag may appear in detected project options, but user-facing framework options
- * should pass imported config arrays/modules explicitly.
+ * User-facing framework options should always pass imported config arrays/modules explicitly
+ * — boolean values are not accepted and will throw a descriptive error.
  */
 export type ImportedFramework =
   FlatConfigArray |
   { default: FlatConfigArray | ((options?: Record<string, unknown>) => FlatConfigArray) } |
-  ((options?: Record<string, unknown>) => FlatConfigArray) |
-  boolean
+  ((options?: Record<string, unknown>) => FlatConfigArray)
+
+/**
+ * Framework names that can be auto-detected by `detectProjectOptions`.
+ * These are informational only — you still need to import and pass the actual
+ * framework config via `frameworks.<name>` in `eslintConfig()`.
+ */
+export type DetectedFrameworkName =
+  | 'react' |
+  'next' |
+  'astro' |
+  'expo' |
+  'vue' |
+  'svelte' |
+  'solid' |
+  'angular' |
+  'nest' |
+  'qwik' |
+  'remix'
 
 /**
  * TypeScript configuration options
@@ -209,7 +232,8 @@ export interface EslintConfigOptions {
 
   /**
    * Framework and library specific configurations.
-   * If a value is provided, its rules and globals are automatically enabled.
+   * Each value must be the imported config from the corresponding
+   * `@santi020k/eslint-config-<framework>` package — boolean values are not accepted.
    */
   frameworks?: {
     react?: ImportedFramework
@@ -224,6 +248,14 @@ export interface EslintConfigOptions {
     qwik?: ImportedFramework
     remix?: ImportedFramework
   }
+
+  /**
+   * Frameworks detected from package.json by `detectProjectOptions()`.
+   * This is informational — use it to display what was auto-detected.
+   * To actually enable framework linting you still need to import the
+   * framework package and pass it via `frameworks.<name>`.
+   */
+  detectedFrameworks?: DetectedFrameworkName[]
 }
 
 /**
