@@ -13,5 +13,5 @@ try {
 
   console.log('✅ Synchronized basic changelog to docs')
 } catch (error) {
-  console.error('❌ Failed to sync changelog:', error.message)
+  throw new Error('❌ Failed to sync changelog', { cause: error })
 }
