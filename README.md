@@ -1,5 +1,7 @@
 # @santi020k/eslint-config-basic
 
+> **Start here:** Install from [npm](https://www.npmjs.com/package/@santi020k/eslint-config-basic) and follow the full guide at **[eslint.santi020k.com](https://eslint.santi020k.com/)** (canonical docs). This README summarizes features and philosophy.
+
 [![CI](https://github.com/santi020k/eslint-config-basic/actions/workflows/build.yml/badge.svg)](https://github.com/santi020k/eslint-config-basic/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@santi020k/eslint-config-basic.svg)](https://www.npmjs.com/package/@santi020k/eslint-config-basic)
 [![npm downloads](https://img.shields.io/npm/dm/@santi020k/eslint-config-basic.svg)](https://www.npmjs.com/package/@santi020k/eslint-config-basic)
