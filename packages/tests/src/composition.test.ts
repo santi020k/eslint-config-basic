@@ -71,6 +71,18 @@ describe('eslintConfig Function', () => {
     expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-nest')
   })
 
+  it('should return config with Hono when hono framework is specified', () => {
+    const config = eslintConfig({
+      frameworks: { hono: [{ name: 'mock-hono', rules: {} }] }
+    })
+
+    expect(Array.isArray(config)).toBe(true)
+
+    expect(config.length).toBeGreaterThan(0)
+
+    expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-hono')
+  })
+
   it('should return config with Vue when vue framework is specified', () => {
     const config = eslintConfig({
       frameworks: { vue: [{ name: 'mock-vue', rules: {} }] }
@@ -142,6 +154,7 @@ describe('eslintConfig Function', () => {
         astro: [{ name: 'mock-astro', rules: {} }],
         expo: [{ name: 'mock-expo', rules: {} }],
         nest: [{ name: 'mock-nest', rules: {} }],
+        hono: [{ name: 'mock-hono', rules: {} }],
         vue: [{ name: 'mock-vue', rules: {} }]
       }
     })
@@ -357,7 +370,7 @@ describe('Framework Composition — remaining frameworks', () => {
     expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-remix')
   })
 
-  it('should handle all eleven frameworks combined', () => {
+  it('should handle all twelve frameworks combined', () => {
     const config = eslintConfig({
       typescript: true,
       frameworks: {
@@ -366,6 +379,7 @@ describe('Framework Composition — remaining frameworks', () => {
         astro: [{ name: 'mock-astro', rules: {} }],
         expo: [{ name: 'mock-expo', rules: {} }],
         nest: [{ name: 'mock-nest', rules: {} }],
+        hono: [{ name: 'mock-hono', rules: {} }],
         vue: [{ name: 'mock-vue', rules: {} }],
         svelte: [{ name: 'mock-svelte', rules: {} }],
         solid: [{ name: 'mock-solid', rules: {} }],
@@ -380,6 +394,7 @@ describe('Framework Composition — remaining frameworks', () => {
     const names = extractConfigNames(config)
 
     expect(names).toContain('mock-svelte')
+    expect(names).toContain('mock-hono')
     expect(names).toContain('mock-solid')
     expect(names).toContain('mock-angular')
     expect(names).toContain('mock-qwik')

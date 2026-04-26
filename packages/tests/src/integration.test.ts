@@ -8,6 +8,7 @@ import { angularConfig } from '@santi020k/eslint-config-angular'
 import astro, { astroConfig } from '@santi020k/eslint-config-astro'
 import { eslintConfig } from '@santi020k/eslint-config-basic'
 import { expoConfig } from '@santi020k/eslint-config-expo'
+import { honoConfig } from '@santi020k/eslint-config-hono'
 import { nestConfig } from '@santi020k/eslint-config-nest'
 import { nextConfig } from '@santi020k/eslint-config-next'
 import { qwik as qwikConfig } from '@santi020k/eslint-config-qwik'
@@ -226,6 +227,18 @@ describe('Integration Tests', () => {
       const names = config.flatMap(c => (c.name ? [c.name] : []))
 
       expect(names).toContain('eslint-config-nest/custom')
+    })
+  })
+
+  describe('Hono', () => {
+    it('should include Hono-specific rules in config', () => {
+      const config = eslintConfig({
+        typescript: false,
+        frameworks: { hono: honoConfig }
+      })
+      const names = config.flatMap(c => (c.name ? [c.name] : []))
+
+      expect(names).toContain('eslint-config-hono/runtime')
     })
   })
 

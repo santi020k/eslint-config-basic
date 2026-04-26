@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- Node.js `>=22.12.0`
+- Node.js `>=22.18.0`
 - ESLint `9+`
 
 ## Base Package
