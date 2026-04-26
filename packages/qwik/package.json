@@ -1,6 +1,6 @@
 {
   "name": "@santi020k/eslint-config-qwik",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Qwik ESLint configuration",
   "type": "module",
   "main": "./dist/index.js",

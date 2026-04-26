@@ -1,6 +1,6 @@
 {
   "name": "@santi020k/eslint-config-hono",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Hono ESLint configuration for Fetch API and edge runtime projects",
   "type": "module",
   "main": "./dist/index.js",
