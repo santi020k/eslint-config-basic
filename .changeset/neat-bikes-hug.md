@@ -18,4 +18,6 @@
 "@santi020k/eslint-config-docs": minor
 ---
 
-Add first-class Hono support with Worker runtime globals, package detection, and a playground for Cloudflare Workers-style projects.
+- Add first-class Hono support with Worker runtime globals, package detection, and a playground for Cloudflare Workers-style projects.
+- Lower the Node.js engine requirement to `>=22.18.0` in `package.json` and `.nvmrc`, and validate CI against Node.js 22.
+- Update `README.md` with a landing pointer to the canonical docs site.
