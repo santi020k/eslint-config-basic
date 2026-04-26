@@ -160,6 +160,7 @@ export default eslintConfig({
 | Solid | `@santi020k/eslint-config-solid` | [Dedicated Page](/frameworks/solid). |
 | Qwik | `@santi020k/eslint-config-qwik` | [Dedicated Page](/frameworks/qwik). |
 | Remix | `@santi020k/eslint-config-remix` | [Dedicated Page](/frameworks/remix). Commonly paired with `react` in Remix apps. |
+| Hono | `@santi020k/eslint-config-hono` | [Dedicated Page](/frameworks/hono). Optimized for Hono and edge runtimes. |
 | Angular | `@santi020k/eslint-config-angular` | [Dedicated Page](/frameworks/angular). |
 | NestJS | `@santi020k/eslint-config-nest` | [Dedicated Page](/frameworks/nest). |
 | Expo | `@santi020k/eslint-config-expo` | [Dedicated Page](/frameworks/expo). Requires `react`. |

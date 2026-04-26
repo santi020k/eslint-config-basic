@@ -15,13 +15,13 @@ import { withBase } from 'vitepress'
         </p>
         <p>
           This docs site is the fastest way to choose the right package, compose a flat config, and roll the setup
-          across React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Expo, Qwik, Remix, and modern tooling.
+          across React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, Remix, and modern tooling.
         </p>
       </div>
 
       <div class="santi-home-metrics">
         <article class="santi-home-metric">
-          <strong>12</strong>
+          <strong>13</strong>
           <span>framework guides</span>
           <p>Explicit packages for the stacks you actually ship, not vague one-size-fits-all presets.</p>
         </article>
@@ -115,6 +115,7 @@ import { withBase } from 'vitepress'
           <li>Solid</li>
           <li>Angular</li>
           <li>NestJS</li>
+          <li>Hono</li>
           <li>Expo</li>
           <li>Qwik</li>
           <li>Remix</li>

@@ -117,12 +117,19 @@ export default {
 
 ### `packages/core/src/types.ts`
 
-Add the new framework to the `frameworks` interface:
+Add the new framework to the `frameworks` interface and the `DetectedFrameworkName` type:
 
 ```typescript
-export interface FrameworkOptions {
+export type DetectedFrameworkName =
   // ... existing frameworks
-  myframework?: TSESLint.FlatConfig.ConfigArray
+  | 'myframework'
+
+export interface EslintConfigOptions {
+  // ...
+  frameworks?: {
+    // ... existing frameworks
+    myframework?: ImportedFramework
+  }
 }
 ```
 
