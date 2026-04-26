@@ -13,9 +13,7 @@ export const playwright: TSESLint.FlatConfig.ConfigArray = [
       '**/e2e/**/*.{js,ts,jsx,tsx}',
       '**/*.e2e.{js,ts,jsx,tsx}',
       '**/tests/e2e/**/*.{js,ts,jsx,tsx}',
-      '**/playwright/**/*.{js,ts,jsx,tsx}',
-      '**/tests/**/*.{js,ts,jsx,tsx}',
-      '**/*.spec.{js,ts,jsx,tsx}'
+      '**/playwright/**/*.{js,ts,jsx,tsx}'
     ],
     ...pluginPlaywright.configs['flat/recommended']
   }
