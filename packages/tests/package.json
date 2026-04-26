@@ -28,7 +28,7 @@
     "@santi020k/eslint-config-svelte": "workspace:^",
     "@santi020k/eslint-config-typescript": "workspace:^",
     "@santi020k/eslint-config-vue": "workspace:^",
-    "@types/node": "^25.6.0",
+    "@types/node": "^22.18.0",
     "@typescript-eslint/utils": "^8.59.0",
     "@vitest/coverage-v8": "^4.1.5",
     "eslint": "^10.2.1",
@@ -39,7 +39,7 @@
   "author": "santi020k",
   "license": "MIT",
   "engines": {
-    "node": ">=24.0.0"
+    "node": ">=22.18.0"
   },
   "publishConfig": {
     "access": "public"
