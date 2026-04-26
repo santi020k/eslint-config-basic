@@ -39,6 +39,7 @@ Link to the issue this PR resolves, e.g. "Resolves #123"
 - [ ] `expo` (@santi020k/eslint-config-expo)
 - [ ] `nest` (@santi020k/eslint-config-nest)
 - [ ] `vue` (@santi020k/eslint-config-vue)
+- [ ] `hono` (@santi020k/eslint-config-hono)
 - [ ] `optionals` (@santi020k/eslint-config-optionals)
 - [ ] `tests` (internal tests)
 

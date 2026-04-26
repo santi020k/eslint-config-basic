@@ -76,6 +76,13 @@ export const packageDocs = [
     docsPath: '/frameworks/nest.html'
   },
   {
+    packageName: '@santi020k/eslint-config-hono',
+    packagePath: 'packages/hono',
+    title: 'Hono guide',
+    description: 'Hono support for Fetch API and edge runtime projects.',
+    docsPath: '/frameworks/hono.html'
+  },
+  {
     packageName: '@santi020k/eslint-config-expo',
     packagePath: 'packages/expo',
     title: 'Expo guide',

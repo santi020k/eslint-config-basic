@@ -19,7 +19,7 @@
     "vitepress": "^1.6.4"
   },
   "engines": {
-    "node": ">=24.0.0"
+    "node": ">=22.18.0"
   },
   "author": "santi020k",
   "license": "MIT",

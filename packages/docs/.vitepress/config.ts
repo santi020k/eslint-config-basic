@@ -8,10 +8,10 @@ const site = process.env.DOCS_SITE_URL ?? 'https://eslint.santi020k.com'
 const siteName = 'Santi020k ESLint'
 
 const siteDescription =
-  'DX-first ESLint 9/10+ flat-config docs for JavaScript and TypeScript teams using React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Expo, Qwik, Remix, and optional tooling.'
+  'DX-first ESLint 9/10+ flat-config docs for JavaScript and TypeScript teams using React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, Remix, and optional tooling.'
 
 const siteKeywords =
-  'ESLint flat config, JavaScript linting, TypeScript linting, React ESLint, Next.js ESLint, Astro ESLint, Vue ESLint, Svelte ESLint, Solid ESLint, Angular ESLint, NestJS ESLint, Expo ESLint, Qwik ESLint, Remix ESLint, developer experience'
+  'ESLint flat config, JavaScript linting, TypeScript linting, React ESLint, Next.js ESLint, Astro ESLint, Vue ESLint, Svelte ESLint, Solid ESLint, Angular ESLint, NestJS ESLint, Hono ESLint, Expo ESLint, Qwik ESLint, Remix ESLint, developer experience'
 
 const socialImage = new URL('/cover.webp', site).toString()
 
@@ -158,6 +158,7 @@ export default defineConfig({
             { text: 'Solid', link: '/frameworks/solid' },
             { text: 'Angular', link: '/frameworks/angular' },
             { text: 'NestJS', link: '/frameworks/nest' },
+            { text: 'Hono', link: '/frameworks/hono' },
             { text: 'Expo', link: '/frameworks/expo' },
             { text: 'Qwik', link: '/frameworks/qwik' },
             { text: 'Remix', link: '/frameworks/remix' }

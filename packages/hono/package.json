@@ -1,0 +1,54 @@
+{
+  "name": "@santi020k/eslint-config-hono",
+  "version": "1.4.0",
+  "description": "Hono ESLint configuration for Fetch API and edge runtime projects",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "clean": "rm -rf dist",
+    "check:exports": "publint",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "eslint": "^9.0.0 || ^10.0.0"
+  },
+  "dependencies": {
+    "@santi020k/eslint-config-core": "workspace:^"
+  },
+  "devDependencies": {
+    "@typescript-eslint/utils": "^8.59.0",
+    "publint": "^0.3.18",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "license": "MIT",
+  "author": "santi020k",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/santi020k/eslint-config-basic.git",
+    "directory": "packages/hono"
+  },
+  "homepage": "https://eslint.santi020k.com/frameworks/hono.html",
+  "bugs": {
+    "url": "https://github.com/santi020k/eslint-config-basic/issues"
+  }
+}

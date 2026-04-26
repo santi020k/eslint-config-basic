@@ -28,8 +28,14 @@ export const getGlobalsForRuntime = (runtime: Runtime = Runtime.Universal): TSES
     case Runtime.Browser:
       return { ...globals.browser }
 
+    case Runtime.Worker:
+      return { ...globals.worker, ...globals.serviceworker }
+
     case Runtime.Universal:
-      break
+      return {
+        ...globals.browser,
+        ...globals.node
+      }
 
     default:
       return {

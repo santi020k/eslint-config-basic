@@ -4,7 +4,7 @@ This library is a DX-first, composable ESLint 9/10+ flat-config toolkit for Java
 
 ## Requirements
 
-- Node.js `>=22.12.0`
+- Node.js `>=22.18.0`
 - ESLint `9+`
 
 ## Install the Base Package

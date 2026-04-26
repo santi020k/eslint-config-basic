@@ -31,6 +31,7 @@
       "@santi020k/eslint-config-solid": ["packages/solid/src/index.ts"],
       "@santi020k/eslint-config-angular": ["packages/angular/src/index.ts"],
       "@santi020k/eslint-config-nest": ["packages/nest/src/index.ts"],
+      "@santi020k/eslint-config-hono": ["packages/hono/src/index.ts"],
       "@santi020k/eslint-config-optionals": ["packages/optionals/src/index.ts"],
       "eslint-plugin-promise": ["packages/core/src/ambient.d.ts"],
       "@stencil-community/eslint-plugin": ["packages/optionals/src/ambient.d.ts"],

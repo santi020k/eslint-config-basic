@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [ 24.x ]
+        node-version: [ 22.x, 24.x ]
 
     # Turbo remote cache — set TURBO_TOKEN and TURBO_TEAM in repo secrets for cross-run caching
     # See: https://turbo.build/repo/docs/ci/github-actions#remote-caching

@@ -66,6 +66,12 @@ export const resolvePreset = (preset: Preset): Partial<EslintConfigOptions> => {
         runtime: Runtime.Browser
       }
 
+    case Preset.Worker:
+      return {
+        typescript: true,
+        runtime: Runtime.Worker
+      }
+
     case Preset.All:
       return {
         typescript: true,

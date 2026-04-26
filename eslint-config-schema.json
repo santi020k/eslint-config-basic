@@ -31,6 +31,24 @@
         }
       ]
     },
+    "DetectedFrameworkName": {
+      "description": "Framework names that can be auto-detected by `detectProjectOptions`. These are informational only — you still need to import and pass the actual framework config via `frameworks.<name>` in `eslintConfig()`.",
+      "enum": [
+        "react",
+        "next",
+        "astro",
+        "expo",
+        "vue",
+        "svelte",
+        "solid",
+        "angular",
+        "nest",
+        "hono",
+        "qwik",
+        "remix"
+      ],
+      "type": "string"
+    },
     "EcmaVersion": {
       "anyOf": [
         {
@@ -150,6 +168,13 @@
       "additionalProperties": false,
       "description": "ESLint configuration interface",
       "properties": {
+        "detectedFrameworks": {
+          "description": "Frameworks detected from package.json by `detectProjectOptions()`. This is informational — use it to display what was auto-detected. To actually enable framework linting you still need to import the framework package and pass it via `frameworks.<name>`.",
+          "items": {
+            "$ref": "#/definitions/DetectedFrameworkName"
+          },
+          "type": "array"
+        },
         "extensions": {
           "description": "List of specialized ESLint rules and extensions",
           "items": {
@@ -166,7 +191,7 @@
         },
         "frameworks": {
           "additionalProperties": false,
-          "description": "Framework and library specific configurations. If a value is provided, its rules and globals are automatically enabled.",
+          "description": "Framework and library specific configurations. Each value must be the imported config from the corresponding `@santi020k/eslint-config-<framework>` package — boolean values are not accepted.",
           "properties": {
             "angular": {
               "$ref": "#/definitions/ImportedFramework"
@@ -175,6 +200,9 @@
               "$ref": "#/definitions/ImportedFramework"
             },
             "expo": {
+              "$ref": "#/definitions/ImportedFramework"
+            },
+            "hono": {
               "$ref": "#/definitions/ImportedFramework"
             },
             "nest": {
@@ -273,7 +301,8 @@
         "unicorn",
         "sonarjs",
         "security",
-        "perfectionist"
+        "perfectionist",
+        "best-practices"
       ],
       "type": "string"
     },
@@ -522,7 +551,27 @@
           "additionalProperties": false,
           "properties": {
             "default": {
-              "$ref": "#/definitions/FlatConfigArray"
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/FlatConfigArray"
+                },
+                {
+                  "$comment": "(options?: Record<string, unknown>) => FlatConfigArray",
+                  "properties": {
+                    "namedArgs": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "options": {
+                          "additionalProperties": {},
+                          "type": "object"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                }
+              ]
             }
           },
           "required": [
@@ -531,10 +580,23 @@
           "type": "object"
         },
         {
-          "type": "boolean"
+          "$comment": "(options?: Record<string, unknown>) => FlatConfigArray",
+          "properties": {
+            "namedArgs": {
+              "additionalProperties": false,
+              "properties": {
+                "options": {
+                  "additionalProperties": {},
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "object"
         }
       ],
-      "description": "Type to handle both direct config arrays and imported modules with a default export. A boolean flag may appear in detected project options, but user-facing framework options should pass imported config arrays/modules explicitly."
+      "description": "Type to handle both direct config arrays and imported modules with a default export. User-facing framework options should always pass imported config arrays/modules explicitly — boolean values are not accepted and will throw a descriptive error."
     },
     "JSDocParsingMode": {
       "enum": [
@@ -629,11 +691,20 @@
         "es2024.regexp",
         "es2024.sharedmemory",
         "es2024.string",
+        "es2025",
+        "es2025.collection",
+        "es2025.float16",
+        "es2025.full",
+        "es2025.intl",
+        "es2025.iterator",
+        "es2025.promise",
+        "es2025.regexp",
         "esnext",
         "esnext.array",
         "esnext.asynciterable",
         "esnext.bigint",
         "esnext.collection",
+        "esnext.date",
         "esnext.decorators",
         "esnext.disposable",
         "esnext.error",
@@ -647,6 +718,8 @@
         "esnext.sharedmemory",
         "esnext.string",
         "esnext.symbol",
+        "esnext.temporal",
+        "esnext.typedarrays",
         "esnext.weakref",
         "lib",
         "scripthost",
@@ -965,7 +1038,8 @@
         "basic",
         "all",
         "node",
-        "browser"
+        "browser",
+        "worker"
       ],
       "type": "string"
     },
@@ -1072,6 +1146,7 @@
       "enum": [
         "node",
         "browser",
+        "worker",
         "universal"
       ],
       "type": "string"

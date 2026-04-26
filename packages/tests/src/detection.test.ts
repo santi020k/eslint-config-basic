@@ -321,6 +321,34 @@ describe('detectProjectOptions', () => {
     expect(options.runtime).toBe(Runtime.Node)
   })
 
+  it('should detect Hono without forcing a runtime adapter', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      dependencies: { hono: 'latest' }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.detectedFrameworks).toContain('hono')
+    expect(options.frameworks?.hono).toBeUndefined()
+    expect(options.runtime).toBe(Runtime.Universal)
+  })
+
+  it('should detect Hono on Cloudflare Workers as Worker runtime', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      dependencies: { hono: 'latest' },
+      devDependencies: { wrangler: 'latest', '@cloudflare/workers-types': 'latest' }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.detectedFrameworks).toContain('hono')
+    expect(options.runtime).toBe(Runtime.Worker)
+  })
+
   it('should detect i18next if i18next is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
