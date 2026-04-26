@@ -44,6 +44,7 @@ pnpm add -D @santi020k/eslint-config-svelte
 pnpm add -D @santi020k/eslint-config-solid
 pnpm add -D @santi020k/eslint-config-angular
 pnpm add -D @santi020k/eslint-config-nest
+pnpm add -D @santi020k/eslint-config-hono
 pnpm add -D @santi020k/eslint-config-qwik
 pnpm add -D @santi020k/eslint-config-remix @santi020k/eslint-config-react
 pnpm add -D @santi020k/eslint-config-expo @santi020k/eslint-config-react
@@ -58,6 +59,7 @@ npm install -D @santi020k/eslint-config-svelte
 npm install -D @santi020k/eslint-config-solid
 npm install -D @santi020k/eslint-config-angular
 npm install -D @santi020k/eslint-config-nest
+npm install -D @santi020k/eslint-config-hono
 npm install -D @santi020k/eslint-config-qwik
 npm install -D @santi020k/eslint-config-remix @santi020k/eslint-config-react
 npm install -D @santi020k/eslint-config-expo @santi020k/eslint-config-react
@@ -72,6 +74,7 @@ yarn add -D @santi020k/eslint-config-svelte
 yarn add -D @santi020k/eslint-config-solid
 yarn add -D @santi020k/eslint-config-angular
 yarn add -D @santi020k/eslint-config-nest
+yarn add -D @santi020k/eslint-config-hono
 yarn add -D @santi020k/eslint-config-qwik
 yarn add -D @santi020k/eslint-config-remix @santi020k/eslint-config-react
 yarn add -D @santi020k/eslint-config-expo @santi020k/eslint-config-react
@@ -86,6 +89,7 @@ bun add -d @santi020k/eslint-config-svelte
 bun add -d @santi020k/eslint-config-solid
 bun add -d @santi020k/eslint-config-angular
 bun add -d @santi020k/eslint-config-nest
+bun add -d @santi020k/eslint-config-hono
 bun add -d @santi020k/eslint-config-qwik
 bun add -d @santi020k/eslint-config-remix @santi020k/eslint-config-react
 bun add -d @santi020k/eslint-config-expo @santi020k/eslint-config-react
@@ -110,6 +114,7 @@ Other supported packages are documented in the [Framework guides](/frameworks/ty
 | Solid | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-solid` | Combine with TypeScript as needed. |
 | Angular | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-angular` | Usually paired with TypeScript. |
 | NestJS | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-nest` | Commonly paired with `Preset.Node` or `Runtime.Node`. |
+| Hono | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-hono` | Optimized for Hono/Edge runtimes. |
 | Qwik | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-qwik` | Optimized for Qwik resumability. |
 | Remix | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-remix`, `@santi020k/eslint-config-react` | React is recommended for Remix component rules. |
 | Expo | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-expo`, `@santi020k/eslint-config-react` | React is required. |

@@ -47,6 +47,7 @@ packages/
   solid/       ← SolidJS
   angular/     ← Angular
   nest/        ← NestJS
+  hono/        ← Hono
   expo/        ← Expo / React Native
   qwik/        ← Qwik
   remix/       ← Remix

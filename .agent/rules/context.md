@@ -15,7 +15,7 @@ trigger: always_on
 
 This is `@santi020k/eslint-config-basic`, a composable ESLint 9+ Flat Config package supporting:
 
-- JavaScript, TypeScript, React, Next.js, Astro, Expo, Vue, Svelte, Solid, Angular, NestJS, Qwik, Remix
+- JavaScript, TypeScript, React, Next.js, Astro, Expo, Vue, Svelte, Solid, Angular, NestJS, Hono, Qwik, Remix
 - Optional integrations: Tailwind, Vitest, Jest, Playwright, Cypress, cspell, i18next, MDX, Markdown, YAML, JSONC, TOML, Storybook, Swagger, Stencil, TanStack Query, TanStack Router, Perfectionist, Unicorn, SonarJS, Security, Regexp
 
 ## Monorepo Architecture
@@ -36,6 +36,7 @@ This project uses **Turborepo** with **pnpm Workspaces** for modular package man
 | `@santi020k/eslint-config-solid` | `packages/solid` | SolidJS |
 | `@santi020k/eslint-config-angular` | `packages/angular` | Angular |
 | `@santi020k/eslint-config-nest` | `packages/nest` | NestJS |
+| `@santi020k/eslint-config-hono` | `packages/hono` | Hono |
 | `@santi020k/eslint-config-expo` | `packages/expo` | Expo / React Native |
 | `@santi020k/eslint-config-qwik` | `packages/qwik` | Qwik |
 | `@santi020k/eslint-config-remix` | `packages/remix` | Remix |
@@ -52,6 +53,7 @@ core → typescript → react → next
      ↘ solid
      ↘ angular
      ↘ nest
+     ↘ hono
      ↘ expo
      ↘ qwik
      ↘ remix
@@ -73,7 +75,7 @@ Users select configs via direct options rather than extending named configs:
 eslintConfig({ typescript: true, frameworks: { react: reactConfig } })
 ```
 
-Note: framework values must be the imported config object — passing `true` throws.
+Note: framework values must be the imported config object — passing `true` throws. Auto-detected frameworks are reported in `detectedFrameworks` but not automatically applied to `frameworks`.
 
 ### Dependency Alignment
 

@@ -15,7 +15,7 @@ Optionals are categorized into five types. Choose the right category before star
 | `libraries` | `Library` | Tailwind, I18next, Stencil, TanstackQuery, TanstackRouter, Storybook |
 | `testing` | `Testing` | Vitest, Playwright, Jest, Cypress, TestingLibrary |
 | `formats` | `Format` | Mdx, Markdown, Jsonc, Yaml, Toml, Graphql |
-| `extensions` | `Extension` | Regexp, Unicorn, Sonarjs, Security, Perfectionist |
+| `extensions` | `Extension` | Regexp, Unicorn, Sonarjs, Security, Perfectionist, BestPractices |
 
 ## 1. Create the Configuration File
 

@@ -10,7 +10,7 @@
 **Conventions**:
 - Strictly Flat Config (no legacy `.eslintrc`).
 - Composable design via direct options (`typescript`, `frameworks`, `optionals`).
-- **Zero-Config Auto-Detection**: Automatically detects frameworks and plugins from `package.json`.
+- **Zero-Config Auto-Detection**: Automatically detects frameworks and plugins from `package.json`. Detected frameworks are reported via `detectedFrameworks` but still require explicit imports for the best DX.
 - **Next.js App Router**: Optimized rules for the `app/` directory.
 - **Lazy Loading**: Framework-specific configs are lazy-loaded to prevent peer dep issues.
 - **Strict Mode**: `strict: true` promotes all warnings to errors.
@@ -40,7 +40,7 @@ This is a monorepo containing multiple config packages.
 - `packages/typescript/` — TypeScript rules
 - `packages/react/`, `packages/next/` — React ecosystem
 - `packages/astro/`, `packages/vue/`, `packages/svelte/`, `packages/solid/` — Frontend frameworks
-- `packages/angular/`, `packages/nest/` — Enterprise/backend frameworks
+- `packages/angular/`, `packages/nest/`, `packages/hono/` — Enterprise, backend, and edge frameworks
 - `packages/expo/` — React Native / Expo
 - `packages/qwik/`, `packages/remix/` — Modern meta-frameworks
 - `packages/optionals/` — All optional integrations (tools, libraries, testing, formats, extensions)
@@ -58,6 +58,7 @@ This is a monorepo containing multiple config packages.
 | SolidJS | `@santi020k/eslint-config-solid` |
 | Angular | `@santi020k/eslint-config-angular` |
 | NestJS | `@santi020k/eslint-config-nest` |
+| Hono | `@santi020k/eslint-config-hono` |
 | Expo | `@santi020k/eslint-config-expo` |
 | Qwik | `@santi020k/eslint-config-qwik` |
 | Remix | `@santi020k/eslint-config-remix` |

@@ -12,6 +12,7 @@ core → typescript → react → next
      ↘ solid
      ↘ angular
      ↘ nest
+     ↘ hono
      ↘ expo
      ↘ qwik
      ↘ remix
@@ -19,9 +20,9 @@ core → typescript → react → next
 basic (composes all above)
 ```
 
-## Modular Frameworks (v0.8.0+)
+## Modular Frameworks (v1.5.0+)
 
-Framework-specific configurations are optional peer dependencies. They are dynamically imported by `eslintConfig()` only when requested and installed. This keeps the core installation footprint small and prevents peer dependency conflicts.
+Framework-specific configurations are optional peer dependencies. They are dynamically imported by `eslintConfig()` only when requested and installed. This keeps the core installation footprint small and prevents peer dependency conflicts. Supported frameworks: React, Next.js, Astro, Vue, Svelte, SolidJS, Angular, NestJS, Hono, Expo, Qwik, and Remix.
 
 ## Package Management
 
