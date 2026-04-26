@@ -7,11 +7,13 @@ import {
   Extension,
   Format,
   Library,
+  Runtime,
   Setting,
   Testing,
   Tool
 } from '@santi020k/eslint-config-core'
 import { expoConfig } from '@santi020k/eslint-config-expo'
+import { createHonoConfig, honoConfig } from '@santi020k/eslint-config-hono'
 import { nestConfig } from '@santi020k/eslint-config-nest'
 import { nextConfig } from '@santi020k/eslint-config-next'
 import { qwik as qwikConfig } from '@santi020k/eslint-config-qwik'
@@ -116,6 +118,29 @@ describe('NestJS Config', () => {
 
   it('should have at least one config entry', () => {
     expect(nestConfig.length).toBeGreaterThan(0)
+  })
+})
+
+describe('Hono Config', () => {
+  it('should export honoConfig as an array', () => {
+    expect(Array.isArray(honoConfig)).toBe(true)
+  })
+
+  it('should have at least one config entry', () => {
+    expect(honoConfig.length).toBeGreaterThan(0)
+  })
+
+  it('should include worker runtime globals', () => {
+    const globals = honoConfig.flatMap(config => Object.keys(config.languageOptions?.globals ?? {}))
+
+    expect(globals).toContain('fetch')
+  })
+
+  it('should allow non-Worker Hono runtimes through the factory', () => {
+    const config = createHonoConfig({ runtime: Runtime.Node })
+    const globals = config.flatMap(entry => Object.keys(entry.languageOptions?.globals ?? {}))
+
+    expect(globals).toContain('process')
   })
 })
 

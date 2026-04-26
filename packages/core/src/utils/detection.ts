@@ -75,6 +75,18 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
       options.runtime = Runtime.Node
     }
 
+    if (allDeps.hono) {
+      detected.push('hono')
+
+      if (
+        allDeps.wrangler ||
+        allDeps['@cloudflare/workers-types'] ||
+        allDeps['@cloudflare/vitest-pool-workers']
+      ) {
+        options.runtime = Runtime.Worker
+      }
+    }
+
     if (allDeps.vue) {
       detected.push('vue')
 
@@ -221,6 +233,8 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
         options.preset = Preset.Node
       } else if (options.runtime === Runtime.Browser) {
         options.preset = Preset.Browser
+      } else if (options.runtime === Runtime.Worker) {
+        options.preset = Preset.Worker
       }
     } else {
       options.preset = Preset.Basic

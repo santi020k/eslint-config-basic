@@ -134,6 +134,7 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
 
   const expoParam = resolveFramework('expo', frameworks.expo)
   const nestParam = resolveFramework('nest', frameworks.nest)
+  const honoParam = resolveFramework('hono', frameworks.hono, { runtime })
   const vueParam = resolveFramework('vue', frameworks.vue)
   const svelteParam = resolveFramework('svelte', frameworks.svelte)
   const solidParam = resolveFramework('solid', frameworks.solid)
@@ -171,6 +172,7 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     ...nextParam,
     ...expoParam,
     ...nestParam,
+    ...honoParam,
     ...vueParam,
     ...svelteParam,
     ...solidParam,

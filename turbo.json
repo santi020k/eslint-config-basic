@@ -35,6 +35,7 @@
     "@santi020k/eslint-config-basic#build": { "outputs": ["dist/**"] },
     "@santi020k/eslint-config-core#build": { "outputs": ["dist/**"] },
     "@santi020k/eslint-config-expo#build": { "outputs": ["dist/**"] },
+    "@santi020k/eslint-config-hono#build": { "outputs": ["dist/**"] },
     "@santi020k/eslint-config-nest#build": { "outputs": ["dist/**"] },
     "@santi020k/eslint-config-next#build": { "outputs": ["dist/**"] },
     "@santi020k/eslint-config-optionals#build": { "outputs": ["dist/**"] },

@@ -118,6 +118,9 @@ export enum Runtime {
   /** Only Browser globals (window, document, etc.) */
   Browser = 'browser',
 
+  /** Service Worker and Fetch API globals for edge runtimes */
+  Worker = 'worker',
+
   /** Both Node.js and Browser globals (default) */
   Universal = 'universal'
 }
@@ -137,7 +140,10 @@ export enum Preset {
   Node = 'node',
 
   /** Core + TS + Browser runtime */
-  Browser = 'browser'
+  Browser = 'browser',
+
+  /** Core + TS + Worker runtime */
+  Worker = 'worker'
 }
 
 /**
@@ -176,6 +182,7 @@ export type DetectedFrameworkName =
   'solid' |
   'angular' |
   'nest' |
+  'hono' |
   'qwik' |
   'remix'
 
@@ -245,6 +252,7 @@ export interface EslintConfigOptions {
     solid?: ImportedFramework
     angular?: ImportedFramework
     nest?: ImportedFramework
+    hono?: ImportedFramework
     qwik?: ImportedFramework
     remix?: ImportedFramework
   }
