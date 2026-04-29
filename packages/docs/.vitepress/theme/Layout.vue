@@ -2,6 +2,7 @@
 import { computed, watchEffect } from 'vue'
 import { useData, useRoute, withBase } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
+import SiteFooter from './components/SiteFooter.vue'
 
 import { buildThemeNav, getDocsPrefix, logoLinkForPrefix } from '../nav-builders.js'
 
@@ -64,6 +65,10 @@ watchEffect(() => {
           <p class="santi-hero-note__body">13 framework guides, 26 integrations, API reference, and migration docs.</p>
         </div>
       </div>
+    </template>
+
+    <template #layout-bottom>
+      <SiteFooter />
     </template>
   </DefaultTheme.Layout>
 </template>

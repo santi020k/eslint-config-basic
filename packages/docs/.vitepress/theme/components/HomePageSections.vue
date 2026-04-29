@@ -132,9 +132,17 @@ const migrationHref = computed(() => withBase('/guide/migration-v1-to-v2'))
         </p>
         <span class="santi-link-card__cta">Read API docs</span>
       </a>
+      <a class="santi-link-card santi-home-reveal santi-home-reveal--delay-8" :href="docHref('/guide/playgrounds')">
+        <span class="santi-kicker">Playgrounds</span>
+        <strong>Validate decisions before rollout</strong>
+        <p class="santi-link-card__body">
+          Test framework and tooling combinations against real playgrounds before adopting changes in your monorepo.
+        </p>
+        <span class="santi-link-card__cta">Open playgrounds</span>
+      </a>
     </div>
 
-    <section class="santi-home-panel santi-home-reveal santi-home-reveal--delay-8">
+    <section class="santi-home-panel santi-home-reveal santi-home-reveal--delay-9">
       <p class="santi-home-eyebrow">Build the right stack for your repo</p>
       <div class="santi-home-stack">
         <article class="santi-home-stack-card">
@@ -184,7 +192,7 @@ const migrationHref = computed(() => withBase('/guide/migration-v1-to-v2'))
       </div>
     </section>
 
-    <section class="santi-home-panel santi-home-outro santi-home-reveal santi-home-reveal--delay-9">
+    <section class="santi-home-panel santi-home-outro santi-home-reveal santi-home-reveal--delay-10">
       <p class="santi-home-eyebrow">Choose your path</p>
       <h2>Navigate by outcome, not by guesswork.</h2>
       <p class="santi-home-lede">
