@@ -752,7 +752,12 @@ a {
 }
 
 .VPHomeFeatures {
-  margin-top: 1.4rem;
+  margin-top: 1.1rem;
+  margin-bottom: 0.35rem;
+}
+
+.VPHomeFeatures .VPFeatures .container {
+  max-width: 1180px;
 }
 
 .VPFeatures .items {
@@ -807,7 +812,7 @@ a {
 }
 
 .VPHero {
-  padding-bottom: 4rem;
+  padding-bottom: clamp(2.25rem, 4.5vw, 3.5rem);
 }
 
 .VPHero .container {
@@ -1097,8 +1102,8 @@ html.dark .santi-hero-visual__grid {
 }
 
 .santi-home-panel {
-  margin-top: 2.4rem;
-  padding: 2.15rem;
+  margin-top: 2rem;
+  padding: 2rem 1.85rem;
 }
 
 .santi-home-panel__grid,
@@ -1301,6 +1306,23 @@ html.dark .santi-home-chip-list li {
 
 .vp-doc h3 {
   margin-top: 2rem;
+}
+
+/* Undo doc-page heading chrome inside custom homepage sections (same .vp-doc wrapper) */
+.vp-doc .santi-home-root h2 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  padding: 0;
+  border-bottom: none;
+}
+
+.vp-doc .santi-home-root .santi-home-panel h2 + p {
+  margin-top: 0.85rem;
+}
+
+.vp-doc .santi-home-root .santi-home-pillar h3,
+.vp-doc .santi-home-root .santi-home-stack-card h3 {
+  margin-top: 0;
 }
 
 .vp-doc p,
@@ -1750,12 +1772,15 @@ html.dark .santi-home-chip-list li {
 
 .santi-home-root {
   position: relative;
+  max-width: 1180px;
+  margin-inline: auto;
+  padding-block: 0.35rem 1.25rem;
 }
 
 .santi-home-upgrade {
   display: grid;
   gap: 0.35rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.65rem;
   padding: 1.28rem 1.35rem;
   border-radius: var(--s2k-radius-lg);
   text-decoration: none;
