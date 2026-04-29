@@ -298,6 +298,25 @@ describe('generateAgentSkills', () => {
     expect(content).toContain('ESLint Code Standards')
   })
 
+  it('should use display labels when falling back to package.json detection', async () => {
+    const cwd = createTempProject({
+      name: 'tmp-project',
+      devDependencies: {
+        tailwindcss: '4.0.0',
+        vitest: '4.0.0'
+      }
+    })
+
+    mkdirSync(join(cwd, '.agent'))
+
+    const result = await generateAgentSkills({ cwd })
+    const content = readFileSync(result.written[0], 'utf8')
+
+    expect(content).toContain('Tailwind CSS')
+    expect(content).toContain('Vitest')
+    expect(content).not.toContain('tailwind,')
+  })
+
   it('should read features from a local eslint.config.js when present', async () => {
     const cwd = createTempProject({ name: 'tmp-project', type: 'module' })
 
