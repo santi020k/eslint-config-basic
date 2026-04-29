@@ -9,6 +9,7 @@ The main package composes the final flat config array from one public install: `
 - Make options explicit when you want stable, reviewable config.
 - Use booleans for bundled framework configs.
 - Use enums for optional tooling.
+- Use `optionMergeStrategy` when you want strict replace behavior.
 
 ## Core Composition Model
 
@@ -16,6 +17,7 @@ The main package composes the final flat config array from one public install: `
 import { eslintConfig, Extension, Format, Library, Runtime, Testing, Tool } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
+  detectRootDir: process.cwd(),
   typescript: true,
   runtime: Runtime.Browser,
   frameworks: {
@@ -25,7 +27,8 @@ export default eslintConfig({
   testing: [Testing.Vitest],
   formats: [Format.Markdown, Format.Mdx],
   tools: [Tool.Prettier],
-  extensions: [Extension.Unicorn, Extension.Security]
+  extensions: [Extension.Unicorn, Extension.Security],
+  optionMergeStrategy: 'merge'
 })
 ```
 
@@ -73,11 +76,34 @@ Next.js, Expo, and Remix automatically include React rules. You can still pass i
 
 ## Configuration Priority
 
+Scalars always follow this order:
+
 1. Explicit options passed to `eslintConfig({})`.
 2. Preset defaults.
 3. Auto-detection from `package.json`, `tsconfig.json`, and project structure.
 
-To disable something detected automatically, pass the disabled value explicitly, such as `typescript: false`, `frameworks: {}`, or `libraries: []`.
+List options (`libraries`, `testing`, `formats`, `tools`, `extensions`) and `frameworks` use:
+
+- `optionMergeStrategy: 'merge'` (default): detected + preset + explicit are combined and deduplicated.
+- `optionMergeStrategy: 'replace'`: explicit values replace preset/detected values.
+
+Use `autoFrameworks: false` when you want manual framework control only (no detected framework auto-enable).
+
+## Detection and Root Directories
+
+- `detectRootDir`: root used to detect dependencies, framework folders, and project files.
+- `tsconfigRootDir`: root passed to TypeScript parser options.
+
+In monorepos these can differ. Example:
+
+```js
+import { eslintConfig } from '@santi020k/eslint-config-basic'
+
+export default eslintConfig({
+  detectRootDir: process.cwd(),
+  tsconfigRootDir: new URL('.', import.meta.url).pathname
+})
+```
 
 ## Full Example
 
@@ -182,3 +208,13 @@ export default eslintConfig({
 - [v1 to v2 Migration](/guide/migration-v1-to-v2)
 - [Framework Guides](/frameworks/typescript)
 - [Optional Tooling](/tooling/overview)
+
+## Schema
+
+This repo can generate a JSON schema for `EslintConfigOptions`:
+
+```sh
+pnpm run build:schema
+```
+
+The output file is `eslint-config-schema.json` at the repository root.

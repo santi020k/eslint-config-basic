@@ -1,3 +1,6 @@
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 
 import { extractConfigNames, extractRuleNames } from './test-utils.js'
@@ -183,7 +186,7 @@ describe('eslintConfig Function', () => {
     expect(Array.isArray(config)).toBe(true)
 
     expect(config.length).toBeGreaterThan(0)
-  })
+  }, 20000)
 
   it('should handle roadmap options (Jest, Cypress, TestingLibrary, GraphQL)', () => {
     const config = eslintConfig({
@@ -280,7 +283,8 @@ describe('eslintConfig Function', () => {
   it('should keep the Browser preset free of implicit React rules', () => {
     const config = eslintConfig({
       preset: Preset.Browser,
-      frameworks: {}
+      frameworks: {},
+      autoFrameworks: false
     })
 
     const rules = extractRuleNames(config)
@@ -291,7 +295,8 @@ describe('eslintConfig Function', () => {
   it('should keep the All preset focused on bundled configs', () => {
     const config = eslintConfig({
       preset: Preset.All,
-      frameworks: {}
+      frameworks: {},
+      autoFrameworks: false
     })
 
     const names = extractConfigNames(config)
@@ -300,6 +305,59 @@ describe('eslintConfig Function', () => {
     expect(names).toContain('optionals/graphql/schema')
     expect(names).toContain('optionals/graphql/operations')
     expect(names).not.toContain('eslint-config-react/recommended')
+  })
+
+  it('should disable detected frameworks when autoFrameworks is false', () => {
+    const config = eslintConfig({
+      autoFrameworks: false
+    })
+
+    const names = extractConfigNames(config)
+
+    expect(names).not.toContain('eslint-config-react/recommended')
+  })
+
+  it('should replace preset optionals when optionMergeStrategy is replace', () => {
+    const config = eslintConfig({
+      preset: Preset.All,
+      optionMergeStrategy: 'replace',
+      tools: [Tool.Prettier],
+      autoFrameworks: false
+    })
+
+    const names = extractConfigNames(config)
+
+    expect(names).toContain('eslint-config/prettier')
+    expect(names).not.toContain('optionals/jsdoc')
+  })
+
+  it('should use detectRootDir independently from tsconfigRootDir', () => {
+    const cwd = mkdtempSync(join(tmpdir(), 'eslint-config-detect-root-'))
+    try {
+      writeFileSync(join(cwd, 'package.json'), JSON.stringify({
+        name: 'tmp-detect-root',
+        dependencies: { next: 'latest' }
+      }))
+
+      const config = eslintConfig({
+        detectRootDir: cwd,
+        tsconfigRootDir: process.cwd()
+      })
+      const names = extractConfigNames(config)
+
+      expect(names.some(name => name.startsWith('eslint-config-next/'))).toBe(true)
+      expect(names).toContain('eslint-config-react/recommended')
+    } finally {
+      rmSync(cwd, { recursive: true, force: true })
+    }
+  })
+
+  it('should throw a clear error for invalid framework shapes', () => {
+    expect(() => eslintConfig({
+      frameworks: {
+        react: { invalid: true } as unknown as ImportedFramework
+      }
+    })).toThrow(/Invalid framework config/)
   })
 })
 

@@ -2,7 +2,7 @@
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import type { EslintConfigFeatures } from '../../basic/src/agent-skill-generator.js'
 import {
@@ -10,7 +10,7 @@ import {
   generateAgentSkills,
   generateSkillContent
 } from '../../basic/src/agent-skill-generator.js'
-import { handleInit, handleUpdate } from '../../basic/src/cli.js'
+import { handleInit, handleUpdate, runCli } from '../../basic/src/cli.js'
 
 const tempDirs: string[] = []
 
@@ -77,6 +77,42 @@ describe('CLI scaffolding', () => {
     expect(config).not.toContain('// old config')
     expect(config).not.toContain('@santi020k/eslint-config-react')
     expect(config).toContain('react: true')
+  })
+})
+
+describe('CLI command UX', () => {
+  it('should print help text for --help', () => {
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    runCli(['node', 'basic-eslint', '--help'])
+
+    expect(logSpy).toHaveBeenCalled()
+    expect(logSpy.mock.calls.flat().join('\n')).toContain('Usage: basic-eslint <command> [options]')
+    logSpy.mockRestore()
+  })
+
+  it('should print version for --version', () => {
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    runCli(['node', 'basic-eslint', '--version'])
+
+    expect(logSpy).toHaveBeenCalled()
+    expect(logSpy.mock.calls[0]?.[0]).toMatch(/\d+\.\d+\.\d+|unknown/)
+    logSpy.mockRestore()
+  })
+
+  it('should set non-zero exit code for unknown command', () => {
+    process.exitCode = undefined
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    runCli(['node', 'basic-eslint', 'unknown-command'])
+
+    expect(errorSpy).toHaveBeenCalledWith('Unknown command: unknown-command')
+    expect(process.exitCode).toBe(1)
+    errorSpy.mockRestore()
+    logSpy.mockRestore()
+    process.exitCode = undefined
   })
 })
 
@@ -346,5 +382,17 @@ describe('generateAgentSkills', () => {
     expect(markerFolders).toContain('.cursor')
     expect(markerFolders).toContain('.windsurf')
     expect(markerFolders).toContain('.claude')
+  })
+
+  it('should cover all AGENT_TARGET marker folders in tests', () => {
+    const markerFolders = AGENT_TARGETS.map(target => target.markerFolder)
+
+    expect(markerFolders).toContain('.agent')
+    expect(markerFolders).toContain('.cursor')
+    expect(markerFolders).toContain('.windsurf')
+    expect(markerFolders).toContain('.claude')
+    expect(markerFolders).toContain('.copilot')
+    expect(markerFolders).toContain('.aider')
+    expect(markerFolders).toContain('.agents')
   })
 })

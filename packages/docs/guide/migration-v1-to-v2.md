@@ -77,6 +77,39 @@ export default eslintConfig()
 
 The composer reads your dependencies and project structure, then enables supported bundled framework configs. Make the `frameworks` object explicit when you want the config to stay independent from dependency detection.
 
+## New v2 Control Flags
+
+Use these options when migrating larger repos:
+
+```js
+import { eslintConfig } from '@santi020k/eslint-config-basic'
+
+export default eslintConfig({
+  // monorepo/project root used for package + framework detection
+  detectRootDir: process.cwd(),
+
+  // parser/projectService root used by TypeScript ESLint internals
+  tsconfigRootDir: process.cwd(),
+
+  // default is 'merge' (detected + preset + explicit)
+  optionMergeStrategy: 'merge',
+
+  // disable if you want framework activation to be manual-only
+  autoFrameworks: true
+})
+```
+
+## Troubleshooting
+
+- Detected frameworks show up unexpectedly:
+  - Set `autoFrameworks: false` and define `frameworks` manually.
+- You only want explicit arrays (no detected merge):
+  - Set `optionMergeStrategy: 'replace'`.
+- Monorepo detection reads the wrong package:
+  - Set `detectRootDir` to the app/package root with the intended `package.json`.
+- TypeScript parser looks in the wrong folder:
+  - Set `tsconfigRootDir` to the package that owns the tsconfig.
+
 ## Keeping v1 Docs
 
 The v1 docs remain available at `/v1/`. The current root docs track v2. Future docs can be added the same way under versioned paths such as `/v2.1/` or `/v2.2.1/` when a release needs permanent documentation.

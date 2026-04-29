@@ -4,6 +4,7 @@ import { angularConfig } from '@santi020k/eslint-config-angular'
 import { astroConfig } from '@santi020k/eslint-config-astro'
 import { coreConfig } from '@santi020k/eslint-config-core'
 import { expoConfig } from '@santi020k/eslint-config-expo'
+import { hono as honoConfig } from '@santi020k/eslint-config-hono'
 import { nestConfig } from '@santi020k/eslint-config-nest'
 import { nextConfig } from '@santi020k/eslint-config-next'
 import { qwik as qwikConfig } from '@santi020k/eslint-config-qwik'
@@ -86,6 +87,12 @@ describe('Config Snapshots — Rule Names', () => {
     expect(rules).toMatchSnapshot()
   })
 
+  it('hono config rules should match snapshot', () => {
+    const rules = extractRuleNames(honoConfig() as Record<string, unknown>[])
+
+    expect(rules).toMatchSnapshot()
+  })
+
   it('vue config rules should match snapshot', () => {
     const rules = extractRuleNames(vueConfig as Record<string, unknown>[])
 
@@ -162,6 +169,12 @@ describe('Config Snapshots — Entry Names', () => {
 
   it('nest config entries should match snapshot', () => {
     const names = extractConfigNames(nestConfig as Record<string, unknown>[])
+
+    expect(names).toMatchSnapshot()
+  })
+
+  it('hono config entries should match snapshot', () => {
+    const names = extractConfigNames(honoConfig() as Record<string, unknown>[])
 
     expect(names).toMatchSnapshot()
   })

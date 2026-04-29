@@ -42,6 +42,13 @@ exports[`Config Snapshots — Entry Names > expo config entries should match sna
 ]
 `;
 
+exports[`Config Snapshots — Entry Names > hono config entries should match snapshot 1`] = `
+[
+  "eslint-config-hono/runtime",
+  "eslint-config-hono/server-handlers",
+]
+`;
+
 exports[`Config Snapshots — Entry Names > nest config entries should match snapshot 1`] = `
 [
   "@darraghor/nestjs-typed/base",
@@ -436,6 +443,12 @@ exports[`Config Snapshots — Rule Names > expo config rules should match snapsh
   "unicode-bom",
   "use-isnan",
   "valid-typeof",
+]
+`;
+
+exports[`Config Snapshots — Rule Names > hono config rules should match snapshot 1`] = `
+[
+  "n/no-process-env",
 ]
 `;
 

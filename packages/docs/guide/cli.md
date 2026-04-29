@@ -32,7 +32,7 @@ bunx @santi020k/eslint-config-basic generate-skill
 - Detects TypeScript, runtime, and supported optional integrations from `package.json`.
 - Chooses `eslint.config.js` for ESM projects.
 - Chooses `eslint.config.mjs` otherwise.
-- Includes explicit framework imports in generated configs.
+- Uses bundled framework booleans (`frameworks.<name>: true`) in generated configs.
 - Adds React automatically when Next.js or Expo is detected.
 
 ## Usage
@@ -58,6 +58,11 @@ bunx @santi020k/eslint-config-basic init
 :::
 
 If the package is already installed locally, the `basic-eslint` bin is also available through your package manager's local binary resolution.
+
+```sh
+basic-eslint --help
+basic-eslint --version
+```
 
 ## Update an Existing Config
 
@@ -117,13 +122,14 @@ Use `--force` if you want to overwrite existing standards files.
 - Use `update` when the dependency graph changed and you want a fresh generated baseline.
 - Use manual editing when the config already has custom organization that you do not want regenerated.
 
-## Why the Generated Config Stays Explicit
+## Why the Generated Config Uses Booleans
 
-The CLI is the bridge between detection and maintainable source code. Detection can infer that a project uses Next.js or Astro, but the generated file still writes explicit imports so your config remains readable and reviewable.
+The CLI writes `frameworks: { <name>: true }` so the generated file stays concise and aligned with v2's bundled framework model. You can still replace any framework entry with an imported custom config array or factory when needed.
 
 ## Notes
 
 - The CLI detects frameworks, but it does not hide them behind implicit runtime magic.
+- Generated files are explicit about enabled frameworks, but do not add per-framework import statements.
 - Existing `eslint.config.js` or `eslint.config.mjs` files are respected for updates.
 - The generated file is a starting point that you can still edit by hand.
 

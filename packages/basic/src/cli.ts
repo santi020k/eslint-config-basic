@@ -1,5 +1,5 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
-import { basename, join } from 'node:path'
+import { basename, dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import { handleGenerateSkill } from './agent-skill-generator.js'
@@ -69,6 +69,36 @@ export default eslintConfig({
   }
 }
 
+const getCliVersion = (): string => {
+  const cliDir = dirname(fileURLToPath(import.meta.url))
+  const packageJsonPath = join(cliDir, '..', 'package.json')
+
+  try {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
+    const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8')) as { version?: string }
+
+    return packageJson.version ?? 'unknown'
+  } catch {
+    return 'unknown'
+  }
+}
+
+const printUsage = () => {
+  console.log([
+    'Usage: basic-eslint <command> [options]',
+    '',
+    'Commands:',
+    '  init            Create eslint.config.js/mjs if missing',
+    '  update          Regenerate eslint.config.js/mjs from detection',
+    '  generate-skill  Generate AI agent standards files',
+    '',
+    'Options:',
+    '  --force         Overwrite existing generated skill sections/files',
+    '  --help, -h      Show this help message',
+    '  --version, -v   Show CLI version'
+  ].join('\n'))
+}
+
 export const handleInit = (cwd: string = process.cwd()) => {
   const configPath = resolveConfigPath(cwd)
 
@@ -104,22 +134,38 @@ export const handleUpdate = (cwd: string = process.cwd()) => {
   console.log('🚀 Ready to lint!')
 }
 
-const run = () => {
-  const command = process.argv[2]
-  const hasForce = process.argv.includes('--force')
+export const runCli = (argv: string[] = process.argv, cwd: string = process.cwd()) => {
+  const command = argv[2]
+  const hasForce = argv.includes('--force')
+  const isHelp = command === '--help' || command === '-h'
+  const isVersion = command === '--version' || command === '-v'
+
+  if (!command || isHelp) {
+    printUsage()
+
+    return
+  }
+
+  if (isVersion) {
+    console.log(getCliVersion())
+
+    return
+  }
 
   if (command === 'init') {
-    handleInit()
+    handleInit(cwd)
   } else if (command === 'update') {
-    handleUpdate()
+    handleUpdate(cwd)
   } else if (command === 'generate-skill') {
-    handleGenerateSkill(process.cwd(), hasForce).catch((err: unknown) => {
+    handleGenerateSkill(cwd, hasForce).catch((err: unknown) => {
       console.error('❌ Failed to generate skill files:', err)
 
       process.exitCode = 1
     })
   } else {
-    console.log('Usage: basic-eslint <init|update|generate-skill> [--force]')
+    console.error(`Unknown command: ${command}`)
+    printUsage()
+    process.exitCode = 1
   }
 }
 
@@ -129,5 +175,5 @@ if (process.argv[1] && (
   process.argv[1].endsWith('cli.js') ||
   process.argv[1].endsWith('cli.ts')
 )) {
-  run()
+  runCli()
 }

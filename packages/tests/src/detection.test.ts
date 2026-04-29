@@ -457,7 +457,7 @@ describe('detectProjectOptions', () => {
     expect(options.formats).toContain(Format.Graphql)
   })
 
-  it('should auto-enable security extension for all detected projects', () => {
+  it('should keep extensions empty unless explicitly detected/enabled', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -466,7 +466,7 @@ describe('detectProjectOptions', () => {
 
     const options = detectProjectOptions()
 
-    expect(options.extensions).toContain('security')
+    expect(options.extensions).toEqual([])
   })
 
   it('should detect tsconfig.base.json as TypeScript project', () => {
@@ -541,6 +541,25 @@ describe('detectProjectOptions', () => {
 
       expect(reactCount).toBe(1)
     })
+  })
+
+  it('should keep runtime deterministic by priority regardless of detection order', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      dependencies: {
+        react: 'latest',
+        '@nestjs/core': 'latest',
+        hono: 'latest'
+      },
+      devDependencies: {
+        wrangler: 'latest'
+      }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.runtime).toBe(Runtime.Worker)
   })
 })
 

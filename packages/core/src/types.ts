@@ -200,10 +200,29 @@ export interface TsOptions {
 export interface EslintConfigOptions {
 
   /**
+   * Root directory used for automatic project detection.
+   * Defaults to `process.cwd()`.
+   */
+  detectRootDir?: string
+
+  /**
    * Root directory of the project.
    * Required if multiple candidate TSConfigRootDirs are present.
    */
   tsconfigRootDir?: string
+
+  /**
+   * Controls how explicit arrays/frameworks combine with auto-detected and preset values.
+   * - `merge` (default): union detected + preset + explicit values
+   * - `replace`: explicit values fully replace detected/preset values
+   */
+  optionMergeStrategy?: 'merge' | 'replace'
+
+  /**
+   * Enables bundled framework configs detected from dependencies.
+   * Disable this when you want manual framework control only.
+   */
+  autoFrameworks?: boolean
 
   /** Enable TypeScript support with optional settings */
   typescript?: boolean | TsOptions

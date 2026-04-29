@@ -43,7 +43,12 @@ export const resolveFramework = (
   }
 
   // Handle config arrays directly
-  return Array.isArray(framework) ? framework : []
+  if (Array.isArray(framework)) return framework
+
+  throw new TypeError(
+    `[ESLint Basic] Invalid framework config for "${frameworkName}". ` +
+    'Use true to enable the bundled config, or pass a config array/factory/default export.'
+  )
 }
 
 /**

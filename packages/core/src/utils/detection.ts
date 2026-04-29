@@ -1,20 +1,27 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
-import { type EslintConfigOptions, Extension, Format, Library, NextMode, Preset, Runtime, Testing, Tool } from '../types.js'
+import { type EslintConfigOptions, Format, Library, NextMode, Preset, Runtime, Testing, Tool } from '../types.js'
 
 interface PackageJson {
   dependencies?: Record<string, string | undefined>
   devDependencies?: Record<string, string | undefined>
 }
 
+const runtimePriority: Record<Runtime, number> = {
+  [Runtime.Universal]: 0,
+  [Runtime.Browser]: 1,
+  [Runtime.Node]: 2,
+  [Runtime.Worker]: 3
+}
+
 /**
  * Automatically detects project settings based on package.json content
- * @param cwd Current working directory (defaults to process.cwd())
+ * @param detectRootDir Root directory used for dependency/file detection (defaults to process.cwd())
  * @returns Detected ESLint configuration options
  */
-export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigOptions => {
-  const packageJsonPath = join(cwd, 'package.json')
+export const detectProjectOptions = (detectRootDir: string = process.cwd()): EslintConfigOptions => {
+  const packageJsonPath = join(detectRootDir, 'package.json')
 
   const options: EslintConfigOptions = {
     typescript: false,
@@ -47,6 +54,11 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
     options.detectedFrameworks = options.detectedFrameworks ?? []
 
     const detected = options.detectedFrameworks
+    const setRuntime = (runtime: Runtime) => {
+      if (runtimePriority[runtime] > runtimePriority[options.runtime ?? Runtime.Universal]) {
+        options.runtime = runtime
+      }
+    }
 
     // Framework detection. In v2 the main package can enable these bundled
     // configs directly, while callers can still override frameworks manually.
@@ -55,25 +67,25 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
 
       detected.push('react') // next always implies react
 
-      options.runtime = Runtime.Universal
+      setRuntime(Runtime.Universal)
     }
 
     if (allDeps.astro) {
       detected.push('astro')
 
-      options.runtime = Runtime.Browser
+      setRuntime(Runtime.Browser)
     }
 
     if (allDeps.react && !allDeps.next && !allDeps.expo && !allDeps['react-native']) {
       detected.push('react')
 
-      options.runtime = Runtime.Browser
+      setRuntime(Runtime.Browser)
     }
 
     if (allDeps['@nestjs/core']) {
       detected.push('nest')
 
-      options.runtime = Runtime.Node
+      setRuntime(Runtime.Node)
     }
 
     if (allDeps.hono) {
@@ -84,14 +96,14 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
         allDeps['@cloudflare/workers-types'] ||
         allDeps['@cloudflare/vitest-pool-workers']
       ) {
-        options.runtime = Runtime.Worker
+        setRuntime(Runtime.Worker)
       }
     }
 
     if (allDeps.vue) {
       detected.push('vue')
 
-      options.runtime = Runtime.Browser
+      setRuntime(Runtime.Browser)
     }
 
     if (allDeps.expo || allDeps['react-native']) {
@@ -103,31 +115,31 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
     if (allDeps.svelte) {
       detected.push('svelte')
 
-      options.runtime = Runtime.Browser
+      setRuntime(Runtime.Browser)
     }
 
     if (allDeps['solid-js']) {
       detected.push('solid')
 
-      options.runtime = Runtime.Browser
+      setRuntime(Runtime.Browser)
     }
 
     if (allDeps['@angular/core']) {
       detected.push('angular')
 
-      options.runtime = Runtime.Browser
+      setRuntime(Runtime.Browser)
     }
 
     if (allDeps['@builder.io/qwik']) {
       detected.push('qwik')
 
-      options.runtime = Runtime.Browser
+      setRuntime(Runtime.Browser)
     }
 
     if (allDeps['@remix-run/react'] || allDeps['@remix-run/node']) {
       detected.push('remix')
 
-      options.runtime = Runtime.Browser
+      setRuntime(Runtime.Browser)
     }
 
     options.detectedFrameworks = [...new Set(detected)]
@@ -136,7 +148,7 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
 
     if (allDeps.next) {
       // eslint-disable-next-line security/detect-non-literal-fs-filename
-      if (existsSync(join(cwd, 'app')) || existsSync(join(cwd, 'src/app'))) {
+      if (existsSync(join(detectRootDir, 'app')) || existsSync(join(detectRootDir, 'src/app'))) {
         options.nextMode = NextMode.AppRouter
       } else {
         options.nextMode = NextMode.Pages
@@ -147,9 +159,9 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
 
     if (
       // eslint-disable-next-line security/detect-non-literal-fs-filename
-      existsSync(join(cwd, 'tsconfig.json')) ||
+      existsSync(join(detectRootDir, 'tsconfig.json')) ||
       // eslint-disable-next-line security/detect-non-literal-fs-filename
-      existsSync(join(cwd, 'tsconfig.base.json'))
+      existsSync(join(detectRootDir, 'tsconfig.base.json'))
     ) {
       options.typescript = true
     }
@@ -225,15 +237,12 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
       allDeps['graphql-tag'] ||
       allDeps['@graphql-typed-document-node/core'] ||
       // eslint-disable-next-line security/detect-non-literal-fs-filename
-      existsSync(join(cwd, 'schema.graphql')) ||
+      existsSync(join(detectRootDir, 'schema.graphql')) ||
       // eslint-disable-next-line security/detect-non-literal-fs-filename
-      existsSync(join(cwd, 'schema.gql'))
+      existsSync(join(detectRootDir, 'schema.gql'))
     ) {
       options.formats?.push(Format.Graphql)
     }
-
-    // Auto-enable security plugin (Professional default)
-    options.extensions?.push(Extension.Security)
 
     // Preset detection logic
     if (options.typescript) {
