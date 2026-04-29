@@ -143,8 +143,39 @@ export enum Preset {
   Browser = 'browser',
 
   /** Core + TS + Worker runtime */
-  Worker = 'worker'
+  Worker = 'worker',
+
+  /** TypeScript package/library defaults for published packages */
+  Library = 'library',
+
+  /** Browser application defaults with TypeScript and Prettier */
+  App = 'app',
+
+  /** CI-oriented defaults with strict severities */
+  CI = 'ci',
+
+  /** Monorepo-friendly defaults for mixed workspaces */
+  Monorepo = 'monorepo'
 }
+
+/**
+ * Controls automatic project detection by category.
+ */
+export interface DetectionOptions {
+  typescript?: boolean
+  frameworks?: boolean
+  libraries?: boolean
+  testing?: boolean
+  formats?: boolean
+  tools?: boolean
+  runtime?: boolean
+  nextMode?: boolean
+}
+
+/**
+ * Severity profiles for teams adopting the config progressively.
+ */
+export type StrictMode = boolean | 'recommended' | 'ci' | 'pedantic'
 
 /**
  * Array of configurations that require React
@@ -224,6 +255,12 @@ export interface EslintConfigOptions {
    */
   autoFrameworks?: boolean
 
+  /**
+   * Enables or disables automatic project detection by category.
+   * Use `false` to disable all detection, or an object for granular control.
+   */
+  detection?: boolean | DetectionOptions
+
   /** Enable TypeScript support with optional settings */
   typescript?: boolean | TsOptions
 
@@ -245,8 +282,13 @@ export interface EslintConfigOptions {
   /** List of global settings and behavioral flags */
   settings?: Setting[]
 
-  /** If true, all 'warn' rules are promoted to 'error' */
-  strict?: boolean
+  /**
+   * Severity profile.
+   * - `false` / `recommended`: keep recommended severities
+   * - `true` / `ci`: promote warnings to errors
+   * - `pedantic`: promote warnings and enable built-in best-practice rules
+   */
+  strict?: StrictMode
 
   /** Runtime environment preset (Node, Browser, Universal) */
   runtime?: Runtime
@@ -284,6 +326,12 @@ export interface EslintConfigOptions {
    * In v2, `eslintConfig()` enables these bundled framework configs by default.
    */
   detectedFrameworks?: DetectedFrameworkName[]
+
+  /**
+   * Package-aware subproject configuration for monorepos.
+   * Each key is a workspace-relative folder and each value is scoped to that folder.
+   */
+  projects?: Record<string, Omit<EslintConfigOptions, 'projects'>>
 }
 
 /**

@@ -69,6 +69,62 @@ export default eslintConfig({
   }
 }
 
+const formatList = (values: unknown[] | undefined): string => {
+  if (!values?.length) return 'none'
+
+  return values.join(', ')
+}
+
+const getProjectSummary = (cwd: string) => {
+  const options = detectProjectOptions(cwd)
+
+  return {
+    typescript: Boolean(options.typescript),
+    preset: options.preset ?? 'basic',
+    runtime: options.runtime ?? 'universal',
+    nextMode: options.nextMode ?? 'n/a',
+    frameworks: getFrameworkKeys(options.detectedFrameworks),
+    libraries: options.libraries ?? [],
+    testing: options.testing ?? [],
+    formats: options.formats ?? [],
+    tools: options.tools ?? [],
+    extensions: options.extensions ?? []
+  }
+}
+
+const createStandardsContent = (cwd: string): string => {
+  const summary = getProjectSummary(cwd)
+
+  return [
+    '# ESLint Standards',
+    '',
+    'This document was generated from the active project dependencies detected by `@santi020k/eslint-config-basic`.',
+    '',
+    '## Active Profile',
+    '',
+    `- TypeScript: ${summary.typescript ? 'enabled' : 'disabled'}`,
+    `- Preset: ${summary.preset}`,
+    `- Runtime: ${summary.runtime}`,
+    `- Next.js mode: ${summary.nextMode}`,
+    `- Frameworks: ${formatList(summary.frameworks)}`,
+    `- Libraries: ${formatList(summary.libraries)}`,
+    `- Testing: ${formatList(summary.testing)}`,
+    `- Formats: ${formatList(summary.formats)}`,
+    `- Tools: ${formatList(summary.tools)}`,
+    `- Extensions: ${formatList(summary.extensions)}`,
+    '',
+    '## Recommended Config',
+    '',
+    '```js',
+    'import { eslintConfig } from \'@santi020k/eslint-config-basic\'',
+    '',
+    'export default eslintConfig()',
+    '```',
+    '',
+    'Use `basic-eslint explain` when you want to inspect what the zero-config setup detects.'
+  ].join('\n')
+}
+
 const getCliVersion = (): string => {
   const cliDir = dirname(fileURLToPath(import.meta.url))
   const packageJsonPath = join(cliDir, '..', 'package.json')
@@ -90,6 +146,9 @@ const printUsage = () => {
     'Commands:',
     '  init            Create eslint.config.js/mjs if missing',
     '  update          Regenerate eslint.config.js/mjs from detection',
+    '  explain         Print detected v2 config inputs',
+    '  docs            Generate ESLINT_STANDARDS.md from detection',
+    '  migrate         Report v1-to-v2 migration suggestions',
     '  generate-skill  Generate AI agent standards files',
     '',
     'Options:',
@@ -134,6 +193,57 @@ export const handleUpdate = (cwd: string = process.cwd()) => {
   console.log('🚀 Ready to lint!')
 }
 
+export const handleExplain = (cwd: string = process.cwd()) => {
+  const summary = getProjectSummary(cwd)
+
+  console.log([
+    'ESLint Basic detected configuration:',
+    `- TypeScript: ${summary.typescript ? 'enabled' : 'disabled'}`,
+    `- Preset: ${summary.preset}`,
+    `- Runtime: ${summary.runtime}`,
+    `- Next.js mode: ${summary.nextMode}`,
+    `- Frameworks: ${formatList(summary.frameworks)}`,
+    `- Libraries: ${formatList(summary.libraries)}`,
+    `- Testing: ${formatList(summary.testing)}`,
+    `- Formats: ${formatList(summary.formats)}`,
+    `- Tools: ${formatList(summary.tools)}`,
+    `- Extensions: ${formatList(summary.extensions)}`
+  ].join('\n'))
+}
+
+export const handleDocs = (cwd: string = process.cwd()) => {
+  const outputPath = join(cwd, 'ESLINT_STANDARDS.md')
+
+  // eslint-disable-next-line security/detect-non-literal-fs-filename
+  writeFileSync(outputPath, createStandardsContent(cwd))
+
+  console.log('✅ Generated ESLINT_STANDARDS.md')
+}
+
+export const handleMigrate = (cwd: string = process.cwd()) => {
+  const configPath = resolveConfigPath(cwd)
+  const suggestions = [
+    'v1 to v2 migration suggestions:',
+    '- Install only @santi020k/eslint-config-basic for the public config API.',
+    '- Replace framework imports with bundled booleans such as frameworks: { react: true, next: true }.',
+    '- Remove app-level @santi020k/eslint-config-react/next/vue/etc. config package imports.',
+    '- Try eslintConfig() first; v2 auto-detects supported frameworks and integrations.',
+    '- Use basic-eslint explain to review what v2 detects before committing the migration.'
+  ]
+
+  // eslint-disable-next-line security/detect-non-literal-fs-filename
+  if (existsSync(configPath)) {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
+    const configContent = readFileSync(configPath, 'utf8')
+
+    if (configContent.includes('@santi020k/eslint-config-') && !configContent.includes('frameworks:')) {
+      suggestions.push('- This config appears to import v1 framework packages; replace those imports with framework booleans.')
+    }
+  }
+
+  console.log(suggestions.join('\n'))
+}
+
 export const runCli = (argv: string[] = process.argv, cwd: string = process.cwd()) => {
   const command = argv[2]
   const hasForce = argv.includes('--force')
@@ -156,6 +266,12 @@ export const runCli = (argv: string[] = process.argv, cwd: string = process.cwd(
     handleInit(cwd)
   } else if (command === 'update') {
     handleUpdate(cwd)
+  } else if (command === 'explain') {
+    handleExplain(cwd)
+  } else if (command === 'docs') {
+    handleDocs(cwd)
+  } else if (command === 'migrate') {
+    handleMigrate(cwd)
   } else if (command === 'generate-skill') {
     handleGenerateSkill(cwd, hasForce).catch((err: unknown) => {
       console.error('❌ Failed to generate skill files:', err)

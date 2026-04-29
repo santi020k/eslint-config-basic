@@ -1,3 +1,5 @@
+import { join } from 'node:path'
+
 import { applyStrictMode } from './compose.js'
 import { createDetectedFrameworkFlags } from './frameworks.js'
 import { getIntegrationConfigs, getPrettierConfig } from './integrations.js'
@@ -6,9 +8,11 @@ import { resolveFramework, resolvePreset } from './resolvers.js'
 import {
   coreConfig,
   createCoreConfig,
+  type DetectionOptions,
   type DetectedFrameworkName,
   detectProjectOptions,
   type EslintConfigOptions,
+  Extension,
   type FlatConfigArray,
   gitignore,
   type ImportedFramework,
@@ -61,7 +65,14 @@ export {
   Tool
 } from '@santi020k/eslint-config-core'
 
-export type { DetectedFrameworkName, EslintConfigOptions, FlatConfigArray, ImportedFramework }
+export type {
+  DetectionOptions,
+  DetectedFrameworkName,
+  EslintConfigOptions,
+  FlatConfigArray,
+  ImportedFramework,
+  StrictMode
+} from '@santi020k/eslint-config-core'
 
 // Re-export framework configs
 export { tsConfig, typescriptConfig } from '@santi020k/eslint-config-typescript'
@@ -139,6 +150,98 @@ const mergeFrameworkOption = (
   }
 }
 
+const resolveDetectionOptions = (
+  detection: EslintConfigOptions['detection']
+): Required<DetectionOptions> => {
+  const defaults = {
+    typescript: true,
+    frameworks: true,
+    libraries: true,
+    testing: true,
+    formats: true,
+    tools: true,
+    runtime: true,
+    nextMode: true
+  }
+
+  if (detection === false) {
+    return Object.fromEntries(
+      Object.keys(defaults).map(key => [key, false])
+    ) as Required<DetectionOptions>
+  }
+
+  if (detection === true || detection === undefined) {
+    return defaults
+  }
+
+  return {
+    ...defaults,
+    ...detection
+  }
+}
+
+const applyDetectionControls = (
+  detected: EslintConfigOptions,
+  detection: EslintConfigOptions['detection']
+): EslintConfigOptions => {
+  const controls = resolveDetectionOptions(detection)
+
+  return {
+    ...detected,
+    typescript: controls.typescript ? detected.typescript : false,
+    detectedFrameworks: controls.frameworks ? detected.detectedFrameworks : [],
+    libraries: controls.libraries ? detected.libraries : [],
+    testing: controls.testing ? detected.testing : [],
+    formats: controls.formats ? detected.formats : [],
+    tools: controls.tools ? detected.tools : [],
+    runtime: controls.runtime ? detected.runtime : undefined,
+    nextMode: controls.nextMode ? detected.nextMode : undefined,
+    preset: controls.typescript && controls.runtime ? detected.preset : undefined
+  }
+}
+
+const getStrictMode = (
+  explicitStrict: EslintConfigOptions['strict'],
+  presetStrict: EslintConfigOptions['strict']
+): EslintConfigOptions['strict'] => explicitStrict ?? presetStrict ?? false
+
+const applyStrictProfileDefaults = (
+  extensions: Extension[],
+  strict: EslintConfigOptions['strict']
+): Extension[] => {
+  if (strict !== 'pedantic') return extensions
+
+  return toUniqueArray([...extensions, Extension.BestPractices])
+}
+
+const scopeFilePattern = (projectPath: string, pattern: unknown): unknown => {
+  if (typeof pattern === 'string') {
+    return `${projectPath.replace(/\/$/, '')}/${pattern.replace(/^\.\//, '')}`
+  }
+
+  if (Array.isArray(pattern)) {
+    return pattern.map(item => scopeFilePattern(projectPath, item))
+  }
+
+  return pattern
+}
+
+const scopeConfigToProject = (
+  config: TSESLint.FlatConfig.Config,
+  projectPath: string
+): TSESLint.FlatConfig.Config => {
+  if ('ignores' in config && !config.files) {
+    return config
+  }
+
+  return {
+    ...config,
+    files: Array.isArray(config.files) ?
+      config.files.map(pattern => scopeFilePattern(projectPath, pattern)) as TSESLint.FlatConfig.Config['files'] :
+      [`${projectPath.replace(/\/$/, '')}/**/*`]
+  }
+}
+
 /**
  * Generates the ESLint configuration array, applying configurations
  * and integration settings based on the input configuration.
@@ -148,7 +251,10 @@ const mergeFrameworkOption = (
  */
 export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => {
   const detectRootDir = options?.detectRootDir
-  const detected = detectProjectOptions(detectRootDir)
+  const detected = applyDetectionControls(
+    detectProjectOptions(detectRootDir),
+    options?.detection
+  )
   const preset = options?.preset ?? detected.preset
   const presetDefaults = preset ? resolvePreset(preset) : {}
   const optionMergeStrategy = options?.optionMergeStrategy ?? 'merge'
@@ -184,14 +290,14 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
       options?.tools,
       optionMergeStrategy
     ),
-    extensions = mergeArrayOption(
+    extensions: configuredExtensions = mergeArrayOption(
       detected.extensions ?? [],
       presetDefaults.extensions,
       options?.extensions,
       optionMergeStrategy
     ),
     settings = options?.settings ?? detected.settings ?? [],
-    strict = options?.strict ?? false,
+    strict = getStrictMode(options?.strict, presetDefaults.strict),
     runtime = (options?.runtime ?? presetDefaults.runtime ?? detected.runtime ?? Runtime.Universal),
     tsconfigRootDir = options?.tsconfigRootDir,
     nextMode = (options?.nextMode ?? presetDefaults.nextMode ?? detected.nextMode ?? NextMode.Pages),
@@ -202,6 +308,8 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
       optionMergeStrategy
     )
   } = options ?? {}
+
+  const extensions = applyStrictProfileDefaults(configuredExtensions, strict)
 
   const resolvedFrameworks = frameworks ?? {}
 
@@ -329,5 +437,19 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     })
   }
 
-  return applyStrictMode(configs, strict)
+  const projectConfigs = Object.entries(options?.projects ?? {}).flatMap(
+    ([projectPath, projectOptions]) => {
+      const projectRoot = join(detectRootDir ?? process.cwd(), projectPath)
+      const scopedConfigs = eslintConfig({
+        ...projectOptions,
+        detectRootDir: projectOptions.detectRootDir ?? projectRoot,
+        tsconfigRootDir: projectOptions.tsconfigRootDir ?? projectRoot,
+        projects: undefined
+      })
+
+      return scopedConfigs.map(config => scopeConfigToProject(config, projectPath))
+    }
+  )
+
+  return applyStrictMode([...configs, ...projectConfigs], strict)
 }

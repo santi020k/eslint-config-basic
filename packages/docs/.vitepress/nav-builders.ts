@@ -90,12 +90,12 @@ export const buildThemeNav = (prefix: DocsPrefix, routePath = '/'): DefaultTheme
   const pathForVersions = routePath.split('#')[0]?.split('?')[0] || '/'
 
   return [
-    { text: 'Guide', link: p('/guide/getting-started') },
-    { text: 'Frameworks', link: p('/frameworks/typescript') },
-    { text: 'Tooling', link: p('/tooling/overview') },
-    { text: 'Packages', link: p('/packages/basic') },
-    { text: 'API', link: p('/api/') },
-    { text: 'Changelog', link: p('/guide/changelog') },
+    { text: 'Guide', link: p('/guide/getting-started'), activeMatch: `^${p('/guide/')}` },
+    { text: 'Frameworks', link: p('/frameworks/typescript'), activeMatch: `^${p('/frameworks/')}` },
+    { text: 'Tooling', link: p('/tooling/overview'), activeMatch: `^${p('/tooling/')}` },
+    { text: 'Packages', link: p('/packages/basic'), activeMatch: `^${p('/packages/')}` },
+    { text: 'API', link: p('/api/'), activeMatch: `^${p('/api/')}` },
+    { text: 'Changelog', link: p('/guide/changelog'), activeMatch: `^${p('/guide/changelog')}$` },
     {
       text: 'Versions',
       items: [

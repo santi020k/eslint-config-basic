@@ -77,6 +77,39 @@ export const resolvePreset = (preset: Preset): Partial<EslintConfigOptions> => {
         runtime: Runtime.Worker
       }
 
+    case Preset.Library:
+      return {
+        typescript: true,
+        runtime: Runtime.Node,
+        tools: [Tool.Prettier],
+        extensions: [Extension.BestPractices]
+      }
+
+    case Preset.App:
+      return {
+        typescript: true,
+        runtime: Runtime.Browser,
+        tools: [Tool.Prettier],
+        testing: [Testing.Vitest]
+      }
+
+    case Preset.CI:
+      return {
+        typescript: true,
+        runtime: Runtime.Universal,
+        tools: [Tool.Prettier],
+        extensions: [Extension.BestPractices],
+        strict: 'ci'
+      }
+
+    case Preset.Monorepo:
+      return {
+        typescript: true,
+        runtime: Runtime.Universal,
+        tools: [Tool.Prettier],
+        extensions: [Extension.BestPractices]
+      }
+
     case Preset.All:
       return {
         typescript: true,
