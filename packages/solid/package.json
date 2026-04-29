@@ -1,6 +1,6 @@
 {
   "name": "@santi020k/eslint-config-solid",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "SolidJS ESLint configuration",
   "type": "module",
   "main": "./dist/index.js",
