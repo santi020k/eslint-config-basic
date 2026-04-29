@@ -200,6 +200,53 @@ interface RawFlatConfigEntry {
   rules?: unknown
 }
 
+const DETECTED_FRAMEWORK_LABELS: Record<string, string> = {
+  angular: 'Angular',
+  astro: 'Astro',
+  expo: 'Expo',
+  hono: 'Hono',
+  nest: 'NestJS',
+  next: 'Next.js',
+  qwik: 'Qwik',
+  react: 'React',
+  remix: 'Remix',
+  solid: 'SolidJS',
+  svelte: 'Svelte',
+  vue: 'Vue'
+}
+
+const FEATURE_LABELS: Record<string, string> = {
+  'best-practices': 'Best Practices',
+  cspell: 'CSpell',
+  cypress: 'Cypress',
+  graphql: 'GraphQL',
+  i18next: 'i18next',
+  jest: 'Jest',
+  jsdoc: 'JSDoc',
+  jsonc: 'JSONC',
+  markdown: 'Markdown',
+  mdx: 'MDX',
+  perfectionist: 'Perfectionist',
+  playwright: 'Playwright',
+  prettier: 'Prettier',
+  regexp: 'Regexp',
+  security: 'Security',
+  sonarjs: 'SonarJS',
+  stencil: 'Stencil',
+  storybook: 'Storybook',
+  swagger: 'Swagger',
+  tailwind: 'Tailwind CSS',
+  'tanstack-query': 'TanStack Query',
+  'tanstack-router': 'TanStack Router',
+  'testing-library': 'Testing Library',
+  toml: 'TOML',
+  unicorn: 'Unicorn',
+  vitest: 'Vitest',
+  yaml: 'YAML'
+}
+
+const toFeatureLabel = (value: string): string => FEATURE_LABELS[value] ?? value
+
 /**
  * Extracts all searchable tokens from a flat-config array:
  * config entry names, plugin keys, and rule namespace prefixes.
@@ -371,29 +418,16 @@ export const analyzeEslintConfig = async (cwd: string): Promise<EslintConfigFeat
 const featuresFromDetection = (cwd: string): EslintConfigFeatures => {
   const opts = detectProjectOptions(cwd)
   const lintCommand = detectLintCommand(cwd)
-
-  const frameworks = (opts.detectedFrameworks ?? []).map(f => {
-    if (f === 'next') return 'Next.js'
-
-    if (f === 'nest') return 'NestJS'
-
-    if (f === 'expo') return 'Expo'
-
-    if (f === 'vue') return 'Vue'
-
-    if (f === 'solid') return 'SolidJS'
-
-    return f.charAt(0).toUpperCase() + f.slice(1)
-  })
+  const frameworks = (opts.detectedFrameworks ?? []).map(f => DETECTED_FRAMEWORK_LABELS[f] ?? f)
 
   return {
     typescript: opts.typescript === true,
     frameworks,
-    testing: (opts.testing ?? []).map(t => t),
-    tools: (opts.tools ?? []).map(t => t),
-    libraries: (opts.libraries ?? []).map(l => l),
-    formats: (opts.formats ?? []).map(f => f),
-    extensions: (opts.extensions ?? []).map(e => e),
+    testing: (opts.testing ?? []).map(toFeatureLabel),
+    tools: (opts.tools ?? []).map(toFeatureLabel),
+    libraries: (opts.libraries ?? []).map(toFeatureLabel),
+    formats: (opts.formats ?? []).map(toFeatureLabel),
+    extensions: (opts.extensions ?? []).map(toFeatureLabel),
     lintCommand,
     configFile: null,
     source: 'detection-fallback'
