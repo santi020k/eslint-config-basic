@@ -10,7 +10,7 @@ const site = process.env.DOCS_SITE_URL ?? 'https://eslint.santi020k.com'
 const siteName = 'Santi020k ESLint'
 
 const siteDescription =
-  'DX-first ESLint 9/10+ flat-config docs for JavaScript and TypeScript teams using React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, Remix, and integrations.'
+  'Production-ready ESLint 9/10+ flat-config documentation for JavaScript and TypeScript teams using React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, Remix, and opt-in integrations.'
 
 const siteKeywords =
   'ESLint flat config, JavaScript linting, TypeScript linting, React ESLint, Next.js ESLint, Astro ESLint, Vue ESLint, Svelte ESLint, Solid ESLint, Angular ESLint, NestJS ESLint, Hono ESLint, Expo ESLint, Qwik ESLint, Remix ESLint, developer experience'
@@ -23,6 +23,16 @@ const websiteSchema = JSON.stringify({
   description: siteDescription,
   inLanguage: 'en-US',
   name: siteName,
+  potentialAction: {
+    '@type': 'SearchAction',
+    'query-input': 'required name=search_term_string',
+    target: `${site}/?q={search_term_string}`
+  },
+  publisher: {
+    '@type': 'Person',
+    name: 'Santiago Molina',
+    url: 'https://santi020k.com'
+  },
   url: site
 })
 
@@ -39,7 +49,9 @@ const softwareSchema = JSON.stringify({
   keywords: siteKeywords,
   license: 'https://github.com/santi020k/eslint-config-basic/blob/main/LICENSE',
   name: '@santi020k/eslint-config-basic',
+  packageManager: 'pnpm',
   programmingLanguage: ['JavaScript', 'TypeScript'],
+  runtimePlatform: 'Node.js',
   url: site
 })
 
@@ -72,6 +84,7 @@ export default defineConfig({
     ['meta', { name: 'application-name', content: siteName }],
     ['meta', { name: 'author', content: 'Santiago Molina' }],
     ['meta', { name: 'color-scheme', content: 'light dark' }],
+    ['meta', { name: 'format-detection', content: 'telephone=no' }],
     ['meta', { name: 'keywords', content: siteKeywords }],
     ['meta', { name: 'robots', content: 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1' }],
     ['meta', { name: 'theme-color', content: '#f8f6fb', media: '(prefers-color-scheme: light)' }],

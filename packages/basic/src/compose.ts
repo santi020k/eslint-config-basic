@@ -5,6 +5,7 @@ export type NormalizedStrictMode = 'recommended' | 'ci' | 'pedantic'
 
 export const normalizeStrictMode = (strict: boolean | NormalizedStrictMode | undefined): NormalizedStrictMode => {
   if (strict === true) return 'ci'
+
   if (strict === 'ci' || strict === 'pedantic') return strict
 
   return 'recommended'
@@ -39,11 +40,11 @@ export const applyStrictMode = (
     if (config.rules) {
       const strictRules = Object.fromEntries(
         Object.entries(config.rules).map(([key, value]) => [key, promoteRuleSeverity(value)])
-      ) as TSESLint.FlatConfig.Rules
+      )
 
       return { ...config, rules: strictRules }
     }
 
     return config
-  }) as FlatConfigArray
+  })
 }

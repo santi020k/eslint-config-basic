@@ -49,10 +49,11 @@ describe('v1.0.0 Roadmap Features', () => {
   it('should support v2 practical presets', () => {
     const appConfig = eslintConfig({ preset: Preset.App, detection: false })
     const ciConfig = eslintConfig({ preset: Preset.CI, detection: false })
+    const ciRuleValues = ciConfig.flatMap(entry => Object.values(entry.rules ?? {}))
 
     expect(extractConfigNames(appConfig)).toContain('eslint-config/prettier')
     expect(extractConfigNames(appConfig)).toContain('integrations/vitest')
-    expect(getEffectiveRuleValue(ciConfig, '@stylistic/quotes')).toEqual(['error', 'single'])
+    expect(ciRuleValues).not.toContain('warn')
   })
 
   it('should allow granular detection controls', () => {

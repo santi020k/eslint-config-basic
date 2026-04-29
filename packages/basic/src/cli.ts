@@ -8,11 +8,9 @@ import { detectProjectOptions } from './index.js'
 const getDefaultConfigFilename = (cwd: string): string => {
   const packageJsonPath = join(cwd, 'package.json')
 
-  // eslint-disable-next-line security/detect-non-literal-fs-filename
   if (!existsSync(packageJsonPath)) return 'eslint.config.mjs'
 
   try {
-    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8')) as { type?: string }
 
     return packageJson.type === 'module' ? 'eslint.config.js' : 'eslint.config.mjs'
@@ -25,7 +23,6 @@ const resolveConfigPath = (cwd: string): string => {
   const existingConfigPath = [
     'eslint.config.js',
     'eslint.config.mjs'
-    // eslint-disable-next-line security/detect-non-literal-fs-filename
   ].map(filename => join(cwd, filename)).find(p => existsSync(p))
 
   return existingConfigPath ?? join(cwd, getDefaultConfigFilename(cwd))
@@ -130,7 +127,6 @@ const getCliVersion = (): string => {
   const packageJsonPath = join(cliDir, '..', 'package.json')
 
   try {
-    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8')) as { version?: string }
 
     return packageJson.version ?? 'unknown'
@@ -161,7 +157,6 @@ const printUsage = () => {
 export const handleInit = (cwd: string = process.cwd()) => {
   const configPath = resolveConfigPath(cwd)
 
-  // eslint-disable-next-line security/detect-non-literal-fs-filename
   if (existsSync(configPath)) {
     console.warn(`⚠️  ${basename(configPath)} already exists. Skipping...`)
 
@@ -172,7 +167,6 @@ export const handleInit = (cwd: string = process.cwd()) => {
 
   const { configContent } = createConfigContent(cwd)
 
-  // eslint-disable-next-line security/detect-non-literal-fs-filename
   writeFileSync(configPath, configContent)
 
   console.log(`✅ Created ${basename(configPath)} with auto-detected settings!`)
@@ -185,7 +179,6 @@ export const handleUpdate = (cwd: string = process.cwd()) => {
 
   const { configPath, configContent } = createConfigContent(cwd)
 
-  // eslint-disable-next-line security/detect-non-literal-fs-filename
   writeFileSync(configPath, configContent)
 
   console.log(`✅ Updated ${basename(configPath)} with auto-detected settings!`)
@@ -214,7 +207,6 @@ export const handleExplain = (cwd: string = process.cwd()) => {
 export const handleDocs = (cwd: string = process.cwd()) => {
   const outputPath = join(cwd, 'ESLINT_STANDARDS.md')
 
-  // eslint-disable-next-line security/detect-non-literal-fs-filename
   writeFileSync(outputPath, createStandardsContent(cwd))
 
   console.log('✅ Generated ESLINT_STANDARDS.md')
@@ -222,6 +214,7 @@ export const handleDocs = (cwd: string = process.cwd()) => {
 
 export const handleMigrate = (cwd: string = process.cwd()) => {
   const configPath = resolveConfigPath(cwd)
+
   const suggestions = [
     'v1 to v2 migration suggestions:',
     '- Install only @santi020k/eslint-config-basic for the public config API.',
@@ -231,9 +224,7 @@ export const handleMigrate = (cwd: string = process.cwd()) => {
     '- Use basic-eslint explain to review what v2 detects before committing the migration.'
   ]
 
-  // eslint-disable-next-line security/detect-non-literal-fs-filename
   if (existsSync(configPath)) {
-    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const configContent = readFileSync(configPath, 'utf8')
 
     if (configContent.includes('@santi020k/eslint-config-') && !configContent.includes('frameworks:')) {
@@ -280,7 +271,9 @@ export const runCli = (argv: string[] = process.argv, cwd: string = process.cwd(
     })
   } else {
     console.error(`Unknown command: ${command}`)
+
     printUsage()
+
     process.exitCode = 1
   }
 }

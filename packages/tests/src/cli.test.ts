@@ -1,4 +1,3 @@
-/* eslint-disable security/detect-non-literal-fs-filename */
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
@@ -161,8 +160,7 @@ describe('CLI command UX', () => {
     const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     writeFileSync(
-      join(cwd, 'eslint.config.js'),
-      'import react from \'@santi020k/eslint-config-react\'\nexport default []'
+      join(cwd, 'eslint.config.js'), 'import react from \'@santi020k/eslint-config-react\'\nexport default []'
     )
 
     handleMigrate(cwd)

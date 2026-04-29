@@ -9,7 +9,6 @@ import {
   coreConfig,
   createCoreConfig,
   type DetectionOptions,
-  type DetectedFrameworkName,
   detectProjectOptions,
   type EslintConfigOptions,
   Extension,
@@ -45,6 +44,14 @@ export {
 } from './frameworks.js'
 
 // Re-export core types and utilities
+export type {
+  DetectedFrameworkName,
+  DetectionOptions,
+  EslintConfigOptions,
+  FlatConfigArray,
+  ImportedFramework,
+  StrictMode
+} from '@santi020k/eslint-config-core'
 export {
   coreConfig,
   createCoreConfig,
@@ -63,15 +70,6 @@ export {
   Setting,
   Testing,
   Tool
-} from '@santi020k/eslint-config-core'
-
-export type {
-  DetectionOptions,
-  DetectedFrameworkName,
-  EslintConfigOptions,
-  FlatConfigArray,
-  ImportedFramework,
-  StrictMode
 } from '@santi020k/eslint-config-core'
 
 // Re-export framework configs
@@ -118,6 +116,7 @@ const mergeArrayOption = <T>(
 ): T[] => {
   if (strategy === 'replace') {
     if (explicitValues) return toUniqueArray(explicitValues)
+
     if (presetValues) return toUniqueArray(presetValues)
 
     return toUniqueArray(detectedValues)
@@ -138,6 +137,7 @@ const mergeFrameworkOption = (
 ): NonNullable<EslintConfigOptions['frameworks']> => {
   if (strategy === 'replace') {
     if (explicitFrameworks) return { ...explicitFrameworks }
+
     if (presetFrameworks) return { ...presetFrameworks }
 
     return { ...detectedFrameworks }
@@ -251,10 +251,11 @@ const scopeConfigToProject = (
  */
 export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => {
   const detectRootDir = options?.detectRootDir
+
   const detected = applyDetectionControls(
-    detectProjectOptions(detectRootDir),
-    options?.detection
+    detectProjectOptions(detectRootDir), options?.detection
   )
+
   const preset = options?.preset ?? detected.preset
   const presetDefaults = preset ? resolvePreset(preset) : {}
   const optionMergeStrategy = options?.optionMergeStrategy ?? 'merge'
@@ -267,34 +268,19 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
   const {
     typescript = (options?.typescript ?? presetDefaults.typescript ?? detected.typescript ?? false),
     libraries = mergeArrayOption(
-      detected.libraries ?? [],
-      presetDefaults.libraries,
-      options?.libraries,
-      optionMergeStrategy
+      detected.libraries ?? [], presetDefaults.libraries, options?.libraries, optionMergeStrategy
     ),
     testing = mergeArrayOption(
-      detected.testing ?? [],
-      presetDefaults.testing,
-      options?.testing,
-      optionMergeStrategy
+      detected.testing ?? [], presetDefaults.testing, options?.testing, optionMergeStrategy
     ),
     formats = mergeArrayOption(
-      detected.formats ?? [],
-      presetDefaults.formats,
-      options?.formats,
-      optionMergeStrategy
+      detected.formats ?? [], presetDefaults.formats, options?.formats, optionMergeStrategy
     ),
     tools = mergeArrayOption(
-      detected.tools ?? [],
-      presetDefaults.tools,
-      options?.tools,
-      optionMergeStrategy
+      detected.tools ?? [], presetDefaults.tools, options?.tools, optionMergeStrategy
     ),
     extensions: configuredExtensions = mergeArrayOption(
-      detected.extensions ?? [],
-      presetDefaults.extensions,
-      options?.extensions,
-      optionMergeStrategy
+      detected.extensions ?? [], presetDefaults.extensions, options?.extensions, optionMergeStrategy
     ),
     settings = options?.settings ?? detected.settings ?? [],
     strict = getStrictMode(options?.strict, presetDefaults.strict),
@@ -302,16 +288,12 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     tsconfigRootDir = options?.tsconfigRootDir,
     nextMode = (options?.nextMode ?? presetDefaults.nextMode ?? detected.nextMode ?? NextMode.Pages),
     frameworks = mergeFrameworkOption(
-      frameworkDefaults,
-      presetDefaults.frameworks as Record<string, ImportedFramework> | undefined,
-      options?.frameworks as Record<string, ImportedFramework> | undefined,
-      optionMergeStrategy
+      frameworkDefaults, presetDefaults.frameworks, options?.frameworks, optionMergeStrategy
     )
   } = options ?? {}
 
   const extensions = applyStrictProfileDefaults(configuredExtensions, strict)
-
-  const resolvedFrameworks = frameworks ?? {}
+  const resolvedFrameworks = frameworks
 
   if ((resolvedFrameworks.next || resolvedFrameworks.expo || resolvedFrameworks.remix) && !resolvedFrameworks.react) {
     resolvedFrameworks.react = true
@@ -440,6 +422,7 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
   const projectConfigs = Object.entries(options?.projects ?? {}).flatMap(
     ([projectPath, projectOptions]) => {
       const projectRoot = join(detectRootDir ?? process.cwd(), projectPath)
+
       const scopedConfigs = eslintConfig({
         ...projectOptions,
         detectRootDir: projectOptions.detectRootDir ?? projectRoot,
