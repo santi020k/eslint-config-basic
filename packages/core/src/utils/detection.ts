@@ -30,11 +30,7 @@ const createDefaultOptions = (): EslintConfigOptions => ({
 })
 
 const dedupe = <T>(values: T[] = []): T[] => [...new Set(values)]
-
-const pathExists = (path: string): boolean => {
-  // eslint-disable-next-line security/detect-non-literal-fs-filename
-  return existsSync(path)
-}
+const pathExists = (path: string): boolean => existsSync(path)
 
 const collectAllDependencies = (pkg: PackageJson): DependencyMap => ({
   ...(pkg.dependencies ?? {}),
@@ -54,21 +50,25 @@ const detectFrameworks = (allDeps: DependencyMap, setRuntime: (runtime: Runtime)
 
   if (allDeps.next) {
     detected.push('next', 'react')
+
     setRuntime(Runtime.Universal)
   }
 
   if (allDeps.astro) {
     detected.push('astro')
+
     setRuntime(Runtime.Browser)
   }
 
   if (allDeps.react && !allDeps.next && !allDeps.expo && !allDeps['react-native']) {
     detected.push('react')
+
     setRuntime(Runtime.Browser)
   }
 
   if (allDeps['@nestjs/core']) {
     detected.push('nest')
+
     setRuntime(Runtime.Node)
   }
 
@@ -82,6 +82,7 @@ const detectFrameworks = (allDeps: DependencyMap, setRuntime: (runtime: Runtime)
 
   if (allDeps.vue) {
     detected.push('vue')
+
     setRuntime(Runtime.Browser)
   }
 
@@ -91,26 +92,31 @@ const detectFrameworks = (allDeps: DependencyMap, setRuntime: (runtime: Runtime)
 
   if (allDeps.svelte) {
     detected.push('svelte')
+
     setRuntime(Runtime.Browser)
   }
 
   if (allDeps['solid-js']) {
     detected.push('solid')
+
     setRuntime(Runtime.Browser)
   }
 
   if (allDeps['@angular/core']) {
     detected.push('angular')
+
     setRuntime(Runtime.Browser)
   }
 
   if (allDeps['@builder.io/qwik']) {
     detected.push('qwik')
+
     setRuntime(Runtime.Browser)
   }
 
   if (allDeps['@remix-run/react'] || allDeps['@remix-run/node']) {
     detected.push('remix')
+
     setRuntime(Runtime.Browser)
   }
 
@@ -129,15 +135,15 @@ const detectNextMode = (allDeps: DependencyMap, detectRootDir: string): NextMode
   return NextMode.Pages
 }
 
-const detectTypescript = (detectRootDir: string): boolean => {
-  return pathExists(join(detectRootDir, 'tsconfig.json')) || pathExists(join(detectRootDir, 'tsconfig.base.json'))
-}
+const detectTypescript = (detectRootDir: string): boolean => pathExists(join(detectRootDir, 'tsconfig.json')) || pathExists(join(detectRootDir, 'tsconfig.base.json'))
 
 const detectLibraries = (allDeps: DependencyMap): Library[] => {
   const libraries: Library[] = []
 
   if (allDeps.tailwindcss) libraries.push(Library.Tailwind)
+
   if (allDeps.i18next) libraries.push(Library.I18next)
+
   if (allDeps['@stencil/core']) libraries.push(Library.Stencil)
 
   if (
@@ -178,8 +184,11 @@ const detectTesting = (allDeps: DependencyMap): Testing[] => {
   const testing: Testing[] = []
 
   if (allDeps.vitest) testing.push(Testing.Vitest)
+
   if (allDeps.playwright || allDeps['@playwright/test']) testing.push(Testing.Playwright)
+
   if (allDeps.jest || allDeps['@jest/core'] || allDeps['jest-circus']) testing.push(Testing.Jest)
+
   if (allDeps.cypress) testing.push(Testing.Cypress)
 
   if (
@@ -220,6 +229,7 @@ const detectTools = (allDeps: DependencyMap): Tool[] => {
   const tools: Tool[] = []
 
   if (allDeps['@nestjs/swagger']) tools.push(Tool.Swagger)
+
   if (allDeps.prettier) tools.push(Tool.Prettier)
 
   return dedupe(tools)
@@ -279,19 +289,26 @@ export const detectProjectOptions = (detectRootDir: string = process.cwd()): Esl
   }
 
   try {
-    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const pkg = JSON.parse(readFileSync(packageJsonPath, 'utf-8')) as PackageJson
     const allDeps = collectAllDependencies(pkg)
     const setRuntime = createRuntimeSetter(options)
 
     options.detectedFrameworks = detectFrameworks(allDeps, setRuntime)
+
     options.nextMode = detectNextMode(allDeps, detectRootDir)
+
     options.typescript = detectTypescript(detectRootDir)
+
     options.libraries = detectLibraries(allDeps)
+
     options.testing = detectTesting(allDeps)
+
     options.formats = detectFormats(allDeps, detectRootDir)
+
     options.tools = detectTools(allDeps)
+
     options.extensions = dedupe(options.extensions)
+
     options.preset = resolvePreset(options)
 
     return options

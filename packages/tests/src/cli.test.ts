@@ -81,7 +81,7 @@ describe('CLI scaffolding', () => {
 
 describe('CLI command UX', () => {
   it('should print help text for --help', () => {
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     runCli(['node', 'basic-eslint', '--help'])
 
@@ -91,7 +91,7 @@ describe('CLI command UX', () => {
   })
 
   it('should print version for --version', () => {
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     runCli(['node', 'basic-eslint', '--version'])
 
@@ -102,8 +102,8 @@ describe('CLI command UX', () => {
 
   it('should set non-zero exit code for unknown command', () => {
     process.exitCode = undefined
-    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     runCli(['node', 'basic-eslint', 'unknown-command'])
 
@@ -124,7 +124,7 @@ describe('CLI command UX', () => {
         vitest: 'latest'
       }
     })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     handleExplain(cwd)
 
@@ -143,7 +143,7 @@ describe('CLI command UX', () => {
         next: '15.0.0'
       }
     })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     handleDocs(cwd)
 
@@ -157,7 +157,7 @@ describe('CLI command UX', () => {
 
   it('should report migration suggestions', () => {
     const cwd = createTempProject({ name: 'tmp-project', type: 'module' })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     writeFileSync(
       join(cwd, 'eslint.config.js'), 'import react from \'@santi020k/eslint-config-react\'\nexport default []'
