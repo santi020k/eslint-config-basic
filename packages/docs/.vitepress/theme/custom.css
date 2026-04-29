@@ -832,11 +832,17 @@ a {
   font-size: clamp(2.85rem, 9vw, 5.5rem);
   line-height: 0.92;
   letter-spacing: -0.06em;
+  background-size: 220% 220%;
+  animation:
+    santi-hero-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) backwards,
+    santi-gradient-shift 10s ease-in-out infinite;
 }
 
 .VPHero .text {
   font-size: clamp(1.2rem, 3vw, 2rem);
   line-height: 1.12;
+  animation: santi-hero-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: 80ms;
 }
 
 .VPHero .tagline {
@@ -845,6 +851,8 @@ a {
   font-size: clamp(1.04rem, 1.6vw, 1.24rem);
   line-height: 1.8;
   color: hsl(var(--s2k-ink-soft));
+  animation: santi-hero-in 0.86s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: 130ms;
 }
 
 .VPHero .tagline .santi-hero-tagline-lead {
@@ -869,6 +877,8 @@ html.dark .VPHero .tagline .santi-hero-tagline-lead {
 
 .VPHero .actions {
   padding-top: 1.6rem;
+  animation: santi-hero-in 0.92s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: 190ms;
 }
 
 .VPHero .image {
@@ -941,12 +951,31 @@ html.dark .santi-hero-kicker__badge {
 }
 
 .santi-hero-strip {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.7rem;
   margin-top: 1.5rem;
   padding: 1.05rem 1.2rem;
+  overflow: hidden;
+  animation: santi-hero-in 1s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: 240ms;
+}
+
+.santi-hero-strip::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 35%,
+    hsl(var(--s2k-glow) / 0.14) 50%,
+    transparent 65%
+  );
+  transform: translateX(-120%);
+  animation: santi-strip-sheen 6s ease-in-out infinite;
+  pointer-events: none;
 }
 
 .santi-hero-strip__label {
@@ -966,6 +995,15 @@ html.dark .santi-hero-kicker__badge {
   color: hsl(var(--s2k-brand));
   font-size: 0.9rem;
   font-weight: 600;
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.santi-hero-strip__item:hover {
+  transform: translateY(-1px);
+  background: hsl(var(--s2k-brand) / 0.14);
 }
 
 html.dark .santi-hero-strip__item {
@@ -977,6 +1015,8 @@ html.dark .santi-hero-strip__item {
   width: 100%;
   height: 100%;
   min-height: 22rem;
+  animation: santi-hero-float-in 1s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: 220ms;
 }
 
 .santi-hero-visual__mesh {
@@ -1005,6 +1045,52 @@ html.dark .santi-hero-strip__item {
       transparent 72%
     );
   filter: blur(22px);
+  animation: santi-halo-pulse 7s ease-in-out infinite alternate;
+}
+
+.santi-hero-visual__ring {
+  position: absolute;
+  inset: 9%;
+  border-radius: 50%;
+  border: 1px dashed hsl(var(--s2k-brand) / 0.26);
+  animation: santi-ring-spin 20s linear infinite;
+}
+
+.santi-hero-visual__chip {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.42rem 0.78rem;
+  border: 1px solid hsl(var(--s2k-line) / 0.56);
+  border-radius: 999px;
+  background: hsl(var(--s2k-surface) / 0.86);
+  box-shadow:
+    0 10px 28px hsl(var(--s2k-shadow) / 0.09),
+    inset 0 1px 0 hsl(0 0% 100% / 0.06);
+  color: hsl(var(--s2k-ink));
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.santi-hero-visual__chip--one {
+  top: 10%;
+  left: 4%;
+  animation: santi-chip-float-a 7s ease-in-out infinite;
+}
+
+.santi-hero-visual__chip--two {
+  top: 18%;
+  right: 2%;
+  animation: santi-chip-float-b 6.6s ease-in-out infinite;
+}
+
+.santi-hero-visual__chip--three {
+  right: 8%;
+  bottom: 8%;
+  animation: santi-chip-float-c 7.6s ease-in-out infinite;
 }
 
 .santi-hero-visual__logo {
@@ -1027,6 +1113,9 @@ html.dark .santi-hero-strip__item {
   object-fit: cover;
   object-position: center;
   transform: translate(-50%, -50%);
+  animation:
+    santi-logo-float 7s ease-in-out infinite,
+    santi-logo-glow 7s ease-in-out infinite alternate;
 }
 
 .santi-home-root {
@@ -1424,17 +1513,6 @@ html.dark .santi-hero-strip__item {
   }
 }
 
-@media (min-width: 960px) {
-  .Layout.has-sidebar .santi-site-footer {
-    padding-left: calc(var(--vp-sidebar-width) + 1rem);
-  }
-
-  .Layout.has-sidebar .santi-site-footer__container {
-    max-width: none;
-    margin-inline: 0;
-  }
-}
-
 @media (min-width: 768px) and (max-width: 959px) {
   .VPNavBar .wrapper {
     padding-inline: 1.25rem;
@@ -1569,6 +1647,19 @@ html.dark .santi-hero-strip__item {
     height: 21rem;
   }
 
+  .santi-hero-visual__chip {
+    font-size: 0.68rem;
+    padding: 0.35rem 0.64rem;
+  }
+
+  .santi-hero-visual__chip--one {
+    left: 2%;
+  }
+
+  .santi-hero-visual__chip--two {
+    right: -2%;
+  }
+
   .santi-hero-strip {
     padding: 0.9rem 1rem;
   }
@@ -1596,7 +1687,18 @@ html.dark .santi-hero-strip__item {
   .VPFeature,
   .santi-home-step,
   .santi-hero-kicker,
-  .santi-hero-visual__mesh {
+  .santi-hero-visual__mesh,
+  .VPHero .name,
+  .VPHero .text,
+  .VPHero .tagline,
+  .VPHero .actions,
+  .santi-hero-strip,
+  .santi-hero-strip::after,
+  .santi-hero-visual,
+  .santi-hero-visual__halo,
+  .santi-hero-visual__logo,
+  .santi-hero-visual__ring,
+  .santi-hero-visual__chip {
     animation: none !important;
     transition: none !important;
     transform: none !important;
@@ -1639,6 +1741,138 @@ html.dark .santi-hero-strip__item {
   to {
     opacity: 0.92;
     filter: blur(44px);
+  }
+}
+
+@keyframes santi-hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes santi-hero-float-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes santi-gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes santi-strip-sheen {
+  0%,
+  60%,
+  100% {
+    transform: translateX(-120%);
+  }
+
+  22%,
+  30% {
+    transform: translateX(120%);
+  }
+}
+
+@keyframes santi-halo-pulse {
+  from {
+    opacity: 0.64;
+    transform: scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes santi-logo-float {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) translateY(0);
+  }
+
+  50% {
+    transform: translate(-50%, -50%) translateY(-8px);
+  }
+}
+
+@keyframes santi-logo-glow {
+  from {
+    box-shadow:
+      0 18px 46px hsl(var(--s2k-shadow) / 0.08),
+      inset 0 1px 0 hsl(0 0% 100% / 0.05);
+  }
+
+  to {
+    box-shadow:
+      0 24px 56px hsl(var(--s2k-shadow) / 0.14),
+      0 0 0 1px hsl(var(--s2k-brand) / 0.2),
+      inset 0 1px 0 hsl(0 0% 100% / 0.08);
+  }
+}
+
+@keyframes santi-ring-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes santi-chip-float-a {
+  0%,
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+
+  50% {
+    transform: translateY(-8px) translateX(3px);
+  }
+}
+
+@keyframes santi-chip-float-b {
+  0%,
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+
+  50% {
+    transform: translateY(7px) translateX(-4px);
+  }
+}
+
+@keyframes santi-chip-float-c {
+  0%,
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+
+  50% {
+    transform: translateY(-6px) translateX(-3px);
   }
 }
 

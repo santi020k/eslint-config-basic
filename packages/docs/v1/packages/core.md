@@ -41,4 +41,4 @@ For most consumers, the main package is the right entry point. Import `core` dir
 - [Basic Package](/v1/packages/basic)
 - [Configuration](/v1/guide/configuration)
 - [API Reference](/v1/api/)
-- [Optionals Package](/v1/packages/optionals)
+- [Integrations Package](/v1/packages/integrations)

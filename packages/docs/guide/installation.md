@@ -78,7 +78,7 @@ Next.js, Expo, and Remix automatically include React rules when needed.
 | Remix | `@santi020k/eslint-config-basic` | `frameworks.remix: true` |
 | Expo | `@santi020k/eslint-config-basic` | `frameworks.expo: true` |
 
-## Optional Tooling
+## Integrations
 
 Optional integrations still use the same categories:
 

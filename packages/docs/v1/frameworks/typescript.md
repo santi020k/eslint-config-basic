@@ -53,5 +53,5 @@ export default eslintConfig({
 ## Related Pages
 
 - [Configuration](/v1/guide/configuration)
-- [Optional Tooling](/v1/tooling/overview)
+- [Integrations](/v1/tooling/overview)
 - [API Reference](/v1/api/)

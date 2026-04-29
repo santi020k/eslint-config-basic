@@ -31,6 +31,7 @@ export default eslintConfig() // Auto-detection enabled by default
 This is a monorepo containing multiple config packages.
 
 - [Full Architecture & Context](./llms-full.txt)
+- [Architecture Notes](./ARCHITECTURE.md)
 - [Project Overview](./README.md)
 - [CLAUDE.md](./CLAUDE.md) - Claude-specific AI agent guide
 - [.agent/skills/](./.agent/skills/) - Specialized workflows for agents

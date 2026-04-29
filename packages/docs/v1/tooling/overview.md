@@ -1,6 +1,6 @@
-# Optional Tooling Overview
+# Integrations Overview
 
-The main package can compose optional integrations from five categories:
+The main package can compose integrations from five categories:
 
 - Libraries
 - Testing
@@ -32,7 +32,7 @@ export default eslintConfig({
 
 ## Detection Notes
 
-Some optional integrations can be inferred from `package.json`, but the final configuration still stays explicit in the source you write or the file the CLI scaffolds for you.
+Some integrations can be inferred from `package.json`, but the final configuration still stays explicit in the source you write or the file the CLI scaffolds for you.
 
 ## Repository Examples
 
@@ -46,5 +46,5 @@ Some optional integrations can be inferred from `package.json`, but the final co
 
 - [Basic Package](/v1/packages/basic)
 - [Configuration](/v1/guide/configuration)
-- [Optionals Package](/v1/packages/optionals)
+- [Integrations Package](/v1/packages/integrations)
 - [CLI](/v1/guide/cli)

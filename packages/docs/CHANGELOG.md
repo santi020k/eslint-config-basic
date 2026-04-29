@@ -44,6 +44,7 @@
 - Expanded installation guidance to cover every supported framework package with package-manager tabs for `pnpm`, `npm`, `yarn`, and `bun`.
 - Updated CLI examples and package guides so the docs show consistent multi-package-manager commands instead of a single-manager path.
 - Clarified coverage across guide pages and API reference pages so framework support is easier to understand at a glance.
+- Added contributor governance docs for current docs vs `v1` archive ownership, plus CI/docs-script consistency expectations.
 
 ## 1.1.0
 

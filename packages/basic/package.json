@@ -36,7 +36,7 @@
     "@santi020k/eslint-config-hono": "workspace:^",
     "@santi020k/eslint-config-nest": "workspace:^",
     "@santi020k/eslint-config-next": "workspace:^",
-    "@santi020k/eslint-config-optionals": "workspace:^",
+    "@santi020k/eslint-config-integrations": "workspace:^",
     "@santi020k/eslint-config-qwik": "workspace:^",
     "@santi020k/eslint-config-react": "workspace:^",
     "@santi020k/eslint-config-remix": "workspace:^",

@@ -12,7 +12,7 @@ The API reference is generated from the source packages with TypeDoc and rendere
 - `@santi020k/eslint-config-basic`
 - `@santi020k/eslint-config-core`
 - `@santi020k/eslint-config-typescript`
-- `@santi020k/eslint-config-optionals`
+- `@santi020k/eslint-config-integrations`
 
 Framework config packages are still part of the generated internal API reference, but v2 application code should import from `@santi020k/eslint-config-basic`.
 

@@ -104,11 +104,11 @@ export const packageDocs = [
     docsPath: '/frameworks/remix.html'
   },
   {
-    packageName: '@santi020k/eslint-config-optionals',
+    packageName: '@santi020k/eslint-config-integrations',
     packagePath: 'packages/optionals',
-    title: 'Optionals package',
-    description: 'Optional libraries, tools, testing integrations, formats, and extensions.',
-    docsPath: '/packages/optionals.html'
+    title: 'Integrations package',
+    description: 'Libraries, tools, testing, formats, and extensions integrations.',
+    docsPath: '/packages/integrations.html'
   },
   {
     packageName: '@santi020k/playground',

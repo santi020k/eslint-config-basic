@@ -40,7 +40,7 @@ function docHref(path: string): string {
         <section>
           <p class="santi-site-footer__heading">Explore</p>
           <a :href="docHref('/frameworks/typescript')">Framework Guides</a>
-          <a :href="docHref('/tooling/overview')">Optional Tooling</a>
+          <a :href="docHref('/tooling/overview')">Integrations</a>
           <a :href="docHref('/packages/basic')">Package Docs</a>
           <a :href="docHref('/api/')">API Reference</a>
         </section>

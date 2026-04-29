@@ -16,7 +16,7 @@ The API reference is generated from the source packages with TypeDoc and rendere
 - `@santi020k/eslint-config-astro`
 - `@santi020k/eslint-config-expo`
 - `@santi020k/eslint-config-nest`
-- `@santi020k/eslint-config-optionals`
+- `@santi020k/eslint-config-integrations`
 - `@santi020k/eslint-config-basic`
 - `@santi020k/eslint-config-vue`
 - `@santi020k/eslint-config-svelte`

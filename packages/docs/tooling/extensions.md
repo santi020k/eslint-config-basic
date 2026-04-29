@@ -40,4 +40,4 @@ The `Extension.BestPractices` pack adds four quality rules that don't require an
 ## Repository Examples
 
 - Extension Playgrounds: [packages/playground/extensions](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/extensions)
-- Optionals Package Source: [packages/optionals](https://github.com/santi020k/eslint-config-basic/tree/main/packages/optionals)
+- Integrations Package Source: [packages/optionals](https://github.com/santi020k/eslint-config-basic/tree/main/packages/optionals)

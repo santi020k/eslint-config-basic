@@ -8,7 +8,7 @@ The main package composes the final flat config array from one public install: `
 - Let project detection enable TypeScript, frameworks, runtime, and supported tooling.
 - Make options explicit when you want stable, reviewable config.
 - Use booleans for bundled framework configs.
-- Use enums for optional tooling.
+- Use enums for integrations.
 - Use `optionMergeStrategy` when you want strict replace behavior.
 
 ## Core Composition Model
@@ -40,7 +40,7 @@ export default eslintConfig({
 | `Node` | Core + TypeScript + Node globals. |
 | `Browser` | Core + TypeScript + Browser globals. |
 | `Worker` | Core + TypeScript + worker globals. |
-| `All` | TypeScript plus all bundled optional integrations. |
+| `All` | TypeScript plus all bundled integrations. |
 
 Presets do not force a framework. Frameworks come from project detection or the `frameworks` option.
 
@@ -207,7 +207,7 @@ export default eslintConfig({
 - [Installation](/guide/installation)
 - [v1 to v2 Migration](/guide/migration-v1-to-v2)
 - [Framework Guides](/frameworks/typescript)
-- [Optional Tooling](/tooling/overview)
+- [Integrations](/tooling/overview)
 
 ## Schema
 

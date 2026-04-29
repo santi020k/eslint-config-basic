@@ -27,4 +27,4 @@ Browse the repository for the actual projects: [github.com/santi020k/eslint-conf
 
 - [Playgrounds](/v1/guide/playgrounds)
 - [Frameworks](/v1/frameworks/typescript)
-- [Optional Tooling](/v1/tooling/overview)
+- [Integrations](/v1/tooling/overview)

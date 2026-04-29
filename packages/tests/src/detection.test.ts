@@ -1,7 +1,7 @@
 import * as fs from 'node:fs'
 import { describe, expect, it, vi } from 'vitest'
 
-import { detectProjectOptions, Format, Library, NextMode, Runtime, Testing, Tool } from '@santi020k/eslint-config-basic'
+import { detectProjectOptions, Format, Library, NextMode, Preset, Runtime, Testing, Tool } from '@santi020k/eslint-config-basic'
 
 vi.mock('node:fs')
 
@@ -560,6 +560,36 @@ describe('detectProjectOptions', () => {
     const options = detectProjectOptions()
 
     expect(options.runtime).toBe(Runtime.Worker)
+  })
+
+  it('should not downgrade runtime when universal frameworks are combined with node frameworks', () => {
+    vi.mocked(fs.existsSync).mockImplementation(path => path.toString().includes('package.json'))
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      dependencies: {
+        next: 'latest',
+        '@nestjs/core': 'latest'
+      }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.runtime).toBe(Runtime.Node)
+    expect(options.preset).toBe(Preset.Basic)
+  })
+
+  it('should keep Expo runtime universal while still implying react', () => {
+    vi.mocked(fs.existsSync).mockImplementation(path => path.toString().includes('package.json'))
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      dependencies: { expo: 'latest' }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.detectedFrameworks).toContain('expo')
+    expect(options.detectedFrameworks).toContain('react')
+    expect(options.runtime).toBe(Runtime.Universal)
   })
 })
 

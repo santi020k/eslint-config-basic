@@ -44,12 +44,12 @@ export default eslintConfig({
 
 - SolidJS-specific framework rules.
 - A modular install path that keeps non-Solid projects lean.
-- Clean composition with TypeScript and optional integrations.
+- Clean composition with TypeScript and integrations.
 
 ## Notes
 
 - Solid projects often combine the framework package with TypeScript support.
-- Optional tooling such as Prettier, Vitest, Storybook, or Markdown can still be added through enums from the main package.
+- Integrations such as Prettier, Vitest, Storybook, or Markdown can still be added through enums from the main package.
 
 ## Repository Links
 
@@ -59,5 +59,5 @@ export default eslintConfig({
 ## Related Pages
 
 - [Configuration](/v1/guide/configuration)
-- [Optional Tooling](/v1/tooling/overview)
+- [Integrations](/v1/tooling/overview)
 - [Playgrounds](/v1/guide/playgrounds)

@@ -54,7 +54,7 @@ export default eslintConfig({
 ## Notes
 
 - Remix projects typically also enable TypeScript support.
-- Optional tooling such as Vitest, Tailwind, or Storybook can still be added through enums from the main package.
+- Integrations such as Vitest, Tailwind, or Storybook can still be added through enums from the main package.
 
 ## Repository Links
 
@@ -63,5 +63,5 @@ export default eslintConfig({
 ## Related Pages
 
 - [Configuration](/v1/guide/configuration)
-- [Optional Tooling](/v1/tooling/overview)
+- [Integrations](/v1/tooling/overview)
 - [Playgrounds](/v1/guide/playgrounds)

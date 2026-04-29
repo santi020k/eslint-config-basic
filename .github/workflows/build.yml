@@ -49,7 +49,7 @@ jobs:
         run: pnpm run test:coverage
       - name: Build docs (smoke check)
         if: matrix.node-version == '22.x'
-        run: pnpm run docs:build
+        run: pnpm run docs:sync-readmes && pnpm run docs:build
       - name: Dry-run publish check
         run: pnpm --filter @santi020k/eslint-config-basic publish --dry-run
           --no-git-checks

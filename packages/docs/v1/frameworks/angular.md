@@ -59,5 +59,5 @@ export default eslintConfig({
 ## Related Pages
 
 - [Configuration](/v1/guide/configuration)
-- [Optional Tooling](/v1/tooling/overview)
+- [Integrations](/v1/tooling/overview)
 - [Playgrounds](/v1/guide/playgrounds)

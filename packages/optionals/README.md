@@ -1,10 +1,10 @@
-# @santi020k/eslint-config-optionals
+# @santi020k/eslint-config-integrations
 
-Optional libraries, tools, testing integrations, formats, and extensions.
+Libraries, tools, testing, formats, and extensions integrations.
 
 This package is part of the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.
 
-- Docs: [Optionals package](https://eslint.santi020k.com/packages/optionals.html)
+- Docs: [Integrations package](https://eslint.santi020k.com/packages/integrations.html)
 - Repository: [santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)
 - Author: [santi020k](https://santi020k.com)
 

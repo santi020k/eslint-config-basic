@@ -44,6 +44,10 @@ watchEffect(() => {
       <div v-if="isHome" class="santi-hero-visual" aria-hidden="true">
         <div class="santi-hero-visual__mesh"></div>
         <div class="santi-hero-visual__halo"></div>
+        <div class="santi-hero-visual__ring"></div>
+        <div class="santi-hero-visual__chip santi-hero-visual__chip--one">Flat Config</div>
+        <div class="santi-hero-visual__chip santi-hero-visual__chip--two">Strict Mode</div>
+        <div class="santi-hero-visual__chip santi-hero-visual__chip--three">26 Integrations</div>
 
         <img
           alt=""
@@ -53,8 +57,12 @@ watchEffect(() => {
       </div>
     </template>
 
+    <template #doc-after>
+      <SiteFooter v-if="!isHome" />
+    </template>
+
     <template #layout-bottom>
-      <SiteFooter />
+      <SiteFooter v-if="isHome" />
     </template>
   </DefaultTheme.Layout>
 </template>

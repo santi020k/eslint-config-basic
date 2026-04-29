@@ -165,7 +165,7 @@ export default eslintConfig({
 | NestJS | `@santi020k/eslint-config-nest` | [Dedicated Page](/v1/frameworks/nest). |
 | Expo | `@santi020k/eslint-config-expo` | [Dedicated Page](/v1/frameworks/expo). Requires `react`. |
 
-## Optional Tooling
+## Integrations
 
 The optional integrations are grouped into five categories:
 
@@ -251,5 +251,5 @@ export default eslintConfig({
 - [CLI](/v1/guide/cli)
 - [Inspector](/v1/guide/inspector)
 - [Basic Package](/v1/packages/basic)
-- [Optionals Package](/v1/packages/optionals)
+- [Integrations Package](/v1/packages/integrations)
 - [Core Package](/v1/packages/core)

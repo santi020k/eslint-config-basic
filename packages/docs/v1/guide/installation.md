@@ -119,7 +119,7 @@ Other supported packages are documented in the [Framework guides](/v1/frameworks
 | Remix | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-remix`, `@santi020k/eslint-config-react` | React is recommended for Remix component rules. |
 | Expo | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-expo`, `@santi020k/eslint-config-react` | React is required. |
 
-## Optional Tooling Matrix
+## Integrations Matrix
 
 | Category | Configure Through | Documentation |
 | :--- | :--- | :--- |
@@ -176,4 +176,4 @@ export default eslintConfig({
 
 - [Getting Started](/v1/guide/getting-started)
 - [Frameworks](/v1/frameworks/typescript)
-- [Optional Tooling](/v1/tooling/overview)
+- [Integrations](/v1/tooling/overview)

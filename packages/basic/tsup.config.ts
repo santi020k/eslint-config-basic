@@ -23,7 +23,7 @@ export default defineConfig([
       'src/index.ts',
       'src/compose.ts',
       'src/frameworks.ts',
-      'src/optionals.ts',
+      'src/integrations.ts',
       'src/resolvers.ts',
     ],
   },

@@ -1,6 +1,6 @@
 import { applyStrictMode } from './compose.js'
 import { createDetectedFrameworkFlags } from './frameworks.js'
-import { getOptionalConfigs, getPrettierConfig } from './optionals.js'
+import { getIntegrationConfigs, getPrettierConfig } from './integrations.js'
 import { resolveFramework, resolvePreset } from './resolvers.js'
 
 import {
@@ -66,7 +66,7 @@ export type { DetectedFrameworkName, EslintConfigOptions, FlatConfigArray, Impor
 // Re-export framework configs
 export { tsConfig, typescriptConfig } from '@santi020k/eslint-config-typescript'
 
-// Re-export optionals
+// Re-export integrations
 export {
   bestPractices,
   cspell,
@@ -95,7 +95,7 @@ export {
   unicorn,
   vitest,
   yaml
-} from '@santi020k/eslint-config-optionals'
+} from '@santi020k/eslint-config-integrations'
 
 const toUniqueArray = <T>(values: T[]): T[] => [...new Set(values)]
 
@@ -141,9 +141,9 @@ const mergeFrameworkOption = (
 
 /**
  * Generates the ESLint configuration array, applying configurations
- * and optional settings based on the input configuration.
+ * and integration settings based on the input configuration.
  *
- * @param {EslintConfigOptions} options - Configuration and optional settings
+ * @param {EslintConfigOptions} options - Configuration and integration settings
  * @returns {FlatConfigArray} The final ESLint configuration array
  */
 export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => {
@@ -299,8 +299,8 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
       ] :
       []),
 
-    // Optionals
-    ...getOptionalConfigs(
+    // Integrations
+    ...getIntegrationConfigs(
       uniqueLibraries, uniqueTools, uniqueTesting, uniqueFormats, uniqueExtensions
     ),
 

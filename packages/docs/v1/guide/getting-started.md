@@ -57,7 +57,7 @@ export default eslintConfig()
 - Use [Configuration](/v1/guide/configuration) when you want to compose the config manually.
 - Use [CLI](/v1/guide/cli) when you want a generated starting file.
 - Use [Frameworks](/v1/frameworks/typescript) when you already know the application stack.
-- Use [Optional Tooling](/v1/tooling/overview) when the main need is integrating Tailwind, Vitest, Prettier, Markdown, Unicorn, or similar packages.
+- Use [Integrations](/v1/tooling/overview) when the main need is integrating Tailwind, Vitest, Prettier, Markdown, Unicorn, or similar packages.
 - Use [Packages](/v1/packages/basic) when you want to understand how the monorepo is organized.
 
 ## Canonical Package Entry Points

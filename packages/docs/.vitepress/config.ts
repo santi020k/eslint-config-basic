@@ -10,7 +10,7 @@ const site = process.env.DOCS_SITE_URL ?? 'https://eslint.santi020k.com'
 const siteName = 'Santi020k ESLint'
 
 const siteDescription =
-  'DX-first ESLint 9/10+ flat-config docs for JavaScript and TypeScript teams using React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, Remix, and optional tooling.'
+  'DX-first ESLint 9/10+ flat-config docs for JavaScript and TypeScript teams using React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, Remix, and integrations.'
 
 const siteKeywords =
   'ESLint flat config, JavaScript linting, TypeScript linting, React ESLint, Next.js ESLint, Astro ESLint, Vue ESLint, Svelte ESLint, Solid ESLint, Angular ESLint, NestJS ESLint, Hono ESLint, Expo ESLint, Qwik ESLint, Remix ESLint, developer experience'
@@ -155,7 +155,7 @@ export default defineConfig({
       ],
       '/v1/tooling/': [
         {
-          text: 'v1 Optional Tooling',
+          text: 'v1 Integrations',
           items: [
             { text: 'Overview', link: '/v1/tooling/overview' },
             { text: 'Libraries', link: '/v1/tooling/libraries' },
@@ -172,7 +172,7 @@ export default defineConfig({
           items: [
             { text: 'Basic', link: '/v1/packages/basic' },
             { text: 'Core', link: '/v1/packages/core' },
-            { text: 'Optionals', link: '/v1/packages/optionals' },
+            { text: 'Integrations', link: '/v1/packages/integrations' },
             { text: 'Playground', link: '/v1/packages/playground' },
             { text: 'Tests', link: '/v1/packages/tests' }
           ]
@@ -224,7 +224,7 @@ export default defineConfig({
       ],
       '/tooling/': [
         {
-          text: 'Optional Tooling',
+          text: 'Integrations',
           items: [
             { text: 'Overview', link: '/tooling/overview' },
             { text: 'Libraries', link: '/tooling/libraries' },
@@ -241,7 +241,7 @@ export default defineConfig({
           items: [
             { text: 'Basic', link: '/packages/basic' },
             { text: 'Core', link: '/packages/core' },
-            { text: 'Optionals', link: '/packages/optionals' },
+            { text: 'Integrations', link: '/packages/integrations' },
             { text: 'Playground', link: '/packages/playground' },
             { text: 'Tests', link: '/packages/tests' }
           ]

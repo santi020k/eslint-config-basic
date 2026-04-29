@@ -1,4 +1,4 @@
-// Re-export all optional configurations from categorized subdirectories
+// Re-export all integrations from categorized subdirectories
 
 // Tools
 export { cspell } from './tools/cspell.js'

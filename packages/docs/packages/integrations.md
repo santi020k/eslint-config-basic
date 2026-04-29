@@ -1,8 +1,8 @@
-# Optionals Package
+# Integrations Package
 
-Package: [`@santi020k/eslint-config-optionals`](https://www.npmjs.com/package/@santi020k/eslint-config-optionals)
+Package: [`@santi020k/eslint-config-integrations`](https://www.npmjs.com/package/@santi020k/eslint-config-integrations)
 
-This package contains the optional integrations consumed by the main package through the `libraries`, `testing`, `formats`, `tools`, and `extensions` options.
+This package contains the integrations consumed by the main package through the `libraries`, `testing`, `formats`, `tools`, and `extensions` options.
 
 ## Categories
 
@@ -14,7 +14,7 @@ This package contains the optional integrations consumed by the main package thr
 
 ## How to Use It
 
-Most projects use the main package and enable optionals through enums rather than importing `@santi020k/eslint-config-optionals` directly.
+Most projects use the main package and enable integrations through enums rather than importing `@santi020k/eslint-config-integrations` directly.
 
 ```js
 import { eslintConfig, Extension, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
@@ -34,10 +34,10 @@ export default eslintConfig({
 
 ## Related Pages
 
-- [Basic Package](/v1/packages/basic)
-- [Tooling Overview](/v1/tooling/overview)
-- [Libraries](/v1/tooling/libraries)
-- [Testing](/v1/tooling/testing)
-- [Formats](/v1/tooling/formats)
-- [Tools](/v1/tooling/tools)
-- [Extensions](/v1/tooling/extensions)
+- [Basic Package](/packages/basic)
+- [Integrations Overview](/tooling/overview)
+- [Libraries](/tooling/libraries)
+- [Testing](/tooling/testing)
+- [Formats](/tooling/formats)
+- [Tools](/tooling/tools)
+- [Extensions](/tooling/extensions)

@@ -18,8 +18,9 @@ const migrationHref = computed(() => withBase('/guide/migration-v1-to-v2'))
   <div class="santi-home-root">
     <p class="santi-home-stats" aria-hidden="true">
       <span class="santi-home-stats__item"><strong>13</strong> frameworks</span>
-      <span class="santi-home-stats__item"><strong>26</strong> optionals</span>
+      <span class="santi-home-stats__item"><strong>26</strong> integrations</span>
       <span class="santi-home-stats__item"><strong>ESLint</strong> 9 &amp; 10+</span>
+      <span class="santi-home-stats__item"><strong>DX-first</strong> defaults</span>
     </p>
 
     <p v-if="docsPrefix !== '/v1'" class="santi-home-migrate">
@@ -56,7 +57,7 @@ const migrationHref = computed(() => withBase('/guide/migration-v1-to-v2'))
       <div class="santi-home-catalog__head">
         <h2 id="santi-home-catalog-title" class="santi-home-catalog__title">Browse</h2>
         <p class="santi-home-catalog__sub">
-          Jump to guides, stacks, or generated reference—everything lives in this site.
+          Go from setup to rollout with docs written for engineering teams, maintainers, and CI owners.
         </p>
       </div>
 
@@ -76,7 +77,7 @@ const migrationHref = computed(() => withBase('/guide/migration-v1-to-v2'))
           <h3>Stacks</h3>
           <ul>
             <li><a :href="docHref('/frameworks/typescript')">Framework guides</a></li>
-            <li><a :href="docHref('/tooling/overview')">Optional tooling</a></li>
+            <li><a :href="docHref('/tooling/overview')">Integrations</a></li>
             <li><a :href="docHref('/packages/basic')">Package boundaries</a></li>
           </ul>
         </div>
