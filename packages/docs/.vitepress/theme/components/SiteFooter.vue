@@ -4,11 +4,12 @@ import { useData, useRoute, withBase } from 'vitepress'
 
 import { getDocsPrefix, type DocsPrefix, withDocsPrefix } from '../../nav-builders.js'
 
-const { site } = useData()
+const { frontmatter, site } = useData()
 const route = useRoute()
 
 const docsPrefix = computed<DocsPrefix>(() => getDocsPrefix(route.path))
 const editionLabel = computed(() => (docsPrefix.value === '/v1' ? 'v1 docs' : 'v2 docs'))
+const isHome = computed(() => frontmatter.value.layout === 'home')
 
 function docHref(path: string): string {
   return withBase(withDocsPrefix(docsPrefix.value, path))
@@ -16,7 +17,7 @@ function docHref(path: string): string {
 </script>
 
 <template>
-  <footer class="santi-site-footer">
+  <footer :class="['santi-site-footer', isHome ? 'santi-site-footer--home' : 'santi-site-footer--docs']">
     <div class="santi-site-footer__container">
       <section class="santi-site-footer__brand" aria-label="Project information">
         <p class="santi-site-footer__eyebrow">Documentation</p>

@@ -18,9 +18,7 @@ const migrationHref = computed(() => withBase('/guide/migration-v1-to-v2'))
   <div class="santi-home-root">
     <p class="santi-home-stats" aria-hidden="true">
       <span class="santi-home-stats__item"><strong>13</strong> frameworks</span>
-      <span class="santi-home-stats__dot" aria-hidden="true" />
       <span class="santi-home-stats__item"><strong>26</strong> optionals</span>
-      <span class="santi-home-stats__dot" aria-hidden="true" />
       <span class="santi-home-stats__item"><strong>ESLint</strong> 9 &amp; 10+</span>
     </p>
 
@@ -56,7 +54,7 @@ const migrationHref = computed(() => withBase('/guide/migration-v1-to-v2'))
 
     <section class="santi-home-catalog" aria-labelledby="santi-home-catalog-title">
       <div class="santi-home-catalog__head">
-        <h2 id="santi-home-catalog-title">Browse</h2>
+        <h2 id="santi-home-catalog-title" class="santi-home-catalog__title">Browse</h2>
         <p class="santi-home-catalog__sub">
           Jump to guides, stacks, or generated reference—everything lives in this site.
         </p>
