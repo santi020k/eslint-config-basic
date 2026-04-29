@@ -3,6 +3,7 @@ import type { TSESLint } from '@typescript-eslint/utils'
 
 export interface HonoConfigOptions {
   runtime?: Runtime
+  [key: string]: unknown
 }
 
 export const createHonoConfig = (

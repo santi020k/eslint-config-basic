@@ -24,6 +24,7 @@ export interface FrameworkOptions {
   hasSvelte?: boolean
   hasSolid?: boolean
   runtime?: Runtime
+  [key: string]: unknown
 }
 
 export type FrameworkFlags = Partial<Record<FrameworkName, true>>

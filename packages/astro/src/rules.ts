@@ -23,6 +23,8 @@ export interface AstroOptions {
 
   /** If true, includes SolidJS-specific sorting groups and JSX overrides */
   hasSolid?: boolean
+
+  [key: string]: unknown
 }
 
 /**
