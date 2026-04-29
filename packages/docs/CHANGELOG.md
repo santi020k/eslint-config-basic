@@ -39,6 +39,7 @@
 
 ### Documentation Updates
 
+- v2-focused homepage refresh: gradient migration banner, staggered section fades, hero mesh/grid/shine, v2 badge and tagline styling, and clearer paths to the migration guide alongside existing guides.
 - Refined the VitePress UI to stay closer to the `santi020k.me` visual language, including footer versioning, responsive navigation improvements, and stronger homepage presentation.
 - Expanded installation guidance to cover every supported framework package with package-manager tabs for `pnpm`, `npm`, `yarn`, and `bun`.
 - Updated CLI examples and package guides so the docs show consistent multi-package-manager commands instead of a single-manager path.

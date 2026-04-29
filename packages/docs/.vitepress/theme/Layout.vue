@@ -11,6 +11,7 @@ const isHome = computed(() => frontmatter.value.layout === 'home')
   <DefaultTheme.Layout>
     <template #home-hero-info-before>
       <div v-if="isHome" class="santi-hero-kicker">
+        <span class="santi-hero-kicker__badge" aria-label="Documentation edition">v2</span>
         <span class="santi-hero-kicker__dot" aria-hidden="true"></span>
         <span>Built for JavaScript and TypeScript teams</span>
       </div>
@@ -27,10 +28,12 @@ const isHome = computed(() => frontmatter.value.layout === 'home')
     </template>
 
     <template #home-hero-image>
-      <div v-if="isHome" class="santi-hero-visual">
-        <div class="santi-hero-visual__halo" aria-hidden="true"></div>
-        <div class="santi-hero-visual__ring santi-hero-visual__ring--outer" aria-hidden="true"></div>
-        <div class="santi-hero-visual__ring santi-hero-visual__ring--inner" aria-hidden="true"></div>
+      <div v-if="isHome" class="santi-hero-visual" aria-hidden="true">
+        <div class="santi-hero-visual__mesh"></div>
+        <div class="santi-hero-visual__grid"></div>
+        <div class="santi-hero-visual__halo"></div>
+        <div class="santi-hero-visual__ring santi-hero-visual__ring--outer"></div>
+        <div class="santi-hero-visual__ring santi-hero-visual__ring--inner"></div>
 
         <img
           alt="Santi020k ESLint emblem"
@@ -45,7 +48,7 @@ const isHome = computed(() => frontmatter.value.layout === 'home')
 
         <div class="santi-hero-note santi-hero-note--right">
           <p class="santi-hero-note__label">Scale</p>
-          <p class="santi-hero-note__body">12 frameworks, 26 integrations, docs, API, and playgrounds.</p>
+          <p class="santi-hero-note__body">13 framework guides, 26 integrations, API reference, and playgrounds.</p>
         </div>
       </div>
     </template>

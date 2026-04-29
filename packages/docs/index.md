@@ -1,12 +1,12 @@
 ---
 layout: home
 title: ESLint Flat Config Docs for JavaScript and TypeScript Teams
-description: DX-first ESLint 9/10+ docs for JavaScript, TypeScript, React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, Remix, and modern tooling.
+description: DX-first ESLint 9/10+ v2 docs for JavaScript, TypeScript, React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, Remix, and modern tooling.
 
 hero:
   name: Santi020k ESLint
   text: Flat config that scales from a starter repo to a real team
-  tagline: DX-first documentation for <code>@santi020k/eslint-config-basic</code>, a composable ESLint 9/10+ toolkit for JavaScript and TypeScript teams shipping React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, and Remix.
+  tagline: <strong class="santi-hero-tagline-lead">Version 2</strong> documentation for <code>@santi020k/eslint-config-basic</code> — a composable ESLint 9/10+ toolkit with clearer composition, stronger defaults, and the same DX-first philosophy for JavaScript and TypeScript teams shipping React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, and Remix.
   image:
     src: /cover.webp
     alt: Santi020k ESLint emblem
@@ -14,6 +14,9 @@ hero:
     - theme: brand
       text: Start with the guide
       link: /guide/getting-started
+    - theme: alt
+      text: v1 → v2 migration
+      link: /guide/migration-v1-to-v2
     - theme: alt
       text: Explore frameworks
       link: /frameworks/typescript
