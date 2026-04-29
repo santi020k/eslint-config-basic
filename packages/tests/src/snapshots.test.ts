@@ -44,6 +44,29 @@ const extractConfigNames = (config: Record<string, unknown>[]): string[] => conf
   .filter((name): name is string => typeof name === 'string')
   .sort()
 
+/**
+ * Extract selected rule entries (severity + options) to catch changes that
+ * won't appear in rule-name-only snapshots.
+ */
+const extractRuleEntries = (
+  config: Record<string, unknown>[],
+  ruleNames: string[]
+): Record<string, unknown> => {
+  const selected = new Map<string, unknown>()
+
+  for (const entry of config) {
+    const rules = entry.rules as Record<string, unknown> | undefined
+
+    if (!rules) continue
+
+    for (const ruleName of ruleNames) {
+      if (ruleName in rules) selected.set(ruleName, rules[ruleName])
+    }
+  }
+
+  return Object.fromEntries([...selected.entries()].sort(([a], [b]) => a.localeCompare(b)))
+}
+
 describe('Config Snapshots — Rule Names', () => {
   it('core config rules should match snapshot', () => {
     const rules = extractRuleNames(coreConfig as Record<string, unknown>[])
@@ -213,5 +236,40 @@ describe('Config Snapshots — Entry Names', () => {
     const names = extractConfigNames(remixConfig as Record<string, unknown>[])
 
     expect(names).toMatchSnapshot()
+  })
+})
+
+describe('Config Snapshots — Critical Rule Entries', () => {
+  it('core critical rule entries should match snapshot', () => {
+    const entries = extractRuleEntries(coreConfig as Record<string, unknown>[], [
+      'eqeqeq',
+      'no-undef',
+      'no-unused-vars',
+      'simple-import-sort/imports'
+    ])
+
+    expect(entries).toMatchSnapshot()
+  })
+
+  it('typescript critical rule entries should match snapshot', () => {
+    const entries = extractRuleEntries(typescriptConfig as Record<string, unknown>[], [
+      '@typescript-eslint/no-explicit-any',
+      '@typescript-eslint/no-unused-vars',
+      '@typescript-eslint/consistent-type-imports',
+      '@typescript-eslint/no-unsafe-assignment'
+    ])
+
+    expect(entries).toMatchSnapshot()
+  })
+
+  it('react critical rule entries should match snapshot', () => {
+    const entries = extractRuleEntries(reactConfig as Record<string, unknown>[], [
+      'react/jsx-pascal-case',
+      'react/self-closing-comp',
+      'react-hooks/rules-of-hooks',
+      'react-hooks/exhaustive-deps'
+    ])
+
+    expect(entries).toMatchSnapshot()
   })
 })

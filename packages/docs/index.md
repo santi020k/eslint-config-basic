@@ -5,35 +5,31 @@ description: DX-first ESLint 9/10+ v2 docs for JavaScript, TypeScript, React, Ne
 
 hero:
   name: Santi020k ESLint
-  text: Flat config architecture for modern JavaScript and TypeScript teams
-  tagline: <strong class="santi-hero-tagline-lead">Version 2</strong> documentation for <code>@santi020k/eslint-config-basic</code> — a composable ESLint 9/10+ system with explicit framework packages, optional tooling categories, migration guidance, and defaults tuned for real production repositories.
+  text: ESLint flat config that scales with your stack
+  tagline: <strong class="santi-hero-tagline-lead">v2</strong> — composable packages for ESLint 9/10+, optional tooling by category, and docs written for adoption—not reference dumps.
   image:
     src: /cover.webp
     alt: Santi020k ESLint emblem
   actions:
     - theme: brand
-      text: Start building with v2
+      text: Getting Started
       link: /guide/getting-started
     - theme: alt
-      text: Plan your migration
-      link: /guide/migration-v1-to-v2
+      text: Configuration
+      link: /guide/configuration
     - theme: alt
-      text: Explore framework docs
-      link: /frameworks/typescript
+      text: Migration (v1 → v2)
+      link: /guide/migration-v1-to-v2
 
 features:
-  - title: Explicit composition
-    details: Start with a minimal base, add framework packages intentionally, and keep config ownership visible in code review.
-  - title: Zero-config auto-detection
-    details: Detect TypeScript, runtimes, frameworks, and optional tooling from your repository so setup friction stays low.
-  - title: 13 framework guides
-    details: Dedicated setup docs for React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, Remix, and TypeScript.
-  - title: 26 optional integrations
-    details: Tailwind CSS, Vitest, Playwright, Markdown, Prettier, Storybook, i18next, and more documented with one model.
-  - title: Strict mode for teams
-    details: Promote warnings to errors for cleaner CI pipelines, stronger review signals, and fewer style debates.
-  - title: Migration-first UX
-    details: Move from v1 to v2 with direct mapping guidance and docs built around adoption workflows, not just file lists.
+  - title: Compose on purpose
+    details: Intentional layers—base, frameworks, optionals—so reviews stay readable.
+  - title: Auto-detection
+    details: TypeScript, runtimes, and tooling inferred from your repo when you want it.
+  - title: Framework docs that match reality
+    details: One guide per stack—React, Next.js, Vue, Astro, and nine more—not generic snippets.
+  - title: Built for CI and teams
+    details: Strict mode, playgrounds to validate choices, and migration paths that skip guesswork.
 ---
 
 <HomePageSections />

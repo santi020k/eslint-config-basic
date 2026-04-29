@@ -272,6 +272,24 @@ describe('generateAgentSkills', () => {
     expect(result.written).toHaveLength(3)
   })
 
+  it('should generate files for every configured AGENT_TARGET marker folder', async () => {
+    const cwd = createTempProject({ name: 'tmp-project' })
+
+    for (const target of AGENT_TARGETS) {
+      mkdirSync(join(cwd, target.markerFolder), { recursive: true })
+    }
+
+    const result = await generateAgentSkills({ cwd })
+
+    for (const target of AGENT_TARGETS) {
+      const expectedPath = target.skillSubdir === '.' ?
+        join(cwd, target.markerFolder, target.skillFile) :
+        join(cwd, target.markerFolder, target.skillSubdir, target.skillFile)
+
+      expect(result.written).toContain(expectedPath)
+    }
+  })
+
   it('should skip existing files when force is false', async () => {
     const cwd = createTempProject({ name: 'tmp-project' })
     const skillsDir = join(cwd, '.agent', 'skills')
