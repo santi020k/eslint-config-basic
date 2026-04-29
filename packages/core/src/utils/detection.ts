@@ -246,6 +246,26 @@ const resolvePreset = (options: EslintConfigOptions): Preset => {
 }
 
 /**
+ * Internal detection helpers exposed for focused unit tests.
+ * Do not use these in application code.
+ */
+export const __detectionInternals = {
+  collectAllDependencies,
+  createDefaultOptions,
+  createRuntimeSetter,
+  dedupe,
+  detectFormats,
+  detectFrameworks,
+  detectLibraries,
+  detectNextMode,
+  detectTesting,
+  detectTools,
+  detectTypescript,
+  pathExists,
+  resolvePreset
+}
+
+/**
  * Automatically detects project settings based on package.json content
  * @param detectRootDir Root directory used for dependency/file detection (defaults to process.cwd())
  * @returns Detected ESLint configuration options

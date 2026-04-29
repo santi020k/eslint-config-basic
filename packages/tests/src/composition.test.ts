@@ -359,6 +359,35 @@ describe('eslintConfig Function', () => {
       }
     })).toThrow(/Invalid framework config/)
   })
+
+  it('should resolve framework modules with default config arrays', () => {
+    const config = eslintConfig({
+      frameworks: {
+        react: {
+          default: [{ name: 'default-export-react', rules: {} }]
+        }
+      }
+    })
+
+    expect(extractConfigNames(config)).toContain('default-export-react')
+  })
+
+  it('should resolve framework modules with default factory exports', () => {
+    const config = eslintConfig({
+      frameworks: {
+        hono: {
+          default: (options?: Record<string, unknown>) => [
+            {
+              name: `default-factory-hono-${String(options?.runtime ?? 'none')}`,
+              rules: {}
+            }
+          ]
+        }
+      }
+    })
+
+    expect(extractConfigNames(config).some(name => name.startsWith('default-factory-hono-'))).toBe(true)
+  })
 })
 
 describe('Framework Composition — remaining frameworks', () => {

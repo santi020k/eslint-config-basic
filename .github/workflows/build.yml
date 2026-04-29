@@ -7,6 +7,22 @@ on:
     branches: [ main ]
 
 jobs:
+  contracts:
+    name: Config Contracts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install pnpm
+        uses: pnpm/action-setup@v5
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22.x
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - name: Run contract and invariant tests
+        run: pnpm --filter @santi020k/eslint-config-tests exec vitest run src/contracts.test.ts src/invariants.test.ts --maxWorkers=1
+
   build:
     runs-on: ubuntu-latest
 
@@ -33,8 +49,9 @@ jobs:
         uses: actions/cache@v5
         with:
           path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          key: ${{ runner.os }}-turbo-${{ matrix.node-version }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}
           restore-keys: |
+            ${{ runner.os }}-turbo-${{ matrix.node-version }}-
             ${{ runner.os }}-turbo-
       - run: pnpm install --frozen-lockfile
       - name: Spellcheck

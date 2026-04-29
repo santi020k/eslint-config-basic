@@ -24,6 +24,8 @@
     "lint:repo": "eslint . --no-warn-ignored",
     "lint:fix": "pnpm run lint:repo:fix && turbo run lint:fix",
     "lint:repo:fix": "eslint . --fix --no-warn-ignored",
+    "lint:changed": "node scripts/lint-changed-files.mjs",
+    "lint:changed:fix": "node scripts/lint-changed-files.mjs --fix",
     "lint:spell": "cspell \"**\" --gitignore --cache --show-suggestions --show-context",
     "lint:knip": "knip",
     "test": "pnpm run build && pnpm --filter @santi020k/eslint-config-tests run test",

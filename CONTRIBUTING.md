@@ -150,6 +150,8 @@ pnpm run inspector  # Visual ESLint config inspector
 
 Full API documentation is available at [santi020k.github.io/eslint-config-basic](https://santi020k.github.io/eslint-config-basic/).
 
+Documentation governance for current docs versus the `v1` archive is defined in `packages/docs/DOCS_GOVERNANCE.md`.
+
 ## Commit Conventions
 
 This project uses [Conventional Commits](https://www.conventionalcommits.org/). Use one of the following prefixes:
@@ -183,7 +185,8 @@ npx cz
 
 3. Write clear, descriptive commit messages following conventional commits.
 4. Update documentation whenever you add or change public framework packages, optional integrations, or user-facing setup flows. This includes the relevant VitePress pages in `packages/docs/`, the root `README.md`, and package-level `README.md` files when applicable.
-5. Add tests for new functionality.
+5. Follow `packages/docs/DOCS_GOVERNANCE.md` for current docs vs `v1` archive policy when docs are touched.
+6. Add tests for new functionality.
 
 ## Questions?
 
