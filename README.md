@@ -32,6 +32,8 @@ This project follows a **DX-First & Stability-First** mission. We prioritize a s
 - **⚡ Lazy Loading**: Framework-specific configurations are loaded only when needed.
 - **🛡️ Strict Mode**: Opt-in `strict: true` to promote all warnings to errors, perfect for CI/CD and maintaining high code standards.
 - **🌐 Smart Runtime Support**: Built-in support for Node.js, Browser, Worker, or Universal runtimes with appropriate globals and rules.
+- **🧭 Explainable Detection**: `basic-eslint explain` shows exactly which frameworks, runtimes, and integrations were detected.
+- **🏗️ Monorepo Projects**: Scope presets and integrations per workspace folder with the `projects` option.
 - **💅 Prettier Integrated**: Seamlessly integrated with Prettier out of the box for consistent code formatting.
 - **🤖 Agent Skill Generator (Beta)**: Automatically generates tailored ESLint standards for AI agents (Cursor, Claude, Copilot, etc.) based on your active config. A non-breaking, opt-in feature to boost AI assistance.
 - **🧩 Extensive Plugin Support**: Tailored rules for Tailwind CSS, Vitest, Testing Library, Storybook, TanStack (Query/Router), and more.
@@ -58,6 +60,12 @@ export default eslintConfig()
 
 Optional integrations are loaded only when you enable them. A Node-only project can use the base config without installing unrelated peer packages such as Storybook, GraphQL, Cypress, or Testing Library.
 
+Inspect what v2 auto-detected:
+
+```bash
+npx @santi020k/eslint-config-basic explain
+```
+
 ### Comprehensive Example
 
 Here is an example with many features activated. Note that many of these are automatically detected if the corresponding packages are in your `package.json`.
@@ -72,7 +80,7 @@ export default eslintConfig({
   typescript: true,
 
   // Strict mode: warnings become errors
-  strict: true,
+  strict: 'ci',
 
   // Frameworks (imports are lazy-loaded)
   frameworks: {
@@ -86,6 +94,26 @@ export default eslintConfig({
   formats: [Format.Mdx, Format.Jsonc, Format.Graphql],
   tools: [Tool.Prettier, Tool.Cspell],
   extensions: [Extension.Unicorn, Extension.Sonarjs, Extension.Perfectionist]
+})
+```
+
+### Monorepo Example
+
+```js
+import { eslintConfig, Preset, Runtime } from '@santi020k/eslint-config-basic'
+
+export default eslintConfig({
+  preset: Preset.Monorepo,
+  projects: {
+    'apps/web': {
+      preset: Preset.App,
+      frameworks: { next: true }
+    },
+    'apps/api': {
+      preset: Preset.Library,
+      runtime: Runtime.Node
+    }
+  }
 })
 ```
 
@@ -120,6 +148,15 @@ npx @santi020k/eslint-config-basic generate-skill
 ```
 
 *Note: Use `--force` to overwrite existing skill files.*
+
+## v2 Migration Helpers
+
+```bash
+npx @santi020k/eslint-config-basic migrate
+npx @santi020k/eslint-config-basic docs
+```
+
+`migrate` reports v1-to-v2 changes, and `docs` generates a project-local `ESLINT_STANDARDS.md` summary.
 
 ## Development
 

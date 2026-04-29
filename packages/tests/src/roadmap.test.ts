@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import { extractRuleNames, getEffectiveRuleValue } from './test-utils.js'
+import { extractConfigNames, extractRuleNames, getEffectiveRuleValue } from './test-utils.js'
 
-import { eslintConfig, Extension, Library, Tool } from '@santi020k/eslint-config-basic'
+import { eslintConfig, Extension, Library, Preset, Runtime, Testing, Tool } from '@santi020k/eslint-config-basic'
 
 describe('v1.0.0 Roadmap Features', () => {
   it('should apply strict mode (warnings to errors)', () => {
@@ -44,5 +44,56 @@ describe('v1.0.0 Roadmap Features', () => {
     const rules = extractRuleNames(config)
 
     expect(rules).toContain('jsdoc/check-access')
+  })
+
+  it('should support v2 practical presets', () => {
+    const appConfig = eslintConfig({ preset: Preset.App, detection: false })
+    const ciConfig = eslintConfig({ preset: Preset.CI, detection: false })
+
+    expect(extractConfigNames(appConfig)).toContain('eslint-config/prettier')
+    expect(extractConfigNames(appConfig)).toContain('integrations/vitest')
+    expect(getEffectiveRuleValue(ciConfig, '@stylistic/quotes')).toEqual(['error', 'single'])
+  })
+
+  it('should allow granular detection controls', () => {
+    const config = eslintConfig({
+      detection: {
+        libraries: false,
+        testing: false
+      },
+      libraries: [Library.Tailwind],
+      testing: [Testing.Vitest],
+      runtime: Runtime.Browser
+    })
+    const names = extractConfigNames(config)
+
+    expect(names).toContain('integrations/vitest')
+    expect(names.some(name => name.toLowerCase().includes('tailwind'))).toBe(true)
+  })
+
+  it('should support project-scoped monorepo configs', () => {
+    const config = eslintConfig({
+      detection: false,
+      projects: {
+        'apps/web': {
+          typescript: false,
+          testing: [Testing.Vitest]
+        }
+      }
+    })
+
+    expect(config.some(entry => (
+      entry.name === 'integrations/vitest' &&
+      Array.isArray(entry.files) &&
+      entry.files.some(file => typeof file === 'string' && file.startsWith('apps/web/'))
+    ))).toBe(true)
+  })
+
+  it('should support pedantic strict mode', () => {
+    const config = eslintConfig({ strict: 'pedantic' })
+    const rules = extractRuleNames(config)
+
+    expect(rules).toContain('no-console')
+    expect(getEffectiveRuleValue(config, '@stylistic/quotes')).toEqual(['error', 'single'])
   })
 })

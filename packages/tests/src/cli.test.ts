@@ -10,7 +10,7 @@ import {
   generateAgentSkills,
   generateSkillContent
 } from '../../basic/src/agent-skill-generator.js'
-import { handleInit, handleUpdate, runCli } from '../../basic/src/cli.js'
+import { handleDocs, handleExplain, handleInit, handleMigrate, handleUpdate, runCli } from '../../basic/src/cli.js'
 
 const tempDirs: string[] = []
 
@@ -113,6 +113,65 @@ describe('CLI command UX', () => {
     errorSpy.mockRestore()
     logSpy.mockRestore()
     process.exitCode = undefined
+  })
+
+  it('should explain detected project settings', () => {
+    const cwd = createTempProject({
+      name: 'tmp-project',
+      dependencies: {
+        react: '19.0.0'
+      },
+      devDependencies: {
+        vitest: 'latest'
+      }
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    handleExplain(cwd)
+
+    const output = logSpy.mock.calls.flat().join('\n')
+
+    expect(output).toContain('ESLint Basic detected configuration:')
+    expect(output).toContain('Frameworks: react')
+    expect(output).toContain('Testing: vitest')
+    logSpy.mockRestore()
+  })
+
+  it('should generate human-readable ESLint standards docs', () => {
+    const cwd = createTempProject({
+      name: 'tmp-project',
+      dependencies: {
+        next: '15.0.0'
+      }
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    handleDocs(cwd)
+
+    const content = readFileSync(join(cwd, 'ESLINT_STANDARDS.md'), 'utf8')
+
+    expect(content).toContain('# ESLint Standards')
+    expect(content).toContain('Frameworks: next, react')
+    expect(logSpy).toHaveBeenCalledWith('✅ Generated ESLINT_STANDARDS.md')
+    logSpy.mockRestore()
+  })
+
+  it('should report migration suggestions', () => {
+    const cwd = createTempProject({ name: 'tmp-project', type: 'module' })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    writeFileSync(
+      join(cwd, 'eslint.config.js'),
+      'import react from \'@santi020k/eslint-config-react\'\nexport default []'
+    )
+
+    handleMigrate(cwd)
+
+    const output = logSpy.mock.calls.flat().join('\n')
+
+    expect(output).toContain('v1 to v2 migration suggestions:')
+    expect(output).toContain('framework booleans')
+    logSpy.mockRestore()
   })
 })
 

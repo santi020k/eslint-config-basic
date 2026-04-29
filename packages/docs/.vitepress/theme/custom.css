@@ -1648,28 +1648,70 @@ html.dark .santi-hero-strip__item {
   font-weight: 600;
 }
 
-.vp-doc div[class*='language-'] .copy {
-  top: 0.52rem;
-  right: 0.52rem;
-  width: 1.95rem;
-  height: 1.95rem;
-  padding: 0;
-  border: 1px solid hsl(var(--s2k-line) / 0.52);
-  border-radius: 0.62rem;
-  background: hsl(var(--s2k-surface) / 0.92);
-  backdrop-filter: blur(8px);
+.vp-doc div[class*='language-'] button.copy {
+  top: 0.58rem;
+  right: 0.58rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  min-height: 2rem;
+  padding: 0.34rem;
+  border: 1px solid hsl(var(--s2k-line) / 0.5);
+  border-radius: 0.5rem;
+  background: hsl(var(--s2k-surface) / 0.2);
+  color: hsl(var(--s2k-ink-muted));
+  backdrop-filter: blur(10px);
+  opacity: 1;
   transition:
-    border-color 0.18s var(--s2k-ease-out),
-    background-color 0.18s var(--s2k-ease-out),
-    transform 0.18s var(--s2k-ease-out),
-    box-shadow 0.18s var(--s2k-ease-out);
+    color 0.15s var(--s2k-ease-out),
+    border-color 0.15s var(--s2k-ease-out),
+    background-color 0.15s var(--s2k-ease-out),
+    transform 0.15s var(--s2k-ease-out);
+  z-index: 3;
 }
 
-.vp-doc div[class*='language-'] .copy:hover {
-  border-color: hsl(var(--s2k-brand) / 0.35);
-  background: hsl(var(--s2k-brand-soft) / 0.84);
-  box-shadow: 0 8px 22px hsl(var(--s2k-shadow) / 0.16);
-  transform: translateY(-1px);
+.vp-doc div[class*='language-'] button.copy::before,
+.vp-doc div[class*='language-'] button.copy::after {
+  width: 14px;
+  height: 14px;
+  background-color: currentcolor;
+}
+
+.vp-doc div[class*='language-'] > span.lang {
+  top: 0.74rem;
+  right: 3.05rem;
+  z-index: 2;
+  max-width: calc(100% - 7.5rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border: 1px solid hsl(var(--s2k-line) / 0.44);
+  border-radius: 999px;
+  background: hsl(var(--s2k-surface) / 0.78);
+  color: hsl(var(--s2k-ink-muted));
+  padding: 0.16rem 0.5rem;
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.vp-doc div[class*='language-']:hover button.copy,
+.vp-doc div[class*='language-'] button.copy:hover {
+  border-color: hsl(var(--s2k-brand) / 0.3);
+  background: hsl(var(--s2k-surface));
+  color: hsl(var(--s2k-brand));
+  transform: scale(1.05);
+}
+
+.vp-doc div[class*='language-'] button.copy:active {
+  transform: scale(0.95);
+}
+
+.vp-doc div[class*='language-'] button.copy.copied {
+  color: hsl(142 58% 52%);
+  border-color: hsl(142 58% 52% / 0.5);
+  background: hsl(142 58% 52% / 0.1);
 }
 
 .vp-doc div[class*='language-'] + p,
@@ -2147,6 +2189,10 @@ html.dark .VPSidebarItem.level-5.is-active > .item .link {
 
   .vp-doc div[class*='language-'] code {
     font-size: 0.82rem;
+  }
+
+  .vp-doc div[class*='language-'] > span.lang {
+    display: none;
   }
 
   .santi-hero-kicker {

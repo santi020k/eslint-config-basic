@@ -10,6 +10,8 @@ The main package composes the final flat config array from one public install: `
 - Use booleans for bundled framework configs.
 - Use enums for integrations.
 - Use `optionMergeStrategy` when you want strict replace behavior.
+- Use `detection` for granular auto-detection control.
+- Use `projects` for package-aware monorepo configuration.
 
 ## Core Composition Model
 
@@ -40,6 +42,10 @@ export default eslintConfig({
 | `Node` | Core + TypeScript + Node globals. |
 | `Browser` | Core + TypeScript + Browser globals. |
 | `Worker` | Core + TypeScript + worker globals. |
+| `Library` | TypeScript package/library defaults with Prettier and best-practice rules. |
+| `App` | Browser app defaults with TypeScript, Prettier, and Vitest. |
+| `CI` | Universal TypeScript defaults with CI strict severities. |
+| `Monorepo` | Mixed-workspace defaults for package-aware configs. |
 | `All` | TypeScript plus all bundled integrations. |
 
 Presets do not force a framework. Frameworks come from project detection or the `frameworks` option.
@@ -89,6 +95,28 @@ List options (`libraries`, `testing`, `formats`, `tools`, `extensions`) and `fra
 
 Use `autoFrameworks: false` when you want manual framework control only (no detected framework auto-enable).
 
+## Detection Controls
+
+Use `detection: false` to disable all auto-detection, or pass an object to disable specific categories while keeping the rest automatic.
+
+```js
+import { eslintConfig, Library, Testing } from '@santi020k/eslint-config-basic'
+
+export default eslintConfig({
+  detection: {
+    frameworks: true,
+    libraries: false,
+    testing: false,
+    formats: true,
+    tools: true
+  },
+  libraries: [Library.Tailwind],
+  testing: [Testing.Vitest]
+})
+```
+
+Supported detection keys are `typescript`, `frameworks`, `libraries`, `testing`, `formats`, `tools`, `runtime`, and `nextMode`.
+
 ## Detection and Root Directories
 
 - `detectRootDir`: root used to detect dependencies, framework folders, and project files.
@@ -104,6 +132,30 @@ export default eslintConfig({
   tsconfigRootDir: new URL('.', import.meta.url).pathname
 })
 ```
+
+## Monorepo Projects
+
+Use `projects` to scope package-specific presets and integrations to workspace folders.
+
+```js
+import { eslintConfig, Preset, Runtime } from '@santi020k/eslint-config-basic'
+
+export default eslintConfig({
+  preset: Preset.Monorepo,
+  projects: {
+    'apps/web': {
+      preset: Preset.App,
+      frameworks: { next: true }
+    },
+    'apps/api': {
+      preset: Preset.Library,
+      runtime: Runtime.Node
+    }
+  }
+})
+```
+
+Each project key is treated as a folder relative to the repo root. The generated project entries are scoped to that folder.
 
 ## Full Example
 
@@ -188,7 +240,13 @@ export default eslintConfig({
 })
 ```
 
-Strict mode promotes warning severities to errors across the composed config.
+Strict mode accepts profiles:
+
+| Value | Behavior |
+| :--- | :--- |
+| `false` or `'recommended'` | Keep recommended rule severities. |
+| `true` or `'ci'` | Promote warnings to errors. |
+| `'pedantic'` | Promote warnings and enable built-in best-practice rules. |
 
 ## Settings
 

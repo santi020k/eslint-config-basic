@@ -12,6 +12,8 @@ The internal architecture is still modular, but application projects no longer n
 | Import framework configs from `@santi020k/eslint-config-react`, `@santi020k/eslint-config-next`, etc. | Use `frameworks.<name>: true`. |
 | Detected frameworks were informational. | Detected frameworks are enabled by `eslintConfig()` by default. |
 | Next.js and Expo required an explicit React config. | Next.js, Expo, and Remix automatically include React rules. |
+| Manual inspection required reading generated config. | `basic-eslint explain` prints detected v2 inputs. |
+| Migration was fully manual. | `basic-eslint migrate` reports v1-to-v2 changes to make. |
 
 ## Package Changes
 
@@ -95,14 +97,82 @@ export default eslintConfig({
   optionMergeStrategy: 'merge',
 
   // disable if you want framework activation to be manual-only
-  autoFrameworks: true
+  autoFrameworks: true,
+
+  // disable all detection or tune specific detection categories
+  detection: {
+    frameworks: true,
+    libraries: true,
+    testing: true,
+    formats: true,
+    tools: true,
+    runtime: true
+  }
 })
+```
+
+## New v2 Presets
+
+V2 adds practical presets for common release profiles:
+
+```js
+import { eslintConfig, Preset } from '@santi020k/eslint-config-basic'
+
+export default eslintConfig({
+  preset: Preset.App
+})
+```
+
+Use `Preset.Library` for published packages, `Preset.App` for browser apps, `Preset.CI` for stricter CI defaults, and `Preset.Monorepo` as a root baseline for workspace repos.
+
+## Monorepo Projects
+
+V2 can scope subproject config to workspace folders:
+
+```js
+import { eslintConfig, Preset, Runtime } from '@santi020k/eslint-config-basic'
+
+export default eslintConfig({
+  preset: Preset.Monorepo,
+  projects: {
+    'apps/web': {
+      preset: Preset.App,
+      frameworks: { next: true }
+    },
+    'apps/api': {
+      preset: Preset.Library,
+      runtime: Runtime.Node
+    }
+  }
+})
+```
+
+Each project entry gets its own detection root by default and the generated config entries are scoped to that folder.
+
+## Migration CLI
+
+Run the migration report before editing:
+
+```sh
+npx @santi020k/eslint-config-basic migrate
+```
+
+Then inspect the detected v2 shape:
+
+```sh
+npx @santi020k/eslint-config-basic explain
+```
+
+After migrating, you can generate a team-facing standards document:
+
+```sh
+npx @santi020k/eslint-config-basic docs
 ```
 
 ## Troubleshooting
 
 - Detected frameworks show up unexpectedly:
-  - Set `autoFrameworks: false` and define `frameworks` manually.
+  - Set `autoFrameworks: false` and define `frameworks` manually, or set `detection.frameworks: false`.
 - You only want explicit arrays (no detected merge):
   - Set `optionMergeStrategy: 'replace'`.
 - Monorepo detection reads the wrong package:
