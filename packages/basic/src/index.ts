@@ -18,6 +18,13 @@ import {
 import { createTypescriptConfig } from '@santi020k/eslint-config-typescript'
 import type { TSESLint } from '@typescript-eslint/utils'
 
+export type { AgentTarget, GenerateSkillOptions, GenerateSkillResult } from './agent-skill-generator.js'
+export {
+  AGENT_TARGETS,
+  generateAgentSkills,
+  generateSkillContent
+} from './agent-skill-generator.js'
+
 // Re-export core types and utilities
 export {
   coreConfig,

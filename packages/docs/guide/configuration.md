@@ -177,6 +177,8 @@ The optional integrations are grouped into five categories:
 
 See the dedicated section for the full catalog: [Tooling Overview](/tooling/overview)
 
+Optional integrations are evaluated lazily. You only need the peer packages for integrations you actually enable, so a base Node project does not need unrelated packages like Storybook or GraphQL.
+
 ## Common Patterns
 
 ### Fullstack Remix + Tailwind

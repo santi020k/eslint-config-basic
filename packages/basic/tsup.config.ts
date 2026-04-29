@@ -19,6 +19,7 @@ export default defineConfig([
   {
     ...shared,
     entry: [
+      'src/agent-skill-generator.ts',
       'src/index.ts',
       'src/compose.ts',
       'src/optionals.ts',

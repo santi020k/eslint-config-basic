@@ -11,6 +11,7 @@
 - Strictly Flat Config (no legacy `.eslintrc`).
 - Composable design via direct options (`typescript`, `frameworks`, `optionals`).
 - **Zero-Config Auto-Detection**: Automatically detects frameworks and plugins from `package.json`. Detected frameworks are reported via `detectedFrameworks` but still require explicit imports for the best DX.
+- **Agent Skill Generator (Beta)**: Automatically generates tailored ESLint standards for AI agents (Cursor, Claude, Copilot, etc.) based on your active config. This is a non-breaking, opt-in feature.
 - **Next.js App Router**: Optimized rules for the `app/` directory.
 - **Lazy Loading**: Framework-specific configs are lazy-loaded to prevent peer dep issues.
 - **Strict Mode**: `strict: true` promotes all warnings to errors.
@@ -78,7 +79,8 @@ pnpm run build       # Build all packages with Turbo
 pnpm run lint        # Run ESLint + CSpell + Knip
 pnpm run test        # Run integration tests (+ coverage)
 pnpm run inspector   # Open ESLint config visualizer
-npx santi-eslint init # Initialize project configuration
+npx @santi020k/eslint-config-basic init # Initialize project configuration
+npx @santi020k/eslint-config-basic generate-skill # (Beta) Generate agent standards
 ```
 
 ## Implementation Workflow
