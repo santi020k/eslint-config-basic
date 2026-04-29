@@ -26,6 +26,7 @@ words:
   - flat-config
   - getentrybyslug
   - gitignore
+  - hono
   - importscripts
   - isnan
   - istanbul
