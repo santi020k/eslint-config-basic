@@ -32,11 +32,11 @@
       "@santi020k/eslint-config-angular": ["packages/angular/src/index.ts"],
       "@santi020k/eslint-config-nest": ["packages/nest/src/index.ts"],
       "@santi020k/eslint-config-hono": ["packages/hono/src/index.ts"],
-      "@santi020k/eslint-config-integrations": ["packages/optionals/src/index.ts"],
+      "@santi020k/eslint-config-integrations": ["packages/integrations/src/index.ts"],
       "eslint-plugin-promise": ["packages/core/src/ambient.d.ts"],
-      "@stencil-community/eslint-plugin": ["packages/optionals/src/ambient.d.ts"],
-      "eslint-plugin-better-tailwindcss": ["packages/optionals/src/ambient.d.ts"],
-      "eslint-plugin-security": ["packages/optionals/src/ambient.d.ts"],
+      "@stencil-community/eslint-plugin": ["packages/integrations/src/ambient.d.ts"],
+      "eslint-plugin-better-tailwindcss": ["packages/integrations/src/ambient.d.ts"],
+      "eslint-plugin-security": ["packages/integrations/src/ambient.d.ts"],
       "cross-dirname": ["packages/expo/src/ambient.d.ts"],
       "eslint-plugin-qwik": ["packages/qwik/src/ambient.d.ts"],
       "eslint-plugin-react/configs/recommended.js": ["packages/react/src/ambient.d.ts"]
@@ -45,7 +45,7 @@
   "files": [
     "packages/core/src/ambient.d.ts",
     "packages/react/src/ambient.d.ts",
-    "packages/optionals/src/ambient.d.ts",
+    "packages/integrations/src/ambient.d.ts",
     "packages/expo/src/ambient.d.ts"
   ],
   "exclude": ["node_modules", "dist"]

@@ -8,7 +8,7 @@ export default {
     'packages/astro/src/index.ts',
     'packages/expo/src/index.ts',
     'packages/nest/src/index.ts',
-    'packages/optionals/src/index.ts',
+    'packages/integrations/src/index.ts',
     'packages/basic/src/index.ts'
   ],
   out: 'docs',

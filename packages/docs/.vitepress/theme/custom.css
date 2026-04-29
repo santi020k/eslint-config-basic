@@ -811,12 +811,15 @@ a {
 }
 
 .VPHero .container {
+  position: relative;
   gap: 2.5rem;
   max-width: 1180px;
 }
 
 .VPHero .main {
   max-width: none;
+  position: relative;
+  z-index: 1;
 }
 
 .VPHero .heading {
@@ -879,6 +882,18 @@ html.dark .VPHero .tagline .santi-hero-tagline-lead {
   padding-top: 1.6rem;
   animation: santi-hero-in 0.92s cubic-bezier(0.22, 1, 0.36, 1) backwards;
   animation-delay: 190ms;
+}
+
+.VPHero .actions .VPButton.brand {
+  box-shadow:
+    0 10px 24px hsl(var(--s2k-brand) / 0.32),
+    0 0 0 1px hsl(var(--s2k-brand) / 0.2);
+}
+
+.VPHero .actions .VPButton.brand:hover {
+  box-shadow:
+    0 14px 30px hsl(var(--s2k-brand) / 0.4),
+    0 0 0 1px hsl(var(--s2k-brand) / 0.3);
 }
 
 .VPHero .image {
@@ -961,6 +976,7 @@ html.dark .santi-hero-kicker__badge {
   overflow: hidden;
   animation: santi-hero-in 1s cubic-bezier(0.22, 1, 0.36, 1) backwards;
   animation-delay: 240ms;
+  border-color: hsl(var(--s2k-brand) / 0.18);
 }
 
 .santi-hero-strip::after {
@@ -1019,6 +1035,42 @@ html.dark .santi-hero-strip__item {
   animation-delay: 220ms;
 }
 
+.santi-hero-visual::before {
+  content: '';
+  position: absolute;
+  inset: 20% 16%;
+  border-radius: 1.7rem;
+  border: 1px solid hsl(var(--s2k-line) / 0.54);
+  background:
+    linear-gradient(
+      180deg,
+      hsl(var(--s2k-surface) / 0.66),
+      hsl(var(--s2k-surface-muted) / 0.4)
+    );
+  backdrop-filter: blur(10px);
+  transform: rotate(-6deg);
+  box-shadow:
+    0 22px 56px hsl(var(--s2k-shadow) / 0.22),
+    inset 0 1px 0 hsl(0 0% 100% / 0.07);
+}
+
+.santi-hero-visual::after {
+  content: '';
+  position: absolute;
+  inset: 23% 20%;
+  border-radius: 1.2rem;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      hsl(var(--s2k-brand) / 0.05) 0px,
+      hsl(var(--s2k-brand) / 0.05) 2px,
+      transparent 2px,
+      transparent 8px
+    );
+  opacity: 0.7;
+  pointer-events: none;
+}
+
 .santi-hero-visual__mesh {
   position: absolute;
   inset: -12%;
@@ -1050,9 +1102,9 @@ html.dark .santi-hero-strip__item {
 
 .santi-hero-visual__ring {
   position: absolute;
-  inset: 9%;
+  inset: 8%;
   border-radius: 50%;
-  border: 1px dashed hsl(var(--s2k-brand) / 0.26);
+  border: 1px dashed hsl(var(--s2k-brand) / 0.34);
   animation: santi-ring-spin 20s linear infinite;
 }
 
@@ -1073,6 +1125,7 @@ html.dark .santi-hero-strip__item {
   font-weight: 700;
   letter-spacing: 0.04em;
   white-space: nowrap;
+  z-index: 2;
 }
 
 .santi-hero-visual__chip--one {
@@ -1113,6 +1166,7 @@ html.dark .santi-hero-strip__item {
   object-fit: cover;
   object-position: center;
   transform: translate(-50%, -50%);
+  z-index: 2;
   animation:
     santi-logo-float 7s ease-in-out infinite,
     santi-logo-glow 7s ease-in-out infinite alternate;
@@ -1552,15 +1606,32 @@ html.dark .santi-hero-strip__item {
     align-items: center;
   }
 
+  .VPHero .main {
+    padding: 1.3rem 1.35rem 1.15rem;
+    border: 1px solid hsl(var(--s2k-line) / 0.44);
+    border-radius: 1.55rem;
+    background:
+      radial-gradient(circle at 84% -20%, hsl(var(--s2k-brand) / 0.1), transparent 40%),
+      linear-gradient(
+        180deg,
+        hsl(var(--s2k-surface) / 0.58),
+        hsl(var(--s2k-surface-muted) / 0.44)
+      );
+    box-shadow:
+      0 18px 44px hsl(var(--s2k-shadow) / 0.15),
+      inset 0 1px 0 hsl(0 0% 100% / 0.05);
+    backdrop-filter: blur(10px);
+  }
+
   .VPHero .tagline {
     font-size: 1.18rem;
   }
 
   .VPHero .image-container {
     width: 100%;
-    max-width: 26rem;
+    max-width: 28rem;
     height: 26rem;
-    transform: translate(-18px, -4px);
+    transform: translate(-10px, -4px);
   }
 
   .VPHero .image-bg {
@@ -1647,6 +1718,14 @@ html.dark .santi-hero-strip__item {
     height: 21rem;
   }
 
+  .santi-hero-visual::before {
+    inset: 19% 12%;
+  }
+
+  .santi-hero-visual::after {
+    inset: 22% 17%;
+  }
+
   .santi-hero-visual__chip {
     font-size: 0.68rem;
     padding: 0.35rem 0.64rem;
@@ -1695,6 +1774,8 @@ html.dark .santi-hero-strip__item {
   .santi-hero-strip,
   .santi-hero-strip::after,
   .santi-hero-visual,
+  .santi-hero-visual::before,
+  .santi-hero-visual::after,
   .santi-hero-visual__halo,
   .santi-hero-visual__logo,
   .santi-hero-visual__ring,

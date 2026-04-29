@@ -105,7 +105,7 @@ export const packageDocs = [
   },
   {
     packageName: '@santi020k/eslint-config-integrations',
-    packagePath: 'packages/optionals',
+    packagePath: 'packages/integrations',
     title: 'Integrations package',
     description: 'Libraries, tools, testing, formats, and extensions integrations.',
     docsPath: '/packages/integrations.html'

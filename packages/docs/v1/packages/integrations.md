@@ -29,7 +29,7 @@ export default eslintConfig({
 
 ## Repository Links
 
-- Source Package: [packages/optionals](https://github.com/santi020k/eslint-config-basic/tree/main/packages/optionals)
+- Source Package: [packages/integrations](https://github.com/santi020k/eslint-config-basic/tree/main/packages/integrations)
 - Playground Root: [packages/playground](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground)
 
 ## Related Pages

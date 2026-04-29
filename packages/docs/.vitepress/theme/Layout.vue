@@ -33,10 +33,10 @@ watchEffect(() => {
     <template #home-hero-info-after>
       <div v-if="isHome" class="santi-hero-strip" aria-label="Product highlights">
         <span class="santi-hero-strip__label">Highlights</span>
-        <span class="santi-hero-strip__item">Flat config</span>
-        <span class="santi-hero-strip__item">Composable packages</span>
+        <span class="santi-hero-strip__item">ESLint 9/10+</span>
+        <span class="santi-hero-strip__item">Framework-ready</span>
         <span class="santi-hero-strip__item">Strict mode</span>
-        <span class="santi-hero-strip__item">Playgrounds</span>
+        <span class="santi-hero-strip__item">CI-safe rollouts</span>
       </div>
     </template>
 
