@@ -14,7 +14,7 @@ const editionBadge = computed(() => (getDocsPrefix(route.path) === '/v1' ? 'v1' 
 watchEffect(() => {
   const prefix = getDocsPrefix(route.path)
   const tc = site.value.themeConfig
-  tc.nav = buildThemeNav(prefix)
+  tc.nav = buildThemeNav(prefix, route.path)
   tc.logoLink = logoLinkForPrefix(prefix)
 })
 </script>
