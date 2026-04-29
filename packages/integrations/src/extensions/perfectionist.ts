@@ -14,7 +14,7 @@ export const perfectionist: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('
 
   return [
     {
-      name: 'eslint-config-optionals/perfectionist',
+      name: 'eslint-config-integrations/perfectionist',
       files: GLOB_JS_TS,
       plugins: {
         perfectionist: pluginPerfectionist

@@ -166,7 +166,7 @@ const FEATURE_MAP: readonly [pattern: string, category: FeatureCategory, label: 
   // Tools
   ['eslint-config/prettier',     'tools', 'Prettier'],
   ['optionals/cspell',           'tools', 'CSpell'],
-  ['eslint-config-optionals/jsdoc', 'tools', 'JSDoc'],
+  ['eslint-config-integrations/jsdoc', 'tools', 'JSDoc'],
   ['optionals/swagger',          'tools', 'Swagger'],
 
   // Libraries
@@ -174,8 +174,8 @@ const FEATURE_MAP: readonly [pattern: string, category: FeatureCategory, label: 
   ['optionals/i18next',                    'libraries', 'i18next'],
   ['optionals/stencil',                    'libraries', 'Stencil'],
   ['optionals/storybook',                  'libraries', 'Storybook'],
-  ['eslint-config-optionals/tanstack-query', 'libraries', 'TanStack Query'],
-  ['eslint-config-optionals/tanstack-router', 'libraries', 'TanStack Router'],
+  ['eslint-config-integrations/tanstack-query', 'libraries', 'TanStack Query'],
+  ['eslint-config-integrations/tanstack-router', 'libraries', 'TanStack Router'],
 
   // Formats
   ['optionals/graphql/',  'formats', 'GraphQL'],
@@ -188,8 +188,8 @@ const FEATURE_MAP: readonly [pattern: string, category: FeatureCategory, label: 
   // Extensions
   ['eslint-config/unicorn',                'extensions', 'Unicorn'],
   ['eslint-config/sonarjs',               'extensions', 'SonarJS'],
-  ['eslint-config-optionals/security',    'extensions', 'Security'],
-  ['eslint-config-optionals/perfectionist', 'extensions', 'Perfectionist'],
+  ['eslint-config-integrations/security',    'extensions', 'Security'],
+  ['eslint-config-integrations/perfectionist', 'extensions', 'Perfectionist'],
   ['optionals/regexp',                    'extensions', 'Regexp'],
   ['eslint-config/best-practices',        'extensions', 'Best Practices']
 ]

@@ -9,7 +9,7 @@
 **Goal**: Ensure code quality, type safety, and seamless Developer Experience (DX).
 **Conventions**:
 - Strictly Flat Config (no legacy `.eslintrc`).
-- Composable design via direct options (`typescript`, `frameworks`, `optionals`).
+- Composable design via direct options (`typescript`, `frameworks`, and integration enums).
 - **Zero-Config Auto-Detection**: Automatically detects frameworks and plugins from `package.json`. Detected frameworks are reported via `detectedFrameworks` but still require explicit imports for the best DX.
 - **Agent Skill Generator (Beta)**: Automatically generates tailored ESLint standards for AI agents (Cursor, Claude, Copilot, etc.) based on your active config. This is a non-breaking, opt-in feature.
 - **Next.js App Router**: Optimized rules for the `app/` directory.
@@ -45,7 +45,7 @@ This is a monorepo containing multiple config packages.
 - `packages/angular/`, `packages/nest/`, `packages/hono/` — Enterprise, backend, and edge frameworks
 - `packages/expo/` — React Native / Expo
 - `packages/qwik/`, `packages/remix/` — Modern meta-frameworks
-- `packages/optionals/` — All optional integrations (tools, libraries, testing, formats, extensions)
+- `packages/integrations/` — All integrations (tools, libraries, testing, formats, extensions)
 - `packages/basic/` — Main entry point composing all packages
 
 ### Supported Frameworks
@@ -65,7 +65,7 @@ This is a monorepo containing multiple config packages.
 | Qwik | `@santi020k/eslint-config-qwik` |
 | Remix | `@santi020k/eslint-config-remix` |
 
-### Supported Optionals
+### Supported Integrations
 
 **Testing**: Vitest, Jest, Playwright, Cypress, TestingLibrary
 **Tools**: Prettier, CSpell, JSDoc, Swagger

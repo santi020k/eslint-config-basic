@@ -29,4 +29,4 @@ export default eslintConfig({
 ## Repository Examples
 
 - Format Playgrounds: [packages/playground/formats](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/formats)
-- Integrations Package Source: [packages/optionals](https://github.com/santi020k/eslint-config-basic/tree/main/packages/optionals)
+- Integrations Package Source: [packages/integrations](https://github.com/santi020k/eslint-config-basic/tree/main/packages/integrations)

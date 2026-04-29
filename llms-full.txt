@@ -16,7 +16,7 @@ core → typescript → react → next
      ↘ expo
      ↘ qwik
      ↘ remix
-     ↘ optionals
+     ↘ integrations
 basic (composes all above)
 ```
 
@@ -82,9 +82,9 @@ Framework files (.svelte, .astro, .vue, .qwik, Remix .tsx) generate virtual Type
 `packages/core/src/utils/detection.ts` reads `package.json` dependencies and checks for tsconfig files to auto-detect the user's stack. Detection checks:
 - Presence of `tsconfig.json` or `tsconfig.base.json` → activates TypeScript
 - Framework packages in deps → activates matching framework config
-- Optional tool/library packages in deps → activates matching optional
+- Integration tool/library packages in deps → activates matching integration
 
-## All Supported Optionals
+## All Supported Integrations
 
 **Testing**: `Testing.Vitest`, `Testing.Jest`, `Testing.Playwright`, `Testing.Cypress`, `Testing.TestingLibrary`
 **Tools**: `Tool.Prettier`, `Tool.Cspell`, `Tool.Jsdoc`, `Tool.Swagger`
@@ -113,11 +113,11 @@ const config = eslintConfig({ typescript: false, frameworks: { react: reactConfi
 5. Add playground under `packages/playground/{name}/`
 6. Update tests (configs, composition, snapshots, options, detection)
 
-### Adding an Optional Integration
-1. Create `packages/optionals/src/{category}/{name}.ts`
-2. Export from `packages/optionals/src/index.ts`
+### Adding an Integration
+1. Create `packages/integrations/src/{category}/{name}.ts`
+2. Export from `packages/integrations/src/index.ts`
 3. Add enum value to the appropriate enum in `packages/core/src/types.ts`
-4. Wire in `packages/basic/src/optionals.ts` via enum check
+4. Wire in `packages/basic/src/integrations.ts` via enum check
 5. Update tests (options.test.ts, detection.test.ts if auto-detectable)
 
 ## Validation & CI

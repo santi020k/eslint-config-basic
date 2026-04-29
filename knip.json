@@ -31,7 +31,7 @@
     "packages/basic": {
       "ignoreDependencies": []
     },
-    "packages/optionals": {
+    "packages/integrations": {
       "ignoreDependencies": [
         "@eslint/markdown",
         "@graphql-eslint/eslint-plugin",

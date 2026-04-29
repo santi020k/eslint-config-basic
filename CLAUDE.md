@@ -23,7 +23,7 @@ This project follows a **DX-First & Stability-First** mission. We prioritize a s
 
 ## ✨ Key Features
 
-Users opt-in to frameworks and optional integrations rather than getting everything at once.
+Users opt-in to frameworks and integrations rather than getting everything at once.
 
 ```js
 import { eslintConfig } from '@santi020k/eslint-config-basic'
@@ -38,7 +38,7 @@ packages/
   basic/       ← main entry point — eslintConfig() function
   core/        ← base JS rules, shared types/enums, utilities
   typescript/  ← TypeScript rules
-  optionals/   ← all optional integrations (tools/libraries/testing/formats/extensions)
+  integrations/← all integrations (tools/libraries/testing/formats/extensions)
   react/       ← React + Hooks
   next/        ← Next.js
   astro/       ← Astro
@@ -62,7 +62,7 @@ packages/
 | :--- | :--- |
 | `packages/core/src/types.ts` | **Single source of truth** for all enums: `Library`, `Testing`, `Format`, `Tool`, `Extension`, `Setting`, `Runtime`, `Preset` |
 | `packages/basic/src/index.ts` | Composes everything into `eslintConfig()` |
-| `packages/basic/src/optionals.ts` | Maps enum values → config arrays |
+| `packages/basic/src/integrations.ts` | Maps enum values → config arrays |
 | `packages/basic/src/resolvers.ts` | Framework and preset resolution logic |
 | `packages/basic/src/compose.ts` | Strict mode helper |
 | `packages/core/src/utils/detection.ts` | Auto-detection logic (reads package.json + tsconfigs) |
@@ -93,7 +93,7 @@ Use these for specific tasks — read the relevant SKILL.md before starting:
 
 ## Documentation Rule
 
-If you add a new published framework package or optional integration, updating the documentation is required in the same task.
+If you add a new published framework package or integration, updating the documentation is required in the same task.
 
 - Add or update the dedicated VitePress page in `packages/docs/frameworks/` or `packages/docs/tooling/`
 - Update `packages/docs/guide/installation.md` and `packages/docs/guide/configuration.md` when setup paths change
@@ -110,7 +110,7 @@ If you add a new published framework package or optional integration, updating t
 - **All configs return `TSESLint.FlatConfig.ConfigArray`**
 - **`.js` extensions on all relative imports** (ESM requirement)
 - **`type` imports** for type-only usage
-- **Prettier always last** — applied via `getPrettierConfig()`, never in `getOptionalConfigs()`
+- **Prettier always last** — applied via `getPrettierConfig()`, never in `getIntegrationConfigs()`
 - **Lint from root only** — do not add lint scripts to individual packages
 - **Ambient `.d.ts` as last resort** — always check `@types/*` or built-in types first
 

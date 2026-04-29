@@ -12,7 +12,7 @@ export const security: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('secur
 
   return [
     {
-      name: 'eslint-config-optionals/security',
+      name: 'eslint-config-integrations/security',
       files: GLOB_JS_TS,
       plugins: {
         security: pluginSecurity

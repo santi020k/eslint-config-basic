@@ -10,7 +10,7 @@ export const tanstackQuery: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('
 
   return [
     {
-      name: 'eslint-config-optionals/tanstack-query',
+      name: 'eslint-config-integrations/tanstack-query',
       plugins: {
         '@tanstack/query': pluginQuery
       },
@@ -29,7 +29,7 @@ export const tanstackRouter: TSESLint.FlatConfig.ConfigArray = defineLazyConfig(
 
   return [
     {
-      name: 'eslint-config-optionals/tanstack-router',
+      name: 'eslint-config-integrations/tanstack-router',
       plugins: {
         '@tanstack/router': pluginRouter
       },
