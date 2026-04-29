@@ -1,5 +1,44 @@
 # @santi020k/eslint-config-basic
 
+## 1.6.0
+
+### Minor Changes
+
+- [#85](https://github.com/santi020k/eslint-config-basic/pull/85) [`664693e`](https://github.com/santi020k/eslint-config-basic/commit/664693ef8edeb51239bf4dc2c75148203bcf41a6) Thanks [@santi020k](https://github.com/santi020k)! - Add `basic-eslint generate-skill` CLI command and `generateAgentSkills()` API.
+
+  The new command scans a project for AI coding-assistant agent folders (`.agent`, `.agents`, `.claude`, `.cursor`, `.windsurf`, `.copilot`, `.aider`) and writes a tailored ESLint standards skill file into each one. The generated file describes the active configuration (TypeScript, frameworks, testing, tools, etc.) and instructs the agent to follow the project's lint conventions automatically.
+
+  A companion GitHub Actions workflow (`.github/workflows/agent-skills.yml`) is included so projects can auto-regenerate skill files whenever the ESLint config changes.
+
+  **Usage:**
+
+  ```bash
+  npx basic-eslint generate-skill          # write skill files (skip existing)
+  npx basic-eslint generate-skill --force  # overwrite all skill files
+  ```
+
+  **Programmatic API:**
+
+  ```ts
+  import { generateAgentSkills } from "@santi020k/eslint-config-basic";
+
+  const { written, skipped } = generateAgentSkills({
+    cwd: process.cwd(),
+    force: true,
+  });
+  ```
+
+### Patch Changes
+
+- [#85](https://github.com/santi020k/eslint-config-basic/pull/85) [`664693e`](https://github.com/santi020k/eslint-config-basic/commit/664693ef8edeb51239bf4dc2c75148203bcf41a6) Thanks [@santi020k](https://github.com/santi020k)! - Load optional integrations lazily so projects can import the base config without installing unrelated integration peers such as Storybook, GraphQL, Stencil, Cypress, or Testing Library.
+
+  Also include the generated agent-skill API entry in the basic package build output so published packages do not reference a missing `agent-skill-generator.js` file.
+
+- Updated dependencies [[`664693e`](https://github.com/santi020k/eslint-config-basic/commit/664693ef8edeb51239bf4dc2c75148203bcf41a6)]:
+  - @santi020k/eslint-config-optionals@1.6.0
+  - @santi020k/eslint-config-core@1.6.0
+  - @santi020k/eslint-config-typescript@1.6.0
+
 ## 1.5.0
 
 ### Minor Changes

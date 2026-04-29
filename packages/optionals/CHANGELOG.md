@@ -1,5 +1,16 @@
 # @santi020k/eslint-config-optionals
 
+## 1.6.0
+
+### Patch Changes
+
+- [#85](https://github.com/santi020k/eslint-config-basic/pull/85) [`664693e`](https://github.com/santi020k/eslint-config-basic/commit/664693ef8edeb51239bf4dc2c75148203bcf41a6) Thanks [@santi020k](https://github.com/santi020k)! - Load optional integrations lazily so projects can import the base config without installing unrelated integration peers such as Storybook, GraphQL, Stencil, Cypress, or Testing Library.
+
+  Also include the generated agent-skill API entry in the basic package build output so published packages do not reference a missing `agent-skill-generator.js` file.
+
+- Updated dependencies []:
+  - @santi020k/eslint-config-core@1.6.0
+
 ## 1.5.0
 
 ### Minor Changes
