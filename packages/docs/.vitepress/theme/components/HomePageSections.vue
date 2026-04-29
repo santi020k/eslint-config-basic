@@ -1,10 +1,22 @@
 <script setup lang="ts">
-import { withBase } from 'vitepress'
+import { computed } from 'vue'
+import { useRoute, withBase } from 'vitepress'
+
+import { getDocsPrefix, type DocsPrefix, withDocsPrefix } from '../../nav-builders.js'
+
+const route = useRoute()
+const docsPrefix = computed<DocsPrefix>(() => getDocsPrefix(route.path))
+
+function docHref(path: string): string {
+  return withBase(withDocsPrefix(docsPrefix.value, path))
+}
+
+const migrationHref = computed(() => withBase('/guide/migration-v1-to-v2'))
 </script>
 
 <template>
   <div class="santi-home-root">
-    <a class="santi-home-upgrade santi-home-reveal" :href="withBase('/guide/migration-v1-to-v2')">
+    <a class="santi-home-upgrade santi-home-reveal" :href="migrationHref">
       <span class="santi-home-upgrade__label">From v1</span>
       <span class="santi-home-upgrade__title">Migrating to v2?</span>
       <span class="santi-home-upgrade__meta">
@@ -26,7 +38,12 @@ import { withBase } from 'vitepress'
             JavaScript and TypeScript apps, framework-heavy frontends, monorepos, and codebases that need strong
             defaults without turning every setup into a custom linting project.
           </p>
-          <p>
+          <p v-if="docsPrefix === '/v1'">
+            This documentation site is the fastest way to choose the right package, compose a flat config, and roll the
+            setup across React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, Remix, and
+            modern tooling using explicit framework packages and the integrations your repo actually uses.
+          </p>
+          <p v-else>
             This documentation site is the fastest way to choose the right package, compose a flat config, and roll
             the setup across React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, Remix, and
             modern tooling—now with a clearer v2 composition model.
@@ -59,7 +76,7 @@ import { withBase } from 'vitepress'
     </section>
 
     <div class="santi-home-links">
-      <a class="santi-link-card santi-home-reveal santi-home-reveal--delay-2" :href="withBase('/guide/getting-started')">
+      <a class="santi-link-card santi-home-reveal santi-home-reveal--delay-2" :href="docHref('/guide/getting-started')">
         <span class="santi-kicker">Start here</span>
         <strong>Get running in minutes</strong>
         <p class="santi-link-card__body">
@@ -68,7 +85,7 @@ import { withBase } from 'vitepress'
         </p>
         <span class="santi-link-card__cta">Open guide</span>
       </a>
-      <a class="santi-link-card santi-home-reveal santi-home-reveal--delay-3" :href="withBase('/frameworks/react')">
+      <a class="santi-link-card santi-home-reveal santi-home-reveal--delay-3" :href="docHref('/frameworks/react')">
         <span class="santi-kicker">Frameworks</span>
         <strong>Choose the exact framework package</strong>
         <p class="santi-link-card__body">
@@ -76,7 +93,7 @@ import { withBase } from 'vitepress'
         </p>
         <span class="santi-link-card__cta">Browse frameworks</span>
       </a>
-      <a class="santi-link-card santi-home-reveal santi-home-reveal--delay-4" :href="withBase('/tooling/overview')">
+      <a class="santi-link-card santi-home-reveal santi-home-reveal--delay-4" :href="docHref('/tooling/overview')">
         <span class="santi-kicker">Tooling</span>
         <strong>Layer in optional integrations</strong>
         <p class="santi-link-card__body">
@@ -84,7 +101,7 @@ import { withBase } from 'vitepress'
         </p>
         <span class="santi-link-card__cta">See tooling</span>
       </a>
-      <a class="santi-link-card santi-home-reveal santi-home-reveal--delay-5" :href="withBase('/packages/basic')">
+      <a class="santi-link-card santi-home-reveal santi-home-reveal--delay-5" :href="docHref('/packages/basic')">
         <span class="santi-kicker">Packages</span>
         <strong>Understand the monorepo layout</strong>
         <p class="santi-link-card__body">
@@ -92,7 +109,7 @@ import { withBase } from 'vitepress'
         </p>
         <span class="santi-link-card__cta">Inspect packages</span>
       </a>
-      <a class="santi-link-card santi-home-reveal santi-home-reveal--delay-6" :href="withBase('/guide/playgrounds')">
+      <a class="santi-link-card santi-home-reveal santi-home-reveal--delay-6" :href="docHref('/guide/playgrounds')">
         <span class="santi-kicker">Examples</span>
         <strong>Validate ideas against playgrounds</strong>
         <p class="santi-link-card__body">
@@ -100,7 +117,7 @@ import { withBase } from 'vitepress'
         </p>
         <span class="santi-link-card__cta">Open playgrounds</span>
       </a>
-      <a class="santi-link-card santi-home-reveal santi-home-reveal--delay-7" :href="withBase('/api/')">
+      <a class="santi-link-card santi-home-reveal santi-home-reveal--delay-7" :href="docHref('/api/')">
         <span class="santi-kicker">Reference</span>
         <strong>Browse the generated API</strong>
         <p class="santi-link-card__body">
@@ -165,18 +182,22 @@ import { withBase } from 'vitepress'
       <p class="santi-home-eyebrow">Choose the fastest path</p>
       <h2>Use the docs like a product guide, not just a file index.</h2>
       <p class="santi-home-lede">
-        Start with <a :href="withBase('/guide/getting-started')">Getting Started</a> if you are new to the library,
-        jump to <a :href="withBase('/guide/configuration')">Configuration</a> if you already know the shape of the
-        final config, or go straight to <a :href="withBase('/tooling/overview')">Optional Tooling</a> and
-        <a :href="withBase('/frameworks/typescript')">Framework Guides</a> when the application stack is already
+        Start with <a :href="docHref('/guide/getting-started')">Getting Started</a> if you are new to the library,
+        jump to <a :href="docHref('/guide/configuration')">Configuration</a> if you already know the shape of the
+        final config, or go straight to <a :href="docHref('/tooling/overview')">Optional Tooling</a> and
+        <a :href="docHref('/frameworks/typescript')">Framework Guides</a> when the application stack is already
         defined.
       </p>
-      <p>
-        Upgrading from v1? Read <a :href="withBase('/guide/migration-v1-to-v2')">Migration from v1 to v2</a> first so
+      <p v-if="docsPrefix !== '/v1'">
+        Upgrading from v1? Read <a :href="migrationHref">Migration from v1 to v2</a> first so
         imports, framework wiring, and defaults match what the ecosystem expects today.
       </p>
+      <p v-else>
+        Ready to move forward? Read <a :href="migrationHref">Migration from v1 to v2</a> for imports, framework wiring,
+        and defaults that match the current ecosystem.
+      </p>
       <p>
-        The generated <a :href="withBase('/api/')">API reference</a>, package docs, and playground guidance all stay
+        The generated <a :href="docHref('/api/')">API reference</a>, package docs, and playground guidance all stay
         inside the same site so contributors, tech leads, and individual developers can move from install to real repo
         decisions without losing context.
       </p>

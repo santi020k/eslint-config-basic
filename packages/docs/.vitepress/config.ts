@@ -1,6 +1,8 @@
 import { createRequire } from 'node:module'
 import { defineConfig } from 'vitepress'
 
+import { buildThemeNav } from './nav-builders.js'
+
 const require = createRequire(import.meta.url)
 const docsPkg = require('../package.json') as { version: string }
 const base = process.env.DOCS_BASE ?? '/'
@@ -114,29 +116,7 @@ export default defineConfig({
     search: {
       provider: 'local'
     },
-    nav: [
-      { text: 'Guide', link: '/guide/getting-started' },
-      { text: 'Frameworks', link: '/frameworks/typescript' },
-      { text: 'Tooling', link: '/tooling/overview' },
-      { text: 'Packages', link: '/packages/basic' },
-      { text: 'API', link: '/api/' },
-      { text: 'Changelog', link: '/guide/changelog' },
-      {
-        text: 'Versions',
-        items: [
-          { text: 'v2', link: '/guide/getting-started' },
-          { text: 'v1', link: '/v1/guide/getting-started' }
-        ]
-      },
-      {
-        text: 'More',
-        items: [
-          { text: 'GitHub', link: 'https://github.com/santi020k/eslint-config-basic' },
-          { text: 'NPM', link: 'https://www.npmjs.com/package/@santi020k/eslint-config-basic' },
-          { text: 'Website', link: 'https://santi020k.com' }
-        ]
-      }
-    ],
+    nav: buildThemeNav(''),
     sidebar: {
       '/v1/guide/': [
         {

@@ -5,6 +5,7 @@
   },
   "include": [
     ".vitepress/config.ts",
+    ".vitepress/nav-builders.ts",
     ".vitepress/theme/index.ts",
     "env.d.ts"
   ],

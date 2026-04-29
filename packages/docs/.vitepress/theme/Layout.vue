@@ -1,17 +1,29 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useData, withBase } from 'vitepress'
+import { computed, watchEffect } from 'vue'
+import { useData, useRoute, withBase } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
 
-const { frontmatter } = useData()
+import { buildThemeNav, getDocsPrefix, logoLinkForPrefix } from '../nav-builders.js'
+
+const { frontmatter, site } = useData()
+const route = useRoute()
+
 const isHome = computed(() => frontmatter.value.layout === 'home')
+const editionBadge = computed(() => (getDocsPrefix(route.path) === '/v1' ? 'v1' : 'v2'))
+
+watchEffect(() => {
+  const prefix = getDocsPrefix(route.path)
+  const tc = site.value.themeConfig
+  tc.nav = buildThemeNav(prefix)
+  tc.logoLink = logoLinkForPrefix(prefix)
+})
 </script>
 
 <template>
   <DefaultTheme.Layout>
     <template #home-hero-info-before>
       <div v-if="isHome" class="santi-hero-kicker">
-        <span class="santi-hero-kicker__badge" aria-label="Documentation edition">v2</span>
+        <span class="santi-hero-kicker__badge" aria-label="Documentation edition">{{ editionBadge }}</span>
         <span class="santi-hero-kicker__dot" aria-hidden="true"></span>
         <span>Built for JavaScript and TypeScript teams</span>
       </div>
