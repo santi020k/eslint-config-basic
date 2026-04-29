@@ -22,6 +22,7 @@ yarn dlx @santi020k/eslint-config-basic update
 ```sh [bun]
 bunx @santi020k/eslint-config-basic init
 bunx @santi020k/eslint-config-basic update
+bunx @santi020k/eslint-config-basic generate-skill
 ```
 
 :::
@@ -81,6 +82,34 @@ bunx @santi020k/eslint-config-basic update
 :::
 
 Use `update` when you want to regenerate the file after adding or removing dependencies.
+
+## Generate Agent Standards (Beta)
+
+The `generate-skill` command creates or updates ESLint standards files for AI coding assistants (Cursor, Claude, Copilot, etc.) based on your project's active configuration.
+
+This is a **beta** feature and is **non-breaking** (it only adds/updates files in `.agent`, `.cursor`, `.claude`, etc. folders).
+
+::: code-group
+
+```sh [pnpm]
+pnpm dlx @santi020k/eslint-config-basic generate-skill
+```
+
+```sh [npm]
+npx @santi020k/eslint-config-basic generate-skill
+```
+
+```sh [yarn]
+yarn dlx @santi020k/eslint-config-basic generate-skill
+```
+
+```sh [bun]
+bunx @santi020k/eslint-config-basic generate-skill
+```
+
+:::
+
+Use `--force` if you want to overwrite existing standards files.
 
 ## When to Use Each Command
 

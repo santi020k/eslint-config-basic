@@ -1,56 +1,62 @@
-import globals from 'globals'
+import type Globals from 'globals'
+
+import { defineLazyConfig, loadDefault, type PluginWithConfigs } from '../lazy.js'
 
 import type { TSESLint } from '@typescript-eslint/utils'
-import pluginVitest from '@vitest/eslint-plugin'
 
 /**
  * Vitest ESLint configuration
  * Provides linting rules for Vitest test files with best practices
  */
-export const vitest: TSESLint.FlatConfig.ConfigArray = [
-  {
-    name: 'optionals/vitest',
-    files: [
-      'tests/**/*.{js,ts,jsx,tsx}',
-      '**/__tests__/**/*.{js,ts,jsx,tsx}',
-      '**/__mocks__/**/*.{js,ts,jsx,tsx}',
-      '**/test/**/*.{js,ts,jsx,tsx}',
-      '**/spec/**/*.{js,ts,jsx,tsx}',
-      '**/__spec__/**/*.{js,ts,jsx,tsx}',
-      '**/*.test.{js,ts,jsx,tsx}',
-      '**/*.spec.{js,ts,jsx,tsx}',
-      'vitest.config.{js,ts}'
-    ],
-    languageOptions: {
-      globals: {
-        ...globals.node
-      }
-    },
-    plugins: {
-      vitest: pluginVitest
-    },
-    rules: {
-      // Vitest recommended rules
-      ...pluginVitest.configs.recommended.rules,
+export const vitest: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('vitest', () => {
+  const globals = loadDefault<typeof Globals>('globals')
+  const pluginVitest = loadDefault<PluginWithConfigs<'recommended'>>('@vitest/eslint-plugin')
 
-      // Best practice rules for testing
-      'vitest/max-nested-describe': ['error', { max: 3 }],
-      'vitest/expect-expect': [
-        'error',
-        {
-          assertFunctionNames: ['expect', 'assert', 'should']
-        }
+  return [
+    {
+      name: 'optionals/vitest',
+      files: [
+        'tests/**/*.{js,ts,jsx,tsx}',
+        '**/__tests__/**/*.{js,ts,jsx,tsx}',
+        '**/__mocks__/**/*.{js,ts,jsx,tsx}',
+        '**/test/**/*.{js,ts,jsx,tsx}',
+        '**/spec/**/*.{js,ts,jsx,tsx}',
+        '**/__spec__/**/*.{js,ts,jsx,tsx}',
+        '**/*.test.{js,ts,jsx,tsx}',
+        '**/*.spec.{js,ts,jsx,tsx}',
+        'vitest.config.{js,ts}'
       ],
-      'vitest/no-identical-title': 'error',
-      'vitest/no-focused-tests': 'error',
-      'vitest/no-disabled-tests': 'warn',
-      'vitest/prefer-to-be': 'warn',
-      'vitest/prefer-to-have-length': 'warn',
-      'vitest/valid-expect': 'error',
+      languageOptions: {
+        globals: {
+          ...globals.node
+        }
+      },
+      plugins: {
+        vitest: pluginVitest
+      },
+      rules: {
+        // Vitest recommended rules
+        ...pluginVitest.configs.recommended.rules,
 
-      // Disable some rules that conflict with test patterns
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@stylistic/padding-line-between-statements': 'off'
+        // Best practice rules for testing
+        'vitest/max-nested-describe': ['error', { max: 3 }],
+        'vitest/expect-expect': [
+          'error',
+          {
+            assertFunctionNames: ['expect', 'assert', 'should']
+          }
+        ],
+        'vitest/no-identical-title': 'error',
+        'vitest/no-focused-tests': 'error',
+        'vitest/no-disabled-tests': 'warn',
+        'vitest/prefer-to-be': 'warn',
+        'vitest/prefer-to-have-length': 'warn',
+        'vitest/valid-expect': 'error',
+
+        // Disable some rules that conflict with test patterns
+        '@typescript-eslint/no-explicit-any': 'off',
+        '@stylistic/padding-line-between-statements': 'off'
+      }
     }
-  }
-]
+  ]
+})

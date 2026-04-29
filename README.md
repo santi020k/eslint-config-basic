@@ -33,6 +33,7 @@ This project follows a **DX-First & Stability-First** mission. We prioritize a s
 - **🛡️ Strict Mode**: Opt-in `strict: true` to promote all warnings to errors, perfect for CI/CD and maintaining high code standards.
 - **🌐 Smart Runtime Support**: Built-in support for Node.js, Browser, Worker, or Universal runtimes with appropriate globals and rules.
 - **💅 Prettier Integrated**: Seamlessly integrated with Prettier out of the box for consistent code formatting.
+- **🤖 Agent Skill Generator (Beta)**: Automatically generates tailored ESLint standards for AI agents (Cursor, Claude, Copilot, etc.) based on your active config. A non-breaking, opt-in feature to boost AI assistance.
 - **🧩 Extensive Plugin Support**: Tailored rules for Tailwind CSS, Vitest, Testing Library, Storybook, TanStack (Query/Router), and more.
 
 ## 🚀 Quick Start
@@ -54,6 +55,8 @@ import { eslintConfig } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig()
 ```
+
+Optional integrations are loaded only when you enable them. A Node-only project can use the base config without installing unrelated peer packages such as Storybook, GraphQL, Cypress, or Testing Library.
 
 ### Comprehensive Example
 
@@ -101,6 +104,22 @@ export default eslintConfig({
 - Expo: [`@santi020k/eslint-config-expo`](https://eslint.santi020k.com/frameworks/expo.html)
 - Qwik: [`@santi020k/eslint-config-qwik`](https://eslint.santi020k.com/frameworks/qwik.html)
 - Remix: [`@santi020k/eslint-config-remix`](https://eslint.santi020k.com/frameworks/remix.html)
+
+## 🤖 Agent Skill Generator (Beta)
+
+The Agent Skill Generator is a new, **beta** feature designed to help AI coding assistants (like Cursor, Claude Code, Copilot, Windsurf, and Aider) understand and follow your project's specific ESLint standards.
+
+It is **non-breaking** and strictly opt-in. It works by:
+1. Scanning for agent-specific folders (e.g., `.cursor/rules`, `.claude/commands`).
+2. Analyzing your `eslint.config.js` to see which frameworks and tools are active.
+3. Generating a tailored `.md` or `.mdc` file that explains your coding conventions to the AI.
+
+To use it, run:
+```bash
+npx @santi020k/eslint-config-basic generate-skill
+```
+
+*Note: Use `--force` to overwrite existing skill files.*
 
 ## Development
 

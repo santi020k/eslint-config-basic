@@ -6,6 +6,7 @@ words:
   - astro
   - asyncgenerator
   - asynciterable
+  - behaviour
   - better-tailwindcss
   - canonicalurl
   - changeset
@@ -25,6 +26,7 @@ words:
   - flat-config
   - getentrybyslug
   - gitignore
+  - hono
   - importscripts
   - isnan
   - istanbul
@@ -36,6 +38,7 @@ words:
   - linter
   - llm
   - llms
+  - lockfiles
   - mdx
   - monorepo
   - multilines
@@ -48,6 +51,7 @@ words:
   - nonconstructor
   - nonoctal
   - nonwords
+  - opengraph
   - orchestrates
   - packagemanager
   - peer-dependency
@@ -85,7 +89,6 @@ words:
   - vdom
   - vitepress
   - vitest
-  - opengraph
   - vue
   - weakref
   - workspace

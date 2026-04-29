@@ -66,6 +66,7 @@ packages/
 | `packages/basic/src/resolvers.ts` | Framework and preset resolution logic |
 | `packages/basic/src/compose.ts` | Strict mode helper |
 | `packages/core/src/utils/detection.ts` | Auto-detection logic (reads package.json + tsconfigs) |
+| `packages/basic/src/agent-skill-generator.ts` | Logic for generating agent-specific standards files |
 
 ## Validation Commands
 
@@ -75,6 +76,7 @@ Always run these from the **repo root** before considering any task done:
 pnpm run build   # Build all packages via Turborepo
 pnpm run lint    # ESLint + CSpell + Knip across monorepo
 pnpm run test    # Vitest integration suite (packages/tests)
+npx @santi020k/eslint-config-basic generate-skill # (Beta) Sync agent standards with your config
 ```
 
 ## Specialized Skills

@@ -2,6 +2,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { basename, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+import { handleGenerateSkill } from './agent-skill-generator.js'
 import { detectProjectOptions } from './index.js'
 
 const getDefaultConfigFilename = (cwd: string): string => {
@@ -103,13 +104,20 @@ export const handleUpdate = (cwd: string = process.cwd()) => {
 
 const run = () => {
   const command = process.argv[2]
+  const hasForce = process.argv.includes('--force')
 
   if (command === 'init') {
     handleInit()
   } else if (command === 'update') {
     handleUpdate()
+  } else if (command === 'generate-skill') {
+    handleGenerateSkill(process.cwd(), hasForce).catch((err: unknown) => {
+      console.error('❌ Failed to generate skill files:', err)
+
+      process.exitCode = 1
+    })
   } else {
-    console.log('Usage: basic-eslint <init|update>')
+    console.log('Usage: basic-eslint <init|update|generate-skill> [--force]')
   }
 }
 

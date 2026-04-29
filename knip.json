@@ -5,8 +5,7 @@
   ],
   "ignoreDependencies": [
     "typedoc-plugin-markdown",
-    "tailwindcss",
-    "typescript-eslint"
+    "tailwindcss"
   ],
   "ignoreExportsUsedInFile": true,
   "rules": {
@@ -31,6 +30,20 @@
     },
     "packages/basic": {
       "ignoreDependencies": []
+    },
+    "packages/optionals": {
+      "ignoreDependencies": [
+        "@eslint/markdown",
+        "@graphql-eslint/eslint-plugin",
+        "@tanstack/eslint-plugin-query",
+        "@tanstack/eslint-plugin-router",
+        "@vitest/eslint-plugin",
+        "eslint-plugin-better-tailwindcss",
+        "eslint-plugin-jsdoc",
+        "eslint-plugin-playwright",
+        "eslint-plugin-security",
+        "eslint-plugin-sonarjs"
+      ]
     },
     "packages/expo": {
       "ignoreDependencies": ["eslint-config-expo"]
