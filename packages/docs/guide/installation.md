@@ -3,11 +3,11 @@
 ## Requirements
 
 - Node.js `>=22.18.0`
-- ESLint `9+`
+- ESLint `9+` or `10+`
 
-## Base Package
+## Install
 
-The base package already depends on ESLint `^9 || ^10`, so this is the smallest supported install:
+In v2, application projects install one public package:
 
 ::: code-group
 
@@ -29,105 +29,7 @@ bun add -d @santi020k/eslint-config-basic
 
 :::
 
-## Framework Packages
-
-Install framework packages only when your project needs them. TypeScript support is enabled through `typescript: true`, not a separate framework package install.
-
-::: code-group
-
-```sh [pnpm]
-pnpm add -D @santi020k/eslint-config-react
-pnpm add -D @santi020k/eslint-config-next @santi020k/eslint-config-react
-pnpm add -D @santi020k/eslint-config-astro
-pnpm add -D @santi020k/eslint-config-vue
-pnpm add -D @santi020k/eslint-config-svelte
-pnpm add -D @santi020k/eslint-config-solid
-pnpm add -D @santi020k/eslint-config-angular
-pnpm add -D @santi020k/eslint-config-nest
-pnpm add -D @santi020k/eslint-config-hono
-pnpm add -D @santi020k/eslint-config-qwik
-pnpm add -D @santi020k/eslint-config-remix @santi020k/eslint-config-react
-pnpm add -D @santi020k/eslint-config-expo @santi020k/eslint-config-react
-```
-
-```sh [npm]
-npm install -D @santi020k/eslint-config-react
-npm install -D @santi020k/eslint-config-next @santi020k/eslint-config-react
-npm install -D @santi020k/eslint-config-astro
-npm install -D @santi020k/eslint-config-vue
-npm install -D @santi020k/eslint-config-svelte
-npm install -D @santi020k/eslint-config-solid
-npm install -D @santi020k/eslint-config-angular
-npm install -D @santi020k/eslint-config-nest
-npm install -D @santi020k/eslint-config-hono
-npm install -D @santi020k/eslint-config-qwik
-npm install -D @santi020k/eslint-config-remix @santi020k/eslint-config-react
-npm install -D @santi020k/eslint-config-expo @santi020k/eslint-config-react
-```
-
-```sh [yarn]
-yarn add -D @santi020k/eslint-config-react
-yarn add -D @santi020k/eslint-config-next @santi020k/eslint-config-react
-yarn add -D @santi020k/eslint-config-astro
-yarn add -D @santi020k/eslint-config-vue
-yarn add -D @santi020k/eslint-config-svelte
-yarn add -D @santi020k/eslint-config-solid
-yarn add -D @santi020k/eslint-config-angular
-yarn add -D @santi020k/eslint-config-nest
-yarn add -D @santi020k/eslint-config-hono
-yarn add -D @santi020k/eslint-config-qwik
-yarn add -D @santi020k/eslint-config-remix @santi020k/eslint-config-react
-yarn add -D @santi020k/eslint-config-expo @santi020k/eslint-config-react
-```
-
-```sh [bun]
-bun add -d @santi020k/eslint-config-react
-bun add -d @santi020k/eslint-config-next @santi020k/eslint-config-react
-bun add -d @santi020k/eslint-config-astro
-bun add -d @santi020k/eslint-config-vue
-bun add -d @santi020k/eslint-config-svelte
-bun add -d @santi020k/eslint-config-solid
-bun add -d @santi020k/eslint-config-angular
-bun add -d @santi020k/eslint-config-nest
-bun add -d @santi020k/eslint-config-hono
-bun add -d @santi020k/eslint-config-qwik
-bun add -d @santi020k/eslint-config-remix @santi020k/eslint-config-react
-bun add -d @santi020k/eslint-config-expo @santi020k/eslint-config-react
-```
-
-:::
-
-Next.js and Expo require `@santi020k/eslint-config-react`. Remix projects usually pair `@santi020k/eslint-config-remix` with `@santi020k/eslint-config-react` so React component rules stay explicit, matching the playground.
-
-Other supported packages are documented in the [Framework guides](/frameworks/typescript).
-
-## Framework Installation Matrix
-
-| Project Type | Packages To Install | Notes |
-| :--- | :--- | :--- |
-| TypeScript | `@santi020k/eslint-config-basic` | TypeScript is enabled with `typescript: true` and is auto-detected from `tsconfig.json`. |
-| React | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-react` | Common browser setup. |
-| Next.js | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-next`, `@santi020k/eslint-config-react` | React is required. |
-| Astro | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-astro` | Commonly paired with TypeScript. |
-| Vue | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-vue` | Supports single-file components. |
-| Svelte | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-svelte` | Commonly paired with TypeScript. |
-| Solid | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-solid` | Combine with TypeScript as needed. |
-| Angular | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-angular` | Usually paired with TypeScript. |
-| NestJS | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-nest` | Commonly paired with `Preset.Node` or `Runtime.Node`. |
-| Hono | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-hono` | Optimized for Hono/Edge runtimes. |
-| Qwik | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-qwik` | Optimized for Qwik resumability. |
-| Remix | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-remix`, `@santi020k/eslint-config-react` | React is recommended for Remix component rules. |
-| Expo | `@santi020k/eslint-config-basic`, `@santi020k/eslint-config-expo`, `@santi020k/eslint-config-react` | React is required. |
-
-## Optional Tooling Matrix
-
-| Category | Configure Through | Documentation |
-| :--- | :--- | :--- |
-| Libraries | `libraries` | [Libraries](/tooling/libraries) |
-| Testing | `testing` | [Testing](/tooling/testing) |
-| Formats | `formats` | [Formats](/tooling/formats) |
-| Tools | `tools` | [Tools](/tooling/tools) |
-| Extensions | `extensions` | [Extensions](/tooling/extensions) |
+That package brings the framework config packages used by the composer. You no longer install `@santi020k/eslint-config-react`, `@santi020k/eslint-config-next`, or another framework config package in normal application projects.
 
 ## Minimal Config
 
@@ -137,43 +39,57 @@ import { eslintConfig } from '@santi020k/eslint-config-basic'
 export default eslintConfig()
 ```
 
-## Common Installation Paths
+The composer detects TypeScript, frameworks, runtime, and supported optional tooling from your project. You can keep the config minimal or make any choice explicit.
 
-- Base JavaScript or TypeScript only: Install `@santi020k/eslint-config-basic`.
-- React projects: Add `@santi020k/eslint-config-react`.
-- Next.js projects: Add both `@santi020k/eslint-config-next` and `@santi020k/eslint-config-react`.
-- Expo projects: Add both `@santi020k/eslint-config-expo` and `@santi020k/eslint-config-react`.
-- Remix projects: Add `@santi020k/eslint-config-remix`, and usually `@santi020k/eslint-config-react` too.
-- Other frameworks: Add the specific framework package only when it is needed by the project.
+## Explicit Frameworks
 
-## React Example
+Use booleans when you want to enable framework configs manually:
 
 ```js
 import { eslintConfig } from '@santi020k/eslint-config-basic'
-import react from '@santi020k/eslint-config-react'
 
 export default eslintConfig({
   typescript: true,
   frameworks: {
-    react
+    react: true,
+    next: true
   }
 })
 ```
 
-## Notes
+Next.js, Expo, and Remix automatically include React rules when needed.
 
-- Install `eslint` manually only if you want to pin it yourself. The base package already carries a compatible version.
-- TypeScript, runtime, and supported optional integrations can be detected automatically from `package.json`.
-- Framework configs stay explicit on purpose.
-- Next.js and Expo require the React package as part of the `frameworks` object.
+## Framework Matrix
 
-## Repository Links
+| Project Type | Package To Install | Enable With |
+| :--- | :--- | :--- |
+| JavaScript | `@santi020k/eslint-config-basic` | `eslintConfig()` |
+| TypeScript | `@santi020k/eslint-config-basic` | `typescript: true` or auto-detection |
+| React | `@santi020k/eslint-config-basic` | `frameworks.react: true` |
+| Next.js | `@santi020k/eslint-config-basic` | `frameworks.next: true` |
+| Astro | `@santi020k/eslint-config-basic` | `frameworks.astro: true` |
+| Vue | `@santi020k/eslint-config-basic` | `frameworks.vue: true` |
+| Svelte | `@santi020k/eslint-config-basic` | `frameworks.svelte: true` |
+| Solid | `@santi020k/eslint-config-basic` | `frameworks.solid: true` |
+| Angular | `@santi020k/eslint-config-basic` | `frameworks.angular: true` |
+| NestJS | `@santi020k/eslint-config-basic` | `frameworks.nest: true` |
+| Hono | `@santi020k/eslint-config-basic` | `frameworks.hono: true` |
+| Qwik | `@santi020k/eslint-config-basic` | `frameworks.qwik: true` |
+| Remix | `@santi020k/eslint-config-basic` | `frameworks.remix: true` |
+| Expo | `@santi020k/eslint-config-basic` | `frameworks.expo: true` |
 
-- Main Package Source: [packages/basic](https://github.com/santi020k/eslint-config-basic/tree/main/packages/basic)
-- Project Repository: [santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)
+## Optional Tooling
 
-## Related Pages
+Optional integrations still use the same categories:
 
-- [Getting Started](/guide/getting-started)
-- [Frameworks](/frameworks/typescript)
-- [Optional Tooling](/tooling/overview)
+| Category | Configure Through | Documentation |
+| :--- | :--- | :--- |
+| Libraries | `libraries` | [Libraries](/tooling/libraries) |
+| Testing | `testing` | [Testing](/tooling/testing) |
+| Formats | `formats` | [Formats](/tooling/formats) |
+| Tools | `tools` | [Tools](/tooling/tools) |
+| Extensions | `extensions` | [Extensions](/tooling/extensions) |
+
+## Migration
+
+If you are upgrading from v1, read the [v1 to v2 migration guide](/guide/migration-v1-to-v2). The short version is: remove extra `@santi020k/eslint-config-*` framework installs from your app and replace imported framework values with `true`.

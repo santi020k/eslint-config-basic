@@ -5,7 +5,8 @@ export default [
     typescript: true,
     tsconfigRootDir: import.meta.dirname,
     formats: [Format.Mdx, Format.Markdown],
-    testing: [Testing.Vitest]
+    testing: [Testing.Vitest],
+    libraries: []
   }),
   {
     name: 'local-config',

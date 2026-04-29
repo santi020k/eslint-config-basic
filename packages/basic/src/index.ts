@@ -1,4 +1,5 @@
 import { applyStrictMode } from './compose.js'
+import { createDetectedFrameworkFlags } from './frameworks.js'
 import { getOptionalConfigs, getPrettierConfig } from './optionals.js'
 import { resolveFramework, resolvePreset } from './resolvers.js'
 
@@ -24,6 +25,20 @@ export {
   generateAgentSkills,
   generateSkillContent
 } from './agent-skill-generator.js'
+export {
+  angularConfig,
+  astro,
+  expoConfig,
+  hono,
+  nestConfig,
+  nextConfig,
+  qwik,
+  reactConfig,
+  remix,
+  solidConfig,
+  svelteConfig,
+  vueConfig
+} from './frameworks.js'
 
 // Re-export core types and utilities
 export {
@@ -90,9 +105,13 @@ export {
  * @returns {FlatConfigArray} The final ESLint configuration array
  */
 export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => {
-  const detected = detectProjectOptions()
+  const detected = detectProjectOptions(options?.tsconfigRootDir)
   const preset = options?.preset ?? detected.preset
   const presetDefaults = preset ? resolvePreset(preset) : {}
+
+  const frameworkDefaults = options && 'frameworks' in options ?
+    (options.frameworks ?? {}) :
+    createDetectedFrameworkFlags(detected.detectedFrameworks)
 
   const {
     typescript = (presetDefaults.typescript ?? detected.typescript ?? false),
@@ -106,8 +125,12 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     runtime = (presetDefaults.runtime ?? detected.runtime ?? Runtime.Universal),
     tsconfigRootDir = options?.tsconfigRootDir,
     nextMode = (presetDefaults.nextMode ?? detected.nextMode ?? NextMode.Pages),
-    frameworks = { ...presetDefaults.frameworks, ...options?.frameworks }
+    frameworks = { ...frameworkDefaults, ...presetDefaults.frameworks, ...options?.frameworks }
   } = options ?? {}
+
+  if ((frameworks.next || frameworks.expo || frameworks.remix) && !frameworks.react) {
+    frameworks.react = true
+  }
 
   // Deduplicate and filter entries
   const uniqueLibraries = [...new Set(libraries)]
@@ -116,13 +139,6 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
   const uniqueTools = [...new Set(tools)]
   const uniqueExtensions = [...new Set(extensions)]
   const uniqueSettings = [...new Set(settings)]
-
-  if ((frameworks.next || frameworks.expo) && !frameworks.react) {
-    throw new TypeError(
-      'Next and Expo configurations require frameworks.react. Import @santi020k/eslint-config-react and pass it via frameworks.react.'
-    )
-  }
-
   const hasReact = !!frameworks.react
   const hasVue = !!frameworks.vue
   const hasSvelte = !!frameworks.svelte
@@ -198,7 +214,7 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
       [
         {
           name: 'eslint-config-next/app-router-overrides',
-          files: ['app/**/*.{ts,tsx}'],
+          files: ['app/**/*.{ts,tsx}', 'src/**/*.{ts,tsx}'],
           rules: {
             '@next/next/no-html-link-for-pages': 'off'
           }

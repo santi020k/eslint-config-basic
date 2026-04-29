@@ -23,7 +23,7 @@ hero:
 
 features:
   - title: Composable by default
-    details: Start with the base package, add explicit framework packages, and layer in only the integrations your project actually needs.
+    details: Install the base package once, enable bundled framework configs with booleans, and layer in only the integrations your project actually needs.
   - title: Zero-config auto-detection
     details: Let the library detect TypeScript, runtimes, frameworks, and optional tooling from your repo so teams spend less time on lint wiring.
   - title: 13 framework guides

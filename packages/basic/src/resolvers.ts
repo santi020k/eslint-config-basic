@@ -1,4 +1,7 @@
+import { type FrameworkOptions, getBundledFrameworkConfig } from './frameworks.js'
+
 import {
+  type DetectedFrameworkName,
   type EslintConfigOptions,
   Extension,
   type FlatConfigArray,
@@ -15,17 +18,14 @@ import {
  * Resolves an imported framework (either array, object with default, or factory function) into a config array.
  */
 export const resolveFramework = (
-  frameworkName: string,
+  frameworkName: DetectedFrameworkName,
   framework?: ImportedFramework,
-  options?: Record<string, unknown>
+  options?: FrameworkOptions
 ): FlatConfigArray => {
   if (!framework) return []
 
   if ((framework as unknown) === true) {
-    throw new TypeError(
-      `Framework "${frameworkName}" requires an imported config. ` +
-      `Install @santi020k/eslint-config-${frameworkName} and pass it via frameworks.${frameworkName}.`
-    )
+    return getBundledFrameworkConfig(frameworkName, options)
   }
 
   // Handle factory functions directly

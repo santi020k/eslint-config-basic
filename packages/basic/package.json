@@ -29,63 +29,23 @@
     "basic-eslint": "./dist/cli.js"
   },
   "dependencies": {
-    "@santi020k/eslint-config-core": "workspace:^",
-    "@santi020k/eslint-config-optionals": "workspace:^",
-    "@santi020k/eslint-config-typescript": "workspace:^",
-    "@typescript-eslint/utils": "^8.59.0",
-    "eslint": "^10.2.1"
-  },
-  "peerDependencies": {
     "@santi020k/eslint-config-angular": "workspace:^",
     "@santi020k/eslint-config-astro": "workspace:^",
+    "@santi020k/eslint-config-core": "workspace:^",
     "@santi020k/eslint-config-expo": "workspace:^",
     "@santi020k/eslint-config-hono": "workspace:^",
     "@santi020k/eslint-config-nest": "workspace:^",
     "@santi020k/eslint-config-next": "workspace:^",
+    "@santi020k/eslint-config-optionals": "workspace:^",
     "@santi020k/eslint-config-qwik": "workspace:^",
     "@santi020k/eslint-config-react": "workspace:^",
     "@santi020k/eslint-config-remix": "workspace:^",
     "@santi020k/eslint-config-solid": "workspace:^",
     "@santi020k/eslint-config-svelte": "workspace:^",
-    "@santi020k/eslint-config-vue": "workspace:^"
-  },
-  "peerDependenciesMeta": {
-    "@santi020k/eslint-config-angular": {
-      "optional": true
-    },
-    "@santi020k/eslint-config-astro": {
-      "optional": true
-    },
-    "@santi020k/eslint-config-expo": {
-      "optional": true
-    },
-    "@santi020k/eslint-config-hono": {
-      "optional": true
-    },
-    "@santi020k/eslint-config-nest": {
-      "optional": true
-    },
-    "@santi020k/eslint-config-next": {
-      "optional": true
-    },
-    "@santi020k/eslint-config-react": {
-      "optional": true
-    },
-    "@santi020k/eslint-config-solid": {
-      "optional": true
-    },
-    "@santi020k/eslint-config-svelte": {
-      "optional": true
-    },
-    "@santi020k/eslint-config-vue": {
-      "optional": true
-    },
-    "@santi020k/eslint-config-qwik": {
-      "optional": true
-    },
-    "@santi020k/eslint-config-remix": {
-      "optional": true
-    }
+    "@santi020k/eslint-config-typescript": "workspace:^",
+    "@santi020k/eslint-config-vue": "workspace:^",
+    "@typescript-eslint/utils": "^8.59.0",
+    "eslint": "^10.2.1"
   },
   "devDependencies": {
     "publint": "^0.3.18",

@@ -254,26 +254,33 @@ describe('eslintConfig Function', () => {
     expect(names).toContain('mock-framework/rules')
   })
 
-  it('should throw when a framework boolean is passed manually', () => {
-    expect(() => eslintConfig({
+  it('should resolve bundled framework configs when a framework boolean is passed manually', () => {
+    const config = eslintConfig({
       frameworks: {
-        // @ts-expect-error intentionally passing invalid type to test runtime guard
         react: true
       }
-    })).toThrow(/requires an imported config/)
+    })
+
+    expect(extractConfigNames(config)).toContain('eslint-config-react/recommended')
   })
 
-  it('should require the React config when Next.js is enabled', () => {
-    expect(() => eslintConfig({
+  it('should include React automatically when Next.js is enabled', () => {
+    const config = eslintConfig({
       frameworks: {
         next: [{ name: 'mock-next', rules: {} }]
       }
-    })).toThrow(/frameworks\.react/)
+    })
+
+    const names = extractConfigNames(config)
+
+    expect(names).toContain('eslint-config-react/recommended')
+    expect(names).toContain('mock-next')
   })
 
   it('should keep the Browser preset free of implicit React rules', () => {
     const config = eslintConfig({
-      preset: Preset.Browser
+      preset: Preset.Browser,
+      frameworks: {}
     })
 
     const rules = extractRuleNames(config)
@@ -283,7 +290,8 @@ describe('eslintConfig Function', () => {
 
   it('should keep the All preset focused on bundled configs', () => {
     const config = eslintConfig({
-      preset: Preset.All
+      preset: Preset.All,
+      frameworks: {}
     })
 
     const names = extractConfigNames(config)

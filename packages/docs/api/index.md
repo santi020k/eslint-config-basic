@@ -9,21 +9,12 @@ The API reference is generated from the source packages with TypeDoc and rendere
 
 ## Covered Packages
 
+- `@santi020k/eslint-config-basic`
 - `@santi020k/eslint-config-core`
 - `@santi020k/eslint-config-typescript`
-- `@santi020k/eslint-config-react`
-- `@santi020k/eslint-config-next`
-- `@santi020k/eslint-config-astro`
-- `@santi020k/eslint-config-expo`
-- `@santi020k/eslint-config-nest`
 - `@santi020k/eslint-config-optionals`
-- `@santi020k/eslint-config-basic`
-- `@santi020k/eslint-config-vue`
-- `@santi020k/eslint-config-svelte`
-- `@santi020k/eslint-config-solid`
-- `@santi020k/eslint-config-angular`
-- `@santi020k/eslint-config-qwik`
-- `@santi020k/eslint-config-remix`
+
+Framework config packages are still part of the generated internal API reference, but v2 application code should import from `@santi020k/eslint-config-basic`.
 
 The generated reference is meant to complement the guide pages, not replace them.
 

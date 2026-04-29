@@ -1,27 +1,25 @@
 # Svelte
 
-Package: [`@santi020k/eslint-config-svelte`](https://www.npmjs.com/package/@santi020k/eslint-config-svelte)
-
-Use the Svelte package for Svelte applications that need explicit framework linting on top of the shared base and TypeScript support.
+Use Svelte support from the main v2 package. Application projects no longer install a separate `@santi020k/eslint-config-svelte` package.
 
 ## Install
 
 ::: code-group
 
 ```sh [pnpm]
-pnpm add -D @santi020k/eslint-config-svelte
+pnpm add -D @santi020k/eslint-config-basic
 ```
 
 ```sh [npm]
-npm install -D @santi020k/eslint-config-svelte
+npm install -D @santi020k/eslint-config-basic
 ```
 
 ```sh [yarn]
-yarn add -D @santi020k/eslint-config-svelte
+yarn add -D @santi020k/eslint-config-basic
 ```
 
 ```sh [bun]
-bun add -d @santi020k/eslint-config-svelte
+bun add -d @santi020k/eslint-config-basic
 ```
 
 :::
@@ -30,34 +28,30 @@ bun add -d @santi020k/eslint-config-svelte
 
 ```js
 import { eslintConfig } from '@santi020k/eslint-config-basic'
-import svelte from '@santi020k/eslint-config-svelte'
 
 export default eslintConfig({
   typescript: true,
   frameworks: {
-    svelte
+    svelte: true
   }
 })
 ```
 
+Most projects can also rely on auto-detection and use `eslintConfig()` with no framework object.
+
 ## What It Adds
 
-- Svelte-specific framework rules through an isolated package.
-- Clean composition with the main package and TypeScript support.
-- Better compatibility with real Svelte projects through the shared playground strategy.
+- Svelte component rules.
+- Composition through the same `@santi020k/eslint-config-basic` entry point as every other framework.
+- Compatibility with advanced overrides if you pass a custom config array or factory instead of `true`.
 
 ## Notes
 
-- Svelte projects often also enable `typescript: true`.
-- Virtual-file behavior is handled in coordination with the TypeScript package.
-
-## Repository Links
-
-- Source Package: [packages/svelte](https://github.com/santi020k/eslint-config-basic/tree/main/packages/svelte)
-- Playground: [packages/playground/svelte](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/svelte)
+- The internal package still exists in the monorepo for modular development and generated API docs.
+- For the old multi-package installation model, see the [v1 Svelte guide](/v1/frameworks/svelte).
 
 ## Related Pages
 
-- [TypeScript](/frameworks/typescript)
+- [Installation](/guide/installation)
 - [Configuration](/guide/configuration)
-- [Playgrounds](/guide/playgrounds)
+- [v1 to v2 Migration](/guide/migration-v1-to-v2)

@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
-    "@santi020k/eslint-config-solid": "workspace:^",
     "eslint": "^10.2.1",
     "solid-js": "^1.9.11"
   },

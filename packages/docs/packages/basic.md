@@ -2,24 +2,15 @@
 
 Package: [`@santi020k/eslint-config-basic`](https://www.npmjs.com/package/@santi020k/eslint-config-basic)
 
-This is the main package of the monorepo and the entry point most projects should install first.
+This is the public package application projects install in v2.
 
 ## What It Owns
 
 - The `eslintConfig()` composer used in application `eslint.config.*` files.
-- The public enums and helper types re-exported from the core package.
-- Framework composition and framework contract checks.
-- Optional tooling composition for libraries, testing, formats, tools, and extensions.
+- Bundled framework composition for React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, and Remix.
+- TypeScript, runtime, settings, strict mode, and optional tooling composition.
+- Public enums and helper types re-exported from `core`.
 - The `basic-eslint` CLI.
-- Strict-mode promotion and final config ordering.
-
-## When to Use It
-
-Use this package when you want the supported public API for the project.
-
-- Application projects should start here.
-- Shared internal configs can usually wrap this package instead of rebuilding the whole stack from `core`.
-- Framework packages are layered into this package instead of replacing it.
 
 ## Minimal Example
 
@@ -29,51 +20,31 @@ import { eslintConfig } from '@santi020k/eslint-config-basic'
 export default eslintConfig()
 ```
 
-## Composed Example
+## Explicit Example
 
 ```js
-import { eslintConfig, Extension, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
-import react from '@santi020k/eslint-config-react'
+import { eslintConfig, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
   typescript: true,
   frameworks: {
-    react
+    react: true
   },
   libraries: [Library.Tailwind],
   testing: [Testing.Vitest],
-  tools: [Tool.Prettier],
-  extensions: [Extension.Unicorn]
+  tools: [Tool.Prettier]
 })
 ```
 
 ## Auto-Detection
 
-The package can automatically identify frameworks and settings from your project structure. You can use `detectProjectOptions()` to see what is detected, or simply call `eslintConfig()` with no arguments to use the defaults.
+`eslintConfig()` detects TypeScript, frameworks, runtime, and supported optional integrations from your project. Detected frameworks are enabled automatically in v2 because their config packages are bundled behind the main package.
 
-```js
-import { eslintConfig } from '@santi020k/eslint-config-basic'
+## Advanced Overrides
 
-// This will automatically detect TypeScript, React, Next.js, etc.
-export default eslintConfig()
-```
+The `frameworks` object still accepts imported config arrays and factories. This keeps the internal architecture flexible for tests, experiments, and custom wrappers, while app-level configs can stay simple with booleans.
 
-> [!IMPORTANT]
-> Since version 1.4.0, detected frameworks are reported via the `detectedFrameworks` field. The `frameworks` object in the detection result remains empty to prevent `TypeError` when spreading it into `eslintConfig()` (as framework options require imported config objects).
-
-## Main Responsibilities
-
-### Public Composition API
-
-The package turns a small, explicit options object into the final flat-config array. That includes runtime globals, framework packages, optional tooling, typed-rule protection for virtual files, and final ordering.
-
-### Re-Exports
-
-The package re-exports the enums and helpers most users need, so consumers rarely need to import `@santi020k/eslint-config-core` directly.
-
-### CLI
-
-The built-in CLI can scaffold or refresh the config file for a project:
+## CLI
 
 ::: code-group
 
@@ -99,23 +70,9 @@ bunx @santi020k/eslint-config-basic update
 
 :::
 
-### Contracts
-
-This package also protects the public contracts of the library. For example:
-
-- Next.js and Expo require the React framework package.
-- Presets never silently inject framework packages.
-- Optional tooling stays explicit in the generated config file.
-
-## Repository Links
-
-- Source Package: [packages/basic](https://github.com/santi020k/eslint-config-basic/tree/main/packages/basic)
-- Project Repository: [santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)
-- Author: [santi020k](https://santi020k.com)
-
 ## Related Pages
 
-- [Getting Started](/guide/getting-started)
+- [Installation](/guide/installation)
 - [Configuration](/guide/configuration)
-- [CLI](/guide/cli)
+- [v1 to v2 Migration](/guide/migration-v1-to-v2)
 - [API Reference](/api/)

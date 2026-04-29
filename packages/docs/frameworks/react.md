@@ -1,27 +1,25 @@
 # React
 
-Package: [`@santi020k/eslint-config-react`](https://www.npmjs.com/package/@santi020k/eslint-config-react)
-
-Use the React package for React apps, or as the required React dependency when composing Next.js or Expo.
+Use React support from the main v2 package. Application projects no longer install a separate `@santi020k/eslint-config-react` package.
 
 ## Install
 
 ::: code-group
 
 ```sh [pnpm]
-pnpm add -D @santi020k/eslint-config-react
+pnpm add -D @santi020k/eslint-config-basic
 ```
 
 ```sh [npm]
-npm install -D @santi020k/eslint-config-react
+npm install -D @santi020k/eslint-config-basic
 ```
 
 ```sh [yarn]
-yarn add -D @santi020k/eslint-config-react
+yarn add -D @santi020k/eslint-config-basic
 ```
 
 ```sh [bun]
-bun add -d @santi020k/eslint-config-react
+bun add -d @santi020k/eslint-config-basic
 ```
 
 :::
@@ -30,34 +28,30 @@ bun add -d @santi020k/eslint-config-react
 
 ```js
 import { eslintConfig } from '@santi020k/eslint-config-basic'
-import react from '@santi020k/eslint-config-react'
 
 export default eslintConfig({
   typescript: true,
   frameworks: {
-    react
+    react: true
   }
 })
 ```
 
+Most projects can also rely on auto-detection and use `eslintConfig()` with no framework object.
+
 ## What It Adds
 
-- React and Hooks rules through an explicit framework package.
-- A reusable building block for plain React, Next.js, and Expo configurations.
-- Better clarity in the final config array because React support is never implicit.
+- React component and Hooks rules.
+- Composition through the same `@santi020k/eslint-config-basic` entry point as every other framework.
+- Compatibility with advanced overrides if you pass a custom config array or factory instead of `true`.
 
 ## Notes
 
-- Plain React browser apps often combine `react` with `runtime: Runtime.Browser` or `preset: Preset.Browser`.
-- Next.js and Expo both require `frameworks.react` in addition to their own framework package.
-
-## Repository Links
-
-- Source Package: [packages/react](https://github.com/santi020k/eslint-config-basic/tree/main/packages/react)
-- Playground: [packages/playground/react](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/react)
+- The internal package still exists in the monorepo for modular development and generated API docs.
+- For the old multi-package installation model, see the [v1 React guide](/v1/frameworks/react).
 
 ## Related Pages
 
-- [Next.js](/frameworks/next)
-- [Expo](/frameworks/expo)
+- [Installation](/guide/installation)
 - [Configuration](/guide/configuration)
+- [v1 to v2 Migration](/guide/migration-v1-to-v2)

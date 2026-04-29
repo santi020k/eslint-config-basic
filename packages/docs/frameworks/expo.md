@@ -1,67 +1,57 @@
 # Expo
 
-Package: [`@santi020k/eslint-config-expo`](https://www.npmjs.com/package/@santi020k/eslint-config-expo)
-
-Use the Expo package for Expo or React Native projects that need the shared baseline plus Expo-specific rules.
+Use Expo support from the main v2 package. Application projects no longer install a separate `@santi020k/eslint-config-expo` package.
 
 ## Install
 
 ::: code-group
 
 ```sh [pnpm]
-pnpm add -D @santi020k/eslint-config-expo @santi020k/eslint-config-react
+pnpm add -D @santi020k/eslint-config-basic
 ```
 
 ```sh [npm]
-npm install -D @santi020k/eslint-config-expo @santi020k/eslint-config-react
+npm install -D @santi020k/eslint-config-basic
 ```
 
 ```sh [yarn]
-yarn add -D @santi020k/eslint-config-expo @santi020k/eslint-config-react
+yarn add -D @santi020k/eslint-config-basic
 ```
 
 ```sh [bun]
-bun add -d @santi020k/eslint-config-expo @santi020k/eslint-config-react
+bun add -d @santi020k/eslint-config-basic
 ```
 
 :::
-
-Expo requires the React package explicitly.
 
 ## Configure
 
 ```js
 import { eslintConfig } from '@santi020k/eslint-config-basic'
-import expo from '@santi020k/eslint-config-expo'
-import react from '@santi020k/eslint-config-react'
 
 export default eslintConfig({
   typescript: true,
   frameworks: {
-    react,
-    expo
+    expo: true
   }
 })
 ```
 
+Most projects can also rely on auto-detection and use `eslintConfig()` with no framework object.
+
 ## What It Adds
 
-- Expo-specific linting on top of the shared config stack.
-- An explicit React dependency so React and Expo stay aligned in the final config.
-- CLI support that scaffolds both `expo` and `react` imports together when Expo is detected.
+- Expo and React rules. React is included automatically.
+- Composition through the same `@santi020k/eslint-config-basic` entry point as every other framework.
+- Compatibility with advanced overrides if you pass a custom config array or factory instead of `true`.
 
 ## Notes
 
-- Expo projects usually also enable TypeScript.
-- The main package throws a helpful error if `frameworks.expo` is provided without `frameworks.react`.
-
-## Repository Links
-
-- Source Package: [packages/expo](https://github.com/santi020k/eslint-config-basic/tree/main/packages/expo)
-- Playground: [packages/playground/expo](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/expo)
+- The internal package still exists in the monorepo for modular development and generated API docs.
+- For the old multi-package installation model, see the [v1 Expo guide](/v1/frameworks/expo).
 
 ## Related Pages
 
-- [React](/frameworks/react)
-- [CLI](/guide/cli)
+- [Installation](/guide/installation)
 - [Configuration](/guide/configuration)
+- [v1 to v2 Migration](/guide/migration-v1-to-v2)

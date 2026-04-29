@@ -8,9 +8,11 @@ import { detectProjectOptions } from './index.js'
 const getDefaultConfigFilename = (cwd: string): string => {
   const packageJsonPath = join(cwd, 'package.json')
 
+  // eslint-disable-next-line security/detect-non-literal-fs-filename
   if (!existsSync(packageJsonPath)) return 'eslint.config.mjs'
 
   try {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8')) as { type?: string }
 
     return packageJson.type === 'module' ? 'eslint.config.js' : 'eslint.config.mjs'
@@ -23,7 +25,8 @@ const resolveConfigPath = (cwd: string): string => {
   const existingConfigPath = [
     'eslint.config.js',
     'eslint.config.mjs'
-  ].map(filename => join(cwd, filename)).find(existsSync)
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
+  ].map(filename => join(cwd, filename)).find(p => existsSync(p))
 
   return existingConfigPath ?? join(cwd, getDefaultConfigFilename(cwd))
 }
@@ -43,16 +46,12 @@ const createConfigContent = (cwd: string): { configPath: string, configContent: 
   const frameworkKeys = getFrameworkKeys(options.detectedFrameworks)
   const imports: string[] = ['import { eslintConfig } from \'@santi020k/eslint-config-basic\'']
 
-  frameworkKeys.forEach(key => {
-    imports.push(`import ${key} from '@santi020k/eslint-config-${key}'`)
-  })
-
   const configContent = `${imports.join('\n')}
 
 export default eslintConfig({
   typescript: ${JSON.stringify(options.typescript ?? false)},
   frameworks: {
-    ${frameworkKeys.map(key => `${key}: ${key}`).join(',\n    ')}
+    ${frameworkKeys.map(key => `${key}: true`).join(',\n    ')}
   },
   libraries: ${JSON.stringify(options.libraries ?? [], null, 2)},
   testing: ${JSON.stringify(options.testing ?? [], null, 2)},
@@ -73,6 +72,7 @@ export default eslintConfig({
 export const handleInit = (cwd: string = process.cwd()) => {
   const configPath = resolveConfigPath(cwd)
 
+  // eslint-disable-next-line security/detect-non-literal-fs-filename
   if (existsSync(configPath)) {
     console.warn(`⚠️  ${basename(configPath)} already exists. Skipping...`)
 
@@ -83,6 +83,7 @@ export const handleInit = (cwd: string = process.cwd()) => {
 
   const { configContent } = createConfigContent(cwd)
 
+  // eslint-disable-next-line security/detect-non-literal-fs-filename
   writeFileSync(configPath, configContent)
 
   console.log(`✅ Created ${basename(configPath)} with auto-detected settings!`)
@@ -95,6 +96,7 @@ export const handleUpdate = (cwd: string = process.cwd()) => {
 
   const { configPath, configContent } = createConfigContent(cwd)
 
+  // eslint-disable-next-line security/detect-non-literal-fs-filename
   writeFileSync(configPath, configContent)
 
   console.log(`✅ Updated ${basename(configPath)} with auto-detected settings!`)

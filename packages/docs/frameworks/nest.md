@@ -1,27 +1,25 @@
 # NestJS
 
-Package: [`@santi020k/eslint-config-nest`](https://www.npmjs.com/package/@santi020k/eslint-config-nest)
-
-Use the NestJS package for server-side TypeScript apps that want the shared rules plus Nest-oriented linting.
+Use NestJS support from the main v2 package. Application projects no longer install a separate `@santi020k/eslint-config-nest` package.
 
 ## Install
 
 ::: code-group
 
 ```sh [pnpm]
-pnpm add -D @santi020k/eslint-config-nest
+pnpm add -D @santi020k/eslint-config-basic
 ```
 
 ```sh [npm]
-npm install -D @santi020k/eslint-config-nest
+npm install -D @santi020k/eslint-config-basic
 ```
 
 ```sh [yarn]
-yarn add -D @santi020k/eslint-config-nest
+yarn add -D @santi020k/eslint-config-basic
 ```
 
 ```sh [bun]
-bun add -d @santi020k/eslint-config-nest
+bun add -d @santi020k/eslint-config-basic
 ```
 
 :::
@@ -30,34 +28,30 @@ bun add -d @santi020k/eslint-config-nest
 
 ```js
 import { eslintConfig } from '@santi020k/eslint-config-basic'
-import nest from '@santi020k/eslint-config-nest'
 
 export default eslintConfig({
   typescript: true,
   frameworks: {
-    nest
+    nest: true
   }
 })
 ```
 
+Most projects can also rely on auto-detection and use `eslintConfig()` with no framework object.
+
 ## What It Adds
 
-- NestJS-focused rules on top of the core and TypeScript packages.
-- A modular server-side framework package that does not affect front-end projects.
-- A composition path that still works with presets and other optional tooling.
+- NestJS server-side TypeScript rules.
+- Composition through the same `@santi020k/eslint-config-basic` entry point as every other framework.
+- Compatibility with advanced overrides if you pass a custom config array or factory instead of `true`.
 
 ## Notes
 
-- NestJS projects usually work well with `runtime: Runtime.Node` or `preset: Preset.Node`.
-- The framework package remains explicit, even when NestJS is detected from `package.json`.
-
-## Repository Links
-
-- Source Package: [packages/nest](https://github.com/santi020k/eslint-config-basic/tree/main/packages/nest)
-- Playground: [packages/playground/nest](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/nest)
+- The internal package still exists in the monorepo for modular development and generated API docs.
+- For the old multi-package installation model, see the [v1 NestJS guide](/v1/frameworks/nest).
 
 ## Related Pages
 
+- [Installation](/guide/installation)
 - [Configuration](/guide/configuration)
-- [Core Package](/packages/core)
-- [Playgrounds](/guide/playgrounds)
+- [v1 to v2 Migration](/guide/migration-v1-to-v2)

@@ -1,27 +1,25 @@
 # Angular
 
-Package: [`@santi020k/eslint-config-angular`](https://www.npmjs.com/package/@santi020k/eslint-config-angular)
-
-Use the Angular package when the project needs Angular-specific linting on top of the shared base and TypeScript stack.
+Use Angular support from the main v2 package. Application projects no longer install a separate `@santi020k/eslint-config-angular` package.
 
 ## Install
 
 ::: code-group
 
 ```sh [pnpm]
-pnpm add -D @santi020k/eslint-config-angular
+pnpm add -D @santi020k/eslint-config-basic
 ```
 
 ```sh [npm]
-npm install -D @santi020k/eslint-config-angular
+npm install -D @santi020k/eslint-config-basic
 ```
 
 ```sh [yarn]
-yarn add -D @santi020k/eslint-config-angular
+yarn add -D @santi020k/eslint-config-basic
 ```
 
 ```sh [bun]
-bun add -d @santi020k/eslint-config-angular
+bun add -d @santi020k/eslint-config-basic
 ```
 
 :::
@@ -29,35 +27,31 @@ bun add -d @santi020k/eslint-config-angular
 ## Configure
 
 ```js
-import angular from '@santi020k/eslint-config-angular'
 import { eslintConfig } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
   typescript: true,
   frameworks: {
-    angular
+    angular: true
   }
 })
 ```
 
+Most projects can also rely on auto-detection and use `eslintConfig()` with no framework object.
+
 ## What It Adds
 
-- Angular-specific linting as an explicit framework package.
-- A modular install path, so non-Angular projects do not inherit Angular dependencies.
-- A clean composition model that still fits the shared `eslintConfig()` API.
+- Angular project rules.
+- Composition through the same `@santi020k/eslint-config-basic` entry point as every other framework.
+- Compatibility with advanced overrides if you pass a custom config array or factory instead of `true`.
 
 ## Notes
 
-- Angular projects usually benefit from enabling TypeScript.
-- Framework packages remain explicit even when the rest of the config is auto-detected.
-
-## Repository Links
-
-- Source Package: [packages/angular](https://github.com/santi020k/eslint-config-basic/tree/main/packages/angular)
-- Playground: [packages/playground/angular](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/angular)
+- The internal package still exists in the monorepo for modular development and generated API docs.
+- For the old multi-package installation model, see the [v1 Angular guide](/v1/frameworks/angular).
 
 ## Related Pages
 
+- [Installation](/guide/installation)
 - [Configuration](/guide/configuration)
-- [Optional Tooling](/tooling/overview)
-- [Playgrounds](/guide/playgrounds)
+- [v1 to v2 Migration](/guide/migration-v1-to-v2)

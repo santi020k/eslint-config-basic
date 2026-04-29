@@ -22,6 +22,7 @@ export default defineConfig([
       'src/agent-skill-generator.ts',
       'src/index.ts',
       'src/compose.ts',
+      'src/frameworks.ts',
       'src/optionals.ts',
       'src/resolvers.ts',
     ],

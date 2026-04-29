@@ -1,27 +1,25 @@
 # Qwik
 
-Package: [`@santi020k/eslint-config-qwik`](https://www.npmjs.com/package/@santi020k/eslint-config-qwik)
-
-Use the Qwik package for Qwik applications that need framework-specific linting alongside the shared base config.
+Use Qwik support from the main v2 package. Application projects no longer install a separate `@santi020k/eslint-config-qwik` package.
 
 ## Install
 
 ::: code-group
 
 ```sh [pnpm]
-pnpm add -D @santi020k/eslint-config-qwik
+pnpm add -D @santi020k/eslint-config-basic
 ```
 
 ```sh [npm]
-npm install -D @santi020k/eslint-config-qwik
+npm install -D @santi020k/eslint-config-basic
 ```
 
 ```sh [yarn]
-yarn add -D @santi020k/eslint-config-qwik
+yarn add -D @santi020k/eslint-config-basic
 ```
 
 ```sh [bun]
-bun add -d @santi020k/eslint-config-qwik
+bun add -d @santi020k/eslint-config-basic
 ```
 
 :::
@@ -30,33 +28,30 @@ bun add -d @santi020k/eslint-config-qwik
 
 ```js
 import { eslintConfig } from '@santi020k/eslint-config-basic'
-import qwik from '@santi020k/eslint-config-qwik'
 
 export default eslintConfig({
   typescript: true,
   frameworks: {
-    qwik
+    qwik: true
   }
 })
 ```
 
+Most projects can also rely on auto-detection and use `eslintConfig()` with no framework object.
+
 ## What It Adds
 
-- Qwik-specific rules via `eslint-plugin-qwik`, including `use-method-usage`, `valid-lexical-scope`, `no-react-props`, and `loader-location`.
-- Built-in accessibility rules (`qwik/jsx-a11y/*`) covering alt text, ARIA attributes, keyboard interaction, and more.
-- A modular install path that keeps non-Qwik projects lean.
+- Qwik resumability and JSX rules.
+- Composition through the same `@santi020k/eslint-config-basic` entry point as every other framework.
+- Compatibility with advanced overrides if you pass a custom config array or factory instead of `true`.
 
 ## Notes
 
-- Qwik projects work well with TypeScript enabled, as Qwik's resumability model relies on type-safe serialisation boundaries.
-- Optional tooling such as Vitest, Tailwind, or Storybook can still be added through enums from the main package.
-
-## Repository Links
-
-- Source Package: [packages/qwik](https://github.com/santi020k/eslint-config-basic/tree/main/packages/qwik)
+- The internal package still exists in the monorepo for modular development and generated API docs.
+- For the old multi-package installation model, see the [v1 Qwik guide](/v1/frameworks/qwik).
 
 ## Related Pages
 
+- [Installation](/guide/installation)
 - [Configuration](/guide/configuration)
-- [Optional Tooling](/tooling/overview)
-- [Playgrounds](/guide/playgrounds)
+- [v1 to v2 Migration](/guide/migration-v1-to-v2)

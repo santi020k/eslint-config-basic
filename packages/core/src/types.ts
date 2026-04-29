@@ -165,7 +165,8 @@ export const ReactConfigKeys = [
 export type ImportedFramework =
   FlatConfigArray |
   { default: FlatConfigArray | ((options?: Record<string, unknown>) => FlatConfigArray) } |
-  ((options?: Record<string, unknown>) => FlatConfigArray)
+  ((options?: Record<string, unknown>) => FlatConfigArray) |
+  true
 
 /**
  * Framework names that can be auto-detected by `detectProjectOptions`.
@@ -239,8 +240,10 @@ export interface EslintConfigOptions {
 
   /**
    * Framework and library specific configurations.
-   * Each value must be the imported config from the corresponding
-   * `@santi020k/eslint-config-<framework>` package — boolean values are not accepted.
+   *
+   * Set a framework to `true` to use the bundled v2 config from
+   * `@santi020k/eslint-config-basic`, or pass a config array/factory when you
+   * need to override the bundled config.
    */
   frameworks?: {
     react?: ImportedFramework
@@ -259,9 +262,7 @@ export interface EslintConfigOptions {
 
   /**
    * Frameworks detected from package.json by `detectProjectOptions()`.
-   * This is informational — use it to display what was auto-detected.
-   * To actually enable framework linting you still need to import the
-   * framework package and pass it via `frameworks.<name>`.
+   * In v2, `eslintConfig()` enables these bundled framework configs by default.
    */
   detectedFrameworks?: DetectedFrameworkName[]
 }

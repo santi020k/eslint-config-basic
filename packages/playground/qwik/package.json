@@ -11,7 +11,6 @@
   "dependencies": {
     "@builder.io/qwik": "^1.19.2",
     "@santi020k/eslint-config-basic": "workspace:^",
-    "@santi020k/eslint-config-qwik": "workspace:^",
     "eslint": "^10.2.1"
   },
   "devDependencies": {

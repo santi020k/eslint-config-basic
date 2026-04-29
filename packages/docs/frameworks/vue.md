@@ -1,27 +1,25 @@
 # Vue
 
-Package: [`@santi020k/eslint-config-vue`](https://www.npmjs.com/package/@santi020k/eslint-config-vue)
-
-Use the Vue package for projects that rely on Vue single-file components and want to keep framework support explicit.
+Use Vue support from the main v2 package. Application projects no longer install a separate `@santi020k/eslint-config-vue` package.
 
 ## Install
 
 ::: code-group
 
 ```sh [pnpm]
-pnpm add -D @santi020k/eslint-config-vue
+pnpm add -D @santi020k/eslint-config-basic
 ```
 
 ```sh [npm]
-npm install -D @santi020k/eslint-config-vue
+npm install -D @santi020k/eslint-config-basic
 ```
 
 ```sh [yarn]
-yarn add -D @santi020k/eslint-config-vue
+yarn add -D @santi020k/eslint-config-basic
 ```
 
 ```sh [bun]
-bun add -d @santi020k/eslint-config-vue
+bun add -d @santi020k/eslint-config-basic
 ```
 
 :::
@@ -30,34 +28,30 @@ bun add -d @santi020k/eslint-config-vue
 
 ```js
 import { eslintConfig } from '@santi020k/eslint-config-basic'
-import vue from '@santi020k/eslint-config-vue'
 
 export default eslintConfig({
   typescript: true,
   frameworks: {
-    vue
+    vue: true
   }
 })
 ```
 
+Most projects can also rely on auto-detection and use `eslintConfig()` with no framework object.
+
 ## What It Adds
 
-- Vue single-file component support through a dedicated framework package.
-- Clean composition with TypeScript and shared base rules.
-- A predictable explicit API instead of hidden framework auto-loading.
+- Vue single-file component rules.
+- Composition through the same `@santi020k/eslint-config-basic` entry point as every other framework.
+- Compatibility with advanced overrides if you pass a custom config array or factory instead of `true`.
 
 ## Notes
 
-- Vue projects often enable TypeScript support for `<script setup lang="ts">` and other typed component patterns.
-- Optional tooling such as Storybook, Tailwind, Vitest, or Markdown can be layered in through the main package enums.
-
-## Repository Links
-
-- Source Package: [packages/vue](https://github.com/santi020k/eslint-config-basic/tree/main/packages/vue)
-- Playground: [packages/playground/vue](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/vue)
+- The internal package still exists in the monorepo for modular development and generated API docs.
+- For the old multi-package installation model, see the [v1 Vue guide](/v1/frameworks/vue).
 
 ## Related Pages
 
-- [TypeScript](/frameworks/typescript)
-- [Optional Tooling](/tooling/overview)
-- [Playgrounds](/guide/playgrounds)
+- [Installation](/guide/installation)
+- [Configuration](/guide/configuration)
+- [v1 to v2 Migration](/guide/migration-v1-to-v2)

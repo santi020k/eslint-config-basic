@@ -13,7 +13,6 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250430.0",
     "@santi020k/eslint-config-basic": "workspace:^",
-    "@santi020k/eslint-config-hono": "workspace:^",
     "eslint": "^10.2.1",
     "typescript": "^5.9.3",
     "wrangler": "^4.85.0"

@@ -1,6 +1,6 @@
 # Getting Started
 
-This library is a DX-first, composable ESLint 9/10+ flat-config toolkit for JavaScript and TypeScript teams. The main entry point is [`@santi020k/eslint-config-basic`](https://www.npmjs.com/package/@santi020k/eslint-config-basic), and framework packages are added explicitly only when the project actually needs them.
+This library is a DX-first, composable ESLint 9/10+ flat-config toolkit for JavaScript and TypeScript teams. In v2, application projects install [`@santi020k/eslint-config-basic`](https://www.npmjs.com/package/@santi020k/eslint-config-basic) and enable bundled framework configs from there.
 
 ## Requirements
 
@@ -42,14 +42,14 @@ export default eslintConfig()
 ## Understand the Package Layout
 
 - `@santi020k/eslint-config-basic` is the main package.
-- Framework packages such as React, Next.js, Astro, Vue, and NestJS are installed only when needed.
+- Framework config packages still exist internally, but application projects normally do not install them directly.
 - Optional integrations are enabled through enums from the main package instead of separate config objects in application code.
 - ESLint can still be installed manually if you want to pin it yourself, as long as you stay on a compatible `^9` or `^10` release.
 
 ## Choose Your Workflow
 
-- Use the base package alone for core JavaScript, TypeScript, runtime detection, and optional integrations.
-- Add framework packages like React, Next.js, Astro, or Vue when your project needs them.
+- Use the base package alone for JavaScript, TypeScript, framework configs, runtime detection, and optional integrations.
+- Set `frameworks.react`, `frameworks.next`, or another framework option to `true` when you want to be explicit.
 - Use the CLI if you want a scaffolded config with detected integrations.
 
 ## Pick the Right Starting Point
@@ -63,6 +63,7 @@ export default eslintConfig()
 ## Canonical Package Entry Points
 
 - Main package: [`@santi020k/eslint-config-basic`](https://www.npmjs.com/package/@santi020k/eslint-config-basic)
+- v1 docs: [Version 1 documentation](/v1/guide/getting-started)
 - Repo: [santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)
 - Author: [santi020k](https://santi020k.com)
 

@@ -1,3 +1,4 @@
+/* eslint-disable security/detect-non-literal-fs-filename */
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
@@ -52,10 +53,10 @@ describe('CLI scaffolding', () => {
 
     const config = readFileSync(join(cwd, 'eslint.config.js'), 'utf8')
 
-    expect(config).toContain('import next from \'@santi020k/eslint-config-next\'')
-    expect(config).toContain('import react from \'@santi020k/eslint-config-react\'')
-    expect(config).toContain('next: next')
-    expect(config).toContain('react: react')
+    expect(config).not.toContain('@santi020k/eslint-config-next')
+    expect(config).not.toContain('@santi020k/eslint-config-react')
+    expect(config).toContain('next: true')
+    expect(config).toContain('react: true')
   })
 
   it('should update an existing config file in place', () => {
@@ -74,7 +75,8 @@ describe('CLI scaffolding', () => {
     const config = readFileSync(join(cwd, 'eslint.config.js'), 'utf8')
 
     expect(config).not.toContain('// old config')
-    expect(config).toContain('import react from \'@santi020k/eslint-config-react\'')
+    expect(config).not.toContain('@santi020k/eslint-config-react')
+    expect(config).toContain('react: true')
   })
 })
 

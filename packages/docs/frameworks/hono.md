@@ -1,27 +1,25 @@
 # Hono
 
-Package: [`@santi020k/eslint-config-hono`](https://www.npmjs.com/package/@santi020k/eslint-config-hono)
-
-Use the Hono package for Fetch API apps, especially Cloudflare Workers and other edge runtimes.
+Use Hono support from the main v2 package. Application projects no longer install a separate `@santi020k/eslint-config-hono` package.
 
 ## Install
 
 ::: code-group
 
 ```sh [pnpm]
-pnpm add -D @santi020k/eslint-config-hono
+pnpm add -D @santi020k/eslint-config-basic
 ```
 
 ```sh [npm]
-npm install -D @santi020k/eslint-config-hono
+npm install -D @santi020k/eslint-config-basic
 ```
 
 ```sh [yarn]
-yarn add -D @santi020k/eslint-config-hono
+yarn add -D @santi020k/eslint-config-basic
 ```
 
 ```sh [bun]
-bun add -d @santi020k/eslint-config-hono
+bun add -d @santi020k/eslint-config-basic
 ```
 
 :::
@@ -29,38 +27,31 @@ bun add -d @santi020k/eslint-config-hono
 ## Configure
 
 ```js
-import { eslintConfig, Runtime } from '@santi020k/eslint-config-basic'
-import hono from '@santi020k/eslint-config-hono'
+import { eslintConfig } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
   typescript: true,
-  runtime: Runtime.Worker,
   frameworks: {
-    hono
+    hono: true
   }
 })
 ```
 
+Most projects can also rely on auto-detection and use `eslintConfig()` with no framework object.
+
 ## What It Adds
 
-- Worker runtime globals for Fetch API server handlers.
-- A small explicit framework package for Hono projects.
-- A `createHonoConfig()` factory when a Hono app targets a non-Worker adapter.
-- Auto-detection for `hono`, plus Worker runtime detection when Cloudflare Workers tooling is present.
+- Hono and edge runtime rules.
+- Composition through the same `@santi020k/eslint-config-basic` entry point as every other framework.
+- Compatibility with advanced overrides if you pass a custom config array or factory instead of `true`.
 
 ## Notes
 
-- Plain Hono projects are detected as Hono but keep the default universal runtime.
-- Hono projects with `wrangler`, `@cloudflare/workers-types`, or `@cloudflare/vitest-pool-workers` are detected as `Runtime.Worker`.
-- The framework package remains explicit, even when Hono is detected from `package.json`.
-
-## Repository Links
-
-- Source Package: [packages/hono](https://github.com/santi020k/eslint-config-basic/tree/main/packages/hono)
-- Playground: [packages/playground/hono](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/hono)
+- The internal package still exists in the monorepo for modular development and generated API docs.
+- For the old multi-package installation model, see the [v1 Hono guide](/v1/frameworks/hono).
 
 ## Related Pages
 
+- [Installation](/guide/installation)
 - [Configuration](/guide/configuration)
-- [Core Package](/packages/core)
-- [Playgrounds](/guide/playgrounds)
+- [v1 to v2 Migration](/guide/migration-v1-to-v2)

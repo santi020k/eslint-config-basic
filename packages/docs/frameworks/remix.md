@@ -1,67 +1,57 @@
 # Remix
 
-Package: [`@santi020k/eslint-config-remix`](https://www.npmjs.com/package/@santi020k/eslint-config-remix)
-
-Use the Remix package for Remix applications that need accessibility-focused linting and Remix-aware ignore patterns alongside the shared base config. In real Remix apps, it is commonly paired with the React package so component linting stays explicit too.
+Use Remix support from the main v2 package. Application projects no longer install a separate `@santi020k/eslint-config-remix` package.
 
 ## Install
 
 ::: code-group
 
 ```sh [pnpm]
-pnpm add -D @santi020k/eslint-config-remix @santi020k/eslint-config-react
+pnpm add -D @santi020k/eslint-config-basic
 ```
 
 ```sh [npm]
-npm install -D @santi020k/eslint-config-remix @santi020k/eslint-config-react
+npm install -D @santi020k/eslint-config-basic
 ```
 
 ```sh [yarn]
-yarn add -D @santi020k/eslint-config-remix @santi020k/eslint-config-react
+yarn add -D @santi020k/eslint-config-basic
 ```
 
 ```sh [bun]
-bun add -d @santi020k/eslint-config-remix @santi020k/eslint-config-react
+bun add -d @santi020k/eslint-config-basic
 ```
 
 :::
-
-The Remix package can be composed on its own, but the playground pairs it with React so Remix component linting stays explicit.
 
 ## Configure
 
 ```js
 import { eslintConfig } from '@santi020k/eslint-config-basic'
-import react from '@santi020k/eslint-config-react'
-import remix from '@santi020k/eslint-config-remix'
 
 export default eslintConfig({
   typescript: true,
   frameworks: {
-    react,
-    remix
+    remix: true
   }
 })
 ```
 
+Most projects can also rely on auto-detection and use `eslintConfig()` with no framework object.
+
 ## What It Adds
 
-- Accessibility rules via `eslint-plugin-jsx-a11y` flat config, covering anchor content, ARIA attributes, label associations, media captions, and more.
-- Automatic ignores for Remix's standard build artefacts: `.cache/`, `build/`, and `public/build/`.
-- A clean way to keep Remix-specific rules and React-specific rules explicit in the same config.
-- A modular install path that keeps non-Remix projects lean.
+- Remix and React accessibility rules. React is included automatically.
+- Composition through the same `@santi020k/eslint-config-basic` entry point as every other framework.
+- Compatibility with advanced overrides if you pass a custom config array or factory instead of `true`.
 
 ## Notes
 
-- Remix projects typically also enable TypeScript support.
-- Optional tooling such as Vitest, Tailwind, or Storybook can still be added through enums from the main package.
-
-## Repository Links
-
-- Source Package: [packages/remix](https://github.com/santi020k/eslint-config-basic/tree/main/packages/remix)
+- The internal package still exists in the monorepo for modular development and generated API docs.
+- For the old multi-package installation model, see the [v1 Remix guide](/v1/frameworks/remix).
 
 ## Related Pages
 
+- [Installation](/guide/installation)
 - [Configuration](/guide/configuration)
-- [Optional Tooling](/tooling/overview)
-- [Playgrounds](/guide/playgrounds)
+- [v1 to v2 Migration](/guide/migration-v1-to-v2)

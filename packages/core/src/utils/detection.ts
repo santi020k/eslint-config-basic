@@ -28,11 +28,13 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
     runtime: Runtime.Universal
   }
 
+  // eslint-disable-next-line security/detect-non-literal-fs-filename
   if (!existsSync(packageJsonPath)) {
     return options
   }
 
   try {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const pkg = JSON.parse(readFileSync(packageJsonPath, 'utf-8')) as PackageJson
     const dependencies = pkg.dependencies ?? {}
     const devDependencies = pkg.devDependencies ?? {}
@@ -46,9 +48,8 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
 
     const detected = options.detectedFrameworks
 
-    // Framework detection — populates detectedFrameworks (informational).
-    // To enable linting for a detected framework, import its config package
-    // and pass it via frameworks.<name> in eslintConfig().
+    // Framework detection. In v2 the main package can enable these bundled
+    // configs directly, while callers can still override frameworks manually.
     if (allDeps.next) {
       detected.push('next')
 
@@ -132,7 +133,9 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
     options.detectedFrameworks = [...new Set(detected)]
 
     // Next.js routing mode detection: app/ directory = App Router, pages/ = Pages Router
+
     if (allDeps.next) {
+      // eslint-disable-next-line security/detect-non-literal-fs-filename
       if (existsSync(join(cwd, 'app')) || existsSync(join(cwd, 'src/app'))) {
         options.nextMode = NextMode.AppRouter
       } else {
@@ -141,8 +144,11 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
     }
 
     // Default to TS if tsconfig exists
+
     if (
+      // eslint-disable-next-line security/detect-non-literal-fs-filename
       existsSync(join(cwd, 'tsconfig.json')) ||
+      // eslint-disable-next-line security/detect-non-literal-fs-filename
       existsSync(join(cwd, 'tsconfig.base.json'))
     ) {
       options.typescript = true
@@ -218,7 +224,9 @@ export const detectProjectOptions = (cwd: string = process.cwd()): EslintConfigO
       allDeps.urql ||
       allDeps['graphql-tag'] ||
       allDeps['@graphql-typed-document-node/core'] ||
+      // eslint-disable-next-line security/detect-non-literal-fs-filename
       existsSync(join(cwd, 'schema.graphql')) ||
+      // eslint-disable-next-line security/detect-non-literal-fs-filename
       existsSync(join(cwd, 'schema.gql'))
     ) {
       options.formats?.push(Format.Graphql)

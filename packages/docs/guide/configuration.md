@@ -1,33 +1,25 @@
 # Configuration
 
-The main package composes the final config array from a small set of clear inputs:
-
-- Framework packages passed through `frameworks`.
-- Optional integrations passed through enums such as `Library`, `Testing`, `Format`, `Tool`, and `Extension`.
-- Runtime and preset choices.
-- Global settings such as `strict` and `settings`.
+The main package composes the final flat config array from one public install: `@santi020k/eslint-config-basic`.
 
 ## Mental Model
 
-Think of the config in three layers:
-
-- Start with the main package and optional TypeScript support.
-- Add explicit framework packages for the application stack.
-- Add optional tooling through enums for libraries, testing, formats, tools, and extensions.
-
-That keeps the final config readable while still giving you a broad feature set.
+- Start with `eslintConfig()`.
+- Let project detection enable TypeScript, frameworks, runtime, and supported tooling.
+- Make options explicit when you want stable, reviewable config.
+- Use booleans for bundled framework configs.
+- Use enums for optional tooling.
 
 ## Core Composition Model
 
 ```js
 import { eslintConfig, Extension, Format, Library, Runtime, Testing, Tool } from '@santi020k/eslint-config-basic'
-import react from '@santi020k/eslint-config-react'
 
 export default eslintConfig({
   typescript: true,
   runtime: Runtime.Browser,
   frameworks: {
-    react
+    react: true
   },
   libraries: [Library.Tailwind, Library.I18next],
   testing: [Testing.Vitest],
@@ -39,69 +31,66 @@ export default eslintConfig({
 
 ## Presets
 
-The base package exposes named presets for common setups.
-
 | Preset | Meaning |
 | :--- | :--- |
 | `Basic` | Core JavaScript rules only. |
 | `Node` | Core + TypeScript + Node globals. |
 | `Browser` | Core + TypeScript + Browser globals. |
-| `All` | TypeScript plus all bundled optional integrations from the main package. |
+| `Worker` | Core + TypeScript + worker globals. |
+| `All` | TypeScript plus all bundled optional integrations. |
 
-Framework packages are still explicit even when you use a preset.
+Presets do not force a framework. Frameworks come from project detection or the `frameworks` option.
 
-## Minimal Config
+## Frameworks
 
 ```js
-import { eslintConfig } from '@santi020k/eslint-config-basic'
+import { eslintConfig, NextMode } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig()
+export default eslintConfig({
+  nextMode: NextMode.AppRouter,
+  frameworks: {
+    next: true
+  }
+})
 ```
 
-## Runtime and Framework Contracts
+Next.js, Expo, and Remix automatically include React rules. You can still pass imported config arrays or factories for advanced cases, but app configs should prefer booleans.
 
-- `Runtime.Node` enables Node.js globals.
-- `Runtime.Browser` enables browser globals.
-- `Runtime.Universal` keeps both environments available.
-- `frameworks.react` is required when `frameworks.next` or `frameworks.expo` is used.
-- `nextMode: NextMode.AppRouter` adds the App Router override for Next.js.
-  - This is **auto-detected** if an `app/` or `src/app/` directory is present.
-- When you write the config manually, pass imported framework packages instead of booleans.
+| Framework | Option |
+| :--- | :--- |
+| React | `frameworks.react` |
+| Next.js | `frameworks.next` |
+| Astro | `frameworks.astro` |
+| Vue | `frameworks.vue` |
+| Svelte | `frameworks.svelte` |
+| Solid | `frameworks.solid` |
+| Angular | `frameworks.angular` |
+| NestJS | `frameworks.nest` |
+| Hono | `frameworks.hono` |
+| Expo | `frameworks.expo` |
+| Qwik | `frameworks.qwik` |
+| Remix | `frameworks.remix` |
 
 ## Configuration Priority
 
-The `eslintConfig` function uses a hierarchical merging strategy for its settings:
+1. Explicit options passed to `eslintConfig({})`.
+2. Preset defaults.
+3. Auto-detection from `package.json`, `tsconfig.json`, and project structure.
 
-1. **User Options**: Any field explicitly passed to `eslintConfig({})` always takes the highest priority.
-2. **Preset Defaults**: If a `preset` is chosen, its default values are used for any fields not explicitly provided by the user.
-3. **Auto-Detection**: If a field is still `undefined`, it falls back to values detected from your `package.json`, `tsconfig.json`, and project structure.
+To disable something detected automatically, pass the disabled value explicitly, such as `typescript: false`, `frameworks: {}`, or `libraries: []`.
 
-> [!TIP]
-> To disable a feature that is being auto-detected, explicitly set it to `false` or an empty array (e.g., `typescript: false` or `libraries: []`).
-
-## Full Settings Example
-
-For large projects with multiple integrations, you can activate everything in a single call. Most of these will be auto-detected if the packages exist in your dependencies, but you can be explicit:
+## Full Example
 
 ```js
 import { eslintConfig, Extension, Format, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
-import next from '@santi020k/eslint-config-next'
-import react from '@santi020k/eslint-config-react'
 
 export default eslintConfig({
-  // Enable TypeScript support (auto-detected if tsconfig.json exists)
   typescript: true,
-
-  // Strict mode: all warnings become errors
   strict: true,
-
-  // Frameworks (imports are lazy-loaded)
   frameworks: {
-    react,
-    next
+    react: true,
+    next: true
   },
-
-  // Libraries & Styling
   libraries: [
     Library.Tailwind,
     Library.TanstackQuery,
@@ -109,16 +98,12 @@ export default eslintConfig({
     Library.Storybook,
     Library.I18next
   ],
-
-  // Testing Frameworks
   testing: [
     Testing.Vitest,
     Testing.Playwright,
     Testing.TestingLibrary,
     Testing.Cypress
   ],
-
-  // File Formats
   formats: [
     Format.Mdx,
     Format.Markdown,
@@ -127,15 +112,11 @@ export default eslintConfig({
     Format.Yaml,
     Format.Toml
   ],
-
-  // Standalone Tools
   tools: [
     Tool.Prettier,
     Tool.Cspell,
     Tool.Jsdoc
   ],
-
-  // Specialized Extensions
   extensions: [
     Extension.Unicorn,
     Extension.Sonarjs,
@@ -147,49 +128,15 @@ export default eslintConfig({
 })
 ```
 
-## Framework Matrix
-
-| Framework | Package | Special Notes |
-| :--- | :--- | :--- |
-| TypeScript | `typescript: true` | Automatically detected from `tsconfig.json`. |
-| React | `@santi020k/eslint-config-react` | Base for React, Next.js, Remix, and Expo. |
-| Next.js | `@santi020k/eslint-config-next` | [Dedicated Page](/frameworks/next). Requires `react`. |
-| Astro | `@santi020k/eslint-config-astro` | [Dedicated Page](/frameworks/astro). |
-| Vue | `@santi020k/eslint-config-vue` | [Dedicated Page](/frameworks/vue). |
-| Svelte | `@santi020k/eslint-config-svelte` | [Dedicated Page](/frameworks/svelte). |
-| Solid | `@santi020k/eslint-config-solid` | [Dedicated Page](/frameworks/solid). |
-| Qwik | `@santi020k/eslint-config-qwik` | [Dedicated Page](/frameworks/qwik). |
-| Remix | `@santi020k/eslint-config-remix` | [Dedicated Page](/frameworks/remix). Commonly paired with `react` in Remix apps. |
-| Hono | `@santi020k/eslint-config-hono` | [Dedicated Page](/frameworks/hono). Optimized for Hono and edge runtimes. |
-| Angular | `@santi020k/eslint-config-angular` | [Dedicated Page](/frameworks/angular). |
-| NestJS | `@santi020k/eslint-config-nest` | [Dedicated Page](/frameworks/nest). |
-| Expo | `@santi020k/eslint-config-expo` | [Dedicated Page](/frameworks/expo). Requires `react`. |
-
-## Optional Tooling
-
-The optional integrations are grouped into five categories:
-
-- Libraries: `libraries`
-- Testing: `testing`
-- Formats: `formats`
-- Tools: `tools`
-- Extensions: `extensions`
-
-See the dedicated section for the full catalog: [Tooling Overview](/tooling/overview)
-
-Optional integrations are evaluated lazily. You only need the peer packages for integrations you actually enable, so a base Node project does not need unrelated packages like Storybook or GraphQL.
-
 ## Common Patterns
 
 ### Fullstack Remix + Tailwind
 
 ```js
 import { eslintConfig, Library } from '@santi020k/eslint-config-basic'
-import react from '@santi020k/eslint-config-react'
-import remix from '@santi020k/eslint-config-remix'
 
 export default eslintConfig({
-  frameworks: { react, remix },
+  frameworks: { remix: true },
   libraries: [Library.Tailwind]
 })
 ```
@@ -197,19 +144,15 @@ export default eslintConfig({
 ### Astro + Svelte + Vitest
 
 ```js
-import astro from '@santi020k/eslint-config-astro'
 import { eslintConfig, Testing } from '@santi020k/eslint-config-basic'
-import svelte from '@santi020k/eslint-config-svelte'
 
 export default eslintConfig({
-  frameworks: { astro, svelte },
+  frameworks: { astro: true, svelte: true },
   testing: [Testing.Vitest]
 })
 ```
 
 ## Strict Mode
-
-Use strict mode when you want warnings promoted to errors.
 
 ```js
 import { eslintConfig } from '@santi020k/eslint-config-basic'
@@ -219,7 +162,7 @@ export default eslintConfig({
 })
 ```
 
-Strict mode promotes warning severities to errors across the composed config, including array-style rule definitions.
+Strict mode promotes warning severities to errors across the composed config.
 
 ## Settings
 
@@ -233,23 +176,9 @@ export default eslintConfig({
 })
 ```
 
-## Recommended Workflow
-
-- Start with `eslintConfig()`.
-- Add framework packages explicitly.
-- Add optional integrations through enums.
-- Use the CLI if you want the first config file scaffolded for you.
-- Use the inspector when the final config needs debugging.
-
-## Repository Links
-
-- Main Package Source: [packages/basic](https://github.com/santi020k/eslint-config-basic/tree/main/packages/basic)
-- Core Types And Detection: [packages/core](https://github.com/santi020k/eslint-config-basic/tree/main/packages/core)
-
 ## Related Pages
 
-- [CLI](/guide/cli)
-- [Inspector](/guide/inspector)
-- [Basic Package](/packages/basic)
-- [Optionals Package](/packages/optionals)
-- [Core Package](/packages/core)
+- [Installation](/guide/installation)
+- [v1 to v2 Migration](/guide/migration-v1-to-v2)
+- [Framework Guides](/frameworks/typescript)
+- [Optional Tooling](/tooling/overview)

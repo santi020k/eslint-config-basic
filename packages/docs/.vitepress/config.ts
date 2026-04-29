@@ -122,6 +122,13 @@ export default defineConfig({
       { text: 'API', link: '/api/' },
       { text: 'Changelog', link: '/guide/changelog' },
       {
+        text: 'Versions',
+        items: [
+          { text: 'v2', link: '/guide/getting-started' },
+          { text: 'v1', link: '/v1/guide/getting-started' }
+        ]
+      },
+      {
         text: 'More',
         items: [
           { text: 'GitHub', link: 'https://github.com/santi020k/eslint-config-basic' },
@@ -131,6 +138,74 @@ export default defineConfig({
       }
     ],
     sidebar: {
+      '/v1/guide/': [
+        {
+          text: 'v1 Guide',
+          items: [
+            { text: 'Getting Started', link: '/v1/guide/getting-started' },
+            { text: 'Installation', link: '/v1/guide/installation' },
+            { text: 'Configuration', link: '/v1/guide/configuration' },
+            { text: 'CLI', link: '/v1/guide/cli' },
+            { text: 'Inspector', link: '/v1/guide/inspector' },
+            { text: 'Playgrounds', link: '/v1/guide/playgrounds' },
+            { text: 'Changelog', link: '/v1/guide/changelog' }
+          ]
+        }
+      ],
+      '/v1/frameworks/': [
+        {
+          text: 'v1 Framework Guides',
+          items: [
+            { text: 'TypeScript', link: '/v1/frameworks/typescript' },
+            { text: 'React', link: '/v1/frameworks/react' },
+            { text: 'Next.js', link: '/v1/frameworks/next' },
+            { text: 'Astro', link: '/v1/frameworks/astro' },
+            { text: 'Vue', link: '/v1/frameworks/vue' },
+            { text: 'Svelte', link: '/v1/frameworks/svelte' },
+            { text: 'Solid', link: '/v1/frameworks/solid' },
+            { text: 'Angular', link: '/v1/frameworks/angular' },
+            { text: 'NestJS', link: '/v1/frameworks/nest' },
+            { text: 'Hono', link: '/v1/frameworks/hono' },
+            { text: 'Expo', link: '/v1/frameworks/expo' },
+            { text: 'Qwik', link: '/v1/frameworks/qwik' },
+            { text: 'Remix', link: '/v1/frameworks/remix' }
+          ]
+        }
+      ],
+      '/v1/tooling/': [
+        {
+          text: 'v1 Optional Tooling',
+          items: [
+            { text: 'Overview', link: '/v1/tooling/overview' },
+            { text: 'Libraries', link: '/v1/tooling/libraries' },
+            { text: 'Testing', link: '/v1/tooling/testing' },
+            { text: 'Formats', link: '/v1/tooling/formats' },
+            { text: 'Tools', link: '/v1/tooling/tools' },
+            { text: 'Extensions', link: '/v1/tooling/extensions' }
+          ]
+        }
+      ],
+      '/v1/packages/': [
+        {
+          text: 'v1 Package Docs',
+          items: [
+            { text: 'Basic', link: '/v1/packages/basic' },
+            { text: 'Core', link: '/v1/packages/core' },
+            { text: 'Optionals', link: '/v1/packages/optionals' },
+            { text: 'Playground', link: '/v1/packages/playground' },
+            { text: 'Tests', link: '/v1/packages/tests' }
+          ]
+        }
+      ],
+      '/v1/api/': [
+        {
+          text: 'v1 API Reference',
+          items: [
+            { text: 'Overview', link: '/v1/api/' },
+            { text: 'Generated Reference Index', link: '/v1/api/reference/' }
+          ]
+        }
+      ],
       '/guide/': [
         {
           text: 'Guide',
@@ -138,6 +213,7 @@ export default defineConfig({
             { text: 'Getting Started', link: '/guide/getting-started' },
             { text: 'Installation', link: '/guide/installation' },
             { text: 'Configuration', link: '/guide/configuration' },
+            { text: 'v1 to v2 Migration', link: '/guide/migration-v1-to-v2' },
             { text: 'CLI', link: '/guide/cli' },
             { text: 'Inspector', link: '/guide/inspector' },
             { text: 'Playgrounds', link: '/guide/playgrounds' },

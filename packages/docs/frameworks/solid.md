@@ -1,27 +1,25 @@
 # Solid
 
-Package: [`@santi020k/eslint-config-solid`](https://www.npmjs.com/package/@santi020k/eslint-config-solid)
-
-Use the Solid package for SolidJS applications that need framework-specific linting alongside the shared base config.
+Use Solid support from the main v2 package. Application projects no longer install a separate `@santi020k/eslint-config-solid` package.
 
 ## Install
 
 ::: code-group
 
 ```sh [pnpm]
-pnpm add -D @santi020k/eslint-config-solid
+pnpm add -D @santi020k/eslint-config-basic
 ```
 
 ```sh [npm]
-npm install -D @santi020k/eslint-config-solid
+npm install -D @santi020k/eslint-config-basic
 ```
 
 ```sh [yarn]
-yarn add -D @santi020k/eslint-config-solid
+yarn add -D @santi020k/eslint-config-basic
 ```
 
 ```sh [bun]
-bun add -d @santi020k/eslint-config-solid
+bun add -d @santi020k/eslint-config-basic
 ```
 
 :::
@@ -30,34 +28,30 @@ bun add -d @santi020k/eslint-config-solid
 
 ```js
 import { eslintConfig } from '@santi020k/eslint-config-basic'
-import solid from '@santi020k/eslint-config-solid'
 
 export default eslintConfig({
   typescript: true,
   frameworks: {
-    solid
+    solid: true
   }
 })
 ```
 
+Most projects can also rely on auto-detection and use `eslintConfig()` with no framework object.
+
 ## What It Adds
 
-- SolidJS-specific framework rules.
-- A modular install path that keeps non-Solid projects lean.
-- Clean composition with TypeScript and optional integrations.
+- Solid JSX rules.
+- Composition through the same `@santi020k/eslint-config-basic` entry point as every other framework.
+- Compatibility with advanced overrides if you pass a custom config array or factory instead of `true`.
 
 ## Notes
 
-- Solid projects often combine the framework package with TypeScript support.
-- Optional tooling such as Prettier, Vitest, Storybook, or Markdown can still be added through enums from the main package.
-
-## Repository Links
-
-- Source Package: [packages/solid](https://github.com/santi020k/eslint-config-basic/tree/main/packages/solid)
-- Playground: [packages/playground/solid](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/solid)
+- The internal package still exists in the monorepo for modular development and generated API docs.
+- For the old multi-package installation model, see the [v1 Solid guide](/v1/frameworks/solid).
 
 ## Related Pages
 
+- [Installation](/guide/installation)
 - [Configuration](/guide/configuration)
-- [Optional Tooling](/tooling/overview)
-- [Playgrounds](/guide/playgrounds)
+- [v1 to v2 Migration](/guide/migration-v1-to-v2)

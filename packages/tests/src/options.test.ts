@@ -12,7 +12,7 @@ import vue from '@santi020k/eslint-config-vue'
 describe('Deep Rule Assertions (#5)', () => {
   it('should include React-specific rules when React is enabled', () => {
     const config = eslintConfig({ frameworks: { react } })
-    const rules = extractRuleNames(config as Record<string, unknown>[])
+    const rules = extractRuleNames(config)
 
     expect(rules).toContain('react/jsx-pascal-case')
 
@@ -22,8 +22,8 @@ describe('Deep Rule Assertions (#5)', () => {
   })
 
   it('should include TypeScript rules when typescript is enabled', () => {
-    const config = eslintConfig({ typescript: true })
-    const rules = extractRuleNames(config as Record<string, unknown>[])
+    const config = eslintConfig({ typescript: true, frameworks: {} })
+    const rules = extractRuleNames(config)
 
     expect(rules).toContain('@typescript-eslint/no-explicit-any')
 
@@ -32,7 +32,7 @@ describe('Deep Rule Assertions (#5)', () => {
 
   it('should include core stylistic rules in all configs', () => {
     const config = eslintConfig({})
-    const rules = extractRuleNames(config as Record<string, unknown>[])
+    const rules = extractRuleNames(config)
 
     expect(rules).toContain('@stylistic/indent')
 
@@ -42,8 +42,8 @@ describe('Deep Rule Assertions (#5)', () => {
   })
 
   it('should include config entry names', () => {
-    const config = eslintConfig({ typescript: true })
-    const names = extractConfigNames(config as Record<string, unknown>[])
+    const config = eslintConfig({ typescript: true, frameworks: {} })
+    const names = extractConfigNames(config)
 
     expect(names).toContain('@eslint/js/recommended')
 
@@ -51,8 +51,8 @@ describe('Deep Rule Assertions (#5)', () => {
   })
 
   it('should NOT include React rules when only typescript is enabled', () => {
-    const config = eslintConfig({ typescript: true })
-    const rules = extractRuleNames(config as Record<string, unknown>[])
+    const config = eslintConfig({ typescript: true, frameworks: {} })
+    const rules = extractRuleNames(config)
 
     expect(rules).not.toContain('react/jsx-pascal-case')
 
@@ -64,7 +64,7 @@ describe('Deep Rule Assertions (#5)', () => {
       extensions: [Extension.Unicorn]
     })
 
-    const rules = extractRuleNames(config as Record<string, unknown>[])
+    const rules = extractRuleNames(config)
 
     expect(rules).toContain('unicorn/better-regex')
 
@@ -76,7 +76,7 @@ describe('Deep Rule Assertions (#5)', () => {
       extensions: [Extension.Sonarjs]
     })
 
-    const rules = extractRuleNames(config as Record<string, unknown>[])
+    const rules = extractRuleNames(config)
 
     expect(rules).toContain('sonarjs/no-duplicate-string')
 
@@ -88,7 +88,7 @@ describe('Deep Rule Assertions (#5)', () => {
       tools: [Tool.Prettier]
     })
 
-    const names = extractConfigNames(config as Record<string, unknown>[])
+    const names = extractConfigNames(config)
 
     expect(names).toContain('eslint-config/prettier')
   })
@@ -98,7 +98,7 @@ describe('Deep Rule Assertions (#5)', () => {
       extensions: [Extension.Regexp]
     })
 
-    const rules = extractRuleNames(config as Record<string, unknown>[])
+    const rules = extractRuleNames(config)
 
     expect(rules).toContain('regexp/no-super-linear-backtracking')
 
@@ -107,7 +107,7 @@ describe('Deep Rule Assertions (#5)', () => {
 
   it('should include Vue rules when Vue is enabled', () => {
     const config = eslintConfig({ frameworks: { vue } })
-    const rules = extractRuleNames(config as Record<string, unknown>[])
+    const rules = extractRuleNames(config)
 
     expect(rules).toContain('vue/multi-word-component-names')
 
@@ -119,7 +119,7 @@ describe('Deep Rule Assertions (#5)', () => {
       testing: [Testing.Playwright]
     })
 
-    const names = extractConfigNames(config as Record<string, unknown>[])
+    const names = extractConfigNames(config)
 
     expect(names).toContain('optionals/playwright')
   })
@@ -128,7 +128,7 @@ describe('Deep Rule Assertions (#5)', () => {
 describe('Framework Rule Assertions — Svelte, Angular, Qwik', () => {
   it('should include Svelte-specific rules when Svelte is enabled', () => {
     const config = eslintConfig({ frameworks: { svelte } })
-    const rules = extractRuleNames(config as Record<string, unknown>[])
+    const rules = extractRuleNames(config)
 
     expect(rules).toContain('svelte/no-at-html-tags')
 
@@ -137,7 +137,7 @@ describe('Framework Rule Assertions — Svelte, Angular, Qwik', () => {
 
   it('should include Angular-specific rules when Angular is enabled', () => {
     const config = eslintConfig({ frameworks: { angular } })
-    const rules = extractRuleNames(config as Record<string, unknown>[])
+    const rules = extractRuleNames(config)
 
     expect(rules).toContain('@angular-eslint/component-class-suffix')
 
@@ -148,7 +148,7 @@ describe('Framework Rule Assertions — Svelte, Angular, Qwik', () => {
 
   it('should include Qwik-specific rules when Qwik is enabled', () => {
     const config = eslintConfig({ frameworks: { qwik } })
-    const rules = extractRuleNames(config as Record<string, unknown>[])
+    const rules = extractRuleNames(config)
 
     expect(rules).toContain('qwik/valid-lexical-scope')
 
@@ -159,14 +159,14 @@ describe('Framework Rule Assertions — Svelte, Angular, Qwik', () => {
 
   it('should NOT include Svelte rules when Svelte is not enabled', () => {
     const config = eslintConfig({ typescript: true })
-    const rules = extractRuleNames(config as Record<string, unknown>[])
+    const rules = extractRuleNames(config)
 
     expect(rules).not.toContain('svelte/no-at-html-tags')
   })
 
   it('should NOT include Angular rules when Angular is not enabled', () => {
     const config = eslintConfig({ typescript: true })
-    const rules = extractRuleNames(config as Record<string, unknown>[])
+    const rules = extractRuleNames(config)
 
     expect(rules).not.toContain('@angular-eslint/component-class-suffix')
   })
@@ -178,7 +178,7 @@ describe('Optional Rule Assertions — Testing', () => {
       testing: [Testing.Jest]
     })
 
-    const names = extractConfigNames(config as Record<string, unknown>[])
+    const names = extractConfigNames(config)
 
     expect(names).toContain('optionals/jest')
   })
@@ -188,7 +188,7 @@ describe('Optional Rule Assertions — Testing', () => {
       testing: [Testing.Cypress]
     })
 
-    const names = extractConfigNames(config as Record<string, unknown>[])
+    const names = extractConfigNames(config)
 
     expect(names).toContain('optionals/cypress')
   })
@@ -198,7 +198,7 @@ describe('Optional Rule Assertions — Testing', () => {
       testing: [Testing.TestingLibrary]
     })
 
-    const rules = extractRuleNames(config as Record<string, unknown>[])
+    const rules = extractRuleNames(config)
 
     expect(rules).toContain('testing-library/await-async-queries')
 
@@ -210,7 +210,7 @@ describe('Optional Rule Assertions — Testing', () => {
       testing: [Testing.Vitest, Testing.Jest, Testing.Playwright, Testing.Cypress, Testing.TestingLibrary]
     })
 
-    const names = extractConfigNames(config as Record<string, unknown>[])
+    const names = extractConfigNames(config)
 
     expect(names).toContain('optionals/jest')
     expect(names).toContain('optionals/cypress')
@@ -225,7 +225,7 @@ describe('Optional Rule Assertions — Libraries', () => {
       libraries: [Library.Tailwind]
     })
 
-    const rules = extractRuleNames(config as Record<string, unknown>[])
+    const rules = extractRuleNames(config)
 
     // better-tailwindcss plugin is used; check for one of its rules
     expect(rules.some(r => r.startsWith('better-tailwindcss/'))).toBe(true)
@@ -236,7 +236,7 @@ describe('Optional Rule Assertions — Libraries', () => {
       libraries: [Library.I18next]
     })
 
-    const rules = extractRuleNames(config as Record<string, unknown>[])
+    const rules = extractRuleNames(config)
 
     expect(rules).toContain('i18next/no-literal-string')
   })
@@ -246,7 +246,7 @@ describe('Optional Rule Assertions — Libraries', () => {
       libraries: [Library.TanstackRouter]
     })
 
-    const names = extractConfigNames(config as Record<string, unknown>[])
+    const names = extractConfigNames(config)
 
     expect(names.some(n => n.toLowerCase().includes('tanstack'))).toBe(true)
   })
@@ -256,7 +256,7 @@ describe('Optional Rule Assertions — Libraries', () => {
       libraries: [Library.Storybook]
     })
 
-    const names = extractConfigNames(config as Record<string, unknown>[])
+    const names = extractConfigNames(config)
 
     expect(names.some(n => n.toLowerCase().includes('storybook'))).toBe(true)
   })
@@ -266,7 +266,7 @@ describe('Optional Rule Assertions — Libraries', () => {
       libraries: [Library.Stencil]
     })
 
-    const rules = extractRuleNames(config as Record<string, unknown>[])
+    const rules = extractRuleNames(config)
 
     expect(rules).toContain('@stencil-community/async-methods')
   })
@@ -276,7 +276,7 @@ describe('Optional Rule Assertions — Libraries', () => {
       libraries: [Library.TanstackQuery]
     })
 
-    const rules = extractRuleNames(config as Record<string, unknown>[])
+    const rules = extractRuleNames(config)
 
     expect(rules.some(r => r.startsWith('@tanstack/query/'))).toBe(true)
   })
@@ -288,7 +288,7 @@ describe('Optional Rule Assertions — Tools', () => {
       tools: [Tool.Cspell]
     })
 
-    const rules = extractRuleNames(config as Record<string, unknown>[])
+    const rules = extractRuleNames(config)
 
     expect(rules).toContain('@cspell/spellchecker')
   })
@@ -298,7 +298,7 @@ describe('Optional Rule Assertions — Tools', () => {
       tools: [Tool.Jsdoc]
     })
 
-    const rules = extractRuleNames(config as Record<string, unknown>[])
+    const rules = extractRuleNames(config)
 
     expect(rules).toContain('jsdoc/check-access')
   })
@@ -308,7 +308,7 @@ describe('Optional Rule Assertions — Tools', () => {
       tools: [Tool.Swagger]
     })
 
-    const names = extractConfigNames(config as Record<string, unknown>[])
+    const names = extractConfigNames(config)
 
     expect(names.some(n => n.toLowerCase().includes('swagger'))).toBe(true)
   })
@@ -320,7 +320,7 @@ describe('Optional Rule Assertions — Formats', () => {
       formats: [Format.Yaml]
     })
 
-    const rules = extractRuleNames(config as Record<string, unknown>[])
+    const rules = extractRuleNames(config)
 
     expect(rules).toContain('yml/no-empty-mapping-value')
   })
@@ -330,7 +330,7 @@ describe('Optional Rule Assertions — Formats', () => {
       formats: [Format.Jsonc]
     })
 
-    const rules = extractRuleNames(config as Record<string, unknown>[])
+    const rules = extractRuleNames(config)
 
     expect(rules).toContain('jsonc/sort-keys')
   })
@@ -340,7 +340,7 @@ describe('Optional Rule Assertions — Formats', () => {
       formats: [Format.Markdown]
     })
 
-    const rules = extractRuleNames(config as Record<string, unknown>[])
+    const rules = extractRuleNames(config)
 
     expect(rules).toContain('markdown/fenced-code-language')
 
@@ -352,7 +352,7 @@ describe('Optional Rule Assertions — Formats', () => {
       formats: [Format.Mdx]
     })
 
-    const names = extractConfigNames(config as Record<string, unknown>[])
+    const names = extractConfigNames(config)
 
     expect(names.some(n => n.toLowerCase().includes('mdx'))).toBe(true)
   })
@@ -362,7 +362,7 @@ describe('Optional Rule Assertions — Formats', () => {
       formats: [Format.Toml]
     })
 
-    const rules = extractRuleNames(config as Record<string, unknown>[])
+    const rules = extractRuleNames(config)
 
     // eslint-plugin-toml rules use the 'toml/' prefix
     expect(rules.some(r => r.startsWith('toml/'))).toBe(true)
@@ -373,7 +373,7 @@ describe('Optional Rule Assertions — Formats', () => {
       formats: [Format.Graphql]
     })
 
-    const names = extractConfigNames(config as Record<string, unknown>[])
+    const names = extractConfigNames(config)
 
     expect(names).toContain('optionals/graphql/schema')
 
@@ -387,7 +387,7 @@ describe('Optional Rule Assertions — Extensions', () => {
       extensions: [Extension.Perfectionist]
     })
 
-    const rules = extractRuleNames(config as Record<string, unknown>[])
+    const rules = extractRuleNames(config)
 
     expect(rules).toContain('perfectionist/sort-imports')
   })
@@ -397,7 +397,7 @@ describe('Optional Rule Assertions — Extensions', () => {
       extensions: [Extension.Security]
     })
 
-    const rules = extractRuleNames(config as Record<string, unknown>[])
+    const rules = extractRuleNames(config)
 
     expect(rules).toContain('security/detect-object-injection')
   })
