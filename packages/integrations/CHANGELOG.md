@@ -1,4 +1,4 @@
-# @santi020k/eslint-config-optionals
+# @santi020k/eslint-config-integrations
 
 ## 1.6.0
 

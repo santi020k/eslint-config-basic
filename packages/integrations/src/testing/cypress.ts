@@ -14,7 +14,7 @@ export const cypress: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('cypres
 
   return [
     {
-      name: 'optionals/cypress',
+      name: 'integrations/cypress',
       files: [
         '**/cypress/**/*.{js,ts,jsx,tsx}',
         '**/*.cy.{js,ts,jsx,tsx}'

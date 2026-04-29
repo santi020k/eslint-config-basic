@@ -823,7 +823,7 @@ a {
 }
 
 .VPHero .heading {
-  gap: 0.35rem;
+  gap: 0.5rem;
 }
 
 .VPHero .name,
@@ -832,7 +832,7 @@ a {
 }
 
 .VPHero .name {
-  font-size: clamp(2.85rem, 9vw, 5.5rem);
+  font-size: clamp(3rem, 9.4vw, 5.9rem);
   line-height: 0.92;
   letter-spacing: -0.06em;
   background-size: 220% 220%;
@@ -842,15 +842,15 @@ a {
 }
 
 .VPHero .text {
-  font-size: clamp(1.2rem, 3vw, 2rem);
+  font-size: clamp(1.22rem, 3.1vw, 2.08rem);
   line-height: 1.12;
   animation: santi-hero-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) backwards;
   animation-delay: 80ms;
 }
 
 .VPHero .tagline {
-  max-width: 42rem;
-  padding-top: 0.75rem;
+  max-width: 39rem;
+  padding-top: 0.68rem;
   font-size: clamp(1.04rem, 1.6vw, 1.24rem);
   line-height: 1.8;
   color: hsl(var(--s2k-ink-soft));
@@ -970,13 +970,41 @@ html.dark .santi-hero-kicker__badge {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.7rem;
+  gap: 0.72rem;
   margin-top: 1.5rem;
-  padding: 1.05rem 1.2rem;
+  padding: 1.12rem 1.2rem;
   overflow: hidden;
   animation: santi-hero-in 1s cubic-bezier(0.22, 1, 0.36, 1) backwards;
   animation-delay: 240ms;
   border-color: hsl(var(--s2k-brand) / 0.18);
+}
+
+.santi-hero-trust {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem 1rem;
+  margin: 0.95rem 0 0.45rem;
+  color: hsl(var(--s2k-ink-muted));
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.santi-hero-trust strong {
+  color: hsl(var(--s2k-ink));
+  font-weight: 800;
+}
+
+.santi-hero-trust span + span::before {
+  content: '';
+  display: inline-block;
+  width: 0.32rem;
+  height: 0.32rem;
+  margin: 0 0.62rem 0 0;
+  border-radius: 999px;
+  background: hsl(var(--s2k-brand) / 0.45);
+  vertical-align: middle;
 }
 
 .santi-hero-strip::after {
@@ -995,6 +1023,7 @@ html.dark .santi-hero-kicker__badge {
 }
 
 .santi-hero-strip__label {
+  flex-basis: 100%;
   color: hsl(var(--s2k-ink-muted));
   font-size: 0.76rem;
   font-weight: 700;
@@ -1144,6 +1173,73 @@ html.dark .santi-hero-strip__item {
   right: 8%;
   bottom: 8%;
   animation: santi-chip-float-c 7.6s ease-in-out infinite;
+}
+
+.santi-hero-visual__terminal {
+  position: absolute;
+  left: 4%;
+  bottom: 10%;
+  width: min(63%, 15.5rem);
+  border: 1px solid hsl(var(--s2k-line) / 0.56);
+  border-radius: 0.9rem;
+  background: hsl(var(--s2k-theme-bg) / 0.82);
+  box-shadow:
+    0 18px 36px hsl(var(--s2k-shadow) / 0.2),
+    inset 0 1px 0 hsl(0 0% 100% / 0.05);
+  overflow: hidden;
+  z-index: 2;
+  backdrop-filter: blur(8px);
+  animation: santi-terminal-float 8s ease-in-out infinite;
+}
+
+.santi-hero-visual__terminal-top {
+  display: flex;
+  align-items: center;
+  gap: 0.34rem;
+  padding: 0.45rem 0.55rem;
+  border-bottom: 1px solid hsl(var(--s2k-line) / 0.4);
+  background: hsl(var(--s2k-surface) / 0.6);
+}
+
+.santi-hero-visual__terminal-top span {
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 999px;
+  background: hsl(var(--s2k-line) / 0.8);
+}
+
+.santi-hero-visual__terminal-top span:first-child {
+  background: hsl(5 82% 68%);
+}
+
+.santi-hero-visual__terminal-top span:nth-child(2) {
+  background: hsl(48 92% 62%);
+}
+
+.santi-hero-visual__terminal-top span:last-child {
+  background: hsl(142 58% 52%);
+}
+
+.santi-hero-visual__terminal-body {
+  display: grid;
+  gap: 0.28rem;
+  padding: 0.52rem 0.62rem 0.62rem;
+}
+
+.santi-hero-visual__line {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.66rem;
+  line-height: 1.5;
+  color: hsl(var(--s2k-ink-soft));
+}
+
+.santi-hero-visual__line--ok {
+  color: hsl(142 58% 52%);
+  font-weight: 700;
+}
+
+.santi-hero-visual__line--muted {
+  color: hsl(var(--s2k-ink-muted));
 }
 
 .santi-hero-visual__logo {
@@ -1604,23 +1700,16 @@ html.dark .santi-hero-strip__item {
 @media (min-width: 960px) {
   .VPHero .container {
     align-items: center;
+    gap: 3.2rem;
   }
 
   .VPHero .main {
-    padding: 1.3rem 1.35rem 1.15rem;
-    border: 1px solid hsl(var(--s2k-line) / 0.44);
+    padding: 0.85rem 0.15rem 0.65rem;
+    border: 0;
     border-radius: 1.55rem;
-    background:
-      radial-gradient(circle at 84% -20%, hsl(var(--s2k-brand) / 0.1), transparent 40%),
-      linear-gradient(
-        180deg,
-        hsl(var(--s2k-surface) / 0.58),
-        hsl(var(--s2k-surface-muted) / 0.44)
-      );
-    box-shadow:
-      0 18px 44px hsl(var(--s2k-shadow) / 0.15),
-      inset 0 1px 0 hsl(0 0% 100% / 0.05);
-    backdrop-filter: blur(10px);
+    background: none;
+    box-shadow: none;
+    backdrop-filter: none;
   }
 
   .VPHero .tagline {
@@ -1631,7 +1720,12 @@ html.dark .santi-hero-strip__item {
     width: 100%;
     max-width: 28rem;
     height: 26rem;
-    transform: translate(-10px, -4px);
+    transform: translate(-2px, -4px);
+  }
+
+  .santi-hero-strip,
+  .santi-hero-trust {
+    max-width: 36.5rem;
   }
 
   .VPHero .image-bg {
@@ -1718,6 +1812,15 @@ html.dark .santi-hero-strip__item {
     height: 21rem;
   }
 
+  .santi-hero-trust {
+    gap: 0.45rem 0.8rem;
+    font-size: 0.78rem;
+  }
+
+  .santi-hero-trust span + span::before {
+    margin-right: 0.45rem;
+  }
+
   .santi-hero-visual::before {
     inset: 19% 12%;
   }
@@ -1739,7 +1842,15 @@ html.dark .santi-hero-strip__item {
     right: -2%;
   }
 
+  .santi-hero-visual__terminal {
+    left: 8%;
+    bottom: 9%;
+    width: min(68%, 14rem);
+  }
+
   .santi-hero-strip {
+    gap: 0.6rem;
+    margin-top: 1.2rem;
     padding: 0.9rem 1rem;
   }
 
@@ -1779,7 +1890,8 @@ html.dark .santi-hero-strip__item {
   .santi-hero-visual__halo,
   .santi-hero-visual__logo,
   .santi-hero-visual__ring,
-  .santi-hero-visual__chip {
+  .santi-hero-visual__chip,
+  .santi-hero-visual__terminal {
     animation: none !important;
     transition: none !important;
     transform: none !important;
@@ -1954,6 +2066,17 @@ html.dark .santi-hero-strip__item {
 
   50% {
     transform: translateY(-6px) translateX(-3px);
+  }
+}
+
+@keyframes santi-terminal-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
   }
 }
 

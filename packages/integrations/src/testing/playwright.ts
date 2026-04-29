@@ -11,7 +11,7 @@ export const playwright: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('pla
 
   return [
     {
-      name: 'optionals/playwright',
+      name: 'integrations/playwright',
       files: [
         '**/e2e/**/*.{js,ts,jsx,tsx}',
         '**/*.e2e.{js,ts,jsx,tsx}',

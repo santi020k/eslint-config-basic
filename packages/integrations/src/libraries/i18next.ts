@@ -14,7 +14,7 @@ export const i18next: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('i18nex
 
   return [
     {
-      name: 'optionals/i18next',
+      name: 'integrations/i18next',
       plugins: {
         i18next: fixupPluginRules(
           pluginI18next

@@ -12,7 +12,7 @@ export const cspell: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('cspell'
 
   return [
     {
-      name: 'optionals/cspell',
+      name: 'integrations/cspell',
       plugins: { '@cspell': pluginCspell },
       rules: {
         '@cspell/spellchecker': ['warn', {

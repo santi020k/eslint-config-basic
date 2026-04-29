@@ -14,7 +14,7 @@ export const jsonc: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('jsonc', 
   return [
     ...(pluginJsonc.configs['flat/recommended-with-jsonc']),
     {
-      name: 'optionals/jsonc/sorting',
+      name: 'integrations/jsonc/sorting',
       files: ['**/package.json'],
       rules: {
         'jsonc/sort-keys': ['warn', {
@@ -50,7 +50,7 @@ export const jsonc: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('jsonc', 
       }
     },
     {
-      name: 'optionals/jsonc/tsconfig-sorting',
+      name: 'integrations/jsonc/tsconfig-sorting',
       files: ['**/tsconfig.json', '**/tsconfig.*.json'],
       rules: {
         'jsonc/sort-keys': ['warn', {

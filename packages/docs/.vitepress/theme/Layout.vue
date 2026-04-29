@@ -31,12 +31,18 @@ watchEffect(() => {
     </template>
 
     <template #home-hero-info-after>
-      <div v-if="isHome" class="santi-hero-strip" aria-label="Product highlights">
-        <span class="santi-hero-strip__label">Highlights</span>
-        <span class="santi-hero-strip__item">ESLint 9/10+</span>
-        <span class="santi-hero-strip__item">Framework-ready</span>
-        <span class="santi-hero-strip__item">Strict mode</span>
-        <span class="santi-hero-strip__item">CI-safe rollouts</span>
+      <div v-if="isHome">
+        <div class="santi-hero-strip" aria-label="Product highlights">
+          <span class="santi-hero-strip__label">Highlights</span>
+          <span class="santi-hero-strip__item">ESLint 9/10+</span>
+          <span class="santi-hero-strip__item">Framework-ready</span>
+          <span class="santi-hero-strip__item">CI-safe rollouts</span>
+        </div>
+        <p class="santi-hero-trust" aria-label="Adoption proof points">
+          <span><strong>13</strong> frameworks</span>
+          <span><strong>26</strong> integrations</span>
+          <span><strong>DX-first</strong> defaults</span>
+        </p>
       </div>
     </template>
 
@@ -48,6 +54,16 @@ watchEffect(() => {
         <div class="santi-hero-visual__chip santi-hero-visual__chip--one">Flat Config</div>
         <div class="santi-hero-visual__chip santi-hero-visual__chip--two">Strict Mode</div>
         <div class="santi-hero-visual__chip santi-hero-visual__chip--three">26 Integrations</div>
+        <div class="santi-hero-visual__terminal">
+          <div class="santi-hero-visual__terminal-top">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="santi-hero-visual__terminal-body">
+            <span class="santi-hero-visual__line">$ pnpm lint</span>
+            <span class="santi-hero-visual__line santi-hero-visual__line--ok">✓ 0 errors</span>
+            <span class="santi-hero-visual__line santi-hero-visual__line--muted">strict mode enabled</span>
+          </div>
+        </div>
 
         <img
           alt=""

@@ -13,7 +13,7 @@ export const stencil: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('stenci
 
   return [
     {
-      name: 'optionals/stencil',
+      name: 'integrations/stencil',
       files: ['**/*.{tsx,ts}'],
       plugins: {
         '@stencil-community': fixupPluginRules(stencilPlugin as unknown as Record<string, unknown>)

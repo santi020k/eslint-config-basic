@@ -12,7 +12,7 @@
       "@santi020k/eslint-config-hono",
       "@santi020k/eslint-config-nest",
       "@santi020k/eslint-config-next",
-      "@santi020k/eslint-config-optionals",
+      "@santi020k/eslint-config-integrations",
       "@santi020k/eslint-config-qwik",
       "@santi020k/eslint-config-react",
       "@santi020k/eslint-config-remix",

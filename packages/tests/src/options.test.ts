@@ -114,14 +114,14 @@ describe('Deep Rule Assertions (#5)', () => {
     expect(rules).toContain('vue/html-self-closing')
   })
 
-  it('should include playwright rules when Playwright optional is enabled', () => {
+  it('should include playwright rules when Playwright integration is enabled', () => {
     const config = eslintConfig({
       testing: [Testing.Playwright]
     })
 
     const names = extractConfigNames(config)
 
-    expect(names).toContain('optionals/playwright')
+    expect(names).toContain('integrations/playwright')
   })
 })
 
@@ -172,28 +172,28 @@ describe('Framework Rule Assertions — Svelte, Angular, Qwik', () => {
   })
 })
 
-describe('Optional Rule Assertions — Testing', () => {
-  it('should include Jest rules when Jest optional is enabled', () => {
+describe('Integration Rule Assertions — Testing', () => {
+  it('should include Jest rules when Jest integration is enabled', () => {
     const config = eslintConfig({
       testing: [Testing.Jest]
     })
 
     const names = extractConfigNames(config)
 
-    expect(names).toContain('optionals/jest')
+    expect(names).toContain('integrations/jest')
   })
 
-  it('should include Cypress rules when Cypress optional is enabled', () => {
+  it('should include Cypress rules when Cypress integration is enabled', () => {
     const config = eslintConfig({
       testing: [Testing.Cypress]
     })
 
     const names = extractConfigNames(config)
 
-    expect(names).toContain('optionals/cypress')
+    expect(names).toContain('integrations/cypress')
   })
 
-  it('should include Testing Library rules when TestingLibrary optional is enabled', () => {
+  it('should include Testing Library rules when TestingLibrary integration is enabled', () => {
     const config = eslintConfig({
       testing: [Testing.TestingLibrary]
     })
@@ -205,21 +205,21 @@ describe('Optional Rule Assertions — Testing', () => {
     expect(rules).toContain('testing-library/no-debugging-utils')
   })
 
-  it('should include all testing optionals simultaneously', () => {
+  it('should include all testing integrations simultaneously', () => {
     const config = eslintConfig({
       testing: [Testing.Vitest, Testing.Jest, Testing.Playwright, Testing.Cypress, Testing.TestingLibrary]
     })
 
     const names = extractConfigNames(config)
 
-    expect(names).toContain('optionals/jest')
-    expect(names).toContain('optionals/cypress')
-    expect(names).toContain('optionals/playwright')
-    expect(names).toContain('optionals/testing-library')
+    expect(names).toContain('integrations/jest')
+    expect(names).toContain('integrations/cypress')
+    expect(names).toContain('integrations/playwright')
+    expect(names).toContain('integrations/testing-library')
   })
 })
 
-describe('Optional Rule Assertions — Libraries', () => {
+describe('Integration Rule Assertions — Libraries', () => {
   it('should include tailwind config when Tailwind library is enabled', () => {
     const config = eslintConfig({
       libraries: [Library.Tailwind]
@@ -282,7 +282,7 @@ describe('Optional Rule Assertions — Libraries', () => {
   })
 })
 
-describe('Optional Rule Assertions — Tools', () => {
+describe('Integration Rule Assertions — Tools', () => {
   it('should include CSpell rules when CSpell tool is enabled', () => {
     const config = eslintConfig({
       tools: [Tool.Cspell]
@@ -314,7 +314,7 @@ describe('Optional Rule Assertions — Tools', () => {
   })
 })
 
-describe('Optional Rule Assertions — Formats', () => {
+describe('Integration Rule Assertions — Formats', () => {
   it('should include YAML rules when Yaml format is enabled', () => {
     const config = eslintConfig({
       formats: [Format.Yaml]
@@ -375,13 +375,13 @@ describe('Optional Rule Assertions — Formats', () => {
 
     const names = extractConfigNames(config)
 
-    expect(names).toContain('optionals/graphql/schema')
+    expect(names).toContain('integrations/graphql/schema')
 
-    expect(names).toContain('optionals/graphql/operations')
+    expect(names).toContain('integrations/graphql/operations')
   })
 })
 
-describe('Optional Rule Assertions — Extensions', () => {
+describe('Integration Rule Assertions — Extensions', () => {
   it('should include Perfectionist rules when Perfectionist extension is enabled', () => {
     const config = eslintConfig({
       extensions: [Extension.Perfectionist]

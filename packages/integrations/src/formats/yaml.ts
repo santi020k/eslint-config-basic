@@ -14,7 +14,7 @@ export const yaml: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('yaml', ()
   return [
     ...(pluginYml.configs['flat/recommended']),
     {
-      name: 'optionals/yaml/rules',
+      name: 'integrations/yaml/rules',
       files: ['**/*.{yml,yaml}'],
       rules: {
         'yml/no-empty-mapping-value': 'warn'

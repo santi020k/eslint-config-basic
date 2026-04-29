@@ -22,7 +22,7 @@ export const graphql: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('graphq
 
   return [
     {
-      name: 'optionals/graphql/schema',
+      name: 'integrations/graphql/schema',
       files: ['**/*.schema.graphql', '**/*.schema.gql', '**/schema.graphql', '**/schema.gql'],
       languageOptions: {
         parser: graphqlPlugin.parser
@@ -36,7 +36,7 @@ export const graphql: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('graphq
       }
     },
     {
-      name: 'optionals/graphql/operations',
+      name: 'integrations/graphql/operations',
       files: ['**/*.graphql', '**/*.gql'],
       ignores: ['**/*.schema.graphql', '**/*.schema.gql', '**/schema.graphql', '**/schema.gql'],
       languageOptions: {

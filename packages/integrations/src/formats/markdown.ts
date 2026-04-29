@@ -25,7 +25,7 @@ export const markdown: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('markd
   return [
     ...(pluginMarkdown.configs.recommended),
     {
-      name: 'optionals/markdown',
+      name: 'integrations/markdown',
       files: ['**/*.md'],
       language: 'markdown/commonmark',
       rules: {
@@ -50,7 +50,7 @@ export const markdown: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('markd
       }
     },
     {
-      name: 'optionals/markdown-code-blocks',
+      name: 'integrations/markdown-code-blocks',
       files: ['**/*.md/*.ts', '**/*.md/*.tsx', '**/*.md/*.js', '**/*.md/*.jsx'],
       rules: {
         // Disable type-aware rules — code blocks in markdown have no tsconfig

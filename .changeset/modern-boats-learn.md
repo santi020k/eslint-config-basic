@@ -8,7 +8,7 @@
 "@santi020k/eslint-config-hono": major
 "@santi020k/eslint-config-nest": major
 "@santi020k/eslint-config-next": major
-"@santi020k/eslint-config-optionals": major
+"@santi020k/eslint-config-integrations": major
 "@santi020k/eslint-config-qwik": major
 "@santi020k/eslint-config-react": major
 "@santi020k/eslint-config-remix": major

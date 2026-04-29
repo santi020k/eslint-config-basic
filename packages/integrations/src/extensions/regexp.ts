@@ -15,7 +15,7 @@ export const regexp: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('regexp'
 
   return [
     {
-      name: 'optionals/regexp',
+      name: 'integrations/regexp',
       files: GLOB_JS_TS,
       plugins: {
         regexp: pluginRegexp

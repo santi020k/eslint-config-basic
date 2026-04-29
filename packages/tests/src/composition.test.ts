@@ -128,7 +128,7 @@ describe('eslintConfig Function', () => {
     expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-react')
   })
 
-  it('should handle optionals', () => {
+  it('should handle integrations', () => {
     const config = eslintConfig({
       typescript: true,
       libraries: [Library.Tailwind],
@@ -175,7 +175,7 @@ describe('eslintConfig Function', () => {
     expect(names).toContain('mock-astro')
   })
 
-  it('should handle all optionals combined', () => {
+  it('should handle all integrations combined', () => {
     const config = eslintConfig({
       typescript: true,
       libraries: Object.values(Library),
@@ -198,17 +198,17 @@ describe('eslintConfig Function', () => {
 
     const names = extractConfigNames(config)
 
-    expect(names).toContain('optionals/jest')
+    expect(names).toContain('integrations/jest')
 
-    expect(names).toContain('optionals/cypress')
+    expect(names).toContain('integrations/cypress')
 
-    expect(names).toContain('optionals/testing-library')
+    expect(names).toContain('integrations/testing-library')
 
-    expect(names).toContain('optionals/graphql/schema')
-    expect(names).toContain('optionals/graphql/operations')
+    expect(names).toContain('integrations/graphql/schema')
+    expect(names).toContain('integrations/graphql/operations')
   })
 
-  it('should handle duplicate optional entries without doubling config blocks', () => {
+  it('should handle duplicate integration entries without doubling config blocks', () => {
     const single = eslintConfig({
       testing: [Testing.Vitest]
     })
@@ -302,8 +302,8 @@ describe('eslintConfig Function', () => {
     const names = extractConfigNames(config)
 
     expect(names).toContain('eslint-config/prettier')
-    expect(names).toContain('optionals/graphql/schema')
-    expect(names).toContain('optionals/graphql/operations')
+    expect(names).toContain('integrations/graphql/schema')
+    expect(names).toContain('integrations/graphql/operations')
     expect(names).not.toContain('eslint-config-react/recommended')
   })
 
@@ -317,7 +317,7 @@ describe('eslintConfig Function', () => {
     expect(names).not.toContain('eslint-config-react/recommended')
   })
 
-  it('should replace preset optionals when optionMergeStrategy is replace', () => {
+  it('should replace preset integrations when optionMergeStrategy is replace', () => {
     const config = eslintConfig({
       preset: Preset.All,
       optionMergeStrategy: 'replace',
@@ -328,7 +328,7 @@ describe('eslintConfig Function', () => {
     const names = extractConfigNames(config)
 
     expect(names).toContain('eslint-config/prettier')
-    expect(names).not.toContain('optionals/jsdoc')
+    expect(names).not.toContain('integrations/jsdoc')
   })
 
   it('should use detectRootDir independently from tsconfigRootDir', () => {

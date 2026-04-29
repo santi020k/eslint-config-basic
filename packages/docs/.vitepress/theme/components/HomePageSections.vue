@@ -16,13 +16,6 @@ const migrationHref = computed(() => withBase('/guide/migration-v1-to-v2'))
 
 <template>
   <div class="santi-home-root">
-    <p class="santi-home-stats" aria-hidden="true">
-      <span class="santi-home-stats__item"><strong>13</strong> frameworks</span>
-      <span class="santi-home-stats__item"><strong>26</strong> integrations</span>
-      <span class="santi-home-stats__item"><strong>ESLint</strong> 9 &amp; 10+</span>
-      <span class="santi-home-stats__item"><strong>DX-first</strong> defaults</span>
-    </p>
-
     <p v-if="docsPrefix !== '/v1'" class="santi-home-migrate">
       On v1 today?
       <a :href="migrationHref">Migration guide</a>

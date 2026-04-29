@@ -14,7 +14,7 @@ export const testingLibrary: TSESLint.FlatConfig.ConfigArray = defineLazyConfig(
 
   return [
     {
-      name: 'optionals/testing-library',
+      name: 'integrations/testing-library',
       files: [
         '**/*.test.{js,ts,jsx,tsx}',
         '**/*.spec.{js,ts,jsx,tsx}',

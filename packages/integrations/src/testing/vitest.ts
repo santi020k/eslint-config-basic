@@ -14,7 +14,7 @@ export const vitest: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('vitest'
 
   return [
     {
-      name: 'optionals/vitest',
+      name: 'integrations/vitest',
       files: [
         'tests/**/*.{js,ts,jsx,tsx}',
         '**/__tests__/**/*.{js,ts,jsx,tsx}',
