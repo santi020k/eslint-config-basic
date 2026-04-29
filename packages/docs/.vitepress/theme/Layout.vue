@@ -25,17 +25,18 @@ watchEffect(() => {
       <div v-if="isHome" class="santi-hero-kicker">
         <span class="santi-hero-kicker__badge" aria-label="Documentation edition">{{ editionBadge }}</span>
         <span class="santi-hero-kicker__dot" aria-hidden="true"></span>
-        <span>Built for JavaScript and TypeScript teams</span>
+        <span>Built for JavaScript and TypeScript teams shipping production apps</span>
       </div>
     </template>
 
     <template #home-hero-info-after>
       <div v-if="isHome" class="santi-hero-strip" aria-label="Product highlights">
-        <span class="santi-hero-strip__label">Focus</span>
+        <span class="santi-hero-strip__label">Core</span>
         <span class="santi-hero-strip__item">Flat config</span>
-        <span class="santi-hero-strip__item">Zero-config auto-detection</span>
+        <span class="santi-hero-strip__item">Auto-detection</span>
         <span class="santi-hero-strip__item">Framework packages</span>
         <span class="santi-hero-strip__item">Playground-backed docs</span>
+        <span class="santi-hero-strip__item">v1 to v2 migration</span>
       </div>
     </template>
 
@@ -55,12 +56,12 @@ watchEffect(() => {
 
         <div class="santi-hero-note santi-hero-note--left">
           <p class="santi-hero-note__label">Base</p>
-          <p class="santi-hero-note__body">JavaScript, TypeScript, runtime presets, and strict mode.</p>
+          <p class="santi-hero-note__body">Composable defaults for JS, TS, runtimes, and strict CI-ready linting.</p>
         </div>
 
         <div class="santi-hero-note santi-hero-note--right">
-          <p class="santi-hero-note__label">Scale</p>
-          <p class="santi-hero-note__body">13 framework guides, 26 integrations, API reference, and playgrounds.</p>
+          <p class="santi-hero-note__label">Coverage</p>
+          <p class="santi-hero-note__body">13 framework guides, 26 integrations, API reference, and migration docs.</p>
         </div>
       </div>
     </template>

@@ -22,7 +22,7 @@
   --s2k-surface: 262 20% 100%;
   --s2k-surface-muted: 262 20% 96%;
   --s2k-surface-strong: 262 15% 90%;
-  --s2k-line: 262 15% 84%;
+  --s2k-line: 262 14% 82%;
   --s2k-ink: 262 10% 20%;
   --s2k-ink-soft: 262 8% 36%;
   --s2k-ink-muted: 262 6% 28%;
@@ -31,6 +31,22 @@
   --s2k-accent: 262 87% 52%;
   --s2k-glow: 262 100% 70%;
   --s2k-shadow: 230 30% 8%;
+  --s2k-card-border: hsl(var(--s2k-line) / 0.52);
+  --s2k-card-border-strong: hsl(var(--s2k-line) / 0.62);
+  --s2k-card-shadow:
+    0 14px 34px hsl(var(--s2k-shadow) / 0.048),
+    inset 0 1px 0 hsl(0 0% 100% / 0.06);
+  --s2k-card-shadow-hover:
+    0 20px 50px hsl(var(--s2k-shadow) / 0.082),
+    inset 0 1px 0 hsl(0 0% 100% / 0.08);
+  --s2k-radius-sm: 0.95rem;
+  --s2k-radius-md: 1.3rem;
+  --s2k-radius-lg: 1.65rem;
+  --s2k-space-xs: 0.45rem;
+  --s2k-space-sm: 0.75rem;
+  --s2k-space-md: 1rem;
+  --s2k-space-lg: 1.35rem;
+  --s2k-space-xl: 1.8rem;
 
   --vp-font-family-base: 'Montserrat', 'Avenir Next', 'Segoe UI', sans-serif;
   --vp-font-family-mono: 'SFMono-Regular', 'SF Mono', 'Consolas', monospace;
@@ -103,7 +119,7 @@ html.dark {
   --s2k-surface: 262 20% 14%;
   --s2k-surface-muted: 262 18% 17%;
   --s2k-surface-strong: 262 15% 23%;
-  --s2k-line: 262 12% 32%;
+  --s2k-line: 262 12% 34%;
   --s2k-ink: 262 10% 88%;
   --s2k-ink-soft: 262 8% 72%;
   --s2k-ink-muted: 262 6% 56%;
@@ -143,6 +159,14 @@ html.dark {
   --vp-button-alt-bg: hsl(var(--s2k-surface) / 0.76);
   --vp-button-alt-hover-border: hsl(var(--s2k-brand) / 0.46);
   --vp-button-alt-hover-bg: hsl(var(--s2k-surface-strong));
+  --s2k-card-border: hsl(var(--s2k-line) / 0.66);
+  --s2k-card-border-strong: hsl(var(--s2k-line) / 0.76);
+  --s2k-card-shadow:
+    0 18px 44px hsl(0 0% 0% / 0.26),
+    inset 0 1px 0 hsl(0 0% 100% / 0.04);
+  --s2k-card-shadow-hover:
+    0 24px 56px hsl(0 0% 0% / 0.32),
+    inset 0 1px 0 hsl(0 0% 100% / 0.055);
 }
 
 html {
@@ -254,27 +278,9 @@ a {
       hsl(var(--s2k-surface) / 0.9),
       hsl(var(--s2k-surface-muted) / 0.74)
     );
-  border: 1px solid hsl(var(--s2k-line) / 0.46);
-  box-shadow:
-    0 16px 40px hsl(var(--s2k-shadow) / 0.045),
-    inset 0 1px 0 hsl(0 0% 100% / 0.05);
+  border: 1px solid var(--s2k-card-border);
+  box-shadow: var(--s2k-card-shadow);
   backdrop-filter: blur(14px);
-}
-
-html.dark .VPSidebar,
-html.dark .VPDocAsideOutline,
-html.dark .VPFeature,
-html.dark .custom-block,
-html.dark .vp-doc div[class*='language-'],
-html.dark .santi-home-panel,
-html.dark .santi-link-card,
-html.dark .santi-home-metric,
-html.dark .santi-home-stack-card,
-html.dark .santi-hero-strip,
-html.dark .santi-hero-note {
-  box-shadow:
-    0 20px 56px hsl(0 0% 0% / 0.26),
-    inset 0 1px 0 hsl(0 0% 100% / 0.04);
 }
 
 .VPNavBarTitle .title {
@@ -608,7 +614,7 @@ html.dark .santi-hero-note {
 }
 
 .VPSidebar {
-  padding: 1.1rem 0.95rem 1.2rem;
+  padding: 1.15rem 1.05rem 1.2rem;
 }
 
 .VPSidebarItem.level-0 {
@@ -640,9 +646,9 @@ html.dark .santi-hero-note {
 .VPSidebarItem.level-3 .link,
 .VPSidebarItem.level-4 .link,
 .VPSidebarItem.level-5 .link {
-  border-radius: 0.95rem;
-  padding-inline: 0.8rem;
-  min-height: 2.5rem;
+  border-radius: var(--s2k-radius-sm);
+  padding-inline: 0.9rem;
+  min-height: 2.55rem;
   transition:
     background-color 0.2s ease,
     color 0.2s ease;
@@ -673,7 +679,8 @@ html.dark .santi-hero-note {
 .VPDocAsideOutline .content {
   border-left: 0;
   padding-left: 0;
-  font-size: 0.84rem;
+  font-size: 0.86rem;
+  padding-block: 0.15rem;
 }
 
 .VPDocAsideOutline .outline-title {
@@ -701,8 +708,8 @@ html.dark .santi-hero-note {
 }
 
 .VPDocOutlineItem .outline-link {
-  border-radius: 0.95rem;
-  padding: 0.42rem 0.75rem;
+  border-radius: var(--s2k-radius-sm);
+  padding: 0.5rem 0.8rem;
   line-height: 1.45;
   white-space: normal;
 }
@@ -749,11 +756,12 @@ html.dark .santi-hero-note {
 }
 
 .VPFeatures .items {
-  margin: -10px;
+  margin: 0;
+  gap: 1rem;
 }
 
 .VPFeatures .item {
-  padding: 10px;
+  padding: 0;
 }
 
 .VPFeature .box {
@@ -794,10 +802,8 @@ html.dark .santi-hero-note {
 .santi-home-metric:hover,
 .santi-home-stack-card:hover {
   transform: translateY(-2px);
-  border-color: hsl(var(--s2k-brand) / 0.28);
-  box-shadow:
-    0 24px 56px hsl(var(--s2k-shadow) / 0.08),
-    inset 0 1px 0 hsl(0 0% 100% / 0.06);
+  border-color: hsl(var(--s2k-brand) / 0.34);
+  box-shadow: var(--s2k-card-shadow-hover);
 }
 
 .VPHero {
@@ -938,9 +944,9 @@ html.dark .santi-hero-kicker__badge {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.65rem;
+  gap: 0.7rem;
   margin-top: 1.5rem;
-  padding: 1rem 1.15rem;
+  padding: 1.05rem 1.2rem;
 }
 
 .santi-hero-strip__label {
@@ -1059,19 +1065,19 @@ html.dark .santi-hero-visual__grid {
 .santi-hero-note {
   position: absolute;
   width: 12rem;
-  padding: 0.95rem 1rem;
+  padding: 1.05rem 1.05rem;
 }
 
 .santi-hero-note--left {
   bottom: 1.9rem;
-  left: -1.8rem;
-  animation: santi-float 6s ease-in-out infinite;
+  left: -0.85rem;
+  animation: santi-float 8s ease-in-out infinite;
 }
 
 .santi-hero-note--right {
   top: 1.6rem;
-  right: -1.8rem;
-  animation: santi-float 6s ease-in-out infinite reverse;
+  right: -0.85rem;
+  animation: santi-float 8s ease-in-out infinite reverse;
 }
 
 .santi-hero-note__label {
@@ -1092,13 +1098,13 @@ html.dark .santi-hero-visual__grid {
 
 .santi-home-panel {
   margin-top: 2.4rem;
-  padding: 2rem;
+  padding: 2.15rem;
 }
 
 .santi-home-panel__grid,
 .santi-home-stack {
   display: grid;
-  gap: 1rem;
+  gap: 1.1rem;
 }
 
 .santi-home-eyebrow,
@@ -1133,11 +1139,40 @@ html.dark .santi-hero-visual__grid {
 .santi-home-metrics,
 .santi-home-links {
   display: grid;
+  gap: 1.1rem;
+}
+
+.santi-home-story h2 {
+  max-width: 46rem;
+}
+
+.santi-home-pillars {
+  display: grid;
   gap: 1rem;
+  margin-top: 1.35rem;
+}
+
+.santi-home-pillar {
+  border: 1px solid var(--s2k-card-border);
+  border-radius: var(--s2k-radius-md);
+  padding: 1.15rem 1.2rem;
+  background: hsl(var(--s2k-surface-muted) / 0.72);
+}
+
+.santi-home-pillar h3 {
+  margin: 0;
+  color: hsl(var(--s2k-ink));
+  font-size: 1.02rem;
+  letter-spacing: -0.02em;
+}
+
+.santi-home-pillar p {
+  margin: 0.6rem 0 0;
+  line-height: 1.72;
 }
 
 .santi-home-metric {
-  padding: 1.2rem 1.25rem;
+  padding: 1.3rem 1.35rem;
 }
 
 .santi-home-metric strong {
@@ -1165,7 +1200,7 @@ html.dark .santi-hero-visual__grid {
   display: block;
   position: relative;
   overflow: hidden;
-  padding: 1.2rem 1.25rem;
+  padding: 1.3rem 1.35rem;
   text-decoration: none;
   transition:
     transform 0.2s ease,
@@ -1189,14 +1224,14 @@ html.dark .santi-hero-visual__grid {
 
 .santi-link-card strong {
   display: block;
-  margin-bottom: 0.45rem;
+  margin-bottom: 0.55rem;
   color: hsl(var(--s2k-ink));
   font-size: 1.08rem;
 }
 
 .santi-link-card__body {
   margin: 0;
-  line-height: 1.8;
+  line-height: 1.72;
 }
 
 .santi-link-card__cta {
@@ -1220,7 +1255,7 @@ html.dark .santi-hero-visual__grid {
 }
 
 .santi-home-stack-card {
-  padding: 1.35rem;
+  padding: 1.4rem;
 }
 
 .santi-home-chip-list {
@@ -1253,8 +1288,9 @@ html.dark .santi-home-chip-list li {
 
 .vp-doc h2 {
   margin-top: 3rem;
-  padding-left: 1rem;
-  border-left: 4px solid hsl(var(--s2k-brand));
+  padding: 0 0 0.65rem;
+  border-left: 0;
+  border-bottom: 1px solid hsl(var(--s2k-line) / 0.55);
 }
 
 .vp-doc h3 {
@@ -1269,8 +1305,8 @@ html.dark .santi-home-chip-list li {
 .vp-doc blockquote {
   margin: 1.4rem 0;
   border-left: 4px solid hsl(var(--s2k-brand) / 0.36);
-  border-radius: 0 1.35rem 1.35rem 0;
-  padding: 1rem 1.3rem;
+  border-radius: 0 var(--s2k-radius-md) var(--s2k-radius-md) 0;
+  padding: 1.05rem 1.35rem;
   background: hsl(var(--s2k-surface-muted) / 0.6);
   color: hsl(var(--s2k-ink-soft));
 }
@@ -1291,10 +1327,10 @@ html.dark .santi-home-chip-list li {
 
 .vp-doc :not(pre) > code {
   border: 1px solid hsl(var(--s2k-brand) / 0.12);
-  border-radius: 0.55rem;
+  border-radius: 0.65rem;
   background: hsl(var(--s2k-brand) / 0.08);
   color: hsl(var(--s2k-brand));
-  padding: 0.18rem 0.45rem;
+  padding: 0.22rem 0.5rem;
 }
 
 .vp-doc ul li::marker,
@@ -1310,8 +1346,8 @@ html.dark .santi-home-chip-list li {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  border: 1px solid hsl(var(--s2k-line) / 0.5);
-  border-radius: 1.35rem;
+  border: 1px solid var(--s2k-card-border-strong);
+  border-radius: var(--s2k-radius-lg);
   background:
     linear-gradient(
       180deg,
@@ -1334,7 +1370,7 @@ html.dark .santi-home-chip-list li {
 .vp-doc td {
   border: 0;
   border-bottom: 1px solid hsl(var(--s2k-line) / 0.36);
-  padding: 0.95rem 1rem;
+  padding: 1rem 1.08rem;
 }
 
 .vp-doc th {
@@ -1363,18 +1399,16 @@ html.dark .santi-home-chip-list li {
 
 .VPFooter .container {
   max-width: min(100%, calc(var(--vp-layout-max-width) - 2rem));
-  border: 1px solid hsl(var(--s2k-line) / 0.44);
-  border-radius: 1.75rem;
-  padding: 1.3rem 1.4rem;
+  border: 1px solid var(--s2k-card-border);
+  border-radius: var(--s2k-radius-lg);
+  padding: 1.4rem 1.5rem;
   background:
     linear-gradient(
       180deg,
       hsl(var(--s2k-surface) / 0.88),
       hsl(var(--s2k-surface-muted) / 0.74)
     );
-  box-shadow:
-    0 16px 40px hsl(var(--s2k-shadow) / 0.045),
-    inset 0 1px 0 hsl(0 0% 100% / 0.05);
+  box-shadow: var(--s2k-card-shadow);
   backdrop-filter: blur(14px);
 }
 
@@ -1409,6 +1443,10 @@ html.dark .santi-home-chip-list li {
   .santi-home-metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .santi-home-pillars {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (min-width: 768px) and (max-width: 959px) {
@@ -1417,7 +1455,7 @@ html.dark .santi-home-chip-list li {
   }
 
   .VPNavBarTitle .title span {
-    max-width: 10rem;
+    max-width: 9.4rem;
   }
 
   .VPNavBarSearch {
@@ -1425,8 +1463,8 @@ html.dark .santi-home-chip-list li {
   }
 
   .DocSearch-Button {
-    min-width: 9.5rem;
-    padding-inline: 0.85rem;
+    min-width: 8.85rem;
+    padding-inline: 0.74rem;
   }
 
   .DocSearch-Button .DocSearch-Button-Placeholder {
@@ -1441,7 +1479,7 @@ html.dark .santi-home-chip-list li {
 
   .VPNavBarMenuLink,
   .VPFlyout .button {
-    padding-inline: 0.68rem;
+    padding-inline: 0.58rem;
   }
 }
 
@@ -1473,6 +1511,16 @@ html.dark .santi-home-chip-list li {
 
   .santi-home-stack {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .santi-home-pillars {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  .santi-home-links {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -1553,7 +1601,7 @@ html.dark .santi-home-chip-list li {
   }
 
   .santi-home-panel {
-    padding: 1.4rem;
+    padding: 1.5rem;
   }
 
   .santi-home-metric strong {
@@ -1579,6 +1627,7 @@ html.dark .santi-home-chip-list li {
   .VPFeature,
   .santi-link-card,
   .santi-home-metric,
+  .santi-home-pillar,
   .santi-home-stack-card,
   .santi-hero-visual__ring,
   .santi-hero-note--left,
@@ -1622,22 +1671,20 @@ html.dark .santi-home-chip-list li {
   gap: 0.35rem;
   margin-bottom: 2rem;
   padding: 1.28rem 1.35rem;
-  border-radius: 1.75rem;
+  border-radius: var(--s2k-radius-lg);
   text-decoration: none;
   color: inherit;
   position: relative;
   overflow: hidden;
   isolation: isolate;
-  border: 1px solid hsl(var(--s2k-line) / 0.48);
+  border: 1px solid var(--s2k-card-border);
   background:
     linear-gradient(
       135deg,
       hsl(var(--s2k-brand-soft) / 0.55),
       hsl(var(--s2k-surface) / 0.82)
     );
-  box-shadow:
-    0 18px 48px hsl(var(--s2k-shadow) / 0.06),
-    inset 0 1px 0 hsl(0 0% 100% / 0.06);
+  box-shadow: var(--s2k-card-shadow);
   backdrop-filter: blur(14px);
   transition:
     transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
@@ -1668,10 +1715,8 @@ html.dark .santi-home-chip-list li {
 
 .santi-home-upgrade:hover {
   transform: translateY(-3px);
-  border-color: hsl(var(--s2k-brand) / 0.28);
-  box-shadow:
-    0 26px 64px hsl(var(--s2k-shadow) / 0.09),
-    inset 0 1px 0 hsl(0 0% 100% / 0.08);
+  border-color: hsl(var(--s2k-brand) / 0.32);
+  box-shadow: var(--s2k-card-shadow-hover);
 }
 
 .santi-home-upgrade__label {
@@ -1729,12 +1774,13 @@ html.dark .santi-home-chip-list li {
 }
 
 .santi-home-outro {
-  margin-bottom: 2.5rem;
+  margin-bottom: 2.7rem;
 }
 
 .santi-home-reveal {
   opacity: 0;
-  animation: santi-fade-in-soft 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  transform: translateY(8px);
+  animation: santi-fade-in-soft 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 .santi-home-reveal--delay-1 {
@@ -1801,10 +1847,12 @@ html.dark .santi-home-chip-list li {
 @keyframes santi-fade-in-soft {
   from {
     opacity: 0;
+    transform: translateY(8px);
   }
 
   to {
     opacity: 1;
+    transform: translateY(0);
   }
 }
 

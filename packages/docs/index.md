@@ -5,38 +5,35 @@ description: DX-first ESLint 9/10+ v2 docs for JavaScript, TypeScript, React, Ne
 
 hero:
   name: Santi020k ESLint
-  text: Flat config that scales from a starter repo to a real team
-  tagline: <strong class="santi-hero-tagline-lead">Version 2</strong> documentation for <code>@santi020k/eslint-config-basic</code> — a composable ESLint 9/10+ toolkit with clearer composition, stronger defaults, and the same DX-first philosophy for JavaScript and TypeScript teams shipping React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, and Remix.
+  text: Flat config architecture for modern JavaScript and TypeScript teams
+  tagline: <strong class="santi-hero-tagline-lead">Version 2</strong> documentation for <code>@santi020k/eslint-config-basic</code> — a composable ESLint 9/10+ system with explicit framework packages, optional tooling categories, migration guidance, and defaults tuned for real production repositories.
   image:
     src: /cover.webp
     alt: Santi020k ESLint emblem
   actions:
     - theme: brand
-      text: Start with the guide
+      text: Start building with v2
       link: /guide/getting-started
     - theme: alt
-      text: v1 → v2 migration
+      text: Plan your migration
       link: /guide/migration-v1-to-v2
     - theme: alt
-      text: Explore frameworks
+      text: Explore framework docs
       link: /frameworks/typescript
-    - theme: alt
-      text: Open GitHub
-      link: https://github.com/santi020k/eslint-config-basic
 
 features:
-  - title: Composable by default
-    details: Install the base package once, enable bundled framework configs with booleans, and layer in only the integrations your project actually needs.
+  - title: Explicit composition
+    details: Start with a minimal base, add framework packages intentionally, and keep config ownership visible in code review.
   - title: Zero-config auto-detection
-    details: Let the library detect TypeScript, runtimes, frameworks, and optional tooling from your repo so teams spend less time on lint wiring.
+    details: Detect TypeScript, runtimes, frameworks, and optional tooling from your repository so setup friction stays low.
   - title: 13 framework guides
-    details: React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, Remix, and TypeScript each have dedicated setup docs.
+    details: Dedicated setup docs for React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, Remix, and TypeScript.
   - title: 26 optional integrations
-    details: Tailwind CSS, Vitest, Playwright, Markdown, Prettier, Unicorn, Security, Storybook, i18next, and more are documented with the same model.
+    details: Tailwind CSS, Vitest, Playwright, Markdown, Prettier, Storybook, i18next, and more documented with one model.
   - title: Strict mode for teams
-    details: Promote warnings to errors when you want cleaner CI pipelines, stronger review signals, and fewer style debates in pull requests.
-  - title: Playground-backed confidence
-    details: Docs stay close to the code because framework packages, optionals, and examples are validated against real playground packages and tests.
+    details: Promote warnings to errors for cleaner CI pipelines, stronger review signals, and fewer style debates.
+  - title: Migration-first UX
+    details: Move from v1 to v2 with direct mapping guidance and docs built around adoption workflows, not just file lists.
 ---
 
 <HomePageSections />

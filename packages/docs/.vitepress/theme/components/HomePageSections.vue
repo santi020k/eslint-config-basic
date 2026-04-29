@@ -28,25 +28,41 @@ const migrationHref = computed(() => withBase('/guide/migration-v1-to-v2'))
       </span>
     </a>
 
-    <section class="santi-home-panel mb-20 santi-home-reveal santi-home-reveal--delay-1">
+    <section class="santi-home-panel santi-home-story santi-home-reveal santi-home-reveal--delay-1">
+      <p class="santi-home-eyebrow">Build once, scale intentionally</p>
+      <h2>v2 keeps lint configuration explicit, composable, and easier to maintain.</h2>
+      <p class="santi-home-lede">
+        The docs now follow the same mental model as the code: start with a clean base, add only the framework package
+        your app needs, then layer optional integrations by category.
+      </p>
+      <div class="santi-home-pillars">
+        <article class="santi-home-pillar">
+          <h3>Clear composition model</h3>
+          <p>No hidden presets or surprising merges. Teams can reason about every config layer in review.</p>
+        </article>
+        <article class="santi-home-pillar">
+          <h3>Real project defaults</h3>
+          <p>Auto-detection and strict mode are tuned for JavaScript and TypeScript repos shipping real products.</p>
+        </article>
+        <article class="santi-home-pillar">
+          <h3>Migration without guesswork</h3>
+          <p>v1 users get direct guidance so upgrades are predictable and can be rolled out safely in stages.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="santi-home-panel santi-home-reveal santi-home-reveal--delay-2">
       <div class="santi-home-panel__grid">
         <div class="santi-home-intro">
-          <p class="santi-home-eyebrow">Why this library exists</p>
-          <h2>Lower lint setup friction without shipping a giant monolith.</h2>
-          <p class="santi-home-lede">
-            <code>@santi020k/eslint-config-basic</code> was built for the kind of projects teams actually maintain:
-            JavaScript and TypeScript apps, framework-heavy frontends, monorepos, and codebases that need strong
-            defaults without turning every setup into a custom linting project.
+          <p class="santi-home-eyebrow">Coverage that matches production stacks</p>
+          <h2>Everything needed to go from install to team-wide adoption.</h2>
+          <p>
+            Use framework-specific packages to avoid one-size-fits-all tradeoffs, then enable tooling integrations only
+            where they add value. The result is simpler config ownership and cleaner CI behavior.
           </p>
-          <p v-if="docsPrefix === '/v1'">
-            This documentation site is the fastest way to choose the right package, compose a flat config, and roll the
-            setup across React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, Remix, and
-            modern tooling using explicit framework packages and the integrations your repo actually uses.
-          </p>
-          <p v-else>
-            This documentation site is the fastest way to choose the right package, compose a flat config, and roll
-            the setup across React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, Remix, and
-            modern tooling—now with a clearer v2 composition model.
+          <p v-if="docsPrefix !== '/v1'">
+            If you are already running v1, start with
+            <a :href="migrationHref">Migration from v1 to v2</a> before introducing framework or optional changes.
           </p>
         </div>
 
@@ -54,88 +70,78 @@ const migrationHref = computed(() => withBase('/guide/migration-v1-to-v2'))
           <article class="santi-home-metric santi-home-metric--pulse">
             <strong>13</strong>
             <span>framework guides</span>
-            <p>Explicit packages for the stacks you actually ship, not vague one-size-fits-all presets.</p>
+            <p>React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, Remix, and TypeScript.</p>
           </article>
           <article class="santi-home-metric">
             <strong>26</strong>
             <span>optional integrations</span>
-            <p>Tailwind CSS, Vitest, Playwright, Markdown, Prettier, Storybook, i18next, and more.</p>
+            <p>Testing, formatting, libraries, tools, and extension packs documented with one consistent structure.</p>
           </article>
           <article class="santi-home-metric">
             <strong>DX-first</strong>
-            <span>from install to CI</span>
-            <p>Auto-detection, strict mode, real playgrounds, and docs that stay tied to the working codebase.</p>
+            <span>from local dev to CI</span>
+            <p>Strict mode, playground-backed guidance, and defaults that optimize team velocity.</p>
           </article>
           <article class="santi-home-metric">
             <strong>ESLint 9/10+</strong>
-            <span>flat config ready</span>
-            <p>Built around modern ESLint workflows instead of legacy config patterns teams are trying to leave behind.</p>
+            <span>flat config native</span>
+            <p>Purpose-built for modern ESLint workflows instead of legacy compatibility layers.</p>
           </article>
         </div>
       </div>
     </section>
 
     <div class="santi-home-links">
-      <a class="santi-link-card santi-home-reveal santi-home-reveal--delay-2" :href="docHref('/guide/getting-started')">
+      <a class="santi-link-card santi-home-reveal santi-home-reveal--delay-3" :href="docHref('/guide/getting-started')">
         <span class="santi-kicker">Start here</span>
-        <strong>Get running in minutes</strong>
+        <strong>Install and compose your first config</strong>
         <p class="santi-link-card__body">
-          Learn the base package, the first config file, the auto-detection model, and the right next page for your
-          stack.
+          Learn the base package flow, defaults, and framework wiring in the shortest path.
         </p>
         <span class="santi-link-card__cta">Open guide</span>
       </a>
-      <a class="santi-link-card santi-home-reveal santi-home-reveal--delay-3" :href="docHref('/frameworks/react')">
+      <a class="santi-link-card santi-home-reveal santi-home-reveal--delay-4" :href="docHref('/frameworks/react')">
         <span class="santi-kicker">Frameworks</span>
-        <strong>Choose the exact framework package</strong>
+        <strong>Pick the exact framework package</strong>
         <p class="santi-link-card__body">
-          Every supported framework has its own page with install notes, config examples, and package relationships.
+          Each framework guide includes package setup, examples, and boundaries with the base config.
         </p>
         <span class="santi-link-card__cta">Browse frameworks</span>
       </a>
-      <a class="santi-link-card santi-home-reveal santi-home-reveal--delay-4" :href="docHref('/tooling/overview')">
+      <a class="santi-link-card santi-home-reveal santi-home-reveal--delay-5" :href="docHref('/tooling/overview')">
         <span class="santi-kicker">Tooling</span>
-        <strong>Layer in optional integrations</strong>
+        <strong>Add integrations by category</strong>
         <p class="santi-link-card__body">
-          Libraries, testing tools, file formats, standalone tools, and extension packs are documented in one place.
+          Enable testing, libraries, formats, and tools with explicit categories your team can review quickly.
         </p>
         <span class="santi-link-card__cta">See tooling</span>
       </a>
-      <a class="santi-link-card santi-home-reveal santi-home-reveal--delay-5" :href="docHref('/packages/basic')">
+      <a class="santi-link-card santi-home-reveal santi-home-reveal--delay-6" :href="docHref('/packages/basic')">
         <span class="santi-kicker">Packages</span>
-        <strong>Understand the monorepo layout</strong>
+        <strong>Understand package boundaries</strong>
         <p class="santi-link-card__body">
-          See what the main package owns, what lives in core or optionals, and how the repo stays composable.
+          See what `basic`, `core`, and `optionals` own so architecture choices stay transparent.
         </p>
         <span class="santi-link-card__cta">Inspect packages</span>
       </a>
-      <a class="santi-link-card santi-home-reveal santi-home-reveal--delay-6" :href="docHref('/guide/playgrounds')">
-        <span class="santi-kicker">Examples</span>
-        <strong>Validate ideas against playgrounds</strong>
-        <p class="santi-link-card__body">
-          Jump into real framework and tooling playground packages before you adopt a new stack or integration.
-        </p>
-        <span class="santi-link-card__cta">Open playgrounds</span>
-      </a>
       <a class="santi-link-card santi-home-reveal santi-home-reveal--delay-7" :href="docHref('/api/')">
         <span class="santi-kicker">Reference</span>
-        <strong>Browse the generated API</strong>
+        <strong>Use generated API reference</strong>
         <p class="santi-link-card__body">
-          Keep guides, package docs, and generated reference in the same place so canonical links stay stable.
+          Keep implementation docs and generated API pages in a single canonical source of truth.
         </p>
         <span class="santi-link-card__cta">Read API docs</span>
       </a>
     </div>
 
     <section class="santi-home-panel santi-home-reveal santi-home-reveal--delay-8">
-      <p class="santi-home-eyebrow">Build the right linting stack</p>
+      <p class="santi-home-eyebrow">Build the right stack for your repo</p>
       <div class="santi-home-stack">
         <article class="santi-home-stack-card">
           <h3>Framework packages stay explicit on purpose.</h3>
           <p>
-            Use dedicated framework packages when the runtime actually requires them. That keeps the final config
-            readable, makes package boundaries obvious, and reduces hidden behavior for teams onboarding into an
-            existing repo.
+            Bring in dedicated framework config only when the runtime needs it. This keeps the final config readable,
+            reviewable, and easier to evolve as the product architecture changes.
           </p>
           <ul class="santi-home-chip-list">
             <li>React</li>
@@ -155,10 +161,10 @@ const migrationHref = computed(() => withBase('/guide/migration-v1-to-v2'))
         </article>
 
         <article class="santi-home-stack-card">
-          <h3>Optional tooling is grouped the way teams think about work.</h3>
+          <h3>Optional tooling follows team workflows.</h3>
           <p>
-            Instead of memorizing custom preset names, enable categories that mirror real project needs: libraries,
-            testing, formats, standalone tools, and extension packs.
+            Instead of memorizing preset names, enable categories that map to real project concerns: testing, tooling,
+            file formats, libraries, and extension packs.
           </p>
           <ul class="santi-home-chip-list">
             <li>Tailwind CSS</li>
@@ -179,27 +185,24 @@ const migrationHref = computed(() => withBase('/guide/migration-v1-to-v2'))
     </section>
 
     <section class="santi-home-panel santi-home-outro santi-home-reveal santi-home-reveal--delay-9">
-      <p class="santi-home-eyebrow">Choose the fastest path</p>
-      <h2>Use the docs like a product guide, not just a file index.</h2>
+      <p class="santi-home-eyebrow">Choose your path</p>
+      <h2>Navigate by outcome, not by guesswork.</h2>
       <p class="santi-home-lede">
-        Start with <a :href="docHref('/guide/getting-started')">Getting Started</a> if you are new to the library,
-        jump to <a :href="docHref('/guide/configuration')">Configuration</a> if you already know the shape of the
-        final config, or go straight to <a :href="docHref('/tooling/overview')">Optional Tooling</a> and
-        <a :href="docHref('/frameworks/typescript')">Framework Guides</a> when the application stack is already
-        defined.
+        Start with <a :href="docHref('/guide/getting-started')">Getting Started</a> if you are evaluating the stack,
+        move to <a :href="docHref('/guide/configuration')">Configuration</a> when adopting in production, and use
+        <a :href="docHref('/guide/playgrounds')">Playgrounds</a> to validate framework or tooling decisions safely.
       </p>
       <p v-if="docsPrefix !== '/v1'">
-        Upgrading from v1? Read <a :href="migrationHref">Migration from v1 to v2</a> first so
-        imports, framework wiring, and defaults match what the ecosystem expects today.
+        Upgrading from v1? Read <a :href="migrationHref">Migration from v1 to v2</a> first so imports, framework
+        wiring, and defaults align with the current composition model.
       </p>
       <p v-else>
-        Ready to move forward? Read <a :href="migrationHref">Migration from v1 to v2</a> for imports, framework wiring,
-        and defaults that match the current ecosystem.
+        Ready to move forward? Read <a :href="migrationHref">Migration from v1 to v2</a> for imports, framework
+        wiring, and defaults that match the current ecosystem.
       </p>
       <p>
-        The generated <a :href="docHref('/api/')">API reference</a>, package docs, and playground guidance all stay
-        inside the same site so contributors, tech leads, and individual developers can move from install to real repo
-        decisions without losing context.
+        The generated <a :href="docHref('/api/')">API reference</a>, package docs, and guide content stay in one site
+        so contributors can move from install to CI policy with less context switching.
       </p>
     </section>
   </div>
