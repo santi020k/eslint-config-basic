@@ -5,7 +5,7 @@ banner:
   content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
 ---
 
-This library is a DX-first, composable ESLint 9/10+ flat-config toolkit for JavaScript and TypeScript teams. The main entry point is [`@santi020k/eslint-config-basic`](https://www.npmjs.com/package/@santi020k/eslint-config-basic), and framework packages are added explicitly only when the project actually needs them.
+Version 1 is a DX-first, composable ESLint 9/10+ flat-config toolkit for JavaScript and TypeScript teams. The main entry point is [`@santi020k/eslint-config-basic`](https://www.npmjs.com/package/@santi020k/eslint-config-basic), and framework support is added through explicit framework package imports.
 
 ## Requirements
 
@@ -15,7 +15,6 @@ This library is a DX-first, composable ESLint 9/10+ flat-config toolkit for Java
 ## Install the Base Package
 
 The smallest install is the main package itself. It already brings a supported ESLint version.
-
 
 ```sh title="pnpm"
 pnpm add -D @santi020k/eslint-config-basic
@@ -33,7 +32,6 @@ yarn add -D @santi020k/eslint-config-basic
 bun add -d @santi020k/eslint-config-basic
 ```
 
-
 Create an `eslint.config.mjs` file, or `eslint.config.js` if your project uses `"type": "module"`.
 
 ```js
@@ -46,13 +44,13 @@ export default eslintConfig()
 
 - `@santi020k/eslint-config-basic` is the main package.
 - Framework packages such as React, Next.js, Astro, Vue, and NestJS are installed only when needed.
-- Optional integrations are enabled through enums from the main package instead of separate config objects in application code.
+- Optional integrations are enabled through enums from the main package.
 - ESLint can still be installed manually if you want to pin it yourself, as long as you stay on a compatible `^9` or `^10` release.
 
 ## Choose Your Workflow
 
 - Use the base package alone for core JavaScript, TypeScript, runtime detection, and optional integrations.
-- Add framework packages like React, Next.js, Astro, or Vue when your project needs them.
+- Add framework packages like React, Next.js, Astro, or Vue when your project needs them, then pass those imports in `frameworks`.
 - Use the CLI if you want a scaffolded config with detected integrations.
 
 ## Pick the Right Starting Point

@@ -297,6 +297,8 @@ body {
 
 .s2k-home-card {
   padding: 1.2rem;
+  position: relative;
+  isolation: isolate;
 }
 
 .s2k-home-card strong,
@@ -311,6 +313,18 @@ body {
   color: hsl(var(--s2k-ink-soft));
 }
 
+.s2k-home-card::after,
+.s2k-framework-grid a::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, hsl(var(--s2k-brand) / 0.35), transparent 48%, hsl(var(--s2k-glow) / 0.22));
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 220ms ease-out;
+}
+
 .s2k-home-kicker {
   color: hsl(var(--s2k-brand));
   font-size: 0.78rem;
@@ -320,9 +334,26 @@ body {
 }
 
 .s2k-framework-grid a {
+  position: relative;
   padding: 0.85rem 1rem;
   text-decoration: none;
   font-weight: 700;
+}
+
+.s2k-home-card:hover,
+.s2k-home-card:focus-visible,
+.s2k-framework-grid a:hover,
+.s2k-framework-grid a:focus-visible {
+  border-color: hsl(var(--s2k-brand) / 0.45);
+  transform: translateY(-3px);
+  box-shadow: 0 20px 40px hsl(var(--s2k-shadow) / 0.12);
+}
+
+.s2k-home-card:hover::after,
+.s2k-home-card:focus-visible::after,
+.s2k-framework-grid a:hover::after,
+.s2k-framework-grid a:focus-visible::after {
+  opacity: 1;
 }
 
 .s2k-v1-note {
@@ -358,6 +389,16 @@ body {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes s2k-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
   }
 }
 
@@ -399,6 +440,30 @@ main .sl-markdown-content > *:nth-child(5) {
 .right-sidebar a:hover,
 .right-sidebar a:focus-visible {
   color: hsl(var(--s2k-brand));
+}
+
+[data-animate] {
+  animation: s2k-fade-up 0.45s ease-out both;
+}
+
+[data-animate]:nth-of-type(2) {
+  animation-delay: 70ms;
+}
+
+[data-animate]:nth-of-type(3) {
+  animation-delay: 120ms;
+}
+
+[data-animate]:nth-of-type(4) {
+  animation-delay: 170ms;
+}
+
+[data-animate]:nth-of-type(5) {
+  animation-delay: 220ms;
+}
+
+.s2k-hero-visual {
+  animation: s2k-float 6s ease-in-out infinite;
 }
 
 .sl-markdown-content table {
@@ -443,33 +508,54 @@ main .sl-markdown-content > *:nth-child(5) {
 .sl-markdown-content .expressive-code {
   overflow: hidden;
   border: 1px solid hsl(var(--s2k-line) / 0.9);
-  border-radius: 0.9rem;
-  box-shadow: 0 18px 45px hsl(var(--s2k-shadow) / 0.11);
+  border-radius: 1rem;
+  box-shadow: 0 20px 54px hsl(var(--s2k-shadow) / 0.14);
 }
 
 .sl-markdown-content .expressive-code .frame {
-  background: hsl(var(--s2k-surface-muted) / 0.38);
+  background: hsl(var(--s2k-surface-muted) / 0.34);
 }
 
 .sl-markdown-content .expressive-code .header {
+  position: relative;
   border-bottom: 1px solid hsl(var(--s2k-line) / 0.75);
-  background: hsl(var(--s2k-surface) / 0.65);
-  backdrop-filter: blur(8px);
+  background: hsl(var(--s2k-surface) / 0.72);
+  backdrop-filter: blur(12px);
+  min-height: 2.75rem;
+}
+
+.sl-markdown-content .expressive-code .header::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0.9rem;
+  width: 0.58rem;
+  height: 0.58rem;
+  border-radius: 999px;
+  transform: translateY(-50%);
+  background: #ff5f56;
+  box-shadow: 0.95rem 0 0 #ffbd2e, 1.9rem 0 0 #27c93f;
 }
 
 .sl-markdown-content .expressive-code .title {
-  color: hsl(var(--s2k-ink-muted));
-  font-size: 0.72rem;
+  color: hsl(var(--s2k-brand-solid));
+  font-size: 0.65rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
+  margin-left: 3.3rem;
+  border: 1px solid hsl(var(--s2k-brand) / 0.26);
+  border-radius: 999px;
+  padding: 0.16rem 0.55rem;
+  background: hsl(var(--s2k-brand-soft) / 0.9);
 }
 
 .sl-markdown-content .expressive-code button.copy {
   border: 1px solid hsl(var(--s2k-line) / 0.8);
-  border-radius: 0.45rem;
-  background: hsl(var(--s2k-surface) / 0.45);
+  border-radius: 0.5rem;
+  background: hsl(var(--s2k-surface) / 0.58);
   color: hsl(var(--s2k-ink-soft));
+  margin-right: 0.35rem;
 }
 
 .sl-markdown-content .expressive-code button.copy:hover,
@@ -480,7 +566,7 @@ main .sl-markdown-content > *:nth-child(5) {
 }
 
 .sl-markdown-content .expressive-code pre {
-  padding-block: 1rem;
+  padding-block: 1.1rem;
 }
 
 .sl-markdown-content .expressive-code .line {
@@ -526,5 +612,20 @@ main .sl-markdown-content > *:nth-child(5) {
 
   .pagination-links a:hover {
     transform: none;
+  }
+
+  [data-animate] {
+    animation: none;
+  }
+
+  .s2k-home-card:hover,
+  .s2k-home-card:focus-visible,
+  .s2k-framework-grid a:hover,
+  .s2k-framework-grid a:focus-visible {
+    transform: none;
+  }
+
+  .s2k-hero-visual {
+    animation: none;
   }
 }

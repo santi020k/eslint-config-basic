@@ -4,9 +4,9 @@ description: Archived v1 documentation for @santi020k/eslint-config-basic users 
 template: splash
 hero:
   title: Santi020k ESLint Config v1
-  tagline: Archived documentation for teams pinned to v1. Use this section to maintain existing projects, then move to the current v2 guides when you are ready.
+  tagline: Archived documentation for teams pinned to v1, including the original installation and framework-package workflow.
   image:
-    html: '<div class="s2k-hero-visual" aria-hidden="true"><div class="s2k-hero-visual__brand"><span class="s2k-hero-visual__mark">v1</span><span>Archive mode</span></div><div class="s2k-hero-visual__terminal"><span class="s2k-hero-visual__line">$ pnpm lint</span><span class="s2k-hero-visual__line">legacy config preserved</span><span class="s2k-hero-visual__line s2k-hero-visual__ok">migration path available</span></div><div class="s2k-hero-visual__layers"><span>v1 setup guides</span><span>Framework package references</span><span>Current v2 docs linked nearby</span></div></div>'
+    html: '<div class="s2k-hero-visual" aria-hidden="true"><div class="s2k-hero-visual__brand"><span class="s2k-hero-visual__mark">v1</span><span>Archive mode</span></div><div class="s2k-hero-visual__terminal"><span class="s2k-hero-visual__line">$ pnpm lint</span><span class="s2k-hero-visual__line">legacy config preserved</span><span class="s2k-hero-visual__line s2k-hero-visual__ok">framework imports explicit</span></div><div class="s2k-hero-visual__layers"><span>v1 setup guides</span><span>Framework package references</span><span>Optional integrations by enum</span></div></div>'
   actions:
     - text: v1 getting started
       link: /v1/guide/getting-started

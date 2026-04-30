@@ -15,6 +15,13 @@ const socialImage = new URL('/cover.webp', site).toString()
 
 const sidebar = [
   {
+    label: 'Versions',
+    items: [
+      { label: 'Current (v2)', link: '/' },
+      { label: 'Archive (v1)', link: '/v1/' }
+    ]
+  },
+  {
     label: 'Start Here',
     items: [
       { label: 'Overview', link: '/' },
