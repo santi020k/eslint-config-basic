@@ -95,6 +95,6 @@ The UI uses a quiet, polished aesthetic:
 
 ## Implementation Notes
 
-- Always ensure the logo SVG aspect ratio is respected (`height: 2.25rem; width: auto;`) rather than forcing a strict pixel width, allowing the longer library name to scale properly.
+- Always ensure the logo SVG aspect ratio is respected (`height: 2.75rem; width: auto; transform: scale(1.1);`) rather than forcing a strict pixel width, allowing the longer library name to scale properly.
 - All Starlight pages should seamlessly match the `cover.webp` branding on social platforms.
 - Re-run the logo generation script if you update the SVG paths to keep `apple-touch-icon.png`, `favicon.png`, and `.webp` assets in sync.
