@@ -15,14 +15,7 @@ const socialImage = new URL('/cover.webp', site).toString()
 
 const sidebar = [
   {
-    label: 'Versions',
-    items: [
-      { label: 'Current (v2)', link: '/' },
-      { label: 'Archive (v1)', link: '/v1/' }
-    ]
-  },
-  {
-    label: 'Start Here',
+    label: 'v2 (Current)',
     items: [
       { label: 'Overview', link: '/' },
       { label: 'Getting Started', slug: 'guide/getting-started' },
@@ -73,16 +66,17 @@ const sidebar = [
     ]
   },
   {
-    label: 'v1 Archive',
+    label: 'v1 (Frozen)',
     collapsed: true,
     items: [
-      { label: 'v1 Overview', slug: 'v1' },
-      { label: 'v1 Getting Started', slug: 'v1/guide/getting-started' },
-      { label: 'v1 Configuration', slug: 'v1/guide/configuration' },
-      { label: 'v1 Frameworks', slug: 'v1/frameworks/typescript' },
-      { label: 'v1 Tooling', slug: 'v1/tooling/overview' },
-      { label: 'v1 Packages', slug: 'v1/packages/basic' },
-      { label: 'v1 API', slug: 'v1/api' }
+      { label: 'Overview', slug: 'v1' },
+      { label: 'Getting Started', slug: 'v1/guide/getting-started' },
+      { label: 'Installation', slug: 'v1/guide/installation' },
+      { label: 'Configuration', slug: 'v1/guide/configuration' },
+      { label: 'Frameworks', slug: 'v1/frameworks/typescript' },
+      { label: 'Tooling', slug: 'v1/tooling/overview' },
+      { label: 'Packages', slug: 'v1/packages/basic' },
+      { label: 'API', slug: 'v1/api' }
     ]
   }
 ]

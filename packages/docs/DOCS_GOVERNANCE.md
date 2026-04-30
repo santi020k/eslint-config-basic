@@ -16,16 +16,17 @@ This policy defines how the current docs set and `v1` docs coexist.
 ## Ownership Model
 
 - Current docs are the source of truth for product behavior and setup guidance.
-- `v1` docs are maintained as an archive for users pinned to v1.
+- `v1` docs are a frozen archive for users pinned to v1.
 - New product features and behavior updates go to current docs only.
-- `v1` receives only:
+- `v1` should not be edited during normal development.
+- Emergency `v1` edits are allowed only for:
   - broken-link fixes,
   - critical security clarification notes,
   - explicit deprecation/migration pointers.
 
 ## Navigation and Cross-Linking
 
-- Keep `v1` navigation in Starlight config to preserve stable legacy URLs.
+- Keep version switching in Starlight navigation so users can move between current docs and frozen `v1`.
 - Add migration links from relevant `v1` pages to current `guide/migration-v1-to-v2`.
 - Do not duplicate full feature guides across current and `v1` trees.
 
@@ -37,7 +38,7 @@ This policy defines how the current docs set and `v1` docs coexist.
 ## Contribution Checklist
 
 - For current-doc changes, update `packages/docs/CHANGELOG.md` under `Unreleased`.
-- When touching both current and `v1`, explain in PR why `v1` edit is necessary.
+- If `v1` must be edited for emergency reasons, explain the reason in PR.
 - Validate with:
   - `pnpm run docs:sync-readmes`
   - `pnpm run docs:build`

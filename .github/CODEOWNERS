@@ -1,2 +1,5 @@
 # Users who can approve a pr of any part of the project
 * @santi020k
+
+# v1 docs archive is frozen; require explicit owner review.
+packages/docs/src/content/docs/v1/** @santi020k
