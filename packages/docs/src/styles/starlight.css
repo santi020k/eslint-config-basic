@@ -107,8 +107,10 @@ body {
 }
 
 .site-title img {
-  height: 2.25rem;
+  height: 2.75rem;
   width: auto;
+  transform: scale(1.1);
+  transform-origin: left center;
 }
 
 .s2k-version-switcher {
