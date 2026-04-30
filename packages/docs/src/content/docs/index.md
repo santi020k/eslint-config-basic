@@ -19,85 +19,120 @@ hero:
       variant: minimal
 ---
 
-<section class="s2k-home-section" data-animate>
-  <h2 class="s2k-home-kicker">Enterprise-Grade Performance</h2>
-  <div class="s2k-home-proof">
-    <span><strong>ESLint 9/10+</strong> Native Flat Config</span>
-    <span><strong>13</strong> Framework Integrations</span>
-    <span><strong>26</strong> Opt-in Tool Presets</span>
-    <span><strong>0</strong> Peer Dependency Conflicts</span>
+import { Card, CardGrid, LinkCard, Icon } from '@astrojs/starlight/components';
+
+<section data-animate>
+  <h2 class="s2k-stats-kicker">BUILT FOR REAL REPOSITORIES</h2>
+  
+  <div class="s2k-stats-grid">
+    <div class="s2k-stat-card">
+      <strong>ESLint 9/10+</strong>
+      <span>flat config</span>
+    </div>
+    <div class="s2k-stat-card">
+      <strong>13</strong>
+      <span>framework guides</span>
+    </div>
+    <div class="s2k-stat-card">
+      <strong>26</strong>
+      <span>optional integrations</span>
+    </div>
+    <div class="s2k-stat-card">
+      <strong>CI</strong>
+      <span>rollout patterns</span>
+    </div>
   </div>
 </section>
 
-<section class="s2k-home-section" data-animate>
+<br/>
+
+<section data-animate>
   <h2 class="s2k-home-kicker">Developer Experience First</h2>
-  <div class="s2k-home-steps">
-    <a class="s2k-home-card" href="/guide/getting-started">
-      <strong>01 - Install Seamlessly</strong>
-      <span>Wrangle the base package and get a robust, working flat config before setup becomes a bottleneck.</span>
-    </a>
-    <a class="s2k-home-card" href="/guide/configuration">
-      <strong>02 - Compose Deliberately</strong>
-      <span>Choose strict modes, project auto-detection, specific framework layers, and integrations without bloat.</span>
-    </a>
-    <a class="s2k-home-card" href="/guide/playgrounds">
-      <strong>03 - Rollout Predictably</strong>
-      <span>Use playground fixtures and CI-friendly checks before enforcing rules into production repositories.</span>
-    </a>
-  </div>
+  
+  <CardGrid>
+    <LinkCard
+      title="01 - Install Seamlessly"
+      description="Wrangle the base package and get a robust, working flat config before setup becomes a bottleneck."
+      href="/guide/getting-started"
+    />
+    <LinkCard
+      title="02 - Compose Deliberately"
+      description="Choose strict modes, project auto-detection, specific framework layers, and integrations without bloat."
+      href="/guide/configuration"
+    />
+    <LinkCard
+      title="03 - Rollout Predictably"
+      description="Use playground fixtures and CI-friendly checks before enforcing rules into production repositories."
+      href="/guide/playgrounds"
+    />
+  </CardGrid>
 </section>
 
-<section class="s2k-home-section" data-animate>
+<br/>
+
+<section data-animate>
   <h2 class="s2k-home-kicker">Seamless Ecosystem Integrations</h2>
+  
   <div class="s2k-framework-grid">
-    <a href="/frameworks/typescript">TypeScript</a>
-    <a href="/frameworks/react">React</a>
-    <a href="/frameworks/next">Next.js</a>
-    <a href="/frameworks/astro">Astro</a>
-    <a href="/frameworks/vue">Vue</a>
-    <a href="/frameworks/svelte">Svelte</a>
-    <a href="/frameworks/solid">Solid</a>
-    <a href="/frameworks/angular">Angular</a>
-    <a href="/frameworks/nest">NestJS</a>
-    <a href="/frameworks/hono">Hono</a>
-    <a href="/frameworks/expo">Expo</a>
-    <a href="/frameworks/qwik">Qwik</a>
-    <a href="/frameworks/remix">Remix</a>
+    <a href="/frameworks/typescript"><Icon name="document" size="1.2rem" class="s2k-icon"/> TypeScript</a>
+    <a href="/frameworks/react"><Icon name="star" size="1.2rem" class="s2k-icon"/> React</a>
+    <a href="/frameworks/next"><Icon name="rocket" size="1.2rem" class="s2k-icon"/> Next.js</a>
+    <a href="/frameworks/astro"><Icon name="moon" size="1.2rem" class="s2k-icon"/> Astro</a>
+    <a href="/frameworks/vue"><Icon name="puzzle" size="1.2rem" class="s2k-icon"/> Vue</a>
+    <a href="/frameworks/svelte"><Icon name="sun" size="1.2rem" class="s2k-icon"/> Svelte</a>
+    <a href="/frameworks/solid"><Icon name="seti:hex" size="1.2rem" class="s2k-icon"/> Solid</a>
+    <a href="/frameworks/angular"><Icon name="error" size="1.2rem" class="s2k-icon"/> Angular</a>
+    <a href="/frameworks/nest"><Icon name="setting" size="1.2rem" class="s2k-icon"/> NestJS</a>
+    <a href="/frameworks/hono"><Icon name="node" size="1.2rem" class="s2k-icon"/> Hono</a>
+    <a href="/frameworks/expo"><Icon name="apple" size="1.2rem" class="s2k-icon"/> Expo</a>
+    <a href="/frameworks/remix"><Icon name="seti:html" size="1.2rem" class="s2k-icon"/> Remix</a>
   </div>
 </section>
 
-<section class="s2k-home-section" data-animate>
+<br/>
+
+<section data-animate>
   <h2 class="s2k-home-kicker">Deep Dive Documentation</h2>
-  <div class="s2k-home-paths">
-    <a class="s2k-home-card" href="/frameworks/typescript">
-      <strong>TypeScript-First Architecture</strong>
-      <span>Compose language, import, and runtime rules dynamically without locking every team into identical stacks.</span>
-    </a>
-    <a class="s2k-home-card" href="/tooling/overview">
-      <strong>Granular Tooling</strong>
-      <span>Add Prettier, Jest, Vitest, Playwright, Tailwind, and GraphQL integrations precisely where they belong.</span>
-    </a>
-    <a class="s2k-home-card" href="/guide/cli">
-      <strong>Automated Scaffolding</strong>
-      <span>Generate starter configurations, inspect underlying choices, and simplify monorepo linting via the CLI.</span>
-    </a>
-  </div>
+  
+  <CardGrid>
+    <LinkCard
+      title="TypeScript-First Architecture"
+      description="Compose language, import, and runtime rules dynamically without locking every team into identical stacks."
+      href="/frameworks/typescript"
+    />
+    <LinkCard
+      title="Granular Tooling"
+      description="Add Prettier, Jest, Vitest, Playwright, Tailwind, and GraphQL integrations precisely where they belong."
+      href="/tooling/overview"
+    />
+    <LinkCard
+      title="Automated Scaffolding"
+      description="Generate starter configurations, inspect underlying choices, and simplify monorepo linting via the CLI."
+      href="/guide/cli"
+    />
+  </CardGrid>
 </section>
 
-<section class="s2k-home-section" data-animate>
-  <h2 class="s2k-home-kicker">Project Architecture</h2>
-  <div class="s2k-home-paths">
-    <a class="s2k-home-card" href="/packages/basic">
-      <strong>Package Boundaries</strong>
-      <span>Understand the core module, internal framework packages, integrations, playgrounds, and the testing suite.</span>
-    </a>
-    <a class="s2k-home-card" href="/api/">
-      <strong>Generated API Reference</strong>
-      <span>Consult the TypeDoc reference when standard guides are not enough for complex implementation details.</span>
-    </a>
-    <a class="s2k-home-card" href="/v1/">
-      <strong>Version 1 Legacy Archive</strong>
-      <span>Keep older projects unblocked and stable while newly developed work transitions through the v2 migration path.</span>
-    </a>
-  </div>
+<br/>
+
+<section data-animate>
+  <h2 class="s2k-home-kicker">Project Reference</h2>
+  
+  <CardGrid>
+    <LinkCard
+      title="Package Boundaries"
+      description="Understand the core module, internal framework packages, integrations, playgrounds, and the testing suite."
+      href="/packages/basic"
+    />
+    <LinkCard
+      title="Generated API Reference"
+      description="Consult the TypeDoc reference when standard guides are not enough for complex implementation details."
+      href="/api/"
+    />
+    <LinkCard
+      title="Version 1 Legacy Archive"
+      description="Keep older projects unblocked and stable while newly developed work transitions through the v2 migration path."
+      href="/v1/"
+    />
+  </CardGrid>
 </section>

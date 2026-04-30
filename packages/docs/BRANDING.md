@@ -57,19 +57,19 @@ The color system extends the Santi020k purple system, applying it to linting int
 
 ```css
 :root[data-theme='dark'] {
-  --s2k-theme-bg: 277 20% 10%;
-  --s2k-surface: 277 20% 14%;
-  --s2k-surface-muted: 277 18% 17%;
-  --s2k-surface-strong: 277 15% 23%;
-  --s2k-line: 277 12% 32%;
-  --s2k-ink: 277 10% 88%;
-  --s2k-ink-soft: 277 8% 72%;
-  --s2k-ink-muted: 277 6% 56%;
-  --s2k-brand: 277 75% 62%;
-  --s2k-brand-solid: 277 70% 46%;
-  --s2k-brand-soft: 277 48% 18%;
-  --s2k-accent: 277 82% 72%;
-  --s2k-glow: 280 85% 68%;
+  --s2k-theme-bg: 260 43% 8%;
+  --s2k-surface: 260 30% 12%;
+  --s2k-surface-muted: 260 25% 15%;
+  --s2k-surface-strong: 260 20% 21%;
+  --s2k-line: 260 15% 30%;
+  --s2k-ink: 260 10% 88%;
+  --s2k-ink-soft: 260 8% 72%;
+  --s2k-ink-muted: 260 6% 56%;
+  --s2k-brand: 262 87% 66%;
+  --s2k-brand-solid: 262 87% 46%;
+  --s2k-brand-soft: 262 50% 18%;
+  --s2k-accent: 262 87% 76%;
+  --s2k-glow: 262 87% 68%;
 }
 ```
 
@@ -77,8 +77,8 @@ The color system extends the Santi020k purple system, applying it to linting int
 
 - Light brand: `#6319be`
 - Light canvas: `#faf9fb`
-- Dark brand: `#af55e7`
-- Dark canvas: `#1b141f`
+- Dark brand: `#945df4`
+- Dark canvas: `#110c1d`
 
 ## Typography
 
