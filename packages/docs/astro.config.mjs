@@ -139,7 +139,8 @@ export default defineConfig({
       logo: {
         light: './src/assets/logo-santi020k.svg',
         dark: './src/assets/logo-santi020k-dark.svg',
-        alt: 'Santi020k'
+        alt: 'Santi020k ESLint Config',
+        replacesTitle: true
       },
       social: [
         {

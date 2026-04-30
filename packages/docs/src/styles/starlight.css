@@ -107,8 +107,8 @@ body {
 }
 
 .site-title img {
-  width: 9.75rem;
-  height: auto;
+  height: 2.25rem;
+  width: auto;
 }
 
 .s2k-version-switcher {
@@ -444,7 +444,8 @@ body {
 
 @media (max-width: 50rem) {
   .site-title img {
-    width: 7.75rem;
+    height: 1.6rem;
+    width: auto;
   }
 
   .s2k-version-switcher {
