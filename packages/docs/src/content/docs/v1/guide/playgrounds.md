@@ -1,9 +1,9 @@
 ---
 title: "Playgrounds"
 description: "The playground packages are one of the best parts of this repository."
+banner:
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
 ---
-
-# Playgrounds
 
 The playground packages are one of the best parts of this repository.
 

@@ -1,9 +1,9 @@
 ---
 title: "Configuration"
 description: "The main package composes the final config array from a small set of clear inputs:"
+banner:
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
 ---
-
-# Configuration
 
 The main package composes the final config array from a small set of clear inputs:
 

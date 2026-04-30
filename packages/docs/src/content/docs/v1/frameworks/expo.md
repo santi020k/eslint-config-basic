@@ -1,9 +1,9 @@
 ---
 title: "Expo"
 description: "Package: @santi020k/eslint-config-expo"
+banner:
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
 ---
-
-# Expo
 
 Package: [`@santi020k/eslint-config-expo`](https://www.npmjs.com/package/@santi020k/eslint-config-expo)
 

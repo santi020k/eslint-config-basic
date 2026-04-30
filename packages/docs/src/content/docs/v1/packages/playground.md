@@ -1,9 +1,9 @@
 ---
 title: "Playground Package"
 description: "Package: @santi020k/playground"
+banner:
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
 ---
-
-# Playground Package
 
 Package: `@santi020k/playground`
 

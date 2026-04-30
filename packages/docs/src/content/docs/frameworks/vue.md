@@ -3,8 +3,6 @@ title: "Vue"
 description: "Use Vue support from the main v2 package. Application projects no longer install a separate @santi020k/eslint-config-vue package."
 ---
 
-# Vue
-
 Use Vue support from the main v2 package. Application projects no longer install a separate `@santi020k/eslint-config-vue` package.
 
 ## Install

@@ -1,9 +1,9 @@
 ---
 title: "Tools"
 description: "The tools option enables integrations for standalone developer tooling that commonly interacts with source code or documentation."
+banner:
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
 ---
-
-# Tools
 
 The `tools` option enables integrations for standalone developer tooling that commonly interacts with source code or documentation.
 

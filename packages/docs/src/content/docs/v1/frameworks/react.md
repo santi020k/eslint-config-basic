@@ -1,9 +1,9 @@
 ---
 title: "React"
 description: "Package: @santi020k/eslint-config-react"
+banner:
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
 ---
-
-# React
 
 Package: [`@santi020k/eslint-config-react`](https://www.npmjs.com/package/@santi020k/eslint-config-react)
 

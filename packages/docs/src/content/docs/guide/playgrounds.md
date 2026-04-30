@@ -3,8 +3,6 @@ title: "Playgrounds"
 description: "The playground packages are one of the best parts of this repository."
 ---
 
-# Playgrounds
-
 The playground packages are one of the best parts of this repository.
 
 They give each framework or optional integration a real project where configuration changes can be linted, tested, and debugged before release.

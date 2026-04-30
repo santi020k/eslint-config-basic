@@ -3,8 +3,6 @@ title: "Next.js"
 description: "Use Next.js support from the main v2 package. Application projects no longer install a separate @santi020k/eslint-config-next package."
 ---
 
-# Next.js
-
 Use Next.js support from the main v2 package. Application projects no longer install a separate `@santi020k/eslint-config-next` package.
 
 ## Install

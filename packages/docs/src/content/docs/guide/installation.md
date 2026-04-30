@@ -3,8 +3,6 @@ title: "Installation"
 description: "- Node.js =22.18.0 - ESLint 9+ or 10+"
 ---
 
-# Installation
-
 ## Requirements
 
 - Node.js `>=22.18.0`

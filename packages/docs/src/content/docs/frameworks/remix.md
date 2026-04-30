@@ -3,8 +3,6 @@ title: "Remix"
 description: "Use Remix support from the main v2 package. Application projects no longer install a separate @santi020k/eslint-config-remix package."
 ---
 
-# Remix
-
 Use Remix support from the main v2 package. Application projects no longer install a separate `@santi020k/eslint-config-remix` package.
 
 ## Install

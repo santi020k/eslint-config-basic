@@ -3,8 +3,6 @@ title: "Angular"
 description: "Use Angular support from the main v2 package. Application projects no longer install a separate @santi020k/eslint-config-angular package."
 ---
 
-# Angular
-
 Use Angular support from the main v2 package. Application projects no longer install a separate `@santi020k/eslint-config-angular` package.
 
 ## Install

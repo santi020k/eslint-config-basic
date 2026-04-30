@@ -1,9 +1,9 @@
 ---
 title: "Hono"
 description: "Package: @santi020k/eslint-config-hono"
+banner:
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
 ---
-
-# Hono
 
 Package: [`@santi020k/eslint-config-hono`](https://www.npmjs.com/package/@santi020k/eslint-config-hono)
 

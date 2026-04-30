@@ -3,8 +3,6 @@ title: "Testing"
 description: "The testing option enables linting support for test runners, test environments, and testing-oriented utilities."
 ---
 
-# Testing
-
 The `testing` option enables linting support for test runners, test environments, and testing-oriented utilities.
 
 | Integration | Enum | Use It When | Auto-Detected |

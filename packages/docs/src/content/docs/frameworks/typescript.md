@@ -3,8 +3,6 @@ title: "TypeScript"
 description: "TypeScript support is enabled from the main v2 package. There is no separate application-level install for TypeScript config."
 ---
 
-# TypeScript
-
 TypeScript support is enabled from the main v2 package. There is no separate application-level install for TypeScript config.
 
 ## Install

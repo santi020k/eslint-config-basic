@@ -3,8 +3,6 @@ title: "Svelte"
 description: "Use Svelte support from the main v2 package. Application projects no longer install a separate @santi020k/eslint-config-svelte package."
 ---
 
-# Svelte
-
 Use Svelte support from the main v2 package. Application projects no longer install a separate `@santi020k/eslint-config-svelte` package.
 
 ## Install

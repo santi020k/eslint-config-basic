@@ -3,7 +3,7 @@ import { defineConfig } from 'astro/config'
 
 const base = process.env.DOCS_BASE ?? '/'
 const site = process.env.DOCS_SITE_URL ?? 'https://eslint.santi020k.com'
-const siteName = 'Santi020k ESLint'
+const siteName = 'ESLint Config'
 
 const siteDescription =
   'Production-ready ESLint flat-config documentation for JavaScript and TypeScript teams using React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, Remix, and opt-in integrations.'
@@ -87,10 +87,11 @@ export default defineConfig({
     starlight({
       title: siteName,
       description: siteDescription,
-      favicon: '/favicon.png',
+      favicon: '/favicon.svg',
       logo: {
-        src: './src/assets/logo-square.webp',
-        alt: 'Santi020k ESLint emblem'
+        light: './src/assets/logo-santi020k.svg',
+        dark: './src/assets/logo-santi020k-dark.svg',
+        alt: 'Santi020k'
       },
       social: [
         {
@@ -100,7 +101,7 @@ export default defineConfig({
         }
       ],
       editLink: {
-        baseUrl: 'https://github.com/santi020k/eslint-config-basic/edit/main/packages/docs/src/content/docs/'
+        baseUrl: 'https://github.com/santi020k/eslint-config-basic/edit/main/packages/docs/'
       },
       tableOfContents: {
         minHeadingLevel: 2,

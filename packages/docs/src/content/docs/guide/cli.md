@@ -3,8 +3,6 @@ title: "CLI"
 description: "The main package ships a CLI that can scaffold or refresh the project config."
 ---
 
-# CLI
-
 The main package ships a CLI that can scaffold or refresh the project config.
 
 

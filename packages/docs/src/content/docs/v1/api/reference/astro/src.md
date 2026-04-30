@@ -1,11 +1,14 @@
 ---
 title: "astro/src"
 description: "@santi020k/eslint-config-basic"
----[**@santi020k/eslint-config-basic**](../index.md)
+banner:
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
+---
 
-***
+[**@santi020k/eslint-config-basic**](../index.md)
 
-# astro/src
+
+
 
 ## Interfaces
 
@@ -90,7 +93,6 @@ Framework-specific options for Astro files
 
 The Astro configuration array
 
-***
 
 ### getRules()
 

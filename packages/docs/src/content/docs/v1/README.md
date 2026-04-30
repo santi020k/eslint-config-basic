@@ -1,9 +1,9 @@
 ---
 title: "@santi020k/eslint-config-docs"
 description: "Internal Starlight documentation workspace for the @santi020k/eslint-config-basic monorepo."
+banner:
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
 ---
-
-# @santi020k/eslint-config-docs
 
 Internal Starlight documentation workspace for the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.
 

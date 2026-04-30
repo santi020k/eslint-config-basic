@@ -1,9 +1,9 @@
 ---
 title: "Extensions"
 description: "The extensions option enables specialized rule packs that are useful across many project types."
+banner:
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
 ---
-
-# Extensions
 
 The `extensions` option enables specialized rule packs that are useful across many project types.
 

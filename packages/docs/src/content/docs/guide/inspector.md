@@ -3,8 +3,6 @@ title: "Inspector"
 description: "The repository includes the ESLint config inspector so you can see the final merged config instead of guessing which layer is responsible for a rule."
 ---
 
-# Inspector
-
 The repository includes the ESLint config inspector so you can see the final merged config instead of guessing which layer is responsible for a rule.
 
 ## Run It

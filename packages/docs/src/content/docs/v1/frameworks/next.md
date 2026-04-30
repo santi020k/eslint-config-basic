@@ -1,9 +1,9 @@
 ---
 title: "Next.js"
 description: "Package: @santi020k/eslint-config-next"
+banner:
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
 ---
-
-# Next.js
 
 Package: [`@santi020k/eslint-config-next`](https://www.npmjs.com/package/@santi020k/eslint-config-next)
 

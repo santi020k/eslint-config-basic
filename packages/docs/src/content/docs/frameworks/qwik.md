@@ -3,8 +3,6 @@ title: "Qwik"
 description: "Use Qwik support from the main v2 package. Application projects no longer install a separate @santi020k/eslint-config-qwik package."
 ---
 
-# Qwik
-
 Use Qwik support from the main v2 package. Application projects no longer install a separate `@santi020k/eslint-config-qwik` package.
 
 ## Install

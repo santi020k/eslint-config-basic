@@ -3,8 +3,6 @@ title: "Playground Package"
 description: "Package: @santi020k/playground"
 ---
 
-# Playground Package
-
 Package: `@santi020k/playground`
 
 This internal package groups the real-world example projects used to validate framework and optional integrations.

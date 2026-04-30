@@ -3,8 +3,6 @@ title: "Tools"
 description: "The tools option enables integrations for standalone developer tooling that commonly interacts with source code or documentation."
 ---
 
-# Tools
-
 The `tools` option enables integrations for standalone developer tooling that commonly interacts with source code or documentation.
 
 | Tool | Enum | Use It When | Auto-Detected |

@@ -3,19 +3,13 @@ title: "nest/src"
 description: "@santi020k/eslint-config-basic"
 ---
 
-[**@santi020k/eslint-config-basic**](../index.md)
-
-***
-
-# nest/src
-
 ## Variables
 
 ### nestConfig
 
 > `const` **nestConfig**: `TSESLint.FlatConfig.ConfigArray`
 
-Defined in: [nest/src/index.ts:10](https://github.com/santi020k/eslint-config-basic/blob/2dd990ea8a52ccf245fa62797233f66281c78ccc/packages/nest/src/index.ts#L10)
+Defined in: [nest/src/index.ts:10](https://github.com/santi020k/eslint-config-basic/blob/31b6169ea57183c167028e48e00a274944b6d13c/packages/nest/src/index.ts#L10)
 
 NestJS ESLint configuration
 Includes NestJS plugin with recommended rules
@@ -26,7 +20,7 @@ Includes NestJS plugin with recommended rules
 
 > `const` **rules**: `TSESLint.Linter.RulesRecord`
 
-Defined in: [nest/src/rules.ts:4](https://github.com/santi020k/eslint-config-basic/blob/2dd990ea8a52ccf245fa62797233f66281c78ccc/packages/nest/src/rules.ts#L4)
+Defined in: [nest/src/rules.ts:4](https://github.com/santi020k/eslint-config-basic/blob/31b6169ea57183c167028e48e00a274944b6d13c/packages/nest/src/rules.ts#L4)
 
 ## References
 

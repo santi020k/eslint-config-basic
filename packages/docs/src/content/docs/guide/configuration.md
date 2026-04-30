@@ -3,8 +3,6 @@ title: "Configuration"
 description: "The main package composes the final flat config array from one public install: @santi020k/eslint-config-basic."
 ---
 
-# Configuration
-
 The main package composes the final flat config array from one public install: `@santi020k/eslint-config-basic`.
 
 ## Mental Model

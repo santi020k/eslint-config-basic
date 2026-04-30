@@ -1,9 +1,9 @@
 ---
 title: "Integrations Overview"
 description: "The main package can compose integrations from five categories:"
+banner:
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
 ---
-
-# Integrations Overview
 
 The main package can compose integrations from five categories:
 

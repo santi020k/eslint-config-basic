@@ -3,8 +3,6 @@ title: "Core Package"
 description: "Package: @santi020k/eslint-config-core"
 ---
 
-# Core Package
-
 Package: [`@santi020k/eslint-config-core`](https://www.npmjs.com/package/@santi020k/eslint-config-core)
 
 The core package contains the base JavaScript rules, runtime-aware globals, shared utilities, and types that the rest of the monorepo builds on.

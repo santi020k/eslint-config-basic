@@ -10,6 +10,13 @@ const titleCase = (value) =>
     .replace(/\b\w/g, (char) => char.toUpperCase())
 
 const escapeYaml = (value) => value.replaceAll('"', '\\"')
+const normalizeTitle = (value) =>
+  value
+    .replace(/\\([_`*[\]])/gu, '$1')
+    .replace(/[`*_]/gu, '')
+    .replace(/\s+/gu, ' ')
+    .trim()
+    .toLowerCase()
 
 async function* markdownFiles(dir) {
   for (const entry of await readdir(dir, { withFileTypes: true })) {
@@ -57,8 +64,8 @@ function deriveDescription(content) {
     .slice(0, 156)
 }
 
-function normalizeMarkdown(content) {
-  return content
+function normalizeMarkdown(path, content) {
+  let normalized = content
     .replace(/^:::\s*code-group\s*$/gmu, '')
     .replace(/^::::\s*code-group\s*$/gmu, '')
     .replace(/^:::\s*$/gmu, '')
@@ -66,6 +73,81 @@ function normalizeMarkdown(content) {
     .replace(/^---(?=#)/gmu, '---\n\n')
     .replace(/^```(\w+)\s+\[([^\]]+)\]\s*$/gmu, '```$1 title="$2"')
     .replaceAll('<HomePageSections />', '')
+
+  return normalized
+}
+
+function splitFrontmatter(content) {
+  if (!content.startsWith('---\n')) {
+    return undefined
+  }
+
+  const endIndex = content.indexOf('\n---', 4)
+
+  if (endIndex === -1) {
+    return undefined
+  }
+
+  const blockEnd = endIndex + '\n---'.length
+
+  return {
+    frontmatter: content.slice(0, blockEnd),
+    body: content.slice(blockEnd).replace(/^\s*\n/u, '')
+  }
+}
+
+function frontmatterTitle(frontmatter) {
+  const quoted = frontmatter.match(/^title:\s*"([^"]+)"\s*$/mu)?.[1]
+  const plain = frontmatter.match(/^title:\s*([^"\n][^\n]*)$/mu)?.[1]
+
+  return quoted ?? plain?.trim()
+}
+
+function removeDuplicateTitle(content) {
+  const parts = splitFrontmatter(content)
+
+  if (!parts) {
+    return content
+  }
+
+  const title = frontmatterTitle(parts.frontmatter)
+
+  if (!title) {
+    return content
+  }
+
+  const normalizedTitle = normalizeTitle(title)
+  let body = parts.body
+
+  body = body.replace(/^\[[^\n]+\]\([^)]+\)\n\n\*\*\*\n\n/u, '')
+  body = body.replace(/^\*\*([^*]+)\*\*\n\n\*\*\*\n\n/u, (match, label) =>
+    normalizeTitle(label) === normalizedTitle ? '' : match
+  )
+  body = body.replace(/^#\s+(.+?)\s*\n+/u, (match, heading) =>
+    normalizeTitle(heading.replace(/\s*[{]#[^}]+[}]$/u, '')) === normalizedTitle ? '' : match
+  )
+
+  return `${parts.frontmatter}\n\n${body}`
+}
+
+function withV1Banner(path, content) {
+  const relativePath = relative(docsRoot.pathname, path).replaceAll('\\', '/')
+
+  if (!relativePath.startsWith('v1/')) {
+    return content
+  }
+
+  const parts = splitFrontmatter(content)
+
+  if (!parts || parts.frontmatter.includes('\nbanner:')) {
+    return content
+  }
+
+  const banner =
+    'banner:\n' +
+    '  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\\"/guide/getting-started\\">v2 docs</a>."\n'
+
+  return `${parts.frontmatter.replace(/\n---$/u, `\n${banner}---`)}\n\n${parts.body}`
 }
 
 function ensureFrontmatter(path, content) {
@@ -90,7 +172,7 @@ function ensureFrontmatter(path, content) {
 
 for await (const file of markdownFiles(docsRoot.pathname)) {
   const before = await readFile(file, 'utf8')
-  const after = ensureFrontmatter(file, normalizeMarkdown(before))
+  const after = withV1Banner(file, removeDuplicateTitle(ensureFrontmatter(file, normalizeMarkdown(file, before))))
 
   if (after !== before) {
     await writeFile(file, after)

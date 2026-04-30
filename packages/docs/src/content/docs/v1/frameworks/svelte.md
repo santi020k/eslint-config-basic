@@ -1,9 +1,9 @@
 ---
 title: "Svelte"
 description: "Package: @santi020k/eslint-config-svelte"
+banner:
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
 ---
-
-# Svelte
 
 Package: [`@santi020k/eslint-config-svelte`](https://www.npmjs.com/package/@santi020k/eslint-config-svelte)
 

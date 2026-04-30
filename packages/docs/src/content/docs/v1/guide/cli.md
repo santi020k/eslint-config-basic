@@ -1,9 +1,9 @@
 ---
 title: "CLI"
 description: "The main package ships a CLI that can scaffold or refresh the project config."
+banner:
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
 ---
-
-# CLI
 
 The main package ships a CLI that can scaffold or refresh the project config.
 

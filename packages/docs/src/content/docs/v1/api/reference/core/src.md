@@ -1,11 +1,14 @@
 ---
 title: "core/src"
 description: "@santi020k/eslint-config-basic"
----[**@santi020k/eslint-config-basic**](../index.md)
+banner:
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
+---
 
-***
+[**@santi020k/eslint-config-basic**](../index.md)
 
-# core/src
+
+
 
 ## Enumerations
 
@@ -56,7 +59,6 @@ Defined in: [core/src/types.ts:91](https://github.com/santi020k/eslint-config-ba
 
 Defined in: [core/src/types.ts:90](https://github.com/santi020k/eslint-config-basic/blob/d4aea2fe358087379afbb96b93d91deff04f5224/packages/core/src/types.ts#L90)
 
-***
 
 ### Format
 

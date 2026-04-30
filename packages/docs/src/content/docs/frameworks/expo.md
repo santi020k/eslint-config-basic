@@ -3,8 +3,6 @@ title: "Expo"
 description: "Use Expo support from the main v2 package. Application projects no longer install a separate @santi020k/eslint-config-expo package."
 ---
 
-# Expo
-
 Use Expo support from the main v2 package. Application projects no longer install a separate `@santi020k/eslint-config-expo` package.
 
 ## Install

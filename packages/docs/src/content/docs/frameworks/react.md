@@ -3,8 +3,6 @@ title: "React"
 description: "Use React support from the main v2 package. Application projects no longer install a separate @santi020k/eslint-config-react package."
 ---
 
-# React
-
 Use React support from the main v2 package. Application projects no longer install a separate `@santi020k/eslint-config-react` package.
 
 ## Install

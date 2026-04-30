@@ -1,9 +1,9 @@
 ---
 title: "Remix"
 description: "Package: @santi020k/eslint-config-remix"
+banner:
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
 ---
-
-# Remix
 
 Package: [`@santi020k/eslint-config-remix`](https://www.npmjs.com/package/@santi020k/eslint-config-remix)
 

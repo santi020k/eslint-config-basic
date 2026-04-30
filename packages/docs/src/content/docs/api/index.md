@@ -3,9 +3,9 @@ title: "API Reference"
 description: "The API reference is generated from the source packages with TypeDoc and rendered as Markdown inside this Starlight site."
 ---
 
-# API Reference
-
-The API reference is generated from the source packages with TypeDoc and rendered as Markdown inside this Starlight site.
+<div class="s2k-api-intro">
+  The API reference is generated from the source packages with TypeDoc and rendered as Markdown inside this Starlight site. Use it as a companion to the guide pages when you need exact exported types, functions, and package boundaries.
+</div>
 
 ## Start Here
 

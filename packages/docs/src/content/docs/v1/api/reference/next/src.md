@@ -1,11 +1,14 @@
 ---
 title: "next/src"
 description: "@santi020k/eslint-config-basic"
----[**@santi020k/eslint-config-basic**](../index.md)
+banner:
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
+---
 
-***
+[**@santi020k/eslint-config-basic**](../index.md)
 
-# next/src
+
+
 
 ## Variables
 
@@ -18,7 +21,6 @@ Defined in: [next/src/index.ts:10](https://github.com/santi020k/eslint-config-ba
 Next.js ESLint configuration
 Includes Next.js plugin with core-web-vitals rules
 
-***
 
 ### rules
 

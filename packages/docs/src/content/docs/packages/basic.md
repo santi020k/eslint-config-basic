@@ -3,8 +3,6 @@ title: "Basic Package"
 description: "Package: @santi020k/eslint-config-basic"
 ---
 
-# Basic Package
-
 Package: [`@santi020k/eslint-config-basic`](https://www.npmjs.com/package/@santi020k/eslint-config-basic)
 
 This is the public package application projects install in v2.

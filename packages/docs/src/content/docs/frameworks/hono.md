@@ -3,8 +3,6 @@ title: "Hono"
 description: "Use Hono support from the main v2 package. Application projects no longer install a separate @santi020k/eslint-config-hono package."
 ---
 
-# Hono
-
 Use Hono support from the main v2 package. Application projects no longer install a separate `@santi020k/eslint-config-hono` package.
 
 ## Install

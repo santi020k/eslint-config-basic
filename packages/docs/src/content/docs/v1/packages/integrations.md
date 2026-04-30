@@ -1,9 +1,9 @@
 ---
 title: "Integrations Package"
 description: "Package: @santi020k/eslint-config-integrations"
+banner:
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
 ---
-
-# Integrations Package
 
 Package: [`@santi020k/eslint-config-integrations`](https://www.npmjs.com/package/@santi020k/eslint-config-integrations)
 

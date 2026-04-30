@@ -1,35 +1,44 @@
 ---
-title: ESLint Flat Config Docs for JavaScript and TypeScript Teams
-description: DX-first ESLint 9/10+ docs for JavaScript, TypeScript, React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, Remix, and modern tooling.
+title: Santi020k ESLint Config v1 Archive
+description: Archived v1 documentation for @santi020k/eslint-config-basic users who have not migrated to the current v2 configuration model.
 template: splash
 hero:
-  title: Santi020k ESLint v1
-  tagline: Archived v1 documentation for the composable ESLint flat-config toolkit across JavaScript, TypeScript, frameworks, testing, formats, libraries, and extensions.
+  title: Santi020k ESLint Config v1
+  tagline: Archived documentation for teams pinned to v1. Use this section to maintain existing projects, then move to the current v2 guides when you are ready.
   image:
-    html: '<img src="/cover.webp" alt="Santi020k ESLint emblem" />'
+    html: '<div class="s2k-hero-visual" aria-hidden="true"><div class="s2k-hero-visual__brand"><span class="s2k-hero-visual__mark">v1</span><span>Archive mode</span></div><div class="s2k-hero-visual__terminal"><span class="s2k-hero-visual__line">$ pnpm lint</span><span class="s2k-hero-visual__line">legacy config preserved</span><span class="s2k-hero-visual__line s2k-hero-visual__ok">migration path available</span></div><div class="s2k-hero-visual__layers"><span>v1 setup guides</span><span>Framework package references</span><span>Current v2 docs linked nearby</span></div></div>'
   actions:
-    - text: Start with the v1 guide
+    - text: v1 getting started
       link: /v1/guide/getting-started
       icon: right-arrow
-    - text: Explore v1 frameworks
-      link: /v1/frameworks/typescript
-      variant: secondary
     - text: Current v2 docs
       link: /
+      variant: secondary
+    - text: Migration guide
+      link: /guide/migration-v1-to-v2
       variant: minimal
+banner:
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
 ---
 
-<div class="s2k-proof">
-  <span><strong>v1</strong> archive</span>
-  <span><strong>13</strong> framework guides</span>
-  <span><strong>26</strong> optional integrations</span>
-  <span><strong>v2</strong> migration path</span>
-</div>
+<p class="s2k-v1-note">
+  You are viewing the v1 archive. New projects should start with the current v2 documentation.
+</p>
 
-## Browse v1
-
-- [Getting Started](/v1/guide/getting-started)
-- [Configuration](/v1/guide/configuration)
-- [Framework Guides](/v1/frameworks/typescript)
-- [Integrations](/v1/tooling/overview)
-- [Package Docs](/v1/packages/basic)
+<section class="s2k-home-section">
+  <p class="s2k-home-kicker">Browse v1</p>
+  <div class="s2k-home-paths">
+    <a class="s2k-home-card" href="/v1/guide/getting-started">
+      <strong>v1 guides</strong>
+      <span>Installation, configuration, CLI, inspector, playgrounds, and changelog notes.</span>
+    </a>
+    <a class="s2k-home-card" href="/v1/frameworks/typescript">
+      <strong>v1 frameworks</strong>
+      <span>Legacy framework package docs for TypeScript, React, Next.js, Astro, Vue, and more.</span>
+    </a>
+    <a class="s2k-home-card" href="/v1/tooling/overview">
+      <strong>v1 integrations</strong>
+      <span>Optional tooling, libraries, formats, testing, and extension layers from the v1 model.</span>
+    </a>
+  </div>
+</section>

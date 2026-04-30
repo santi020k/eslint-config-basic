@@ -3,8 +3,6 @@ title: "Migrating from v1 to v2"
 description: "Version 2 moves the npm-level public API to a single package: @santi020k/eslint-config-basic."
 ---
 
-# Migrating from v1 to v2
-
 Version 2 moves the npm-level public API to a single package: `@santi020k/eslint-config-basic`.
 
 The internal architecture is still modular, but application projects no longer need to install or import separate framework config packages.

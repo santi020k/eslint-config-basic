@@ -3,8 +3,6 @@ title: "Astro"
 description: "Use Astro support from the main v2 package. Application projects no longer install a separate @santi020k/eslint-config-astro package."
 ---
 
-# Astro
-
 Use Astro support from the main v2 package. Application projects no longer install a separate `@santi020k/eslint-config-astro` package.
 
 ## Install

@@ -1,9 +1,9 @@
 ---
 title: "Astro"
 description: "Package: @santi020k/eslint-config-astro"
+banner:
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
 ---
-
-# Astro
 
 Package: [`@santi020k/eslint-config-astro`](https://www.npmjs.com/package/@santi020k/eslint-config-astro)
 

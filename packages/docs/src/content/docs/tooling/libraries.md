@@ -3,8 +3,6 @@ title: "Libraries"
 description: "The libraries option enables integrations that usually correspond to major project dependencies."
 ---
 
-# Libraries
-
 The `libraries` option enables integrations that usually correspond to major project dependencies.
 
 | Integration | Enum | Use It When | Auto-Detected |

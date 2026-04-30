@@ -3,8 +3,6 @@ title: "Formats"
 description: "The formats option enables linting for non-code or mixed-content file formats."
 ---
 
-# Formats
-
 The `formats` option enables linting for non-code or mixed-content file formats.
 
 | Format | Enum | Use It When |

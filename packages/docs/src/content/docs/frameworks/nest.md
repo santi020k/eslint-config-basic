@@ -3,8 +3,6 @@ title: "NestJS"
 description: "Use NestJS support from the main v2 package. Application projects no longer install a separate @santi020k/eslint-config-nest package."
 ---
 
-# NestJS
-
 Use NestJS support from the main v2 package. Application projects no longer install a separate `@santi020k/eslint-config-nest` package.
 
 ## Install

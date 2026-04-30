@@ -1,9 +1,9 @@
 ---
 title: "Formats"
 description: "The formats option enables linting for non-code or mixed-content file formats."
+banner:
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
 ---
-
-# Formats
 
 The `formats` option enables linting for non-code or mixed-content file formats.
 

@@ -3,8 +3,6 @@ title: "Integrations Package"
 description: "Package: @santi020k/eslint-config-integrations"
 ---
 
-# Integrations Package
-
 Package: [`@santi020k/eslint-config-integrations`](https://www.npmjs.com/package/@santi020k/eslint-config-integrations)
 
 This package contains the integrations consumed by the main package through the `libraries`, `testing`, `formats`, `tools`, and `extensions` options.

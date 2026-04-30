@@ -1,11 +1,14 @@
 ---
 title: "react/src"
 description: "@santi020k/eslint-config-basic"
----[**@santi020k/eslint-config-basic**](../index.md)
+banner:
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
+---
 
-***
+[**@santi020k/eslint-config-basic**](../index.md)
 
-# react/src
+
+
 
 ## Variables
 
@@ -18,7 +21,6 @@ Defined in: [react/src/index.ts:25](https://github.com/santi020k/eslint-config-b
 React ESLint configuration
 Includes React plugin recommended rules and React Hooks
 
-***
 
 ### rules
 

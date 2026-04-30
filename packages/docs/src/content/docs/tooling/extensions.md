@@ -3,8 +3,6 @@ title: "Extensions"
 description: "The extensions option enables specialized rule packs that are useful across many project types."
 ---
 
-# Extensions
-
 The `extensions` option enables specialized rule packs that are useful across many project types.
 
 | Extension | Enum | Use It When | Auto-Detected |

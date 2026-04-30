@@ -1,9 +1,9 @@
 ---
 title: "Testing"
 description: "The testing option enables linting support for test runners, test environments, and testing-oriented utilities."
+banner:
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
 ---
-
-# Testing
 
 The `testing` option enables linting support for test runners, test environments, and testing-oriented utilities.
 

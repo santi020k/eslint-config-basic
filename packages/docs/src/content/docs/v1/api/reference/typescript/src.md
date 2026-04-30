@@ -1,11 +1,14 @@
 ---
 title: "typescript/src"
 description: "@santi020k/eslint-config-basic"
----[**@santi020k/eslint-config-basic**](../index.md)
+banner:
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
+---
 
-***
+[**@santi020k/eslint-config-basic**](../index.md)
 
-# typescript/src
+
+
 
 ## Variables
 
@@ -15,7 +18,6 @@ description: "@santi020k/eslint-config-basic"
 
 Defined in: [typescript/src/rules.ts:3](https://github.com/santi020k/eslint-config-basic/blob/d4aea2fe358087379afbb96b93d91deff04f5224/packages/typescript/src/rules.ts#L3)
 
-***
 
 ### typeCheckedRules
 

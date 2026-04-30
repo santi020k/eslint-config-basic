@@ -1,11 +1,14 @@
 ---
 title: "basic/src"
 description: "@santi020k/eslint-config-basic"
----[**@santi020k/eslint-config-basic**](../index.md)
+banner:
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
+---
 
-***
+[**@santi020k/eslint-config-basic**](../index.md)
 
-# basic/src
+
+
 
 ## Functions
 
@@ -38,7 +41,6 @@ The final ESLint configuration array
 
 Re-exports [bestPractices](../optionals/src.md#bestpractices)
 
-***
 
 ### coreConfig
 

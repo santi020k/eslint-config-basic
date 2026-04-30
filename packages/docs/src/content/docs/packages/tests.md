@@ -3,8 +3,6 @@ title: "Tests Package"
 description: "Package: @santi020k/eslint-config-tests"
 ---
 
-# Tests Package
-
 Package: `@santi020k/eslint-config-tests`
 
 This internal package holds the public API tests, composition tests, CLI integration tests, detection tests, and snapshot coverage for the monorepo.

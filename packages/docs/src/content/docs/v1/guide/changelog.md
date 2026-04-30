@@ -1,9 +1,9 @@
 ---
 title: "Changelog"
 description: "- #82 af844f6 Thanks @santi020k! - - Add first-class Hono support with Worker runtime globals, package detection, and a playground for Cloudflare Workers-st"
+banner:
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
 ---
-
-# Changelog
 
 ## 1.5.0
 

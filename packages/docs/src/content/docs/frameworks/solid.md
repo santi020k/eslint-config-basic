@@ -3,8 +3,6 @@ title: "Solid"
 description: "Use Solid support from the main v2 package. Application projects no longer install a separate @santi020k/eslint-config-solid package."
 ---
 
-# Solid
-
 Use Solid support from the main v2 package. Application projects no longer install a separate `@santi020k/eslint-config-solid` package.
 
 ## Install

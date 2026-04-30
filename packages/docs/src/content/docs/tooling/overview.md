@@ -3,8 +3,6 @@ title: "Integrations Overview"
 description: "The main package can compose integrations from five categories:"
 ---
 
-# Integrations Overview
-
 The main package can compose integrations from five categories:
 
 - Libraries
