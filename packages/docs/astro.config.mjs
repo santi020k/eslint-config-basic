@@ -15,76 +15,67 @@ const socialImage = new URL('/cover.webp', site).toString()
 
 const sidebar = [
   {
-    label: 'Current Docs (v2)',
+    label: 'Getting Started',
     items: [
-      {
-        label: 'Start Here',
-        items: [
-          { label: 'Overview', link: '/' },
-          { label: 'Getting Started', slug: 'guide/getting-started' },
-          { label: 'Installation', slug: 'guide/installation' },
-          { label: 'Configuration', slug: 'guide/configuration' },
-          { label: 'Migration v1 to v2', slug: 'guide/migration-v1-to-v2' }
-        ]
-      },
-      {
-        label: 'Frameworks',
-        items: [
-          { label: 'TypeScript', slug: 'frameworks/typescript' },
-          { label: 'React', slug: 'frameworks/react' },
-          { label: 'Next.js', slug: 'frameworks/next' },
-          { label: 'Astro', slug: 'frameworks/astro' },
-          { label: 'Vue', slug: 'frameworks/vue' },
-          { label: 'Svelte', slug: 'frameworks/svelte' },
-          { label: 'Solid', slug: 'frameworks/solid' },
-          { label: 'Angular', slug: 'frameworks/angular' },
-          { label: 'NestJS', slug: 'frameworks/nest' },
-          { label: 'Hono', slug: 'frameworks/hono' },
-          { label: 'Expo', slug: 'frameworks/expo' },
-          { label: 'Qwik', slug: 'frameworks/qwik' },
-          { label: 'Remix', slug: 'frameworks/remix' }
-        ]
-      },
-      {
-        label: 'Tooling',
-        items: [
-          { label: 'Overview', slug: 'tooling/overview' },
-          { label: 'Libraries', slug: 'tooling/libraries' },
-          { label: 'Testing', slug: 'tooling/testing' },
-          { label: 'Formats', slug: 'tooling/formats' },
-          { label: 'Tools', slug: 'tooling/tools' },
-          { label: 'Extensions', slug: 'tooling/extensions' }
-        ]
-      },
-      {
-        label: 'Packages and API',
-        items: [
-          { label: 'Basic', slug: 'packages/basic' },
-          { label: 'Core', slug: 'packages/core' },
-          { label: 'Integrations', slug: 'packages/integrations' },
-          { label: 'Playground', slug: 'packages/playground' },
-          { label: 'Tests', slug: 'packages/tests' },
-          { label: 'API Overview', slug: 'api' },
-          { label: 'Generated Reference', slug: 'api/reference' }
-        ]
-      }
+      { label: 'Introduction', link: '/' },
+      { label: 'Quick Start', slug: 'guide/getting-started' },
+      { label: 'Installation', slug: 'guide/installation' },
+      { label: 'Configuration', slug: 'guide/configuration' },
+      { label: 'Migrate from v1', slug: 'guide/migration-v1-to-v2', badge: { text: 'Migration', variant: 'tip' } }
     ]
   },
   {
-    label: 'Frozen Docs (v1)',
+    label: 'Frameworks',
+    items: [
+      { label: 'TypeScript', slug: 'frameworks/typescript', badge: { text: 'Core', variant: 'success' } },
+      { label: 'React', slug: 'frameworks/react' },
+      { label: 'Next.js', slug: 'frameworks/next' },
+      { label: 'Astro', slug: 'frameworks/astro' },
+      { label: 'Vue', slug: 'frameworks/vue' },
+      { label: 'Svelte', slug: 'frameworks/svelte' },
+      { label: 'Solid', slug: 'frameworks/solid' },
+      { label: 'Angular', slug: 'frameworks/angular' },
+      { label: 'NestJS', slug: 'frameworks/nest' },
+      { label: 'Hono', slug: 'frameworks/hono' },
+      { label: 'Expo', slug: 'frameworks/expo' },
+      { label: 'Qwik', slug: 'frameworks/qwik' },
+      { label: 'Remix', slug: 'frameworks/remix' }
+    ]
+  },
+  {
+    label: 'Tooling & Integrations',
+    items: [
+      { label: 'Ecosystem Overview', slug: 'tooling/overview' },
+      { label: 'Testing Tools', slug: 'tooling/testing' },
+      { label: 'Formatters', slug: 'tooling/formats' },
+      { label: 'Libraries', slug: 'tooling/libraries' },
+      { label: 'Utilities', slug: 'tooling/tools' },
+      { label: 'Extensions', slug: 'tooling/extensions' }
+    ]
+  },
+  {
+    label: 'Architecture & API',
+    items: [
+      { label: 'Core Config', slug: 'packages/basic', badge: { text: 'Main', variant: 'note' } },
+      { label: 'Base Rules', slug: 'packages/core' },
+      { label: 'Integrations', slug: 'packages/integrations' },
+      { label: 'Playground', slug: 'packages/playground' },
+      { label: 'Testing Suite', slug: 'packages/tests' },
+      { label: 'API Reference', slug: 'api' },
+      { label: 'Generated Types', slug: 'api/reference' }
+    ]
+  },
+  {
+    label: 'Legacy (v1)',
     collapsed: true,
     items: [
-      {
-        label: 'Start Here',
-        items: [
-          { label: 'Overview', slug: 'v1' },
-          { label: 'Getting Started', slug: 'v1/guide/getting-started' },
-          { label: 'Installation', slug: 'v1/guide/installation' },
-          { label: 'Configuration', slug: 'v1/guide/configuration' }
-        ]
-      },
+      { label: 'Overview', slug: 'v1' },
+      { label: 'Getting Started', slug: 'v1/guide/getting-started' },
+      { label: 'Installation', slug: 'v1/guide/installation' },
+      { label: 'Configuration', slug: 'v1/guide/configuration' },
       {
         label: 'Frameworks',
+        collapsed: true,
         items: [
           { label: 'TypeScript', slug: 'v1/frameworks/typescript' },
           { label: 'React', slug: 'v1/frameworks/react' },
@@ -103,6 +94,7 @@ const sidebar = [
       },
       {
         label: 'Tooling',
+        collapsed: true,
         items: [
           { label: 'Overview', slug: 'v1/tooling/overview' },
           { label: 'Libraries', slug: 'v1/tooling/libraries' },
@@ -114,6 +106,7 @@ const sidebar = [
       },
       {
         label: 'Packages and API',
+        collapsed: true,
         items: [
           { label: 'Basic', slug: 'v1/packages/basic' },
           { label: 'Core', slug: 'v1/packages/core' },
