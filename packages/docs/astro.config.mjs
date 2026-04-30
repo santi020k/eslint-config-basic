@@ -115,6 +115,7 @@ export default defineConfig({
         { tag: 'meta', attrs: { name: 'application-name', content: siteName } },
         { tag: 'meta', attrs: { name: 'author', content: 'Santiago Molina' } },
         { tag: 'meta', attrs: { name: 'keywords', content: siteKeywords } },
+        { tag: 'meta', attrs: { name: 'theme-color', content: '#6319BE' } },
         { tag: 'meta', attrs: { property: 'og:image', content: socialImage } },
         { tag: 'meta', attrs: { property: 'og:image:alt', content: 'Santi020k ESLint cover artwork' } },
         { tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' } },

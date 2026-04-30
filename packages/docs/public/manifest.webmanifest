@@ -3,9 +3,10 @@
   "short_name": "ESLint Config",
   "description": "Composable ESLint flat-config docs for JavaScript and TypeScript teams.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#FAF9FB",
-  "theme_color": "#FAF9FB",
+  "theme_color": "#6319BE",
   "icons": [
     {
       "src": "/favicon.svg",
@@ -13,9 +14,10 @@
       "type": "image/svg+xml"
     },
     {
-      "src": "/apple-touch-icon.png",
-      "sizes": "180x180",
-      "type": "image/png"
+      "src": "/logo-square.svg",
+      "sizes": "128x128",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
     }
   ]
 }

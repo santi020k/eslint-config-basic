@@ -19,7 +19,7 @@ hero:
       variant: minimal
 ---
 
-<section class="s2k-home-section">
+<section class="s2k-home-section" data-animate>
   <p class="s2k-home-kicker">Built for real repositories</p>
   <div class="s2k-home-proof">
     <span><strong>ESLint 9/10+</strong> flat config</span>
@@ -29,7 +29,7 @@ hero:
   </div>
 </section>
 
-<section class="s2k-home-section">
+<section class="s2k-home-section" data-animate>
   <p class="s2k-home-kicker">Recommended path</p>
   <div class="s2k-home-steps">
     <a class="s2k-home-card" href="/guide/getting-started">
@@ -47,7 +47,7 @@ hero:
   </div>
 </section>
 
-<section class="s2k-home-section">
+<section class="s2k-home-section" data-animate>
   <p class="s2k-home-kicker">Rollout paths</p>
   <div class="s2k-home-paths">
     <a class="s2k-home-card" href="/frameworks/typescript">
@@ -65,7 +65,7 @@ hero:
   </div>
 </section>
 
-<section class="s2k-home-section">
+<section class="s2k-home-section" data-animate>
   <p class="s2k-home-kicker">Framework coverage</p>
   <div class="s2k-framework-grid">
     <a href="/frameworks/typescript">TypeScript</a>
@@ -84,7 +84,7 @@ hero:
   </div>
 </section>
 
-<section class="s2k-home-section">
+<section class="s2k-home-section" data-animate>
   <p class="s2k-home-kicker">Reference</p>
   <div class="s2k-home-paths">
     <a class="s2k-home-card" href="/packages/basic">
