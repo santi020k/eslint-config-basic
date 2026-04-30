@@ -11,7 +11,7 @@ export default {
     'packages/integrations/src/index.ts',
     'packages/basic/src/index.ts'
   ],
-  out: 'packages/docs/api/reference',
+  out: 'packages/docs/src/content/docs/api/reference',
   tsconfig: './tsconfig.docs.json',
   name: '@santi020k/eslint-config-basic',
   readme: 'none',

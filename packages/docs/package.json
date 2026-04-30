@@ -2,21 +2,24 @@
   "name": "@santi020k/eslint-config-docs",
   "private": true,
   "version": "1.6.0",
-  "description": "VitePress documentation site for the @santi020k/eslint-config-basic monorepo",
+  "description": "Astro Starlight documentation site for the @santi020k/eslint-config-basic monorepo",
   "type": "module",
   "scripts": {
-    "docs:build": "vitepress build .",
-    "docs:dev": "vitepress dev .",
-    "docs:preview": "vitepress preview .",
-    "docs:clean": "rm -rf .vitepress/dist .vitepress/cache api/reference",
+    "docs:build": "node ../../scripts/prepare-starlight-docs.mjs && astro build",
+    "docs:dev": "node ../../scripts/prepare-starlight-docs.mjs && astro dev",
+    "docs:preview": "astro preview",
+    "docs:clean": "rm -rf dist .astro src/content/docs/api/reference",
     "build": "echo \"No direct build step required\"",
     "dev": "echo \"No direct build step required\"",
-    "clean": "rm -rf dist node_modules",
+    "clean": "rm -rf dist .astro node_modules",
     "check:exports": "echo \"No exports to check\"",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "node ../../scripts/prepare-starlight-docs.mjs && astro check"
   },
   "devDependencies": {
-    "vitepress": "^1.6.4"
+    "@astrojs/check": "^0.9.9",
+    "@astrojs/starlight": "^0.38.4",
+    "astro": "^6.1.8",
+    "typescript": "^5.9.3"
   },
   "engines": {
     "node": ">=22.18.0"

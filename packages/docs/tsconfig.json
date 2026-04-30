@@ -1,13 +1,14 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "noEmit": true
+    "noEmit": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext"
   },
   "include": [
-    ".vitepress/config.ts",
-    ".vitepress/nav-builders.ts",
-    ".vitepress/theme/index.ts",
+    "astro.config.mjs",
+    "src/content.config.ts",
     "env.d.ts"
   ],
-  "exclude": ["node_modules", ".vitepress/dist", ".vitepress/cache"]
+  "exclude": ["node_modules", "dist", ".astro"]
 }

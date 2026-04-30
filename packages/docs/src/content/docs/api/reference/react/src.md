@@ -1,0 +1,35 @@
+---
+title: "react/src"
+description: "@santi020k/eslint-config-basic"
+---
+
+[**@santi020k/eslint-config-basic**](../index.md)
+
+***
+
+# react/src
+
+## Variables
+
+### reactConfig
+
+> `const` **reactConfig**: `TSESLint.FlatConfig.ConfigArray`
+
+Defined in: [react/src/index.ts:25](https://github.com/santi020k/eslint-config-basic/blob/2dd990ea8a52ccf245fa62797233f66281c78ccc/packages/react/src/index.ts#L25)
+
+React ESLint configuration
+Includes React plugin recommended rules and React Hooks
+
+***
+
+### rules
+
+> `const` **rules**: `TSESLint.Linter.RulesRecord`
+
+Defined in: [react/src/rules.ts:4](https://github.com/santi020k/eslint-config-basic/blob/2dd990ea8a52ccf245fa62797233f66281c78ccc/packages/react/src/rules.ts#L4)
+
+## References
+
+### default
+
+Renames and re-exports [reactConfig](#reactconfig)

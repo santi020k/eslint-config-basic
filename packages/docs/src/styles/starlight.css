@@ -1,0 +1,133 @@
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/fonts/montserrat-variable-font-wght.ttf') format('truetype-variations');
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/fonts/montserrat-italic-variable-font-wght.ttf') format('truetype-variations');
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+:root {
+  --sl-font: 'Montserrat', 'Avenir Next', 'Segoe UI', sans-serif;
+  --sl-font-mono: 'SFMono-Regular', 'SF Mono', 'Consolas', monospace;
+  --sl-color-accent-low: #d8f4ee;
+  --sl-color-accent: #117c73;
+  --sl-color-accent-high: #093e3b;
+  --s2k-blue: #2563eb;
+  --s2k-teal: #0f9f8f;
+  --s2k-gold: #d79016;
+  --s2k-radius: 8px;
+}
+
+:root[data-theme='dark'] {
+  --sl-color-accent-low: #123936;
+  --sl-color-accent: #63dfd0;
+  --sl-color-accent-high: #cbfff8;
+}
+
+body {
+  letter-spacing: 0;
+  background:
+    radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--s2k-gold) 14%, transparent), transparent 22rem),
+    radial-gradient(circle at 88% 8%, color-mix(in srgb, var(--s2k-teal) 16%, transparent), transparent 24rem),
+    linear-gradient(180deg, color-mix(in srgb, var(--sl-color-gray-6) 58%, transparent), var(--sl-color-black) 18rem);
+}
+
+::selection {
+  color: var(--sl-color-black);
+  background: color-mix(in srgb, var(--sl-color-accent) 28%, transparent);
+}
+
+.site-title {
+  font-weight: 800;
+}
+
+.header {
+  border-bottom-color: color-mix(in srgb, var(--sl-color-gray-5) 72%, transparent);
+  background: color-mix(in srgb, var(--sl-color-black) 86%, transparent);
+  backdrop-filter: blur(18px);
+}
+
+.hero {
+  gap: clamp(2rem, 6vw, 5rem);
+  padding-block: clamp(3.5rem, 8vw, 6rem);
+}
+
+.hero img {
+  border: 1px solid color-mix(in srgb, var(--sl-color-accent) 26%, var(--sl-color-gray-5));
+  border-radius: var(--s2k-radius);
+  box-shadow: 0 24px 70px color-mix(in srgb, var(--sl-color-accent) 20%, transparent);
+}
+
+.hero .tagline {
+  max-width: 66ch;
+  color: var(--sl-color-gray-2);
+}
+
+.hero .actions a {
+  border-radius: var(--s2k-radius);
+}
+
+.card-grid {
+  gap: 1rem;
+}
+
+.card,
+.sl-markdown-content .expressive-code,
+.right-sidebar,
+.sidebar-pane {
+  border-color: color-mix(in srgb, var(--sl-color-gray-5) 78%, transparent);
+  border-radius: var(--s2k-radius);
+}
+
+.card {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--sl-color-gray-6) 64%, transparent), transparent),
+    var(--sl-color-black);
+}
+
+.card:hover {
+  border-color: color-mix(in srgb, var(--sl-color-accent) 40%, var(--sl-color-gray-5));
+}
+
+.sl-markdown-content h2 {
+  margin-top: 2.2rem;
+}
+
+.sl-markdown-content a:not(.anchor-link) {
+  text-decoration-color: color-mix(in srgb, var(--sl-color-accent) 42%, transparent);
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.2em;
+}
+
+.sl-markdown-content code:not(:where(.not-content *)) {
+  border: 1px solid color-mix(in srgb, var(--sl-color-accent) 22%, transparent);
+  border-radius: 6px;
+}
+
+.s2k-proof {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 0.75rem;
+  margin-block: 2rem;
+}
+
+.s2k-proof span {
+  border: 1px solid color-mix(in srgb, var(--sl-color-gray-5) 76%, transparent);
+  border-radius: var(--s2k-radius);
+  padding: 0.85rem 1rem;
+  color: var(--sl-color-gray-2);
+  background: color-mix(in srgb, var(--sl-color-gray-6) 54%, transparent);
+}
+
+.s2k-proof strong {
+  display: block;
+  color: var(--sl-color-white);
+}

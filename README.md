@@ -5,7 +5,7 @@
 [![CI](https://github.com/santi020k/eslint-config-basic/actions/workflows/build.yml/badge.svg)](https://github.com/santi020k/eslint-config-basic/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@santi020k/eslint-config-basic.svg)](https://www.npmjs.com/package/@santi020k/eslint-config-basic)
 [![npm downloads](https://img.shields.io/npm/dm/@santi020k/eslint-config-basic.svg)](https://www.npmjs.com/package/@santi020k/eslint-config-basic)
-[![Docs](https://img.shields.io/badge/docs-VitePress-114d66.svg)](https://eslint.santi020k.com/)
+[![Docs](https://img.shields.io/badge/docs-Starlight-114d66.svg)](https://eslint.santi020k.com/)
 [![license](https://img.shields.io/npm/l/@santi020k/eslint-config-basic.svg)](https://github.com/santi020k/eslint-config-basic/blob/main/LICENSE)
 
 ![ESLint toolkit branding](./cover.webp)

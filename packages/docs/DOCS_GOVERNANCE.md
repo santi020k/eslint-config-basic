@@ -5,13 +5,13 @@ This policy defines how the current docs set and `v1` docs coexist.
 ## Scope
 
 - Current docs live at:
-  - `packages/docs/guide`
-  - `packages/docs/frameworks`
-  - `packages/docs/tooling`
-  - `packages/docs/packages`
-  - `packages/docs/api`
+  - `packages/docs/src/content/docs/guide`
+  - `packages/docs/src/content/docs/frameworks`
+  - `packages/docs/src/content/docs/tooling`
+  - `packages/docs/src/content/docs/packages`
+  - `packages/docs/src/content/docs/api`
 - Legacy docs archive lives under:
-  - `packages/docs/v1`
+  - `packages/docs/src/content/docs/v1`
 
 ## Ownership Model
 
@@ -25,7 +25,7 @@ This policy defines how the current docs set and `v1` docs coexist.
 
 ## Navigation and Cross-Linking
 
-- Keep `v1` navigation in VitePress config to preserve stable legacy URLs.
+- Keep `v1` navigation in Starlight config to preserve stable legacy URLs.
 - Add migration links from relevant `v1` pages to current `guide/migration-v1-to-v2`.
 - Do not duplicate full feature guides across current and `v1` trees.
 
