@@ -39,9 +39,11 @@ export const expectNoUnexpectedAccessibilityViolations = async (
     await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => {
       resolve()
     })))
+
     const finiteAnimations = document.getAnimations().filter(
       a => a.effect?.getTiming().iterations !== Infinity
     )
+
     await Promise.all(finiteAnimations.map(a => a.finished.catch(() => undefined)))
   })
 

@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
+import { getEffectiveRuleValue } from './test-utils.js'
+
 import { coreConfig, rules } from '@santi020k/eslint-config-core'
 import { reactConfig } from '@santi020k/eslint-config-react'
 import { typescriptConfig } from '@santi020k/eslint-config-typescript'
-import { getEffectiveRuleValue } from './test-utils.js'
 
 describe('Core Rules', () => {
   it('should export rules object', () => {

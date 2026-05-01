@@ -20,12 +20,12 @@
   **Programmatic API:**
 
   ```ts
-  import { generateAgentSkills } from "@santi020k/eslint-config-basic";
+  import { generateAgentSkills } from '@santi020k/eslint-config-basic'
 
   const { written, skipped } = generateAgentSkills({
     cwd: process.cwd(),
-    force: true,
-  });
+    force: true
+  })
   ```
 
 ### Patch Changes
@@ -72,18 +72,18 @@
 
   ```ts
   // Before (would throw)
-  const opts = detectProjectOptions();
+  const opts = detectProjectOptions()
 
-  eslintConfig(opts); // ❌
+  eslintConfig(opts) // ❌
 
   // opts.frameworks.next === true → TypeError inside eslintConfig()
 
   // After (safe)
-  const opts = detectProjectOptions();
+  const opts = detectProjectOptions()
 
   // opts.detectedFrameworks → ['next', 'react']  (informational)
   // opts.frameworks → {}                          (safe to spread)
-  eslintConfig(opts); // ✅
+  eslintConfig(opts) // ✅
   ```
 
   ## New features
@@ -95,7 +95,7 @@
   - `max-depth` (warn, max 4) — flags deeply nested blocks
 
   ```ts
-  eslintConfig({ extensions: [Extension.BestPractices] });
+  eslintConfig({ extensions: [Extension.BestPractices] })
   ```
 
   **Category barrel exports for `@santi020k/eslint-config-optionals`** — five new sub-path exports let you import a whole category at once:

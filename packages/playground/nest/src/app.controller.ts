@@ -1,9 +1,9 @@
-/* eslint-disable @darraghor/nestjs-typed/injectable-should-be-provided -- registered in AppModule; typed-plugin cannot resolve the module graph when linting from the monorepo root */
 import { Controller, Get } from '@nestjs/common'
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger'
 
 @ApiTags('app')
 @Controller()
+// eslint-disable-next-line @darraghor/nestjs-typed/injectable-should-be-provided -- playground: controller is registered in app.module.ts; plugin lacks full bootstrap graph
 export class AppController {
   @Get()
   @ApiOkResponse({ description: 'Hello world' })

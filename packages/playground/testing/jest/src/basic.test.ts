@@ -6,7 +6,7 @@ describe('Jest playground', () => {
   })
 
   it('should handle async functions', async () => {
-    const asyncFn = async (): Promise<string> => 'hello'
+    const asyncFn = (): Promise<string> => Promise.resolve('hello')
     const result = await asyncFn()
 
     expect(result).toBe('hello')
@@ -17,6 +17,7 @@ describe('Jest playground', () => {
     const result = mockFn() as string
 
     expect(mockFn).toHaveBeenCalledTimes(1)
+
     expect(result).toBe('mocked')
   })
 })

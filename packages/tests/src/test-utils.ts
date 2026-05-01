@@ -1,5 +1,6 @@
-import { ESLint } from 'eslint'
 import type { Linter } from 'eslint'
+import { ESLint } from 'eslint'
+
 import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
@@ -59,7 +60,7 @@ export const lintText = async (
 ): Promise<ESLint.LintResult[]> => {
   const eslint = new ESLint({
     overrideConfigFile: true,
-    overrideConfig: config as Linter.Config[],
+    overrideConfig: config as Linter.Config[]
   })
 
   return await eslint.lintText(code, { filePath: fileName })
@@ -74,7 +75,7 @@ export const lintFile = async (
 ): Promise<ESLint.LintResult[]> => {
   const eslint = new ESLint({
     overrideConfigFile: true,
-    overrideConfig: config as Linter.Config[],
+    overrideConfig: config as Linter.Config[]
   })
 
   return await eslint.lintFiles([filePath])

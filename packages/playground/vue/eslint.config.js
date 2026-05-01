@@ -4,6 +4,8 @@ import { eslintConfig } from '@santi020k/eslint-config-basic'
 export default eslintConfig({
   tsconfigRootDir: import.meta.dirname,
   typescript: true,
+  libraries: [],
+  detection: { libraries: false },
   frameworks: {
     vue: true
   }

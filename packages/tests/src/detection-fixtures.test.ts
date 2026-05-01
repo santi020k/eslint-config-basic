@@ -1,4 +1,4 @@
-import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs'
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
@@ -46,9 +46,7 @@ describe('detectProjectOptions fixture matrix', () => {
           next: 'latest',
           '@nestjs/core': 'latest'
         }
-      },
-      ['app'],
-      { 'tsconfig.json': '{}' }
+      }, ['app'], { 'tsconfig.json': '{}' }
     )
 
     const options = detectProjectOptions(dir)
@@ -63,9 +61,7 @@ describe('detectProjectOptions fixture matrix', () => {
       {
         dependencies: { hono: 'latest' },
         devDependencies: { wrangler: 'latest' }
-      },
-      [],
-      { 'tsconfig.base.json': '{}' }
+      }, [], { 'tsconfig.base.json': '{}' }
     )
 
     const options = detectProjectOptions(dir)
@@ -77,9 +73,7 @@ describe('detectProjectOptions fixture matrix', () => {
 
   it('detects graphql format when only schema file exists', () => {
     const dir = createFixtureProject(
-      { dependencies: {} },
-      [],
-      { 'schema.graphql': 'type Query { hello: String }' }
+      { dependencies: {} }, [], { 'schema.graphql': 'type Query { hello: String }' }
     )
 
     const options = detectProjectOptions(dir)

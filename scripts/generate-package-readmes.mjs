@@ -9,11 +9,14 @@ import { docsOrigin, packageDocs } from '../config/docs-packages.mjs'
 const generateReadmeContent = pkg => {
   const { packageName, title, description, docsPath } = pkg
 
+  const monorepoLine =
+    'This package is part of the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.'
+
   return `# ${packageName}
 
 ${description}
 
-This package is part of the [\`@santi020k/eslint-config-basic\`](https://github.com/santi020k/eslint-config-basic) monorepo.
+${monorepoLine}
 
 - Docs: [${title}](${docsOrigin}${docsPath})
 - Repository: [santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-/* eslint-disable better-tailwindcss/no-unknown-classes -- arbitrary demo class names without a Tailwind entry in this playground */
 import { computed, ref } from 'vue'
 
 const count = ref(0)

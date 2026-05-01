@@ -1,5 +1,6 @@
-import { test } from '@playwright/test'
 import { expectNoUnexpectedAccessibilityViolations } from './helpers/accessibility.js'
+
+import { test } from '@playwright/test'
 
 test.describe('Accessibility', () => {
   test('homepage should have no accessibility violations', async ({ page }) => {

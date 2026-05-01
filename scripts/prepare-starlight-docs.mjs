@@ -1,22 +1,22 @@
+/* eslint func-style: off -- generator + recursive helpers read clearly as declarations */
 import { readdir, readFile, writeFile } from 'node:fs/promises'
 import { join, relative } from 'node:path'
 
 const docsRoot = new URL('../packages/docs/src/content/docs/', import.meta.url)
 
-const titleCase = (value) =>
-  value
-    .replaceAll('-', ' ')
-    .replaceAll('_', ' ')
-    .replace(/\b\w/g, (char) => char.toUpperCase())
+const titleCase = value => value
+  .replaceAll('-', ' ')
+  .replaceAll('_', ' ')
+  .replace(/\b\w/g, char => char.toUpperCase())
 
-const escapeYaml = (value) => value.replaceAll('"', '\\"')
-const normalizeTitle = (value) =>
-  value
-    .replace(/\\([_`*[\]])/gu, '$1')
-    .replace(/[`*_]/gu, '')
-    .replace(/\s+/gu, ' ')
-    .trim()
-    .toLowerCase()
+const escapeYaml = value => value.replaceAll('"', '\\"')
+
+const normalizeTitle = value => value
+  .replace(/\\([_`*[\]])/gu, '$1')
+  .replace(/[`*_]/gu, '')
+  .replace(/\s+/gu, ' ')
+  .trim()
+  .toLowerCase()
 
 async function* markdownFiles(dir) {
   for (const entry of await readdir(dir, { withFileTypes: true })) {
@@ -24,6 +24,7 @@ async function* markdownFiles(dir) {
 
     if (entry.isDirectory()) {
       yield* markdownFiles(path)
+
       continue
     }
 
@@ -48,9 +49,10 @@ function deriveTitle(path, content) {
 
 function deriveDescription(content) {
   const body = content.replace(/^---[\s\S]*?---\s*/u, '')
+
   const paragraph = body
     .split(/\n{2,}/u)
-    .find((block) => !block.startsWith('#') && !block.startsWith('```') && block.trim().length > 0)
+    .find(block => !block.startsWith('#') && !block.startsWith('```') && block.trim().length > 0)
 
   if (!paragraph) {
     return undefined
@@ -120,12 +122,10 @@ function removeDuplicateTitle(content) {
   let body = parts.body
 
   body = body.replace(/^\[[^\n]+\]\([^)]+\)\n\n\*\*\*\n\n/u, '')
-  body = body.replace(/^\*\*([^*]+)\*\*\n\n\*\*\*\n\n/u, (match, label) =>
-    normalizeTitle(label) === normalizedTitle ? '' : match
-  )
-  body = body.replace(/^#\s+(.+?)\s*\n+/u, (match, heading) =>
-    normalizeTitle(heading.replace(/\s*[{]#[^}]+[}]$/u, '')) === normalizedTitle ? '' : match
-  )
+
+  body = body.replace(/^\*\*([^*]+)\*\*\n\n\*\*\*\n\n/u, (match, label) => normalizeTitle(label) === normalizedTitle ? '' : match)
+
+  body = body.replace(/^#\s+(.+?)\s*\n+/u, (match, heading) => normalizeTitle(heading.replace(/\s*[{]#[^}]+[}]$/u, '')) === normalizedTitle ? '' : match)
 
   return `${parts.frontmatter}\n\n${body}`
 }
@@ -157,6 +157,7 @@ function ensureFrontmatter(path, content) {
 
   const title = deriveTitle(path, content)
   const description = deriveDescription(content)
+
   const frontmatter = [
     '---',
     `title: "${escapeYaml(title)}"`,

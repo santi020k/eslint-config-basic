@@ -7,9 +7,9 @@ const targetPath = join(rootDir, 'packages/docs/src/content/docs/guide/changelog
 
 try {
   const content = readFileSync(sourcePath, 'utf8')
+
   const modifiedContent = content.replace(
-    /^# @santi020k\/eslint-config-basic/,
-    '---\ntitle: "Changelog"\ndescription: "Release history for @santi020k/eslint-config-basic."\n---\n\n# Changelog'
+    /^# @santi020k\/eslint-config-basic/, '---\ntitle: "Changelog"\ndescription: "Release history for @santi020k/eslint-config-basic."\n---\n\n# Changelog'
   )
 
   writeFileSync(targetPath, modifiedContent, 'utf8')

@@ -64,8 +64,7 @@ export const defineLazyConfig = (
   }
 
   return new Proxy([], {
-    get: (_target, property, receiver): unknown =>
-      Reflect.get(getConfig(), property, receiver) as unknown,
+    get: (_target, property, receiver): unknown => Reflect.get(getConfig(), property, receiver) as unknown,
     getOwnPropertyDescriptor: (_target, property) => Reflect.getOwnPropertyDescriptor(getConfig(), property),
     has: (_target, property) => Reflect.has(getConfig(), property),
     ownKeys: () => Reflect.ownKeys(getConfig())

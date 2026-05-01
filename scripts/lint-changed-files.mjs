@@ -20,14 +20,13 @@ const resolveBaseRef = () => {
   return ''
 }
 
-const listChangedFiles = (baseRef) => {
+const listChangedFiles = baseRef => {
   if (!baseRef) {
     return []
   }
 
   const rawOutput = execSync(
-    `git diff --name-only --diff-filter=ACMR ${baseRef}...HEAD`,
-    { encoding: 'utf-8' }
+    `git diff --name-only --diff-filter=ACMR ${baseRef}...HEAD`, { encoding: 'utf-8' }
   )
 
   const eslintExt = new Set(['.js', '.jsx', '.mjs', '.cjs', '.ts', '.tsx'])
@@ -44,6 +43,7 @@ const changedFiles = listChangedFiles(baseRef)
 
 if (changedFiles.length === 0) {
   console.info('[lint:changed] No changed JS/TS files detected.')
+
   process.exitCode = 0
 } else {
   const args = ['eslint', '--no-warn-ignored', ...(isFixMode ? ['--fix'] : []), ...changedFiles]

@@ -584,7 +584,8 @@ export const generateSkillContent = (
   // ── Assemble body ─────────────────────────────────────────────────────────
   const body = `# ESLint Code Standards
 
-This project uses [\`@santi020k/eslint-config-basic\`](https://github.com/santi020k/eslint-config-basic) — a composable ESLint 9/10+ Flat Config package.
+This project uses [\`@santi020k/eslint-config-basic\`](https://github.com/santi020k/eslint-config-basic) —
+a composable ESLint 9/10+ Flat Config package.
 
 **Always run \`${lintCommand}\` to validate your changes before finishing any task.**
 

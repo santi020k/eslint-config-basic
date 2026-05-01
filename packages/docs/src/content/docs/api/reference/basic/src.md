@@ -233,6 +233,7 @@ dynamically imported (e.g. when running outside a built environment).
 import { generateAgentSkills } from '@santi020k/eslint-config-basic'
 
 const result = await generateAgentSkills({ cwd: process.cwd() })
+
 console.log('Written to:', result.written)
 ```
 
