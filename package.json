@@ -43,6 +43,8 @@
     "build:schema": "ts-json-schema-generator -p packages/core/src/types.ts -t EslintConfigOptions -o eslint-config-schema.json",
     "docs:dev": "pnpm run docs:api && pnpm --filter @santi020k/eslint-config-docs run docs:dev",
     "docs:preview": "pnpm --filter @santi020k/eslint-config-docs run docs:preview",
+    "docs:test:a11y": "pnpm --filter @santi020k/eslint-config-docs run test:a11y",
+    "docs:test": "pnpm run docs:test:a11y && pnpm --filter @santi020k/eslint-config-docs run lighthouse",
     "docs:md": "pnpm run docs:api",
     "docs:sync-readmes": "node scripts/generate-package-readmes.mjs",
     "docs:sync-changelog": "node scripts/sync-docs-changelog.mjs",

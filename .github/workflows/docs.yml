@@ -35,10 +35,17 @@ jobs:
           DOCS_BASE: /
           DOCS_SITE_URL: https://eslint.santi020k.com
         run: pnpm run docs:build
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+        working-directory: packages/docs
+      - name: Run A11y and SEO Tests
+        run: pnpm run docs:test:a11y
+      - name: Run Lighthouse CI
+        run: pnpm --filter @santi020k/eslint-config-docs run lighthouse
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: packages/docs/.vitepress/dist
+          path: packages/docs/dist
 
   deploy:
     needs: build
