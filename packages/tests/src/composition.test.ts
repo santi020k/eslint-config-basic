@@ -118,17 +118,18 @@ describe('eslintConfig Function', () => {
   it('should prepend a global ignores block when ignores option is non-empty', () => {
     const patterns = ['dist/**', 'tmp/**']
     const config = eslintConfig({ ignores: patterns })
-    const ignoreEntry = config.find(
-      c =>
-        typeof c === 'object' &&
-        c !== null &&
-        'name' in c &&
-        (c as { name?: string }).name === 'eslint-config-basic/ignores'
-    ) as { ignores?: string[] } | undefined
+    const ignoreEntry = config.find((entry): entry is { name: string, ignores?: string[] } => typeof entry === 'object' &&
+      'name' in entry &&
+      entry.name === 'eslint-config-basic/ignores')
 
     expect(ignoreEntry?.ignores).toEqual(patterns)
     expect(extractConfigNames(config)).toContain('eslint-config-basic/ignores')
-    expect(config.indexOf(ignoreEntry as (typeof config)[number])).toBe(0)
+
+    if (ignoreEntry === undefined) {
+      throw new Error('expected eslint-config-basic/ignores block')
+    }
+
+    expect(config.indexOf(ignoreEntry)).toBe(0)
   })
 
   it('should handle multiple framework configs', () => {

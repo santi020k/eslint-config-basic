@@ -105,7 +105,7 @@ Defined in: [basic/src/agent-skill-generator.ts:51](https://github.com/santi020k
 
 ### AGENT\_TARGETS
 
-> `const` **AGENT\_TARGETS**: [`AgentTarget`](#agenttarget)[]
+> `const` **AGENT\_TARGETS**: [`AgentTarget`](#agenttarget) `[]`
 
 Defined in: [basic/src/agent-skill-generator.ts:74](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/basic/src/agent-skill-generator.ts#L74)
 
@@ -233,6 +233,7 @@ dynamically imported (e.g. when running outside a built environment).
 import { generateAgentSkills } from '@santi020k/eslint-config-basic'
 
 const result = await generateAgentSkills({ cwd: process.cwd() })
+
 console.log('Written to:', result.written)
 ```
 

@@ -3,7 +3,7 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger'
 
 @ApiTags('app')
 @Controller()
-// eslint-disable-next-line @darraghor/nestjs-typed/injectable-should-be-provided -- playground: controller is registered in app.module.ts; plugin lacks full bootstrap graph
+// eslint-disable-next-line @darraghor/nestjs-typed/injectable-should-be-provided -- plugin cannot resolve module graph; AppController is listed in app.module.ts `controllers`
 export class AppController {
   @Get()
   @ApiOkResponse({ description: 'Hello world' })
