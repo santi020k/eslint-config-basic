@@ -28,7 +28,7 @@ Framework-specific configurations are optional peer dependencies. They are dynam
 
 - **pnpm Workspaces**: Manages local packages and shared devDependencies.
 - **Turborepo**: Orchestrates builds, linting, and tests across the monorepo.
-- **Changesets**: Automates semantic versioning and publishing.
+- **Changesets**: Automates semantic versioning and publishing. **Never edit `packages/*/CHANGELOG.md` by hand for release notes**—run `pnpm run changeset`, commit `.changeset/*.md`, and follow `.agent/skills/release-process/SKILL.md`.
 - **pnpm Overrides**: Ensures consistent plugin versions across the ecosystem.
 
 ```json

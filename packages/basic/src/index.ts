@@ -337,7 +337,16 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     createCoreConfig(runtime) :
     coreConfig
 
+  const userIgnores = options?.ignores?.length ?
+    [{
+      name: 'eslint-config-basic/ignores',
+      ignores: options.ignores
+    } as TSESLint.FlatConfig.Config] :
+    []
+
   const configs: FlatConfigArray = [
+    ...userIgnores,
+
     // Settings
     ...(useGitignore ? gitignore : []),
 

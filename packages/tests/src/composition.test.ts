@@ -115,6 +115,22 @@ describe('eslintConfig Function', () => {
     expect(names.some(n => n.toLowerCase().includes('gitignore'))).toBe(false)
   })
 
+  it('should prepend a global ignores block when ignores option is non-empty', () => {
+    const patterns = ['dist/**', 'tmp/**']
+    const config = eslintConfig({ ignores: patterns })
+    const ignoreEntry = config.find(
+      c =>
+        typeof c === 'object' &&
+        c !== null &&
+        'name' in c &&
+        (c as { name?: string }).name === 'eslint-config-basic/ignores'
+    ) as { ignores?: string[] } | undefined
+
+    expect(ignoreEntry?.ignores).toEqual(patterns)
+    expect(extractConfigNames(config)).toContain('eslint-config-basic/ignores')
+    expect(config.indexOf(ignoreEntry as (typeof config)[number])).toBe(0)
+  })
+
   it('should handle multiple framework configs', () => {
     const config = eslintConfig({
       typescript: true,

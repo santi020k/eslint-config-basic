@@ -7,6 +7,8 @@ description: How to release new versions and manage changesets for @santi020k/es
 
 This project uses [Changesets](https://github.com/changesets/changesets) for managing versioning, generating changelogs, and publishing to npm.
 
+**Agents and contributors:** never append release notes by editing `packages/*/CHANGELOG.md` directly. Always add a changeset (below); bots or `pnpm run version-packages` rewrite those files from Changesets data.
+
 ## 1. Creating a Changeset
 
 When you add a feature, fix a bug, or make changes that should be reflected in the changelog, you must generate a new changeset.

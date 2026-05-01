@@ -60,6 +60,20 @@ export default eslintConfig({
 
 Next.js, Expo, and Remix automatically include React rules when needed.
 
+## Ignoring paths
+
+Skip linting build artifacts or generated folders by passing [`ignores`](/guide/configuration#additional-global-ignores) on `eslintConfig()`—same effect as a leading flat-config block that only sets `ignores`, without wrapping the export in an extra array.
+
+```js
+import { eslintConfig } from '@santi020k/eslint-config-basic'
+
+export default eslintConfig({
+  ignores: ['dist/**', 'coverage/**']
+})
+```
+
+See [Configuration](/guide/configuration#additional-global-ignores) for presets, monorepo `projects`, and ESLint working-directory notes.
+
 ## Framework Matrix
 
 | Project Type | Package To Install | Enable With |

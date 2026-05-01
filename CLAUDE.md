@@ -91,16 +91,23 @@ Use these for specific tasks — read the relevant SKILL.md before starting:
 | Release & versioning | `.agent/skills/release-process/SKILL.md` |
 | General improvements | `.agent/skills/improve-project/SKILL.md` |
 
-## Documentation Rule
+## Documentation and changelog
+
+### Changelog
+
+Do **not** edit `packages/*/CHANGELOG.md` by hand for routine work. This repo uses [Changesets](https://github.com/changesets/changesets): run `pnpm run changeset`, choose affected packages and semver level, write the summary, and commit the generated file under `.changeset/`. Release automation updates package changelogs when the Version Packages PR merges. See `.agent/skills/release-process/SKILL.md`.
+
+Meaningful docs-site updates belong in the same release notes when `@santi020k/eslint-config-docs` is included in that changeset (packages share fixed versioning—see `.changeset/config.json`).
+
+### Documentation
 
 If you add a new published framework package or integration, updating the documentation is required in the same task.
 
-- Add or update the dedicated VitePress page in `packages/docs/frameworks/` or `packages/docs/tooling/`
-- Update `packages/docs/guide/installation.md` and `packages/docs/guide/configuration.md` when setup paths change
-- Update `packages/docs/api/index.md` when package coverage changes
-- Update homepage counts or package lists in `packages/docs/index.md` and `packages/docs/.vitepress/theme/components/HomePageSections.vue` when totals change
-- Keep `README.md` and package-level `README.md` files aligned with the published surface area
-- Add an unreleased note to `packages/docs/CHANGELOG.md` when the docs site changes meaningfully
+- Add or update the dedicated guides under `packages/docs/src/content/docs/` (framework/tooling paths as appropriate)
+- Update `packages/docs/src/content/docs/guide/installation.md` and `packages/docs/src/content/docs/guide/configuration.md` when setup paths change
+- Update `packages/docs/src/content/docs/api/index.md` when package coverage changes
+- Update homepage counts or package lists in `packages/docs/src/content/docs/index.md` when totals change
+- Keep root `README.md` and package-level `README.md` files aligned with the published surface area
 
 ## Critical Conventions
 

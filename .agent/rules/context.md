@@ -101,6 +101,7 @@ All commands must pass before considering work complete.
 7. **Virtual script files**: Framework files (.svelte, .astro, .vue, .qwik) generate virtual TS files. Do NOT add `allowDefaultProject: true` or re-apply `disableTypeChecked` in framework packages — the `typescript` package already handles `virtualTypeCheckedFiles`.
 8. **Integration test projectService**: When writing tests that call `lintText()`, avoid relying on auto-detection with TypeScript if using virtual file paths. Use `typescript: false` to prevent `projectService` from rejecting virtual paths not in a real tsconfig.
 9. **Tailwind plugin naming**: The `better-tailwindcss` plugin does NOT include "tailwind" in config entry names — check for the rule prefix `better-tailwindcss/` instead.
+10. **Changelog**: Never append release notes by editing `packages/*/CHANGELOG.md` manually—use Changesets (`pnpm run changeset`, commit `.changeset/*.md`). See `.agent/skills/release-process/SKILL.md`.
 
 ## File Modification Patterns
 

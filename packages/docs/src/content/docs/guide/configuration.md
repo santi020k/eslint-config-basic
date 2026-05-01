@@ -15,6 +15,7 @@ The main package composes the final flat config array from one public install: `
 - Use `optionMergeStrategy` when you want strict replace behavior.
 - Use `detection` for granular auto-detection control.
 - Use `projects` for package-aware monorepo configuration.
+- Use `ignores` for extra global ignore globs alongside the composed config (same as a leading flat-config object with only `ignores`).
 
 ## Core Composition Model
 
@@ -119,6 +120,18 @@ export default eslintConfig({
 ```
 
 Supported detection keys are `typescript`, `frameworks`, `libraries`, `testing`, `formats`, `tools`, `runtime`, and `nextMode`.
+
+## Additional global ignores
+
+Pass `ignores` when you want repo-specific globs inside `eslintConfig()` instead of a separate array entry. Patterns behave like ESLint flat config global ignores (relative to the ESLint working directory). They are not merged from presets or auto-detection. For `projects` sub-configs, patterns are not rewritten with the subfolder prefix; use paths that make sense from the config file's working directory.
+
+```js
+import { eslintConfig } from '@santi020k/eslint-config-basic'
+
+export default eslintConfig({
+  ignores: ['dist/**', 'packages/*/dist/**', 'coverage/**']
+})
+```
 
 ## Detection and Root Directories
 

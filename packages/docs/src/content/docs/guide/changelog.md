@@ -3,6 +3,8 @@ title: "Changelog"
 description: "Release history for @santi020k/eslint-config-basic."
 ---
 
+# Changelog
+
 ## 1.6.0
 
 ### Minor Changes

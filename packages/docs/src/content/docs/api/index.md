@@ -11,6 +11,7 @@ description: "The API reference is generated from the source packages with TypeD
 
 - [Generated reference index](/api/reference/)
 - [Main Package Guide](/packages/basic)
+- [`eslintConfig()` options](/guide/configuration) — typed fields such as `ignores`, `typescript`, `frameworks`, and integrations (full detail in generated [`EslintConfigOptions`](/api/reference/core/src#eslintconfigoptions))
 
 ## Covered Packages
 

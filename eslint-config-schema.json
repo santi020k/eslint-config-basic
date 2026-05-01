@@ -49,6 +49,37 @@
       ],
       "type": "string"
     },
+    "DetectionOptions": {
+      "additionalProperties": false,
+      "description": "Controls automatic project detection by category.",
+      "properties": {
+        "formats": {
+          "type": "boolean"
+        },
+        "frameworks": {
+          "type": "boolean"
+        },
+        "libraries": {
+          "type": "boolean"
+        },
+        "nextMode": {
+          "type": "boolean"
+        },
+        "runtime": {
+          "type": "boolean"
+        },
+        "testing": {
+          "type": "boolean"
+        },
+        "tools": {
+          "type": "boolean"
+        },
+        "typescript": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "EcmaVersion": {
       "anyOf": [
         {
@@ -168,12 +199,31 @@
       "additionalProperties": false,
       "description": "ESLint configuration interface",
       "properties": {
+        "autoFrameworks": {
+          "description": "Enables bundled framework configs detected from dependencies. Disable this when you want manual framework control only.",
+          "type": "boolean"
+        },
+        "detectRootDir": {
+          "description": "Root directory used for automatic project detection. Defaults to `process.cwd()`.",
+          "type": "string"
+        },
         "detectedFrameworks": {
-          "description": "Frameworks detected from package.json by `detectProjectOptions()`. This is informational — use it to display what was auto-detected. To actually enable framework linting you still need to import the framework package and pass it via `frameworks.<name>`.",
+          "description": "Frameworks detected from package.json by `detectProjectOptions()`. In v2, `eslintConfig()` enables these bundled framework configs by default.",
           "items": {
             "$ref": "#/definitions/DetectedFrameworkName"
           },
           "type": "array"
+        },
+        "detection": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "$ref": "#/definitions/DetectionOptions"
+            }
+          ],
+          "description": "Enables or disables automatic project detection by category. Use `false` to disable all detection, or an object for granular control."
         },
         "extensions": {
           "description": "List of specialized ESLint rules and extensions",
@@ -191,7 +241,7 @@
         },
         "frameworks": {
           "additionalProperties": false,
-          "description": "Framework and library specific configurations. Each value must be the imported config from the corresponding `@santi020k/eslint-config-<framework>` package — boolean values are not accepted.",
+          "description": "Framework and library specific configurations.\n\nSet a framework to `true` to use the bundled v2 config from `@santi020k/eslint-config-basic`, or pass a config array/factory when you need to override the bundled config.",
           "properties": {
             "angular": {
               "$ref": "#/definitions/ImportedFramework"
@@ -232,6 +282,13 @@
           },
           "type": "object"
         },
+        "ignores": {
+          "description": "Extra global ignore globs (flat config `ignores` only, no `files`). Patterns are relative to ESLint’s working directory, like a manual ignore block. Not merged from presets or detection. For `projects` entries, patterns are not auto-prefixed with the subproject path; use repo-root-relative globs when needed.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "libraries": {
           "description": "List of application-level dependencies configurations",
           "items": {
@@ -243,9 +300,25 @@
           "$ref": "#/definitions/NextMode",
           "description": "Next.js specific routing mode"
         },
+        "optionMergeStrategy": {
+          "description": "Controls how explicit arrays/frameworks combine with auto-detected and preset values.\n- `merge` (default): union detected + preset + explicit values\n- `replace`: explicit values fully replace detected/preset values",
+          "enum": [
+            "merge",
+            "replace"
+          ],
+          "type": "string"
+        },
         "preset": {
           "$ref": "#/definitions/Preset",
           "description": "High-level configuration preset"
+        },
+        "projects": {
+          "additionalProperties": {
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "description": "Package-aware subproject configuration for monorepos. Each key is a workspace-relative folder and each value is scoped to that folder.",
+          "type": "object"
         },
         "runtime": {
           "$ref": "#/definitions/Runtime",
@@ -259,8 +332,8 @@
           "type": "array"
         },
         "strict": {
-          "description": "If true, all 'warn' rules are promoted to 'error'",
-          "type": "boolean"
+          "$ref": "#/definitions/StrictMode",
+          "description": "Severity profile.\n- `false` / `recommended`: keep recommended severities\n- `true` / `ci`: promote warnings to errors\n- `pedantic`: promote warnings and enable built-in best-practice rules"
         },
         "testing": {
           "description": "List of testing frameworks and testing environments",
@@ -594,6 +667,10 @@
             }
           },
           "type": "object"
+        },
+        {
+          "const": true,
+          "type": "boolean"
         }
       ],
       "description": "Type to handle both direct config arrays and imported modules with a default export. User-facing framework options should always pass imported config arrays/modules explicitly — boolean values are not accepted and will throw a descriptive error."
@@ -1039,7 +1116,11 @@
         "all",
         "node",
         "browser",
-        "worker"
+        "worker",
+        "library",
+        "app",
+        "ci",
+        "monorepo"
       ],
       "type": "string"
     },
@@ -1269,6 +1350,26 @@
         "script"
       ],
       "type": "string"
+    },
+    "StrictMode": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "const": "recommended",
+          "type": "string"
+        },
+        {
+          "const": "ci",
+          "type": "string"
+        },
+        {
+          "const": "pedantic",
+          "type": "string"
+        }
+      ],
+      "description": "Severity profiles for teams adopting the config progressively."
     },
     "Testing": {
       "description": "Enum for testing frameworks and environments",

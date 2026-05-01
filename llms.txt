@@ -17,6 +17,7 @@
 - **Strict Mode**: `strict: true` promotes all warnings to errors.
 - Monorepo using Turborepo and pnpm Workspaces.
 - Dependency alignment via pnpm `overrides` with `$` references.
+- **Changelog**: Use Changesets (`pnpm run changeset`, commit `.changeset/*.md`); do not edit `packages/*/CHANGELOG.md` manually for releases.
 
 ## Quick Start
 

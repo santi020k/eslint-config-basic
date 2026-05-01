@@ -243,6 +243,14 @@ export interface EslintConfigOptions {
   tsconfigRootDir?: string
 
   /**
+   * Extra global ignore globs (flat config `ignores` only, no `files`).
+   * Patterns are relative to ESLint's working directory, like a manual ignore block.
+   * Not merged from presets or detection. For `projects` entries, patterns are not
+   * auto-prefixed with the subproject path; use repo-root-relative globs when needed.
+   */
+  ignores?: string[]
+
+  /**
    * Controls how explicit arrays/frameworks combine with auto-detected and preset values.
    * - `merge` (default): union detected + preset + explicit values
    * - `replace`: explicit values fully replace detected/preset values

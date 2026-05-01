@@ -1,7 +1,8 @@
----
-title: "@santi020k/eslint-config-basic"
-description: "@santi020k/eslint-config-basic"
----
+**@santi020k/eslint-config-basic**
+
+***
+
+# @santi020k/eslint-config-basic
 
 ## Modules
 

@@ -73,4 +73,6 @@ pnpm run test       # Runs the Vitest integration suite
 
 When creating a Pull Request, always use the project's PR template found at `.github/pull_request_template.md`. Fill out all relevant sections (Description, Type of Change, Packages Affected, Changeset, and Checklist) to ensure a smooth review process.
 
+Do not manually edit `packages/*/CHANGELOG.md` for release messaging—create or update a Changeset (`pnpm run changeset`) and commit `.changeset/*.md` instead; see `.agent/skills/release-process/SKILL.md`.
+
 ALL commands must pass successfully before submitting changes. Do not leave broken setups.
