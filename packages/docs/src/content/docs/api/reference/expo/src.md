@@ -1,8 +1,7 @@
-[**@santi020k/eslint-config-basic**](../index.md)
-
-***
-
-# expo/src
+---
+title: "expo/src"
+description: "@santi020k/eslint-config-basic"
+---
 
 ## Variables
 

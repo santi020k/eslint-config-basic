@@ -1,8 +1,7 @@
-[**@santi020k/eslint-config-basic**](../index.md)
-
-***
-
-# nest/src
+---
+title: "nest/src"
+description: "@santi020k/eslint-config-basic"
+---
 
 ## Variables
 

@@ -1,8 +1,7 @@
-[**@santi020k/eslint-config-basic**](../index.md)
-
-***
-
-# basic/src
+---
+title: "basic/src"
+description: "@santi020k/eslint-config-basic"
+---
 
 ## Interfaces
 

@@ -1,8 +1,7 @@
-[**@santi020k/eslint-config-basic**](../index.md)
-
-***
-
-# core/src
+---
+title: "core/src"
+description: "@santi020k/eslint-config-basic"
+---
 
 ## Enumerations
 

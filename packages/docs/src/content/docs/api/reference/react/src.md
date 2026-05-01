@@ -1,8 +1,7 @@
-[**@santi020k/eslint-config-basic**](../index.md)
-
-***
-
-# react/src
+---
+title: "react/src"
+description: "@santi020k/eslint-config-basic"
+---
 
 ## Variables
 

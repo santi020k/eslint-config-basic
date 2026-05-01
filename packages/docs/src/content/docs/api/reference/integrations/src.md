@@ -1,8 +1,7 @@
-[**@santi020k/eslint-config-basic**](../index.md)
-
-***
-
-# integrations/src
+---
+title: "integrations/src"
+description: "@santi020k/eslint-config-basic"
+---
 
 ## Variables
 

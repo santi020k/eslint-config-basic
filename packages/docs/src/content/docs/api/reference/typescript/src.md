@@ -1,8 +1,7 @@
-[**@santi020k/eslint-config-basic**](../index.md)
-
-***
-
-# typescript/src
+---
+title: "typescript/src"
+description: "@santi020k/eslint-config-basic"
+---
 
 ## Variables
 
