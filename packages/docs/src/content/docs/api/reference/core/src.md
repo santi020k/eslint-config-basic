@@ -3,6 +3,8 @@ title: "core/src"
 description: "@santi020k/eslint-config-basic"
 ---
 
+<!-- markdownlint-disable MD024 -->
+
 ## Enumerations
 
 ### Extension
@@ -600,6 +602,7 @@ Next.js specific routing mode
 Defined in: [core/src/types.ts:258](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L258)
 
 Controls how explicit arrays/frameworks combine with auto-detected and preset values.
+
 - `merge` (default): union detected + preset + explicit values
 - `replace`: explicit values fully replace detected/preset values
 
@@ -643,6 +646,7 @@ List of global settings and behavioral flags
 Defined in: [core/src/types.ts:299](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L299)
 
 Severity profile.
+
 - `false` / `recommended`: keep recommended severities
 - `true` / `ci`: promote warnings to errors
 - `pedantic`: promote warnings and enable built-in best-practice rules
