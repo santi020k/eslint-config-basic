@@ -2,13 +2,17 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "noEmit": true,
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext"
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["ES2023", "DOM"]
   },
   "include": [
     "astro.config.mjs",
     "src/content.config.ts",
-    "env.d.ts"
+    "env.d.ts",
+    "playwright.config.ts",
+    "tests/**/*.ts",
+    ".astro/**/*.ts"
   ],
-  "exclude": ["node_modules", "dist", ".astro"]
+  "exclude": ["node_modules", "dist"]
 }

@@ -465,7 +465,7 @@ Disable this when you want manual framework control only.
 
 ##### detectedFrameworks?
 
-> `optional` **detectedFrameworks?**: [`DetectedFrameworkName`](#detectedframeworkname)[]
+> `optional` **detectedFrameworks?**: Array<[`DetectedFrameworkName`](#detectedframeworkname)>
 
 Defined in: [core/src/types.ts:328](https://github.com/santi020k/eslint-config-basic/blob/cdb5cddf7d4d0c459805890061d2e2ec4a01e19c/packages/core/src/types.ts#L328)
 
@@ -492,7 +492,7 @@ Defaults to `process.cwd()`.
 
 ##### extensions?
 
-> `optional` **extensions?**: [`Extension`](#extension)[]
+> `optional` **extensions?**: Array<[`Extension`](#extension)>
 
 Defined in: [core/src/types.ts:280](https://github.com/santi020k/eslint-config-basic/blob/cdb5cddf7d4d0c459805890061d2e2ec4a01e19c/packages/core/src/types.ts#L280)
 
@@ -500,7 +500,7 @@ List of specialized ESLint rules and extensions
 
 ##### formats?
 
-> `optional` **formats?**: [`Format`](#format)[]
+> `optional` **formats?**: Array<[`Format`](#format)>
 
 Defined in: [core/src/types.ts:274](https://github.com/santi020k/eslint-config-basic/blob/cdb5cddf7d4d0c459805890061d2e2ec4a01e19c/packages/core/src/types.ts#L274)
 
@@ -568,7 +568,7 @@ need to override the bundled config.
 
 ##### libraries?
 
-> `optional` **libraries?**: [`Library`](#library)[]
+> `optional` **libraries?**: Array<[`Library`](#library)>
 
 Defined in: [core/src/types.ts:268](https://github.com/santi020k/eslint-config-basic/blob/cdb5cddf7d4d0c459805890061d2e2ec4a01e19c/packages/core/src/types.ts#L268)
 
@@ -619,7 +619,7 @@ Runtime environment preset (Node, Browser, Universal)
 
 ##### settings?
 
-> `optional` **settings?**: [`Setting`](#setting)[]
+> `optional` **settings?**: Array<[`Setting`](#setting)>
 
 Defined in: [core/src/types.ts:283](https://github.com/santi020k/eslint-config-basic/blob/cdb5cddf7d4d0c459805890061d2e2ec4a01e19c/packages/core/src/types.ts#L283)
 
@@ -638,7 +638,7 @@ Severity profile.
 
 ##### testing?
 
-> `optional` **testing?**: [`Testing`](#testing)[]
+> `optional` **testing?**: Array<[`Testing`](#testing)>
 
 Defined in: [core/src/types.ts:271](https://github.com/santi020k/eslint-config-basic/blob/cdb5cddf7d4d0c459805890061d2e2ec4a01e19c/packages/core/src/types.ts#L271)
 
@@ -646,7 +646,7 @@ List of testing frameworks and testing environments
 
 ##### tools?
 
-> `optional` **tools?**: [`Tool`](#tool)[]
+> `optional` **tools?**: Array<[`Tool`](#tool)>
 
 Defined in: [core/src/types.ts:277](https://github.com/santi020k/eslint-config-basic/blob/cdb5cddf7d4d0c459805890061d2e2ec4a01e19c/packages/core/src/types.ts#L277)
 
@@ -800,7 +800,7 @@ Do not use these in application code.
 
 ##### detectFormats
 
-> **detectFormats**: (`allDeps`, `detectRootDir`) => [`Format`](#format)[]
+> **detectFormats**: (`allDeps`, `detectRootDir`) => Array<[`Format`](#format)>
 
 ###### Parameters
 
@@ -814,11 +814,11 @@ Do not use these in application code.
 
 ###### Returns
 
-[`Format`](#format)[]
+Array<[`Format`](#format)>
 
 ##### detectFrameworks
 
-> **detectFrameworks**: (`allDeps`, `setRuntime`) => [`DetectedFrameworkName`](#detectedframeworkname)[] \| `undefined`
+> **detectFrameworks**: (`allDeps`, `setRuntime`) => Array<[`DetectedFrameworkName`](#detectedframeworkname)> \| `undefined`
 
 ###### Parameters
 
@@ -832,11 +832,11 @@ Do not use these in application code.
 
 ###### Returns
 
-[`DetectedFrameworkName`](#detectedframeworkname)[] \| `undefined`
+Array<[`DetectedFrameworkName`](#detectedframeworkname)> \| `undefined`
 
 ##### detectLibraries
 
-> **detectLibraries**: (`allDeps`) => [`Library`](#library)[]
+> **detectLibraries**: (`allDeps`) => Array<[`Library`](#library)>
 
 ###### Parameters
 
@@ -846,7 +846,7 @@ Do not use these in application code.
 
 ###### Returns
 
-[`Library`](#library)[]
+Array<[`Library`](#library)>
 
 ##### detectNextMode
 
@@ -868,7 +868,7 @@ Do not use these in application code.
 
 ##### detectTesting
 
-> **detectTesting**: (`allDeps`) => [`Testing`](#testing)[]
+> **detectTesting**: (`allDeps`) => Array<[`Testing`](#testing)>
 
 ###### Parameters
 
@@ -878,11 +878,11 @@ Do not use these in application code.
 
 ###### Returns
 
-[`Testing`](#testing)[]
+Array<[`Testing`](#testing)>
 
 ##### detectTools
 
-> **detectTools**: (`allDeps`) => [`Tool`](#tool)[]
+> **detectTools**: (`allDeps`) => Array<[`Tool`](#tool)>
 
 ###### Parameters
 
@@ -892,7 +892,7 @@ Do not use these in application code.
 
 ###### Returns
 
-[`Tool`](#tool)[]
+Array<[`Tool`](#tool)>
 
 ##### detectTypescript
 

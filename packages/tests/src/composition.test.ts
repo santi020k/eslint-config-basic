@@ -376,12 +376,33 @@ describe('eslintConfig Function', () => {
     const config = eslintConfig({
       frameworks: {
         hono: {
-          default: (options?: Record<string, unknown>) => [
-            {
-              name: `default-factory-hono-${String(options?.runtime ?? 'none')}`,
-              rules: {}
+          default: (options?: Record<string, unknown>) => {
+            const runtime = options?.runtime
+            let runtimeKey = 'none'
+
+            if (runtime !== undefined && runtime !== null) {
+              if (typeof runtime === 'object') {
+                runtimeKey = 'object'
+              } else if (
+                typeof runtime === 'string' ||
+                typeof runtime === 'number' ||
+                typeof runtime === 'boolean' ||
+                typeof runtime === 'bigint' ||
+                typeof runtime === 'symbol'
+              ) {
+                runtimeKey = String(runtime)
+              } else {
+                runtimeKey = 'unknown'
+              }
             }
-          ]
+
+            return [
+              {
+                name: `default-factory-hono-${runtimeKey}`,
+                rules: {}
+              }
+            ]
+          }
         }
       }
     })

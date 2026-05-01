@@ -1,5 +1,6 @@
-import { test, expect } from '@playwright/test'
 import { shouldRunVisualSnapshots, visualSnapshotSkipReason } from './helpers/visual-regression.js'
+
+import { expect, test } from '@playwright/test'
 
 test.describe('Visual Regression', () => {
   test.skip(!shouldRunVisualSnapshots, visualSnapshotSkipReason)
@@ -7,7 +8,7 @@ test.describe('Visual Regression', () => {
   test('homepage should match snapshot', async ({ page }) => {
     await page.goto('/')
     await page.waitForLoadState('networkidle')
-    
+
     // Hide dynamic elements if necessary (e.g., date-based content)
     // await page.addStyleTag({ content: '.last-updated { display: none; }' })
 

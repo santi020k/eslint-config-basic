@@ -105,7 +105,7 @@ Defined in: [basic/src/agent-skill-generator.ts:51](https://github.com/santi020k
 
 ### AGENT\_TARGETS
 
-> `const` **AGENT\_TARGETS**: [`AgentTarget`](#agenttarget)[]
+> `const` **AGENT\_TARGETS**: Array<[`AgentTarget`](#agenttarget)>
 
 Defined in: [basic/src/agent-skill-generator.ts:74](https://github.com/santi020k/eslint-config-basic/blob/cdb5cddf7d4d0c459805890061d2e2ec4a01e19c/packages/basic/src/agent-skill-generator.ts#L74)
 

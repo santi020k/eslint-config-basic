@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 import { execSync, spawnSync } from 'node:child_process'
 
 const isFixMode = process.argv.includes('--fix')
@@ -46,10 +44,10 @@ const changedFiles = listChangedFiles(baseRef)
 
 if (changedFiles.length === 0) {
   console.info('[lint:changed] No changed JS/TS files detected.')
-  process.exit(0)
+  process.exitCode = 0
+} else {
+  const args = ['eslint', '--no-warn-ignored', ...(isFixMode ? ['--fix'] : []), ...changedFiles]
+  const result = spawnSync('pnpm', args, { stdio: 'inherit' })
+
+  process.exitCode = result.status ?? 1
 }
-
-const args = ['eslint', '--no-warn-ignored', ...(isFixMode ? ['--fix'] : []), ...changedFiles]
-const result = spawnSync('pnpm', args, { stdio: 'inherit' })
-
-process.exit(result.status ?? 1)
