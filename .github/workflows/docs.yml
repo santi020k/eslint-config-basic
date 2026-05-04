@@ -21,7 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Install pnpm
-        uses: pnpm/action-setup@v5
+        uses: pnpm/action-setup@v6
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
@@ -36,7 +36,7 @@ jobs:
           DOCS_SITE_URL: https://eslint.santi020k.com
         run: pnpm run docs:build
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           path: packages/docs/.vitepress/dist
 
