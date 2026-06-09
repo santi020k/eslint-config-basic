@@ -1,6 +1,9 @@
 {
   "name": "@playground/vue",
   "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "scripts": {
     "lint": "eslint .",
@@ -17,17 +20,14 @@
     "@types/node": "^22.18.0",
     "typescript": "^5.8.2"
   },
-  "author": "santi020k",
-  "license": "MIT",
   "engines": {
     "node": ">=22.18.0"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/santi020k/eslint-config-basic.git",
     "directory": "packages/playground/vue"
-  }
+  },
+  "author": "santi020k",
+  "license": "MIT"
 }

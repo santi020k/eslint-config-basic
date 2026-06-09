@@ -1,6 +1,9 @@
 {
   "name": "@playground/jest",
   "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "scripts": {
     "lint": "eslint .",
@@ -14,17 +17,14 @@
     "eslint": "^10.2.1",
     "jest": "^30.3.0"
   },
-  "author": "santi020k",
-  "license": "MIT",
   "engines": {
     "node": ">=22.18.0"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/santi020k/eslint-config-basic.git",
     "directory": "packages/playground/testing/jest"
-  }
+  },
+  "author": "santi020k",
+  "license": "MIT"
 }

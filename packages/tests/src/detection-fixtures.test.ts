@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
 
-import { detectProjectOptions, Format, NextMode, Preset, Runtime } from '@santi020k/eslint-config-basic'
+import { detectProjectOptions, Format, Library, NextMode, Preset, Runtime, Tool } from '@santi020k/eslint-config-basic'
 
 const tempDirs: string[] = []
 
@@ -91,5 +91,58 @@ describe('detectProjectOptions fixture matrix', () => {
     expect(options.runtime).toBe(Runtime.Universal)
     expect(options.detectedFrameworks).toContain('expo')
     expect(options.detectedFrameworks).toContain('react')
+  })
+
+  it('detects Vite fixtures with Tailwind adapter packages and config files', () => {
+    const dir = createFixtureProject(
+      {
+        devDependencies: {
+          '@tailwindcss/vite': 'latest',
+          vite: 'latest'
+        }
+      },
+      [],
+      {
+        '.prettierrc': '{}',
+        'cspell.config.yml': 'version: "0.2"\n',
+        'tsconfig.json': '{}',
+        'vite.config.ts': 'export default {}'
+      }
+    )
+
+    const options = detectProjectOptions(dir)
+
+    expect(options.detectedFrameworks).toContain('vite')
+    expect(options.libraries).toContain(Library.Tailwind)
+    expect(options.tools).toContain(Tool.Prettier)
+    expect(options.tools).toContain(Tool.Cspell)
+    expect(options.formats).toContain(Format.Yaml)
+    expect(options.runtime).toBe(Runtime.Browser)
+    expect(options.preset).toBe(Preset.Browser)
+  })
+
+  it('detects Slidev fixtures as Slidev + Vue without adding Vite separately', () => {
+    const dir = createFixtureProject(
+      {
+        dependencies: {
+          '@slidev/cli': 'latest',
+          vite: 'latest',
+          vue: 'latest'
+        }
+      },
+      [],
+      {
+        'slides.md': '# Deck\n\n{{ 1 + 1 }}',
+        'tsconfig.json': '{}'
+      }
+    )
+
+    const options = detectProjectOptions(dir)
+
+    expect(options.detectedFrameworks).toContain('slidev')
+    expect(options.detectedFrameworks).toContain('vue')
+    expect(options.detectedFrameworks).not.toContain('vite')
+    expect(options.formats).toContain(Format.Markdown)
+    expect(options.runtime).toBe(Runtime.Browser)
   })
 })

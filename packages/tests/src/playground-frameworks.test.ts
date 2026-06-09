@@ -1,0 +1,27 @@
+import { execFile } from 'node:child_process'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { promisify } from 'node:util'
+import { describe, expect, it } from 'vitest'
+
+const execFileAsync = promisify(execFile)
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+const REPO_ROOT = join(__dirname, '../../..')
+
+const lintPlayground = async (filter: string): Promise<void> => {
+  await execFileAsync('pnpm', ['--filter', filter, 'run', 'lint'], {
+    cwd: REPO_ROOT,
+    timeout: 60_000
+  })
+}
+
+describe('new framework playgrounds', () => {
+  it('lints the Vite playground with the bundled framework config', async () => {
+    await expect(lintPlayground('@santi020k/playground-vite')).resolves.toBeUndefined()
+  })
+
+  it('lints the Slidev playground with the bundled framework config', async () => {
+    await expect(lintPlayground('@santi020k/playground-slidev')).resolves.toBeUndefined()
+  })
+}, 120_000)

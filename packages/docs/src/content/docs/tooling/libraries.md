@@ -40,7 +40,7 @@ To fix this, it is highly recommended to provide an explicit `entryPoint` in you
 You can pass the `entryPoint` by appending a configuration object to the array returned by `eslintConfig`:
 
 ```js
-import { defineConfig, Library } from '@santi020k/eslint-config-basic'
+import { Library } from '@santi020k/eslint-config-basic'
 
 export default [
   ...eslintConfig({

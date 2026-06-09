@@ -123,11 +123,11 @@ Starlight uses Expressive Code for syntax highlighting. Never override code bloc
 ```js
 // astro.config.mjs
 expressiveCode({
-  themes: ['github-dark', 'github-light'],
   styleOverrides: {
     // Ensure comment text meets 3:1 on code background
     codeComment: 'hsl(268 10% 55%)'
-  }
+  },
+  themes: ['github-dark', 'github-light']
 })
 ```
 

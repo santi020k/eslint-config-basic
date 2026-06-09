@@ -60,32 +60,32 @@ starlight({
   head: [
     // JSON-LD — SoftwareApplication schema for the whole site
     {
-      tag: 'script',
       attrs: { type: 'application/ld+json' },
       content: JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'SoftwareApplication',
-        name: '@santi020k/eslint-config-basic',
-        url: 'https://eslint.santi020k.com',
         applicationCategory: 'DeveloperApplication',
-        operatingSystem: 'Node.js',
+        author: { '@type': 'Person', name: 'santi020k', url: 'https://santi020k.com' },
         description: 'Composable ESLint flat-config for JavaScript and TypeScript teams',
-        author: { '@type': 'Person', name: 'santi020k', url: 'https://santi020k.com' }
-      })
+        name: '@santi020k/eslint-config-basic',
+        operatingSystem: 'Node.js',
+        url: 'https://eslint.santi020k.com'
+      }),
+      tag: 'script'
     },
     // Global OG image fallback
     {
-      tag: 'meta',
-      attrs: { property: 'og:image', content: 'https://eslint.santi020k.com/cover.webp' }
+      attrs: { content: 'https://eslint.santi020k.com/cover.webp', property: 'og:image' },
+      tag: 'meta'
     },
     // Twitter card
     {
-      tag: 'meta',
-      attrs: { name: 'twitter:card', content: 'summary_large_image' }
+      attrs: { content: 'summary_large_image', name: 'twitter:card' },
+      tag: 'meta'
     },
     {
-      tag: 'meta',
-      attrs: { name: 'twitter:creator', content: '@santi020k' }
+      attrs: { content: '@santi020k', name: 'twitter:creator' },
+      tag: 'meta'
     }
   ]
 })
@@ -144,12 +144,12 @@ Controlled by `@astrojs/sitemap` in `astro.config.mjs`. To exclude pages (e.g. a
 
 ```js
 sitemap({
+  changefreq: 'weekly',
   filter: (page) =>
     !page.includes('/api/reference') &&
     !page.includes('/v1/'),
-  changefreq: 'weekly',
-  priority: 0.7,
-  lastmod: new Date()
+  lastmod: new Date(),
+  priority: 0.7
 })
 ```
 
@@ -164,6 +164,7 @@ sitemap({
   ````md
   ```js title="eslint.config.js"
   import { eslintConfig } from '@santi020k/eslint-config-basic'
+  
   export default eslintConfig()
   ```
   ````

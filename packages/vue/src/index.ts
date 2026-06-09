@@ -10,7 +10,10 @@ import type { TSESLint } from '@typescript-eslint/utils'
  * Extends eslint-plugin-vue recommended config with custom rules
  */
 export const vueConfig: TSESLint.FlatConfig.ConfigArray = [
-  ...(pluginVue.configs['flat/recommended'] as TSESLint.FlatConfig.ConfigArray),
+  ...(pluginVue.configs['flat/recommended'] as TSESLint.FlatConfig.ConfigArray).map(config => ({
+    ...config,
+    files: config.files ?? ['**/*.vue']
+  })),
   {
     files: ['**/*.vue'],
     languageOptions: {

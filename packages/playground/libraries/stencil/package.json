@@ -1,6 +1,9 @@
 {
   "name": "@playground/stencil",
   "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "scripts": {
     "lint": "eslint .",
@@ -13,17 +16,14 @@
     "@stencil/core": "^4.43.4",
     "eslint": "^10.2.1"
   },
-  "author": "santi020k",
-  "license": "MIT",
   "engines": {
     "node": ">=22.18.0"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/santi020k/eslint-config-basic.git",
     "directory": "packages/playground/libraries/stencil"
-  }
+  },
+  "author": "santi020k",
+  "license": "MIT"
 }

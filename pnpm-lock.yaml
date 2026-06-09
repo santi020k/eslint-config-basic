@@ -1314,6 +1314,9 @@ importers:
       '@santi020k/eslint-config-remix':
         specifier: workspace:^
         version: link:../remix
+      '@santi020k/eslint-config-slidev':
+        specifier: workspace:^
+        version: link:../slidev
       '@santi020k/eslint-config-solid':
         specifier: workspace:^
         version: link:../solid
@@ -1323,6 +1326,9 @@ importers:
       '@santi020k/eslint-config-typescript':
         specifier: workspace:^
         version: link:../typescript
+      '@santi020k/eslint-config-vite':
+        specifier: workspace:^
+        version: link:../vite
       '@santi020k/eslint-config-vue':
         specifier: workspace:^
         version: link:../vue

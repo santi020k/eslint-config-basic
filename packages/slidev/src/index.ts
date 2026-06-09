@@ -1,6 +1,6 @@
-import { getGlobalsForRuntime, GLOB_JS_TS, Runtime } from '@santi020k/eslint-config-core'
 import pluginVue from 'eslint-plugin-vue'
 
+import { getGlobalsForRuntime, GLOB_JS_TS, Runtime } from '@santi020k/eslint-config-core'
 import type { TSESLint } from '@typescript-eslint/utils'
 
 export interface SlidevConfigOptions {
@@ -15,6 +15,7 @@ export const createSlidevConfig = (
   options: SlidevConfigOptions = {}
 ): TSESLint.FlatConfig.ConfigArray => {
   const runtime = options.runtime ?? Runtime.Browser
+
   const disabledVueMarkdownRules = Object.fromEntries(
     Object.keys(pluginVue.rules).map(ruleName => [`vue/${ruleName}`, 'off'])
   ) as TSESLint.Linter.RulesRecord

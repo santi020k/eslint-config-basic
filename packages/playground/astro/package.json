@@ -1,6 +1,9 @@
 {
   "name": "@playground/astro",
   "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "scripts": {
     "lint": "eslint .",
@@ -13,17 +16,14 @@
     "astro": "^6.1.8",
     "eslint": "^10.2.1"
   },
-  "author": "santi020k",
-  "license": "MIT",
   "engines": {
     "node": ">=22.18.0"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/santi020k/eslint-config-basic.git",
     "directory": "packages/playground/astro"
-  }
+  },
+  "author": "santi020k",
+  "license": "MIT"
 }

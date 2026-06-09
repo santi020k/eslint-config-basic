@@ -6,7 +6,7 @@ import { lintFile, lintText } from './test-utils.js'
 
 import { angularConfig } from '@santi020k/eslint-config-angular'
 import astro, { astroConfig } from '@santi020k/eslint-config-astro'
-import { eslintConfig } from '@santi020k/eslint-config-basic'
+import { eslintConfig, Format } from '@santi020k/eslint-config-basic'
 import { expoConfig } from '@santi020k/eslint-config-expo'
 import { honoConfig } from '@santi020k/eslint-config-hono'
 import { nestConfig } from '@santi020k/eslint-config-nest'
@@ -14,7 +14,9 @@ import { nextConfig } from '@santi020k/eslint-config-next'
 import { qwik as qwikConfig } from '@santi020k/eslint-config-qwik'
 import { reactConfig } from '@santi020k/eslint-config-react'
 import { remix as remixConfig } from '@santi020k/eslint-config-remix'
+import { slidev as slidevConfig } from '@santi020k/eslint-config-slidev'
 import { svelteConfig } from '@santi020k/eslint-config-svelte'
+import { vite as viteConfig } from '@santi020k/eslint-config-vite'
 import { vueConfig } from '@santi020k/eslint-config-vue'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -281,6 +283,102 @@ describe('Integration Tests', () => {
       const names = config.flatMap(c => (c.name ? [c.name] : []))
 
       expect(names).toContain('eslint-config-remix/jsx-a11y')
+    })
+  })
+
+  describe('Vite', () => {
+    it('should include Vite-specific config entries', () => {
+      const config = eslintConfig({
+        frameworks: { vite: viteConfig },
+        typescript: false
+      })
+      const names = config.flatMap(c => (c.name ? [c.name] : []))
+
+      expect(names).toContain('eslint-config-vite/runtime')
+      expect(names).toContain('eslint-config-vite/config-files')
+    })
+
+    it('should report errors in the intentionally bad Vite fixture', async () => {
+      const config = eslintConfig({
+        detection: false,
+        frameworks: { vite: viteConfig },
+        tools: [],
+        typescript: false
+      })
+      const filePath = join(FIXTURES_DIR, 'vite-bad.ts')
+      const results = await lintFile(filePath, config)
+      const ruleIds = results[0].messages.map(m => m.ruleId)
+
+      expect(ruleIds).toContain('@stylistic/quotes')
+      expect(ruleIds).toContain('@stylistic/semi')
+      expect(ruleIds).not.toContain('no-undef')
+    })
+
+    it('should pass for the corrected Vite fixture', async () => {
+      const config = eslintConfig({
+        detection: false,
+        frameworks: { vite: viteConfig },
+        tools: [],
+        typescript: false
+      })
+      const filePath = join(FIXTURES_DIR, 'vite.ts')
+      const results = await lintFile(filePath, config)
+
+      expect(results[0].errorCount).toBe(0)
+      expect(results[0].warningCount).toBe(0)
+    })
+  })
+
+  describe('Slidev', () => {
+    it('should include Slidev-specific config entries', () => {
+      const config = eslintConfig({
+        detection: false,
+        formats: [Format.Markdown],
+        frameworks: {
+          slidev: slidevConfig,
+          vue: vueConfig
+        },
+        typescript: false
+      })
+      const names = config.flatMap(c => (c.name ? [c.name] : []))
+
+      expect(names).toContain('eslint-config-slidev/runtime')
+      expect(names).toContain('eslint-config-slidev/deck-markdown')
+    })
+
+    it('should report errors in the intentionally bad Slidev fixture', async () => {
+      const config = eslintConfig({
+        detection: false,
+        formats: [Format.Markdown],
+        frameworks: {
+          slidev: slidevConfig,
+          vue: vueConfig
+        },
+        tools: [],
+        typescript: false
+      })
+      const filePath = join(FIXTURES_DIR, 'slidev-bad.md')
+      const results = await lintFile(filePath, config)
+      const ruleIds = results[0].messages.map(m => m.ruleId)
+
+      expect(ruleIds).toContain('@stylistic/quotes')
+      expect(ruleIds).not.toContain('vue/multi-word-component-names')
+    })
+
+    it('should pass for the corrected Slidev fixture', async () => {
+      const config = eslintConfig({
+        frameworks: {
+          slidev: slidevConfig,
+          vue: vueConfig
+        },
+        tools: [],
+        typescript: false
+      })
+      const filePath = join(FIXTURES_DIR, 'slidev.md')
+      const results = await lintFile(filePath, config)
+
+      expect(results[0].errorCount).toBe(0)
+      expect(results[0].warningCount).toBe(0)
     })
   })
 }, 30000)

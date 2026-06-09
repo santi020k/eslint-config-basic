@@ -69,7 +69,6 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
   it('should include Astro-specific rules logic', () => {
     // Note: Astro rules are in the astro package, but we test composition here
     const config = eslintConfig({
-      tools: [],
       frameworks: {
         astro: [{
           name: 'mock-astro',
@@ -78,7 +77,8 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
             'react/jsx-no-undef': 'off'
           }
         }]
-      }
+      },
+      tools: []
     })
 
     expect(getEffectiveRuleValue(config as Record<string, unknown>[], 'react/jsx-no-undef')).toBe('off')

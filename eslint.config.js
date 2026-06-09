@@ -8,7 +8,7 @@ export default [
       '**/tsup.config.ts',
       'docs/*',
       'docs-md/*',
-      '.agent/**',
+      '**/.agent/**',
       'packages/tests/fixtures/**',
       'packages/docs/.astro/**',
       'packages/docs/playwright-report/**',
@@ -26,5 +26,16 @@ export default [
     testing: [Testing.Vitest],
     tsconfigRootDir: import.meta.dirname,
     typescript: true
-  })
+  }),
+  {
+    files: ['scripts/**', 'packages/tests/**', 'packages/typescript/src/index.ts'],
+    name: 'local-overrides',
+    rules: {
+      'security/detect-non-literal-fs-filename': 'off',
+      'security/detect-object-injection': 'off',
+      '@typescript-eslint/no-empty-function': 'off',
+      'no-use-before-define': 'off',
+      '@cspell/spellchecker': 'off'
+    }
+  }
 ]

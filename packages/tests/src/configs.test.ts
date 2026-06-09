@@ -19,9 +19,11 @@ import { nextConfig } from '@santi020k/eslint-config-next'
 import { qwik as qwikConfig } from '@santi020k/eslint-config-qwik'
 import { reactConfig } from '@santi020k/eslint-config-react'
 import { remix as remixConfig } from '@santi020k/eslint-config-remix'
+import { slidevConfig } from '@santi020k/eslint-config-slidev'
 import { solidConfig } from '@santi020k/eslint-config-solid'
 import { svelteConfig } from '@santi020k/eslint-config-svelte'
 import { typescriptConfig } from '@santi020k/eslint-config-typescript'
+import { viteConfig } from '@santi020k/eslint-config-vite'
 import { vueConfig } from '@santi020k/eslint-config-vue'
 
 describe('Core Config', () => {
@@ -241,6 +243,45 @@ describe('Remix Config', () => {
   it('should include jsx-a11y plugin', () => {
     const plugins = remixConfig.flatMap(c => Object.keys(c.plugins ?? {}))
     expect(plugins).toContain('jsx-a11y')
+  })
+})
+
+describe('Vite Config', () => {
+  it('should export viteConfig as an array', () => {
+    expect(Array.isArray(viteConfig)).toBe(true)
+  })
+
+  it('should include browser and config-file entries', () => {
+    const names = viteConfig.flatMap(c => (c.name ? [c.name] : []))
+
+    expect(names).toContain('eslint-config-vite/runtime')
+    expect(names).toContain('eslint-config-vite/config-files')
+  })
+
+  it('should include browser globals for app files', () => {
+    const globals = viteConfig.flatMap(config => Object.keys(config.languageOptions?.globals ?? {}))
+
+    expect(globals).toContain('document')
+  })
+})
+
+describe('Slidev Config', () => {
+  it('should export slidevConfig as an array', () => {
+    expect(Array.isArray(slidevConfig)).toBe(true)
+  })
+
+  it('should include deck markdown and setup entries', () => {
+    const names = slidevConfig.flatMap(c => (c.name ? [c.name] : []))
+
+    expect(names).toContain('eslint-config-slidev/deck-markdown')
+    expect(names).toContain('eslint-config-slidev/setup-files')
+  })
+
+  it('should disable Vue rules for Slidev markdown files', () => {
+    const markdownConfig = slidevConfig.find(config => config.name === 'eslint-config-slidev/deck-markdown')
+
+    expect(markdownConfig?.rules?.['vue/multi-word-component-names']).toBe('off')
+    expect(markdownConfig?.rules?.['vue/no-async-in-computed-properties']).toBe('off')
   })
 })
 
