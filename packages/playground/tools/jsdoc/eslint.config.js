@@ -1,5 +1,5 @@
 // @ts-check
-import { eslintConfig, Tool } from '@santi020k/eslint-config-basic'
+import { eslintConfig, Tool } from '../../../basic/dist/index.js'
 
 export default eslintConfig({
   tools: [Tool.Jsdoc],

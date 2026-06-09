@@ -1,5 +1,5 @@
 // @ts-check
-import { eslintConfig, Extension } from '@santi020k/eslint-config-basic'
+import { eslintConfig, Extension } from '../../../basic/dist/index.js'
 
 export default eslintConfig({
   extensions: [Extension.Perfectionist],

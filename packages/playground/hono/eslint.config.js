@@ -1,5 +1,5 @@
 // @ts-check
-import { eslintConfig, Runtime } from '@santi020k/eslint-config-basic'
+import { eslintConfig, Runtime } from '../../basic/dist/index.js'
 
 export default eslintConfig({
   frameworks: {

@@ -1,6 +1,6 @@
 // @ts-check
 
-import { eslintConfig, NextMode } from '@santi020k/eslint-config-basic'
+import { eslintConfig, NextMode } from '../../basic/dist/index.js'
 
 export default eslintConfig({
   detection: { libraries: false },

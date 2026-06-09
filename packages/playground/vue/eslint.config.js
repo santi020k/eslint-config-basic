@@ -1,5 +1,5 @@
 // @ts-check
-import { eslintConfig } from '@santi020k/eslint-config-basic'
+import { eslintConfig } from '../../basic/dist/index.js'
 
 export default eslintConfig({
   detection: { libraries: false },
