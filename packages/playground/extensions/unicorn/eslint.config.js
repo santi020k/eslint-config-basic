@@ -1,7 +1,7 @@
 // @ts-check
-import { eslintConfig, Extension } from '../../../basic/dist/index.js'
+import { defineConfig, Extension } from '../../../basic/dist/index.js'
 
-export default eslintConfig({
+export default defineConfig({
   tsconfigRootDir: import.meta.dirname,
   extensions: [Extension.Unicorn]
 })

@@ -1,8 +1,8 @@
 // @ts-check
 
-import { eslintConfig, NextMode } from '../../basic/dist/index.js'
+import { defineConfig, NextMode } from '../../basic/dist/index.js'
 
-export default eslintConfig({
+export default defineConfig({
   detection: { libraries: false },
   frameworks: {
     next: true

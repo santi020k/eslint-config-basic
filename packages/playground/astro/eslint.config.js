@@ -1,7 +1,7 @@
 // @ts-check
-import { eslintConfig } from '../../basic/dist/index.js'
+import { defineConfig } from '../../basic/dist/index.js'
 
-export default eslintConfig({
+export default defineConfig({
   detectRootDir: import.meta.dirname,
   frameworks: {
     astro: true

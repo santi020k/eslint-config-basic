@@ -1,3 +1,3 @@
-import { eslintConfig } from '../../basic/dist/index.js'
+import { defineConfig } from '../../basic/dist/index.js'
 
-export default eslintConfig()
+export default defineConfig()

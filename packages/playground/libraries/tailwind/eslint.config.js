@@ -1,8 +1,8 @@
 // @ts-check
-import { eslintConfig, Library } from '../../../basic/dist/index.js'
+import { defineConfig, Library } from '../../../basic/dist/index.js'
 
 export default [
-  ...eslintConfig({
+  ...defineConfig({
     libraries: [Library.Tailwind],
     tsconfigRootDir: import.meta.dirname
   }),

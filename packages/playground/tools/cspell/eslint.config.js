@@ -1,7 +1,7 @@
 // @ts-check
-import { eslintConfig, Tool } from '../../../basic/dist/index.js'
+import { defineConfig, Tool } from '../../../basic/dist/index.js'
 
-export default eslintConfig({
+export default defineConfig({
   tools: [Tool.Cspell],
   tsconfigRootDir: import.meta.dirname
 })

@@ -1,7 +1,7 @@
 // @ts-check
-import { eslintConfig, Runtime } from '../../basic/dist/index.js'
+import { defineConfig, Runtime } from '../../basic/dist/index.js'
 
-export default eslintConfig({
+export default defineConfig({
   frameworks: {
     hono: true
   },

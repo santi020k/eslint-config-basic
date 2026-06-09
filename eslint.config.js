@@ -1,4 +1,4 @@
-import { eslintConfig, Format, Testing } from './packages/basic/dist/index.js'
+import { defineConfig, Format, Testing } from './packages/basic/dist/index.js'
 
 export default [
   {
@@ -19,7 +19,7 @@ export default [
     ],
     name: 'local-global-ignores'
   },
-  ...eslintConfig({
+  ...defineConfig({
     // Root lists tailwindcss for tooling; do not enable Tailwind ESLint for the whole monorepo.
     detection: { libraries: false },
     formats: [Format.Mdx, Format.Markdown],
