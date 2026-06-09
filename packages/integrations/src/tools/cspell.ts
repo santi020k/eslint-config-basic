@@ -1,6 +1,7 @@
 import { defineLazyConfig, loadDefault } from '../lazy.js'
 
 import type PluginCspell from '@cspell/eslint-plugin'
+import { GLOB_JS_TS_ALL } from '@santi020k/eslint-config-core'
 import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
@@ -13,6 +14,7 @@ export const cspell: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('cspell'
   return [
     {
       name: 'integrations/cspell',
+      files: GLOB_JS_TS_ALL,
       plugins: { '@cspell': pluginCspell },
       rules: {
         '@cspell/spellchecker': ['warn', {

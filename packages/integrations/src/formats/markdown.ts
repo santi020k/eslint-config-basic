@@ -67,7 +67,6 @@ export const markdown: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('markd
         '@typescript-eslint/no-unnecessary-type-assertion': 'off',
         '@typescript-eslint/unbound-method': 'off',
         // Disable other rules that don't make sense for code snippets
-        'import/no-unresolved': 'off',
         ...tsEslint.configs.disableTypeChecked.rules,
         'no-unused-vars': 'off',
         '@typescript-eslint/no-unused-vars': 'off',

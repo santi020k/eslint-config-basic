@@ -1,6 +1,7 @@
 import { defineLazyConfig, loadModule } from '../lazy.js'
 
 import type NestjsTyped from '@darraghor/eslint-plugin-nestjs-typed'
+import { GLOB_TS } from '@santi020k/eslint-config-core'
 import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
@@ -13,6 +14,7 @@ export const swagger: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('swagge
   return [
     {
       name: 'integrations/swagger',
+      files: GLOB_TS,
       plugins: {
         '@darraghor/nestjs-typed': nestjsTypedPlugin
       },

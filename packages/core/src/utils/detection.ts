@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
 import { type EslintConfigOptions, Format, Library, NextMode, Preset, Runtime, Testing, Tool } from '../types.js'
@@ -31,6 +31,19 @@ const createDefaultOptions = (): EslintConfigOptions => ({
 
 const dedupe = <T>(values: T[] = []): T[] => [...new Set(values)]
 const pathExists = (path: string): boolean => existsSync(path)
+
+const hasFileMatching = (
+  rootDir: string,
+  predicate: (fileName: string) => boolean
+): boolean => {
+  try {
+    return readdirSync(rootDir, { withFileTypes: true }).some(
+      entry => entry.isFile() && predicate(entry.name)
+    )
+  } catch {
+    return false
+  }
+}
 
 const collectAllDependencies = (pkg: PackageJson): DependencyMap => ({
   ...(pkg.dependencies ?? {}),
@@ -222,6 +235,45 @@ const detectFormats = (allDeps: DependencyMap, detectRootDir: string): Format[] 
     formats.push(Format.Graphql)
   }
 
+  if (
+    allDeps['@mdx-js/react'] ||
+    allDeps['@mdx-js/mdx'] ||
+    hasFileMatching(detectRootDir, fileName => fileName.endsWith('.mdx'))
+  ) {
+    formats.push(Format.Mdx)
+  }
+
+  if (
+    allDeps.markdown ||
+    pathExists(join(detectRootDir, '.markdownlint.json')) ||
+    pathExists(join(detectRootDir, '.markdownlint.yaml')) ||
+    hasFileMatching(detectRootDir, fileName => fileName.endsWith('.md'))
+  ) {
+    formats.push(Format.Markdown)
+  }
+
+  if (
+    allDeps['eslint-plugin-jsonc'] ||
+    hasFileMatching(detectRootDir, fileName => fileName.endsWith('.jsonc'))
+  ) {
+    formats.push(Format.Jsonc)
+  }
+
+  if (
+    pathExists(join(detectRootDir, 'pnpm-workspace.yaml')) ||
+    pathExists(join(detectRootDir, 'cspell.config.yaml')) ||
+    pathExists(join(detectRootDir, '.github/workflows'))
+  ) {
+    formats.push(Format.Yaml)
+  }
+
+  if (
+    allDeps['eslint-plugin-toml'] ||
+    hasFileMatching(detectRootDir, fileName => fileName.endsWith('.toml'))
+  ) {
+    formats.push(Format.Toml)
+  }
+
   return dedupe(formats)
 }
 
@@ -231,6 +283,8 @@ const detectTools = (allDeps: DependencyMap): Tool[] => {
   if (allDeps['@nestjs/swagger']) tools.push(Tool.Swagger)
 
   if (allDeps.prettier) tools.push(Tool.Prettier)
+
+  if (allDeps.cspell || allDeps['@cspell/eslint-plugin']) tools.push(Tool.Cspell)
 
   return dedupe(tools)
 }

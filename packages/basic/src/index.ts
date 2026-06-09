@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs'
 import { join } from 'node:path'
 
 import { applyStrictMode } from './compose.js'
@@ -15,6 +16,7 @@ import {
   type FlatConfigArray,
   gitignore,
   type ImportedFramework,
+  Library,
   NextMode,
   Runtime,
   Setting
@@ -107,6 +109,32 @@ export {
 } from '@santi020k/eslint-config-integrations'
 
 const toUniqueArray = <T>(values: T[]): T[] => [...new Set(values)]
+
+const DEFAULT_IGNORES = [
+  '**/dist/**',
+  '**/build/**',
+  '**/coverage/**',
+  '**/.turbo/**',
+  '**/.next/**',
+  '**/.open-next/**',
+  '**/.astro/**',
+  '**/.svelte-kit/**',
+  '**/.vercel/**',
+  '**/.wrangler/**',
+  '**/playwright-report/**',
+  '**/test-results/**',
+  '**/node_modules/**',
+  '**/tsconfig.tsbuildinfo'
+]
+
+const TAILWIND_ENTRYPOINT_CANDIDATES = [
+  'src/styles/global.css',
+  'src/app/globals.css',
+  'src/globals.css',
+  'src/index.css',
+  'app/globals.css',
+  'styles/global.css'
+]
 
 const mergeArrayOption = <T>(
   detectedValues: T[],
@@ -214,6 +242,26 @@ const applyStrictProfileDefaults = (
   return toUniqueArray([...extensions, Extension.BestPractices])
 }
 
+const hasTsconfig = (rootDir: string): boolean => [
+  'tsconfig.eslint.json',
+  'tsconfig.json',
+  'tsconfig.base.json'
+].some(fileName => existsSync(join(rootDir, fileName)))
+
+const resolveTsconfigRootDir = (
+  rootDir: string,
+  typescript: EslintConfigOptions['typescript'],
+  explicitRootDir: string | undefined
+): string | undefined => {
+  if (explicitRootDir) return explicitRootDir
+
+  return typescript && hasTsconfig(rootDir) ? rootDir : undefined
+}
+
+const findTailwindEntryPoint = (rootDir: string): string | undefined => TAILWIND_ENTRYPOINT_CANDIDATES.find(
+  candidate => existsSync(join(rootDir, candidate))
+)
+
 const scopeFilePattern = (projectPath: string, pattern: unknown): unknown => {
   if (typeof pattern === 'string') {
     return `${projectPath.replace(/\/$/, '')}/${pattern.replace(/^\.\//, '')}`
@@ -250,7 +298,7 @@ const scopeConfigToProject = (
  * @returns {FlatConfigArray} The final ESLint configuration array
  */
 export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => {
-  const detectRootDir = options?.detectRootDir
+  const detectRootDir = options?.detectRootDir ?? options?.tsconfigRootDir
 
   const detected = applyDetectionControls(
     detectProjectOptions(detectRootDir), options?.detection
@@ -285,13 +333,14 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     settings = options?.settings ?? detected.settings ?? [],
     strict = getStrictMode(options?.strict, presetDefaults.strict),
     runtime = (options?.runtime ?? presetDefaults.runtime ?? detected.runtime ?? Runtime.Universal),
-    tsconfigRootDir = options?.tsconfigRootDir,
     nextMode = (options?.nextMode ?? presetDefaults.nextMode ?? detected.nextMode ?? NextMode.Pages),
     frameworks = mergeFrameworkOption(
       frameworkDefaults, presetDefaults.frameworks, options?.frameworks, optionMergeStrategy
     )
   } = options ?? {}
 
+  const rootDir = detectRootDir ?? process.cwd()
+  const tsconfigRootDir = resolveTsconfigRootDir(rootDir, typescript, options?.tsconfigRootDir)
   const extensions = applyStrictProfileDefaults(configuredExtensions, strict)
   const resolvedFrameworks = frameworks
 
@@ -311,6 +360,8 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
   const hasSvelte = !!resolvedFrameworks.svelte
   const hasSolid = !!resolvedFrameworks.solid
   const useGitignore = !uniqueSettings.includes(Setting.NoGitignore)
+  const useDefaultIgnores = !uniqueSettings.includes(Setting.NoDefaultIgnores)
+  const tailwindEntryPoint = uniqueLibraries.includes(Library.Tailwind) ? findTailwindEntryPoint(rootDir) : undefined
   // Resolve Frameworks
   const reactParam = resolveFramework('react', resolvedFrameworks.react)
   const nextParam = resolveFramework('next', resolvedFrameworks.next)
@@ -337,6 +388,13 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     createCoreConfig(runtime) :
     coreConfig
 
+  const defaultIgnores = useDefaultIgnores ?
+    [{
+      name: 'eslint-config-basic/default-ignores',
+      ignores: DEFAULT_IGNORES
+    } as TSESLint.FlatConfig.Config] :
+    []
+
   const userIgnores = options?.ignores?.length ?
     [{
       name: 'eslint-config-basic/ignores',
@@ -345,6 +403,7 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     []
 
   const configs: FlatConfigArray = [
+    ...defaultIgnores,
     ...userIgnores,
 
     // Settings
@@ -361,6 +420,21 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
         }
       }] :
       []),
+
+    {
+      name: 'eslint-config-basic/commonjs',
+      files: ['**/*.cjs', '**/*.cts'],
+      languageOptions: {
+        sourceType: 'commonjs',
+        globals: {
+          module: 'readonly',
+          exports: 'readonly',
+          require: 'readonly',
+          __dirname: 'readonly',
+          __filename: 'readonly'
+        }
+      }
+    },
 
     // Core JS config with runtime-aware globals
     ...runtimeCoreConfig,
@@ -402,6 +476,18 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     ...getIntegrationConfigs(
       uniqueLibraries, uniqueTools, uniqueTesting, uniqueFormats, uniqueExtensions
     ),
+
+    ...(tailwindEntryPoint ?
+      [{
+        name: 'eslint-config-basic/tailwind-settings',
+        settings: {
+          'better-tailwindcss': {
+            entryPoint: tailwindEntryPoint,
+            detectComponentClasses: true
+          }
+        }
+      } as TSESLint.FlatConfig.Config] :
+      []),
 
     // Prettier always last
     ...getPrettierConfig(uniqueTools)

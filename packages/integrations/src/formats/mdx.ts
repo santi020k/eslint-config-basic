@@ -25,8 +25,7 @@ export const mdx: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('mdx', () =
     'no-multi-spaces': 'off',
     '@stylistic/no-multi-spaces': 'off',
     'comma-dangle': 'off',
-    '@stylistic/jsx-tag-spacing': 'off',
-    'import/export': 'off'
+    '@stylistic/jsx-tag-spacing': 'off'
   }
 
   return [

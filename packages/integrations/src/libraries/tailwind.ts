@@ -1,5 +1,6 @@
 import { defineLazyConfig, loadDefault, type PluginWithConfigs } from '../lazy.js'
 
+import { GLOB_JS_TS_ALL } from '@santi020k/eslint-config-core'
 import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
@@ -13,6 +14,7 @@ export const tailwind: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('tailw
     {
       ...pluginTailwind.configs.recommended,
       name: 'santi020k/tailwind/recommended',
+      files: GLOB_JS_TS_ALL,
       settings: {
         'better-tailwindcss': {
           // Enable faster resolution in monorepos

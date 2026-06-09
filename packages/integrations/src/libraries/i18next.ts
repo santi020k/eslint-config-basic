@@ -3,6 +3,7 @@ import type PluginI18next from 'eslint-plugin-i18next'
 import { defineLazyConfig, loadDefault } from '../lazy.js'
 
 import { fixupPluginRules } from '@eslint/compat'
+import { GLOB_JS_TS_ALL } from '@santi020k/eslint-config-core'
 import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
@@ -15,6 +16,7 @@ export const i18next: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('i18nex
   return [
     {
       name: 'integrations/i18next',
+      files: GLOB_JS_TS_ALL,
       plugins: {
         i18next: fixupPluginRules(
           pluginI18next

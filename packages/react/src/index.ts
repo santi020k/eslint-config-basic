@@ -6,6 +6,7 @@ import globals from 'globals'
 import { rules } from './rules.js'
 
 import { fixupConfigRules } from '@eslint/compat'
+import { GLOB_JS_TS } from '@santi020k/eslint-config-core'
 import type { TSESLint } from '@typescript-eslint/utils'
 
 const languageOptions: TSESLint.FlatConfig.LanguageOptions = {
@@ -27,6 +28,7 @@ export const reactConfig: TSESLint.FlatConfig.ConfigArray = [
   ...(fixupConfigRules(pluginReactConfig as unknown as Parameters<typeof fixupConfigRules>[0]).map(react => ({
     ...react,
     name: 'eslint-config-react/recommended',
+    files: GLOB_JS_TS,
     languageOptions,
     settings: {
       react: {
@@ -40,7 +42,7 @@ export const reactConfig: TSESLint.FlatConfig.ConfigArray = [
       'react-hooks': pluginReactHooks
     },
     languageOptions,
-    files: ['**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}'],
+    files: GLOB_JS_TS,
     rules: {
       ...pluginReactHooks.configs.recommended.rules,
       ...rules

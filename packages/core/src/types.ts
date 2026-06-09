@@ -104,7 +104,9 @@ export enum Extension {
  */
 export enum Setting {
   Gitignore = 'gitignore',
-  NoGitignore = 'no-gitignore'
+  NoGitignore = 'no-gitignore',
+  DefaultIgnores = 'default-ignores',
+  NoDefaultIgnores = 'no-default-ignores'
 }
 
 /**

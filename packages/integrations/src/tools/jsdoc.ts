@@ -1,5 +1,6 @@
 import { defineLazyConfig, loadDefault, type PluginWithConfigs } from '../lazy.js'
 
+import { GLOB_JS_TS } from '@santi020k/eslint-config-core'
 import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
@@ -12,6 +13,7 @@ export const jsdoc: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('jsdoc', 
   return [
     {
       name: 'eslint-config-integrations/jsdoc',
+      files: GLOB_JS_TS,
       plugins: {
         jsdoc: pluginJsdoc
       },
