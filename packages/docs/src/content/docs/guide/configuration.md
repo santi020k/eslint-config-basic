@@ -22,7 +22,7 @@ The main package composes the final flat config array from one public install: `
 ```js
 import { defineConfig, Extension, Format, Library, Runtime, Testing, Tool } from '@santi020k/eslint-config-basic'
 
-export default defineConfig({
+export default await defineConfig({
   detectRootDir: process.cwd(),
   extensions: [Extension.Unicorn, Extension.Security],
   formats: [Format.Markdown, Format.Mdx],
@@ -59,7 +59,7 @@ Presets do not force a framework. Frameworks come from project detection or the 
 ```js
 import { defineConfig, NextMode } from '@santi020k/eslint-config-basic'
 
-export default defineConfig({
+export default await defineConfig({
   frameworks: {
     next: true
   },
@@ -106,7 +106,7 @@ Use `detection: false` to disable all auto-detection, or pass an object to disab
 ```js
 import { defineConfig, Library, Testing } from '@santi020k/eslint-config-basic'
 
-export default defineConfig({
+export default await defineConfig({
   detection: {
     formats: true,
     frameworks: true,
@@ -128,7 +128,7 @@ Pass `ignores` when you want repo-specific globs inside `eslintConfig()` instead
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default defineConfig({
+export default await defineConfig({
   ignores: ['dist/**', 'packages/*/dist/**', 'coverage/**']
 })
 ```
@@ -143,7 +143,7 @@ In monorepos these can differ. Example:
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default defineConfig({
+export default await defineConfig({
   detectRootDir: process.cwd(),
   tsconfigRootDir: new URL('.', import.meta.url).pathname
 })
@@ -156,7 +156,7 @@ Use `projects` to scope package-specific presets and integrations to workspace f
 ```js
 import { defineConfig, Preset, Runtime } from '@santi020k/eslint-config-basic'
 
-export default defineConfig({
+export default await defineConfig({
   preset: Preset.Monorepo,
   projects: {
     'apps/api': {
@@ -178,7 +178,7 @@ Each project key is treated as a folder relative to the repo root. The generated
 ```js
 import { defineConfig, Extension, Format, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
 
-export default defineConfig({
+export default await defineConfig({
   extensions: [
     Extension.Unicorn,
     Extension.Sonarjs,
@@ -229,7 +229,7 @@ export default defineConfig({
 ```js
 import { defineConfig, Library } from '@santi020k/eslint-config-basic'
 
-export default defineConfig({
+export default await defineConfig({
   frameworks: { remix: true },
   libraries: [Library.Tailwind]
 })
@@ -240,7 +240,7 @@ export default defineConfig({
 ```js
 import { defineConfig, Testing } from '@santi020k/eslint-config-basic'
 
-export default defineConfig({
+export default await defineConfig({
   frameworks: { astro: true, svelte: true },
   testing: [Testing.Vitest]
 })
@@ -251,7 +251,7 @@ export default defineConfig({
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default defineConfig({
+export default await defineConfig({
   strict: true
 })
 ```
@@ -271,7 +271,7 @@ Gitignore integration is enabled by default.
 ```js
 import { defineConfig, Setting } from '@santi020k/eslint-config-basic'
 
-export default defineConfig({
+export default await defineConfig({
   settings: [Setting.NoGitignore]
 })
 ```

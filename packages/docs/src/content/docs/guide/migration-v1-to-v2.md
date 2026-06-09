@@ -38,7 +38,7 @@ import { eslintConfig } from '@santi020k/eslint-config-basic'
 import next from '@santi020k/eslint-config-next'
 import react from '@santi020k/eslint-config-react'
 
-export default eslintConfig({
+export default await eslintConfig({
   frameworks: {
     next,
     react
@@ -51,7 +51,7 @@ After:
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default defineConfig({
+export default await defineConfig({
   frameworks: {
     next: true
   }
@@ -63,7 +63,7 @@ For React-only projects:
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default defineConfig({
+export default await defineConfig({
   frameworks: {
     react: true
   }
@@ -77,7 +77,7 @@ In v2, this is enough for most projects:
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default defineConfig()
+export default await defineConfig()
 ```
 
 The composer reads your dependencies and project structure, then enables supported bundled framework configs. Make the `frameworks` object explicit when you want the config to stay independent from dependency detection.
@@ -89,7 +89,7 @@ Use these options when migrating larger repos:
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default defineConfig({
+export default await defineConfig({
   // disable if you want framework activation to be manual-only
   autoFrameworks: true,
 
@@ -121,7 +121,7 @@ V2 adds practical presets for common release profiles:
 ```js
 import { defineConfig, Preset } from '@santi020k/eslint-config-basic'
 
-export default defineConfig({
+export default await defineConfig({
   preset: Preset.App
 })
 ```
@@ -135,7 +135,7 @@ V2 can scope subproject config to workspace folders:
 ```js
 import { defineConfig, Preset, Runtime } from '@santi020k/eslint-config-basic'
 
-export default defineConfig({
+export default await defineConfig({
   preset: Preset.Monorepo,
   projects: {
     'apps/api': {

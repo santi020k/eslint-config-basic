@@ -20,7 +20,7 @@ Basic usage:
 // eslint.config.js
 import { eslintConfig } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig()
+export default await eslintConfig()
 ```
 
 ## Advanced Composition
@@ -32,7 +32,7 @@ import { eslintConfig } from '@santi020k/eslint-config-basic'
 import reactConfig from '@santi020k/eslint-config-react'
 import { Testing, Format } from '@santi020k/eslint-config-core'
 
-export default eslintConfig({
+export default await eslintConfig({
   strict: true,
   typescript: true,
   frameworks: {

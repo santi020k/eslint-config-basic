@@ -22,7 +22,7 @@ Most projects use the main package and enable integrations through enums rather 
 ```js
 import { defineConfig, Extension, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
 
-export default defineConfig({
+export default await defineConfig({
   extensions: [Extension.Unicorn],
   libraries: [Library.Tailwind],
   testing: [Testing.Vitest],

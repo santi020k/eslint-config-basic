@@ -24,7 +24,7 @@
 ```js
 import { eslintConfig } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig() // Auto-detection enabled by default
+export default await eslintConfig() // Auto-detection enabled by default
 ```
 
 ## Project Architecture

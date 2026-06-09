@@ -28,7 +28,7 @@ Users opt-in to frameworks and integrations rather than getting everything at on
 ```js
 import { eslintConfig } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig() // auto-detects your stack
+export default await eslintConfig() // auto-detects your stack
 ```
 
 ## Monorepo Layout

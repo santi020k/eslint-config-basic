@@ -19,7 +19,7 @@ The `extensions` option enables specialized rule packs that are useful across ma
 ```js
 import { defineConfig, Extension } from '@santi020k/eslint-config-basic'
 
-export default defineConfig({
+export default await defineConfig({
   extensions: [Extension.Unicorn, Extension.Security, Extension.Perfectionist, Extension.BestPractices]
 })
 ```

@@ -19,7 +19,7 @@ The `libraries` option enables integrations that usually correspond to major pro
 ```js
 import { defineConfig, Library } from '@santi020k/eslint-config-basic'
 
-export default defineConfig({
+export default await defineConfig({
   libraries: [Library.Tailwind, Library.Storybook]
 })
 ```

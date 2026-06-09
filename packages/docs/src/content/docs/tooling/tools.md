@@ -17,7 +17,7 @@ The `tools` option enables integrations for standalone developer tooling that co
 ```js
 import { defineConfig, Tool } from '@santi020k/eslint-config-basic'
 
-export default defineConfig({
+export default await defineConfig({
   tools: [Tool.Prettier, Tool.Cspell]
 })
 ```

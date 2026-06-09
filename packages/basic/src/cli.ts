@@ -45,7 +45,7 @@ const createConfigContent = (cwd: string): { configContent: string, configPath: 
 
   const configContent = `${imports.join('\n')}
 
-export default eslintConfig({
+export default await eslintConfig({
   typescript: ${JSON.stringify(options.typescript ?? false)},
   frameworks: {
     ${frameworkKeys.map(key => `${key}: true`).join(',\n    ')}
@@ -115,7 +115,7 @@ const createStandardsContent = (cwd: string): string => {
     '```js',
     'import { eslintConfig } from \'@santi020k/eslint-config-basic\'',
     '',
-    'export default eslintConfig()',
+    'export default await eslintConfig()',
     '```',
     '',
     'Use `basic-eslint explain` when you want to inspect what the zero-config setup detects.'

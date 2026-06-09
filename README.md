@@ -55,7 +55,7 @@ Create an `eslint.config.js` in your project root. By default, it will detect yo
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default defineConfig()
+export default await defineConfig()
 ```
 
 Optional integrations are loaded only when you enable them. A Node-only project can use the base config without installing unrelated peer packages such as Storybook, GraphQL, Cypress, or Testing Library.
@@ -73,7 +73,7 @@ Here is an example with many features activated. Note that many of these are aut
 ```js
 import { defineConfig, Extension, Format, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
 
-export default defineConfig({
+export default await defineConfig({
   extensions: [Extension.Unicorn, Extension.Sonarjs, Extension.Perfectionist],
 
   formats: [Format.Mdx, Format.Jsonc, Format.Graphql],
@@ -100,7 +100,7 @@ export default defineConfig({
 ```js
 import { defineConfig, Preset, Runtime } from '@santi020k/eslint-config-basic'
 
-export default defineConfig({
+export default await defineConfig({
   preset: Preset.Monorepo,
   projects: {
     'apps/api': {

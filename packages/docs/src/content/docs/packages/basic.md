@@ -20,7 +20,7 @@ This is the public package application projects install in v2.
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default defineConfig()
+export default await defineConfig()
 ```
 
 ## Explicit Example
@@ -28,7 +28,7 @@ export default defineConfig()
 ```js
 import { defineConfig, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
 
-export default defineConfig({
+export default await defineConfig({
   frameworks: {
     react: true
   },

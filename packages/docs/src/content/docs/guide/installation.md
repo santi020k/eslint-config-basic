@@ -37,7 +37,7 @@ That package brings the framework config packages used by the composer. You no l
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default defineConfig()
+export default await defineConfig()
 ```
 
 The composer detects TypeScript, frameworks, runtime, and supported optional tooling from your project. You can keep the config minimal or make any choice explicit.
@@ -49,7 +49,7 @@ Use booleans when you want to enable framework configs manually:
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default defineConfig({
+export default await defineConfig({
   frameworks: {
     next: true,
     react: true
@@ -67,7 +67,7 @@ Skip linting build artifacts or generated folders by passing [`ignores`](/guide/
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default defineConfig({
+export default await defineConfig({
   ignores: ['dist/**', 'coverage/**']
 })
 ```

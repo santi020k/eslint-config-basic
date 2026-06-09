@@ -49,7 +49,7 @@ This library is a DX-first, composable ESLint 9/10+ flat-config toolkit for Java
     ```js title="eslint.config.mjs"
     import { defineConfig } from '@santi020k/eslint-config-basic'
 
-    export default defineConfig()
+    export default await defineConfig()
     ```
 </Steps>
 

@@ -2,10 +2,10 @@
 import { defineConfig, Library } from '../../../basic/dist/index.js'
 
 export default [
-  ...defineConfig({
+  ...(await defineConfig({
     libraries: [Library.Tailwind],
     tsconfigRootDir: import.meta.dirname
-  }),
+  })),
   {
     name: 'playground/tailwind/settings',
     rules: {

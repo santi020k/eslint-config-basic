@@ -2,7 +2,7 @@
 
 import { defineConfig, NextMode } from '../../basic/dist/index.js'
 
-export default defineConfig({
+export default await defineConfig({
   detection: { libraries: false },
   frameworks: {
     next: true

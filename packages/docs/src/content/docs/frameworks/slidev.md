@@ -16,7 +16,7 @@ pnpm add -D @santi020k/eslint-config-basic
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default defineConfig({
+export default await defineConfig({
   frameworks: {
     slidev: true
   },

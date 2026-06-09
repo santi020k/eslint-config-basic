@@ -1,7 +1,7 @@
 // @ts-check
 import { defineConfig, Runtime } from '../../basic/dist/index.js'
 
-export default defineConfig({
+export default await defineConfig({
   frameworks: {
     hono: true
   },

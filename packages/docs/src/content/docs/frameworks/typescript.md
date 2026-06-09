@@ -30,7 +30,7 @@ bun add -d @santi020k/eslint-config-basic
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default defineConfig({
+export default await defineConfig({
   typescript: true
 })
 ```
@@ -44,7 +44,7 @@ Use `tsconfigRootDir` when your project layout needs an explicit root for parser
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default defineConfig({
+export default await defineConfig({
   tsconfigRootDir: import.meta.dirname,
   typescript: true
 })

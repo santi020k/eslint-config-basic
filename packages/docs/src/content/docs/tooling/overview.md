@@ -16,7 +16,7 @@ The main package can compose integrations from five categories:
 ```js
 import { defineConfig, Extension, Format, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
 
-export default defineConfig({
+export default await defineConfig({
   extensions: [Extension.Unicorn, Extension.Security],
   formats: [Format.Markdown],
   libraries: [Library.Tailwind, Library.Storybook],

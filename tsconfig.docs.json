@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "noEmit": true
+    "noEmit": true,
   },
   "include": [
     "packages/core/src/**/*.ts",
@@ -14,5 +14,9 @@
     "packages/integrations/src/**/*.ts",
     "packages/basic/src/**/*.ts"
   ],
-  "exclude": ["node_modules", "dist", "**/*.test.ts"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.test.ts"
+  ]
 }

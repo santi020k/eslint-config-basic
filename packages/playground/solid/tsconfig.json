@@ -9,5 +9,8 @@
     "jsx": "preserve",
     "jsxImportSource": "solid-js"
   },
-  "include": ["src/**/*", "eslint.config.js"]
+  "include": [
+    "src/**/*",
+    "eslint.config.js"
+  ]
 }

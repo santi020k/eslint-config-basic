@@ -1,7 +1,7 @@
 // @ts-check
 import { defineConfig } from '../../basic/dist/index.js'
 
-export default defineConfig({
+export default await defineConfig({
   detectRootDir: import.meta.dirname,
   frameworks: {
     astro: true
