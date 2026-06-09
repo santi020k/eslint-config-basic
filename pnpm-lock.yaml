@@ -1218,6 +1218,9 @@ importers:
       eslint:
         specifier: ^10.2.1
         version: 10.2.1(jiti@2.7.0)
+      eslint-plugin-vue:
+        specifier: ^10.9.2
+        version: 10.9.2(@stylistic/eslint-plugin@5.10.0(eslint@10.2.1(jiti@2.7.0)))(@typescript-eslint/parser@8.61.0(eslint@10.2.1(jiti@2.7.0))(typescript@5.9.3))(eslint@10.2.1(jiti@2.7.0))(vue-eslint-parser@10.4.1(eslint@10.2.1(jiti@2.7.0)))
     devDependencies:
       '@typescript-eslint/utils':
         specifier: ^8.61.0
@@ -13373,7 +13376,7 @@ snapshots:
       outdent: 0.5.0
       prettier: 2.8.8
       resolve-from: 5.0.0
-      semver: 7.7.4
+      semver: 7.8.3
 
   '@changesets/assemble-release-plan@6.0.10':
     dependencies:
@@ -13382,7 +13385,7 @@ snapshots:
       '@changesets/should-skip-package': 0.1.2
       '@changesets/types': 6.1.0
       '@manypkg/get-packages': 1.1.3
-      semver: 7.7.4
+      semver: 7.8.3
 
   '@changesets/changelog-git@0.2.1':
     dependencies:
@@ -13447,7 +13450,7 @@ snapshots:
       '@changesets/types': 6.1.0
       '@manypkg/get-packages': 1.1.3
       picocolors: 1.1.1
-      semver: 7.7.4
+      semver: 7.8.3
 
   '@changesets/get-github-info@0.8.0':
     dependencies:
@@ -15541,7 +15544,7 @@ snapshots:
       metro: 0.84.3
       metro-config: 0.84.3
       metro-core: 0.84.3
-      semver: 7.7.4
+      semver: 7.8.3
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -16255,7 +16258,7 @@ snapshots:
 
   '@testing-library/dom@10.4.1':
     dependencies:
-      '@babel/code-frame': 7.29.0
+      '@babel/code-frame': 7.29.7
       '@babel/runtime': 7.29.2
       '@types/aria-query': 5.0.4
       aria-query: 5.3.0
@@ -19471,7 +19474,7 @@ snapshots:
   eslint-compat-utils@0.5.1(eslint@10.2.1(jiti@2.7.0)):
     dependencies:
       eslint: 10.2.1(jiti@2.7.0)
-      semver: 7.7.4
+      semver: 7.8.3
 
   eslint-compat-utils@0.6.5(eslint@10.2.1(jiti@2.7.0)):
     dependencies:
@@ -19988,7 +19991,7 @@ snapshots:
       natural-compare: 1.4.0
       nth-check: 2.1.1
       postcss-selector-parser: 7.1.1
-      semver: 7.7.4
+      semver: 7.8.3
       vue-eslint-parser: 10.4.1(eslint@10.2.1(jiti@2.7.0))
       xml-name-validator: 4.0.0
     optionalDependencies:
@@ -21168,7 +21171,7 @@ snapshots:
 
   is-bun-module@2.0.0:
     dependencies:
-      semver: 7.7.4
+      semver: 7.8.3
 
   is-callable@1.2.7: {}
 
@@ -21720,7 +21723,7 @@ snapshots:
       jest-message-util: 30.3.0
       jest-util: 30.3.0
       pretty-format: 30.3.0
-      semver: 7.7.4
+      semver: 7.8.3
       synckit: 0.11.12
     transitivePeerDependencies:
       - supports-color
@@ -21899,7 +21902,7 @@ snapshots:
     dependencies:
       acorn: 8.16.0
       eslint-visitor-keys: 5.0.1
-      semver: 7.7.4
+      semver: 7.8.3
 
   jsonc-parser@2.3.1: {}
 
@@ -22257,7 +22260,7 @@ snapshots:
 
   make-dir@4.0.0:
     dependencies:
-      semver: 7.7.4
+      semver: 7.8.3
 
   makeerror@1.0.12:
     dependencies:
@@ -24626,7 +24629,7 @@ snapshots:
     dependencies:
       '@img/colour': 1.1.0
       detect-libc: 2.1.2
-      semver: 7.7.4
+      semver: 7.8.3
     optionalDependencies:
       '@img/sharp-darwin-arm64': 0.34.5
       '@img/sharp-darwin-x64': 0.34.5
@@ -25112,7 +25115,7 @@ snapshots:
       postcss: 8.5.10
       postcss-scss: 4.0.9(postcss@8.5.10)
       postcss-selector-parser: 7.1.1
-      semver: 7.7.4
+      semver: 7.8.3
     optionalDependencies:
       svelte: 5.55.4
 
@@ -26171,7 +26174,7 @@ snapshots:
   volar-service-typescript@0.0.70(@volar/language-service@2.4.28):
     dependencies:
       path-browserify: 1.0.1
-      semver: 7.7.4
+      semver: 7.8.3
       typescript-auto-import-cache: 0.3.6
       vscode-languageserver-textdocument: 1.0.12
       vscode-nls: 5.2.0

@@ -53,9 +53,9 @@ npm install -D @santi020k/eslint-config-basic
 Create an `eslint.config.js` in your project root. By default, it will detect your project settings:
 
 ```js
-import { eslintConfig } from '@santi020k/eslint-config-basic'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig()
+export default defineConfig()
 ```
 
 Optional integrations are loaded only when you enable them. A Node-only project can use the base config without installing unrelated peer packages such as Storybook, GraphQL, Cypress, or Testing Library.
@@ -71,19 +71,17 @@ npx @santi020k/eslint-config-basic explain
 Here is an example with many features activated. Note that many of these are automatically detected if the corresponding packages are in your `package.json`.
 
 ```js
-import { eslintConfig, Extension, Format, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
-import next from '@santi020k/eslint-config-next'
-import react from '@santi020k/eslint-config-react'
+import { defineConfig, Extension, Format, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
+export default defineConfig({
   extensions: [Extension.Unicorn, Extension.Sonarjs, Extension.Perfectionist],
 
   formats: [Format.Mdx, Format.Jsonc, Format.Graphql],
 
-  // Frameworks (imports are lazy-loaded)
+  // Frameworks
   frameworks: {
-    next,
-    react
+    next: true,
+    react: true
   },
 
   // Optional integrations
@@ -100,9 +98,9 @@ export default eslintConfig({
 ### Monorepo Example
 
 ```js
-import { eslintConfig, Preset, Runtime } from '@santi020k/eslint-config-basic'
+import { defineConfig, Preset, Runtime } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
+export default defineConfig({
   preset: Preset.Monorepo,
   projects: {
     'apps/api': {

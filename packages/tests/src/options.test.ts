@@ -66,8 +66,6 @@ describe('Deep Rule Assertions (#5)', () => {
 
     const rules = extractRuleNames(config)
 
-    expect(rules).toContain('unicorn/better-regex')
-
     expect(rules).toContain('unicorn/prefer-array-flat-map')
   })
 

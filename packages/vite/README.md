@@ -1,16 +1,11 @@
 # @santi020k/eslint-config-vite
 
-Vite ESLint configuration for browser apps and Vite config files.
+Vite support for browser apps and Vite config files.
 
-Most projects should consume it through `@santi020k/eslint-config-basic`:
+This package is part of the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.
 
-```js
-import { eslintConfig } from '@santi020k/eslint-config-basic'
+- Docs: [Vite guide](https://eslint.santi020k.com/frameworks/vite.html)
+- Repository: [santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)
+- Author: [santi020k](https://santi020k.com)
 
-export default eslintConfig({
-  frameworks: {
-    vite: true
-  },
-  typescript: true
-})
-```
+The canonical documentation lives on the Starlight site, so this README intentionally stays short to avoid duplication.

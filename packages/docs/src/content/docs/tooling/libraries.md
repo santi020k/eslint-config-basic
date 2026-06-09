@@ -17,9 +17,9 @@ The `libraries` option enables integrations that usually correspond to major pro
 ## Example
 
 ```js
-import { eslintConfig, Library } from '@santi020k/eslint-config-basic'
+import { defineConfig, Library } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
+export default defineConfig({
   libraries: [Library.Tailwind, Library.Storybook]
 })
 ```
@@ -40,7 +40,7 @@ To fix this, it is highly recommended to provide an explicit `entryPoint` in you
 You can pass the `entryPoint` by appending a configuration object to the array returned by `eslintConfig`:
 
 ```js
-import { eslintConfig, Library } from '@santi020k/eslint-config-basic'
+import { defineConfig, Library } from '@santi020k/eslint-config-basic'
 
 export default [
   ...eslintConfig({

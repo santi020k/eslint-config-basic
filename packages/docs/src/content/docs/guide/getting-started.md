@@ -47,9 +47,9 @@ This library is a DX-first, composable ESLint 9/10+ flat-config toolkit for Java
     Create an `eslint.config.mjs` file, or `eslint.config.js` if your project uses `"type": "module"`.
 
     ```js title="eslint.config.mjs"
-    import { eslintConfig } from '@santi020k/eslint-config-basic'
+    import { defineConfig } from '@santi020k/eslint-config-basic'
 
-    export default eslintConfig()
+    export default defineConfig()
     ```
 </Steps>
 

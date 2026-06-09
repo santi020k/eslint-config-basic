@@ -6,7 +6,7 @@ import { eslintConfig, Extension, Library, Preset, Runtime, Testing, Tool } from
 
 describe('v1.0.0 Roadmap Features', () => {
   it('should apply strict mode (warnings to errors)', () => {
-    const config = eslintConfig({ strict: true })
+    const config = eslintConfig({ strict: true, tools: [] })
     const configsWithRules = config.filter(c => 'rules' in c && c.rules)
     const allRules = configsWithRules.flatMap(c => Object.values(c.rules ?? {}))
     const arrayWarnings = allRules.filter(
@@ -91,7 +91,7 @@ describe('v1.0.0 Roadmap Features', () => {
   })
 
   it('should support pedantic strict mode', () => {
-    const config = eslintConfig({ strict: 'pedantic' })
+    const config = eslintConfig({ strict: 'pedantic', tools: [] })
     const rules = extractRuleNames(config)
 
     expect(rules).toContain('no-console')

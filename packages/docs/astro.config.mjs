@@ -39,7 +39,9 @@ const sidebar = [
       { label: 'Hono', slug: 'frameworks/hono' },
       { label: 'Expo', slug: 'frameworks/expo' },
       { label: 'Qwik', slug: 'frameworks/qwik' },
-      { label: 'Remix', slug: 'frameworks/remix' }
+      { label: 'Remix', slug: 'frameworks/remix' },
+      { label: 'Vite', slug: 'frameworks/vite' },
+      { label: 'Slidev', slug: 'frameworks/slidev' }
     ],
     label: 'Frameworks'
   },

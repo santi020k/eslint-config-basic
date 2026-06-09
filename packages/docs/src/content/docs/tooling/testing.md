@@ -16,9 +16,9 @@ The `testing` option enables linting support for test runners, test environments
 ## Example
 
 ```js
-import { eslintConfig, Testing } from '@santi020k/eslint-config-basic'
+import { defineConfig, Testing } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
+export default defineConfig({
   testing: [Testing.Vitest, Testing.Playwright]
 })
 ```

@@ -35,9 +35,9 @@ That package brings the framework config packages used by the composer. You no l
 ## Minimal Config
 
 ```js
-import { eslintConfig } from '@santi020k/eslint-config-basic'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig()
+export default defineConfig()
 ```
 
 The composer detects TypeScript, frameworks, runtime, and supported optional tooling from your project. You can keep the config minimal or make any choice explicit.
@@ -47,9 +47,9 @@ The composer detects TypeScript, frameworks, runtime, and supported optional too
 Use booleans when you want to enable framework configs manually:
 
 ```js
-import { eslintConfig } from '@santi020k/eslint-config-basic'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
+export default defineConfig({
   frameworks: {
     next: true,
     react: true
@@ -65,9 +65,9 @@ Next.js, Expo, and Remix automatically include React rules when needed.
 Skip linting build artifacts or generated folders by passing [`ignores`](/guide/configuration#additional-global-ignores) on `eslintConfig()`—same effect as a leading flat-config block that only sets `ignores`, without wrapping the export in an extra array.
 
 ```js
-import { eslintConfig } from '@santi020k/eslint-config-basic'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
+export default defineConfig({
   ignores: ['dist/**', 'coverage/**']
 })
 ```

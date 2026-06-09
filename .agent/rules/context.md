@@ -13,7 +13,7 @@ trigger: always_on
 
 ## Project Summary
 
-This is `@santi020k/eslint-config-basic`, a composable ESLint 9+ Flat Config package supporting:
+This is `@santi020k/eslint-config-basic`, a composable ESLint 9+ and 10+ Flat Config package supporting:
 
 - JavaScript, TypeScript, React, Next.js, Astro, Expo, Vue, Svelte, Solid, Angular, NestJS, Hono, Qwik, Remix
 - Optional integrations: Tailwind, Vitest, Jest, Playwright, Cypress, cspell, i18next, MDX, Markdown, YAML, JSONC, TOML, Storybook, Swagger, Stencil, TanStack Query, TanStack Router, Perfectionist, Unicorn, SonarJS, Security, Regexp
@@ -72,10 +72,12 @@ This package only supports ESLint 9+ flat config format. No legacy `.eslintrc` s
 Users select configs via direct options rather than extending named configs:
 
 ```js
-eslintConfig({ typescript: true, frameworks: { react: reactConfig } })
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
+defineConfig({ typescript: true, frameworks: { react: true } })
 ```
 
-Note: framework values must be the imported config object — passing `true` throws. Auto-detected frameworks are reported in `detectedFrameworks` but not automatically applied to `frameworks`.
+Note: In v2, you can pass `true` to framework values to enable the bundled config, and auto-detected frameworks are enabled by default.
 
 ### Dependency Alignment
 
@@ -97,7 +99,7 @@ All commands must pass before considering work complete.
 3. **Plugin version conflicts**: Check `overrides` in root `package.json` when adding new ESLint plugins.
 4. **Workspace lint**: Lint runs from root only, not from individual packages.
 5. **Ambient Declarations**: Prioritize official `@types/*` package replacements or built-in types. Use `ambient.d.ts` only when no official types exist.
-6. **Framework boolean**: Passing `frameworks.react = true` throws — users must pass the imported config array (e.g., `import reactConfig from '@santi020k/eslint-config-react'`).
+6. **Framework boolean**: Passing `frameworks.react = true` enables the bundled config — it no longer throws in v2.
 7. **Virtual script files**: Framework files (.svelte, .astro, .vue, .qwik) generate virtual TS files. Do NOT add `allowDefaultProject: true` or re-apply `disableTypeChecked` in framework packages — the `typescript` package already handles `virtualTypeCheckedFiles`.
 8. **Integration test projectService**: When writing tests that call `lintText()`, avoid relying on auto-detection with TypeScript if using virtual file paths. Use `typescript: false` to prevent `projectService` from rejecting virtual paths not in a real tsconfig.
 9. **Tailwind plugin naming**: The `better-tailwindcss` plugin does NOT include "tailwind" in config entry names — check for the rule prefix `better-tailwindcss/` instead.

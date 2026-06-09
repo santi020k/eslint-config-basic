@@ -1,4 +1,6 @@
 import { getGlobalsForRuntime, GLOB_JS_TS, Runtime } from '@santi020k/eslint-config-core'
+import pluginVue from 'eslint-plugin-vue'
+
 import type { TSESLint } from '@typescript-eslint/utils'
 
 export interface SlidevConfigOptions {
@@ -13,6 +15,9 @@ export const createSlidevConfig = (
   options: SlidevConfigOptions = {}
 ): TSESLint.FlatConfig.ConfigArray => {
   const runtime = options.runtime ?? Runtime.Browser
+  const disabledVueMarkdownRules = Object.fromEntries(
+    Object.keys(pluginVue.rules).map(ruleName => [`vue/${ruleName}`, 'off'])
+  ) as TSESLint.Linter.RulesRecord
 
   return [
     {
@@ -26,6 +31,7 @@ export const createSlidevConfig = (
       files: ['**/slides.md', '**/pages/**/*.md'],
       name: 'eslint-config-slidev/deck-markdown',
       rules: {
+        ...disabledVueMarkdownRules,
         '@stylistic/max-len': 'off',
         'no-undef': 'off',
         'no-unused-expressions': 'off'

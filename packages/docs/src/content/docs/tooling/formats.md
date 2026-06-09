@@ -17,9 +17,9 @@ The `formats` option enables linting for non-code or mixed-content file formats.
 ## Example
 
 ```js
-import { eslintConfig, Format } from '@santi020k/eslint-config-basic'
+import { defineConfig, Format } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
+export default defineConfig({
   formats: [Format.Markdown, Format.Mdx, Format.Yaml]
 })
 ```

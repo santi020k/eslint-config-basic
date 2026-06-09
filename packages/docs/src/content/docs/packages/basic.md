@@ -18,17 +18,17 @@ This is the public package application projects install in v2.
 ## Minimal Example
 
 ```js
-import { eslintConfig } from '@santi020k/eslint-config-basic'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig()
+export default defineConfig()
 ```
 
 ## Explicit Example
 
 ```js
-import { eslintConfig, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
+import { defineConfig, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
+export default defineConfig({
   frameworks: {
     react: true
   },

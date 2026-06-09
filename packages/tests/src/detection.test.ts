@@ -627,7 +627,7 @@ describe('detectProjectOptions', () => {
   })
 
   it('should use default extensions, formats, and tools when package.json is present', () => {
-    vi.mocked(fs.existsSync).mockReturnValue(true)
+    vi.mocked(fs.existsSync).mockImplementation(path => path.toString().includes('package.json'))
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
       dependencies: {}

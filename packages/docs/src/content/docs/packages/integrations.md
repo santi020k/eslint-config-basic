@@ -20,9 +20,9 @@ This package contains the integrations consumed by the main package through the 
 Most projects use the main package and enable integrations through enums rather than importing `@santi020k/eslint-config-integrations` directly.
 
 ```js
-import { eslintConfig, Extension, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
+import { defineConfig, Extension, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
+export default defineConfig({
   extensions: [Extension.Unicorn],
   libraries: [Library.Tailwind],
   testing: [Testing.Vitest],

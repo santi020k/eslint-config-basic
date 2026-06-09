@@ -20,9 +20,9 @@ The main package composes the final flat config array from one public install: `
 ## Core Composition Model
 
 ```js
-import { eslintConfig, Extension, Format, Library, Runtime, Testing, Tool } from '@santi020k/eslint-config-basic'
+import { defineConfig, Extension, Format, Library, Runtime, Testing, Tool } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
+export default defineConfig({
   detectRootDir: process.cwd(),
   extensions: [Extension.Unicorn, Extension.Security],
   formats: [Format.Markdown, Format.Mdx],
@@ -57,9 +57,9 @@ Presets do not force a framework. Frameworks come from project detection or the 
 ## Frameworks
 
 ```js
-import { eslintConfig, NextMode } from '@santi020k/eslint-config-basic'
+import { defineConfig, NextMode } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
+export default defineConfig({
   frameworks: {
     next: true
   },
@@ -104,9 +104,9 @@ Use `autoFrameworks: false` when you want manual framework control only (no dete
 Use `detection: false` to disable all auto-detection, or pass an object to disable specific categories while keeping the rest automatic.
 
 ```js
-import { eslintConfig, Library, Testing } from '@santi020k/eslint-config-basic'
+import { defineConfig, Library, Testing } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
+export default defineConfig({
   detection: {
     formats: true,
     frameworks: true,
@@ -126,9 +126,9 @@ Supported detection keys are `typescript`, `frameworks`, `libraries`, `testing`,
 Pass `ignores` when you want repo-specific globs inside `eslintConfig()` instead of a separate array entry. Patterns behave like ESLint flat config global ignores (relative to the ESLint working directory). They are not merged from presets or auto-detection. For `projects` sub-configs, patterns are not rewritten with the subfolder prefix; use paths that make sense from the config file's working directory.
 
 ```js
-import { eslintConfig } from '@santi020k/eslint-config-basic'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
+export default defineConfig({
   ignores: ['dist/**', 'packages/*/dist/**', 'coverage/**']
 })
 ```
@@ -141,9 +141,9 @@ export default eslintConfig({
 In monorepos these can differ. Example:
 
 ```js
-import { eslintConfig } from '@santi020k/eslint-config-basic'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
+export default defineConfig({
   detectRootDir: process.cwd(),
   tsconfigRootDir: new URL('.', import.meta.url).pathname
 })
@@ -154,9 +154,9 @@ export default eslintConfig({
 Use `projects` to scope package-specific presets and integrations to workspace folders.
 
 ```js
-import { eslintConfig, Preset, Runtime } from '@santi020k/eslint-config-basic'
+import { defineConfig, Preset, Runtime } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
+export default defineConfig({
   preset: Preset.Monorepo,
   projects: {
     'apps/api': {
@@ -176,9 +176,9 @@ Each project key is treated as a folder relative to the repo root. The generated
 ## Full Example
 
 ```js
-import { eslintConfig, Extension, Format, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
+import { defineConfig, Extension, Format, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
+export default defineConfig({
   extensions: [
     Extension.Unicorn,
     Extension.Sonarjs,
@@ -227,9 +227,9 @@ export default eslintConfig({
 ### Fullstack Remix + Tailwind
 
 ```js
-import { eslintConfig, Library } from '@santi020k/eslint-config-basic'
+import { defineConfig, Library } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
+export default defineConfig({
   frameworks: { remix: true },
   libraries: [Library.Tailwind]
 })
@@ -238,9 +238,9 @@ export default eslintConfig({
 ### Astro + Svelte + Vitest
 
 ```js
-import { eslintConfig, Testing } from '@santi020k/eslint-config-basic'
+import { defineConfig, Testing } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
+export default defineConfig({
   frameworks: { astro: true, svelte: true },
   testing: [Testing.Vitest]
 })
@@ -249,9 +249,9 @@ export default eslintConfig({
 ## Strict Mode
 
 ```js
-import { eslintConfig } from '@santi020k/eslint-config-basic'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
+export default defineConfig({
   strict: true
 })
 ```
@@ -269,9 +269,9 @@ Strict mode accepts profiles:
 Gitignore integration is enabled by default.
 
 ```js
-import { eslintConfig, Setting } from '@santi020k/eslint-config-basic'
+import { defineConfig, Setting } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
+export default defineConfig({
   settings: [Setting.NoGitignore]
 })
 ```

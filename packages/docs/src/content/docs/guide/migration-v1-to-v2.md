@@ -49,9 +49,9 @@ export default eslintConfig({
 After:
 
 ```js
-import { eslintConfig } from '@santi020k/eslint-config-basic'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
+export default defineConfig({
   frameworks: {
     next: true
   }
@@ -61,9 +61,9 @@ export default eslintConfig({
 For React-only projects:
 
 ```js
-import { eslintConfig } from '@santi020k/eslint-config-basic'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
+export default defineConfig({
   frameworks: {
     react: true
   }
@@ -75,9 +75,9 @@ export default eslintConfig({
 In v2, this is enough for most projects:
 
 ```js
-import { eslintConfig } from '@santi020k/eslint-config-basic'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig()
+export default defineConfig()
 ```
 
 The composer reads your dependencies and project structure, then enables supported bundled framework configs. Make the `frameworks` object explicit when you want the config to stay independent from dependency detection.
@@ -87,9 +87,9 @@ The composer reads your dependencies and project structure, then enables support
 Use these options when migrating larger repos:
 
 ```js
-import { eslintConfig } from '@santi020k/eslint-config-basic'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
+export default defineConfig({
   // disable if you want framework activation to be manual-only
   autoFrameworks: true,
 
@@ -119,9 +119,9 @@ export default eslintConfig({
 V2 adds practical presets for common release profiles:
 
 ```js
-import { eslintConfig, Preset } from '@santi020k/eslint-config-basic'
+import { defineConfig, Preset } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
+export default defineConfig({
   preset: Preset.App
 })
 ```
@@ -133,9 +133,9 @@ Use `Preset.Library` for published packages, `Preset.App` for browser apps, `Pre
 V2 can scope subproject config to workspace folders:
 
 ```js
-import { eslintConfig, Preset, Runtime } from '@santi020k/eslint-config-basic'
+import { defineConfig, Preset, Runtime } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
+export default defineConfig({
   preset: Preset.Monorepo,
   projects: {
     'apps/api': {

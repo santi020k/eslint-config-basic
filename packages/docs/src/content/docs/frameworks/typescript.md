@@ -28,9 +28,9 @@ bun add -d @santi020k/eslint-config-basic
 ## Configure
 
 ```js
-import { eslintConfig } from '@santi020k/eslint-config-basic'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
+export default defineConfig({
   typescript: true
 })
 ```
@@ -42,9 +42,9 @@ If a `tsconfig.json` or `tsconfig.base.json` exists, `eslintConfig()` can detect
 Use `tsconfigRootDir` when your project layout needs an explicit root for parser options.
 
 ```js
-import { eslintConfig } from '@santi020k/eslint-config-basic'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
+export default defineConfig({
   tsconfigRootDir: import.meta.dirname,
   typescript: true
 })
