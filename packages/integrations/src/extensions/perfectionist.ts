@@ -14,13 +14,16 @@ export const perfectionist: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('
 
   return [
     {
-      name: 'eslint-config-integrations/perfectionist',
       files: GLOB_JS_TS,
+      name: 'eslint-config-integrations/perfectionist',
       plugins: {
         perfectionist: pluginPerfectionist
       },
       rules: {
-        ...pluginPerfectionist.configs['recommended-natural'].rules
+        ...pluginPerfectionist.configs['recommended-natural'].rules,
+        // Disabled: simple-import-sort handles import ordering to avoid circular fix conflicts
+        'perfectionist/sort-imports': 'off',
+        'perfectionist/sort-named-imports': 'off'
       }
     }
   ]

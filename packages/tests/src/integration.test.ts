@@ -24,7 +24,7 @@ const FIXTURES_DIR = join(__dirname, '../fixtures')
 describe('Integration Tests', () => {
   describe('JavaScript', () => {
     it('should report warnings for stylistic issues in javascript.js', async () => {
-      const config = eslintConfig()
+      const config = eslintConfig({ tools: [] })
       const filePath = join(FIXTURES_DIR, 'javascript.js')
       const results = await lintFile(filePath, config)
 
@@ -37,7 +37,7 @@ describe('Integration Tests', () => {
     })
 
     it('should pass for clean javascript code', async () => {
-      const config = eslintConfig()
+      const config = eslintConfig({ tools: [] })
       const code = 'const x = \'clean\'\n\nconsole.log(x)\n'
       const results = await lintText(code, config, 'clean.js')
 
@@ -49,8 +49,9 @@ describe('Integration Tests', () => {
   describe('TypeScript', () => {
     it('should report TypeScript-specific issues', async () => {
       const config = eslintConfig({
-        typescript: true,
-        tsconfigRootDir: FIXTURES_DIR
+        tools: [],
+        tsconfigRootDir: FIXTURES_DIR,
+        typescript: true
       })
       const filePath = join(FIXTURES_DIR, 'typescript.ts')
       const results = await lintFile(filePath, config)
@@ -64,8 +65,9 @@ describe('Integration Tests', () => {
 
     it('should report issues in nest.ts', async () => {
       const config = eslintConfig({
-        typescript: true,
-        tsconfigRootDir: FIXTURES_DIR
+        tools: [],
+        tsconfigRootDir: FIXTURES_DIR,
+        typescript: true
       })
       const filePath = join(FIXTURES_DIR, 'nest.ts')
       const results = await lintFile(filePath, config)
@@ -112,8 +114,8 @@ describe('Integration Tests', () => {
 
     it('should pass for clean React JSX code', async () => {
       const config = eslintConfig({
-        typescript: false,
-        frameworks: { react: reactConfig }
+        frameworks: { react: reactConfig },
+        typescript: false
       })
       // Use plain JSX without TS type annotations since typescript: false
       // Use double quotes for JSX attributes to satisfy @stylistic/jsx-quotes
@@ -150,7 +152,8 @@ describe('Integration Tests', () => {
   describe('Svelte', () => {
     it('should detect stylistic issues in svelte.svelte', async () => {
       const config = eslintConfig({
-        frameworks: { svelte: svelteConfig }
+        frameworks: { svelte: svelteConfig },
+        tools: []
       })
       const filePath = join(FIXTURES_DIR, 'svelte.svelte')
       const results = await lintFile(filePath, config)
@@ -166,8 +169,8 @@ describe('Integration Tests', () => {
   describe('Angular', () => {
     it('should include Angular-specific rules in config', () => {
       const config = eslintConfig({
-        typescript: false,
-        frameworks: { angular: angularConfig }
+        frameworks: { angular: angularConfig },
+        typescript: false
       })
       const names = config.flatMap(c => (c.name ? [c.name] : []))
 
@@ -178,8 +181,8 @@ describe('Integration Tests', () => {
   describe('Astro', () => {
     it('should include Astro-specific rules in config', () => {
       const config = eslintConfig({
-        typescript: false,
-        frameworks: { astro: astroConfig }
+        frameworks: { astro: astroConfig },
+        typescript: false
       })
       const names = config.flatMap(c => (typeof c.name === 'string' ? [c.name] : []))
 
@@ -188,9 +191,9 @@ describe('Integration Tests', () => {
 
     it('should avoid Astro template false positives when TypeScript is enabled', async () => {
       const config = eslintConfig({
-        typescript: true,
+        frameworks: { astro },
         tsconfigRootDir: FIXTURES_DIR,
-        frameworks: { astro }
+        typescript: true
       })
       const filePath = join(FIXTURES_DIR, 'astro.astro')
       const results = await lintFile(filePath, config)
@@ -205,11 +208,11 @@ describe('Integration Tests', () => {
     it('should include Expo-specific rules in config', () => {
       // Expo requires react to be passed alongside
       const config = eslintConfig({
-        typescript: false,
         frameworks: {
-          react: reactConfig,
-          expo: expoConfig
-        }
+          expo: expoConfig,
+          react: reactConfig
+        },
+        typescript: false
       })
 
       expect(Array.isArray(config)).toBe(true)
@@ -221,8 +224,8 @@ describe('Integration Tests', () => {
   describe('NestJS', () => {
     it('should include NestJS-specific rules in config', () => {
       const config = eslintConfig({
-        typescript: false,
-        frameworks: { nest: nestConfig }
+        frameworks: { nest: nestConfig },
+        typescript: false
       })
       const names = config.flatMap(c => (c.name ? [c.name] : []))
 
@@ -233,8 +236,8 @@ describe('Integration Tests', () => {
   describe('Hono', () => {
     it('should include Hono-specific rules in config', () => {
       const config = eslintConfig({
-        typescript: false,
-        frameworks: { hono: honoConfig }
+        frameworks: { hono: honoConfig },
+        typescript: false
       })
       const names = config.flatMap(c => (c.name ? [c.name] : []))
 
@@ -245,11 +248,11 @@ describe('Integration Tests', () => {
   describe('Next.js', () => {
     it('should include Next.js-specific rules in config', () => {
       const config = eslintConfig({
-        typescript: false,
         frameworks: {
-          react: reactConfig,
-          next: nextConfig
-        }
+          next: nextConfig,
+          react: reactConfig
+        },
+        typescript: false
       })
       const names = config.flatMap(c => (c.name ? [c.name] : []))
 
@@ -260,8 +263,8 @@ describe('Integration Tests', () => {
   describe('Qwik', () => {
     it('should include Qwik-specific rules in config', () => {
       const config = eslintConfig({
-        typescript: false,
-        frameworks: { qwik: qwikConfig }
+        frameworks: { qwik: qwikConfig },
+        typescript: false
       })
       const names = config.flatMap(c => (c.name ? [c.name] : []))
 
@@ -272,8 +275,8 @@ describe('Integration Tests', () => {
   describe('Remix', () => {
     it('should include Remix-specific rules in config', () => {
       const config = eslintConfig({
-        typescript: false,
-        frameworks: { remix: remixConfig }
+        frameworks: { remix: remixConfig },
+        typescript: false
       })
       const names = config.flatMap(c => (c.name ? [c.name] : []))
 

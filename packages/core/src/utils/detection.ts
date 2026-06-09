@@ -1,32 +1,32 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
-import { type EslintConfigOptions, Format, Library, NextMode, Preset, Runtime, Testing, Tool } from '../types.js'
+import { type EslintConfigOptions, Extension, Format, Library, NextMode, Preset, Runtime, Testing, Tool } from '../types.js'
+
+type DependencyMap = Record<string, string | undefined>
 
 interface PackageJson {
   dependencies?: Record<string, string | undefined>
   devDependencies?: Record<string, string | undefined>
 }
 
-type DependencyMap = Record<string, string | undefined>
-
 const runtimePriority: Record<Runtime, number> = {
-  [Runtime.Universal]: 0,
   [Runtime.Browser]: 1,
   [Runtime.Node]: 2,
+  [Runtime.Universal]: 0,
   [Runtime.Worker]: 3
 }
 
 const createDefaultOptions = (): EslintConfigOptions => ({
-  typescript: false,
-  frameworks: {},
   detectedFrameworks: [],
+  extensions: [Extension.Unicorn, Extension.Perfectionist, Extension.Security],
+  formats: [Format.Mdx, Format.Markdown, Format.Jsonc, Format.Yaml, Format.Toml],
+  frameworks: {},
   libraries: [],
+  runtime: Runtime.Universal,
   testing: [],
-  formats: [],
-  tools: [],
-  extensions: [],
-  runtime: Runtime.Universal
+  tools: [Tool.Prettier],
+  typescript: false
 })
 
 const dedupe = <T>(values: T[] = []): T[] => [...new Set(values)]
@@ -366,9 +366,9 @@ export const detectProjectOptions = (detectRootDir: string = process.cwd()): Esl
     options.preset = resolvePreset(options)
 
     return options
-  } catch (err) {
+  } catch (error) {
     if (process.env.ESLINT_BASIC_DEBUG) {
-      console.warn('[ESLint Basic] Failed to detect project options from package.json:', err)
+      console.warn('[ESLint Basic] Failed to detect project options from package.json:', error)
     }
 
     return options

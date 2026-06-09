@@ -1,7 +1,7 @@
 import * as fs from 'node:fs'
 import { describe, expect, it, vi } from 'vitest'
 
-import { detectProjectOptions, Format, Library, NextMode, Preset, Runtime, Testing, Tool } from '@santi020k/eslint-config-basic'
+import { detectProjectOptions, Extension, Format, Library, NextMode, Preset, Runtime, Testing, Tool } from '@santi020k/eslint-config-basic'
 
 vi.mock('node:fs')
 
@@ -181,9 +181,9 @@ describe('detectProjectOptions', () => {
     expect(options.detectedFrameworks).toEqual([])
     expect(options.libraries).toEqual([])
     expect(options.testing).toEqual([])
-    expect(options.formats).toEqual([])
-    expect(options.tools).toEqual([])
-    expect(options.extensions).toEqual([])
+    expect(options.formats).toEqual([Format.Mdx, Format.Markdown, Format.Jsonc, Format.Yaml, Format.Toml])
+    expect(options.tools).toEqual([Tool.Prettier])
+    expect(options.extensions).toEqual([Extension.Unicorn, Extension.Perfectionist, Extension.Security])
     expect(options.runtime).toBe(Runtime.Universal)
   })
 
@@ -340,7 +340,7 @@ describe('detectProjectOptions', () => {
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
       dependencies: { hono: 'latest' },
-      devDependencies: { wrangler: 'latest', '@cloudflare/workers-types': 'latest' }
+      devDependencies: { '@cloudflare/workers-types': 'latest', wrangler: 'latest' }
     }))
 
     const options = detectProjectOptions()
@@ -457,7 +457,7 @@ describe('detectProjectOptions', () => {
     expect(options.formats).toContain(Format.Graphql)
   })
 
-  it('should keep extensions empty unless explicitly detected/enabled', () => {
+  it('should use default extensions unless explicitly disabled', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -466,7 +466,7 @@ describe('detectProjectOptions', () => {
 
     const options = detectProjectOptions()
 
-    expect(options.extensions).toEqual([])
+    expect(options.extensions).toEqual([Extension.Unicorn, Extension.Perfectionist, Extension.Security])
   })
 
   it('should detect tsconfig.base.json as TypeScript project', () => {
@@ -548,9 +548,9 @@ describe('detectProjectOptions', () => {
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
       dependencies: {
-        react: 'latest',
         '@nestjs/core': 'latest',
-        hono: 'latest'
+        hono: 'latest',
+        react: 'latest'
       },
       devDependencies: {
         wrangler: 'latest'
@@ -567,8 +567,8 @@ describe('detectProjectOptions', () => {
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
       dependencies: {
-        next: 'latest',
-        '@nestjs/core': 'latest'
+        '@nestjs/core': 'latest',
+        next: 'latest'
       }
     }))
 
