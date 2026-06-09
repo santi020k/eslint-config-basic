@@ -8,7 +8,7 @@ import type { TSESLint } from '@typescript-eslint/utils'
  * Vitest ESLint configuration
  * Provides linting rules for Vitest test files with best practices
  */
-export const vitest: Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('vitest', async () => {
+export const vitest: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('vitest', async () => {
   const globals = await loadDefault<typeof Globals>('globals')
   const pluginVitest = await loadDefault<PluginWithConfigs<'recommended'>>('@vitest/eslint-plugin')
 

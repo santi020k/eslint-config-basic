@@ -3,15 +3,15 @@ import { describe, expect, it } from 'vitest'
 import { extractConfigNames, extractRuleNames } from './test-utils.js'
 
 import angular from '@santi020k/eslint-config-angular'
-import { eslintConfig, Extension, Format, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
+import { defineConfig, Extension, Format, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
 import qwik from '@santi020k/eslint-config-qwik'
 import react from '@santi020k/eslint-config-react'
 import svelte from '@santi020k/eslint-config-svelte'
 import vue from '@santi020k/eslint-config-vue'
 
 describe('Deep Rule Assertions (#5)', () => {
-  it('should include React-specific rules when React is enabled', () => {
-    const config = eslintConfig({ frameworks: { react } })
+  it('should include React-specific rules when React is enabled', async () => {
+    const config = await defineConfig({ frameworks: { react } })
     const rules = extractRuleNames(config)
 
     expect(rules).toContain('react/jsx-pascal-case')
@@ -21,8 +21,8 @@ describe('Deep Rule Assertions (#5)', () => {
     expect(rules).toContain('react-hooks/exhaustive-deps')
   })
 
-  it('should include TypeScript rules when typescript is enabled', () => {
-    const config = eslintConfig({ frameworks: {}, typescript: true })
+  it('should include TypeScript rules when typescript is enabled', async () => {
+    const config = await defineConfig({ frameworks: {}, typescript: true })
     const rules = extractRuleNames(config)
 
     expect(rules).toContain('@typescript-eslint/no-explicit-any')
@@ -30,8 +30,8 @@ describe('Deep Rule Assertions (#5)', () => {
     expect(rules).toContain('@typescript-eslint/no-unused-vars')
   })
 
-  it('should include core stylistic rules in all configs', () => {
-    const config = eslintConfig({})
+  it('should include core stylistic rules in all configs', async () => {
+    const config = await defineConfig({})
     const rules = extractRuleNames(config)
 
     expect(rules).toContain('@stylistic/indent')
@@ -41,8 +41,8 @@ describe('Deep Rule Assertions (#5)', () => {
     expect(rules).toContain('@stylistic/semi')
   })
 
-  it('should include config entry names', () => {
-    const config = eslintConfig({ frameworks: {}, typescript: true })
+  it('should include config entry names', async () => {
+    const config = await defineConfig({ frameworks: {}, typescript: true })
     const names = extractConfigNames(config)
 
     expect(names).toContain('@eslint/js/recommended')
@@ -50,8 +50,8 @@ describe('Deep Rule Assertions (#5)', () => {
     expect(names).toContain('eslint-config-typescript/standard-rules')
   })
 
-  it('should NOT include React rules when only typescript is enabled', () => {
-    const config = eslintConfig({ autoFrameworks: false, frameworks: {}, typescript: true })
+  it('should NOT include React rules when only typescript is enabled', async () => {
+    const config = await defineConfig({ autoFrameworks: false, frameworks: {}, typescript: true })
     const rules = extractRuleNames(config)
 
     expect(rules).not.toContain('react/jsx-pascal-case')
@@ -59,8 +59,8 @@ describe('Deep Rule Assertions (#5)', () => {
     expect(rules).not.toContain('react-hooks/exhaustive-deps')
   })
 
-  it('should include unicorn rules when Unicorn optional is enabled', () => {
-    const config = eslintConfig({
+  it('should include unicorn rules when Unicorn optional is enabled', async () => {
+    const config = await defineConfig({
       extensions: [Extension.Unicorn]
     })
 
@@ -69,8 +69,8 @@ describe('Deep Rule Assertions (#5)', () => {
     expect(rules).toContain('unicorn/prefer-array-flat-map')
   })
 
-  it('should include sonarjs rules when Sonarjs optional is enabled', () => {
-    const config = eslintConfig({
+  it('should include sonarjs rules when Sonarjs optional is enabled', async () => {
+    const config = await defineConfig({
       extensions: [Extension.Sonarjs]
     })
 
@@ -81,8 +81,8 @@ describe('Deep Rule Assertions (#5)', () => {
     expect(rules).toContain('sonarjs/cognitive-complexity')
   })
 
-  it('should include prettier config when Prettier optional is enabled', () => {
-    const config = eslintConfig({
+  it('should include prettier config when Prettier optional is enabled', async () => {
+    const config = await defineConfig({
       tools: [Tool.Prettier]
     })
 
@@ -91,8 +91,8 @@ describe('Deep Rule Assertions (#5)', () => {
     expect(names).toContain('eslint-config/prettier')
   })
 
-  it('should include regexp rules when Regexp optional is enabled', () => {
-    const config = eslintConfig({
+  it('should include regexp rules when Regexp optional is enabled', async () => {
+    const config = await defineConfig({
       extensions: [Extension.Regexp]
     })
 
@@ -103,8 +103,8 @@ describe('Deep Rule Assertions (#5)', () => {
     expect(rules).toContain('regexp/no-useless-escape')
   })
 
-  it('should include Vue rules when Vue is enabled', () => {
-    const config = eslintConfig({ frameworks: { vue } })
+  it('should include Vue rules when Vue is enabled', async () => {
+    const config = await defineConfig({ frameworks: { vue } })
     const rules = extractRuleNames(config)
 
     expect(rules).toContain('vue/multi-word-component-names')
@@ -112,8 +112,8 @@ describe('Deep Rule Assertions (#5)', () => {
     expect(rules).toContain('vue/html-self-closing')
   })
 
-  it('should include playwright rules when Playwright integration is enabled', () => {
-    const config = eslintConfig({
+  it('should include playwright rules when Playwright integration is enabled', async () => {
+    const config = await defineConfig({
       testing: [Testing.Playwright]
     })
 
@@ -124,8 +124,8 @@ describe('Deep Rule Assertions (#5)', () => {
 })
 
 describe('Framework Rule Assertions — Svelte, Angular, Qwik', () => {
-  it('should include Svelte-specific rules when Svelte is enabled', () => {
-    const config = eslintConfig({ frameworks: { svelte } })
+  it('should include Svelte-specific rules when Svelte is enabled', async () => {
+    const config = await defineConfig({ frameworks: { svelte } })
     const rules = extractRuleNames(config)
 
     expect(rules).toContain('svelte/no-at-html-tags')
@@ -133,8 +133,8 @@ describe('Framework Rule Assertions — Svelte, Angular, Qwik', () => {
     expect(rules).toContain('svelte/require-each-key')
   })
 
-  it('should include Angular-specific rules when Angular is enabled', () => {
-    const config = eslintConfig({ frameworks: { angular } })
+  it('should include Angular-specific rules when Angular is enabled', async () => {
+    const config = await defineConfig({ frameworks: { angular } })
     const rules = extractRuleNames(config)
 
     expect(rules).toContain('@angular-eslint/component-class-suffix')
@@ -144,8 +144,8 @@ describe('Framework Rule Assertions — Svelte, Angular, Qwik', () => {
     expect(rules).toContain('@angular-eslint/no-empty-lifecycle-method')
   })
 
-  it('should include Qwik-specific rules when Qwik is enabled', () => {
-    const config = eslintConfig({ frameworks: { qwik } })
+  it('should include Qwik-specific rules when Qwik is enabled', async () => {
+    const config = await defineConfig({ frameworks: { qwik } })
     const rules = extractRuleNames(config)
 
     expect(rules).toContain('qwik/valid-lexical-scope')
@@ -155,15 +155,15 @@ describe('Framework Rule Assertions — Svelte, Angular, Qwik', () => {
     expect(rules).toContain('qwik/no-react-props')
   })
 
-  it('should NOT include Svelte rules when Svelte is not enabled', () => {
-    const config = eslintConfig({ autoFrameworks: false, typescript: true })
+  it('should NOT include Svelte rules when Svelte is not enabled', async () => {
+    const config = await defineConfig({ autoFrameworks: false, typescript: true })
     const rules = extractRuleNames(config)
 
     expect(rules).not.toContain('svelte/no-at-html-tags')
   })
 
-  it('should NOT include Angular rules when Angular is not enabled', () => {
-    const config = eslintConfig({ autoFrameworks: false, typescript: true })
+  it('should NOT include Angular rules when Angular is not enabled', async () => {
+    const config = await defineConfig({ autoFrameworks: false, typescript: true })
     const rules = extractRuleNames(config)
 
     expect(rules).not.toContain('@angular-eslint/component-class-suffix')
@@ -171,8 +171,8 @@ describe('Framework Rule Assertions — Svelte, Angular, Qwik', () => {
 })
 
 describe('Integration Rule Assertions — Testing', () => {
-  it('should include Jest rules when Jest integration is enabled', () => {
-    const config = eslintConfig({
+  it('should include Jest rules when Jest integration is enabled', async () => {
+    const config = await defineConfig({
       testing: [Testing.Jest]
     })
 
@@ -181,8 +181,8 @@ describe('Integration Rule Assertions — Testing', () => {
     expect(names).toContain('integrations/jest')
   })
 
-  it('should include Cypress rules when Cypress integration is enabled', () => {
-    const config = eslintConfig({
+  it('should include Cypress rules when Cypress integration is enabled', async () => {
+    const config = await defineConfig({
       testing: [Testing.Cypress]
     })
 
@@ -191,8 +191,8 @@ describe('Integration Rule Assertions — Testing', () => {
     expect(names).toContain('integrations/cypress')
   })
 
-  it('should include Testing Library rules when TestingLibrary integration is enabled', () => {
-    const config = eslintConfig({
+  it('should include Testing Library rules when TestingLibrary integration is enabled', async () => {
+    const config = await defineConfig({
       testing: [Testing.TestingLibrary]
     })
 
@@ -203,8 +203,8 @@ describe('Integration Rule Assertions — Testing', () => {
     expect(rules).toContain('testing-library/no-debugging-utils')
   })
 
-  it('should include all testing integrations simultaneously', () => {
-    const config = eslintConfig({
+  it('should include all testing integrations simultaneously', async () => {
+    const config = await defineConfig({
       testing: [Testing.Vitest, Testing.Jest, Testing.Playwright, Testing.Cypress, Testing.TestingLibrary]
     })
 
@@ -218,8 +218,8 @@ describe('Integration Rule Assertions — Testing', () => {
 })
 
 describe('Integration Rule Assertions — Libraries', () => {
-  it('should include tailwind config when Tailwind library is enabled', () => {
-    const config = eslintConfig({
+  it('should include tailwind config when Tailwind library is enabled', async () => {
+    const config = await defineConfig({
       libraries: [Library.Tailwind]
     })
 
@@ -229,8 +229,8 @@ describe('Integration Rule Assertions — Libraries', () => {
     expect(rules.some(r => r.startsWith('better-tailwindcss/'))).toBe(true)
   })
 
-  it('should include i18next rules when i18next library is enabled', () => {
-    const config = eslintConfig({
+  it('should include i18next rules when i18next library is enabled', async () => {
+    const config = await defineConfig({
       libraries: [Library.I18next]
     })
 
@@ -239,8 +239,8 @@ describe('Integration Rule Assertions — Libraries', () => {
     expect(rules).toContain('i18next/no-literal-string')
   })
 
-  it('should include TanStack Router rules when TanstackRouter library is enabled', () => {
-    const config = eslintConfig({
+  it('should include TanStack Router rules when TanstackRouter library is enabled', async () => {
+    const config = await defineConfig({
       libraries: [Library.TanstackRouter]
     })
 
@@ -249,8 +249,8 @@ describe('Integration Rule Assertions — Libraries', () => {
     expect(names.some(n => n.toLowerCase().includes('tanstack'))).toBe(true)
   })
 
-  it('should include Storybook config when Storybook library is enabled', () => {
-    const config = eslintConfig({
+  it('should include Storybook config when Storybook library is enabled', async () => {
+    const config = await defineConfig({
       libraries: [Library.Storybook]
     })
 
@@ -259,8 +259,8 @@ describe('Integration Rule Assertions — Libraries', () => {
     expect(names.some(n => n.toLowerCase().includes('storybook'))).toBe(true)
   })
 
-  it('should include Stencil rules when Stencil library is enabled', () => {
-    const config = eslintConfig({
+  it('should include Stencil rules when Stencil library is enabled', async () => {
+    const config = await defineConfig({
       libraries: [Library.Stencil]
     })
 
@@ -269,8 +269,8 @@ describe('Integration Rule Assertions — Libraries', () => {
     expect(rules).toContain('@stencil-community/async-methods')
   })
 
-  it('should include TanStack Query rules when TanstackQuery library is enabled', () => {
-    const config = eslintConfig({
+  it('should include TanStack Query rules when TanstackQuery library is enabled', async () => {
+    const config = await defineConfig({
       libraries: [Library.TanstackQuery]
     })
 
@@ -281,8 +281,8 @@ describe('Integration Rule Assertions — Libraries', () => {
 })
 
 describe('Integration Rule Assertions — Tools', () => {
-  it('should include CSpell rules when CSpell tool is enabled', () => {
-    const config = eslintConfig({
+  it('should include CSpell rules when CSpell tool is enabled', async () => {
+    const config = await defineConfig({
       tools: [Tool.Cspell]
     })
 
@@ -291,8 +291,8 @@ describe('Integration Rule Assertions — Tools', () => {
     expect(rules).toContain('@cspell/spellchecker')
   })
 
-  it('should include JSDoc rules when Jsdoc tool is enabled', () => {
-    const config = eslintConfig({
+  it('should include JSDoc rules when Jsdoc tool is enabled', async () => {
+    const config = await defineConfig({
       tools: [Tool.Jsdoc]
     })
 
@@ -301,8 +301,8 @@ describe('Integration Rule Assertions — Tools', () => {
     expect(rules).toContain('jsdoc/check-access')
   })
 
-  it('should include Swagger rules when Swagger tool is enabled', () => {
-    const config = eslintConfig({
+  it('should include Swagger rules when Swagger tool is enabled', async () => {
+    const config = await defineConfig({
       tools: [Tool.Swagger]
     })
 
@@ -313,8 +313,8 @@ describe('Integration Rule Assertions — Tools', () => {
 })
 
 describe('Integration Rule Assertions — Formats', () => {
-  it('should include YAML rules when Yaml format is enabled', () => {
-    const config = eslintConfig({
+  it('should include YAML rules when Yaml format is enabled', async () => {
+    const config = await defineConfig({
       formats: [Format.Yaml]
     })
 
@@ -323,8 +323,8 @@ describe('Integration Rule Assertions — Formats', () => {
     expect(rules).toContain('yml/no-empty-mapping-value')
   })
 
-  it('should include JSONC rules when Jsonc format is enabled', () => {
-    const config = eslintConfig({
+  it('should include JSONC rules when Jsonc format is enabled', async () => {
+    const config = await defineConfig({
       formats: [Format.Jsonc]
     })
 
@@ -333,8 +333,8 @@ describe('Integration Rule Assertions — Formats', () => {
     expect(rules).toContain('jsonc/sort-keys')
   })
 
-  it('should include Markdown rules when Markdown format is enabled', () => {
-    const config = eslintConfig({
+  it('should include Markdown rules when Markdown format is enabled', async () => {
+    const config = await defineConfig({
       formats: [Format.Markdown]
     })
 
@@ -345,8 +345,8 @@ describe('Integration Rule Assertions — Formats', () => {
     expect(rules).toContain('markdown/no-empty-links')
   })
 
-  it('should include MDX config when Mdx format is enabled', () => {
-    const config = eslintConfig({
+  it('should include MDX config when Mdx format is enabled', async () => {
+    const config = await defineConfig({
       formats: [Format.Mdx]
     })
 
@@ -355,8 +355,8 @@ describe('Integration Rule Assertions — Formats', () => {
     expect(names.some(n => n.toLowerCase().includes('mdx'))).toBe(true)
   })
 
-  it('should include TOML config when Toml format is enabled', () => {
-    const config = eslintConfig({
+  it('should include TOML config when Toml format is enabled', async () => {
+    const config = await defineConfig({
       formats: [Format.Toml]
     })
 
@@ -366,8 +366,8 @@ describe('Integration Rule Assertions — Formats', () => {
     expect(rules.some(r => r.startsWith('toml/'))).toBe(true)
   })
 
-  it('should include GraphQL config when Graphql format is enabled', () => {
-    const config = eslintConfig({
+  it('should include GraphQL config when Graphql format is enabled', async () => {
+    const config = await defineConfig({
       formats: [Format.Graphql]
     })
 
@@ -380,8 +380,8 @@ describe('Integration Rule Assertions — Formats', () => {
 })
 
 describe('Integration Rule Assertions — Extensions', () => {
-  it('should include Perfectionist rules when Perfectionist extension is enabled', () => {
-    const config = eslintConfig({
+  it('should include Perfectionist rules when Perfectionist extension is enabled', async () => {
+    const config = await defineConfig({
       extensions: [Extension.Perfectionist]
     })
 
@@ -390,8 +390,8 @@ describe('Integration Rule Assertions — Extensions', () => {
     expect(rules).toContain('perfectionist/sort-imports')
   })
 
-  it('should include Security rules when Security extension is enabled', () => {
-    const config = eslintConfig({
+  it('should include Security rules when Security extension is enabled', async () => {
+    const config = await defineConfig({
       extensions: [Extension.Security]
     })
 

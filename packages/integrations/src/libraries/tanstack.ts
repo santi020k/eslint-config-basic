@@ -6,7 +6,7 @@ import type { TSESLint } from '@typescript-eslint/utils'
 /**
  * TanStack Query ESLint configuration
  */
-export const tanstackQuery: Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('tanstack-query', async () => {
+export const tanstackQuery: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('tanstack-query', async () => {
   const pluginQuery = await loadDefault<PluginWithConfigs<'recommended'>>('@tanstack/eslint-plugin-query')
 
   return [
@@ -26,7 +26,7 @@ export const tanstackQuery: Promise<TSESLint.FlatConfig.ConfigArray> = defineLaz
 /**
  * TanStack Router ESLint configuration
  */
-export const tanstackRouter: Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('tanstack-router', async () => {
+export const tanstackRouter: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('tanstack-router', async () => {
   const pluginRouter = await loadDefault<PluginWithConfigs<'recommended'>>('@tanstack/eslint-plugin-router')
 
   return [

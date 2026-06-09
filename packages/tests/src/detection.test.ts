@@ -1,7 +1,7 @@
 import * as fs from 'node:fs'
 import { describe, expect, it, vi } from 'vitest'
 
-import { detectProjectOptions, Extension, Format, Library, NextMode, Preset, Runtime, Testing, Tool } from '@santi020k/eslint-config-basic'
+import { detectProjectOptions, defineConfig, Extension, Format, Library, NextMode, Preset, Runtime, Testing, Tool } from '@santi020k/eslint-config-basic'
 
 vi.mock('node:fs')
 
@@ -777,6 +777,6 @@ describe('detectProjectOptions — does not pollute frameworks with booleans', (
     const detected = detectProjectOptions()
 
     // Must not throw — previously frameworks.next = true would cause resolveFramework to throw
-    expect(() => eslintConfig(detected)).not.toThrow()
+    await expect(defineConfig(detected)).resolves.toBeDefined()
   })
 })

@@ -8,7 +8,7 @@ import type { TSESLint } from '@typescript-eslint/utils'
  * Swagger/NestJS documentation ESLint configuration
  * Provides rules from the nestjs-typed plugin for Swagger decorator validation
  */
-export const swagger: Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('swagger', async () => {
+export const swagger: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('swagger', async () => {
   const { plugin: nestjsTypedPlugin } = await loadModule<typeof NestjsTyped>('@darraghor/eslint-plugin-nestjs-typed')
 
   return [

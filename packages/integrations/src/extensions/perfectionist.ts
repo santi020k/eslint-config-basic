@@ -9,7 +9,7 @@ import type { TSESLint } from '@typescript-eslint/utils'
  * Perfectionist ESLint configuration
  * Provides rules for sorting and organizing code (imports, exports, object keys, etc.)
  */
-export const perfectionist: Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('perfectionist', async () => {
+export const perfectionist: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('perfectionist', async () => {
   const pluginPerfectionist = await loadDefault<typeof PluginPerfectionist>('eslint-plugin-perfectionist')
 
   return [

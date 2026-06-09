@@ -9,7 +9,7 @@ import type { TSESLint } from '@typescript-eslint/utils'
  * MDX ESLint configuration
  * Lints MDX files with proper code block handling
  */
-export const mdx: Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('mdx', async () => {
+export const mdx: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('mdx', async () => {
   const pluginMdx = await loadModule<typeof PluginMdx>('eslint-plugin-mdx')
   const tsEslint = await loadDefault<typeof TsEslint>('typescript-eslint')
 

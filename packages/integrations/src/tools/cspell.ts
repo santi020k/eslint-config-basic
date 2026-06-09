@@ -8,7 +8,7 @@ import type { TSESLint } from '@typescript-eslint/utils'
  * CSpell ESLint configuration
  * Enables spell checking in your codebase
  */
-export const cspell: Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('cspell', async () => {
+export const cspell: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('cspell', async () => {
   const pluginCspell = await loadDefault<typeof PluginCspell>('@cspell/eslint-plugin')
 
   return [

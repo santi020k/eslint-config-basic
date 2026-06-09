@@ -7,7 +7,7 @@ import type { TSESLint } from '@typescript-eslint/utils'
  * Tailwind CSS ESLint configuration
  * Enforces Tailwind CSS best practices using eslint-plugin-better-tailwindcss
  */
-export const tailwind: Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('tailwind', async () => {
+export const tailwind: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('tailwind', async () => {
   const pluginTailwind = await loadDefault<PluginWithConfigs<'recommended'>>('eslint-plugin-better-tailwindcss')
 
   return [

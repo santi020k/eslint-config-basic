@@ -9,7 +9,7 @@ import type { TSESLint } from '@typescript-eslint/utils'
  * Testing Library ESLint configuration
  * Provides linting rules for Testing Library usage in tests
  */
-export const testingLibrary: Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('testing-library', async () => {
+export const testingLibrary: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('testing-library', async () => {
   const pluginTestingLibrary = await loadDefault<typeof PluginTestingLibrary>('eslint-plugin-testing-library')
 
   return [

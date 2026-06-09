@@ -6,7 +6,7 @@ import type { TSESLint } from '@typescript-eslint/utils'
  * Playwright ESLint configuration
  * Provides linting rules for Playwright end-to-end test files
  */
-export const playwright: Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('playwright', async () => {
+export const playwright: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('playwright', async () => {
   const pluginPlaywright = await loadDefault<PluginWithConfigs<'flat/recommended'>>('eslint-plugin-playwright')
 
   return [

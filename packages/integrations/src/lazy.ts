@@ -44,10 +44,10 @@ export const loadModule = async <T = unknown>(specifier: string): Promise<T> => 
 export const defineLazyConfig = (
   name: string,
   load: () => ConfigArray | Promise<ConfigArray>
-): Promise<ConfigArray> => {
+): () => Promise<ConfigArray> => {
   let config: ConfigArray | undefined
 
-  const getConfig = async (): Promise<ConfigArray> => {
+  return async (): Promise<ConfigArray> => {
     try {
       config ??= await load()
 
@@ -60,6 +60,4 @@ export const defineLazyConfig = (
       )
     }
   }
-
-  return getConfig()
 }

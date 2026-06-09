@@ -8,7 +8,7 @@ import type { TSESLint } from '@typescript-eslint/utils'
  * Storybook ESLint configuration
  * Provides rules for Storybook story best practices
  */
-export const storybook: Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('storybook', async () => {
+export const storybook: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('storybook', async () => {
   const pluginStorybook = await loadDefault<typeof PluginStorybook>('eslint-plugin-storybook')
 
   return [

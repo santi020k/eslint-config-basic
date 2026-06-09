@@ -8,7 +8,7 @@ import type { TSESLint } from '@typescript-eslint/utils'
  * TOML ESLint configuration
  * Provides rules for TOML file linting
  */
-export const toml: Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('toml', async () => {
+export const toml: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('toml', async () => {
   const pluginToml = await loadDefault<typeof PluginToml>('eslint-plugin-toml')
 
   return [

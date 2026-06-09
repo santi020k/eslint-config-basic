@@ -17,7 +17,7 @@ type GraphqlPlugin = PluginWithConfigs<
  * GraphQL ESLint configuration
  * Provides linting rules for GraphQL schema and operations
  */
-export const graphql: Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('graphql', async () => {
+export const graphql: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('graphql', async () => {
   const graphqlPlugin = await loadDefault<GraphqlPlugin>('@graphql-eslint/eslint-plugin')
 
   return [

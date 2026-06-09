@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import {
   type DetectedFrameworkName,
-  eslintConfig,
+  defineConfig,
   type EslintConfigOptions,
   Extension,
   Format,
@@ -25,14 +25,14 @@ const createBaseOptions = (): EslintConfigOptions => ({
   typescript: false
 })
 
-const countConfigs = (options: EslintConfigOptions): number => eslintConfig(options).length
+const countConfigs = async (options: EslintConfigOptions): Promise<number> => (await defineConfig(options)).length
 
 describe('eslintConfig enum contracts', () => {
-  it('maps all library enums to optional configs', () => {
-    const baseLength = countConfigs(createBaseOptions())
+  it('maps all library enums to optional configs', async () => {
+    const baseLength = await countConfigs(createBaseOptions())
 
     for (const library of Object.values(Library)) {
-      const configLength = countConfigs({
+      const configLength = await countConfigs({
         ...createBaseOptions(),
         libraries: [library]
       })
@@ -41,11 +41,11 @@ describe('eslintConfig enum contracts', () => {
     }
   })
 
-  it('maps all testing enums to optional configs', () => {
-    const baseLength = countConfigs(createBaseOptions())
+  it('maps all testing enums to optional configs', async () => {
+    const baseLength = await countConfigs(createBaseOptions())
 
     for (const testing of Object.values(Testing)) {
-      const configLength = countConfigs({
+      const configLength = await countConfigs({
         ...createBaseOptions(),
         testing: [testing]
       })
@@ -54,11 +54,11 @@ describe('eslintConfig enum contracts', () => {
     }
   })
 
-  it('maps all format enums to optional configs', () => {
-    const baseLength = countConfigs(createBaseOptions())
+  it('maps all format enums to optional configs', async () => {
+    const baseLength = await countConfigs(createBaseOptions())
 
     for (const format of Object.values(Format)) {
-      const configLength = countConfigs({
+      const configLength = await countConfigs({
         ...createBaseOptions(),
         formats: [format]
       })
@@ -67,11 +67,11 @@ describe('eslintConfig enum contracts', () => {
     }
   })
 
-  it('maps all extension enums to optional configs', () => {
-    const baseLength = countConfigs(createBaseOptions())
+  it('maps all extension enums to optional configs', async () => {
+    const baseLength = await countConfigs(createBaseOptions())
 
     for (const extension of Object.values(Extension)) {
-      const configLength = countConfigs({
+      const configLength = await countConfigs({
         ...createBaseOptions(),
         extensions: [extension]
       })
@@ -80,11 +80,11 @@ describe('eslintConfig enum contracts', () => {
     }
   })
 
-  it('maps all tool enums to optional configs', () => {
-    const baseLength = countConfigs(createBaseOptions())
+  it('maps all tool enums to optional configs', async () => {
+    const baseLength = await countConfigs(createBaseOptions())
 
     for (const tool of Object.values(Tool)) {
-      const configLength = countConfigs({
+      const configLength = await countConfigs({
         ...createBaseOptions(),
         tools: [tool]
       })
@@ -112,15 +112,15 @@ describe('eslintConfig framework contracts', () => {
     'vite'
   ]
 
-  it('resolves all framework flags through bundled resolvers', () => {
-    const baseLength = countConfigs(createBaseOptions())
+  it('resolves all framework flags through bundled resolvers', async () => {
+    const baseLength = await countConfigs(createBaseOptions())
 
     for (const frameworkName of frameworkNames) {
       const frameworkConfig = {
         [frameworkName]: true
       } as EslintConfigOptions['frameworks']
 
-      const configLength = countConfigs({
+      const configLength = await countConfigs({
         ...createBaseOptions(),
         frameworks: frameworkConfig
       })

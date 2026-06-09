@@ -9,7 +9,7 @@ import type { TSESLint } from '@typescript-eslint/utils'
  * Unicorn ESLint configuration
  * Modern JavaScript best practices from eslint-plugin-unicorn
  */
-export const unicorn: Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('unicorn', async () => {
+export const unicorn: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('unicorn', async () => {
   const pluginUnicorn = await loadDefault<typeof PluginUnicorn>('eslint-plugin-unicorn')
 
   return [
