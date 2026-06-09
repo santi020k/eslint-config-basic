@@ -76,24 +76,24 @@ import next from '@santi020k/eslint-config-next'
 import react from '@santi020k/eslint-config-react'
 
 export default eslintConfig({
-  // Explicitly enable TypeScript (auto-detected if tsconfig.json exists)
-  typescript: true,
+  extensions: [Extension.Unicorn, Extension.Sonarjs, Extension.Perfectionist],
 
-  // Strict mode: warnings become errors
-  strict: 'ci',
+  formats: [Format.Mdx, Format.Jsonc, Format.Graphql],
 
   // Frameworks (imports are lazy-loaded)
   frameworks: {
-    react,
-    next
+    next,
+    react
   },
 
   // Optional integrations
   libraries: [Library.Tailwind, Library.TanstackQuery],
+  // Strict mode: warnings become errors
+  strict: 'ci',
   testing: [Testing.Vitest, Testing.Playwright, Testing.TestingLibrary],
-  formats: [Format.Mdx, Format.Jsonc, Format.Graphql],
   tools: [Tool.Prettier, Tool.Cspell],
-  extensions: [Extension.Unicorn, Extension.Sonarjs, Extension.Perfectionist]
+  // Explicitly enable TypeScript (auto-detected if tsconfig.json exists)
+  typescript: true
 })
 ```
 
@@ -105,13 +105,13 @@ import { eslintConfig, Preset, Runtime } from '@santi020k/eslint-config-basic'
 export default eslintConfig({
   preset: Preset.Monorepo,
   projects: {
-    'apps/web': {
-      preset: Preset.App,
-      frameworks: { next: true }
-    },
     'apps/api': {
       preset: Preset.Library,
       runtime: Runtime.Node
+    },
+    'apps/web': {
+      frameworks: { next: true },
+      preset: Preset.App
     }
   }
 })

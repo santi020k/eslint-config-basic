@@ -1,7 +1,7 @@
 import type { FlatConfigArray } from '@santi020k/eslint-config-core'
 import type { TSESLint } from '@typescript-eslint/utils'
 
-export type NormalizedStrictMode = 'recommended' | 'ci' | 'pedantic'
+export type NormalizedStrictMode = 'ci' | 'pedantic' | 'recommended'
 
 export const normalizeStrictMode = (strict: boolean | NormalizedStrictMode | undefined): NormalizedStrictMode => {
   if (strict === true) return 'ci'

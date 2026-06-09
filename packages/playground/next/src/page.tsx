@@ -1,26 +1,26 @@
 import React from 'react'
 
 interface Feature {
+  description: string
   id: string
   title: string
-  description: string
 }
 
 const features: Feature[] = [
   {
+    description: 'Uses the latest ESLint 9 Flat Config format.',
     id: 'f1',
-    title: 'Flat Config',
-    description: 'Uses the latest ESLint 9 Flat Config format.'
+    title: 'Flat Config'
   },
   {
+    description: 'Easily combine different rule sets for your project.',
     id: 'f2',
-    title: 'Composable',
-    description: 'Easily combine different rule sets for your project.'
+    title: 'Composable'
   },
   {
+    description: 'Deep integration with TypeScript for robust development.',
     id: 'f3',
-    title: 'Type-Safe',
-    description: 'Deep integration with TypeScript for robust development.'
+    title: 'Type-Safe'
   }
 ]
 

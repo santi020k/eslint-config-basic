@@ -33,35 +33,29 @@ const groups: string[][] = [
 ]
 
 export const rules: TSESLint.Linter.RulesRecord = {
-  'unused-imports/no-unused-imports': 'warn',
-  indent: 'off',
-  'brace-style': 'off',
-  '@stylistic/brace-style': ['warn', '1tbs'],
-  '@stylistic/indent': ['warn', 2],
-  '@stylistic/quote-props': ['warn', 'as-needed'],
-  quotes: 'off',
-  '@stylistic/quotes': ['warn', 'single'],
-  '@stylistic/semi': ['warn', 'never'],
-  'quote-props': 'off',
-  'comma-dangle': 'off',
-  '@stylistic/comma-dangle': ['warn', 'never'],
-  '@stylistic/object-curly-spacing': ['warn', 'always'],
-  '@stylistic/padded-blocks': ['warn', 'never'],
+  '@stylistic/array-element-newline': ['warn', 'consistent'],
   '@stylistic/arrow-parens': ['warn', 'as-needed'],
+  '@stylistic/brace-style': ['warn', '1tbs'],
+  '@stylistic/comma-dangle': ['warn', 'never'],
   '@stylistic/dot-location': ['warn', 'property'],
   '@stylistic/function-call-argument-newline': ['warn', 'never'],
-  '@stylistic/object-property-newline': [
+  '@stylistic/function-paren-newline': ['warn', 'consistent'],
+  '@stylistic/implicit-arrow-linebreak': 'warn',
+  '@stylistic/indent': ['warn', 2],
+  '@stylistic/lines-around-comment': ['error', { allowBlockStart: true, allowClassStart: true, beforeLineComment: false }],
+  '@stylistic/max-len': [
     'warn',
-    { allowAllPropertiesOnSameLine: true }
+    {
+      code: 120,
+      comments: 200,
+      ignoreStrings: true,
+      tabWidth: 2
+    }
   ],
-  '@stylistic/multiline-ternary': ['warn', 'always-multiline'],
+  '@stylistic/max-statements-per-line': ['warn', { max: 1 }],
   '@stylistic/member-delimiter-style': ['error', {
     multiline: {
       delimiter: 'none',
-      requireLast: false
-    },
-    singleline: {
-      delimiter: 'comma',
       requireLast: false
     },
     overrides: {
@@ -71,54 +65,68 @@ export const rules: TSESLint.Linter.RulesRecord = {
           requireLast: false
         }
       }
+    },
+    singleline: {
+      delimiter: 'comma',
+      requireLast: false
     }
   }],
+  '@stylistic/multiline-comment-style': 'off',
+  '@stylistic/multiline-ternary': ['warn', 'always-multiline'],
   '@stylistic/no-extra-parens': 'off',
-  '@stylistic/max-len': [
-    'warn',
-    {
-      code: 120,
-      tabWidth: 2,
-      comments: 200,
-      ignoreStrings: true
-    }
-  ],
-  '@stylistic/max-statements-per-line': ['warn', { max: 1 }],
-  '@stylistic/array-element-newline': ['warn', 'consistent'],
   '@stylistic/no-extra-semi': 'off',
   '@stylistic/no-multi-spaces': 'off',
+  '@stylistic/object-curly-spacing': ['warn', 'always'],
+  '@stylistic/object-property-newline': [
+    'warn',
+    { allowAllPropertiesOnSameLine: true }
+  ],
+  '@stylistic/operator-linebreak': ['error', 'after'],
+  '@stylistic/padded-blocks': ['warn', 'never'],
   '@stylistic/padding-line-between-statements': [
     'warn',
-    { blankLine: 'always', prev: '*', next: '*' },
-    { blankLine: 'any', prev: 'import', next: 'import' },
-    { blankLine: 'any', prev: 'export', next: 'export' },
-    { blankLine: 'any', prev: 'cjs-export', next: 'cjs-export' },
+    { blankLine: 'always', next: '*', prev: '*' },
+    { blankLine: 'any', next: 'import', prev: 'import' },
+    { blankLine: 'any', next: 'export', prev: 'export' },
+    { blankLine: 'any', next: 'cjs-export', prev: 'cjs-export' },
     {
       blankLine: 'always',
-      prev: ['const', 'let', 'var'],
-      next: ['const', 'let', 'var']
+      next: ['const', 'let', 'var'],
+      prev: ['const', 'let', 'var']
     },
     {
       blankLine: 'never',
-      prev: ['singleline-const', 'singleline-let', 'singleline-var'],
-      next: ['singleline-const', 'singleline-let', 'singleline-var']
+      next: ['singleline-const', 'singleline-let', 'singleline-var'],
+      prev: ['singleline-const', 'singleline-let', 'singleline-var']
     },
-    { blankLine: 'always', prev: 'block-like', next: 'const' },
-    { blankLine: 'always', prev: 'const', next: 'block-like' }
+    { blankLine: 'always', next: 'const', prev: 'block-like' },
+    { blankLine: 'always', next: 'block-like', prev: 'const' }
   ],
-  '@stylistic/function-paren-newline': ['warn', 'consistent'],
+  '@stylistic/quote-props': ['warn', 'as-needed'],
+  '@stylistic/quotes': ['warn', 'single'],
+  '@stylistic/semi': ['warn', 'never'],
+  'array-callback-return': 'warn',
   'arrow-body-style': ['warn', 'as-needed'],
-  'prefer-arrow-callback': ['warn', { allowNamedFunctions: true }],
+  'brace-style': 'off',
+  camelcase: 'warn',
+  'comma-dangle': 'off',
+  eqeqeq: 'warn',
   'func-style': ['warn', 'expression', { allowArrowFunctions: true }],
-  'simple-import-sort/imports': [
-    'warn',
-    {
-      groups
-    }
-  ],
+  'import/export': 'warn',
+  'import/no-duplicates': 'warn',
+  indent: 'off',
   'jsx-a11y/alt-text': 'warn',
+  // Node rules
+  'n/no-extraneous-import': 'off',
+  'n/no-missing-import': 'off',
+  'n/no-unsupported-features/node-builtins': 'off',
+  'no-constant-binary-expression': 'warn',
+  'no-constant-condition': 'warn',
   'no-empty': 'warn',
+  'no-fallthrough': 'warn',
   'no-nested-ternary': 'warn',
+  'no-new': 'warn',
+  'no-unassigned-vars': 'error',
   'no-undef': 'warn',
   'no-unused-vars': ['error', {
     args: 'after-used',
@@ -127,41 +135,33 @@ export const rules: TSESLint.Linter.RulesRecord = {
     vars: 'all',
     varsIgnorePattern: '^_'
   }],
-  'no-unassigned-vars': 'error',
-  'no-useless-assignment': 'error',
-  'preserve-caught-error': 'error',
   'no-use-before-define': 'warn',
-  'no-void': 'warn',
-  camelcase: 'warn',
-  'array-callback-return': 'warn',
-  'no-fallthrough': 'warn',
-  eqeqeq: 'warn',
-  'no-constant-binary-expression': 'warn',
-  '@stylistic/lines-around-comment': ['error', { allowClassStart: true, beforeLineComment: false, allowBlockStart: true }],
-  'import/no-duplicates': 'warn',
-  'valid-typeof': 'warn',
-  'no-constant-condition': 'warn',
-  '@stylistic/implicit-arrow-linebreak': 'warn',
-  'import/export': 'warn',
+  'no-useless-assignment': 'error',
+  'no-useless-constructor': 'warn',
   'no-useless-escape': 'warn',
   'no-useless-return': 'warn',
-  'prefer-promise-reject-errors': 'warn',
-  'no-useless-constructor': 'warn',
-  'no-new': 'warn',
-  'prefer-regex-literals': 'warn',
-  '@stylistic/multiline-comment-style': 'off',
-  'space-before-function-paren': 'off',
+  'no-void': 'warn',
   'operator-linebreak': 'off',
-  '@stylistic/operator-linebreak': ['error', 'after'],
-
-  // Node rules
-  'n/no-extraneous-import': 'off',
-  'n/no-unsupported-features/node-builtins': 'off',
-  'n/no-missing-import': 'off',
-
+  'prefer-arrow-callback': ['warn', { allowNamedFunctions: true }],
+  'prefer-promise-reject-errors': 'warn',
+  'prefer-regex-literals': 'warn',
+  'preserve-caught-error': 'error',
   // Promise rules
   'promise/always-return': 'warn',
-  'promise/catch-or-return': 'warn'
+  'promise/catch-or-return': 'warn',
+  'quote-props': 'off',
+
+  quotes: 'off',
+  'simple-import-sort/imports': [
+    'warn',
+    {
+      groups
+    }
+  ],
+  'space-before-function-paren': 'off',
+
+  'unused-imports/no-unused-imports': 'warn',
+  'valid-typeof': 'warn'
 }
 
 export { groups }

@@ -12,7 +12,6 @@ import type { TSESLint } from '@typescript-eslint/utils'
 export const vueConfig: TSESLint.FlatConfig.ConfigArray = [
   ...(pluginVue.configs['flat/recommended'] as TSESLint.FlatConfig.ConfigArray),
   {
-    name: 'eslint-config-vue/rules',
     files: ['**/*.vue'],
     languageOptions: {
       parser: vueParser,
@@ -21,16 +20,17 @@ export const vueConfig: TSESLint.FlatConfig.ConfigArray = [
         sourceType: 'module'
       }
     },
+    name: 'eslint-config-vue/rules',
     rules
   },
   {
+    files: ['**/*.vue/*.ts', '**/*.vue/*.tsx'],
     // Disable rules that cause false positives in Vue virtual script blocks.
     // Type-checked rule disabling is handled by @santi020k/eslint-config-typescript.
     name: 'eslint-config-vue/virtual-script-rules',
-    files: ['**/*.vue/*.ts', '**/*.vue/*.tsx'],
     rules: {
-      'no-unused-expressions': 'off',
-      '@typescript-eslint/no-unused-expressions': 'off'
+      '@typescript-eslint/no-unused-expressions': 'off',
+      'no-unused-expressions': 'off'
     }
   }
 ]

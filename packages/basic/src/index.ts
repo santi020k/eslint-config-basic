@@ -74,9 +74,6 @@ export {
   Tool
 } from '@santi020k/eslint-config-core'
 
-// Re-export framework configs
-export { tsConfig, typescriptConfig } from '@santi020k/eslint-config-typescript'
-
 // Re-export integrations
 export {
   bestPractices,
@@ -107,6 +104,9 @@ export {
   vitest,
   yaml
 } from '@santi020k/eslint-config-integrations'
+
+// Re-export framework configs
+export { tsConfig, typescriptConfig } from '@santi020k/eslint-config-typescript'
 
 const toUniqueArray = <T>(values: T[]): T[] => [...new Set(values)]
 
@@ -182,14 +182,14 @@ const resolveDetectionOptions = (
   detection: EslintConfigOptions['detection']
 ): Required<DetectionOptions> => {
   const defaults = {
-    typescript: true,
+    formats: true,
     frameworks: true,
     libraries: true,
-    testing: true,
-    formats: true,
-    tools: true,
+    nextMode: true,
     runtime: true,
-    nextMode: true
+    testing: true,
+    tools: true,
+    typescript: true
   }
 
   if (detection === false) {
@@ -216,15 +216,15 @@ const applyDetectionControls = (
 
   return {
     ...detected,
-    typescript: controls.typescript ? detected.typescript : false,
     detectedFrameworks: controls.frameworks ? detected.detectedFrameworks : [],
-    libraries: controls.libraries ? detected.libraries : [],
-    testing: controls.testing ? detected.testing : [],
     formats: controls.formats ? detected.formats : [],
-    tools: controls.tools ? detected.tools : [],
-    runtime: controls.runtime ? detected.runtime : undefined,
+    libraries: controls.libraries ? detected.libraries : [],
     nextMode: controls.nextMode ? detected.nextMode : undefined,
-    preset: controls.typescript && controls.runtime ? detected.preset : undefined
+    preset: controls.typescript && controls.runtime ? detected.preset : undefined,
+    runtime: controls.runtime ? detected.runtime : undefined,
+    testing: controls.testing ? detected.testing : [],
+    tools: controls.tools ? detected.tools : [],
+    typescript: controls.typescript ? detected.typescript : false
   }
 }
 
@@ -314,35 +314,35 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     {}
 
   const {
-    typescript = (options?.typescript ?? presetDefaults.typescript ?? detected.typescript ?? false),
-    libraries = mergeArrayOption(
-      detected.libraries ?? [], presetDefaults.libraries, options?.libraries, optionMergeStrategy
-    ),
-    testing = mergeArrayOption(
-      detected.testing ?? [], presetDefaults.testing, options?.testing, optionMergeStrategy
+    extensions: configuredExtensions = mergeArrayOption(
+      detected.extensions ?? [], presetDefaults.extensions, options?.extensions, optionMergeStrategy
     ),
     formats = mergeArrayOption(
       detected.formats ?? [], presetDefaults.formats, options?.formats, optionMergeStrategy
     ),
+    frameworks = mergeFrameworkOption(
+      frameworkDefaults, presetDefaults.frameworks, options?.frameworks, optionMergeStrategy
+    ),
+    libraries = mergeArrayOption(
+      detected.libraries ?? [], presetDefaults.libraries, options?.libraries, optionMergeStrategy
+    ),
+    nextMode = (options?.nextMode ?? presetDefaults.nextMode ?? detected.nextMode ?? NextMode.Pages),
+    runtime = (options?.runtime ?? presetDefaults.runtime ?? detected.runtime ?? Runtime.Universal),
+    settings = options?.settings ?? detected.settings ?? [],
+    strict = getStrictMode(options?.strict, presetDefaults.strict),
+    testing = mergeArrayOption(
+      detected.testing ?? [], presetDefaults.testing, options?.testing, optionMergeStrategy
+    ),
     tools = mergeArrayOption(
       detected.tools ?? [], presetDefaults.tools, options?.tools, optionMergeStrategy
     ),
-    extensions: configuredExtensions = mergeArrayOption(
-      detected.extensions ?? [], presetDefaults.extensions, options?.extensions, optionMergeStrategy
-    ),
-    settings = options?.settings ?? detected.settings ?? [],
-    strict = getStrictMode(options?.strict, presetDefaults.strict),
-    runtime = (options?.runtime ?? presetDefaults.runtime ?? detected.runtime ?? Runtime.Universal),
-    nextMode = (options?.nextMode ?? presetDefaults.nextMode ?? detected.nextMode ?? NextMode.Pages),
-    frameworks = mergeFrameworkOption(
-      frameworkDefaults, presetDefaults.frameworks, options?.frameworks, optionMergeStrategy
-    )
+    typescript = (options?.typescript ?? presetDefaults.typescript ?? detected.typescript ?? false)
   } = options ?? {}
 
   const rootDir = detectRootDir ?? process.cwd()
   const tsconfigRootDir = resolveTsconfigRootDir(rootDir, typescript, options?.tsconfigRootDir)
   const extensions = applyStrictProfileDefaults(configuredExtensions, strict)
-  const resolvedFrameworks = frameworks
+  const resolvedFrameworks = { ...frameworks }
 
   if ((resolvedFrameworks.next || resolvedFrameworks.expo || resolvedFrameworks.remix) && !resolvedFrameworks.react) {
     resolvedFrameworks.react = true
@@ -368,9 +368,9 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
 
   const astroParam = resolveFramework('astro', resolvedFrameworks.astro, {
     hasReact,
-    hasVue,
+    hasSolid,
     hasSvelte,
-    hasSolid
+    hasVue
   })
 
   const expoParam = resolveFramework('expo', resolvedFrameworks.expo)
@@ -390,15 +390,15 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
 
   const defaultIgnores = useDefaultIgnores ?
     [{
-      name: 'eslint-config-basic/default-ignores',
-      ignores: DEFAULT_IGNORES
+      ignores: DEFAULT_IGNORES,
+      name: 'eslint-config-basic/default-ignores'
     } as TSESLint.FlatConfig.Config] :
     []
 
   const userIgnores = options?.ignores?.length ?
     [{
-      name: 'eslint-config-basic/ignores',
-      ignores: options.ignores
+      ignores: options.ignores,
+      name: 'eslint-config-basic/ignores'
     } as TSESLint.FlatConfig.Config] :
     []
 
@@ -412,28 +412,28 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     // Global TSConfig Root Dir fix
     ...(tsconfigRootDir ?
       [{
-        name: 'eslint-config-basic/tsconfig-root-dir',
         languageOptions: {
           parserOptions: {
             tsconfigRootDir
           }
-        }
+        },
+        name: 'eslint-config-basic/tsconfig-root-dir'
       }] :
       []),
 
     {
-      name: 'eslint-config-basic/commonjs',
       files: ['**/*.cjs', '**/*.cts'],
       languageOptions: {
-        sourceType: 'commonjs',
         globals: {
-          module: 'readonly',
-          exports: 'readonly',
-          require: 'readonly',
           __dirname: 'readonly',
-          __filename: 'readonly'
-        }
-      }
+          __filename: 'readonly',
+          exports: 'readonly',
+          module: 'readonly',
+          require: 'readonly'
+        },
+        sourceType: 'commonjs'
+      },
+      name: 'eslint-config-basic/commonjs'
     },
 
     // Core JS config with runtime-aware globals
@@ -463,8 +463,8 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     ...(resolvedFrameworks.next && nextMode === NextMode.AppRouter ?
       [
         {
-          name: 'eslint-config-next/app-router-overrides',
           files: ['app/**/*.{ts,tsx}', 'src/**/*.{ts,tsx}'],
+          name: 'eslint-config-next/app-router-overrides',
           rules: {
             '@next/next/no-html-link-for-pages': 'off'
           }
@@ -482,8 +482,8 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
         name: 'eslint-config-basic/tailwind-settings',
         settings: {
           'better-tailwindcss': {
-            entryPoint: tailwindEntryPoint,
-            detectComponentClasses: true
+            detectComponentClasses: true,
+            entryPoint: tailwindEntryPoint
           }
         }
       } as TSESLint.FlatConfig.Config] :
@@ -495,22 +495,22 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
 
   if (process.env.ESLINT_BASIC_DEBUG) {
     console.info('[ESLint Basic] Resolved options:', {
-      detectRootDir: detectRootDir ?? process.cwd(),
-      tsconfigRootDir,
-      preset,
-      optionMergeStrategy,
       autoFrameworks,
-      runtime,
-      nextMode,
-      typescript,
+      detectRootDir: detectRootDir ?? process.cwd(),
+      extensions: uniqueExtensions,
+      formats: uniqueFormats,
       frameworks: Object.keys(resolvedFrameworks).filter(
         key => Boolean((resolvedFrameworks as Record<string, unknown>)[key])
       ),
       libraries: uniqueLibraries,
+      nextMode,
+      optionMergeStrategy,
+      preset,
+      runtime,
       testing: uniqueTesting,
-      formats: uniqueFormats,
       tools: uniqueTools,
-      extensions: uniqueExtensions
+      tsconfigRootDir,
+      typescript
     })
   }
 
@@ -521,8 +521,8 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
       const scopedConfigs = eslintConfig({
         ...projectOptions,
         detectRootDir: projectOptions.detectRootDir ?? projectRoot,
-        tsconfigRootDir: projectOptions.tsconfigRootDir ?? projectRoot,
-        projects: undefined
+        projects: undefined,
+        tsconfigRootDir: projectOptions.tsconfigRootDir ?? projectRoot
       })
 
       return scopedConfigs.map(config => scopeConfigToProject(config, projectPath))
@@ -531,3 +531,8 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
 
   return applyStrictMode([...configs, ...projectConfigs], strict)
 }
+
+/**
+ * Alias for `eslintConfig()` that reads naturally in `eslint.config.*` files.
+ */
+export const defineConfig = eslintConfig

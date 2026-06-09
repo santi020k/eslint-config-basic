@@ -27,9 +27,9 @@ export const reactConfig: TSESLint.FlatConfig.ConfigArray = [
   // Use type assertion to handle @eslint/compat type mismatch
   ...(fixupConfigRules(pluginReactConfig as unknown as Parameters<typeof fixupConfigRules>[0]).map(react => ({
     ...react,
-    name: 'eslint-config-react/recommended',
     files: GLOB_JS_TS,
     languageOptions,
+    name: 'eslint-config-react/recommended',
     settings: {
       react: {
         version: 'detect'
@@ -37,12 +37,12 @@ export const reactConfig: TSESLint.FlatConfig.ConfigArray = [
     }
   })) as unknown as TSESLint.FlatConfig.ConfigArray),
   {
+    files: GLOB_JS_TS,
+    languageOptions,
     name: 'eslint-config-react/custom',
     plugins: {
       'react-hooks': pluginReactHooks
     },
-    languageOptions,
-    files: GLOB_JS_TS,
     rules: {
       ...pluginReactHooks.configs.recommended.rules,
       ...rules

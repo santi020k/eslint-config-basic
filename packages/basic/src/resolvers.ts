@@ -56,69 +56,69 @@ export const resolveFramework = (
  */
 export const resolvePreset = (preset: Preset): Partial<EslintConfigOptions> => {
   switch (preset) {
-    case Preset.Basic:
-      return { runtime: Runtime.Universal }
-
-    case Preset.Node:
+    case Preset.All:
       return {
-        typescript: true,
-        runtime: Runtime.Node
-      }
-
-    case Preset.Browser:
-      return {
-        typescript: true,
-        runtime: Runtime.Browser
-      }
-
-    case Preset.Worker:
-      return {
-        typescript: true,
-        runtime: Runtime.Worker
-      }
-
-    case Preset.Library:
-      return {
-        typescript: true,
-        runtime: Runtime.Node,
-        tools: [Tool.Prettier],
-        extensions: [Extension.BestPractices]
+        extensions: Object.values(Extension),
+        formats: Object.values(Format),
+        libraries: Object.values(Library),
+        runtime: Runtime.Universal,
+        testing: Object.values(Testing),
+        tools: Object.values(Tool),
+        typescript: true
       }
 
     case Preset.App:
       return {
-        typescript: true,
         runtime: Runtime.Browser,
+        testing: [Testing.Vitest],
         tools: [Tool.Prettier],
-        testing: [Testing.Vitest]
+        typescript: true
+      }
+
+    case Preset.Basic:
+      return { runtime: Runtime.Universal }
+
+    case Preset.Browser:
+      return {
+        runtime: Runtime.Browser,
+        typescript: true
       }
 
     case Preset.CI:
       return {
-        typescript: true,
-        runtime: Runtime.Universal,
-        tools: [Tool.Prettier],
         extensions: [Extension.BestPractices],
-        strict: 'ci'
+        runtime: Runtime.Universal,
+        strict: 'ci',
+        tools: [Tool.Prettier],
+        typescript: true
+      }
+
+    case Preset.Library:
+      return {
+        extensions: [Extension.BestPractices],
+        runtime: Runtime.Node,
+        tools: [Tool.Prettier],
+        typescript: true
       }
 
     case Preset.Monorepo:
       return {
-        typescript: true,
+        extensions: [Extension.BestPractices],
         runtime: Runtime.Universal,
         tools: [Tool.Prettier],
-        extensions: [Extension.BestPractices]
+        typescript: true
       }
 
-    case Preset.All:
+    case Preset.Node:
       return {
-        typescript: true,
-        libraries: Object.values(Library),
-        tools: Object.values(Tool),
-        testing: Object.values(Testing),
-        formats: Object.values(Format),
-        extensions: Object.values(Extension),
-        runtime: Runtime.Universal
+        runtime: Runtime.Node,
+        typescript: true
+      }
+
+    case Preset.Worker:
+      return {
+        runtime: Runtime.Worker,
+        typescript: true
       }
 
     default:

@@ -40,8 +40,8 @@ import react from '@santi020k/eslint-config-react'
 
 export default eslintConfig({
   frameworks: {
-    react,
-    next
+    next,
+    react
   }
 })
 ```
@@ -90,27 +90,27 @@ Use these options when migrating larger repos:
 import { eslintConfig } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
-  // monorepo/project root used for package + framework detection
-  detectRootDir: process.cwd(),
-
-  // parser/projectService root used by TypeScript ESLint internals
-  tsconfigRootDir: process.cwd(),
-
-  // default is 'merge' (detected + preset + explicit)
-  optionMergeStrategy: 'merge',
-
   // disable if you want framework activation to be manual-only
   autoFrameworks: true,
 
   // disable all detection or tune specific detection categories
   detection: {
+    formats: true,
     frameworks: true,
     libraries: true,
+    runtime: true,
     testing: true,
-    formats: true,
-    tools: true,
-    runtime: true
-  }
+    tools: true
+  },
+
+  // monorepo/project root used for package + framework detection
+  detectRootDir: process.cwd(),
+
+  // default is 'merge' (detected + preset + explicit)
+  optionMergeStrategy: 'merge',
+
+  // parser/projectService root used by TypeScript ESLint internals
+  tsconfigRootDir: process.cwd()
 })
 ```
 
@@ -138,13 +138,13 @@ import { eslintConfig, Preset, Runtime } from '@santi020k/eslint-config-basic'
 export default eslintConfig({
   preset: Preset.Monorepo,
   projects: {
-    'apps/web': {
-      preset: Preset.App,
-      frameworks: { next: true }
-    },
     'apps/api': {
       preset: Preset.Library,
       runtime: Runtime.Node
+    },
+    'apps/web': {
+      frameworks: { next: true },
+      preset: Preset.App
     }
   }
 })

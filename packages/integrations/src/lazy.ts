@@ -4,17 +4,19 @@ import type { TSESLint } from '@typescript-eslint/utils'
 
 const require = createRequire(import.meta.url)
 
-type ConfigArray = TSESLint.FlatConfig.ConfigArray
+export type ConfigWithRules = FlatConfig & { rules?: FlatRules }
 
-type FlatConfig = TSESLint.FlatConfig.Config
+export type FlatParser = NonNullable<FlatConfig['languageOptions']>['parser']
 
 export type FlatPlugin = NonNullable<FlatConfig['plugins']>[string]
-export type FlatParser = NonNullable<FlatConfig['languageOptions']>['parser']
 export type FlatRules = NonNullable<FlatConfig['rules']>
-export type ConfigWithRules = FlatConfig & { rules?: FlatRules }
 export type PluginWithConfigs<ConfigName extends string = string> = FlatPlugin & {
   configs: Record<ConfigName, ConfigWithRules>
 }
+
+type ConfigArray = TSESLint.FlatConfig.ConfigArray
+
+type FlatConfig = TSESLint.FlatConfig.Config
 
 const getErrorMessage = (error: unknown): string => error instanceof Error ?
   error.message :

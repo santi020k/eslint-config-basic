@@ -2,7 +2,6 @@ import { eslintConfig, Format, Testing } from '@santi020k/eslint-config-basic'
 
 export default [
   {
-    name: 'local-global-ignores',
     ignores: [
       'dist/*',
       'packages/*/dist/*',
@@ -16,15 +15,16 @@ export default [
       'packages/docs/test-results/**',
       'typedoc.config.mjs',
       'typedoc.markdown.mjs'
-    ]
+    ],
+    name: 'local-global-ignores'
   },
   ...eslintConfig({
-    typescript: true,
-    tsconfigRootDir: import.meta.dirname,
-    formats: [Format.Mdx, Format.Markdown],
-    testing: [Testing.Vitest],
-    libraries: [],
     // Root lists tailwindcss for tooling; do not enable Tailwind ESLint for the whole monorepo.
-    detection: { libraries: false }
+    detection: { libraries: false },
+    formats: [Format.Mdx, Format.Markdown],
+    libraries: [],
+    testing: [Testing.Vitest],
+    tsconfigRootDir: import.meta.dirname,
+    typescript: true
   })
 ]

@@ -8,7 +8,7 @@ import {
 import type { TSESLint } from '@typescript-eslint/utils'
 
 type GraphqlPlugin = PluginWithConfigs<
-  'flat/schema-recommended' | 'flat/operations-recommended'
+  'flat/operations-recommended' | 'flat/schema-recommended'
 > & {
   parser: FlatParser
 }
@@ -22,11 +22,11 @@ export const graphql: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('graphq
 
   return [
     {
-      name: 'integrations/graphql/schema',
       files: ['**/*.schema.graphql', '**/*.schema.gql', '**/schema.graphql', '**/schema.gql'],
       languageOptions: {
         parser: graphqlPlugin.parser
       },
+      name: 'integrations/graphql/schema',
       plugins: {
         '@graphql-eslint': graphqlPlugin
       },
@@ -36,12 +36,12 @@ export const graphql: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('graphq
       }
     },
     {
-      name: 'integrations/graphql/operations',
       files: ['**/*.graphql', '**/*.gql'],
       ignores: ['**/*.schema.graphql', '**/*.schema.gql', '**/schema.graphql', '**/schema.gql'],
       languageOptions: {
         parser: graphqlPlugin.parser
       },
+      name: 'integrations/graphql/operations',
       plugins: {
         '@graphql-eslint': graphqlPlugin
       },

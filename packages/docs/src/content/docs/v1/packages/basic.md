@@ -41,14 +41,14 @@ import { eslintConfig, Extension, Library, Testing, Tool } from '@santi020k/esli
 import react from '@santi020k/eslint-config-react'
 
 export default eslintConfig({
-  typescript: true,
+  extensions: [Extension.Unicorn],
   frameworks: {
     react
   },
   libraries: [Library.Tailwind],
   testing: [Testing.Vitest],
   tools: [Tool.Prettier],
-  extensions: [Extension.Unicorn]
+  typescript: true
 })
 ```
 

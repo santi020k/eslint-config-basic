@@ -23,10 +23,10 @@ Most projects use the main package and enable integrations through enums rather 
 import { eslintConfig, Extension, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
+  extensions: [Extension.Unicorn],
   libraries: [Library.Tailwind],
   testing: [Testing.Vitest],
-  tools: [Tool.Prettier],
-  extensions: [Extension.Unicorn]
+  tools: [Tool.Prettier]
 })
 ```
 

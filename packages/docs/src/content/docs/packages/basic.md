@@ -29,13 +29,13 @@ export default eslintConfig()
 import { eslintConfig, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
-  typescript: true,
   frameworks: {
     react: true
   },
   libraries: [Library.Tailwind],
   testing: [Testing.Vitest],
-  tools: [Tool.Prettier]
+  tools: [Tool.Prettier],
+  typescript: true
 })
 ```
 

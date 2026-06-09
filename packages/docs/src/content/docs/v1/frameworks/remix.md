@@ -39,11 +39,11 @@ import react from '@santi020k/eslint-config-react'
 import remix from '@santi020k/eslint-config-remix'
 
 export default eslintConfig({
-  typescript: true,
   frameworks: {
     react,
     remix
-  }
+  },
+  typescript: true
 })
 ```
 

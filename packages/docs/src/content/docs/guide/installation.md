@@ -50,11 +50,11 @@ Use booleans when you want to enable framework configs manually:
 import { eslintConfig } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
-  typescript: true,
   frameworks: {
-    react: true,
-    next: true
-  }
+    next: true,
+    react: true
+  },
+  typescript: true
 })
 ```
 

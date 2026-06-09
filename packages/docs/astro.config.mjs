@@ -16,19 +16,18 @@ const socialImage = new URL('/cover.webp', site).toString()
 
 const sidebar = [
   {
-    label: 'Getting Started',
     items: [
       { label: 'Introduction', link: '/' },
       { label: 'Quick Start', slug: 'guide/getting-started' },
       { label: 'Installation', slug: 'guide/installation' },
       { label: 'Configuration', slug: 'guide/configuration' },
-      { label: 'Migrate from v1', slug: 'guide/migration-v1-to-v2', badge: { text: 'Migration', variant: 'tip' } }
-    ]
+      { badge: { text: 'Migration', variant: 'tip' }, label: 'Migrate from v1', slug: 'guide/migration-v1-to-v2' }
+    ],
+    label: 'Getting Started'
   },
   {
-    label: 'Frameworks',
     items: [
-      { label: 'TypeScript', slug: 'frameworks/typescript', badge: { text: 'Core', variant: 'success' } },
+      { badge: { text: 'Core', variant: 'success' }, label: 'TypeScript', slug: 'frameworks/typescript' },
       { label: 'React', slug: 'frameworks/react' },
       { label: 'Next.js', slug: 'frameworks/next' },
       { label: 'Astro', slug: 'frameworks/astro' },
@@ -41,10 +40,10 @@ const sidebar = [
       { label: 'Expo', slug: 'frameworks/expo' },
       { label: 'Qwik', slug: 'frameworks/qwik' },
       { label: 'Remix', slug: 'frameworks/remix' }
-    ]
+    ],
+    label: 'Frameworks'
   },
   {
-    label: 'Tooling & Integrations',
     items: [
       { label: 'Ecosystem Overview', slug: 'tooling/overview' },
       { label: 'Testing Tools', slug: 'tooling/testing' },
@@ -52,22 +51,22 @@ const sidebar = [
       { label: 'Libraries', slug: 'tooling/libraries' },
       { label: 'Utilities', slug: 'tooling/tools' },
       { label: 'Extensions', slug: 'tooling/extensions' }
-    ]
+    ],
+    label: 'Tooling & Integrations'
   },
   {
-    label: 'Architecture & API',
     items: [
-      { label: 'Core Config', slug: 'packages/basic', badge: { text: 'Main', variant: 'note' } },
+      { badge: { text: 'Main', variant: 'note' }, label: 'Core Config', slug: 'packages/basic' },
       { label: 'Base Rules', slug: 'packages/core' },
       { label: 'Integrations', slug: 'packages/integrations' },
       { label: 'Playground', slug: 'packages/playground' },
       { label: 'Testing Suite', slug: 'packages/tests' },
       { label: 'API Reference', slug: 'api' },
       { label: 'Generated Types', slug: 'api/reference' }
-    ]
+    ],
+    label: 'Architecture & API'
   },
   {
-    label: 'Legacy (v1)',
     collapsed: true,
     items: [
       { label: 'Overview', slug: 'v1' },
@@ -75,7 +74,6 @@ const sidebar = [
       { label: 'Installation', slug: 'v1/guide/installation' },
       { label: 'Configuration', slug: 'v1/guide/configuration' },
       {
-        label: 'Frameworks',
         collapsed: true,
         items: [
           { label: 'TypeScript', slug: 'v1/frameworks/typescript' },
@@ -91,10 +89,10 @@ const sidebar = [
           { label: 'Expo', slug: 'v1/frameworks/expo' },
           { label: 'Qwik', slug: 'v1/frameworks/qwik' },
           { label: 'Remix', slug: 'v1/frameworks/remix' }
-        ]
+        ],
+        label: 'Frameworks'
       },
       {
-        label: 'Tooling',
         collapsed: true,
         items: [
           { label: 'Overview', slug: 'v1/tooling/overview' },
@@ -103,10 +101,10 @@ const sidebar = [
           { label: 'Formats', slug: 'v1/tooling/formats' },
           { label: 'Tools', slug: 'v1/tooling/tools' },
           { label: 'Extensions', slug: 'v1/tooling/extensions' }
-        ]
+        ],
+        label: 'Tooling'
       },
       {
-        label: 'Packages and API',
         collapsed: true,
         items: [
           { label: 'Basic', slug: 'v1/packages/basic' },
@@ -116,66 +114,68 @@ const sidebar = [
           { label: 'Tests', slug: 'v1/packages/tests' },
           { label: 'API Overview', slug: 'v1/api' },
           { label: 'Generated Reference', slug: 'v1/api/reference' }
-        ]
+        ],
+        label: 'Packages and API'
       }
-    ]
+    ],
+    label: 'Legacy (v1)'
   }
 ]
 
 export default defineConfig({
-  site,
   base,
   integrations: [
     starlight({
-      title: siteName,
+      credits: false,
+      customCss: ['./src/styles/starlight.css'],
       description: siteDescription,
-      favicon: '/favicon.svg',
-      logo: {
-        light: './src/assets/logo-santi020k.svg',
-        dark: './src/assets/logo-santi020k-dark.svg',
-        alt: 'Santi020k ESLint Config',
-        replacesTitle: true
-      },
-      social: [
-        {
-          icon: 'github',
-          label: 'GitHub',
-          href: 'https://github.com/santi020k/eslint-config-basic'
-        }
-      ],
       editLink: {
         baseUrl: 'https://github.com/santi020k/eslint-config-basic/edit/main/packages/docs/'
       },
-      tableOfContents: {
-        minHeadingLevel: 2,
-        maxHeadingLevel: 3
-      },
-      lastUpdated: true,
-      credits: false,
-      customCss: ['./src/styles/starlight.css'],
-      sidebar,
+      favicon: '/favicon.svg',
       head: [
-        { tag: 'meta', attrs: { name: 'application-name', content: siteName } },
-        { tag: 'meta', attrs: { name: 'author', content: 'Santiago Molina' } },
-        { tag: 'meta', attrs: { name: 'keywords', content: siteKeywords } },
-        { tag: 'meta', attrs: { name: 'theme-color', content: '#6319BE' } },
-        { tag: 'meta', attrs: { property: 'og:image', content: socialImage } },
-        { tag: 'meta', attrs: { property: 'og:image:alt', content: 'Santi020k ESLint cover artwork' } },
-        { tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' } },
-        { tag: 'meta', attrs: { name: 'twitter:image', content: socialImage } },
+        { attrs: { content: siteName, name: 'application-name' }, tag: 'meta' },
+        { attrs: { content: 'Santiago Molina', name: 'author' }, tag: 'meta' },
+        { attrs: { content: siteKeywords, name: 'keywords' }, tag: 'meta' },
+        { attrs: { content: '#6319BE', name: 'theme-color' }, tag: 'meta' },
+        { attrs: { content: socialImage, property: 'og:image' }, tag: 'meta' },
+        { attrs: { content: 'Santi020k ESLint cover artwork', property: 'og:image:alt' }, tag: 'meta' },
+        { attrs: { content: 'summary_large_image', name: 'twitter:card' }, tag: 'meta' },
+        { attrs: { content: socialImage, name: 'twitter:image' }, tag: 'meta' },
         {
-          tag: 'script',
           attrs: { is: 'inline' },
           content:
-            '(() => { const HIDE_CLASS = \'s2k-version-hidden\'; const applyVersionSidebar = () => { const isV1 = window.location.pathname.startsWith(\'/v1/\'); document.documentElement.dataset.docsVersion = isV1 ? \'v1\' : \'v2\'; for (const section of document.querySelectorAll(\'.sidebar-content details\')) { const summary = section.querySelector(\':scope > summary\'); if (!summary) continue; const label = summary.textContent?.trim(); const isCurrentGroup = label === \'Current Docs (v2)\'; const isFrozenGroup = label === \'Frozen Docs (v1)\'; if (!isCurrentGroup && !isFrozenGroup) continue; const shouldHide = (isCurrentGroup && isV1) || (isFrozenGroup && !isV1); section.classList.toggle(HIDE_CLASS, shouldHide); section.setAttribute(\'aria-hidden\', shouldHide ? \'true\' : \'false\'); } }; if (document.readyState === \'loading\') { document.addEventListener(\'DOMContentLoaded\', applyVersionSidebar, { once: true }); } else { applyVersionSidebar(); } document.addEventListener(\'astro:page-load\', applyVersionSidebar); })();'
+            '(() => { const HIDE_CLASS = \'s2k-version-hidden\'; const applyVersionSidebar = () => { const isV1 = window.location.pathname.startsWith(\'/v1/\'); document.documentElement.dataset.docsVersion = isV1 ? \'v1\' : \'v2\'; for (const section of document.querySelectorAll(\'.sidebar-content details\')) { const summary = section.querySelector(\':scope > summary\'); if (!summary) continue; const label = summary.textContent?.trim(); const isCurrentGroup = label === \'Current Docs (v2)\'; const isFrozenGroup = label === \'Frozen Docs (v1)\'; if (!isCurrentGroup && !isFrozenGroup) continue; const shouldHide = (isCurrentGroup && isV1) || (isFrozenGroup && !isV1); section.classList.toggle(HIDE_CLASS, shouldHide); section.setAttribute(\'aria-hidden\', shouldHide ? \'true\' : \'false\'); } }; if (document.readyState === \'loading\') { document.addEventListener(\'DOMContentLoaded\', applyVersionSidebar, { once: true }); } else { applyVersionSidebar(); } document.addEventListener(\'astro:page-load\', applyVersionSidebar); })();',
+          tag: 'script'
         },
         {
-          tag: 'script',
           attrs: { is: 'inline' },
           content:
-            '(() => { const VERSION_ID = \'s2k-version-switcher\'; const getVersionTarget = version => { const { pathname, search, hash } = window.location; const isV1 = pathname.startsWith(\'/v1/\'); if (version === \'v1\') { const nextPath = isV1 ? pathname : `/v1${pathname === \'/\' ? \'/\' : pathname}`; return `${nextPath}${search}${hash}`; } const nextPath = isV1 ? pathname.replace(/^\\/v1/, \'\') || \'/\' : pathname; return `${nextPath}${search}${hash}`; }; const ensureSwitcher = () => { const header = document.querySelector(\'.header .right-group\'); if (!header) return; let wrapper = document.getElementById(VERSION_ID); if (!wrapper) { wrapper = document.createElement(\'label\'); wrapper.id = VERSION_ID; wrapper.className = \'s2k-version-switcher\'; wrapper.setAttribute(\'aria-label\', \'Select docs version\'); const select = document.createElement(\'select\'); select.innerHTML = \'<option value="v2">v2</option><option value="v1">v1</option>\'; select.addEventListener(\'change\', () => { window.location.assign(getVersionTarget(select.value)); }); wrapper.appendChild(select); header.prepend(wrapper); } const select = wrapper.querySelector(\'select\'); if (!select) return; select.value = window.location.pathname.startsWith(\'/v1/\') ? \'v1\' : \'v2\'; }; if (document.readyState === \'loading\') { document.addEventListener(\'DOMContentLoaded\', ensureSwitcher, { once: true }); } else { ensureSwitcher(); } document.addEventListener(\'astro:page-load\', ensureSwitcher); })();'
+            '(() => { const VERSION_ID = \'s2k-version-switcher\'; const getVersionTarget = version => { const { pathname, search, hash } = window.location; const isV1 = pathname.startsWith(\'/v1/\'); if (version === \'v1\') { const nextPath = isV1 ? pathname : `/v1${pathname === \'/\' ? \'/\' : pathname}`; return `${nextPath}${search}${hash}`; } const nextPath = isV1 ? pathname.replace(/^\\/v1/, \'\') || \'/\' : pathname; return `${nextPath}${search}${hash}`; }; const ensureSwitcher = () => { const header = document.querySelector(\'.header .right-group\'); if (!header) return; let wrapper = document.getElementById(VERSION_ID); if (!wrapper) { wrapper = document.createElement(\'label\'); wrapper.id = VERSION_ID; wrapper.className = \'s2k-version-switcher\'; wrapper.setAttribute(\'aria-label\', \'Select docs version\'); const select = document.createElement(\'select\'); select.innerHTML = \'<option value="v2">v2</option><option value="v1">v1</option>\'; select.addEventListener(\'change\', () => { window.location.assign(getVersionTarget(select.value)); }); wrapper.appendChild(select); header.prepend(wrapper); } const select = wrapper.querySelector(\'select\'); if (!select) return; select.value = window.location.pathname.startsWith(\'/v1/\') ? \'v1\' : \'v2\'; }; if (document.readyState === \'loading\') { document.addEventListener(\'DOMContentLoaded\', ensureSwitcher, { once: true }); } else { ensureSwitcher(); } document.addEventListener(\'astro:page-load\', ensureSwitcher); })();',
+          tag: 'script'
         }
-      ]
+      ],
+      lastUpdated: true,
+      logo: {
+        alt: 'Santi020k ESLint Config',
+        dark: './src/assets/logo-santi020k-dark.svg',
+        light: './src/assets/logo-santi020k.svg',
+        replacesTitle: true
+      },
+      sidebar,
+      social: [
+        {
+          href: 'https://github.com/santi020k/eslint-config-basic',
+          icon: 'github',
+          label: 'GitHub'
+        }
+      ],
+      tableOfContents: {
+        maxHeadingLevel: 3,
+        minHeadingLevel: 2
+      },
+      title: siteName
     })
-  ]
+  ],
+  site
 })

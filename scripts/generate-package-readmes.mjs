@@ -7,7 +7,7 @@ import { docsOrigin, packageDocs } from '../config/docs-packages.mjs'
  * Generate a standard README.md content for a package.
  */
 const generateReadmeContent = pkg => {
-  const { packageName, title, description, docsPath } = pkg
+  const { description, docsPath, packageName, title } = pkg
 
   const monorepoLine =
     'This package is part of the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.'
@@ -29,8 +29,8 @@ The canonical documentation lives on the Starlight site, so this README intentio
 // Ensure scripts are run from the root
 const rootDir = process.cwd()
 
-packageDocs.forEach(pkg => {
-  if (pkg.isPrivate) return // Skip private packages if desired
+for (const pkg of packageDocs) {
+  if (pkg.isPrivate) continue // Skip private packages if desired
 
   const readmePath = join(rootDir, pkg.packagePath, 'README.md')
   const content = generateReadmeContent(pkg)
@@ -42,6 +42,6 @@ packageDocs.forEach(pkg => {
   } catch (error) {
     console.error(`❌ Failed to generate README for ${pkg.packageName}:`, error.message)
   }
-})
+}
 
 console.log('🚀 Documentation sync complete!')

@@ -14,15 +14,9 @@ import type { TSESLint } from '@typescript-eslint/utils'
  */
 export const bestPractices: TSESLint.FlatConfig.ConfigArray = [
   {
-    name: 'eslint-config/best-practices',
     files: GLOB_JS_TS,
+    name: 'eslint-config/best-practices',
     rules: {
-
-      /** Warn on console usage so developers remember to remove debug output. */
-      'no-console': 'warn',
-
-      /** Disallow browser dialogs — use proper UI instead. */
-      'no-alert': 'error',
 
       /**
        * Warn when a function's cyclomatic complexity exceeds 10.
@@ -34,7 +28,13 @@ export const bestPractices: TSESLint.FlatConfig.ConfigArray = [
        * Warn when blocks are nested more than 4 levels deep.
        * Deep nesting is a common sign that logic should be extracted.
        */
-      'max-depth': ['warn', { max: 4 }]
+      'max-depth': ['warn', { max: 4 }],
+
+      /** Disallow browser dialogs — use proper UI instead. */
+      'no-alert': 'error',
+
+      /** Warn on console usage so developers remember to remove debug output. */
+      'no-console': 'warn'
     }
   }
 ]

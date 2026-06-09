@@ -9,12 +9,12 @@ import { eslintConfig, Extension, Format, Library, NextMode, Testing, Tool } fro
 describe('Edge-Case & Conflict Tests (#6)', () => {
   it('should handle Expo + Next together without crashing', () => {
     const config = eslintConfig({
-      typescript: true,
       frameworks: {
         expo: [{ name: 'mock-expo', rules: { 'react/jsx-pascal-case': 'error' } }],
         next: [{ name: 'mock-next', rules: {} }],
         react: [{ name: 'mock-react', rules: {} }]
-      }
+      },
+      typescript: true
     })
 
     expect(Array.isArray(config)).toBe(true)
@@ -73,8 +73,8 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
         astro: [{
           name: 'mock-astro',
           rules: {
-            'react/jsx-no-undef': 'off',
-            '@stylistic/comma-dangle': ['warn', 'never']
+            '@stylistic/comma-dangle': ['warn', 'never'],
+            'react/jsx-no-undef': 'off'
           }
         }]
       }
@@ -87,9 +87,9 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
 
   it('should apply Astro parser and rule workarounds through the framework factory', () => {
     const config = eslintConfig({
-      typescript: true,
+      frameworks: { astro },
       tsconfigRootDir: tmpdir(), // os.tmpdir() always exists on any platform
-      frameworks: { astro }
+      typescript: true
     })
 
     expect(getEffectiveRuleValue(config as Record<string, unknown>[], '@typescript-eslint/no-unsafe-return')).toBe('off')
@@ -112,11 +112,11 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
 
   it('Prettier optional should be applied last', () => {
     const config = eslintConfig({
-      typescript: true,
+      formats: [Format.Mdx],
       libraries: [Library.Tailwind],
       testing: [Testing.Vitest],
       tools: [Tool.Prettier],
-      formats: [Format.Mdx]
+      typescript: true
     })
 
     const names = extractConfigNames(config)
@@ -131,12 +131,12 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
 
   it('should apply NextMode.AppRouter override for app/** files', () => {
     const config = eslintConfig({
-      typescript: false,
-      nextMode: NextMode.AppRouter,
       frameworks: {
-        react: [{ name: 'mock-react', rules: {} }],
-        next: [{ name: 'mock-next', rules: {} }]
-      }
+        next: [{ name: 'mock-next', rules: {} }],
+        react: [{ name: 'mock-react', rules: {} }]
+      },
+      nextMode: NextMode.AppRouter,
+      typescript: false
     })
 
     const appRouterEntry = (config as Record<string, unknown>[]).find(
@@ -149,12 +149,12 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
 
   it('should NOT apply app-router overrides when NextMode.Pages is used', () => {
     const config = eslintConfig({
-      typescript: false,
-      nextMode: NextMode.Pages,
       frameworks: {
-        react: [{ name: 'mock-react', rules: {} }],
-        next: [{ name: 'mock-next', rules: {} }]
-      }
+        next: [{ name: 'mock-next', rules: {} }],
+        react: [{ name: 'mock-react', rules: {} }]
+      },
+      nextMode: NextMode.Pages,
+      typescript: false
     })
 
     const appRouterEntry = (config as Record<string, unknown>[]).find(
@@ -166,8 +166,8 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
 
   it('should throw a clear error when tsconfigRootDir does not exist', () => {
     expect(() => eslintConfig({
-      typescript: true,
-      tsconfigRootDir: '/this/path/does/not/exist'
+      tsconfigRootDir: '/this/path/does/not/exist',
+      typescript: true
     })).toThrow(/tsconfigRootDir does not exist/)
   })
 

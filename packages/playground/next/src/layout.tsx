@@ -3,8 +3,8 @@ import React from 'react'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Next.js Playground',
-  description: 'A playground for testing ESLint rules in a Next.js environment.'
+  description: 'A playground for testing ESLint rules in a Next.js environment.',
+  title: 'Next.js Playground'
 }
 
 export default function RootLayout({

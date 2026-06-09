@@ -13,8 +13,8 @@ export const swagger: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('swagge
 
   return [
     {
-      name: 'integrations/swagger',
       files: GLOB_TS,
+      name: 'integrations/swagger',
       plugins: {
         '@darraghor/nestjs-typed': nestjsTypedPlugin
       },

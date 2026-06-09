@@ -13,8 +13,8 @@ export const tailwind: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('tailw
   return [
     {
       ...pluginTailwind.configs.recommended,
-      name: 'santi020k/tailwind/recommended',
       files: GLOB_JS_TS_ALL,
+      name: 'santi020k/tailwind/recommended',
       settings: {
         'better-tailwindcss': {
           // Enable faster resolution in monorepos

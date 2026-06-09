@@ -36,7 +36,6 @@ describe('Configuration invariants', () => {
 
   it('promotes warning-level rules to errors when strict mode is enabled', () => {
     const config = eslintConfig({
-      strict: true,
       frameworks: {
         react: [
           {
@@ -44,7 +43,8 @@ describe('Configuration invariants', () => {
             rules: { 'no-console': 'warn' }
           }
         ]
-      }
+      },
+      strict: true
     })
 
     expect(getEffectiveRuleValue(config, 'no-console')).toBe('error')

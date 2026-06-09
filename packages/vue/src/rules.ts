@@ -1,23 +1,23 @@
 import type { TSESLint } from '@typescript-eslint/utils'
 
 export const rules: TSESLint.Linter.RulesRecord = {
-  'vue/multi-word-component-names': 'warn',
-  'vue/no-unused-vars': 'warn',
-  'vue/no-mutating-props': 'warn',
-  'vue/require-default-prop': 'warn',
-  'vue/require-prop-types': 'warn',
+  'vue/block-order': ['warn', {
+    order: ['script', 'template', 'style']
+  }],
   'vue/component-definition-name-casing': ['warn', 'PascalCase'],
   'vue/html-self-closing': ['warn', {
     html: {
-      void: 'always',
+      component: 'always',
       normal: 'always',
-      component: 'always'
+      void: 'always'
     },
-    svg: 'always',
-    math: 'always'
+    math: 'always',
+    svg: 'always'
   }],
+  'vue/multi-word-component-names': 'warn',
+  'vue/no-mutating-props': 'warn',
+  'vue/no-unused-vars': 'warn',
   'vue/padding-line-between-blocks': 'warn',
-  'vue/block-order': ['warn', {
-    order: ['script', 'template', 'style']
-  }]
+  'vue/require-default-prop': 'warn',
+  'vue/require-prop-types': 'warn'
 }

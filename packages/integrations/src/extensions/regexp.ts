@@ -15,8 +15,8 @@ export const regexp: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('regexp'
 
   return [
     {
-      name: 'integrations/regexp',
       files: GLOB_JS_TS,
+      name: 'integrations/regexp',
       plugins: {
         regexp: pluginRegexp
       },
@@ -25,11 +25,11 @@ export const regexp: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('regexp'
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         ...pluginRegexp.configs?.['flat/recommended']?.rules,
 
+        'regexp/no-super-linear-backtracking': 'error',
         // Downgrade some rules to warnings for a smoother adoption
         'regexp/no-unused-capturing-group': 'warn',
         'regexp/no-useless-escape': 'warn',
-        'regexp/prefer-character-class': 'warn',
-        'regexp/no-super-linear-backtracking': 'error'
+        'regexp/prefer-character-class': 'warn'
       }
     }
   ]

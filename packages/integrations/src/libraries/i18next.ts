@@ -15,8 +15,8 @@ export const i18next: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('i18nex
 
   return [
     {
-      name: 'integrations/i18next',
       files: GLOB_JS_TS_ALL,
+      name: 'integrations/i18next',
       plugins: {
         i18next: fixupPluginRules(
           pluginI18next
@@ -24,10 +24,10 @@ export const i18next: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('i18nex
       },
       rules: {
         'i18next/no-literal-string': ['warn', {
-          mode: 'jsx-text-only',
           'jsx-attributes': {
             include: ['label', 'placeholder', 'alt', 'title', 'aria-label']
-          }
+          },
+          mode: 'jsx-text-only'
         }]
       }
     }

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-const Button = ({ label, onClick }: { label: string, onClick: () => void }) => <button type="button" onClick={onClick}>{label}</button>
+const Button = ({ label, onClick }: { label: string, onClick: () => void }) => <button onClick={onClick} type="button">{label}</button>
 
 describe('Testing Library playground', () => {
   it('renders a button', () => {

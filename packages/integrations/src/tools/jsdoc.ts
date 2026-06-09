@@ -12,8 +12,8 @@ export const jsdoc: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('jsdoc', 
 
   return [
     {
-      name: 'eslint-config-integrations/jsdoc',
       files: GLOB_JS_TS,
+      name: 'eslint-config-integrations/jsdoc',
       plugins: {
         jsdoc: pluginJsdoc
       },

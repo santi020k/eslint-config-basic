@@ -14,7 +14,6 @@ export const vitest: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('vitest'
 
   return [
     {
-      name: 'integrations/vitest',
       files: [
         'tests/**/*.{js,ts,jsx,tsx}',
         '**/__tests__/**/*.{js,ts,jsx,tsx}',
@@ -31,6 +30,7 @@ export const vitest: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('vitest'
           ...globals.node
         }
       },
+      name: 'integrations/vitest',
       plugins: {
         vitest: pluginVitest
       },
@@ -38,24 +38,24 @@ export const vitest: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('vitest'
         // Vitest recommended rules
         ...pluginVitest.configs.recommended.rules,
 
-        // Best practice rules for testing
-        'vitest/max-nested-describe': ['error', { max: 3 }],
+        '@stylistic/padding-line-between-statements': 'off',
+        // Disable some rules that conflict with test patterns
+        '@typescript-eslint/no-explicit-any': 'off',
         'vitest/expect-expect': [
           'error',
           {
             assertFunctionNames: ['expect', 'assert', 'should']
           }
         ],
-        'vitest/no-identical-title': 'error',
-        'vitest/no-focused-tests': 'error',
+        // Best practice rules for testing
+        'vitest/max-nested-describe': ['error', { max: 3 }],
         'vitest/no-disabled-tests': 'warn',
+        'vitest/no-focused-tests': 'error',
+        'vitest/no-identical-title': 'error',
         'vitest/prefer-to-be': 'warn',
-        'vitest/prefer-to-have-length': 'warn',
-        'vitest/valid-expect': 'error',
 
-        // Disable some rules that conflict with test patterns
-        '@typescript-eslint/no-explicit-any': 'off',
-        '@stylistic/padding-line-between-statements': 'off'
+        'vitest/prefer-to-have-length': 'warn',
+        'vitest/valid-expect': 'error'
       }
     }
   ]

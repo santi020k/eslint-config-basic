@@ -14,8 +14,8 @@ export const unicorn: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('unicor
 
   return [
     {
-      name: 'eslint-config/unicorn',
       files: GLOB_JS_TS,
+      name: 'eslint-config/unicorn',
       plugins: {
         unicorn: pluginUnicorn
       },

@@ -2,6 +2,6 @@
 import { eslintConfig, Testing } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
-  tsconfigRootDir: import.meta.dirname,
-  testing: [Testing.Cypress]
+  testing: [Testing.Cypress],
+  tsconfigRootDir: import.meta.dirname
 })

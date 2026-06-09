@@ -36,10 +36,10 @@ import { eslintConfig } from '@santi020k/eslint-config-basic'
 import qwik from '@santi020k/eslint-config-qwik'
 
 export default eslintConfig({
-  typescript: true,
   frameworks: {
     qwik
-  }
+  },
+  typescript: true
 })
 ```
 

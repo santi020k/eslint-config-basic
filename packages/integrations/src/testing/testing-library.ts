@@ -14,12 +14,12 @@ export const testingLibrary: TSESLint.FlatConfig.ConfigArray = defineLazyConfig(
 
   return [
     {
-      name: 'integrations/testing-library',
       files: [
         '**/*.test.{js,ts,jsx,tsx}',
         '**/*.spec.{js,ts,jsx,tsx}',
         '**/__tests__/**/*.{js,ts,jsx,tsx}'
       ],
+      name: 'integrations/testing-library',
       plugins: {
         'testing-library': fixupPluginRules(
           pluginTestingLibrary

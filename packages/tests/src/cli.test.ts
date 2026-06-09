@@ -24,7 +24,7 @@ const createTempProject = (packageJson: Record<string, unknown>): string => {
 
 afterEach(() => {
   for (const dir of tempDirs.splice(0)) {
-    rmSync(dir, { recursive: true, force: true })
+    rmSync(dir, { force: true, recursive: true })
   }
 })
 
@@ -41,11 +41,11 @@ describe('CLI scaffolding', () => {
 
   it('should keep eslint.config.js for ESM projects and include React for Next.js', () => {
     const cwd = createTempProject({
-      name: 'tmp-project',
-      type: 'module',
       dependencies: {
         next: '15.0.0'
-      }
+      },
+      name: 'tmp-project',
+      type: 'module'
     })
 
     handleInit(cwd)
@@ -60,11 +60,11 @@ describe('CLI scaffolding', () => {
 
   it('should update an existing config file in place', () => {
     const cwd = createTempProject({
-      name: 'tmp-project',
-      type: 'module',
       dependencies: {
         react: '19.0.0'
-      }
+      },
+      name: 'tmp-project',
+      type: 'module'
     })
 
     writeFileSync(join(cwd, 'eslint.config.js'), '// old config')
@@ -81,7 +81,7 @@ describe('CLI scaffolding', () => {
 
 describe('CLI command UX', () => {
   it('should print help text for --help', () => {
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     runCli(['node', 'basic-eslint', '--help'])
 
@@ -91,7 +91,7 @@ describe('CLI command UX', () => {
   })
 
   it('should print version for --version', () => {
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     runCli(['node', 'basic-eslint', '--version'])
 
@@ -102,8 +102,8 @@ describe('CLI command UX', () => {
 
   it('should set non-zero exit code for unknown command', () => {
     process.exitCode = undefined
-    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined)
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     runCli(['node', 'basic-eslint', 'unknown-command'])
 
@@ -116,15 +116,15 @@ describe('CLI command UX', () => {
 
   it('should explain detected project settings', () => {
     const cwd = createTempProject({
-      name: 'tmp-project',
       dependencies: {
         react: '19.0.0'
       },
       devDependencies: {
         vitest: 'latest'
-      }
+      },
+      name: 'tmp-project'
     })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     handleExplain(cwd)
 
@@ -138,12 +138,12 @@ describe('CLI command UX', () => {
 
   it('should generate human-readable ESLint standards docs', () => {
     const cwd = createTempProject({
-      name: 'tmp-project',
       dependencies: {
         next: '15.0.0'
-      }
+      },
+      name: 'tmp-project'
     })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     handleDocs(cwd)
 
@@ -157,7 +157,7 @@ describe('CLI command UX', () => {
 
   it('should report migration suggestions', () => {
     const cwd = createTempProject({ name: 'tmp-project', type: 'module' })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     writeFileSync(
       join(cwd, 'eslint.config.js'), 'import react from \'@santi020k/eslint-config-react\'\nexport default []'
@@ -178,16 +178,16 @@ describe('CLI command UX', () => {
 const makeFeatures = (
   overrides: Partial<EslintConfigFeatures> = {}
 ): EslintConfigFeatures => ({
-  typescript: false,
+  configFile: null,
+  extensions: [],
+  formats: [],
   frameworks: [],
+  libraries: [],
+  lintCommand: 'npm run lint',
+  source: 'detection-fallback',
   testing: [],
   tools: [],
-  libraries: [],
-  formats: [],
-  extensions: [],
-  lintCommand: 'npm run lint',
-  configFile: null,
-  source: 'detection-fallback',
+  typescript: false,
   ...overrides
 })
 
@@ -413,11 +413,11 @@ describe('generateAgentSkills', () => {
 
   it('should use display labels when falling back to package.json detection', async () => {
     const cwd = createTempProject({
-      name: 'tmp-project',
       devDependencies: {
         tailwindcss: '4.0.0',
         vitest: '4.0.0'
-      }
+      },
+      name: 'tmp-project'
     })
 
     mkdirSync(join(cwd, '.agent'))

@@ -14,8 +14,8 @@ export const nestConfig: TSESLint.FlatConfig.ConfigArray = [
     files: ['**/*.ts', '**/*.mts', '**/*.cts', '**/*.tsx']
   })),
   {
-    name: 'eslint-config-nest/custom',
     files: ['**/*.ts', '**/*.mts', '**/*.cts', '**/*.tsx'],
+    name: 'eslint-config-nest/custom',
     rules
   }
 ]

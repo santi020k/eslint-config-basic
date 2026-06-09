@@ -13,7 +13,6 @@ import type { TSESLint } from '@typescript-eslint/utils'
 export const createAstroConfig = (options?: AstroOptions): TSESLint.FlatConfig.ConfigArray => [
   ...pluginAstro.configs.recommended,
   {
-    name: 'eslint-config-astro/custom',
     files: ['**/*.astro'],
     languageOptions: {
       parserOptions: {
@@ -22,18 +21,19 @@ export const createAstroConfig = (options?: AstroOptions): TSESLint.FlatConfig.C
         tsconfigRootDir: options?.tsconfigRootDir
       }
     },
+    name: 'eslint-config-astro/custom',
     rules: getRules(options)
   },
   {
-    name: 'eslint-config-astro/virtual-scripts',
     files: ['**/*.astro/*.js', '*.astro/*.js', '**/*.astro/*.ts', '*.astro/*.ts'],
     languageOptions: { sourceType: 'module' },
+    name: 'eslint-config-astro/virtual-scripts',
     rules: {
-      'prettier/prettier': 'off',
+      '@typescript-eslint/no-unused-expressions': 'off',
       // Disable rules that cause false positives in Astro virtual script blocks.
       // Type-checked rule disabling is handled by @santi020k/eslint-config-typescript.
       'no-unused-expressions': 'off',
-      '@typescript-eslint/no-unused-expressions': 'off'
+      'prettier/prettier': 'off'
     }
   }
 ]

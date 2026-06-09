@@ -6,6 +6,7 @@
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -44,10 +45,13 @@
     "@santi020k/eslint-config-svelte": "workspace:^",
     "@santi020k/eslint-config-typescript": "workspace:^",
     "@santi020k/eslint-config-vue": "workspace:^",
-    "@typescript-eslint/utils": "^8.61.0",
-    "eslint": "^10.2.1"
+    "@typescript-eslint/utils": "^8.61.0"
+  },
+  "peerDependencies": {
+    "eslint": "^9.0.0 || ^10.0.0"
   },
   "devDependencies": {
+    "eslint": "^10.2.1",
     "publint": "^0.3.21",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"

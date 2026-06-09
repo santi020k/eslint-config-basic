@@ -13,12 +13,12 @@ export const jest: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('jest', ()
 
   return [
     {
-      name: 'integrations/jest',
       files: [
         '**/*.test.{js,ts,jsx,tsx}',
         '**/*.spec.{js,ts,jsx,tsx}',
         '**/__tests__/**/*.{js,ts,jsx,tsx}'
       ],
+      name: 'integrations/jest',
       plugins: {
         jest: pluginJest
       },

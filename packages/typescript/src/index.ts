@@ -29,18 +29,18 @@ export const createTypescriptConfig = (
 
   return [
     {
-      name: 'eslint-config-typescript/setup',
       files: typedFiles,
-      plugins: {
-        '@typescript-eslint': tsEslint.plugin
-      },
       languageOptions: {
         parserOptions: {
+          extraFileExtensions: ['.astro', '.svelte', '.vue'],
           parser: tsParser,
           projectService: true,
-          extraFileExtensions: ['.astro', '.svelte', '.vue'],
           tsconfigRootDir: options.tsconfigRootDir
         }
+      },
+      name: 'eslint-config-typescript/setup',
+      plugins: {
+        '@typescript-eslint': tsEslint.plugin
       }
     },
     ...(tsEslint.configs.strictTypeChecked as TSESLint.FlatConfig.ConfigArray).flatMap(c => [
@@ -52,8 +52,8 @@ export const createTypescriptConfig = (
       ...(c.rules ?
         [
           {
-            name: `${c.name ?? 'ts-strict'}/rules-only`,
             files: [...GLOB_SLOT, ...GLOB_VIRTUAL_TS],
+            name: `${c.name ?? 'ts-strict'}/rules-only`,
             rules: c.rules
           }
         ] :
@@ -68,34 +68,34 @@ export const createTypescriptConfig = (
       ...(c.rules ?
         [
           {
-            name: `${c.name ?? 'ts-stylistic'}/rules-only`,
             files: [...GLOB_SLOT, ...GLOB_VIRTUAL_TS],
+            name: `${c.name ?? 'ts-stylistic'}/rules-only`,
             rules: c.rules
           }
         ] :
         [])
     ]),
     {
-      name: 'eslint-config-typescript/parser-setup',
       files: GLOB_TS,
       languageOptions: {
+        ecmaVersion: 'latest',
         parser: tsParser,
         parserOptions: {
-          projectService: true,
           extraFileExtensions: ['.astro', '.svelte', '.vue'],
+          projectService: true,
           tsconfigRootDir: options.tsconfigRootDir
-        },
-        ecmaVersion: 'latest'
-      }
+        }
+      },
+      name: 'eslint-config-typescript/parser-setup'
     },
     {
-      name: 'eslint-config-typescript/standard-rules',
       files: typedFiles,
+      name: 'eslint-config-typescript/standard-rules',
       rules: standardRules
     },
     {
-      name: 'eslint-config-typescript/type-checked-rules',
       files: typeCheckedFiles,
+      name: 'eslint-config-typescript/type-checked-rules',
       rules: typeCheckedRules
     }
   ]

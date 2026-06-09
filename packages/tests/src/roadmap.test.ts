@@ -47,8 +47,8 @@ describe('v1.0.0 Roadmap Features', () => {
   })
 
   it('should support v2 practical presets', () => {
-    const appConfig = eslintConfig({ preset: Preset.App, detection: false })
-    const ciConfig = eslintConfig({ preset: Preset.CI, detection: false })
+    const appConfig = eslintConfig({ detection: false, preset: Preset.App })
+    const ciConfig = eslintConfig({ detection: false, preset: Preset.CI })
     const ciRuleValues = ciConfig.flatMap(entry => Object.values(entry.rules ?? {}))
 
     expect(extractConfigNames(appConfig)).toContain('eslint-config/prettier')
@@ -63,8 +63,8 @@ describe('v1.0.0 Roadmap Features', () => {
         testing: false
       },
       libraries: [Library.Tailwind],
-      testing: [Testing.Vitest],
-      runtime: Runtime.Browser
+      runtime: Runtime.Browser,
+      testing: [Testing.Vitest]
     })
     const names = extractConfigNames(config)
 
@@ -77,8 +77,8 @@ describe('v1.0.0 Roadmap Features', () => {
       detection: false,
       projects: {
         'apps/web': {
-          typescript: false,
-          testing: [Testing.Vitest]
+          testing: [Testing.Vitest],
+          typescript: false
         }
       }
     })

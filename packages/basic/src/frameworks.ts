@@ -16,18 +16,18 @@ import { solidConfig } from '@santi020k/eslint-config-solid'
 import { svelteConfig } from '@santi020k/eslint-config-svelte'
 import { vueConfig } from '@santi020k/eslint-config-vue'
 
+export type FrameworkFlags = Partial<Record<FrameworkName, true>>
+
 export type FrameworkName = DetectedFrameworkName
 
 export interface FrameworkOptions {
-  hasReact?: boolean
-  hasVue?: boolean
-  hasSvelte?: boolean
-  hasSolid?: boolean
-  runtime?: Runtime
   [key: string]: unknown
+  hasReact?: boolean
+  hasSolid?: boolean
+  hasSvelte?: boolean
+  hasVue?: boolean
+  runtime?: Runtime
 }
-
-export type FrameworkFlags = Partial<Record<FrameworkName, true>>
 
 export const createDetectedFrameworkFlags = (
   detectedFrameworks: DetectedFrameworkName[] = []
@@ -40,11 +40,8 @@ export const getBundledFrameworkConfig = (
   options?: FrameworkOptions
 ): FlatConfigArray => {
   switch (frameworkName) {
-    case 'react':
-      return reactConfig
-
-    case 'next':
-      return nextConfig
+    case 'angular':
+      return angularConfig
 
     case 'astro':
       return astro(options)
@@ -52,29 +49,32 @@ export const getBundledFrameworkConfig = (
     case 'expo':
       return expoConfig
 
-    case 'vue':
-      return vueConfig
-
-    case 'svelte':
-      return svelteConfig
-
-    case 'solid':
-      return solidConfig
-
-    case 'angular':
-      return angularConfig
+    case 'hono':
+      return hono(options)
 
     case 'nest':
       return nestConfig
 
-    case 'hono':
-      return hono(options)
+    case 'next':
+      return nextConfig
 
     case 'qwik':
       return qwik
 
+    case 'react':
+      return reactConfig
+
     case 'remix':
       return remix
+
+    case 'solid':
+      return solidConfig
+
+    case 'svelte':
+      return svelteConfig
+
+    case 'vue':
+      return vueConfig
   }
 }
 

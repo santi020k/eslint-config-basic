@@ -11,8 +11,8 @@ export const tanstackQuery: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('
 
   return [
     {
-      name: 'eslint-config-integrations/tanstack-query',
       files: GLOB_JS_TS_ALL,
+      name: 'eslint-config-integrations/tanstack-query',
       plugins: {
         '@tanstack/query': pluginQuery
       },
@@ -31,8 +31,8 @@ export const tanstackRouter: TSESLint.FlatConfig.ConfigArray = defineLazyConfig(
 
   return [
     {
-      name: 'eslint-config-integrations/tanstack-router',
       files: GLOB_JS_TS_ALL,
+      name: 'eslint-config-integrations/tanstack-router',
       plugins: {
         '@tanstack/router': pluginRouter
       },

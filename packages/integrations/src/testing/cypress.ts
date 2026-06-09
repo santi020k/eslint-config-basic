@@ -14,11 +14,11 @@ export const cypress: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('cypres
 
   return [
     {
-      name: 'integrations/cypress',
       files: [
         '**/cypress/**/*.{js,ts,jsx,tsx}',
         '**/*.cy.{js,ts,jsx,tsx}'
       ],
+      name: 'integrations/cypress',
       plugins: {
         cypress: fixupPluginRules(
           pluginCypress

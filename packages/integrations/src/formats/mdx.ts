@@ -15,17 +15,17 @@ export const mdx: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('mdx', () =
 
   const rules: TSESLint.Linter.RulesRecord = {
     ...pluginMdx.flatCodeBlocks.rules,
-    'no-var': 'error',
-    'prefer-const': 'error',
-    'react/react-in-jsx-scope': 0,
-    'no-unused-vars': 'off',
     '@stylistic/indent': 'off',
     '@stylistic/jsx-closing-bracket-location': 'off',
-    indent: 'off',
-    'no-multi-spaces': 'off',
+    '@stylistic/jsx-tag-spacing': 'off',
     '@stylistic/no-multi-spaces': 'off',
     'comma-dangle': 'off',
-    '@stylistic/jsx-tag-spacing': 'off'
+    indent: 'off',
+    'no-multi-spaces': 'off',
+    'no-unused-vars': 'off',
+    'no-var': 'error',
+    'prefer-const': 'error',
+    'react/react-in-jsx-scope': 0
   }
 
   return [
@@ -33,8 +33,8 @@ export const mdx: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('mdx', () =
       files: ['**/*.mdx'],
       ...pluginMdx.flat,
       processor: pluginMdx.createRemarkProcessor({
-        lintCodeBlocks: true,
-        languageMapper: {}
+        languageMapper: {},
+        lintCodeBlocks: true
       }),
       rules
     },
@@ -44,20 +44,20 @@ export const mdx: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('mdx', () =
       rules
     },
     {
-      name: 'eslint-config-mdx/disable-type-checked',
       files: ['**/*.mdx/*.ts', '**/*.mdx/*.tsx'],
       languageOptions: {
         parserOptions: {
-          project: null,
+          allowDefaultProject: true,
           program: null,
-          projectService: false,
-          allowDefaultProject: true
+          project: null,
+          projectService: false
         }
       },
+      name: 'eslint-config-mdx/disable-type-checked',
       rules: {
         ...tsEslint.configs.disableTypeChecked.rules,
-        'no-unused-expressions': 'off',
-        '@typescript-eslint/no-unused-expressions': 'off'
+        '@typescript-eslint/no-unused-expressions': 'off',
+        'no-unused-expressions': 'off'
       }
     }
   ]

@@ -59,8 +59,8 @@ export const lintText = async (
   fileName = 'test.ts'
 ): Promise<ESLint.LintResult[]> => {
   const eslint = new ESLint({
-    overrideConfigFile: true,
-    overrideConfig: config as Linter.Config[]
+    overrideConfig: config as Linter.Config[],
+    overrideConfigFile: true
   })
 
   return await eslint.lintText(code, { filePath: fileName })
@@ -74,8 +74,8 @@ export const lintFile = async (
   config: readonly TSESLint.FlatConfig.Config[]
 ): Promise<ESLint.LintResult[]> => {
   const eslint = new ESLint({
-    overrideConfigFile: true,
-    overrideConfig: config as Linter.Config[]
+    overrideConfig: config as Linter.Config[],
+    overrideConfigFile: true
   })
 
   return await eslint.lintFiles([filePath])

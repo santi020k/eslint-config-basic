@@ -3,14 +3,12 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger'
 
 @ApiTags('app')
 @Controller()
-// eslint-disable-next-line @darraghor/nestjs-typed/injectable-should-be-provided -- plugin cannot resolve module graph; AppController is listed in app.module.ts `controllers`
-export class AppController {
-  @Get()
-  @ApiOkResponse({ description: 'Hello world' })
-  getHello(): string {
-    // eslint-disable-next-line no-var, @typescript-eslint/no-unused-vars
-    var x = 1
 
+export class AppController {
+  @ApiOkResponse({ description: 'Hello world' })
+  @Get()
+  getHello(): string {
+    // Just return the greeting
     return 'Hello World!'
   }
 }

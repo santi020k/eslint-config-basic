@@ -17,11 +17,11 @@ The main package can compose integrations from five categories:
 import { eslintConfig, Extension, Format, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
+  extensions: [Extension.Unicorn, Extension.Security],
+  formats: [Format.Markdown],
   libraries: [Library.Tailwind, Library.Storybook],
   testing: [Testing.Vitest],
-  formats: [Format.Markdown],
-  tools: [Tool.Prettier],
-  extensions: [Extension.Unicorn, Extension.Security]
+  tools: [Tool.Prettier]
 })
 ```
 

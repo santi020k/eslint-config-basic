@@ -12,8 +12,8 @@ export const sonarjs: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('sonarj
       files: GLOB_JS_TS
     },
     {
-      name: 'eslint-config/sonarjs',
       files: GLOB_JS_TS,
+      name: 'eslint-config/sonarjs',
       rules: {}
     }
   ]

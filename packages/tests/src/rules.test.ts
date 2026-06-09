@@ -58,7 +58,7 @@ describe('React Rules', () => {
   })
 
   it('should have React version detection setting', () => {
-    const hasReactSettings = reactConfig.some(c => (c.settings?.react as { version?: string } | undefined)?.version === 'detect')
+    const hasReactSettings = reactConfig.some(c => (c.settings?.react as undefined | { version?: string })?.version === 'detect')
     expect(hasReactSettings).toBe(true)
   })
 

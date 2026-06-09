@@ -3,8 +3,8 @@ import { eslintConfig, Library } from '@santi020k/eslint-config-basic'
 
 export default [
   ...eslintConfig({
-    tsconfigRootDir: import.meta.dirname,
-    libraries: [Library.Tailwind]
+    libraries: [Library.Tailwind],
+    tsconfigRootDir: import.meta.dirname
   }),
   {
     name: 'playground/tailwind/settings',

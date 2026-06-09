@@ -8,30 +8,30 @@ const previewURL = `http://${previewHost}:${previewPort}`
 const previewServerCommand = `pnpm run docs:preview --host ${previewHost} --port ${previewPort}`
 
 export default defineConfig({
-  testDir: './tests',
-  timeout: 60_000,
   expect: {
     timeout: 10_000
   },
-  fullyParallel: !isGithubCi,
   forbidOnly: isGithubCi,
-  retries: isGithubCi ? 2 : 0,
-  workers: isGithubCi ? 1 : '50%',
-  reporter: 'html',
-  use: {
-    baseURL: previewURL,
-    trace: 'on-first-retry'
-  },
+  fullyParallel: !isGithubCi,
   projects: [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] }
     }
   ],
+  reporter: 'html',
+  retries: isGithubCi ? 2 : 0,
+  testDir: './tests',
+  timeout: 60_000,
+  use: {
+    baseURL: previewURL,
+    trace: 'on-first-retry'
+  },
   webServer: {
     command: previewServerCommand,
+    reuseExistingServer: !isGithubCi,
     timeout: 120_000,
-    url: previewURL,
-    reuseExistingServer: !isGithubCi
-  }
+    url: previewURL
+  },
+  workers: isGithubCi ? 1 : '50%'
 })

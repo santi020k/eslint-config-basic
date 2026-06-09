@@ -13,8 +13,8 @@ export const stencil: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('stenci
 
   return [
     {
-      name: 'integrations/stencil',
       files: ['**/*.{tsx,ts}'],
+      name: 'integrations/stencil',
       plugins: {
         '@stencil-community': fixupPluginRules(stencilPlugin as unknown as Record<string, unknown>)
       },
@@ -24,13 +24,13 @@ export const stencil: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('stenci
         '@stencil-community/decorators-context': 'error',
         '@stencil-community/decorators-style': [
           'error', {
-            prop: 'inline',
-            state: 'inline',
             element: 'inline',
             event: 'inline',
+            listen: 'multiline',
             method: 'multiline',
-            watch: 'multiline',
-            listen: 'multiline'
+            prop: 'inline',
+            state: 'inline',
+            watch: 'multiline'
           }],
         '@stencil-community/element-type': 'error',
         '@stencil-community/host-data-deprecated': 'error',

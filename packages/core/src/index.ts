@@ -13,29 +13,30 @@ import eslint from '@eslint/js'
 import pluginStylistic from '@stylistic/eslint-plugin'
 import type { TSESLint } from '@typescript-eslint/utils'
 
-// Re-export types and utilities
-export * from './types.js'
-export * from './utils/index.js'
+// Export rules and groups for use by other packages
+export { groups, rules } from './rules.js'
+// Export settings
+export { gitignore } from './settings/index.js'
 
 /**
  * Returns the appropriate globals for the given runtime option
  */
 export const getGlobalsForRuntime = (runtime: Runtime = Runtime.Universal): TSESLint.FlatConfig.LanguageOptions['globals'] => {
   switch (runtime) {
-    case Runtime.Node:
-      return { ...globals.node }
-
     case Runtime.Browser:
       return { ...globals.browser }
 
-    case Runtime.Worker:
-      return { ...globals.worker, ...globals.serviceworker }
+    case Runtime.Node:
+      return { ...globals.node }
 
     case Runtime.Universal:
       return {
         ...globals.browser,
         ...globals.node
       }
+
+    case Runtime.Worker:
+      return { ...globals.worker, ...globals.serviceworker }
 
     default:
       return {
@@ -51,8 +52,8 @@ export const getGlobalsForRuntime = (runtime: Runtime = Runtime.Universal): TSES
 export const createCoreConfig = (runtime: Runtime = Runtime.Universal): TSESLint.FlatConfig.ConfigArray => {
   const languageOptions: TSESLint.FlatConfig.LanguageOptions = {
     ecmaVersion: 'latest',
-    sourceType: 'module',
-    globals: getGlobalsForRuntime(runtime)
+    globals: getGlobalsForRuntime(runtime),
+    sourceType: 'module'
   }
 
   // Define the base sets of configurations we want to wrap
@@ -74,18 +75,18 @@ export const createCoreConfig = (runtime: Runtime = Runtime.Universal): TSESLint
       ...pluginStylistic.configs.recommended
     },
     {
-      name: 'eslint-config/plugins-rules',
       languageOptions,
+      name: 'eslint-config/plugins-rules',
       rules: {
         'import/first': 'error',
-        'simple-import-sort/imports': 'error',
         'simple-import-sort/exports': 'error',
+        'simple-import-sort/imports': 'error',
         'unused-imports/no-unused-imports': 'error'
       }
     },
     {
-      name: 'eslint-config/custom-rules',
       languageOptions,
+      name: 'eslint-config/custom-rules',
       rules
     }
   ]
@@ -99,8 +100,8 @@ export const createCoreConfig = (runtime: Runtime = Runtime.Universal): TSESLint
     ...(config.rules ?
       [
         {
-          name: `${config.name ?? 'core'}/slots`,
           files: GLOB_SLOT,
+          name: `${config.name ?? 'core'}/slots`,
           rules: config.rules
         }
       ] :
@@ -110,16 +111,16 @@ export const createCoreConfig = (runtime: Runtime = Runtime.Universal): TSESLint
   // Return final array with global plugin setup
   return [
     {
-      name: 'eslint-config/core-plugins',
       files: GLOB_JS_TS_ALL, // Ensure plugins are available for all compatible files
+      name: 'eslint-config/core-plugins',
       plugins: {
+        '@stylistic': pluginStylistic,
         import: pluginImport,
+        'jsx-a11y': pluginJsxA11y,
         n: pluginN,
         promise: pluginPromise,
-        stylistic: pluginStylistic,
-        '@stylistic': pluginStylistic,
         'simple-import-sort': pluginSimpleImport,
-        'jsx-a11y': pluginJsxA11y,
+        stylistic: pluginStylistic,
         'unused-imports': pluginUnusedImport
       }
     },
@@ -136,8 +137,6 @@ export const coreConfig: TSESLint.FlatConfig.ConfigArray = createCoreConfig()
 // Legacy export for backwards compatibility
 export { coreConfig as jsConfig }
 
-// Export rules and groups for use by other packages
-export { groups, rules } from './rules.js'
-
-// Export settings
-export { gitignore } from './settings/index.js'
+// Re-export types and utilities
+export * from './types.js'
+export * from './utils/index.js'

@@ -9,9 +9,9 @@ describe('detection internals', () => {
     const setRuntime = __detectionInternals.createRuntimeSetter(options)
 
     const frameworks = __detectionInternals.detectFrameworks({
+      expo: 'latest',
       next: 'latest',
-      react: 'latest',
-      expo: 'latest'
+      react: 'latest'
     }, setRuntime)
 
     const reactCount = frameworks?.filter(name => name === 'react').length ?? 0

@@ -36,10 +36,10 @@ import astro from '@santi020k/eslint-config-astro'
 import { eslintConfig } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
-  typescript: true,
   frameworks: {
     astro
-  }
+  },
+  typescript: true
 })
 ```
 

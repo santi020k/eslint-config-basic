@@ -8,20 +8,20 @@ import { detectProjectOptions } from './index.js'
 
 export interface AgentTarget {
 
+  /** Format variant used when generating content */
+  format: 'cursor' | 'frontmatter' | 'plain'
+
   /** Human-readable label for logging */
   label: string
 
   /** Folder that must exist in cwd to be considered "present" */
   markerFolder: string
 
-  /** Subdirectory inside the agent folder where the skill file is placed */
-  skillSubdir: string
-
   /** File name for the generated skill */
   skillFile: string
 
-  /** Format variant used when generating content */
-  format: 'frontmatter' | 'cursor' | 'plain'
+  /** Subdirectory inside the agent folder where the skill file is placed */
+  skillSubdir: string
 }
 
 /**
@@ -29,27 +29,25 @@ export interface AgentTarget {
  * All arrays hold display-friendly labels (e.g. `'TypeScript'`, `'React'`).
  */
 export interface EslintConfigFeatures {
-  typescript: boolean
-  frameworks: string[]
-  testing: string[]
-  tools: string[]
-  libraries: string[]
-  formats: string[]
+
+  /** Path to the config file that was loaded, or null when falling back to detection */
+  configFile: null | string
   extensions: string[]
+  formats: string[]
+  frameworks: string[]
+  libraries: string[]
 
   /** The lint command found in the project's package.json scripts, or a sensible default */
   lintCommand: string
 
-  /** Path to the config file that was loaded, or null when falling back to detection */
-  configFile: string | null
-
   /** Whether features came from the real config file or from package.json detection */
   source: 'config-file' | 'detection-fallback'
-}
 
-export interface GenerateSkillResult {
-  written: string[]
-  skipped: string[]
+  testing: string[]
+
+  tools: string[]
+
+  typescript: boolean
 }
 
 export interface GenerateSkillOptions {
@@ -64,6 +62,11 @@ export interface GenerateSkillOptions {
   force?: boolean
 }
 
+export interface GenerateSkillResult {
+  skipped: string[]
+  written: string[]
+}
+
 // ─── Known agent targets ──────────────────────────────────────────────────────
 
 /**
@@ -73,53 +76,53 @@ export interface GenerateSkillOptions {
  */
 export const AGENT_TARGETS: AgentTarget[] = [
   {
+    format: 'frontmatter',
     label: '.agent (generic skill format)',
     markerFolder: '.agent',
-    skillSubdir: 'skills',
     skillFile: 'eslint-standards.md',
-    format: 'frontmatter'
+    skillSubdir: 'skills'
   },
   {
+    format: 'frontmatter',
     label: '.agents (generic skill format)',
     markerFolder: '.agents',
-    skillSubdir: 'skills',
     skillFile: 'eslint-standards.md',
-    format: 'frontmatter'
+    skillSubdir: 'skills'
   },
   {
+    format: 'plain',
     label: 'Claude Code (.claude/commands)',
     markerFolder: '.claude',
-    skillSubdir: 'commands',
     skillFile: 'eslint.md',
-    format: 'plain'
+    skillSubdir: 'commands'
   },
   {
+    format: 'cursor',
     label: 'Cursor (.cursor/rules)',
     markerFolder: '.cursor',
-    skillSubdir: 'rules',
     skillFile: 'eslint-standards.mdc',
-    format: 'cursor'
+    skillSubdir: 'rules'
   },
   {
+    format: 'frontmatter',
     label: 'Windsurf (.windsurf/rules)',
     markerFolder: '.windsurf',
-    skillSubdir: 'rules',
     skillFile: 'eslint-standards.md',
-    format: 'frontmatter'
+    skillSubdir: 'rules'
   },
   {
+    format: 'plain',
     label: 'Copilot (.copilot)',
     markerFolder: '.copilot',
-    skillSubdir: 'instructions',
     skillFile: 'eslint-standards.md',
-    format: 'plain'
+    skillSubdir: 'instructions'
   },
   {
+    format: 'plain',
     label: 'Aider (.aider)',
     markerFolder: '.aider',
-    skillSubdir: '.',
     skillFile: 'eslint-standards.md',
-    format: 'plain'
+    skillSubdir: '.'
   }
 ]
 
@@ -135,7 +138,7 @@ export const AGENT_TARGETS: AgentTarget[] = [
  *   - category  — which feature bucket to place the label into
  *   - label     — display string written to the skill file
  */
-type FeatureCategory = 'typescript' | 'frameworks' | 'testing' | 'tools' | 'libraries' | 'formats' | 'extensions'
+type FeatureCategory = 'extensions' | 'formats' | 'frameworks' | 'libraries' | 'testing' | 'tools' | 'typescript'
 
 const FEATURE_MAP: readonly [pattern: string, category: FeatureCategory, label: string][] = [
   // TypeScript
@@ -294,16 +297,16 @@ const extractFeatures = (
   const tokens = collectTokens(configs)
 
   const features: EslintConfigFeatures = {
-    typescript: false,
+    configFile,
+    extensions: [],
+    formats: [],
     frameworks: [],
+    libraries: [],
+    lintCommand,
+    source: 'config-file',
     testing: [],
     tools: [],
-    libraries: [],
-    formats: [],
-    extensions: [],
-    lintCommand,
-    configFile,
-    source: 'config-file'
+    typescript: false
   }
 
   const seen = new Set<string>()
@@ -331,7 +334,7 @@ const extractFeatures = (
  * Tries each candidate config filename in order and returns the first one
  * found, or `null` when none exist.
  */
-const findEslintConfig = (cwd: string): string | null => {
+const findEslintConfig = (cwd: string): null | string => {
   for (const name of ['eslint.config.js', 'eslint.config.mjs', 'eslint.config.cjs']) {
     const p = join(cwd, name)
 
@@ -421,16 +424,16 @@ const featuresFromDetection = (cwd: string): EslintConfigFeatures => {
   const frameworks = (opts.detectedFrameworks ?? []).map(f => DETECTED_FRAMEWORK_LABELS[f] ?? f)
 
   return {
-    typescript: opts.typescript === true,
+    configFile: null,
+    extensions: (opts.extensions ?? []).map(toFeatureLabel),
+    formats: (opts.formats ?? []).map(toFeatureLabel),
     frameworks,
+    libraries: (opts.libraries ?? []).map(toFeatureLabel),
+    lintCommand,
+    source: 'detection-fallback',
     testing: (opts.testing ?? []).map(toFeatureLabel),
     tools: (opts.tools ?? []).map(toFeatureLabel),
-    libraries: (opts.libraries ?? []).map(toFeatureLabel),
-    formats: (opts.formats ?? []).map(toFeatureLabel),
-    extensions: (opts.extensions ?? []).map(toFeatureLabel),
-    lintCommand,
-    configFile: null,
-    source: 'detection-fallback'
+    typescript: opts.typescript === true
   }
 }
 
@@ -448,7 +451,7 @@ export const generateSkillContent = (
   features: EslintConfigFeatures,
   format: AgentTarget['format']
 ): string => {
-  const { typescript, frameworks, testing, tools, libraries, formats, extensions, lintCommand } = features
+  const { extensions, formats, frameworks, libraries, lintCommand, testing, tools, typescript } = features
   // ── Summary ────────────────────────────────────────────────────────────────
   const summaryLines: string[] = []
 
@@ -672,7 +675,7 @@ const handleCopilotInstructions = (
   cwd: string,
   body: string,
   force: boolean
-): 'written' | 'skipped' | null => {
+): 'skipped' | 'written' | null => {
   const filePath = join(cwd, COPILOT_INSTRUCTIONS_PATH)
 
   if (!existsSync(filePath)) return null
@@ -682,7 +685,7 @@ const handleCopilotInstructions = (
   if (existing.includes(COPILOT_SECTION_START)) {
     if (!force) return 'skipped'
 
-    const updated = existing.replace(
+    const updated = existing.replaceAll(
       new RegExp(`${COPILOT_SECTION_START}[\\s\\S]*?${COPILOT_SECTION_END}`, 'g'), `${COPILOT_SECTION_START}\n${body}\n${COPILOT_SECTION_END}`
     )
 
@@ -747,7 +750,7 @@ export const generateAgentSkills = async (
     else skipped.push(filePath)
   }
 
-  return { written, skipped }
+  return { skipped, written }
 }
 
 // ─── CLI handler ──────────────────────────────────────────────────────────────

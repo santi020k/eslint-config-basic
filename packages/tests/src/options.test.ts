@@ -22,7 +22,7 @@ describe('Deep Rule Assertions (#5)', () => {
   })
 
   it('should include TypeScript rules when typescript is enabled', () => {
-    const config = eslintConfig({ typescript: true, frameworks: {} })
+    const config = eslintConfig({ frameworks: {}, typescript: true })
     const rules = extractRuleNames(config)
 
     expect(rules).toContain('@typescript-eslint/no-explicit-any')
@@ -42,7 +42,7 @@ describe('Deep Rule Assertions (#5)', () => {
   })
 
   it('should include config entry names', () => {
-    const config = eslintConfig({ typescript: true, frameworks: {} })
+    const config = eslintConfig({ frameworks: {}, typescript: true })
     const names = extractConfigNames(config)
 
     expect(names).toContain('@eslint/js/recommended')
@@ -51,7 +51,7 @@ describe('Deep Rule Assertions (#5)', () => {
   })
 
   it('should NOT include React rules when only typescript is enabled', () => {
-    const config = eslintConfig({ typescript: true, frameworks: {}, autoFrameworks: false })
+    const config = eslintConfig({ autoFrameworks: false, frameworks: {}, typescript: true })
     const rules = extractRuleNames(config)
 
     expect(rules).not.toContain('react/jsx-pascal-case')
@@ -158,14 +158,14 @@ describe('Framework Rule Assertions — Svelte, Angular, Qwik', () => {
   })
 
   it('should NOT include Svelte rules when Svelte is not enabled', () => {
-    const config = eslintConfig({ typescript: true, autoFrameworks: false })
+    const config = eslintConfig({ autoFrameworks: false, typescript: true })
     const rules = extractRuleNames(config)
 
     expect(rules).not.toContain('svelte/no-at-html-tags')
   })
 
   it('should NOT include Angular rules when Angular is not enabled', () => {
-    const config = eslintConfig({ typescript: true, autoFrameworks: false })
+    const config = eslintConfig({ autoFrameworks: false, typescript: true })
     const rules = extractRuleNames(config)
 
     expect(rules).not.toContain('@angular-eslint/component-class-suffix')

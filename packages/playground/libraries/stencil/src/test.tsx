@@ -1,9 +1,9 @@
 import { Component, Prop } from '@stencil/core'
 
 @Component({
-  tag: 'my-component',
+  shadow: true,
   styleUrl: 'my-component.css',
-  shadow: true
+  tag: 'my-component'
 })
 export class MyComponent {
   /**

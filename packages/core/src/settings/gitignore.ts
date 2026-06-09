@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-import { includeIgnoreFile } from '@eslint/compat'
+import { includeIgnoreFile } from '@eslint/config-helpers'
 import type { TSESLint } from '@typescript-eslint/utils'
 
 /**

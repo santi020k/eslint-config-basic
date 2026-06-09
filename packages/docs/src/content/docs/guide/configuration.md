@@ -24,17 +24,17 @@ import { eslintConfig, Extension, Format, Library, Runtime, Testing, Tool } from
 
 export default eslintConfig({
   detectRootDir: process.cwd(),
-  typescript: true,
-  runtime: Runtime.Browser,
+  extensions: [Extension.Unicorn, Extension.Security],
+  formats: [Format.Markdown, Format.Mdx],
   frameworks: {
     react: true
   },
   libraries: [Library.Tailwind, Library.I18next],
+  optionMergeStrategy: 'merge',
+  runtime: Runtime.Browser,
   testing: [Testing.Vitest],
-  formats: [Format.Markdown, Format.Mdx],
   tools: [Tool.Prettier],
-  extensions: [Extension.Unicorn, Extension.Security],
-  optionMergeStrategy: 'merge'
+  typescript: true
 })
 ```
 
@@ -60,10 +60,10 @@ Presets do not force a framework. Frameworks come from project detection or the 
 import { eslintConfig, NextMode } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
-  nextMode: NextMode.AppRouter,
   frameworks: {
     next: true
-  }
+  },
+  nextMode: NextMode.AppRouter
 })
 ```
 
@@ -108,10 +108,10 @@ import { eslintConfig, Library, Testing } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
   detection: {
+    formats: true,
     frameworks: true,
     libraries: false,
     testing: false,
-    formats: true,
     tools: true
   },
   libraries: [Library.Tailwind],
@@ -159,13 +159,13 @@ import { eslintConfig, Preset, Runtime } from '@santi020k/eslint-config-basic'
 export default eslintConfig({
   preset: Preset.Monorepo,
   projects: {
-    'apps/web': {
-      preset: Preset.App,
-      frameworks: { next: true }
-    },
     'apps/api': {
       preset: Preset.Library,
       runtime: Runtime.Node
+    },
+    'apps/web': {
+      frameworks: { next: true },
+      preset: Preset.App
     }
   }
 })
@@ -179,24 +179,13 @@ Each project key is treated as a folder relative to the repo root. The generated
 import { eslintConfig, Extension, Format, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
-  typescript: true,
-  strict: true,
-  frameworks: {
-    react: true,
-    next: true
-  },
-  libraries: [
-    Library.Tailwind,
-    Library.TanstackQuery,
-    Library.TanstackRouter,
-    Library.Storybook,
-    Library.I18next
-  ],
-  testing: [
-    Testing.Vitest,
-    Testing.Playwright,
-    Testing.TestingLibrary,
-    Testing.Cypress
+  extensions: [
+    Extension.Unicorn,
+    Extension.Sonarjs,
+    Extension.Perfectionist,
+    Extension.Security,
+    Extension.Regexp,
+    Extension.BestPractices
   ],
   formats: [
     Format.Mdx,
@@ -206,19 +195,30 @@ export default eslintConfig({
     Format.Yaml,
     Format.Toml
   ],
+  frameworks: {
+    next: true,
+    react: true
+  },
+  libraries: [
+    Library.Tailwind,
+    Library.TanstackQuery,
+    Library.TanstackRouter,
+    Library.Storybook,
+    Library.I18next
+  ],
+  strict: true,
+  testing: [
+    Testing.Vitest,
+    Testing.Playwright,
+    Testing.TestingLibrary,
+    Testing.Cypress
+  ],
   tools: [
     Tool.Prettier,
     Tool.Cspell,
     Tool.Jsdoc
   ],
-  extensions: [
-    Extension.Unicorn,
-    Extension.Sonarjs,
-    Extension.Perfectionist,
-    Extension.Security,
-    Extension.Regexp,
-    Extension.BestPractices
-  ]
+  typescript: true
 })
 ```
 

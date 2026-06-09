@@ -13,17 +13,17 @@ export const cspell: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('cspell'
 
   return [
     {
-      name: 'integrations/cspell',
       files: GLOB_JS_TS_ALL,
+      name: 'integrations/cspell',
       plugins: { '@cspell': pluginCspell },
       rules: {
         '@cspell/spellchecker': ['warn', {
           autoFix: false,
-          numSuggestions: 3,
           checkComments: true,
           checkIdentifiers: true,
           checkStrings: true,
-          checkStringTemplates: true
+          checkStringTemplates: true,
+          numSuggestions: 3
         }]
       }
     }

@@ -13,13 +13,13 @@ export const remix: TSESLint.FlatConfig.ConfigArray = [
     }
   },
   {
+    files: ['**/*.tsx/*.ts', '**/*.ts/*.ts'],
     // Disable rules that cause false positives in Remix virtual script blocks.
     // Type-checked rule disabling is handled by @santi020k/eslint-config-typescript.
     name: 'eslint-config-remix/virtual-script-rules',
-    files: ['**/*.tsx/*.ts', '**/*.ts/*.ts'],
     rules: {
-      'no-unused-expressions': 'off',
-      '@typescript-eslint/no-unused-expressions': 'off'
+      '@typescript-eslint/no-unused-expressions': 'off',
+      'no-unused-expressions': 'off'
     }
   }
 ]

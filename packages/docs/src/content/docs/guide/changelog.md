@@ -25,7 +25,7 @@ description: "Release history for @santi020k/eslint-config-basic."
   ```ts
   import { generateAgentSkills } from '@santi020k/eslint-config-basic'
 
-  const { written, skipped } = generateAgentSkills({
+  const { skipped, written } = generateAgentSkills({
     cwd: process.cwd(),
     force: true
   })

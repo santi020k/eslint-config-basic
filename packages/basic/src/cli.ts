@@ -38,7 +38,7 @@ const getFrameworkKeys = (detectedFrameworks?: string[]): string[] => {
   return [...frameworkKeys].sort()
 }
 
-const createConfigContent = (cwd: string): { configPath: string, configContent: string } => {
+const createConfigContent = (cwd: string): { configContent: string, configPath: string } => {
   const options = detectProjectOptions(cwd)
   const frameworkKeys = getFrameworkKeys(options.detectedFrameworks)
   const imports: string[] = ['import { eslintConfig } from \'@santi020k/eslint-config-basic\'']
@@ -61,12 +61,12 @@ export default eslintConfig({
 `
 
   return {
-    configPath: resolveConfigPath(cwd),
-    configContent
+    configContent,
+    configPath: resolveConfigPath(cwd)
   }
 }
 
-const formatList = (values: unknown[] | undefined): string => {
+const formatList = (values: undefined | unknown[]): string => {
   if (!values?.length) return 'none'
 
   return values.join(', ')
@@ -76,16 +76,16 @@ const getProjectSummary = (cwd: string) => {
   const options = detectProjectOptions(cwd)
 
   return {
-    typescript: Boolean(options.typescript),
-    preset: options.preset ?? 'basic',
-    runtime: options.runtime ?? 'universal',
-    nextMode: options.nextMode ?? 'n/a',
+    extensions: options.extensions ?? [],
+    formats: options.formats ?? [],
     frameworks: getFrameworkKeys(options.detectedFrameworks),
     libraries: options.libraries ?? [],
+    nextMode: options.nextMode ?? 'n/a',
+    preset: options.preset ?? 'basic',
+    runtime: options.runtime ?? 'universal',
     testing: options.testing ?? [],
-    formats: options.formats ?? [],
     tools: options.tools ?? [],
-    extensions: options.extensions ?? []
+    typescript: Boolean(options.typescript)
   }
 }
 
@@ -177,7 +177,7 @@ export const handleInit = (cwd: string = process.cwd()) => {
 export const handleUpdate = (cwd: string = process.cwd()) => {
   console.log('🔍 Detecting project settings...')
 
-  const { configPath, configContent } = createConfigContent(cwd)
+  const { configContent, configPath } = createConfigContent(cwd)
 
   writeFileSync(configPath, configContent)
 
@@ -253,28 +253,54 @@ export const runCli = (argv: string[] = process.argv, cwd: string = process.cwd(
     return
   }
 
-  if (command === 'init') {
-    handleInit(cwd)
-  } else if (command === 'update') {
-    handleUpdate(cwd)
-  } else if (command === 'explain') {
-    handleExplain(cwd)
-  } else if (command === 'docs') {
-    handleDocs(cwd)
-  } else if (command === 'migrate') {
-    handleMigrate(cwd)
-  } else if (command === 'generate-skill') {
-    handleGenerateSkill(cwd, hasForce).catch((err: unknown) => {
-      console.error('❌ Failed to generate skill files:', err)
+  switch (command) {
+    case 'docs': {
+      handleDocs(cwd)
+
+      break
+    }
+
+    case 'explain': {
+      handleExplain(cwd)
+
+      break
+    }
+
+    case 'generate-skill': {
+      handleGenerateSkill(cwd, hasForce).catch((error: unknown) => {
+        console.error('❌ Failed to generate skill files:', error)
+
+        process.exitCode = 1
+      })
+
+      break
+    }
+
+    case 'init': {
+      handleInit(cwd)
+
+      break
+    }
+
+    case 'migrate': {
+      handleMigrate(cwd)
+
+      break
+    }
+
+    case 'update': {
+      handleUpdate(cwd)
+
+      break
+    }
+
+    default: {
+      console.error(`Unknown command: ${command}`)
+
+      printUsage()
 
       process.exitCode = 1
-    })
-  } else {
-    console.error(`Unknown command: ${command}`)
-
-    printUsage()
-
-    process.exitCode = 1
+    }
   }
 }
 

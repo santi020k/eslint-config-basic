@@ -45,8 +45,8 @@ Use `tsconfigRootDir` when your project layout needs an explicit root for parser
 import { eslintConfig } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
-  typescript: true,
-  tsconfigRootDir: import.meta.dirname
+  tsconfigRootDir: import.meta.dirname,
+  typescript: true
 })
 ```
 

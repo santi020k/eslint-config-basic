@@ -29,7 +29,7 @@ const listChangedFiles = baseRef => {
     `git diff --name-only --diff-filter=ACMR ${baseRef}...HEAD`, { encoding: 'utf-8' }
   )
 
-  const eslintExt = new Set(['.js', '.jsx', '.mjs', '.cjs', '.ts', '.tsx'])
+  const eslintExt = new Set(['.cjs', '.js', '.jsx', '.mjs', '.ts', '.tsx'])
 
   return rawOutput
     .split('\n')

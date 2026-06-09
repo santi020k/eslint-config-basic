@@ -10,8 +10,8 @@ import type { TSESLint } from '@typescript-eslint/utils'
  */
 export const nextConfig: TSESLint.FlatConfig.ConfigArray = [
   {
-    name: 'eslint-config-next/plugin',
     files: GLOB_JS_TS,
+    name: 'eslint-config-next/plugin',
     plugins: {
       '@next/next': pluginNext
     },
@@ -21,13 +21,13 @@ export const nextConfig: TSESLint.FlatConfig.ConfigArray = [
     }
   },
   {
-    name: 'eslint-config-next/custom',
     files: GLOB_JS_TS,
+    name: 'eslint-config-next/custom',
     rules
   },
   {
-    name: 'eslint-config-next/ignores',
-    ignores: ['.next/*']
+    ignores: ['.next/*'],
+    name: 'eslint-config-next/ignores'
   }
 ]
 

@@ -7,8 +7,8 @@ import type { TSESLint } from '@typescript-eslint/utils'
  */
 export const angularConfig: TSESLint.FlatConfig.ConfigArray = [
   {
-    name: 'eslint-config-angular/rules',
     files: ['**/*.ts'],
+    name: 'eslint-config-angular/rules',
     plugins: {
       '@angular-eslint': pluginAngular
     },

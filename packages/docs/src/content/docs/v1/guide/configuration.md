@@ -29,16 +29,16 @@ import { eslintConfig, Extension, Format, Library, Runtime, Testing, Tool } from
 import react from '@santi020k/eslint-config-react'
 
 export default eslintConfig({
-  typescript: true,
-  runtime: Runtime.Browser,
+  extensions: [Extension.Unicorn, Extension.Security],
+  formats: [Format.Markdown, Format.Mdx],
   frameworks: {
     react
   },
   libraries: [Library.Tailwind, Library.I18next],
+  runtime: Runtime.Browser,
   testing: [Testing.Vitest],
-  formats: [Format.Markdown, Format.Mdx],
   tools: [Tool.Prettier],
-  extensions: [Extension.Unicorn, Extension.Security]
+  typescript: true
 })
 ```
 
@@ -94,33 +94,14 @@ import next from '@santi020k/eslint-config-next'
 import react from '@santi020k/eslint-config-react'
 
 export default eslintConfig({
-  // Enable TypeScript support (auto-detected if tsconfig.json exists)
-  typescript: true,
-
-  // Strict mode: all warnings become errors
-  strict: true,
-
-  // Frameworks (imports are lazy-loaded)
-  frameworks: {
-    react,
-    next
-  },
-
-  // Libraries & Styling
-  libraries: [
-    Library.Tailwind,
-    Library.TanstackQuery,
-    Library.TanstackRouter,
-    Library.Storybook,
-    Library.I18next
-  ],
-
-  // Testing Frameworks
-  testing: [
-    Testing.Vitest,
-    Testing.Playwright,
-    Testing.TestingLibrary,
-    Testing.Cypress
+  // Specialized Extensions
+  extensions: [
+    Extension.Unicorn,
+    Extension.Sonarjs,
+    Extension.Perfectionist,
+    Extension.Security,
+    Extension.Regexp,
+    Extension.BestPractices
   ],
 
   // File Formats
@@ -133,6 +114,32 @@ export default eslintConfig({
     Format.Toml
   ],
 
+  // Frameworks (imports are lazy-loaded)
+  frameworks: {
+    next,
+    react
+  },
+
+  // Libraries & Styling
+  libraries: [
+    Library.Tailwind,
+    Library.TanstackQuery,
+    Library.TanstackRouter,
+    Library.Storybook,
+    Library.I18next
+  ],
+
+  // Strict mode: all warnings become errors
+  strict: true,
+
+  // Testing Frameworks
+  testing: [
+    Testing.Vitest,
+    Testing.Playwright,
+    Testing.TestingLibrary,
+    Testing.Cypress
+  ],
+
   // Standalone Tools
   tools: [
     Tool.Prettier,
@@ -140,15 +147,8 @@ export default eslintConfig({
     Tool.Jsdoc
   ],
 
-  // Specialized Extensions
-  extensions: [
-    Extension.Unicorn,
-    Extension.Sonarjs,
-    Extension.Perfectionist,
-    Extension.Security,
-    Extension.Regexp,
-    Extension.BestPractices
-  ]
+  // Enable TypeScript support (auto-detected if tsconfig.json exists)
+  typescript: true
 })
 ```
 

@@ -39,12 +39,12 @@ import next from '@santi020k/eslint-config-next'
 import react from '@santi020k/eslint-config-react'
 
 export default eslintConfig({
-  typescript: true,
-  nextMode: NextMode.AppRouter,
   frameworks: {
-    react,
-    next
-  }
+    next,
+    react
+  },
+  nextMode: NextMode.AppRouter,
+  typescript: true
 })
 ```
 

@@ -43,8 +43,8 @@ describe('detectProjectOptions fixture matrix', () => {
     const dir = createFixtureProject(
       {
         dependencies: {
-          next: 'latest',
-          '@nestjs/core': 'latest'
+          '@nestjs/core': 'latest',
+          next: 'latest'
         }
       }, ['app'], { 'tsconfig.json': '{}' }
     )

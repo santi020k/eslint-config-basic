@@ -31,10 +31,10 @@ bun add -d @santi020k/eslint-config-basic
 import { eslintConfig } from '@santi020k/eslint-config-basic'
 
 export default eslintConfig({
-  typescript: true,
   frameworks: {
     vue: true
-  }
+  },
+  typescript: true
 })
 ```
 

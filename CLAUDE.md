@@ -127,11 +127,11 @@ Framework files like `.svelte`, `.astro`, `.vue` generate virtual TypeScript scr
 
 ```ts
 export default {
-  name: 'eslint-config-svelte/virtual-script-rules',
   files: ['**/*.svelte/*.ts', '**/*.svelte/*.tsx'],
+  name: 'eslint-config-svelte/virtual-script-rules',
   rules: {
-    'no-unused-expressions': 'off',
-    '@typescript-eslint/no-unused-expressions': 'off'
+    '@typescript-eslint/no-unused-expressions': 'off',
+    'no-unused-expressions': 'off'
   }
 }
 ```
@@ -145,7 +145,7 @@ When writing integration tests that call `lintText()`, **do not rely on auto-det
 Use `typescript: false` when the test doesn't need TS-specific rule checking:
 
 ```ts
-const config = eslintConfig({ typescript: false, frameworks: { react: reactConfig } })
+const config = eslintConfig({ frameworks: { react: reactConfig }, typescript: false })
 ```
 
 ## Common Pitfalls

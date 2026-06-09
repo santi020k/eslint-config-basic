@@ -35,8 +35,8 @@ describe('eslintConfig Function', () => {
   it('should return config with React when react framework is specified', () => {
     const config = eslintConfig({
       frameworks: {
-        react: [{ name: 'mock-react', rules: {} }],
-        expo: [{ name: 'mock-expo', rules: {} }]
+        expo: [{ name: 'mock-expo', rules: {} }],
+        react: [{ name: 'mock-react', rules: {} }]
       }
     })
 
@@ -50,8 +50,8 @@ describe('eslintConfig Function', () => {
   it('should return config with Next when next and react frameworks are specified', () => {
     const config = eslintConfig({
       frameworks: {
-        react: [{ name: 'mock-react', rules: {} }],
-        next: [{ name: 'mock-next', rules: {} }]
+        next: [{ name: 'mock-next', rules: {} }],
+        react: [{ name: 'mock-react', rules: {} }]
       }
     })
 
@@ -60,6 +60,19 @@ describe('eslintConfig Function', () => {
     expect(config.length).toBeGreaterThan(0)
 
     expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-next')
+  })
+
+  it('does not mutate framework options while adding implicit React', () => {
+    const frameworks = {
+      next: [{ name: 'mock-next', rules: {} }]
+    }
+
+    eslintConfig({ frameworks })
+
+    expect(frameworks).toEqual({
+      next: [{ name: 'mock-next', rules: {} }]
+    })
+    expect('react' in frameworks).toBe(false)
   })
 
   it('should return config with Nest when nest framework is specified', () => {
@@ -118,10 +131,10 @@ describe('eslintConfig Function', () => {
   it('should prepend a global ignores block when ignores option is non-empty', () => {
     const patterns = ['dist/**', 'tmp/**']
     const config = eslintConfig({ ignores: patterns })
-    const defaultIgnoreEntry = config.find((entry): entry is { name: string, ignores?: string[] } => typeof entry === 'object' &&
+    const defaultIgnoreEntry = config.find((entry): entry is { ignores?: string[], name: string } => typeof entry === 'object' &&
       'name' in entry &&
       entry.name === 'eslint-config-basic/default-ignores')
-    const ignoreEntry = config.find((entry): entry is { name: string, ignores?: string[] } => typeof entry === 'object' &&
+    const ignoreEntry = config.find((entry): entry is { ignores?: string[], name: string } => typeof entry === 'object' &&
       'name' in entry &&
       entry.name === 'eslint-config-basic/ignores')
 
@@ -147,8 +160,8 @@ describe('eslintConfig Function', () => {
 
   it('should handle multiple framework configs', () => {
     const config = eslintConfig({
-      typescript: true,
-      frameworks: { react: [{ name: 'mock-react', rules: {} }] }
+      frameworks: { react: [{ name: 'mock-react', rules: {} }] },
+      typescript: true
     })
 
     expect(Array.isArray(config)).toBe(true)
@@ -160,11 +173,11 @@ describe('eslintConfig Function', () => {
 
   it('should handle integrations', () => {
     const config = eslintConfig({
-      typescript: true,
+      extensions: [Extension.Unicorn],
       libraries: [Library.Tailwind],
       testing: [Testing.Vitest],
       tools: [Tool.Prettier],
-      extensions: [Extension.Unicorn]
+      typescript: true
     })
 
     expect(Array.isArray(config)).toBe(true)
@@ -180,16 +193,16 @@ describe('eslintConfig Function', () => {
 
   it('should handle all framework configs combined', () => {
     const config = eslintConfig({
-      typescript: true,
       frameworks: {
-        react: [{ name: 'mock-react', rules: {} }],
-        next: [{ name: 'mock-next', rules: {} }],
         astro: [{ name: 'mock-astro', rules: {} }],
         expo: [{ name: 'mock-expo', rules: {} }],
-        nest: [{ name: 'mock-nest', rules: {} }],
         hono: [{ name: 'mock-hono', rules: {} }],
+        nest: [{ name: 'mock-nest', rules: {} }],
+        next: [{ name: 'mock-next', rules: {} }],
+        react: [{ name: 'mock-react', rules: {} }],
         vue: [{ name: 'mock-vue', rules: {} }]
-      }
+      },
+      typescript: true
     })
 
     expect(Array.isArray(config)).toBe(true)
@@ -207,10 +220,10 @@ describe('eslintConfig Function', () => {
 
   it('should handle all integrations combined', () => {
     const config = eslintConfig({
-      typescript: true,
+      extensions: Object.values(Extension),
       libraries: Object.values(Library),
       tools: Object.values(Tool),
-      extensions: Object.values(Extension)
+      typescript: true
     })
 
     expect(Array.isArray(config)).toBe(true)
@@ -220,8 +233,8 @@ describe('eslintConfig Function', () => {
 
   it('should handle roadmap options (Jest, Cypress, TestingLibrary, GraphQL)', () => {
     const config = eslintConfig({
-      testing: [Testing.Jest, Testing.Cypress, Testing.TestingLibrary],
-      formats: [Format.Graphql]
+      formats: [Format.Graphql],
+      testing: [Testing.Jest, Testing.Cypress, Testing.TestingLibrary]
     })
 
     expect(Array.isArray(config)).toBe(true)
@@ -252,14 +265,14 @@ describe('eslintConfig Function', () => {
 
   it('should handle full kitchen-sink configuration', () => {
     const config = eslintConfig({
-      typescript: true,
       frameworks: {
-        react: [{ name: 'mock-react', rules: {} }],
-        next: [{ name: 'mock-next', rules: {} }]
+        next: [{ name: 'mock-next', rules: {} }],
+        react: [{ name: 'mock-react', rules: {} }]
       },
+      settings: [Setting.Gitignore],
       testing: [Testing.Vitest],
       tools: [Tool.Cspell],
-      settings: [Setting.Gitignore]
+      typescript: true
     })
 
     expect(Array.isArray(config)).toBe(true)
@@ -312,9 +325,9 @@ describe('eslintConfig Function', () => {
 
   it('should keep the Browser preset free of implicit React rules', () => {
     const config = eslintConfig({
-      preset: Preset.Browser,
+      autoFrameworks: false,
       frameworks: {},
-      autoFrameworks: false
+      preset: Preset.Browser
     })
 
     const rules = extractRuleNames(config)
@@ -324,9 +337,9 @@ describe('eslintConfig Function', () => {
 
   it('should keep the All preset focused on bundled configs', () => {
     const config = eslintConfig({
-      preset: Preset.All,
+      autoFrameworks: false,
       frameworks: {},
-      autoFrameworks: false
+      preset: Preset.All
     })
 
     const names = extractConfigNames(config)
@@ -349,10 +362,10 @@ describe('eslintConfig Function', () => {
 
   it('should replace preset integrations when optionMergeStrategy is replace', () => {
     const config = eslintConfig({
-      preset: Preset.All,
+      autoFrameworks: false,
       optionMergeStrategy: 'replace',
-      tools: [Tool.Prettier],
-      autoFrameworks: false
+      preset: Preset.All,
+      tools: [Tool.Prettier]
     })
 
     const names = extractConfigNames(config)
@@ -365,8 +378,8 @@ describe('eslintConfig Function', () => {
     const cwd = mkdtempSync(join(tmpdir(), 'eslint-config-detect-root-'))
     try {
       writeFileSync(join(cwd, 'package.json'), JSON.stringify({
-        name: 'tmp-detect-root',
-        dependencies: { next: 'latest' }
+        dependencies: { next: 'latest' },
+        name: 'tmp-detect-root'
       }))
 
       const config = eslintConfig({
@@ -378,7 +391,7 @@ describe('eslintConfig Function', () => {
       expect(names.some(name => name.startsWith('eslint-config-next/'))).toBe(true)
       expect(names).toContain('eslint-config-react/recommended')
     } finally {
-      rmSync(cwd, { recursive: true, force: true })
+      rmSync(cwd, { force: true, recursive: true })
     }
   })
 
@@ -456,8 +469,8 @@ describe('Framework Composition — remaining frameworks', () => {
     // Expo requires react — pass a mock react config alongside
     const config = eslintConfig({
       frameworks: {
-        react: [{ name: 'mock-react', rules: {} }],
-        expo: [{ name: 'mock-expo', rules: {} }]
+        expo: [{ name: 'mock-expo', rules: {} }],
+        react: [{ name: 'mock-react', rules: {} }]
       }
     })
 
@@ -518,21 +531,21 @@ describe('Framework Composition — remaining frameworks', () => {
 
   it('should handle all twelve frameworks combined', () => {
     const config = eslintConfig({
-      typescript: true,
       frameworks: {
-        react: [{ name: 'mock-react', rules: {} }],
-        next: [{ name: 'mock-next', rules: {} }],
+        angular: [{ name: 'mock-angular', rules: {} }],
         astro: [{ name: 'mock-astro', rules: {} }],
         expo: [{ name: 'mock-expo', rules: {} }],
-        nest: [{ name: 'mock-nest', rules: {} }],
         hono: [{ name: 'mock-hono', rules: {} }],
-        vue: [{ name: 'mock-vue', rules: {} }],
-        svelte: [{ name: 'mock-svelte', rules: {} }],
-        solid: [{ name: 'mock-solid', rules: {} }],
-        angular: [{ name: 'mock-angular', rules: {} }],
+        nest: [{ name: 'mock-nest', rules: {} }],
+        next: [{ name: 'mock-next', rules: {} }],
         qwik: [{ name: 'mock-qwik', rules: {} }],
-        remix: [{ name: 'mock-remix', rules: {} }]
-      }
+        react: [{ name: 'mock-react', rules: {} }],
+        remix: [{ name: 'mock-remix', rules: {} }],
+        solid: [{ name: 'mock-solid', rules: {} }],
+        svelte: [{ name: 'mock-svelte', rules: {} }],
+        vue: [{ name: 'mock-vue', rules: {} }]
+      },
+      typescript: true
     })
 
     expect(Array.isArray(config)).toBe(true)

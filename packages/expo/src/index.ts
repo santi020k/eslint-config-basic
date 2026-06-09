@@ -29,10 +29,10 @@ const sanitizedConfigs = compatConfigs.map(config => {
 
   if (config.plugins) {
     const {
+      '@typescript-eslint': _tsEslint,
       import: _import,
       react: _react,
       'react-hooks': _reactHooks,
-      '@typescript-eslint': _tsEslint,
       ...restPlugins
     } = config.plugins
 
