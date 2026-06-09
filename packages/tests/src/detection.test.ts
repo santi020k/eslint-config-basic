@@ -56,6 +56,21 @@ describe('detectProjectOptions', () => {
     expect(options.libraries).toContain(Library.Tailwind)
   })
 
+  it('should detect Tailwind from first-party Tailwind adapter packages', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      devDependencies: {
+        '@tailwindcss/postcss': 'latest',
+        '@tailwindcss/vite': 'latest'
+      }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.libraries).toContain(Library.Tailwind)
+  })
+
   it('should detect Vitest if vitest is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
@@ -133,6 +148,49 @@ describe('detectProjectOptions', () => {
     expect(options.tools).toContain(Tool.Prettier)
   })
 
+  it('should detect Prettier from plugins and config files', () => {
+    vi.mocked(fs.existsSync).mockImplementation(path => {
+      const p = path.toString()
+
+      return p.includes('package.json') || p.endsWith('.prettierrc')
+    })
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      devDependencies: { 'prettier-plugin-tailwindcss': 'latest' }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.tools).toContain(Tool.Prettier)
+  })
+
+  it('should detect CSpell from config files', () => {
+    vi.mocked(fs.existsSync).mockImplementation(path => {
+      const p = path.toString()
+
+      return p.includes('package.json') || p.endsWith('cspell.config.yaml')
+    })
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({ dependencies: {} }))
+
+    const options = detectProjectOptions()
+
+    expect(options.tools).toContain(Tool.Cspell)
+    expect(options.formats).toContain(Format.Yaml)
+  })
+
+  it('should detect JSDoc from its ESLint plugin', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      devDependencies: { 'eslint-plugin-jsdoc': 'latest' }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.tools).toContain(Tool.Jsdoc)
+  })
+
   it('should detect Storybook via @storybook/core', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
@@ -155,6 +213,33 @@ describe('detectProjectOptions', () => {
     const options = detectProjectOptions()
 
     expect(options.formats).toContain(Format.Graphql)
+  })
+
+  it('should detect MDX from Astro MDX', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      dependencies: { '@astrojs/mdx': 'latest' }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.formats).toContain(Format.Mdx)
+  })
+
+  it('should detect Markdown from Markdown tooling packages', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      dependencies: {
+        'markdownlint-cli2': 'latest',
+        'react-markdown': 'latest'
+      }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.formats).toContain(Format.Markdown)
   })
 
   it('should detect GraphQL when schema.graphql exists', () => {
@@ -347,6 +432,33 @@ describe('detectProjectOptions', () => {
 
     expect(options.detectedFrameworks).toContain('hono')
     expect(options.runtime).toBe(Runtime.Worker)
+  })
+
+  it('should detect Cloudflare Worker runtime for non-framework worker packages', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      devDependencies: { '@cloudflare/workers-types': 'latest', wrangler: 'latest' }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.detectedFrameworks).toEqual([])
+    expect(options.runtime).toBe(Runtime.Worker)
+  })
+
+  it('should not force Worker runtime for browser frameworks deployed with Wrangler', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      dependencies: { astro: 'latest' },
+      devDependencies: { wrangler: 'latest' }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.detectedFrameworks).toContain('astro')
+    expect(options.runtime).toBe(Runtime.Browser)
   })
 
   it('should detect i18next if i18next is a dependency', () => {

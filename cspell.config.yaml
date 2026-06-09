@@ -27,6 +27,7 @@ words:
   - getentrybyslug
   - gitignore
   - hono
+  - iconify
   - importscripts
   - isnan
   - istanbul

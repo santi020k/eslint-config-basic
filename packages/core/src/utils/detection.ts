@@ -133,6 +133,28 @@ const detectFrameworks = (allDeps: DependencyMap, setRuntime: (runtime: Runtime)
     setRuntime(Runtime.Browser)
   }
 
+  if (
+    (
+      allDeps.wrangler ||
+      allDeps['@cloudflare/workers-types'] ||
+      allDeps['@cloudflare/vitest-pool-workers']
+    ) &&
+    !detected.some(framework => [
+      'angular',
+      'astro',
+      'expo',
+      'next',
+      'qwik',
+      'react',
+      'remix',
+      'solid',
+      'svelte',
+      'vue'
+    ].includes(framework))
+  ) {
+    setRuntime(Runtime.Worker)
+  }
+
   return dedupe(detected)
 }
 
@@ -153,7 +175,13 @@ const detectTypescript = (detectRootDir: string): boolean => pathExists(join(det
 const detectLibraries = (allDeps: DependencyMap): Library[] => {
   const libraries: Library[] = []
 
-  if (allDeps.tailwindcss) libraries.push(Library.Tailwind)
+  if (
+    allDeps.tailwindcss ||
+    allDeps['@tailwindcss/postcss'] ||
+    allDeps['@tailwindcss/vite'] ||
+    allDeps['@tailwindcss/typography'] ||
+    allDeps['@iconify/tailwind4']
+  ) libraries.push(Library.Tailwind)
 
   if (allDeps.i18next) libraries.push(Library.I18next)
 
@@ -238,6 +266,7 @@ const detectFormats = (allDeps: DependencyMap, detectRootDir: string): Format[] 
   if (
     allDeps['@mdx-js/react'] ||
     allDeps['@mdx-js/mdx'] ||
+    allDeps['@astrojs/mdx'] ||
     hasFileMatching(detectRootDir, fileName => fileName.endsWith('.mdx'))
   ) {
     formats.push(Format.Mdx)
@@ -245,6 +274,9 @@ const detectFormats = (allDeps: DependencyMap, detectRootDir: string): Format[] 
 
   if (
     allDeps.markdown ||
+    allDeps['react-markdown'] ||
+    allDeps['remark-gfm'] ||
+    allDeps['markdownlint-cli2'] ||
     pathExists(join(detectRootDir, '.markdownlint.json')) ||
     pathExists(join(detectRootDir, '.markdownlint.yaml')) ||
     hasFileMatching(detectRootDir, fileName => fileName.endsWith('.md'))
@@ -262,6 +294,7 @@ const detectFormats = (allDeps: DependencyMap, detectRootDir: string): Format[] 
   if (
     pathExists(join(detectRootDir, 'pnpm-workspace.yaml')) ||
     pathExists(join(detectRootDir, 'cspell.config.yaml')) ||
+    pathExists(join(detectRootDir, 'cspell.config.yml')) ||
     pathExists(join(detectRootDir, '.github/workflows'))
   ) {
     formats.push(Format.Yaml)
@@ -277,14 +310,42 @@ const detectFormats = (allDeps: DependencyMap, detectRootDir: string): Format[] 
   return dedupe(formats)
 }
 
-const detectTools = (allDeps: DependencyMap): Tool[] => {
+const detectTools = (allDeps: DependencyMap, detectRootDir: string): Tool[] => {
   const tools: Tool[] = []
 
   if (allDeps['@nestjs/swagger']) tools.push(Tool.Swagger)
 
-  if (allDeps.prettier) tools.push(Tool.Prettier)
+  if (
+    allDeps.prettier ||
+    allDeps['prettier-plugin-astro'] ||
+    allDeps['prettier-plugin-tailwindcss'] ||
+    pathExists(join(detectRootDir, '.prettierrc')) ||
+    pathExists(join(detectRootDir, '.prettierrc.json')) ||
+    pathExists(join(detectRootDir, '.prettierrc.yaml')) ||
+    pathExists(join(detectRootDir, '.prettierrc.yml')) ||
+    pathExists(join(detectRootDir, '.prettierrc.js')) ||
+    pathExists(join(detectRootDir, '.prettierrc.cjs')) ||
+    pathExists(join(detectRootDir, 'prettier.config.js')) ||
+    pathExists(join(detectRootDir, 'prettier.config.cjs')) ||
+    pathExists(join(detectRootDir, 'prettier.config.mjs'))
+  ) tools.push(Tool.Prettier)
 
-  if (allDeps.cspell || allDeps['@cspell/eslint-plugin']) tools.push(Tool.Cspell)
+  if (
+    allDeps.cspell ||
+    allDeps['@cspell/eslint-plugin'] ||
+    pathExists(join(detectRootDir, 'cspell.config.yaml')) ||
+    pathExists(join(detectRootDir, 'cspell.config.yml')) ||
+    pathExists(join(detectRootDir, 'cspell.config.json'))
+  ) tools.push(Tool.Cspell)
+
+  if (
+    allDeps.jsdoc ||
+    allDeps['eslint-plugin-jsdoc'] ||
+    pathExists(join(detectRootDir, 'jsdoc.json')) ||
+    pathExists(join(detectRootDir, 'jsdoc.config.js')) ||
+    pathExists(join(detectRootDir, 'jsdoc.config.cjs')) ||
+    pathExists(join(detectRootDir, 'jsdoc.config.mjs'))
+  ) tools.push(Tool.Jsdoc)
 
   return dedupe(tools)
 }
@@ -359,7 +420,7 @@ export const detectProjectOptions = (detectRootDir: string = process.cwd()): Esl
 
     options.formats = detectFormats(allDeps, detectRootDir)
 
-    options.tools = detectTools(allDeps)
+    options.tools = detectTools(allDeps, detectRootDir)
 
     options.extensions = dedupe(options.extensions)
 
