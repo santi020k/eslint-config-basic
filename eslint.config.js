@@ -19,7 +19,7 @@ export default [
     ],
     name: 'local-global-ignores'
   },
-  ...defineConfig({
+  ...await defineConfig({
     // Root lists tailwindcss for tooling; do not enable Tailwind ESLint for the whole monorepo.
     detection: { libraries: false },
     formats: [Format.Mdx, Format.Markdown],

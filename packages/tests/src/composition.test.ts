@@ -395,8 +395,8 @@ describe('eslintConfig Function', () => {
     }
   })
 
-  it('should throw a clear error for invalid framework shapes', () => {
-    expect(async () => await defineConfig({
+  it('should throw a clear error for invalid framework shapes', async () => {
+    await expect(defineConfig({
       frameworks: {
         react: { invalid: true } as unknown as ImportedFramework
       }
