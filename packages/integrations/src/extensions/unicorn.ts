@@ -20,7 +20,6 @@ export const unicorn: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('unicor
         unicorn: pluginUnicorn
       },
       rules: {
-        'unicorn/better-regex': 'warn',
         'unicorn/catch-error-name': 'warn',
         'unicorn/consistent-function-scoping': 'warn',
         'unicorn/no-abusive-eslint-disable': 'warn',
