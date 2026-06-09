@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig, Tool } from '../../../basic/dist/index.js'
+import { defineConfig, Tool } from '@santi020k/eslint-config-basic'
 
 export default await defineConfig({
   tools: [Tool.Cspell],

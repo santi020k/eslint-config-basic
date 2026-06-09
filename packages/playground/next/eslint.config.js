@@ -1,6 +1,6 @@
 // @ts-check
 
-import { defineConfig, NextMode } from '../../basic/dist/index.js'
+import { defineConfig, NextMode } from '@santi020k/eslint-config-basic'
 
 export default await defineConfig({
   detection: { libraries: false },

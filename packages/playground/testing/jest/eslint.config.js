@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig, Testing } from '../../../basic/dist/index.js'
+import { defineConfig, Testing } from '@santi020k/eslint-config-basic'
 
 export default await defineConfig({
   testing: [Testing.Jest],

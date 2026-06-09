@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig, Runtime } from '../../basic/dist/index.js'
+import { defineConfig, Runtime } from '@santi020k/eslint-config-basic'
 
 export default await defineConfig({
   frameworks: {
