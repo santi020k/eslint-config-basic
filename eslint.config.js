@@ -1,4 +1,4 @@
-import { eslintConfig, Format, Testing } from '@santi020k/eslint-config-basic'
+import { eslintConfig, Format, Testing } from './packages/basic/dist/index.js'
 
 export default [
   {
