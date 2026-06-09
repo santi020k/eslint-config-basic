@@ -1,4 +1,7 @@
 ---
+name: brand-guidelines
+description: MOVED — this skill has been relocated to packages/docs/.agent/skills/brand-guidelines/SKILL.md. Use that version when working on the docs site branding.
+---
 # ═══════════════════════════════════════════════════════════════════════════════
 # Codex OFFICE SKILL - Enhanced Metadata v2.0
 # ═══════════════════════════════════════════════════════════════════════════════

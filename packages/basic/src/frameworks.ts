@@ -12,8 +12,10 @@ import { nextConfig } from '@santi020k/eslint-config-next'
 import { qwik } from '@santi020k/eslint-config-qwik'
 import { reactConfig } from '@santi020k/eslint-config-react'
 import { remix } from '@santi020k/eslint-config-remix'
+import { slidev } from '@santi020k/eslint-config-slidev'
 import { solidConfig } from '@santi020k/eslint-config-solid'
 import { svelteConfig } from '@santi020k/eslint-config-svelte'
+import { vite } from '@santi020k/eslint-config-vite'
 import { vueConfig } from '@santi020k/eslint-config-vue'
 
 export type FrameworkFlags = Partial<Record<FrameworkName, true>>
@@ -67,11 +69,17 @@ export const getBundledFrameworkConfig = (
     case 'remix':
       return remix
 
+    case 'slidev':
+      return slidev(options)
+
     case 'solid':
       return solidConfig
 
     case 'svelte':
       return svelteConfig
+
+    case 'vite':
+      return vite(options)
 
     case 'vue':
       return vueConfig
@@ -88,7 +96,9 @@ export {
   qwik,
   reactConfig,
   remix,
+  slidev,
   solidConfig,
   svelteConfig,
+  vite,
   vueConfig
 }

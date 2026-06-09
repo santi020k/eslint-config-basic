@@ -1,0 +1,58 @@
+# @santi020k/eslint-config-basic AI Guide
+
+> You are an AI assistant helping a developer set up or modify their ESLint flat config using the `@santi020k/eslint-config-basic` package.
+
+## Core Concepts
+
+- **Flat Config Only**: This package only supports ESLint 9+ flat config (`eslint.config.js` or `eslint.config.mjs`). Legacy `.eslintrc` is not supported.
+- **Zero-Config Auto-Detection**: Automatically detects common frameworks and integrations from `package.json`.
+- **Composable Function**: The main export is `eslintConfig()`, which takes an options object.
+
+## Quick Start
+
+Installation:
+```bash
+npm install -D eslint @santi020k/eslint-config-basic
+```
+
+Basic usage:
+```javascript
+// eslint.config.js
+import { eslintConfig } from '@santi020k/eslint-config-basic'
+
+export default eslintConfig()
+```
+
+## Advanced Composition
+
+You can compose specific configs for explicit control:
+
+```javascript
+import { eslintConfig } from '@santi020k/eslint-config-basic'
+import reactConfig from '@santi020k/eslint-config-react'
+import { Testing, Format } from '@santi020k/eslint-config-core'
+
+export default eslintConfig({
+  strict: true,
+  typescript: true,
+  frameworks: {
+    react: reactConfig // Pass the imported config object, NOT boolean `true`
+  },
+  testing: [Testing.Vitest],
+  formats: [Format.JSONC, Format.Markdown]
+})
+```
+
+## Agent Skill Generator
+
+To help AI coding assistants (like yourself) follow the exact rules defined in a project, developers can generate agent instructions using our CLI:
+
+```bash
+npx @santi020k/eslint-config-basic generate-skill
+```
+
+This writes the standard rule rules to files like `.cursorrules` or `.agent/skills/` based on the active config.
+
+## Reference Links
+- Documentation: https://eslint.santi020k.com/
+- Repository: https://github.com/santi020k/eslint-config-basic

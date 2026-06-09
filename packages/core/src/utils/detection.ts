@@ -127,8 +127,29 @@ const detectFrameworks = (allDeps: DependencyMap, setRuntime: (runtime: Runtime)
     setRuntime(Runtime.Browser)
   }
 
+  if (allDeps['@slidev/cli']) {
+    detected.push('slidev', 'vue')
+
+    setRuntime(Runtime.Browser)
+  }
+
   if (allDeps['@remix-run/react'] || allDeps['@remix-run/node']) {
     detected.push('remix')
+
+    setRuntime(Runtime.Browser)
+  }
+
+  if (
+    allDeps.vite &&
+    !detected.some(framework => [
+      'astro',
+      'next',
+      'qwik',
+      'remix',
+      'slidev'
+    ].includes(framework))
+  ) {
+    detected.push('vite')
 
     setRuntime(Runtime.Browser)
   }
@@ -147,8 +168,10 @@ const detectFrameworks = (allDeps: DependencyMap, setRuntime: (runtime: Runtime)
       'qwik',
       'react',
       'remix',
+      'slidev',
       'solid',
       'svelte',
+      'vite',
       'vue'
     ].includes(framework))
   ) {
@@ -418,9 +441,9 @@ export const detectProjectOptions = (detectRootDir: string = process.cwd()): Esl
 
     options.testing = detectTesting(allDeps)
 
-    options.formats = detectFormats(allDeps, detectRootDir)
+    options.formats = dedupe([...(options.formats ?? []), ...detectFormats(allDeps, detectRootDir)])
 
-    options.tools = detectTools(allDeps, detectRootDir)
+    options.tools = dedupe([...(options.tools ?? []), ...detectTools(allDeps, detectRootDir)])
 
     options.extensions = dedupe(options.extensions)
 

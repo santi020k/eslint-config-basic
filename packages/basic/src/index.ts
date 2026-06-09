@@ -40,8 +40,10 @@ export {
   qwik,
   reactConfig,
   remix,
+  slidev,
   solidConfig,
   svelteConfig,
+  vite,
   vueConfig
 } from './frameworks.js'
 
@@ -348,6 +350,10 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     resolvedFrameworks.react = true
   }
 
+  if (resolvedFrameworks.slidev && !resolvedFrameworks.vue) {
+    resolvedFrameworks.vue = true
+  }
+
   // Deduplicate and filter entries
   const uniqueLibraries = [...new Set(libraries)]
   const uniqueTesting = [...new Set(testing)]
@@ -382,6 +388,8 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
   const angularParam = resolveFramework('angular', resolvedFrameworks.angular)
   const qwikParam = resolveFramework('qwik', resolvedFrameworks.qwik)
   const remixParam = resolveFramework('remix', resolvedFrameworks.remix)
+  const slidevParam = resolveFramework('slidev', resolvedFrameworks.slidev, { runtime })
+  const viteParam = resolveFramework('vite', resolvedFrameworks.vite, { runtime })
 
   // Use runtime-aware core config
   const runtimeCoreConfig = runtime !== Runtime.Universal ?
@@ -452,6 +460,8 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     ...angularParam,
     ...qwikParam,
     ...remixParam,
+    ...slidevParam,
+    ...viteParam,
 
     ...(typescript ? createTypescriptConfig({ tsconfigRootDir }) : []),
 

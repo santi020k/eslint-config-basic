@@ -1,6 +1,6 @@
 ---
 name: accessibility
-description: Web accessibility (a11y) for this Astro + Alpine.js + Tailwind website. Use this skill when auditing pages for accessibility, adding ARIA attributes, fixing keyboard navigation, improving color contrast, writing semantic HTML, making interactive Alpine.js components accessible, or any task related to WCAG compliance, screen reader compatibility, or inclusive design. Trigger on mentions of accessibility, a11y, WCAG, ARIA, screen reader, keyboard navigation, focus management, color contrast, or inclusive design.
+description: MOVED — this skill has been relocated to packages/docs/.agent/skills/accessibility/SKILL.md and updated for the Starlight docs site. Use that version when working in packages/docs/.
 ---
 
 # Accessibility Skill — santi020k Website

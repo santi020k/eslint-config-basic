@@ -1,0 +1,11 @@
+// @ts-check
+import { eslintConfig, Format } from '@santi020k/eslint-config-basic'
+
+export default eslintConfig({
+  formats: [Format.Markdown],
+  frameworks: {
+    slidev: true
+  },
+  tsconfigRootDir: import.meta.dirname,
+  typescript: true
+})

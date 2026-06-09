@@ -1,6 +1,6 @@
 ---
 name: ui-ux-pro-max
-description: UI/UX design intelligence. 50 styles, 21 palettes, 50 font pairings, 20 charts, 9 stacks.
+description: MOVED — this skill has been relocated to packages/docs/.agent/skills/ui-ux-pro-max/SKILL.md. Use that version when working on the docs site UI.
 ---
 # ui-ux-pro-max
 

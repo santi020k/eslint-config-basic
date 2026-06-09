@@ -107,7 +107,9 @@ describe('eslintConfig framework contracts', () => {
     'nest',
     'hono',
     'qwik',
-    'remix'
+    'remix',
+    'slidev',
+    'vite'
   ]
 
   it('resolves all framework flags through bundled resolvers', () => {

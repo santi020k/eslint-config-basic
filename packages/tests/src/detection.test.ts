@@ -340,6 +340,49 @@ describe('detectProjectOptions', () => {
     expect(options.frameworks?.qwik).toBeUndefined()
   })
 
+  it('should detect Slidev if @slidev/cli is a dependency', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      dependencies: { '@slidev/cli': 'latest' }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.detectedFrameworks).toContain('slidev')
+    expect(options.detectedFrameworks).toContain('vue')
+    expect(options.frameworks?.slidev).toBeUndefined()
+    expect(options.runtime).toBe(Runtime.Browser)
+  })
+
+  it('should detect Vite if vite is a dependency', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      devDependencies: { vite: 'latest' }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.detectedFrameworks).toContain('vite')
+    expect(options.frameworks?.vite).toBeUndefined()
+    expect(options.runtime).toBe(Runtime.Browser)
+  })
+
+  it('should not add Vite as a separate framework for Vite-backed meta-frameworks', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      dependencies: { astro: 'latest' },
+      devDependencies: { vite: 'latest' }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.detectedFrameworks).toContain('astro')
+    expect(options.detectedFrameworks).not.toContain('vite')
+  })
+
   it('should detect Remix if @remix-run/react is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
@@ -461,6 +504,20 @@ describe('detectProjectOptions', () => {
     expect(options.runtime).toBe(Runtime.Browser)
   })
 
+  it('should not force Worker runtime for Qwik deployed with Wrangler', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      dependencies: { '@builder.io/qwik': 'latest' },
+      devDependencies: { wrangler: 'latest' }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.detectedFrameworks).toContain('qwik')
+    expect(options.runtime).toBe(Runtime.Browser)
+  })
+
   it('should detect i18next if i18next is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
@@ -569,7 +626,7 @@ describe('detectProjectOptions', () => {
     expect(options.formats).toContain(Format.Graphql)
   })
 
-  it('should use default extensions unless explicitly disabled', () => {
+  it('should use default extensions, formats, and tools when package.json is present', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -578,6 +635,8 @@ describe('detectProjectOptions', () => {
 
     const options = detectProjectOptions()
 
+    expect(options.formats).toEqual([Format.Mdx, Format.Markdown, Format.Jsonc, Format.Yaml, Format.Toml])
+    expect(options.tools).toEqual([Tool.Prettier])
     expect(options.extensions).toEqual([Extension.Unicorn, Extension.Perfectionist, Extension.Security])
   })
 

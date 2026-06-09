@@ -1,6 +1,6 @@
 ---
 name: seo
-description: SEO optimization for this Astro website. Use this skill whenever working on meta tags, Open Graph, structured data (JSON-LD), sitemaps, robots.txt, Core Web Vitals, image optimization, page speed, internal linking, or any task related to search engine visibility and ranking. Trigger on mentions of SEO, search ranking, Google, meta description, canonical URL, schema markup, page speed, Lighthouse score, or discoverability.
+description: MOVED — this skill has been relocated to packages/docs/.agent/skills/seo/SKILL.md and updated for the Starlight docs site. Use that version when working in packages/docs/.
 ---
 
 # SEO Skill — Astro / santi020k Website

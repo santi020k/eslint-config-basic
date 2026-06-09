@@ -42,9 +42,11 @@
     "@santi020k/eslint-config-qwik#build": { "outputs": ["dist/**"] },
     "@santi020k/eslint-config-react#build": { "outputs": ["dist/**"] },
     "@santi020k/eslint-config-remix#build": { "outputs": ["dist/**"] },
+    "@santi020k/eslint-config-slidev#build": { "outputs": ["dist/**"] },
     "@santi020k/eslint-config-solid#build": { "outputs": ["dist/**"] },
     "@santi020k/eslint-config-svelte#build": { "outputs": ["dist/**"] },
     "@santi020k/eslint-config-typescript#build": { "outputs": ["dist/**"] },
+    "@santi020k/eslint-config-vite#build": { "outputs": ["dist/**"] },
     "@santi020k/eslint-config-vue#build": { "outputs": ["dist/**"] }
   },
   "futureFlags": {

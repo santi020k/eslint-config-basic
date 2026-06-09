@@ -1,6 +1,6 @@
 ---
 name: marketing
-description: Marketing copy, content strategy, and growth for this Astro personal/portfolio website. Use this skill for writing landing page copy, blog post headlines, CTAs, project descriptions, about page content, social media posts, email newsletter content, and any task aimed at attracting visitors, communicating value, or converting readers. Trigger on mentions of copy, landing page, headline, CTA, call to action, newsletter, social media, marketing, brand voice, about page, or converting visitors.
+description: MOVED — this skill has been relocated to packages/docs/.agent/skills/marketing/SKILL.md and rewritten for the eslint.santi020k.com docs site. Use that version when working in packages/docs/.
 ---
 
 # Marketing Skill — santi020k Website

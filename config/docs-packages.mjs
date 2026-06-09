@@ -104,6 +104,20 @@ export const packageDocs = [
     title: 'Remix guide'
   },
   {
+    description: 'Vite support for browser apps and Vite config files.',
+    docsPath: '/frameworks/vite.html',
+    packageName: '@santi020k/eslint-config-vite',
+    packagePath: 'packages/vite',
+    title: 'Vite guide'
+  },
+  {
+    description: 'Slidev support for Vue-powered presentation decks.',
+    docsPath: '/frameworks/slidev.html',
+    packageName: '@santi020k/eslint-config-slidev',
+    packagePath: 'packages/slidev',
+    title: 'Slidev guide'
+  },
+  {
     description: 'Libraries, tools, testing, formats, and extensions integrations.',
     docsPath: '/packages/integrations.html',
     packageName: '@santi020k/eslint-config-integrations',

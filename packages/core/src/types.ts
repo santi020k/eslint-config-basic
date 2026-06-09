@@ -206,8 +206,10 @@ export type DetectedFrameworkName =
   'qwik' |
   'react' |
   'remix' |
+  'slidev' |
   'solid' |
   'svelte' |
+  'vite' |
   'vue'
 
 /**
@@ -262,8 +264,10 @@ export interface EslintConfigOptions {
     qwik?: ImportedFramework
     react?: ImportedFramework
     remix?: ImportedFramework
+    slidev?: ImportedFramework
     solid?: ImportedFramework
     svelte?: ImportedFramework
+    vite?: ImportedFramework
     vue?: ImportedFramework
   }
 
