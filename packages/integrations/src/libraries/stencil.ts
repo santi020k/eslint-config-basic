@@ -8,8 +8,8 @@ import type { TSESLint } from '@typescript-eslint/utils'
  * Stencil ESLint configuration
  * Enforces best practices for Stencil.js components
  */
-export const stencil: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('stencil', () => {
-  const stencilPlugin = loadDefault<typeof StencilPlugin>('@stencil-community/eslint-plugin')
+export const stencil: Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('stencil', async () => {
+  const stencilPlugin = await loadDefault<typeof StencilPlugin>('@stencil-community/eslint-plugin')
 
   return [
     {

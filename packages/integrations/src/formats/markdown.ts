@@ -18,9 +18,9 @@ interface TypescriptEslint {
  * Markdown ESLint configuration
  * Lints markdown files for common issues
  */
-export const markdown: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('markdown', () => {
-  const pluginMarkdown = loadDefault<MarkdownPlugin>('@eslint/markdown')
-  const tsEslint = loadDefault<TypescriptEslint>('typescript-eslint')
+export const markdown: Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('markdown', async () => {
+  const pluginMarkdown = await loadDefault<MarkdownPlugin>('@eslint/markdown')
+  const tsEslint = await loadDefault<TypescriptEslint>('typescript-eslint')
 
   return [
     ...(pluginMarkdown.configs.recommended),

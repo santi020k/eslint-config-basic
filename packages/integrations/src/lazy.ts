@@ -1,8 +1,4 @@
-import { createRequire } from 'node:module'
-
 import type { TSESLint } from '@typescript-eslint/utils'
-
-const require = createRequire(import.meta.url)
 
 export type ConfigWithRules = FlatConfig & { rules?: FlatRules }
 
@@ -29,8 +25,8 @@ const hasDefaultExport = (module: unknown): module is { default?: unknown } => (
 )
 
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
-export const loadDefault = <T = unknown>(specifier: string): T => {
-  const module = require(specifier) as unknown
+export const loadDefault = async <T = unknown>(specifier: string): Promise<T> => {
+  const module = await import(specifier)
 
   if (hasDefaultExport(module)) {
     return (module.default ?? module) as T
@@ -40,20 +36,20 @@ export const loadDefault = <T = unknown>(specifier: string): T => {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
-export const loadModule = <T = unknown>(specifier: string): T => require(specifier) as T
+export const loadModule = async <T = unknown>(specifier: string): Promise<T> => await import(specifier) as T
 
 /**
  * Keeps optional integrations import-safe for consumers that do not enable them.
  */
 export const defineLazyConfig = (
   name: string,
-  load: () => ConfigArray
-): ConfigArray => {
+  load: () => ConfigArray | Promise<ConfigArray>
+): Promise<ConfigArray> => {
   let config: ConfigArray | undefined
 
-  const getConfig = (): ConfigArray => {
+  const getConfig = async (): Promise<ConfigArray> => {
     try {
-      config ??= load()
+      config ??= await load()
 
       return config
     } catch (error) {
@@ -65,10 +61,5 @@ export const defineLazyConfig = (
     }
   }
 
-  return new Proxy([], {
-    get: (_target, property, receiver): unknown => Reflect.get(getConfig(), property, receiver) as unknown,
-    getOwnPropertyDescriptor: (_target, property) => Reflect.getOwnPropertyDescriptor(getConfig(), property),
-    has: (_target, property) => Reflect.has(getConfig(), property),
-    ownKeys: () => Reflect.ownKeys(getConfig())
-  })
+  return getConfig()
 }

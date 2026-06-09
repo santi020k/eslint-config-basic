@@ -299,7 +299,7 @@ const scopeConfigToProject = (
  * @param {EslintConfigOptions} options - Configuration and integration settings
  * @returns {FlatConfigArray} The final ESLint configuration array
  */
-export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => {
+export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatConfigArray> => {
   const detectRootDir = options?.detectRootDir ?? options?.tsconfigRootDir
 
   const detected = applyDetectionControls(
@@ -483,9 +483,9 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
       []),
 
     // Integrations
-    ...getIntegrationConfigs(
+    ...(await getIntegrationConfigs(
       uniqueLibraries, uniqueTools, uniqueTesting, uniqueFormats, uniqueExtensions
-    ),
+    )),
 
     ...(tailwindEntryPoint ?
       [{
@@ -500,7 +500,7 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
       []),
 
     // Prettier always last
-    ...getPrettierConfig(uniqueTools)
+    ...(await getPrettierConfig(uniqueTools))
   ]
 
   if (process.env.ESLINT_BASIC_DEBUG) {
@@ -524,11 +524,11 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
     })
   }
 
-  const projectConfigs = Object.entries(options?.projects ?? {}).flatMap(
-    ([projectPath, projectOptions]) => {
+  const projectConfigs = await Promise.all(
+    Object.entries(options?.projects ?? {}).map(async ([projectPath, projectOptions]) => {
       const projectRoot = join(detectRootDir ?? process.cwd(), projectPath)
 
-      const scopedConfigs = eslintConfig({
+      const scopedConfigs = await eslintConfig({
         ...projectOptions,
         detectRootDir: projectOptions.detectRootDir ?? projectRoot,
         projects: undefined,
@@ -536,10 +536,10 @@ export const eslintConfig = (options?: EslintConfigOptions): FlatConfigArray => 
       })
 
       return scopedConfigs.map(config => scopeConfigToProject(config, projectPath))
-    }
+    })
   )
 
-  return applyStrictMode([...configs, ...projectConfigs], strict)
+  return applyStrictMode([...configs, ...projectConfigs.flat()], strict)
 }
 
 /**

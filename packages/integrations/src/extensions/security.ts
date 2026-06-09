@@ -7,8 +7,8 @@ import type { TSESLint } from '@typescript-eslint/utils'
  * Security ESLint configuration
  * Provides rules for catching common security vulnerabilities.
  */
-export const security: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('security', () => {
-  const pluginSecurity = loadDefault<PluginWithConfigs<'recommended'>>('eslint-plugin-security')
+export const security: Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('security', async () => {
+  const pluginSecurity = await loadDefault<PluginWithConfigs<'recommended'>>('eslint-plugin-security')
 
   return [
     {

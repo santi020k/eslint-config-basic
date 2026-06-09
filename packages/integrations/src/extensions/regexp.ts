@@ -10,8 +10,8 @@ import type { TSESLint } from '@typescript-eslint/utils'
  * Catches common regex mistakes like exponential backtracking,
  * unnecessary escapes, and optimizable character classes
  */
-export const regexp: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('regexp', () => {
-  const pluginRegexp = loadModule<typeof PluginRegexp>('eslint-plugin-regexp')
+export const regexp: Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('regexp', async () => {
+  const pluginRegexp = await loadModule<typeof PluginRegexp>('eslint-plugin-regexp')
 
   return [
     {

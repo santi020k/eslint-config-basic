@@ -8,8 +8,8 @@ import type { TSESLint } from '@typescript-eslint/utils'
  * Jest ESLint configuration
  * Provides linting rules for Jest test files
  */
-export const jest: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('jest', () => {
-  const pluginJest = loadDefault<typeof PluginJest>('eslint-plugin-jest')
+export const jest: Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('jest', async () => {
+  const pluginJest = await loadDefault<typeof PluginJest>('eslint-plugin-jest')
 
   return [
     {

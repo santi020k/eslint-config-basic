@@ -8,8 +8,8 @@ import type { TSESLint } from '@typescript-eslint/utils'
  * YAML ESLint configuration
  * Provides rules for YAML file linting
  */
-export const yaml: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('yaml', () => {
-  const pluginYml = loadDefault<typeof PluginYml>('eslint-plugin-yml')
+export const yaml: Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('yaml', async () => {
+  const pluginYml = await loadDefault<typeof PluginYml>('eslint-plugin-yml')
 
   return [
     ...(pluginYml.configs['flat/recommended']),

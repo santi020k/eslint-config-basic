@@ -7,8 +7,8 @@ import type { TSESLint } from '@typescript-eslint/utils'
  * JSDoc ESLint configuration
  * Provides rules for TSDoc/JSDoc validation and formatting.
  */
-export const jsdoc: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('jsdoc', () => {
-  const pluginJsdoc = loadDefault<PluginWithConfigs<'flat/recommended-error'>>('eslint-plugin-jsdoc')
+export const jsdoc: Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('jsdoc', async () => {
+  const pluginJsdoc = await loadDefault<PluginWithConfigs<'flat/recommended-error'>>('eslint-plugin-jsdoc')
 
   return [
     {

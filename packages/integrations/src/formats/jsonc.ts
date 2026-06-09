@@ -8,8 +8,8 @@ import type { TSESLint } from '@typescript-eslint/utils'
  * JSON/JSONC ESLint configuration
  * Provides rules for JSON file linting and package.json key sorting
  */
-export const jsonc: TSESLint.FlatConfig.ConfigArray = defineLazyConfig('jsonc', () => {
-  const pluginJsonc = loadDefault<typeof PluginJsonc>('eslint-plugin-jsonc')
+export const jsonc: Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('jsonc', async () => {
+  const pluginJsonc = await loadDefault<typeof PluginJsonc>('eslint-plugin-jsonc')
 
   return [
     ...(pluginJsonc.configs['flat/recommended-with-jsonc']),
