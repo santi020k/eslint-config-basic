@@ -10,6 +10,7 @@ export default [
       'docs-md/*',
       '**/.agent/**',
       'packages/tests/fixtures/**',
+      'packages/playground/**',
       'packages/docs/.astro/**',
       'packages/docs/playwright-report/**',
       'packages/docs/test-results/**',
@@ -28,14 +29,11 @@ export default [
     typescript: true
   }),
   {
-    files: ['scripts/**', 'packages/tests/**', 'packages/typescript/src/index.ts'],
+    files: ['scripts/**/*', 'packages/tests/**/*', 'packages/typescript/src/index.ts'],
     name: 'local-overrides',
     rules: {
-      'security/detect-non-literal-fs-filename': 'off',
-      'security/detect-object-injection': 'off',
       '@typescript-eslint/no-empty-function': 'off',
       'no-use-before-define': 'off',
-      '@cspell/spellchecker': 'off'
     }
   }
 ]

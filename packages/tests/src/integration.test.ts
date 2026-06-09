@@ -361,12 +361,14 @@ describe('Integration Tests', () => {
       const results = await lintFile(filePath, config)
       const ruleIds = results[0].messages.map(m => m.ruleId)
 
-      expect(ruleIds).toContain('@stylistic/quotes')
+      expect(ruleIds).toContain('markdown/fenced-code-language')
       expect(ruleIds).not.toContain('vue/multi-word-component-names')
     })
 
     it('should pass for the corrected Slidev fixture', async () => {
       const config = eslintConfig({
+        detection: false,
+        formats: [Format.Markdown],
         frameworks: {
           slidev: slidevConfig,
           vue: vueConfig
