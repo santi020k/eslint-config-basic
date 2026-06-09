@@ -24,6 +24,7 @@ export default defineConfig({
       }
     },
     environment: 'node',
-    globals: true
+    globals: true,
+    pool: 'forks'
   }
 })
