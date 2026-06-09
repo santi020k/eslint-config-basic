@@ -25,8 +25,11 @@ const hasDefaultExport = (module: unknown): module is { default?: unknown } => (
 )
 
 // Bypass jiti/bundler transformation of import() to require()
-// eslint-disable-next-line @typescript-eslint/no-implied-eval
-const dynamicImport = new Function('specifier', 'return import(specifier)') as (specifier: string) => Promise<unknown>
+
+const dynamicImport = process.env.VITEST
+  ? (specifier: string) => import(/* @vite-ignore */ specifier)
+  // eslint-disable-next-line @typescript-eslint/no-implied-eval
+  : new Function('specifier', 'return import(specifier)') as (specifier: string) => Promise<unknown>
 
 
 export const loadDefault = async <T = unknown>(specifier: string): Promise<T> => {
