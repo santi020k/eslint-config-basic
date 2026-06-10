@@ -6,5 +6,9 @@ export default defineConfig({
   dts: true,
   clean: true,
   sourcemap: true,
-  target: 'es2022'
+  target: 'es2022',
+  // eslint-plugin-solid's declaration file imports @typescript-eslint/utils,
+  // causing rollup-plugin-dts to attempt to bundle the entire package and crash.
+  // Mark it external so the import is preserved as-is in the output .d.ts.,
+  external: [/^node:/, /@typescript-eslint/]
 })

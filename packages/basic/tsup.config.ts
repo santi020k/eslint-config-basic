@@ -13,6 +13,7 @@ const shared = {
   watch: env === 'development',
   target: 'es2020' as const,
   outDir: 'dist',
+  external: [/^node:/],
 }
 
 export default defineConfig([

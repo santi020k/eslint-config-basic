@@ -9,5 +9,6 @@ export default defineConfig({
   sourcemap: true,
   clean: true,
   target: 'es2022',
-  platform: 'node'
+  platform: 'node',
+  external: [/^node:/]
 })

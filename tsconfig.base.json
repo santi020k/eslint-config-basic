@@ -69,6 +69,9 @@
       "@santi020k/eslint-config-qwik": [
         "./packages/qwik/src/index.ts"
       ],
+      "@santi020k/eslint-config-remix": [
+        "./packages/remix/src/index.ts"
+      ],
       "@santi020k/eslint-config-slidev": [
         "./packages/slidev/src/index.ts"
       ],

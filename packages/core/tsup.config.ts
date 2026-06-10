@@ -6,5 +6,8 @@ export default defineConfig({
   dts: true,
   clean: true,
   sourcemap: true,
-  target: 'es2022'
+  target: 'es2022',
+  // Prevent rollup-plugin-dts from attempting to bundle node built-in types
+  // (node:fs, node:path, etc.), which causes a silent worker crash,
+  external: [/^node:/]
 })

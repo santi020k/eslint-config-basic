@@ -7,5 +7,6 @@ export default defineConfig({
   entry: ['src/index.ts'],
   format: ['esm'],
   sourcemap: true,
-  splitting: false
+  splitting: false,
+  external: [/^node:/]
 })
