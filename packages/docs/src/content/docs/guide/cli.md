@@ -138,6 +138,8 @@ npx @santi020k/eslint-config-basic inspect --json
 
 Use `doctor` while adopting v2 or after moving a project into a workspace. It reports missing config files, configs that cannot be loaded, lingering v1 framework imports, missing lint scripts, and detected workspace packages that are not represented with `projects` scoping.
 
+It also detects when two different ESLint copies are installed — for example an ESLint 9 project that also pulls in the config packages' ESLint 10 dependency. Both majors are supported, but parallel copies can make your editor and CLI apply slightly different rule behavior, so `doctor` warns and suggests aligning or deduping.
+
 ```sh
 npx @santi020k/eslint-config-basic doctor
 ```
@@ -211,6 +213,16 @@ bunx @santi020k/eslint-config-basic generate-skill
 
 
 Use `--force` if you want to overwrite existing standards files.
+
+### Flags
+
+- `--force` — overwrite existing skill files and guarded sections.
+- `--check` — CI mode: compares existing skill files against freshly generated content without writing anything, and exits with code 1 when any file is stale or missing. Useful as a CI step or pre-push hook so agent rules never drift from the actual config.
+- `--create` — scaffold a root `AGENTS.md` (with the guarded ESLint-standards section) when the project has none. Without this flag, `AGENTS.md` is only updated when it already exists.
+
+```sh title="CI example"
+npx @santi020k/eslint-config-basic generate-skill --check
+```
 
 ## When to Use Each Command
 

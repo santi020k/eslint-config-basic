@@ -86,6 +86,8 @@ pnpm run test        # Run integration tests (+ coverage)
 pnpm run inspector   # Open ESLint config visualizer
 npx @santi020k/eslint-config-basic init # Initialize project configuration
 npx @santi020k/eslint-config-basic generate-skill # (Beta) Generate agent standards
+npx @santi020k/eslint-config-basic generate-skill --check # CI: fail when agent standards are stale
+npx @santi020k/eslint-config-basic generate-skill --create # Scaffold root AGENTS.md when missing
 ```
 
 ## Implementation Workflow

@@ -1,4 +1,4 @@
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 import { afterEach, describe, expect, it, vi } from 'vitest'
@@ -11,6 +11,7 @@ import {
   handleGenerateSkill
 } from '../../basic/src/agent-skill-generator.js'
 import {
+  findDuplicateEslint,
   handleDocs,
   handleDoctor,
   handleExplain,
@@ -667,6 +668,83 @@ describe('generateAgentSkills', () => {
     logSpy.mockRestore()
   })
 
+  it('should report stale and up-to-date files in check mode without writing', async () => {
+    const cwd = createTempProject({ name: 'tmp-project' })
+
+    mkdirSync(join(cwd, '.cursor'))
+
+    // First check: file missing → stale, nothing written
+    const checkResult = await generateAgentSkills({ check: true, cwd })
+
+    expect(checkResult.written).toHaveLength(0)
+    expect(checkResult.stale.some(f => f.includes('.cursor'))).toBe(true)
+    expect(existsSync(join(cwd, '.cursor', 'rules', 'eslint-standards.mdc'))).toBe(false)
+
+    // Generate, then check again: up to date
+    await generateAgentSkills({ cwd })
+
+    const recheck = await generateAgentSkills({ check: true, cwd })
+
+    expect(recheck.stale).toHaveLength(0)
+    expect(recheck.skipped.some(f => f.includes('.cursor'))).toBe(true)
+  })
+
+  it('should flag an outdated guarded AGENTS.md section in check mode', async () => {
+    const cwd = createTempProject({ name: 'tmp-project' })
+
+    writeFileSync(
+      join(cwd, 'AGENTS.md'), '# Guide\n\n<!-- eslint-standards:start -->\nold content\n<!-- eslint-standards:end -->\n'
+    )
+
+    const result = await generateAgentSkills({ check: true, cwd })
+
+    expect(result.stale.some(f => f.endsWith('AGENTS.md'))).toBe(true)
+    // Check mode must not modify the file
+    expect(readFileSync(join(cwd, 'AGENTS.md'), 'utf8')).toContain('old content')
+  })
+
+  it('should create AGENTS.md when createAgentsMd is enabled and the file is missing', async () => {
+    const cwd = createTempProject({ name: 'tmp-project' })
+
+    const result = await generateAgentSkills({ createAgentsMd: true, cwd })
+
+    expect(result.written.some(f => f.endsWith('AGENTS.md'))).toBe(true)
+
+    const content = readFileSync(join(cwd, 'AGENTS.md'), 'utf8')
+
+    expect(content).toContain('# Agent instructions')
+    expect(content).toContain('eslint-standards:start')
+    expect(content).toContain('ESLint Code Standards')
+  })
+
+  it('should not create AGENTS.md in check mode even with createAgentsMd enabled', async () => {
+    const cwd = createTempProject({ name: 'tmp-project' })
+
+    const result = await generateAgentSkills({ check: true, createAgentsMd: true, cwd })
+
+    expect(result.written).toHaveLength(0)
+    expect(existsSync(join(cwd, 'AGENTS.md'))).toBe(false)
+  })
+
+  it('should set a non-zero exit code from the CLI handler in check mode when stale', async () => {
+    const cwd = createTempProject({ name: 'tmp-project' })
+
+    mkdirSync(join(cwd, '.cursor'))
+
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const previousExitCode = process.exitCode
+
+    await handleGenerateSkill(cwd, false, { check: true })
+
+    const output = logSpy.mock.calls.map(call => String(call[0])).join('\n')
+
+    expect(output).toContain('Stale or missing')
+    expect(process.exitCode).toBe(1)
+
+    process.exitCode = previousExitCode
+    logSpy.mockRestore()
+  })
+
   it('should generate a Kiro steering file with always-on inclusion front-matter', () => {
     const kiroTarget = AGENT_TARGETS.find(target => target.markerFolder === '.kiro')
 
@@ -677,5 +755,65 @@ describe('generateAgentSkills', () => {
     const content = generateSkillContent(makeFeatures(), 'kiro')
 
     expect(content.startsWith('---\ninclusion: always\n---')).toBe(true)
+  })
+})
+
+const writeFakePackage = (root: string, name: string, version: string): void => {
+  const packageDir = join(root, 'node_modules', ...name.split('/'))
+
+  mkdirSync(packageDir, { recursive: true })
+  writeFileSync(join(packageDir, 'package.json'), JSON.stringify({ main: 'index.js', name, version }))
+  writeFileSync(join(packageDir, 'index.js'), 'module.exports = {}')
+}
+
+describe('findDuplicateEslint', () => {
+  it('should return null when eslint cannot be resolved', () => {
+    const cwd = createTempProject({ name: 'tmp-project' })
+
+    expect(findDuplicateEslint(cwd)).toBeNull()
+  })
+
+  it('should return null when project and config resolve the same eslint copy', () => {
+    const cwd = createTempProject({ name: 'tmp-project' })
+
+    writeFakePackage(cwd, 'eslint', '10.2.1')
+    writeFakePackage(cwd, '@santi020k/eslint-config-core', '2.0.0')
+
+    expect(findDuplicateEslint(cwd)).toBeNull()
+  })
+
+  it('should detect two different eslint versions between project and config', () => {
+    const cwd = createTempProject({ name: 'tmp-project' })
+
+    writeFakePackage(cwd, 'eslint', '9.39.0')
+    writeFakePackage(cwd, '@santi020k/eslint-config-core', '2.0.0')
+    // Nested copy that the config package resolves first
+    writeFakePackage(join(cwd, 'node_modules', '@santi020k', 'eslint-config-core'), 'eslint', '10.2.1')
+
+    const duplicate = findDuplicateEslint(cwd)
+
+    expect(duplicate).not.toBeNull()
+    expect(duplicate?.projectVersion).toBe('9.39.0')
+    expect(duplicate?.configVersion).toBe('10.2.1')
+  })
+
+  it('should surface the duplicate as a doctor warning', async () => {
+    const cwd = createTempProject({ name: 'tmp-project' })
+
+    writeFakePackage(cwd, 'eslint', '9.39.0')
+    writeFakePackage(cwd, '@santi020k/eslint-config-core', '2.0.0')
+    writeFakePackage(join(cwd, 'node_modules', '@santi020k', 'eslint-config-core'), 'eslint', '10.2.1')
+
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    await handleDoctor(cwd)
+
+    const output = logSpy.mock.calls.map(call => String(call[0])).join('\n')
+
+    expect(output).toContain('Two ESLint copies are installed')
+    expect(output).toContain('9.39.0')
+    expect(output).toContain('10.2.1')
+
+    logSpy.mockRestore()
   })
 })

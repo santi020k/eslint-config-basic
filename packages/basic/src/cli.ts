@@ -1,4 +1,5 @@
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { createRequire } from 'node:module'
 import { basename, dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -273,6 +274,8 @@ const printUsage = () => {
     '',
     'Options:',
     '  --force         Overwrite existing generated skill sections/files',
+    '  --check         generate-skill: verify skill files are up to date (CI mode, exits 1 when stale)',
+    '  --create        generate-skill: scaffold a root AGENTS.md when missing',
     '  --json          Print JSON for commands that support it',
     '  --write         Apply safe migrations for commands that support it',
     '  --help, -h      Show this help message',
@@ -364,6 +367,38 @@ export const handleInspect = async (cwd: string = process.cwd(), json = false) =
   ].join('\n'))
 }
 
+interface DuplicateEslintInfo {
+  configVersion: string
+  projectVersion: string
+}
+
+/**
+ * Detects whether the project and the config packages resolve two different
+ * physical copies of ESLint (e.g. an ESLint 9 project pulling in the config's
+ * ESLint 10 dependency). Both major versions are supported, but two parallel
+ * copies can apply subtly different rule behavior between editor and CLI.
+ */
+export const findDuplicateEslint = (cwd: string = process.cwd()): DuplicateEslintInfo | null => {
+  try {
+    const projectRequire = createRequire(join(cwd, 'package.json'))
+    const projectEslintPkgPath = projectRequire.resolve('eslint/package.json')
+    const corePkgPath = projectRequire.resolve('@santi020k/eslint-config-core/package.json')
+    const coreRequire = createRequire(corePkgPath)
+    const coreEslintPkgPath = coreRequire.resolve('eslint/package.json')
+
+    if (projectEslintPkgPath === coreEslintPkgPath) return null
+
+    const projectVersion = (JSON.parse(readFileSync(projectEslintPkgPath, 'utf8')) as { version?: string }).version ?? 'unknown'
+    const configVersion = (JSON.parse(readFileSync(coreEslintPkgPath, 'utf8')) as { version?: string }).version ?? 'unknown'
+
+    if (projectVersion === configVersion) return null
+
+    return { configVersion, projectVersion }
+  } catch {
+    return null
+  }
+}
+
 export const handleDoctor = async (cwd: string = process.cwd()) => {
   const issues: string[] = []
   const warnings: string[] = []
@@ -395,6 +430,16 @@ export const handleDoctor = async (cwd: string = process.cwd()) => {
     if (summary.workspaceProjects.length > 0 && !configContent.includes('projects:')) {
       warnings.push('Workspace packages were detected, but the root config does not use `projects` scoping.')
     }
+  }
+
+  const duplicateEslint = findDuplicateEslint(cwd)
+
+  if (duplicateEslint) {
+    warnings.push(
+      `Two ESLint copies are installed: the project resolves ${duplicateEslint.projectVersion} while the config packages resolve ${duplicateEslint.configVersion}. ` +
+      'Both ESLint 9 and 10 are supported, but parallel copies can apply different rule behavior between your editor and CLI. ' +
+      'Align the project\'s eslint version with the config\'s (or dedupe via your package manager).'
+    )
   }
 
   let status = 'passed'
@@ -490,6 +535,8 @@ export const handleMigrate = (cwd: string = process.cwd(), write = false) => {
 export const runCli = (argv: string[] = process.argv, cwd: string = process.cwd()) => {
   const command = argv[2]
   const hasForce = argv.includes('--force')
+  const hasCheck = argv.includes('--check')
+  const hasCreate = argv.includes('--create')
   const hasJson = argv.includes('--json')
   const hasWrite = argv.includes('--write')
   const isHelp = command === '--help' || command === '-h'
@@ -531,7 +578,7 @@ export const runCli = (argv: string[] = process.argv, cwd: string = process.cwd(
     }
 
     case 'generate-skill': {
-      handleGenerateSkill(cwd, hasForce).catch((error: unknown) => {
+      handleGenerateSkill(cwd, hasForce, { check: hasCheck, createAgentsMd: hasCreate }).catch((error: unknown) => {
         console.error('❌ Failed to generate skill files:', error)
 
         process.exitCode = 1

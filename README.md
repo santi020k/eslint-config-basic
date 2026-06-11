@@ -149,7 +149,12 @@ To use it, run:
 npx @santi020k/eslint-config-basic generate-skill
 ```
 
-*Note: Use `--force` to overwrite existing skill files.*
+Useful flags:
+- `--force` overwrites existing skill files.
+- `--check` verifies skill files are up to date without writing (exits 1 when stale — ideal for CI).
+- `--create` scaffolds a root `AGENTS.md` when the project has none.
+
+Generated agent folders (`.claude/`, `.cursor/`, `.kiro/`, etc.) are ignored by the config's default ignore block, so agent artifacts are never linted as source code.
 
 ## v2 Migration Helpers
 

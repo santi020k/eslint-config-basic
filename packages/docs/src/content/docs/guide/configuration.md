@@ -135,6 +135,10 @@ export default await defineConfig({
 })
 ```
 
+### Default ignores
+
+The composed config ships a default ignore block (`dist`, `build`, `coverage`, framework output folders, `node_modules`, and similar). It also ignores AI coding-assistant artifact folders — `.agent`, `.agents`, `.aider*`, `.claude`, `.clinerules`, `.codex`, `.copilot`, `.cursor`, `.gemini`, `.kiro`, `.opencode`, `.roo`, and `.windsurf` — so generated agent rules and skills are never linted as source code. Disable the whole block with `settings: [Setting.NoDefaultIgnores]`.
+
 ## Detection and Root Directories
 
 - `detectRootDir`: root used to detect dependencies, framework folders, and project files.

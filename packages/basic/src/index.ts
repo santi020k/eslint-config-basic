@@ -137,7 +137,22 @@ const DEFAULT_IGNORES = [
   '**/playwright-report/**',
   '**/test-results/**',
   '**/node_modules/**',
-  '**/tsconfig.tsbuildinfo'
+  '**/tsconfig.tsbuildinfo',
+  // AI coding-assistant artifacts (rule/skill folders managed by tools, not source code)
+  '**/.agent/**',
+  '**/.agents/**',
+  '**/.aider*',
+  '**/.aider*/**',
+  '**/.claude/**',
+  '**/.clinerules/**',
+  '**/.codex/**',
+  '**/.copilot/**',
+  '**/.cursor/**',
+  '**/.gemini/**',
+  '**/.kiro/**',
+  '**/.opencode/**',
+  '**/.roo/**',
+  '**/.windsurf/**'
 ]
 
 const TAILWIND_ENTRYPOINT_CANDIDATES = [

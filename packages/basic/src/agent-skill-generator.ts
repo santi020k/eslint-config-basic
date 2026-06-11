@@ -52,6 +52,21 @@ export interface EslintConfigFeatures {
 
 export interface GenerateSkillOptions {
 
+  /**
+   * Check mode — compare existing skill files against freshly generated
+   * content without writing anything. Stale or missing files are reported
+   * in {@link GenerateSkillResult.stale}.
+   * @default false
+   */
+  check?: boolean
+
+  /**
+   * Create a root `AGENTS.md` when it does not exist yet, instead of only
+   * updating an existing one.
+   * @default false
+   */
+  createAgentsMd?: boolean
+
   /** Working directory — defaults to process.cwd() */
   cwd?: string
 
@@ -64,6 +79,10 @@ export interface GenerateSkillOptions {
 
 export interface GenerateSkillResult {
   skipped: string[]
+
+  /** Files that are out of date (or missing) — only populated in check mode */
+  stale: string[]
+
   written: string[]
 }
 
@@ -738,69 +757,56 @@ const writeSkillFile = (filePath: string, content: string, force: boolean): bool
   return true
 }
 
-// ─── GitHub Copilot special case ──────────────────────────────────────────────
+// ─── Guarded-section files (Copilot instructions, AGENTS.md) ──────────────────
 
 const COPILOT_INSTRUCTIONS_PATH = '.github/copilot-instructions.md'
+const AGENTS_MD_PATH = 'AGENTS.md'
 const COPILOT_SECTION_START = '<!-- eslint-standards:start -->'
 const COPILOT_SECTION_END   = '<!-- eslint-standards:end -->'
 
-const handleCopilotInstructions = (
-  cwd: string,
-  body: string,
-  force: boolean
-): 'skipped' | 'written' | null => {
-  const filePath = join(cwd, COPILOT_INSTRUCTIONS_PATH)
+const buildGuardedSection = (body: string): string => (
+  `${COPILOT_SECTION_START}\n${body}\n${COPILOT_SECTION_END}`
+)
 
-  if (!existsSync(filePath)) return null
-
-  const existing = readFileSync(filePath, 'utf-8')
-
-  if (existing.includes(COPILOT_SECTION_START)) {
-    if (!force) return 'skipped'
-
-    const updated = existing.replaceAll(
-      new RegExp(`${COPILOT_SECTION_START}[\\s\\S]*?${COPILOT_SECTION_END}`, 'g'), `${COPILOT_SECTION_START}\n${body}\n${COPILOT_SECTION_END}`
-    )
-
-    writeFileSync(filePath, updated, 'utf-8')
-
-    return 'written'
-  }
-
-  writeFileSync(
-    filePath, `${existing}\n${COPILOT_SECTION_START}\n${body}\n${COPILOT_SECTION_END}\n`, 'utf-8'
-  )
-
-  return 'written'
-}
-
-// ─── AGENTS.md special case ───────────────────────────────────────────────────
-
-const AGENTS_MD_PATH = 'AGENTS.md'
+type GuardedSectionResult = 'skipped' | 'stale' | 'written' | null
 
 /**
- * Appends or updates a guarded ESLint-standards section inside a root
- * `AGENTS.md`, the open agent-instructions standard read by Codex CLI,
- * OpenCode, Jules, Amp, and many other AI coding tools.
+ * Appends or updates a guarded ESLint-standards section inside an existing
+ * instructions file (`.github/copilot-instructions.md` or root `AGENTS.md`,
+ * the open agent-instructions standard read by Codex CLI, OpenCode, Jules,
+ * Amp, and many other AI coding tools).
  *
- * Only runs when `AGENTS.md` already exists — the generator never creates it.
+ * In check mode nothing is written; the function reports `'stale'` when the
+ * section is missing or out of date and `'skipped'` when it is up to date.
  */
-const handleAgentsMd = (
-  cwd: string,
+const handleGuardedSectionFile = (
+  filePath: string,
   body: string,
-  force: boolean
-): 'skipped' | 'written' | null => {
-  const filePath = join(cwd, AGENTS_MD_PATH)
+  force: boolean,
+  check: boolean,
+  createIfMissing = false
+): GuardedSectionResult => {
+  const section = buildGuardedSection(body)
 
-  if (!existsSync(filePath)) return null
+  if (!existsSync(filePath)) {
+    if (!createIfMissing || check) return null
+
+    writeFileSync(filePath, `# Agent instructions\n\n${section}\n`, 'utf-8')
+
+    return 'written'
+  }
 
   const existing = readFileSync(filePath, 'utf-8')
+
+  if (check) {
+    return existing.includes(section) ? 'skipped' : 'stale'
+  }
 
   if (existing.includes(COPILOT_SECTION_START)) {
     if (!force) return 'skipped'
 
     const updated = existing.replaceAll(
-      new RegExp(`${COPILOT_SECTION_START}[\\s\\S]*?${COPILOT_SECTION_END}`, 'g'), `${COPILOT_SECTION_START}\n${body}\n${COPILOT_SECTION_END}`
+      new RegExp(`${COPILOT_SECTION_START}[\\s\\S]*?${COPILOT_SECTION_END}`, 'g'), section
     )
 
     writeFileSync(filePath, updated, 'utf-8')
@@ -808,9 +814,7 @@ const handleAgentsMd = (
     return 'written'
   }
 
-  writeFileSync(
-    filePath, `${existing}\n${COPILOT_SECTION_START}\n${body}\n${COPILOT_SECTION_END}\n`, 'utf-8'
-  )
+  writeFileSync(filePath, `${existing}\n${section}\n`, 'utf-8')
 
   return 'written'
 }
@@ -838,22 +842,43 @@ export const generateAgentSkills = async (
 ): Promise<GenerateSkillResult> => {
   const cwd = opts.cwd ?? process.cwd()
   const force = opts.force ?? false
+  const check = opts.check ?? false
+  const createAgentsMd = opts.createAgentsMd ?? false
   const written: string[] = []
   const skipped: string[] = []
+  const stale: string[] = []
   // Primary: load the real eslint.config.js; fallback: package.json detection
   const features = (await analyzeEslintConfig(cwd)) ?? featuresFromDetection(cwd)
   const plainBody = generateSkillContent(features, 'plain')
-  // ── Copilot instructions (append/update guarded section) ──────────────────
-  const copilotResult = handleCopilotInstructions(cwd, plainBody, force)
 
-  if (copilotResult === 'written') written.push(join(cwd, COPILOT_INSTRUCTIONS_PATH))
-  else if (copilotResult === 'skipped') skipped.push(join(cwd, COPILOT_INSTRUCTIONS_PATH))
+  const recordGuardedResult = (filePath: string, result: GuardedSectionResult): void => {
+    switch (result) {
+      case 'skipped':
+        skipped.push(filePath)
+
+        break
+
+      case 'stale':
+        stale.push(filePath)
+
+        break
+
+      case 'written':
+        written.push(filePath)
+
+        break
+    }
+  }
+
+  // ── Copilot instructions (append/update guarded section) ──────────────────
+  const copilotPath = join(cwd, COPILOT_INSTRUCTIONS_PATH)
+
+  recordGuardedResult(copilotPath, handleGuardedSectionFile(copilotPath, plainBody, force, check))
 
   // ── AGENTS.md (append/update guarded section, Codex CLI / OpenCode / etc.) ─
-  const agentsMdResult = handleAgentsMd(cwd, plainBody, force)
+  const agentsMdPath = join(cwd, AGENTS_MD_PATH)
 
-  if (agentsMdResult === 'written') written.push(join(cwd, AGENTS_MD_PATH))
-  else if (agentsMdResult === 'skipped') skipped.push(join(cwd, AGENTS_MD_PATH))
+  recordGuardedResult(agentsMdPath, handleGuardedSectionFile(agentsMdPath, plainBody, force, check, createAgentsMd))
 
   // ── Standard agent targets ─────────────────────────────────────────────────
   for (const target of AGENT_TARGETS) {
@@ -864,22 +889,44 @@ export const generateAgentSkills = async (
     const subdir = target.skillSubdir === '.' ? agentFolder : join(agentFolder, target.skillSubdir)
     const filePath = join(subdir, target.skillFile)
     const content = generateSkillContent(features, target.format)
+
+    if (check) {
+      const upToDate = existsSync(filePath) && readFileSync(filePath, 'utf-8') === content
+
+      if (upToDate) skipped.push(filePath)
+      else stale.push(filePath)
+
+      continue
+    }
+
     const didWrite = writeSkillFile(filePath, content, force)
 
     if (didWrite) written.push(filePath)
     else skipped.push(filePath)
   }
 
-  return { skipped, written }
+  return { skipped, stale, written }
 }
 
 // ─── CLI handler ──────────────────────────────────────────────────────────────
 
+export interface HandleGenerateSkillFlags {
+
+  /** Check mode — report stale files and set a non-zero exit code, write nothing */
+  check?: boolean
+
+  /** Create a root `AGENTS.md` when it does not exist */
+  createAgentsMd?: boolean
+}
+
 export const handleGenerateSkill = async (
   cwd: string = process.cwd(),
-  force = false
+  force = false,
+  flags: HandleGenerateSkillFlags = {}
 ): Promise<void> => {
-  console.log('🔍 Scanning for AI agent folders...')
+  const check = flags.check ?? false
+
+  console.log(check ? '🔍 Checking AI agent skill files...' : '🔍 Scanning for AI agent folders...')
 
   const configFile = findEslintConfig(cwd)
 
@@ -889,14 +936,39 @@ export const handleGenerateSkill = async (
     console.log('⚠️  No eslint.config.js found — falling back to package.json detection.')
   }
 
-  const result = await generateAgentSkills({ cwd, force })
+  const result = await generateAgentSkills({
+    check,
+    createAgentsMd: flags.createAgentsMd ?? false,
+    cwd,
+    force
+  })
 
-  if (result.written.length === 0 && result.skipped.length === 0) {
+  if (result.written.length === 0 && result.skipped.length === 0 && result.stale.length === 0) {
     console.log(
       '\n⚠️  No agent folders found (.agent, .agents, .claude, .cursor, .windsurf, .copilot, .aider, .gemini, .clinerules, .roo, .kiro) and no AGENTS.md.'
     )
 
-    console.log('   Create one of those folders first, then re-run this command.')
+    console.log('   Create one of those folders first (or re-run with --create to scaffold AGENTS.md).')
+
+    return
+  }
+
+  if (check) {
+    for (const file of result.skipped) {
+      console.log(`✅ Up to date: ${file.replace(cwd + '/', '')}`)
+    }
+
+    for (const file of result.stale) {
+      console.log(`❌ Stale or missing: ${file.replace(cwd + '/', '')}`)
+    }
+
+    if (result.stale.length > 0) {
+      console.log(`\n⚠️  ${result.stale.length} skill file(s) are out of date. Run \`generate-skill --force\` to regenerate them.`)
+
+      process.exitCode = 1
+    } else {
+      console.log('\n🎉 All agent skill files are up to date!')
+    }
 
     return
   }

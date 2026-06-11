@@ -150,6 +150,19 @@ describe('eslintConfig Function', () => {
     expect(config.indexOf(ignoreEntry)).toBe(1)
   })
 
+  it('should ignore AI coding-assistant artifact folders by default', async () => {
+    const config = await defineConfig({ detection: false })
+    const defaultIgnoreEntry = config.find((entry): entry is { ignores?: string[], name: string } => typeof entry === 'object' &&
+      'name' in entry &&
+      entry.name === 'eslint-config-basic/default-ignores')
+
+    expect(defaultIgnoreEntry?.ignores).toContain('**/.claude/**')
+    expect(defaultIgnoreEntry?.ignores).toContain('**/.cursor/**')
+    expect(defaultIgnoreEntry?.ignores).toContain('**/.clinerules/**')
+    expect(defaultIgnoreEntry?.ignores).toContain('**/.kiro/**')
+    expect(defaultIgnoreEntry?.ignores).toContain('**/.windsurf/**')
+  })
+
   it('should exclude default ignores when NoDefaultIgnores setting is specified', async () => {
     const config = await defineConfig({
       settings: [Setting.NoDefaultIgnores]
