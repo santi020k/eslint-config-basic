@@ -58,6 +58,8 @@ const sidebar = [
   },
   {
     items: [
+      { label: 'Architecture Notes', slug: 'guide/architecture' },
+      { label: 'Development Guide', slug: 'guide/development' },
       { badge: { text: 'Main', variant: 'note' }, label: 'Core Config', slug: 'packages/basic' },
       { label: 'Base Rules', slug: 'packages/core' },
       { label: 'Integrations', slug: 'packages/integrations' },

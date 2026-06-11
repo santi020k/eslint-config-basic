@@ -110,7 +110,6 @@ ignorePaths:
   - pnpm-lock.yaml
   - "*.log"
   - docs
-  - docs-md
   - .agent
   - "**/*.test.ts.snap"
   - packages/playground/**

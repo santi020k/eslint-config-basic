@@ -7,7 +7,6 @@ export default [
       'packages/*/dist/*',
       '**/tsup.config.ts',
       'docs/*',
-      'docs-md/*',
       '**/.agent/**',
       'packages/tests/fixtures/**',
       'packages/playground/**',
