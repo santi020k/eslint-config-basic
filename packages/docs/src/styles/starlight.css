@@ -45,6 +45,7 @@
   --sl-color-gray-5: hsl(var(--s2k-surface-strong));
   --sl-color-gray-6: hsl(var(--s2k-surface-muted));
   --sl-color-black: hsl(var(--s2k-theme-bg));
+  --sl-color-text-invert: white;
 }
 
 :root[data-theme='dark'] {
@@ -63,6 +64,9 @@
   --s2k-accent: 262 87% 76%;
   --s2k-glow: 262 87% 68%;
   --s2k-shadow: 260 40% 4%;
+  --sl-color-text-invert: white;
+  --sl-color-accent-high: hsl(var(--s2k-accent));
+  --sl-color-text-accent: hsl(var(--s2k-accent));
 }
 
 html {
@@ -498,6 +502,22 @@ body {
     transform 260ms cubic-bezier(0.25, 0.8, 0.25, 1),
     box-shadow 260ms cubic-bezier(0.25, 0.8, 0.25, 1);
 }
+
+/* Ensure accessible contrast for active sidebar links and banners in dark mode. */
+:root[data-theme='dark'] a[aria-current='page'],
+:root[data-theme='dark'] a[aria-current='true'],
+:root[data-theme='dark'] .sl-banner {
+  background-color: hsl(var(--s2k-brand-solid)) !important;
+  color: white !important;
+}
+
+:root[data-theme='dark'] a[aria-current='page'] *,
+:root[data-theme='dark'] a[aria-current='true'] *,
+:root[data-theme='dark'] .sl-banner * {
+  color: white !important;
+  text-decoration-color: hsl(0 0% 100% / 0.6) !important;
+}
+
 
 .s2k-home-card {
   padding: 1.25rem 1.5rem;
