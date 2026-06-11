@@ -202,6 +202,8 @@ export default await defineConfig({
     react: true
   },
   libraries: [
+    Library.AiSdk,
+    Library.Mcp,
     Library.Tailwind,
     Library.TanstackQuery,
     Library.TanstackRouter,

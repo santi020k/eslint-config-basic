@@ -287,10 +287,12 @@ describe('Slidev Config', () => {
 
 describe('Config Enums', () => {
   it('should export all Library enum values', () => {
+    expect(Library.AiSdk).toBeDefined()
     expect(Library.Typeorm).toBeDefined()
     expect(Library.Prisma).toBeDefined()
     expect(Library.Drizzle).toBeDefined()
     expect(Library.MikroOrm).toBeDefined()
+    expect(Library.Mcp).toBeDefined()
     expect(Library.Sequelize).toBeDefined()
     expect(Library.Tailwind).toBeDefined()
     expect(Library.I18next).toBeDefined()

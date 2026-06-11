@@ -100,6 +100,23 @@ describe('detectProjectOptions', () => {
     expect(options.libraries).toContain(Library.TanstackRouter)
   })
 
+  it('should detect AI SDK and MCP libraries', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      dependencies: {
+        '@ai-sdk/openai': 'latest',
+        '@modelcontextprotocol/sdk': 'latest',
+        ai: 'latest'
+      }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.libraries).toContain(Library.AiSdk)
+    expect(options.libraries).toContain(Library.Mcp)
+  })
+
   it('should detect ORM libraries', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 

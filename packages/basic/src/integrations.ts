@@ -7,6 +7,7 @@ import {
   Tool
 } from '@santi020k/eslint-config-core'
 import {
+  aiSdk,
   bestPractices,
   cspell,
   cypress,
@@ -17,6 +18,7 @@ import {
   jsdoc,
   jsonc,
   markdown,
+  mcp,
   mdx,
   mikroOrm,
   perfectionist,
@@ -58,6 +60,10 @@ export const getIntegrationConfigs = async (
   if (tools.includes(Tool.Cspell)) configs.push(...await cspell())
 
   // Libraries
+  if (libraries.includes(Library.AiSdk)) configs.push(...await aiSdk())
+
+  if (libraries.includes(Library.Mcp)) configs.push(...mcp())
+
   if (libraries.includes(Library.Typeorm)) configs.push(...typeorm())
 
   if (libraries.includes(Library.Prisma)) configs.push(...prisma())

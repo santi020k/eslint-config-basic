@@ -218,6 +218,18 @@ describe('Integration Rule Assertions — Testing', () => {
 })
 
 describe('Integration Rule Assertions — Libraries', () => {
+  it('should include AI SDK security rules when AiSdk library is enabled', async () => {
+    const config = await defineConfig({
+      libraries: [Library.AiSdk]
+    })
+
+    const names = extractConfigNames(config)
+    const rules = extractRuleNames(config)
+
+    expect(names).toContain('eslint-config-integrations/ai-sdk')
+    expect(rules).toContain('vercel-ai-security/require-validated-prompt')
+  })
+
   it('should include tailwind config when Tailwind library is enabled', async () => {
     const config = await defineConfig({
       libraries: [Library.Tailwind]
@@ -298,6 +310,18 @@ describe('Integration Rule Assertions — Libraries', () => {
     expect(names).toContain('eslint-config-integrations/drizzle')
     expect(names).toContain('eslint-config-integrations/mikro-orm')
     expect(names).toContain('eslint-config-integrations/sequelize')
+    expect(rules).toContain('no-restricted-imports')
+  })
+
+  it('should include MCP SDK import safety rules when Mcp library is enabled', async () => {
+    const config = await defineConfig({
+      libraries: [Library.Mcp]
+    })
+
+    const names = extractConfigNames(config)
+    const rules = extractRuleNames(config)
+
+    expect(names).toContain('eslint-config-integrations/mcp')
     expect(rules).toContain('no-restricted-imports')
   })
 })

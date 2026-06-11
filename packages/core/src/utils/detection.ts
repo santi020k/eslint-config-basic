@@ -198,6 +198,19 @@ const detectTypescript = (detectRootDir: string): boolean => pathExists(join(det
 const detectLibraries = (allDeps: DependencyMap): Library[] => {
   const libraries: Library[] = []
 
+  if (
+    allDeps.ai ||
+    allDeps['@ai-sdk/anthropic'] ||
+    allDeps['@ai-sdk/azure'] ||
+    allDeps['@ai-sdk/google'] ||
+    allDeps['@ai-sdk/openai'] ||
+    allDeps['@ai-sdk/react'] ||
+    allDeps['@ai-sdk/vue'] ||
+    allDeps['@ai-sdk/svelte']
+  ) libraries.push(Library.AiSdk)
+
+  if (allDeps['@modelcontextprotocol/sdk']) libraries.push(Library.Mcp)
+
   if (allDeps.typeorm) libraries.push(Library.Typeorm)
 
   if (allDeps.prisma || allDeps['@prisma/client']) libraries.push(Library.Prisma)

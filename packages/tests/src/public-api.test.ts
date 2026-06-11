@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'vitest'
 
 import {
+  aiSdk,
   cypress,
   defineConfig,
   drizzle,
   graphql,
   jest as jestConfig,
+  mcp,
   mikroOrm,
   prisma,
   sequelize,
@@ -35,5 +37,10 @@ describe('Public API Re-exports', () => {
     expect(typeof drizzle).toBe("function")
     expect(typeof mikroOrm).toBe("function")
     expect(typeof sequelize).toBe("function")
+  })
+
+  it('should re-export AI and MCP library configs from the main package', () => {
+    expect(typeof aiSdk).toBe("function")
+    expect(typeof mcp).toBe("function")
   })
 })

@@ -78,6 +78,7 @@ export {
 
 // Re-export integrations
 export {
+  aiSdk,
   bestPractices,
   cspell,
   cypress,
@@ -88,6 +89,7 @@ export {
   jsdoc,
   jsonc,
   markdown,
+  mcp,
   mdx,
   mikroOrm,
   perfectionist,

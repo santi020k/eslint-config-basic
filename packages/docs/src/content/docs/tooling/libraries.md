@@ -7,6 +7,8 @@ The `libraries` option enables integrations that usually correspond to major pro
 
 | Integration | Enum | Use It When | Auto-Detected |
 | :--- | :--- | :--- | :--- |
+| AI SDK | `Library.AiSdk` | The project uses Vercel AI SDK or provider packages such as `ai` / `@ai-sdk/openai`. | Yes |
+| Model Context Protocol | `Library.Mcp` | The project uses the MCP TypeScript SDK. | Yes |
 | TypeORM | `Library.Typeorm` | The project uses TypeORM entities, repositories, data sources, subscribers, or migrations. | Yes |
 | Prisma | `Library.Prisma` | The project uses Prisma Client or Prisma CLI. | Yes |
 | Drizzle ORM | `Library.Drizzle` | The project uses Drizzle ORM schemas, queries, or migrations. | Yes |
@@ -25,7 +27,7 @@ The `libraries` option enables integrations that usually correspond to major pro
 import { defineConfig, Library } from '@santi020k/eslint-config-basic'
 
 export default await defineConfig({
-  libraries: [Library.Typeorm, Library.Prisma, Library.Tailwind, Library.Storybook]
+  libraries: [Library.AiSdk, Library.Mcp, Library.Typeorm, Library.Prisma, Library.Tailwind, Library.Storybook]
 })
 ```
 
@@ -33,6 +35,12 @@ export default await defineConfig({
 
 - The library integrations stay optional, so projects only install and enable what they use.
 - Detection helps the CLI and zero-argument config path, but you can still choose the final composition explicitly.
+
+## AI and Agent Tooling
+
+`Library.AiSdk` enables security-focused rules for Vercel AI SDK calls such as `generateText`, `streamText`, tool definitions, output validation, token limits, abort signals, and unsafe prompt handling.
+
+`Library.Mcp` adds import safety rules for `@modelcontextprotocol/sdk` projects so MCP servers and clients use documented SDK entry points instead of package internals.
 
 ## ORM Integrations
 

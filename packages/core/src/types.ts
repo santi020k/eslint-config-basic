@@ -63,8 +63,10 @@ export enum Format {
  * Enum for application-level runtime dependencies and styling
  */
 export enum Library {
+  AiSdk = 'ai-sdk',
   Drizzle = 'drizzle',
   I18next = 'i18next',
+  Mcp = 'mcp',
   MikroOrm = 'mikro-orm',
   Prisma = 'prisma',
   Sequelize = 'sequelize',

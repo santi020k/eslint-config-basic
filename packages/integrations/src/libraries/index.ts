@@ -1,4 +1,6 @@
+export { aiSdk } from './ai.js'
 export { i18next } from './i18next.js'
+export { mcp } from './mcp.js'
 export { drizzle, mikroOrm, prisma, sequelize, typeorm } from './orm.js'
 export { stencil } from './stencil.js'
 export { storybook } from './storybook.js'

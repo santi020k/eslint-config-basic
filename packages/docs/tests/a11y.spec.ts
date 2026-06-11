@@ -9,8 +9,10 @@ import { test } from '@playwright/test'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-function getDocUrls(dir: string, baseDir = dir): string[] {
-  let urls: string[] = []
+/* eslint-disable security/detect-non-literal-fs-filename */
+
+const getDocUrls = (dir: string, baseDir = dir): string[] => {
+  const urls: string[] = []
   if (!fs.existsSync(dir)) {
     return urls
   }
@@ -18,7 +20,7 @@ function getDocUrls(dir: string, baseDir = dir): string[] {
   for (const file of files) {
     const res = path.resolve(dir, file.name)
     if (file.isDirectory()) {
-      urls = urls.concat(getDocUrls(res, baseDir))
+      urls.push(...getDocUrls(res, baseDir))
     } else if (file.name.endsWith('.md') || file.name.endsWith('.mdx')) {
       const relativePath = path.relative(baseDir, res)
       // Remove file extension
@@ -59,4 +61,3 @@ test.describe('Accessibility', () => {
     })
   }
 })
-
