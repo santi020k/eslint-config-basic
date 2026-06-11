@@ -9,18 +9,10 @@ description: "@santi020k/eslint-config-basic"
 
 > `const` **expoConfig**: `TSESLint.FlatConfig.ConfigArray`
 
-Defined in: [expo/src/index.ts:53](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/expo/src/index.ts#L53)
+Defined in: [expo/src/index.ts:49](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/expo/src/index.ts#L49)
 
 Expo ESLint configuration
-Extends the expo config with custom import sorting
-
-***
-
-### rules
-
-> `const` **rules**: `TSESLint.Linter.RulesRecord`
-
-Defined in: [expo/src/index.ts:13](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/expo/src/index.ts#L13)
+Extends the expo config with React Native/Expo rules.
 
 ## References
 

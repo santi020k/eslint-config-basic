@@ -9,7 +9,7 @@ description: "@santi020k/eslint-config-basic"
 
 > `const` **bestPractices**: `TSESLint.FlatConfig.ConfigArray`
 
-Defined in: [integrations/src/extensions/best-practices.ts:15](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/integrations/src/extensions/best-practices.ts#L15)
+Defined in: [integrations/src/extensions/best-practices.ts:15](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/extensions/best-practices.ts#L15)
 
 Best-practices ESLint configuration
 
@@ -25,280 +25,461 @@ All rules use built-in ESLint only; no extra dependencies are required.
 
 ### cspell
 
-> `const` **cspell**: `TSESLint.FlatConfig.ConfigArray`
+> `const` **cspell**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/tools/cspell.ts:10](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/integrations/src/tools/cspell.ts#L10)
+Defined in: [integrations/src/tools/cspell.ts:11](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/tools/cspell.ts#L11)
 
 CSpell ESLint configuration
 Enables spell checking in your codebase
+
+#### Returns
+
+`Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
 ***
 
 ### cypress
 
-> `const` **cypress**: `TSESLint.FlatConfig.ConfigArray`
+> `const` **cypress**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/testing/cypress.ts:12](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/integrations/src/testing/cypress.ts#L12)
+Defined in: [integrations/src/testing/cypress.ts:12](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/testing/cypress.ts#L12)
 
 Cypress ESLint configuration
 Provides linting rules for Cypress end-to-end test files
+
+#### Returns
+
+`Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
 ***
 
 ### graphql
 
-> `const` **graphql**: `TSESLint.FlatConfig.ConfigArray`
+> `const` **graphql**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/formats/graphql.ts:20](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/integrations/src/formats/graphql.ts#L20)
+Defined in: [integrations/src/formats/graphql.ts:20](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/formats/graphql.ts#L20)
 
 GraphQL ESLint configuration
 Provides linting rules for GraphQL schema and operations
+
+#### Returns
+
+`Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
 ***
 
 ### i18next
 
-> `const` **i18next**: `TSESLint.FlatConfig.ConfigArray`
+> `const` **i18next**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/libraries/i18next.ts:12](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/integrations/src/libraries/i18next.ts#L12)
+Defined in: [integrations/src/libraries/i18next.ts:13](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/libraries/i18next.ts#L13)
 
 i18next ESLint configuration
 Enables i18next plugin for internationalization best practices
+
+#### Returns
+
+`Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
 ***
 
 ### jest
 
-> `const` **jest**: `TSESLint.FlatConfig.ConfigArray`
+> `const` **jest**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/testing/jest.ts:11](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/integrations/src/testing/jest.ts#L11)
+Defined in: [integrations/src/testing/jest.ts:11](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/testing/jest.ts#L11)
 
 Jest ESLint configuration
 Provides linting rules for Jest test files
+
+#### Returns
+
+`Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
 ***
 
 ### jsdoc
 
-> `const` **jsdoc**: `TSESLint.FlatConfig.ConfigArray`
+> `const` **jsdoc**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/tools/jsdoc.ts:9](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/integrations/src/tools/jsdoc.ts#L9)
+Defined in: [integrations/src/tools/jsdoc.ts:10](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/tools/jsdoc.ts#L10)
 
 JSDoc ESLint configuration
 Provides rules for TSDoc/JSDoc validation and formatting.
+
+#### Returns
+
+`Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
 ***
 
 ### jsonc
 
-> `const` **jsonc**: `TSESLint.FlatConfig.ConfigArray`
+> `const` **jsonc**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/formats/jsonc.ts:11](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/integrations/src/formats/jsonc.ts#L11)
+Defined in: [integrations/src/formats/jsonc.ts:11](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/formats/jsonc.ts#L11)
 
 JSON/JSONC ESLint configuration
 Provides rules for JSON file linting and package.json key sorting
+
+#### Returns
+
+`Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
 ***
 
 ### markdown
 
-> `const` **markdown**: `TSESLint.FlatConfig.ConfigArray`
+> `const` **markdown**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/formats/markdown.ts:21](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/integrations/src/formats/markdown.ts#L21)
+Defined in: [integrations/src/formats/markdown.ts:21](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/formats/markdown.ts#L21)
 
 Markdown ESLint configuration
 Lints markdown files for common issues
+
+#### Returns
+
+`Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
 ***
 
 ### mdx
 
-> `const` **mdx**: `TSESLint.FlatConfig.ConfigArray`
+> `const` **mdx**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/formats/mdx.ts:12](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/integrations/src/formats/mdx.ts#L12)
+Defined in: [integrations/src/formats/mdx.ts:12](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/formats/mdx.ts#L12)
 
 MDX ESLint configuration
 Lints MDX files with proper code block handling
+
+#### Returns
+
+`Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
 ***
 
 ### perfectionist
 
-> `const` **perfectionist**: `TSESLint.FlatConfig.ConfigArray`
+> `const` **perfectionist**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/extensions/perfectionist.ts:12](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/integrations/src/extensions/perfectionist.ts#L12)
+Defined in: [integrations/src/extensions/perfectionist.ts:12](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/extensions/perfectionist.ts#L12)
 
 Perfectionist ESLint configuration
 Provides rules for sorting and organizing code (imports, exports, object keys, etc.)
+
+#### Returns
+
+`Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
 ***
 
 ### playwright
 
-> `const` **playwright**: `TSESLint.FlatConfig.ConfigArray`
+> `const` **playwright**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/testing/playwright.ts:9](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/integrations/src/testing/playwright.ts#L9)
+Defined in: [integrations/src/testing/playwright.ts:9](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/testing/playwright.ts#L9)
 
 Playwright ESLint configuration
 Provides linting rules for Playwright end-to-end test files
+
+#### Returns
+
+`Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
 ***
 
 ### prettier
 
-> `const` **prettier**: `TSESLint.FlatConfig.ConfigArray`
+> `const` **prettier**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/tools/prettier.ts:11](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/integrations/src/tools/prettier.ts#L11)
+Defined in: [integrations/src/tools/prettier.ts:11](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/tools/prettier.ts#L11)
 
 Prettier interop configuration
 Disables all ESLint rules that conflict with Prettier formatting
+
+#### Returns
+
+`Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
 ***
 
 ### regexp
 
-> `const` **regexp**: `TSESLint.FlatConfig.ConfigArray`
+> `const` **regexp**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/extensions/regexp.ts:13](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/integrations/src/extensions/regexp.ts#L13)
+Defined in: [integrations/src/extensions/regexp.ts:13](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/extensions/regexp.ts#L13)
 
 RegExp ESLint configuration
 Catches common regex mistakes like exponential backtracking,
 unnecessary escapes, and optimizable character classes
 
+#### Returns
+
+`Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
+
 ***
 
 ### security
 
-> `const` **security**: `TSESLint.FlatConfig.ConfigArray`
+> `const` **security**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/extensions/security.ts:10](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/integrations/src/extensions/security.ts#L10)
+Defined in: [integrations/src/extensions/security.ts:10](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/extensions/security.ts#L10)
 
 Security ESLint configuration
 Provides rules for catching common security vulnerabilities.
+
+#### Returns
+
+`Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
 ***
 
 ### sonarjs
 
-> `const` **sonarjs**: `TSESLint.FlatConfig.ConfigArray`
+> `const` **sonarjs**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/extensions/sonarjs.ts:6](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/integrations/src/extensions/sonarjs.ts#L6)
+Defined in: [integrations/src/extensions/sonarjs.ts:6](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/extensions/sonarjs.ts#L6)
+
+#### Returns
+
+`Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
 ***
 
 ### stencil
 
-> `const` **stencil**: `TSESLint.FlatConfig.ConfigArray`
+> `const` **stencil**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/libraries/stencil.ts:11](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/integrations/src/libraries/stencil.ts#L11)
+Defined in: [integrations/src/libraries/stencil.ts:11](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/libraries/stencil.ts#L11)
 
 Stencil ESLint configuration
 Enforces best practices for Stencil.js components
+
+#### Returns
+
+`Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
 ***
 
 ### storybook
 
-> `const` **storybook**: `TSESLint.FlatConfig.ConfigArray`
+> `const` **storybook**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/libraries/storybook.ts:11](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/integrations/src/libraries/storybook.ts#L11)
+Defined in: [integrations/src/libraries/storybook.ts:11](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/libraries/storybook.ts#L11)
 
 Storybook ESLint configuration
 Provides rules for Storybook story best practices
+
+#### Returns
+
+`Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
 ***
 
 ### swagger
 
-> `const` **swagger**: `TSESLint.FlatConfig.ConfigArray`
+> `const` **swagger**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/tools/swagger.ts:10](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/integrations/src/tools/swagger.ts#L10)
+Defined in: [integrations/src/tools/swagger.ts:11](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/tools/swagger.ts#L11)
 
 Swagger/NestJS documentation ESLint configuration
 Provides rules from the nestjs-typed plugin for Swagger decorator validation
+
+#### Returns
+
+`Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
 ***
 
 ### tailwind
 
-> `const` **tailwind**: `TSESLint.FlatConfig.ConfigArray`
+> `const` **tailwind**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/libraries/tailwind.ts:9](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/integrations/src/libraries/tailwind.ts#L9)
+Defined in: [integrations/src/libraries/tailwind.ts:10](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/libraries/tailwind.ts#L10)
 
 Tailwind CSS ESLint configuration
 Enforces Tailwind CSS best practices using eslint-plugin-better-tailwindcss
+
+#### Returns
+
+`Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
 ***
 
 ### tanstackQuery
 
-> `const` **tanstackQuery**: `TSESLint.FlatConfig.ConfigArray`
+> `const` **tanstackQuery**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/libraries/tanstack.ts:8](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/integrations/src/libraries/tanstack.ts#L8)
+Defined in: [integrations/src/libraries/tanstack.ts:9](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/libraries/tanstack.ts#L9)
 
 TanStack Query ESLint configuration
+
+#### Returns
+
+`Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
 ***
 
 ### tanstackRouter
 
-> `const` **tanstackRouter**: `TSESLint.FlatConfig.ConfigArray`
+> `const` **tanstackRouter**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/libraries/tanstack.ts:27](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/integrations/src/libraries/tanstack.ts#L27)
+Defined in: [integrations/src/libraries/tanstack.ts:29](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/libraries/tanstack.ts#L29)
 
 TanStack Router ESLint configuration
+
+#### Returns
+
+`Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
 ***
 
 ### testingLibrary
 
-> `const` **testingLibrary**: `TSESLint.FlatConfig.ConfigArray`
+> `const` **testingLibrary**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/testing/testing-library.ts:12](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/integrations/src/testing/testing-library.ts#L12)
+Defined in: [integrations/src/testing/testing-library.ts:12](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/testing/testing-library.ts#L12)
 
 Testing Library ESLint configuration
 Provides linting rules for Testing Library usage in tests
+
+#### Returns
+
+`Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
 ***
 
 ### toml
 
-> `const` **toml**: `TSESLint.FlatConfig.ConfigArray`
+> `const` **toml**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/formats/toml.ts:11](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/integrations/src/formats/toml.ts#L11)
+Defined in: [integrations/src/formats/toml.ts:11](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/formats/toml.ts#L11)
 
 TOML ESLint configuration
 Provides rules for TOML file linting
+
+#### Returns
+
+`Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
 ***
 
 ### unicorn
 
-> `const` **unicorn**: `TSESLint.FlatConfig.ConfigArray`
+> `const` **unicorn**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/extensions/unicorn.ts:12](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/integrations/src/extensions/unicorn.ts#L12)
+Defined in: [integrations/src/extensions/unicorn.ts:12](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/extensions/unicorn.ts#L12)
 
 Unicorn ESLint configuration
 Modern JavaScript best practices from eslint-plugin-unicorn
+
+#### Returns
+
+`Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
 ***
 
 ### vitest
 
-> `const` **vitest**: `TSESLint.FlatConfig.ConfigArray`
+> `const` **vitest**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/testing/vitest.ts:11](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/integrations/src/testing/vitest.ts#L11)
+Defined in: [integrations/src/testing/vitest.ts:11](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/testing/vitest.ts#L11)
 
 Vitest ESLint configuration
 Provides linting rules for Vitest test files with best practices
+
+#### Returns
+
+`Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
 ***
 
 ### yaml
 
-> `const` **yaml**: `TSESLint.FlatConfig.ConfigArray`
+> `const` **yaml**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/formats/yaml.ts:11](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/integrations/src/formats/yaml.ts#L11)
+Defined in: [integrations/src/formats/yaml.ts:11](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/formats/yaml.ts#L11)
 
 YAML ESLint configuration
 Provides rules for YAML file linting
+
+#### Returns
+
+`Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
+
+## Functions
+
+### drizzle()
+
+> **drizzle**(): `ConfigArray`
+
+Defined in: [integrations/src/libraries/orm.ts:76](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/libraries/orm.ts#L76)
+
+Drizzle ORM ESLint configuration.
+
+#### Returns
+
+`ConfigArray`
+
+***
+
+### mikroOrm()
+
+> **mikroOrm**(): `ConfigArray`
+
+Defined in: [integrations/src/libraries/orm.ts:96](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/libraries/orm.ts#L96)
+
+MikroORM ESLint configuration.
+
+#### Returns
+
+`ConfigArray`
+
+***
+
+### prisma()
+
+> **prisma**(): `ConfigArray`
+
+Defined in: [integrations/src/libraries/orm.ts:57](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/libraries/orm.ts#L57)
+
+Prisma ESLint configuration.
+
+Keeps Prisma Client usage on public package entry points. This avoids runtime
+internals that frequently change between generated client versions.
+
+#### Returns
+
+`ConfigArray`
+
+***
+
+### sequelize()
+
+> **sequelize**(): `ConfigArray`
+
+Defined in: [integrations/src/libraries/orm.ts:115](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/libraries/orm.ts#L115)
+
+Sequelize ESLint configuration.
+
+#### Returns
+
+`ConfigArray`
+
+***
+
+### typeorm()
+
+> **typeorm**(): `ConfigArray`
+
+Defined in: [integrations/src/libraries/orm.ts:22](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/integrations/src/libraries/orm.ts#L22)
+
+TypeORM ESLint configuration.
+
+TypeORM does not currently provide an ESLint 9/10-ready recommended flat
+config. This integration focuses on stable imports and avoids legacy global
+helpers that make migrations and tests harder to reason about.
+
+#### Returns
+
+`ConfigArray`

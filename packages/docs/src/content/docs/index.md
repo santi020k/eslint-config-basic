@@ -85,7 +85,10 @@ import { Card, CardGrid, LinkCard, Icon } from '@astrojs/starlight/components';
     <a href="/frameworks/nest"><Icon name="setting" size="1.2rem" class="s2k-icon"/> NestJS</a>
     <a href="/frameworks/hono"><Icon name="node" size="1.2rem" class="s2k-icon"/> Hono</a>
     <a href="/frameworks/expo"><Icon name="apple" size="1.2rem" class="s2k-icon"/> Expo</a>
+    <a href="/frameworks/qwik"><Icon name="sun" size="1.2rem" class="s2k-icon"/> Qwik</a>
     <a href="/frameworks/remix"><Icon name="seti:html" size="1.2rem" class="s2k-icon"/> Remix</a>
+    <a href="/frameworks/vite"><Icon name="seti:config" size="1.2rem" class="s2k-icon"/> Vite</a>
+    <a href="/frameworks/slidev"><Icon name="document" size="1.2rem" class="s2k-icon"/> Slidev</a>
   </div>
 </section>
 

@@ -206,7 +206,12 @@ export default await defineConfig({
     Library.TanstackQuery,
     Library.TanstackRouter,
     Library.Storybook,
-    Library.I18next
+    Library.I18next,
+    Library.Prisma,
+    Library.Drizzle,
+    Library.Typeorm,
+    Library.MikroOrm,
+    Library.Sequelize
   ],
   strict: true,
   testing: [
@@ -218,7 +223,8 @@ export default await defineConfig({
   tools: [
     Tool.Prettier,
     Tool.Cspell,
-    Tool.Jsdoc
+    Tool.Jsdoc,
+    Tool.Swagger
   ],
   typescript: true
 })

@@ -10,7 +10,7 @@ This is the public package application projects install in v2.
 ## What It Owns
 
 - The `eslintConfig()` composer used in application `eslint.config.*` files.
-- Bundled framework composition for React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, and Remix.
+- Bundled framework composition for React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, Remix, Vite, and Slidev.
 - TypeScript, runtime, settings, strict mode, and optional tooling composition.
 - Public enums and helper types re-exported from `core`.
 - The `basic-eslint` CLI.

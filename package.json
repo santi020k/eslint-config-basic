@@ -26,7 +26,7 @@
     "prepare": "husky config/.husky",
     "ok": "pnpm install --reporter=silent && TURBO_LOG_ORDER=grouped pnpm run build && pnpm run test --silent && TURBO_LOG_ORDER=grouped pnpm run lint && TURBO_LOG_ORDER=grouped pnpm run typecheck",
     "pre-commit": "lint-staged",
-    "pre-push": "pnpm run build && pnpm --filter @santi020k/eslint-config-tests run test",
+    "pre-push": "pnpm run lint && pnpm run lint:spell && pnpm run typecheck && pnpm run test",
     "docs": "pnpm run docs:build",
     "docs:api": "typedoc --options typedoc.markdown.mjs && pnpm run docs:sync-changelog",
     "docs:build": "pnpm run docs:api && pnpm --filter @santi020k/eslint-config-docs run docs:build",

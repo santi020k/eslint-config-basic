@@ -17,8 +17,8 @@ Browse the repository for the actual projects: [github.com/santi020k/eslint-conf
 
 ## What It Covers
 
-- Framework projects such as React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Expo, and TypeScript.
-- Optional integration examples for libraries, testing, formats, tools, and extensions.
+- Framework projects such as React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Expo, Qwik, Remix, Vite, Slidev, and TypeScript.
+- Optional integration examples for libraries (like Prisma, TypeORM, Sequelize, Tailwind, etc.), testing, formats, tools, and extensions.
 - Reproducible examples for debugging inspector output or rule regressions.
 
 ## Repository Links

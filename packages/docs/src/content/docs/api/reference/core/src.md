@@ -3,13 +3,11 @@ title: "core/src"
 description: "@santi020k/eslint-config-basic"
 ---
 
-<!-- markdownlint-disable MD024 -->
-
 ## Enumerations
 
 ### Extension
 
-Defined in: [core/src/types.ts:88](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L88)
+Defined in: [core/src/types.ts:35](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L35)
 
 Enum for specialized ESLint extensions and strict rule sets
 
@@ -19,7 +17,7 @@ Enum for specialized ESLint extensions and strict rule sets
 
 > **BestPractices**: `"best-practices"`
 
-Defined in: [core/src/types.ts:99](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L99)
+Defined in: [core/src/types.ts:41](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L41)
 
 Built-in best-practice rules: no-console, no-alert, cyclomatic complexity,
 max nesting depth. No extra dependencies required.
@@ -28,37 +26,37 @@ max nesting depth. No extra dependencies required.
 
 > **Perfectionist**: `"perfectionist"`
 
-Defined in: [core/src/types.ts:93](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L93)
+Defined in: [core/src/types.ts:42](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L42)
 
 ##### Regexp
 
 > **Regexp**: `"regexp"`
 
-Defined in: [core/src/types.ts:89](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L89)
+Defined in: [core/src/types.ts:43](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L43)
 
 ##### Security
 
 > **Security**: `"security"`
 
-Defined in: [core/src/types.ts:92](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L92)
+Defined in: [core/src/types.ts:44](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L44)
 
 ##### Sonarjs
 
 > **Sonarjs**: `"sonarjs"`
 
-Defined in: [core/src/types.ts:91](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L91)
+Defined in: [core/src/types.ts:45](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L45)
 
 ##### Unicorn
 
 > **Unicorn**: `"unicorn"`
 
-Defined in: [core/src/types.ts:90](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L90)
+Defined in: [core/src/types.ts:47](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L47)
 
 ***
 
 ### Format
 
-Defined in: [core/src/types.ts:66](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L66)
+Defined in: [core/src/types.ts:53](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L53)
 
 Enum for linting non-JS/TS file formats
 
@@ -68,89 +66,119 @@ Enum for linting non-JS/TS file formats
 
 > **Graphql**: `"graphql"`
 
-Defined in: [core/src/types.ts:72](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L72)
+Defined in: [core/src/types.ts:54](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L54)
 
 ##### Jsonc
 
 > **Jsonc**: `"jsonc"`
 
-Defined in: [core/src/types.ts:69](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L69)
+Defined in: [core/src/types.ts:55](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L55)
 
 ##### Markdown
 
 > **Markdown**: `"markdown"`
 
-Defined in: [core/src/types.ts:68](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L68)
+Defined in: [core/src/types.ts:56](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L56)
 
 ##### Mdx
 
 > **Mdx**: `"mdx"`
 
-Defined in: [core/src/types.ts:67](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L67)
+Defined in: [core/src/types.ts:57](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L57)
 
 ##### Toml
 
 > **Toml**: `"toml"`
 
-Defined in: [core/src/types.ts:71](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L71)
+Defined in: [core/src/types.ts:58](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L58)
 
 ##### Yaml
 
 > **Yaml**: `"yaml"`
 
-Defined in: [core/src/types.ts:70](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L70)
+Defined in: [core/src/types.ts:59](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L59)
 
 ***
 
 ### Library
 
-Defined in: [core/src/types.ts:43](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L43)
+Defined in: [core/src/types.ts:65](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L65)
 
 Enum for application-level runtime dependencies and styling
 
 #### Enumeration Members
 
+##### Drizzle
+
+> **Drizzle**: `"drizzle"`
+
+Defined in: [core/src/types.ts:66](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L66)
+
 ##### I18next
 
 > **I18next**: `"i18next"`
 
-Defined in: [core/src/types.ts:45](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L45)
+Defined in: [core/src/types.ts:67](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L67)
+
+##### MikroOrm
+
+> **MikroOrm**: `"mikro-orm"`
+
+Defined in: [core/src/types.ts:68](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L68)
+
+##### Prisma
+
+> **Prisma**: `"prisma"`
+
+Defined in: [core/src/types.ts:69](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L69)
+
+##### Sequelize
+
+> **Sequelize**: `"sequelize"`
+
+Defined in: [core/src/types.ts:70](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L70)
 
 ##### Stencil
 
 > **Stencil**: `"stencil"`
 
-Defined in: [core/src/types.ts:46](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L46)
+Defined in: [core/src/types.ts:71](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L71)
 
 ##### Storybook
 
 > **Storybook**: `"storybook"`
 
-Defined in: [core/src/types.ts:49](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L49)
+Defined in: [core/src/types.ts:72](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L72)
 
 ##### Tailwind
 
 > **Tailwind**: `"tailwind"`
 
-Defined in: [core/src/types.ts:44](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L44)
+Defined in: [core/src/types.ts:73](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L73)
 
 ##### TanstackQuery
 
 > **TanstackQuery**: `"tanstack-query"`
 
-Defined in: [core/src/types.ts:47](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L47)
+Defined in: [core/src/types.ts:74](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L74)
 
 ##### TanstackRouter
 
 > **TanstackRouter**: `"tanstack-router"`
 
-Defined in: [core/src/types.ts:48](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L48)
+Defined in: [core/src/types.ts:75](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L75)
+
+##### Typeorm
+
+> **Typeorm**: `"typeorm"`
+
+Defined in: [core/src/types.ts:76](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L76)
 
 ***
 
 ### NextMode
 
-Defined in: [core/src/types.ts:35](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L35)
+Defined in: [core/src/types.ts:82](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L82)
 
 Enum for Next.js mode options
 
@@ -160,19 +188,19 @@ Enum for Next.js mode options
 
 > **AppRouter**: `"app-router"`
 
-Defined in: [core/src/types.ts:37](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L37)
+Defined in: [core/src/types.ts:83](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L83)
 
 ##### Pages
 
 > **Pages**: `"pages"`
 
-Defined in: [core/src/types.ts:36](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L36)
+Defined in: [core/src/types.ts:84](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L84)
 
 ***
 
 ### Preset
 
-Defined in: [core/src/types.ts:131](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L131)
+Defined in: [core/src/types.ts:90](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L90)
 
 Enum for named presets
 
@@ -182,7 +210,7 @@ Enum for named presets
 
 > **All**: `"all"`
 
-Defined in: [core/src/types.ts:137](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L137)
+Defined in: [core/src/types.ts:93](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L93)
 
 All configs + all optionals
 
@@ -190,7 +218,7 @@ All configs + all optionals
 
 > **App**: `"app"`
 
-Defined in: [core/src/types.ts:152](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L152)
+Defined in: [core/src/types.ts:96](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L96)
 
 Browser application defaults with TypeScript and Prettier
 
@@ -198,7 +226,7 @@ Browser application defaults with TypeScript and Prettier
 
 > **Basic**: `"basic"`
 
-Defined in: [core/src/types.ts:134](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L134)
+Defined in: [core/src/types.ts:99](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L99)
 
 Core JS config only
 
@@ -206,7 +234,7 @@ Core JS config only
 
 > **Browser**: `"browser"`
 
-Defined in: [core/src/types.ts:143](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L143)
+Defined in: [core/src/types.ts:102](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L102)
 
 Core + TS + Browser runtime
 
@@ -214,7 +242,7 @@ Core + TS + Browser runtime
 
 > **CI**: `"ci"`
 
-Defined in: [core/src/types.ts:155](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L155)
+Defined in: [core/src/types.ts:105](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L105)
 
 CI-oriented defaults with strict severities
 
@@ -222,7 +250,7 @@ CI-oriented defaults with strict severities
 
 > **Library**: `"library"`
 
-Defined in: [core/src/types.ts:149](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L149)
+Defined in: [core/src/types.ts:108](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L108)
 
 TypeScript package/library defaults for published packages
 
@@ -230,7 +258,7 @@ TypeScript package/library defaults for published packages
 
 > **Monorepo**: `"monorepo"`
 
-Defined in: [core/src/types.ts:158](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L158)
+Defined in: [core/src/types.ts:111](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L111)
 
 Monorepo-friendly defaults for mixed workspaces
 
@@ -238,7 +266,7 @@ Monorepo-friendly defaults for mixed workspaces
 
 > **Node**: `"node"`
 
-Defined in: [core/src/types.ts:140](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L140)
+Defined in: [core/src/types.ts:114](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L114)
 
 Core + TS + Node runtime
 
@@ -246,7 +274,7 @@ Core + TS + Node runtime
 
 > **Worker**: `"worker"`
 
-Defined in: [core/src/types.ts:146](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L146)
+Defined in: [core/src/types.ts:117](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L117)
 
 Core + TS + Worker runtime
 
@@ -254,7 +282,7 @@ Core + TS + Worker runtime
 
 ### Runtime
 
-Defined in: [core/src/types.ts:113](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L113)
+Defined in: [core/src/types.ts:123](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L123)
 
 Enum for runtime environment presets
 
@@ -264,7 +292,7 @@ Enum for runtime environment presets
 
 > **Browser**: `"browser"`
 
-Defined in: [core/src/types.ts:119](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L119)
+Defined in: [core/src/types.ts:126](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L126)
 
 Only Browser globals (window, document, etc.)
 
@@ -272,7 +300,7 @@ Only Browser globals (window, document, etc.)
 
 > **Node**: `"node"`
 
-Defined in: [core/src/types.ts:116](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L116)
+Defined in: [core/src/types.ts:129](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L129)
 
 Only Node.js globals (process, __dirname, etc.)
 
@@ -280,7 +308,7 @@ Only Node.js globals (process, __dirname, etc.)
 
 > **Universal**: `"universal"`
 
-Defined in: [core/src/types.ts:125](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L125)
+Defined in: [core/src/types.ts:132](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L132)
 
 Both Node.js and Browser globals (default)
 
@@ -288,7 +316,7 @@ Both Node.js and Browser globals (default)
 
 > **Worker**: `"worker"`
 
-Defined in: [core/src/types.ts:122](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L122)
+Defined in: [core/src/types.ts:135](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L135)
 
 Service Worker and Fetch API globals for edge runtimes
 
@@ -296,29 +324,49 @@ Service Worker and Fetch API globals for edge runtimes
 
 ### Setting
 
-Defined in: [core/src/types.ts:105](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L105)
+Defined in: [core/src/types.ts:141](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L141)
 
 Enum for settings options in ESLint
 
 #### Enumeration Members
 
+##### DefaultIgnores
+
+> **DefaultIgnores**: `"default-ignores"`
+
+Defined in: [core/src/types.ts:144](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L144)
+
+Default behavior — accepted for symmetry with `NoDefaultIgnores`; passing it changes nothing.
+
 ##### Gitignore
 
 > **Gitignore**: `"gitignore"`
 
-Defined in: [core/src/types.ts:106](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L106)
+Defined in: [core/src/types.ts:147](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L147)
+
+Default behavior — accepted for symmetry with `NoGitignore`; passing it changes nothing.
+
+##### NoDefaultIgnores
+
+> **NoDefaultIgnores**: `"no-default-ignores"`
+
+Defined in: [core/src/types.ts:150](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L150)
+
+Disable the built-in default ignore globs (dist, build, coverage, etc.).
 
 ##### NoGitignore
 
 > **NoGitignore**: `"no-gitignore"`
 
-Defined in: [core/src/types.ts:107](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L107)
+Defined in: [core/src/types.ts:153](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L153)
+
+Disable automatic `.gitignore`-based ignores.
 
 ***
 
 ### Testing
 
-Defined in: [core/src/types.ts:55](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L55)
+Defined in: [core/src/types.ts:159](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L159)
 
 Enum for testing frameworks and environments
 
@@ -328,37 +376,37 @@ Enum for testing frameworks and environments
 
 > **Cypress**: `"cypress"`
 
-Defined in: [core/src/types.ts:59](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L59)
+Defined in: [core/src/types.ts:160](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L160)
 
 ##### Jest
 
 > **Jest**: `"jest"`
 
-Defined in: [core/src/types.ts:58](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L58)
+Defined in: [core/src/types.ts:161](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L161)
 
 ##### Playwright
 
 > **Playwright**: `"playwright"`
 
-Defined in: [core/src/types.ts:57](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L57)
+Defined in: [core/src/types.ts:162](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L162)
 
 ##### TestingLibrary
 
 > **TestingLibrary**: `"testing-library"`
 
-Defined in: [core/src/types.ts:60](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L60)
+Defined in: [core/src/types.ts:163](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L163)
 
 ##### Vitest
 
 > **Vitest**: `"vitest"`
 
-Defined in: [core/src/types.ts:56](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L56)
+Defined in: [core/src/types.ts:164](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L164)
 
 ***
 
 ### Tool
 
-Defined in: [core/src/types.ts:78](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L78)
+Defined in: [core/src/types.ts:170](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L170)
 
 Enum for integrating external standalone utilities
 
@@ -368,89 +416,95 @@ Enum for integrating external standalone utilities
 
 > **Cspell**: `"cspell"`
 
-Defined in: [core/src/types.ts:80](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L80)
+Defined in: [core/src/types.ts:171](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L171)
 
 ##### Jsdoc
 
 > **Jsdoc**: `"jsdoc"`
 
-Defined in: [core/src/types.ts:81](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L81)
+Defined in: [core/src/types.ts:172](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L172)
 
 ##### Prettier
 
 > **Prettier**: `"prettier"`
 
-Defined in: [core/src/types.ts:79](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L79)
+Defined in: [core/src/types.ts:173](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L173)
 
 ##### Swagger
 
 > **Swagger**: `"swagger"`
 
-Defined in: [core/src/types.ts:82](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L82)
+Defined in: [core/src/types.ts:174](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L174)
 
 ## Interfaces
 
 ### DetectionOptions
 
-Defined in: [core/src/types.ts:164](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L164)
+Defined in: [core/src/types.ts:180](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L180)
 
 Controls automatic project detection by category.
 
 #### Properties
 
+##### extensions?
+
+> `optional` **extensions?**: `boolean`
+
+Defined in: [core/src/types.ts:181](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L181)
+
 ##### formats?
 
 > `optional` **formats?**: `boolean`
 
-Defined in: [core/src/types.ts:169](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L169)
+Defined in: [core/src/types.ts:182](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L182)
 
 ##### frameworks?
 
 > `optional` **frameworks?**: `boolean`
 
-Defined in: [core/src/types.ts:166](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L166)
+Defined in: [core/src/types.ts:183](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L183)
 
 ##### libraries?
 
 > `optional` **libraries?**: `boolean`
 
-Defined in: [core/src/types.ts:167](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L167)
+Defined in: [core/src/types.ts:184](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L184)
 
 ##### nextMode?
 
 > `optional` **nextMode?**: `boolean`
 
-Defined in: [core/src/types.ts:172](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L172)
+Defined in: [core/src/types.ts:185](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L185)
 
 ##### runtime?
 
 > `optional` **runtime?**: `boolean`
 
-Defined in: [core/src/types.ts:171](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L171)
+Defined in: [core/src/types.ts:186](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L186)
 
 ##### testing?
 
 > `optional` **testing?**: `boolean`
 
-Defined in: [core/src/types.ts:168](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L168)
+Defined in: [core/src/types.ts:187](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L187)
 
 ##### tools?
 
 > `optional` **tools?**: `boolean`
 
-Defined in: [core/src/types.ts:170](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L170)
+Defined in: [core/src/types.ts:188](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L188)
 
 ##### typescript?
 
 > `optional` **typescript?**: `boolean`
 
-Defined in: [core/src/types.ts:165](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L165)
+Defined in: [core/src/types.ts:189](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L189)
 
 ***
 
 ### EslintConfigOptions
 
-Defined in: [core/src/types.ts:231](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L231)
+Defined in: [core/src/types.ts:232](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L232)
 
 ESLint configuration interface
 
@@ -460,16 +514,16 @@ ESLint configuration interface
 
 > `optional` **autoFrameworks?**: `boolean`
 
-Defined in: [core/src/types.ts:264](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L264)
+Defined in: [core/src/types.ts:238](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L238)
 
 Enables bundled framework configs detected from dependencies.
 Disable this when you want manual framework control only.
 
 ##### detectedFrameworks?
 
-> `optional` **detectedFrameworks?**: [`DetectedFrameworkName`](#detectedframeworkname) `[]`
+> `optional` **detectedFrameworks?**: [`DetectedFrameworkName`](#detectedframeworkname)[]
 
-Defined in: [core/src/types.ts:336](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L336)
+Defined in: [core/src/types.ts:244](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L244)
 
 Frameworks detected from package.json by `detectProjectOptions()`.
 In v2, `eslintConfig()` enables these bundled framework configs by default.
@@ -478,7 +532,7 @@ In v2, `eslintConfig()` enables these bundled framework configs by default.
 
 > `optional` **detection?**: `boolean` \| [`DetectionOptions`](#detectionoptions)
 
-Defined in: [core/src/types.ts:270](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L270)
+Defined in: [core/src/types.ts:250](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L250)
 
 Enables or disables automatic project detection by category.
 Use `false` to disable all detection, or an object for granular control.
@@ -487,24 +541,24 @@ Use `false` to disable all detection, or an object for granular control.
 
 > `optional` **detectRootDir?**: `string`
 
-Defined in: [core/src/types.ts:237](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L237)
+Defined in: [core/src/types.ts:256](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L256)
 
 Root directory used for automatic project detection.
 Defaults to `process.cwd()`.
 
 ##### extensions?
 
-> `optional` **extensions?**: [`Extension`](#extension) `[]`
+> `optional` **extensions?**: [`Extension`](#extension)[]
 
-Defined in: [core/src/types.ts:288](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L288)
+Defined in: [core/src/types.ts:259](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L259)
 
 List of specialized ESLint rules and extensions
 
 ##### formats?
 
-> `optional` **formats?**: [`Format`](#format) `[]`
+> `optional` **formats?**: [`Format`](#format)[]
 
-Defined in: [core/src/types.ts:282](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L282)
+Defined in: [core/src/types.ts:262](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L262)
 
 Additional non-JS/TS file formats to lint
 
@@ -512,7 +566,7 @@ Additional non-JS/TS file formats to lint
 
 > `optional` **frameworks?**: `object`
 
-Defined in: [core/src/types.ts:317](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L317)
+Defined in: [core/src/types.ts:271](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L271)
 
 Framework and library specific configurations.
 
@@ -556,6 +610,10 @@ need to override the bundled config.
 
 > `optional` **remix?**: [`ImportedFramework`](#importedframework)
 
+###### slidev?
+
+> `optional` **slidev?**: [`ImportedFramework`](#importedframework)
+
 ###### solid?
 
 > `optional` **solid?**: [`ImportedFramework`](#importedframework)
@@ -563,6 +621,10 @@ need to override the bundled config.
 ###### svelte?
 
 > `optional` **svelte?**: [`ImportedFramework`](#importedframework)
+
+###### vite?
+
+> `optional` **vite?**: [`ImportedFramework`](#importedframework)
 
 ###### vue?
 
@@ -572,7 +634,7 @@ need to override the bundled config.
 
 > `optional` **ignores?**: `string`[]
 
-Defined in: [core/src/types.ts:251](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L251)
+Defined in: [core/src/types.ts:294](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L294)
 
 Extra global ignore globs (flat config `ignores` only, no `files`).
 Patterns are relative to ESLint's working directory, like a manual ignore block.
@@ -581,9 +643,9 @@ auto-prefixed with the subproject path; use repo-root-relative globs when needed
 
 ##### libraries?
 
-> `optional` **libraries?**: [`Library`](#library) `[]`
+> `optional` **libraries?**: [`Library`](#library)[]
 
-Defined in: [core/src/types.ts:276](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L276)
+Defined in: [core/src/types.ts:297](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L297)
 
 List of application-level dependencies configurations
 
@@ -591,7 +653,7 @@ List of application-level dependencies configurations
 
 > `optional` **nextMode?**: [`NextMode`](#nextmode)
 
-Defined in: [core/src/types.ts:308](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L308)
+Defined in: [core/src/types.ts:300](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L300)
 
 Next.js specific routing mode
 
@@ -599,10 +661,9 @@ Next.js specific routing mode
 
 > `optional` **optionMergeStrategy?**: `"replace"` \| `"merge"`
 
-Defined in: [core/src/types.ts:258](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L258)
+Defined in: [core/src/types.ts:307](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L307)
 
 Controls how explicit arrays/frameworks combine with auto-detected and preset values.
-
 - `merge` (default): union detected + preset + explicit values
 - `replace`: explicit values fully replace detected/preset values
 
@@ -610,7 +671,7 @@ Controls how explicit arrays/frameworks combine with auto-detected and preset va
 
 > `optional` **preset?**: [`Preset`](#preset)
 
-Defined in: [core/src/types.ts:305](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L305)
+Defined in: [core/src/types.ts:310](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L310)
 
 High-level configuration preset
 
@@ -618,7 +679,7 @@ High-level configuration preset
 
 > `optional` **projects?**: `Record`\<`string`, `Omit`\<[`EslintConfigOptions`](#eslintconfigoptions), `"projects"`\>\>
 
-Defined in: [core/src/types.ts:342](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L342)
+Defined in: [core/src/types.ts:316](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L316)
 
 Package-aware subproject configuration for monorepos.
 Each key is a workspace-relative folder and each value is scoped to that folder.
@@ -627,15 +688,15 @@ Each key is a workspace-relative folder and each value is scoped to that folder.
 
 > `optional` **runtime?**: [`Runtime`](#runtime)
 
-Defined in: [core/src/types.ts:302](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L302)
+Defined in: [core/src/types.ts:319](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L319)
 
 Runtime environment preset (Node, Browser, Universal)
 
 ##### settings?
 
-> `optional` **settings?**: [`Setting`](#setting) `[]`
+> `optional` **settings?**: [`Setting`](#setting)[]
 
-Defined in: [core/src/types.ts:291](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L291)
+Defined in: [core/src/types.ts:322](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L322)
 
 List of global settings and behavioral flags
 
@@ -643,27 +704,26 @@ List of global settings and behavioral flags
 
 > `optional` **strict?**: [`StrictMode`](#strictmode)
 
-Defined in: [core/src/types.ts:299](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L299)
+Defined in: [core/src/types.ts:330](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L330)
 
 Severity profile.
-
 - `false` / `recommended`: keep recommended severities
 - `true` / `ci`: promote warnings to errors
 - `pedantic`: promote warnings and enable built-in best-practice rules
 
 ##### testing?
 
-> `optional` **testing?**: [`Testing`](#testing) `[]`
+> `optional` **testing?**: [`Testing`](#testing)[]
 
-Defined in: [core/src/types.ts:279](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L279)
+Defined in: [core/src/types.ts:333](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L333)
 
 List of testing frameworks and testing environments
 
 ##### tools?
 
-> `optional` **tools?**: [`Tool`](#tool) `[]`
+> `optional` **tools?**: [`Tool`](#tool)[]
 
-Defined in: [core/src/types.ts:285](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L285)
+Defined in: [core/src/types.ts:336](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L336)
 
 List of integrations for external standalone tools
 
@@ -671,42 +731,70 @@ List of integrations for external standalone tools
 
 > `optional` **tsconfigRootDir?**: `string`
 
-Defined in: [core/src/types.ts:243](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L243)
+Defined in: [core/src/types.ts:342](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L342)
 
 Root directory of the project.
 Required if multiple candidate TSConfigRootDirs are present.
 
 ##### typescript?
 
-> `optional` **typescript?**: `boolean` \| [`TsOptions`](#tsoptions)
+> `optional` **typescript?**: `boolean` \| \{ `project?`: `string` \| `boolean` \| `string`[]; \}
 
-Defined in: [core/src/types.ts:273](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L273)
+Defined in: [core/src/types.ts:345](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L345)
 
 Enable TypeScript support with optional settings
 
+###### Union Members
+
+`boolean`
+
 ***
 
-### TsOptions
+###### Type Literal
 
-Defined in: [core/src/types.ts:224](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L224)
+\{ `project?`: `string` \| `boolean` \| `string`[]; \}
 
-TypeScript configuration options
-
-#### Properties
-
-##### project?
+###### ~~project?~~
 
 > `optional` **project?**: `string` \| `boolean` \| `string`[]
 
-Defined in: [core/src/types.ts:225](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L225)
+###### Deprecated
+
+Since v2, `typescript` only toggles TypeScript support and the
+`project` field is ignored — type-aware linting uses `projectService` with
+`tsconfigRootDir`. Pass `typescript: true` and use `tsconfigRootDir` instead.
+This field remains only for v1 compatibility and will be removed in v3.
+
+***
+
+### ~~TsOptions~~
+
+Defined in: [core/src/types.ts:383](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L383)
+
+TypeScript configuration options.
+
+#### Deprecated
+
+Since v2, `typescript` only toggles TypeScript support and the
+`project` field is ignored — type-aware linting uses `projectService` with
+`tsconfigRootDir`. Pass `typescript: true` and use `tsconfigRootDir` instead.
+This interface remains only for v1 compatibility and will be removed in v3.
+
+#### Properties
+
+##### ~~project?~~
+
+> `optional` **project?**: `string` \| `boolean` \| `string`[]
+
+Defined in: [core/src/types.ts:384](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L384)
 
 ## Type Aliases
 
 ### DetectedFrameworkName
 
-> **DetectedFrameworkName** = `"react"` \| `"next"` \| `"astro"` \| `"expo"` \| `"vue"` \| `"svelte"` \| `"solid"` \| `"angular"` \| `"nest"` \| `"hono"` \| `"qwik"` \| `"remix"`
+> **DetectedFrameworkName** = `"angular"` \| `"astro"` \| `"expo"` \| `"hono"` \| `"nest"` \| `"next"` \| `"qwik"` \| `"react"` \| `"remix"` \| `"slidev"` \| `"solid"` \| `"svelte"` \| `"vite"` \| `"vue"`
 
-Defined in: [core/src/types.ts:207](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L207)
+Defined in: [core/src/types.ts:213](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L213)
 
 Framework names that can be auto-detected by `detectProjectOptions`.
 These are informational only — you still need to import and pass the actual
@@ -718,7 +806,7 @@ framework config via `frameworks.<name>` in `eslintConfig()`.
 
 > **FlatConfigArray** = `TSESLint.FlatConfig.ConfigArray`
 
-Defined in: [core/src/types.ts:348](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L348)
+Defined in: [core/src/types.ts:361](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L361)
 
 Type alias for ESLint flat config array
 
@@ -726,21 +814,22 @@ Type alias for ESLint flat config array
 
 ### ImportedFramework
 
-> **ImportedFramework** = [`FlatConfigArray`](#flatconfigarray) \| \{ `default`: [`FlatConfigArray`](#flatconfigarray) \| ((`options?`) => [`FlatConfigArray`](#flatconfigarray)); \} \| ((`options?`) => [`FlatConfigArray`](#flatconfigarray)) \| `true`
+> **ImportedFramework** = ((`options?`) => [`FlatConfigArray`](#flatconfigarray)) \| [`FlatConfigArray`](#flatconfigarray) \| `true` \| \{ `default`: ((`options?`) => [`FlatConfigArray`](#flatconfigarray)) \| [`FlatConfigArray`](#flatconfigarray); \}
 
-Defined in: [core/src/types.ts:196](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L196)
+Defined in: [core/src/types.ts:369](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L369)
 
-Type to handle both direct config arrays and imported modules with a default export.
-User-facing framework options should always pass imported config arrays/modules explicitly
-— boolean values are not accepted and will throw a descriptive error.
+Type for framework option values: `true` enables the bundled v2 config,
+or pass a config array, a factory function, or an imported module with a
+default export. Any other value throws a descriptive `TypeError`
+(see `resolveFramework` in `@santi020k/eslint-config-basic`).
 
 ***
 
 ### StrictMode
 
-> **StrictMode** = `boolean` \| `"recommended"` \| `"ci"` \| `"pedantic"`
+> **StrictMode** = `"ci"` \| `"pedantic"` \| `"recommended"` \| `boolean`
 
-Defined in: [core/src/types.ts:178](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L178)
+Defined in: [core/src/types.ts:195](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L195)
 
 Severity profiles for teams adopting the config progressively.
 
@@ -750,7 +839,7 @@ Severity profiles for teams adopting the config progressively.
 
 > `const` **\_\_detectionInternals**: `object`
 
-Defined in: [core/src/utils/detection.ts:262](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/utils/detection.ts#L262)
+Defined in: [core/src/utils/detection.ts:410](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/utils/detection.ts#L410)
 
 Internal detection helpers exposed for focused unit tests.
 Do not use these in application code.
@@ -815,7 +904,7 @@ Do not use these in application code.
 
 ##### detectFormats
 
-> **detectFormats**: (`allDeps`, `detectRootDir`) => [`Format`](#format) `[]`
+> **detectFormats**: (`allDeps`, `detectRootDir`) => [`Format`](#format)[]
 
 ###### Parameters
 
@@ -829,11 +918,11 @@ Do not use these in application code.
 
 ###### Returns
 
-[`Format`](#format) `[]`
+[`Format`](#format)[]
 
 ##### detectFrameworks
 
-> **detectFrameworks**: (`allDeps`, `setRuntime`) => [`DetectedFrameworkName`](#detectedframeworkname) `[]` \| `undefined`
+> **detectFrameworks**: (`allDeps`, `setRuntime`) => [`DetectedFrameworkName`](#detectedframeworkname)[] \| `undefined`
 
 ###### Parameters
 
@@ -847,11 +936,11 @@ Do not use these in application code.
 
 ###### Returns
 
-[`DetectedFrameworkName`](#detectedframeworkname) `[]` \| `undefined`
+[`DetectedFrameworkName`](#detectedframeworkname)[] \| `undefined`
 
 ##### detectLibraries
 
-> **detectLibraries**: (`allDeps`) => [`Library`](#library) `[]`
+> **detectLibraries**: (`allDeps`) => [`Library`](#library)[]
 
 ###### Parameters
 
@@ -861,7 +950,7 @@ Do not use these in application code.
 
 ###### Returns
 
-[`Library`](#library) `[]`
+[`Library`](#library)[]
 
 ##### detectNextMode
 
@@ -883,7 +972,7 @@ Do not use these in application code.
 
 ##### detectTesting
 
-> **detectTesting**: (`allDeps`) => [`Testing`](#testing) `[]`
+> **detectTesting**: (`allDeps`) => [`Testing`](#testing)[]
 
 ###### Parameters
 
@@ -893,11 +982,11 @@ Do not use these in application code.
 
 ###### Returns
 
-[`Testing`](#testing) `[]`
+[`Testing`](#testing)[]
 
 ##### detectTools
 
-> **detectTools**: (`allDeps`) => [`Tool`](#tool) `[]`
+> **detectTools**: (`allDeps`, `detectRootDir`) => [`Tool`](#tool)[]
 
 ###### Parameters
 
@@ -905,9 +994,13 @@ Do not use these in application code.
 
 `DependencyMap`
 
+###### detectRootDir
+
+`string`
+
 ###### Returns
 
-[`Tool`](#tool) `[]`
+[`Tool`](#tool)[]
 
 ##### detectTypescript
 
@@ -957,7 +1050,7 @@ Do not use these in application code.
 
 > `const` **coreConfig**: `TSESLint.FlatConfig.ConfigArray`
 
-Defined in: [core/src/index.ts:134](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/index.ts#L134)
+Defined in: [core/src/index.ts:135](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/index.ts#L135)
 
 Core JavaScript ESLint configuration (Universal runtime by default)
 This is included by default in all configurations
@@ -968,7 +1061,7 @@ This is included by default in all configurations
 
 > `const` **gitignore**: `TSESLint.FlatConfig.ConfigArray`
 
-Defined in: [core/src/settings/gitignore.ts:13](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/settings/gitignore.ts#L13)
+Defined in: [core/src/settings/gitignore.ts:13](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/settings/gitignore.ts#L13)
 
 ***
 
@@ -976,7 +1069,7 @@ Defined in: [core/src/settings/gitignore.ts:13](https://github.com/santi020k/esl
 
 > `const` **GLOB\_ASTRO**: `string`[]
 
-Defined in: [core/src/types.ts:13](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L13)
+Defined in: [core/src/types.ts:13](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L13)
 
 ***
 
@@ -984,7 +1077,7 @@ Defined in: [core/src/types.ts:13](https://github.com/santi020k/eslint-config-ba
 
 > `const` **GLOB\_JS**: `string`[]
 
-Defined in: [core/src/types.ts:6](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L6)
+Defined in: [core/src/types.ts:6](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L6)
 
 Global file patterns for JavaScript-compatible files
 
@@ -994,7 +1087,7 @@ Global file patterns for JavaScript-compatible files
 
 > `const` **GLOB\_JS\_TS**: `string`[]
 
-Defined in: [core/src/types.ts:10](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L10)
+Defined in: [core/src/types.ts:10](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L10)
 
 ***
 
@@ -1002,7 +1095,7 @@ Defined in: [core/src/types.ts:10](https://github.com/santi020k/eslint-config-ba
 
 > `const` **GLOB\_JS\_TS\_ALL**: `string`[]
 
-Defined in: [core/src/types.ts:15](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L15)
+Defined in: [core/src/types.ts:15](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L15)
 
 ***
 
@@ -1010,7 +1103,7 @@ Defined in: [core/src/types.ts:15](https://github.com/santi020k/eslint-config-ba
 
 > `const` **GLOB\_SLOT**: `string`[]
 
-Defined in: [core/src/types.ts:14](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L14)
+Defined in: [core/src/types.ts:14](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L14)
 
 ***
 
@@ -1018,7 +1111,7 @@ Defined in: [core/src/types.ts:14](https://github.com/santi020k/eslint-config-ba
 
 > `const` **GLOB\_SVELTE**: `string`[]
 
-Defined in: [core/src/types.ts:12](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L12)
+Defined in: [core/src/types.ts:12](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L12)
 
 ***
 
@@ -1026,7 +1119,7 @@ Defined in: [core/src/types.ts:12](https://github.com/santi020k/eslint-config-ba
 
 > `const` **GLOB\_TS**: `string`[]
 
-Defined in: [core/src/types.ts:8](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L8)
+Defined in: [core/src/types.ts:8](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L8)
 
 ***
 
@@ -1034,7 +1127,7 @@ Defined in: [core/src/types.ts:8](https://github.com/santi020k/eslint-config-bas
 
 > `const` **GLOB\_VIRTUAL\_TS**: `string`[]
 
-Defined in: [core/src/types.ts:17](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L17)
+Defined in: [core/src/types.ts:17](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L17)
 
 ***
 
@@ -1042,7 +1135,7 @@ Defined in: [core/src/types.ts:17](https://github.com/santi020k/eslint-config-ba
 
 > `const` **GLOB\_VUE**: `string`[]
 
-Defined in: [core/src/types.ts:11](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L11)
+Defined in: [core/src/types.ts:11](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L11)
 
 ***
 
@@ -1050,7 +1143,7 @@ Defined in: [core/src/types.ts:11](https://github.com/santi020k/eslint-config-ba
 
 > `const` **groups**: `string`[][]
 
-Defined in: [core/src/rules.ts:3](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/rules.ts#L3)
+Defined in: [core/src/rules.ts:3](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/rules.ts#L3)
 
 ***
 
@@ -1058,7 +1151,7 @@ Defined in: [core/src/rules.ts:3](https://github.com/santi020k/eslint-config-bas
 
 > `const` **ReactConfigKeys**: readonly \[`"react"`, `"next"`, `"expo"`, `"remix"`\]
 
-Defined in: [core/src/types.ts:184](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/types.ts#L184)
+Defined in: [core/src/types.ts:201](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/types.ts#L201)
 
 Array of configurations that require React
 Note: These are now used internally for auto-detection and globals
@@ -1069,7 +1162,7 @@ Note: These are now used internally for auto-detection and globals
 
 > `const` **rules**: `TSESLint.Linter.RulesRecord`
 
-Defined in: [core/src/rules.ts:35](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/rules.ts#L35)
+Defined in: [core/src/rules.ts:35](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/rules.ts#L35)
 
 ## Functions
 
@@ -1077,7 +1170,7 @@ Defined in: [core/src/rules.ts:35](https://github.com/santi020k/eslint-config-ba
 
 > **createCoreConfig**(`runtime?`): `ConfigArray`
 
-Defined in: [core/src/index.ts:51](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/index.ts#L51)
+Defined in: [core/src/index.ts:52](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/index.ts#L52)
 
 Creates the core config with the specified runtime globals
 
@@ -1097,7 +1190,7 @@ Creates the core config with the specified runtime globals
 
 > **detectProjectOptions**(`detectRootDir?`): [`EslintConfigOptions`](#eslintconfigoptions)
 
-Defined in: [core/src/utils/detection.ts:283](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/utils/detection.ts#L283)
+Defined in: [core/src/utils/detection.ts:431](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/utils/detection.ts#L431)
 
 Automatically detects project settings based on package.json content
 
@@ -1121,7 +1214,7 @@ Detected ESLint configuration options
 
 > **getGlobalsForRuntime**(`runtime?`): `GlobalsConfig` \| `undefined`
 
-Defined in: [core/src/index.ts:23](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/index.ts#L23)
+Defined in: [core/src/index.ts:24](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/index.ts#L24)
 
 Returns the appropriate globals for the given runtime option
 
@@ -1141,7 +1234,7 @@ Returns the appropriate globals for the given runtime option
 
 > **hasReactConfig**(`options?`): `boolean`
 
-Defined in: [core/src/utils/index.ts:9](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/core/src/utils/index.ts#L9)
+Defined in: [core/src/utils/index.ts:9](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/core/src/utils/index.ts#L9)
 
 Checks if the provided EslintConfigOptions includes any React-specific configurations.
 

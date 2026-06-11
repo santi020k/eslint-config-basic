@@ -14,6 +14,8 @@ export default [
       'packages/docs/.astro/**',
       'packages/docs/playwright-report/**',
       'packages/docs/test-results/**',
+      'packages/docs/src/content/docs/api/reference/**',
+      'packages/docs/src/content/docs/v1/api/reference/**',
       'typedoc.config.mjs',
       'typedoc.markdown.mjs'
     ],

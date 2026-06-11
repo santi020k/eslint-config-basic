@@ -7,15 +7,15 @@ description: "@santi020k/eslint-config-basic"
 
 ### AgentTarget
 
-Defined in: [basic/src/agent-skill-generator.ts:9](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/basic/src/agent-skill-generator.ts#L9)
+Defined in: [basic/src/agent-skill-generator.ts:9](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/basic/src/agent-skill-generator.ts#L9)
 
 #### Properties
 
 ##### format
 
-> **format**: `"frontmatter"` \| `"cursor"` \| `"plain"`
+> **format**: `"cursor"` \| `"frontmatter"` \| `"plain"`
 
-Defined in: [basic/src/agent-skill-generator.ts:24](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/basic/src/agent-skill-generator.ts#L24)
+Defined in: [basic/src/agent-skill-generator.ts:12](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/basic/src/agent-skill-generator.ts#L12)
 
 Format variant used when generating content
 
@@ -23,7 +23,7 @@ Format variant used when generating content
 
 > **label**: `string`
 
-Defined in: [basic/src/agent-skill-generator.ts:12](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/basic/src/agent-skill-generator.ts#L12)
+Defined in: [basic/src/agent-skill-generator.ts:15](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/basic/src/agent-skill-generator.ts#L15)
 
 Human-readable label for logging
 
@@ -31,7 +31,7 @@ Human-readable label for logging
 
 > **markerFolder**: `string`
 
-Defined in: [basic/src/agent-skill-generator.ts:15](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/basic/src/agent-skill-generator.ts#L15)
+Defined in: [basic/src/agent-skill-generator.ts:18](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/basic/src/agent-skill-generator.ts#L18)
 
 Folder that must exist in cwd to be considered "present"
 
@@ -39,7 +39,7 @@ Folder that must exist in cwd to be considered "present"
 
 > **skillFile**: `string`
 
-Defined in: [basic/src/agent-skill-generator.ts:21](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/basic/src/agent-skill-generator.ts#L21)
+Defined in: [basic/src/agent-skill-generator.ts:21](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/basic/src/agent-skill-generator.ts#L21)
 
 File name for the generated skill
 
@@ -47,7 +47,7 @@ File name for the generated skill
 
 > **skillSubdir**: `string`
 
-Defined in: [basic/src/agent-skill-generator.ts:18](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/basic/src/agent-skill-generator.ts#L18)
+Defined in: [basic/src/agent-skill-generator.ts:24](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/basic/src/agent-skill-generator.ts#L24)
 
 Subdirectory inside the agent folder where the skill file is placed
 
@@ -55,7 +55,7 @@ Subdirectory inside the agent folder where the skill file is placed
 
 ### GenerateSkillOptions
 
-Defined in: [basic/src/agent-skill-generator.ts:55](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/basic/src/agent-skill-generator.ts#L55)
+Defined in: [basic/src/agent-skill-generator.ts:53](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/basic/src/agent-skill-generator.ts#L53)
 
 #### Properties
 
@@ -63,7 +63,7 @@ Defined in: [basic/src/agent-skill-generator.ts:55](https://github.com/santi020k
 
 > `optional` **cwd?**: `string`
 
-Defined in: [basic/src/agent-skill-generator.ts:58](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/basic/src/agent-skill-generator.ts#L58)
+Defined in: [basic/src/agent-skill-generator.ts:56](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/basic/src/agent-skill-generator.ts#L56)
 
 Working directory — defaults to process.cwd()
 
@@ -71,7 +71,7 @@ Working directory — defaults to process.cwd()
 
 > `optional` **force?**: `boolean`
 
-Defined in: [basic/src/agent-skill-generator.ts:64](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/basic/src/agent-skill-generator.ts#L64)
+Defined in: [basic/src/agent-skill-generator.ts:62](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/basic/src/agent-skill-generator.ts#L62)
 
 Overwrite files that already exist.
 
@@ -85,7 +85,7 @@ false
 
 ### GenerateSkillResult
 
-Defined in: [basic/src/agent-skill-generator.ts:50](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/basic/src/agent-skill-generator.ts#L50)
+Defined in: [basic/src/agent-skill-generator.ts:65](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/basic/src/agent-skill-generator.ts#L65)
 
 #### Properties
 
@@ -93,21 +93,21 @@ Defined in: [basic/src/agent-skill-generator.ts:50](https://github.com/santi020k
 
 > **skipped**: `string`[]
 
-Defined in: [basic/src/agent-skill-generator.ts:52](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/basic/src/agent-skill-generator.ts#L52)
+Defined in: [basic/src/agent-skill-generator.ts:66](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/basic/src/agent-skill-generator.ts#L66)
 
 ##### written
 
 > **written**: `string`[]
 
-Defined in: [basic/src/agent-skill-generator.ts:51](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/basic/src/agent-skill-generator.ts#L51)
+Defined in: [basic/src/agent-skill-generator.ts:67](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/basic/src/agent-skill-generator.ts#L67)
 
 ## Variables
 
 ### AGENT\_TARGETS
 
-> `const` **AGENT\_TARGETS**: [`AgentTarget`](#agenttarget) `[]`
+> `const` **AGENT\_TARGETS**: [`AgentTarget`](#agenttarget)[]
 
-Defined in: [basic/src/agent-skill-generator.ts:74](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/basic/src/agent-skill-generator.ts#L74)
+Defined in: [basic/src/agent-skill-generator.ts:77](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/basic/src/agent-skill-generator.ts#L77)
 
 All AI coding-assistant agent folders that are probed for.
 Add new entries here as new agents emerge — the generator picks them up
@@ -119,7 +119,7 @@ automatically on the next run.
 
 > `const` **angularConfig**: `TSESLint.FlatConfig.ConfigArray`
 
-Defined in: [angular/src/index.ts:8](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/angular/src/index.ts#L8)
+Defined in: [angular/src/index.ts:8](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/angular/src/index.ts#L8)
 
 Angular ESLint configuration
 Extends
@@ -130,60 +130,13 @@ recommended rules
 
 ***
 
-### qwik
+### defineConfig
 
-> `const` **qwik**: `TSESLint.FlatConfig.ConfigArray`
+> `const` **defineConfig**: (`options?`) => `Promise`\<`ConfigArray`\> = `eslintConfig`
 
-Defined in: qwik/dist/index.d.ts:3
+Defined in: [basic/src/index.ts:567](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/basic/src/index.ts#L567)
 
-***
-
-### remix
-
-> `const` **remix**: `TSESLint.FlatConfig.ConfigArray`
-
-Defined in: remix/dist/index.d.ts:3
-
-***
-
-### solidConfig
-
-> `const` **solidConfig**: `TSESLint.FlatConfig.ConfigArray`
-
-Defined in: [solid/src/index.ts:9](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/solid/src/index.ts#L9)
-
-SolidJS ESLint configuration
-Extends eslint-plugin-solid recommended rules
-
-***
-
-### svelteConfig
-
-> `const` **svelteConfig**: `TSESLint.FlatConfig.ConfigArray`
-
-Defined in: [svelte/src/index.ts:9](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/svelte/src/index.ts#L9)
-
-Svelte ESLint configuration
-Extends eslint-plugin-svelte recommended flat config
-
-***
-
-### vueConfig
-
-> `const` **vueConfig**: `TSESLint.FlatConfig.ConfigArray`
-
-Defined in: [vue/src/index.ts:12](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/vue/src/index.ts#L12)
-
-Vue ESLint configuration
-Extends eslint-plugin-vue recommended config with custom rules
-
-## Functions
-
-### eslintConfig()
-
-> **eslintConfig**(`options?`): `ConfigArray`
-
-Defined in: [basic/src/index.ts:252](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/basic/src/index.ts#L252)
+Alias for `eslintConfig()` that reads naturally in `eslint.config.*` files.
 
 Generates the ESLint configuration array, applying configurations
 and integration settings based on the input configuration.
@@ -198,7 +151,81 @@ Configuration and integration settings
 
 #### Returns
 
-`ConfigArray`
+`Promise`\<`ConfigArray`\>
+
+The final ESLint configuration array
+
+***
+
+### qwik
+
+> `const` **qwik**: `TSESLint.FlatConfig.ConfigArray`
+
+Defined in: [qwik/src/index.ts:5](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/qwik/src/index.ts#L5)
+
+***
+
+### remix
+
+> `const` **remix**: `TSESLint.FlatConfig.ConfigArray`
+
+Defined in: [remix/src/index.ts:5](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/remix/src/index.ts#L5)
+
+***
+
+### solidConfig
+
+> `const` **solidConfig**: `TSESLint.FlatConfig.ConfigArray`
+
+Defined in: [solid/src/index.ts:9](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/solid/src/index.ts#L9)
+
+SolidJS ESLint configuration
+Extends eslint-plugin-solid recommended rules
+
+***
+
+### svelteConfig
+
+> `const` **svelteConfig**: `TSESLint.FlatConfig.ConfigArray`
+
+Defined in: [svelte/src/index.ts:9](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/svelte/src/index.ts#L9)
+
+Svelte ESLint configuration
+Extends eslint-plugin-svelte recommended flat config
+
+***
+
+### vueConfig
+
+> `const` **vueConfig**: `TSESLint.FlatConfig.ConfigArray`
+
+Defined in: [vue/src/index.ts:12](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/vue/src/index.ts#L12)
+
+Vue ESLint configuration
+Extends eslint-plugin-vue recommended config with custom rules
+
+## Functions
+
+### eslintConfig()
+
+> **eslintConfig**(`options?`): `Promise`\<`ConfigArray`\>
+
+Defined in: [basic/src/index.ts:313](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/basic/src/index.ts#L313)
+
+Generates the ESLint configuration array, applying configurations
+and integration settings based on the input configuration.
+
+#### Parameters
+
+##### options?
+
+[`EslintConfigOptions`](../core/src.md#eslintconfigoptions)
+
+Configuration and integration settings
+
+#### Returns
+
+`Promise`\<`ConfigArray`\>
 
 The final ESLint configuration array
 
@@ -208,7 +235,7 @@ The final ESLint configuration array
 
 > **generateAgentSkills**(`opts?`): `Promise`\<[`GenerateSkillResult`](#generateskillresult)\>
 
-Defined in: [basic/src/agent-skill-generator.ts:719](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/basic/src/agent-skill-generator.ts#L719)
+Defined in: [basic/src/agent-skill-generator.ts:752](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/basic/src/agent-skill-generator.ts#L752)
 
 Detects which AI agent folders exist in the project, reads the actual
 `eslint.config.js` to understand what is configured, and writes a tailored
@@ -233,7 +260,6 @@ dynamically imported (e.g. when running outside a built environment).
 import { generateAgentSkills } from '@santi020k/eslint-config-basic'
 
 const result = await generateAgentSkills({ cwd: process.cwd() })
-
 console.log('Written to:', result.written)
 ```
 
@@ -243,7 +269,7 @@ console.log('Written to:', result.written)
 
 > **generateSkillContent**(`features`, `format`): `string`
 
-Defined in: [basic/src/agent-skill-generator.ts:447](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/basic/src/agent-skill-generator.ts#L447)
+Defined in: [basic/src/agent-skill-generator.ts:480](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/basic/src/agent-skill-generator.ts#L480)
 
 Builds the skill document body from the project's EslintConfigFeatures.
 Three format variants are produced:
@@ -260,7 +286,7 @@ Three format variants are produced:
 
 ##### format
 
-`"frontmatter"` \| `"cursor"` \| `"plain"`
+`"cursor"` \| `"frontmatter"` \| `"plain"`
 
 #### Returns
 
@@ -272,13 +298,53 @@ Three format variants are produced:
 
 > **hono**(`options?`): `ConfigArray`
 
-Defined in: [hono/src/index.ts:9](https://github.com/santi020k/eslint-config-basic/blob/0b5d79f40f1e8ee8a0de24aa1748711e1b98b1b5/packages/hono/src/index.ts#L9)
+Defined in: [hono/src/index.ts:9](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/hono/src/index.ts#L9)
 
 #### Parameters
 
 ##### options?
 
 `HonoConfigOptions` = `{}`
+
+#### Returns
+
+`ConfigArray`
+
+***
+
+### slidev()
+
+> **slidev**(`options?`): `ConfigArray`
+
+Defined in: [slidev/src/index.ts:14](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/slidev/src/index.ts#L14)
+
+Slidev ESLint configuration for Vue-powered presentation decks.
+
+#### Parameters
+
+##### options?
+
+`SlidevConfigOptions` = `{}`
+
+#### Returns
+
+`ConfigArray`
+
+***
+
+### vite()
+
+> **vite**(`options?`): `ConfigArray`
+
+Defined in: [vite/src/index.ts:17](https://github.com/santi020k/eslint-config-basic/blob/19ee64376096e90ee3e4b31f8d92e94818b3ed48/packages/vite/src/index.ts#L17)
+
+Vite ESLint configuration for browser apps and Vite/Vitest config files.
+
+#### Parameters
+
+##### options?
+
+`ViteConfigOptions` = `{}`
 
 #### Returns
 
@@ -337,6 +403,12 @@ Re-exports [DetectionOptions](../core/src.md#detectionoptions)
 ### detectProjectOptions
 
 Re-exports [detectProjectOptions](../core/src.md#detectprojectoptions)
+
+***
+
+### drizzle
+
+Re-exports [drizzle](../integrations/src.md#drizzle)
 
 ***
 
@@ -448,6 +520,12 @@ Re-exports [mdx](../integrations/src.md#mdx)
 
 ***
 
+### mikroOrm
+
+Re-exports [mikroOrm](../integrations/src.md#mikroorm)
+
+***
+
 ### nestConfig
 
 Re-exports [nestConfig](../nest/src.md#nestconfig)
@@ -490,6 +568,12 @@ Re-exports [prettier](../integrations/src.md#prettier)
 
 ***
 
+### prisma
+
+Re-exports [prisma](../integrations/src.md#prisma)
+
+***
+
 ### reactConfig
 
 Re-exports [reactConfig](../react/src.md#reactconfig)
@@ -517,6 +601,12 @@ Re-exports [Runtime](../core/src.md#runtime)
 ### security
 
 Re-exports [security](../integrations/src.md#security)
+
+***
+
+### sequelize
+
+Re-exports [sequelize](../integrations/src.md#sequelize)
 
 ***
 
@@ -601,6 +691,12 @@ Re-exports [Tool](../core/src.md#tool)
 ### tsConfig
 
 Renames and re-exports [typescriptConfig](../typescript/src.md#typescriptconfig)
+
+***
+
+### typeorm
+
+Re-exports [typeorm](../integrations/src.md#typeorm)
 
 ***
 

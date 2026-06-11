@@ -20,10 +20,11 @@ It is intentionally internal, but documenting it makes the monorepo easier to un
 ## Main Test Areas
 
 - `public-api.test.ts` protects the package surface.
-- `composition.test.ts` and `options.test.ts` protect config assembly behavior.
+- `composition.test.ts`, `options.test.ts`, `contracts.test.ts`, and `invariants.test.ts` protect config assembly behavior and invariants.
 - `cli.test.ts` covers scaffold and update behavior.
-- `detection.test.ts` covers auto-detection.
+- `detection.test.ts`, `detection-fixtures.test.ts`, and `detection-internals.test.ts` cover auto-detection.
 - `snapshots.test.ts` protects the generated config output.
+- `playground-frameworks.test.ts` validates configuration with playground fixtures.
 
 ## Repository Links
 

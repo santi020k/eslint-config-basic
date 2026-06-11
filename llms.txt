@@ -73,7 +73,7 @@ This is a monorepo containing multiple config packages.
 
 **Testing**: Vitest, Jest, Playwright, Cypress, TestingLibrary
 **Tools**: Prettier, CSpell, JSDoc, Swagger
-**Libraries**: Tailwind (via `better-tailwindcss`), i18next, Stencil, TanStack Query, TanStack Router, Storybook
+**Libraries**: Tailwind (via `better-tailwindcss`), i18next, Stencil, TanStack Query, TanStack Router, Storybook, TypeORM, Prisma, Drizzle, MikroORM, Sequelize
 **Formats**: MDX, Markdown, JSONC, YAML, TOML, GraphQL
 **Extensions**: Regexp, Unicorn, SonarJS, Security, Perfectionist
 
