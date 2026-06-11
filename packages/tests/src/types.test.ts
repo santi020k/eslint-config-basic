@@ -20,6 +20,12 @@ describe('Type Exports', () => {
 
     expect(options).toContain('i18next')
 
+    expect(options).toContain('mastra')
+
+    expect(options).toContain('mcp')
+
+    expect(options).toContain('openai-agents')
+
     expect(options).toContain('stencil')
 
     expect(options).toContain('tanstack-query')

@@ -8,6 +8,8 @@ The `libraries` option enables integrations that usually correspond to major pro
 | Integration | Enum | Use It When | Auto-Detected |
 | :--- | :--- | :--- | :--- |
 | AI SDK | `Library.AiSdk` | The project uses Vercel AI SDK or provider packages such as `ai` / `@ai-sdk/openai`. | Yes |
+| OpenAI Agents SDK | `Library.OpenAiAgents` | The project uses OpenAI's TypeScript Agents SDK. | Yes |
+| Mastra | `Library.Mastra` | The project uses Mastra agents, workflows, tools, or memory. | Yes |
 | Model Context Protocol | `Library.Mcp` | The project uses the MCP TypeScript SDK. | Yes |
 | TypeORM | `Library.Typeorm` | The project uses TypeORM entities, repositories, data sources, subscribers, or migrations. | Yes |
 | Prisma | `Library.Prisma` | The project uses Prisma Client or Prisma CLI. | Yes |
@@ -27,7 +29,7 @@ The `libraries` option enables integrations that usually correspond to major pro
 import { defineConfig, Library } from '@santi020k/eslint-config-basic'
 
 export default await defineConfig({
-  libraries: [Library.AiSdk, Library.Mcp, Library.Typeorm, Library.Prisma, Library.Tailwind, Library.Storybook]
+  libraries: [Library.AiSdk, Library.OpenAiAgents, Library.Mastra, Library.Mcp, Library.Typeorm, Library.Prisma, Library.Tailwind, Library.Storybook]
 })
 ```
 
@@ -39,6 +41,10 @@ export default await defineConfig({
 ## AI and Agent Tooling
 
 `Library.AiSdk` enables security-focused rules for Vercel AI SDK calls such as `generateText`, `streamText`, tool definitions, output validation, token limits, abort signals, and unsafe prompt handling.
+
+`Library.OpenAiAgents` adds import safety rules for `@openai/agents` projects so agent workflows use the dedicated SDK package and avoid source or distribution internals.
+
+`Library.Mastra` adds import safety rules for Mastra projects so agents, workflows, tools, and memory integrations stay on documented package entry points.
 
 `Library.Mcp` adds import safety rules for `@modelcontextprotocol/sdk` projects so MCP servers and clients use documented SDK entry points instead of package internals.
 

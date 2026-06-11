@@ -230,6 +230,30 @@ describe('Integration Rule Assertions — Libraries', () => {
     expect(rules).toContain('vercel-ai-security/require-validated-prompt')
   })
 
+  it('should include OpenAI Agents SDK import safety rules when OpenAiAgents library is enabled', async () => {
+    const config = await defineConfig({
+      libraries: [Library.OpenAiAgents]
+    })
+
+    const names = extractConfigNames(config)
+    const rules = extractRuleNames(config)
+
+    expect(names).toContain('eslint-config-integrations/openai-agents')
+    expect(rules).toContain('no-restricted-imports')
+  })
+
+  it('should include Mastra import safety rules when Mastra library is enabled', async () => {
+    const config = await defineConfig({
+      libraries: [Library.Mastra]
+    })
+
+    const names = extractConfigNames(config)
+    const rules = extractRuleNames(config)
+
+    expect(names).toContain('eslint-config-integrations/mastra')
+    expect(rules).toContain('no-restricted-imports')
+  })
+
   it('should include tailwind config when Tailwind library is enabled', async () => {
     const config = await defineConfig({
       libraries: [Library.Tailwind]

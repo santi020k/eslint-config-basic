@@ -203,6 +203,8 @@ export default await defineConfig({
   },
   libraries: [
     Library.AiSdk,
+    Library.OpenAiAgents,
+    Library.Mastra,
     Library.Mcp,
     Library.Tailwind,
     Library.TanstackQuery,

@@ -36,7 +36,7 @@ This project follows a **DX-First & Stability-First** mission. We prioritize a s
 - **🏗️ Monorepo Projects**: Scope presets and integrations per workspace folder with the `projects` option.
 - **💅 Prettier Integrated**: Seamlessly integrated with Prettier out of the box for consistent code formatting.
 - **🤖 Agent Skill Generator (Beta)**: Automatically generates tailored ESLint standards for AI agents (Cursor, Claude, Copilot, etc.) based on your active config. A non-breaking, opt-in feature to boost AI assistance.
-- **🧩 Extensive Plugin Support**: Tailored rules for AI SDK, MCP, Tailwind CSS, Vitest, Testing Library, Storybook, TanStack (Query/Router), and more.
+- **🧩 Extensive Plugin Support**: Tailored rules for AI SDK, OpenAI Agents SDK, Mastra, MCP, Tailwind CSS, Vitest, Testing Library, Storybook, TanStack (Query/Router), and more.
 
 ## 🚀 Quick Start
 
@@ -85,7 +85,7 @@ export default await defineConfig({
   },
 
   // Optional integrations
-  libraries: [Library.AiSdk, Library.Mcp, Library.Tailwind, Library.TanstackQuery],
+  libraries: [Library.AiSdk, Library.OpenAiAgents, Library.Mastra, Library.Mcp, Library.Tailwind, Library.TanstackQuery],
   // Strict mode: warnings become errors
   strict: 'ci',
   testing: [Testing.Vitest, Testing.Playwright, Testing.TestingLibrary],

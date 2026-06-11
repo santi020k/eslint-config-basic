@@ -7,8 +7,10 @@ import {
   drizzle,
   graphql,
   jest as jestConfig,
+  mastra,
   mcp,
   mikroOrm,
+  openAiAgents,
   prisma,
   sequelize,
   testingLibrary,
@@ -39,8 +41,10 @@ describe('Public API Re-exports', () => {
     expect(typeof sequelize).toBe("function")
   })
 
-  it('should re-export AI and MCP library configs from the main package', () => {
+  it('should re-export AI and agent library configs from the main package', () => {
     expect(typeof aiSdk).toBe("function")
+    expect(typeof mastra).toBe("function")
     expect(typeof mcp).toBe("function")
+    expect(typeof openAiAgents).toBe("function")
   })
 })

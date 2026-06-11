@@ -117,6 +117,22 @@ describe('detectProjectOptions', () => {
     expect(options.libraries).toContain(Library.Mcp)
   })
 
+  it('should detect OpenAI Agents SDK and Mastra libraries', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      dependencies: {
+        '@mastra/core': 'latest',
+        '@openai/agents': 'latest'
+      }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.libraries).toContain(Library.Mastra)
+    expect(options.libraries).toContain(Library.OpenAiAgents)
+  })
+
   it('should detect ORM libraries', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 

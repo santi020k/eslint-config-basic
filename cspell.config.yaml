@@ -40,6 +40,7 @@ words:
   - llm
   - llms
   - lockfiles
+  - mastra
   - mdx
   - mikro
   - monorepo
@@ -55,6 +56,7 @@ words:
   - nonconstructor
   - nonoctal
   - nonwords
+  - openai
   - opengraph
   - orchestrates
   - packagemanager
