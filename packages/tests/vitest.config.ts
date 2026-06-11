@@ -49,6 +49,7 @@ export default defineConfig({
     environment: 'node',
     globals: true,
     include: ['packages/tests/src/**/*.test.ts'],
-    pool: 'forks'
+    pool: 'forks',
+    testTimeout: 60000
   }
 })

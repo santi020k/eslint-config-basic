@@ -348,17 +348,7 @@ export interface EslintConfigOptions {
   tsconfigRootDir?: string
 
   /** Enable TypeScript support with optional settings */
-  typescript?:
-    | boolean
-    | {
-        /**
-         * @deprecated Since v2, `typescript` only toggles TypeScript support and the
-         * `project` field is ignored — type-aware linting uses `projectService` with
-         * `tsconfigRootDir`. Pass `typescript: true` and use `tsconfigRootDir` instead.
-         * This field remains only for v1 compatibility and will be removed in v3.
-         */
-        project?: boolean | string | string[]
-      }
+  typescript?: boolean
 }
 
 /**
@@ -378,14 +368,4 @@ export type ImportedFramework =
   true |
   { default: ((options?: Record<string, unknown>) => FlatConfigArray) | FlatConfigArray }
 
-/**
- * TypeScript configuration options.
- *
- * @deprecated Since v2, `typescript` only toggles TypeScript support and the
- * `project` field is ignored — type-aware linting uses `projectService` with
- * `tsconfigRootDir`. Pass `typescript: true` and use `tsconfigRootDir` instead.
- * This interface remains only for v1 compatibility and will be removed in v3.
- */
-export interface TsOptions {
-  project?: boolean | string | string[]
-}
+

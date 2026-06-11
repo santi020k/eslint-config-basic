@@ -19,7 +19,7 @@
     "typecheck": "node ../../scripts/prepare-starlight-docs.mjs && rm -rf .astro && astro check",
     "test:a11y": "playwright test",
     "test:a11y:ui": "playwright test --ui",
-    "lighthouse": "lhci autoreview"
+    "lighthouse": "lhci autorun"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",

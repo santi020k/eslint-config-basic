@@ -365,34 +365,7 @@
           "type": "string"
         },
         "typescript": {
-          "anyOf": [
-            {
-              "type": "boolean"
-            },
-            {
-              "additionalProperties": false,
-              "properties": {
-                "project": {
-                  "anyOf": [
-                    {
-                      "type": "boolean"
-                    },
-                    {
-                      "type": "string"
-                    },
-                    {
-                      "items": {
-                        "type": "string"
-                      },
-                      "type": "array"
-                    }
-                  ],
-                  "deprecated": "Since v2, `typescript` only toggles TypeScript support and the\n`project` field is ignored — type-aware linting uses `projectService` with\n`tsconfigRootDir`. Pass `typescript: true` and use `tsconfigRootDir` instead.\nThis field remains only for v1 compatibility and will be removed in v3."
-                }
-              },
-              "type": "object"
-            }
-          ],
+          "type": "boolean",
           "description": "Enable TypeScript support with optional settings"
         }
       },
