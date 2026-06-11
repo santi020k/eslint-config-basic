@@ -1,7 +1,10 @@
 {
   "name": "@santi020k/eslint-config-docs",
-  "private": true,
   "version": "1.6.0",
+  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "Astro Starlight documentation site for the @santi020k/eslint-config-basic monorepo",
   "type": "module",
   "scripts": {
@@ -31,14 +34,11 @@
   "engines": {
     "node": ">=22.18.0"
   },
-  "author": "santi020k",
-  "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/santi020k/eslint-config-basic.git",
     "directory": "packages/docs"
-  }
+  },
+  "author": "santi020k",
+  "license": "MIT"
 }

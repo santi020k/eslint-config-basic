@@ -88,8 +88,8 @@ export {
   jsdoc,
   jsonc,
   markdown,
-  mikroOrm,
   mdx,
+  mikroOrm,
   perfectionist,
   playwright,
   prettier,
@@ -360,7 +360,6 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
   )
 
   const typescript = options?.typescript ?? presetDefaults.typescript ?? detected.typescript ?? false
-
   const rootDir = detectRootDir ?? process.cwd()
   const tsconfigRootDir = resolveTsconfigRootDir(rootDir, typescript, options?.tsconfigRootDir)
   const extensions = applyStrictProfileDefaults(configuredExtensions, strict)

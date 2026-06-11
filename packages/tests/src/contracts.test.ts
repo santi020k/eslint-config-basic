@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
 import {
-  type DetectedFrameworkName,
   defineConfig,
+  type DetectedFrameworkName,
   type EslintConfigOptions,
   Extension,
   Format,

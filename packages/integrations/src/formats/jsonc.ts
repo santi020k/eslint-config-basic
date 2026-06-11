@@ -25,6 +25,7 @@ export const jsonc: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyC
         ]
       }
     }
+
     return config
   })
 

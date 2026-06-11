@@ -1,6 +1,9 @@
 {
   "name": "@santi020k/eslint-config-react",
   "version": "1.6.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "React ESLint configuration with hooks and JSX rules",
   "type": "module",
   "main": "./dist/index.js",
@@ -22,15 +25,6 @@
     "check:exports": "publint",
     "typecheck": "tsc --noEmit"
   },
-  "peerDependencies": {
-    "eslint": "^9.0.0 || ^10.0.0",
-    "react": ">=16.0.0"
-  },
-  "peerDependenciesMeta": {
-    "react": {
-      "optional": true
-    }
-  },
   "dependencies": {
     "@eslint/compat": "^2.1.0",
     "@santi020k/eslint-config-core": "workspace:^",
@@ -44,14 +38,18 @@
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   },
-  "publishConfig": {
-    "access": "public"
+  "peerDependencies": {
+    "eslint": "^9.0.0 || ^10.0.0",
+    "react": ">=16.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
   },
   "engines": {
     "node": ">=22.18.0"
   },
-  "license": "MIT",
-  "author": "santi020k",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/santi020k/eslint-config-basic.git",
@@ -60,5 +58,7 @@
   "homepage": "https://eslint.santi020k.com/frameworks/react.html",
   "bugs": {
     "url": "https://github.com/santi020k/eslint-config-basic/issues"
-  }
+  },
+  "author": "santi020k",
+  "license": "MIT"
 }

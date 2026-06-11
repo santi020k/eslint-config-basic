@@ -1,6 +1,9 @@
 {
   "name": "@santi020k/eslint-config-solid",
   "version": "1.6.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "SolidJS ESLint configuration",
   "type": "module",
   "main": "./dist/index.js",
@@ -22,14 +25,6 @@
     "check:exports": "publint",
     "typecheck": "tsc --noEmit"
   },
-  "peerDependencies": {
-    "eslint": "^9.0.0 || ^10.0.0"
-  },
-  "peerDependenciesMeta": {
-    "solid-js": {
-      "optional": true
-    }
-  },
   "dependencies": {
     "eslint-plugin-solid": "^0.14.5"
   },
@@ -39,14 +34,17 @@
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   },
-  "publishConfig": {
-    "access": "public"
+  "peerDependencies": {
+    "eslint": "^9.0.0 || ^10.0.0"
+  },
+  "peerDependenciesMeta": {
+    "solid-js": {
+      "optional": true
+    }
   },
   "engines": {
     "node": ">=22.18.0"
   },
-  "license": "MIT",
-  "author": "santi020k",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/santi020k/eslint-config-basic.git",
@@ -55,5 +53,7 @@
   "homepage": "https://eslint.santi020k.com/frameworks/solid.html",
   "bugs": {
     "url": "https://github.com/santi020k/eslint-config-basic/issues"
-  }
+  },
+  "author": "santi020k",
+  "license": "MIT"
 }

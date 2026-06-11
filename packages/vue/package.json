@@ -1,6 +1,9 @@
 {
   "name": "@santi020k/eslint-config-vue",
   "version": "1.6.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "Vue ESLint configuration",
   "type": "module",
   "main": "./dist/index.js",
@@ -22,9 +25,6 @@
     "check:exports": "publint",
     "typecheck": "tsc --noEmit"
   },
-  "peerDependencies": {
-    "eslint": "^9.0.0 || ^10.0.0"
-  },
   "dependencies": {
     "eslint-plugin-vue": "^10.9.2",
     "vue-eslint-parser": "^10.4.1"
@@ -35,14 +35,12 @@
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   },
-  "publishConfig": {
-    "access": "public"
+  "peerDependencies": {
+    "eslint": "^9.0.0 || ^10.0.0"
   },
   "engines": {
     "node": ">=22.18.0"
   },
-  "license": "MIT",
-  "author": "santi020k",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/santi020k/eslint-config-basic.git",
@@ -51,5 +49,7 @@
   "homepage": "https://eslint.santi020k.com/frameworks/vue.html",
   "bugs": {
     "url": "https://github.com/santi020k/eslint-config-basic/issues"
-  }
+  },
+  "author": "santi020k",
+  "license": "MIT"
 }

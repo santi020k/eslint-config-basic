@@ -1,6 +1,9 @@
 {
   "name": "@santi020k/eslint-config-basic",
   "version": "1.6.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "A composable ESLint 9/10+ Flat Config package for JavaScript, TypeScript, React, Next.js, Vue, Svelte, Solid, Angular, Astro, Expo, NestJS, Hono, Qwik, and Remix.",
   "type": "module",
   "main": "./dist/index.js",
@@ -18,6 +21,9 @@
     "README.md",
     "CHANGELOG.md"
   ],
+  "bin": {
+    "basic-eslint": "./dist/cli.js"
+  },
   "scripts": {
     "build": "tsup",
     "build:pack": "npm pack",
@@ -25,9 +31,6 @@
     "clean": "rm -rf dist",
     "check:exports": "publint",
     "typecheck": "tsc --noEmit"
-  },
-  "bin": {
-    "basic-eslint": "./dist/cli.js"
   },
   "dependencies": {
     "@santi020k/eslint-config-angular": "workspace:^",
@@ -49,23 +52,18 @@
     "@santi020k/eslint-config-vue": "workspace:^",
     "@typescript-eslint/utils": "^8.61.0"
   },
-  "peerDependencies": {
-    "eslint": "^9.0.0 || ^10.0.0"
-  },
   "devDependencies": {
     "eslint": "^10.2.1",
     "publint": "^0.3.21",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   },
-  "publishConfig": {
-    "access": "public"
+  "peerDependencies": {
+    "eslint": "^9.0.0 || ^10.0.0"
   },
   "engines": {
     "node": ">=22.18.0"
   },
-  "license": "MIT",
-  "author": "santi020k",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/santi020k/eslint-config-basic.git",
@@ -74,5 +72,7 @@
   "homepage": "https://eslint.santi020k.com/packages/basic.html",
   "bugs": {
     "url": "https://github.com/santi020k/eslint-config-basic/issues"
-  }
+  },
+  "author": "santi020k",
+  "license": "MIT"
 }
