@@ -74,20 +74,16 @@ html {
 
 body {
   background:
-    radial-gradient(circle at 10% 0%, hsl(var(--s2k-glow) / 0.25), transparent 28rem),
-    radial-gradient(circle at 90% -10%, hsl(var(--s2k-brand) / 0.2), transparent 32rem),
-    radial-gradient(circle at 50% 120%, hsl(var(--s2k-accent) / 0.15), transparent 40rem),
-    linear-gradient(180deg, hsl(var(--s2k-surface-muted) / 0.8), transparent 25rem),
+    linear-gradient(135deg, hsl(190 72% 96% / 0.62), transparent 34rem),
+    linear-gradient(180deg, hsl(var(--s2k-surface-muted) / 0.82), hsl(var(--s2k-theme-bg)) 34rem),
     hsl(var(--s2k-theme-bg));
   background-attachment: fixed;
 }
 
 :root[data-theme='dark'] body {
   background:
-    radial-gradient(circle at 10% 0%, hsl(var(--s2k-glow) / 0.15), transparent 28rem),
-    radial-gradient(circle at 90% -10%, hsl(var(--s2k-brand) / 0.15), transparent 32rem),
-    radial-gradient(circle at 50% 120%, hsl(var(--s2k-accent) / 0.15), transparent 40rem),
-    linear-gradient(180deg, hsl(var(--s2k-theme-bg) / 0.88), hsl(var(--s2k-theme-bg) / 0.95)),
+    linear-gradient(135deg, hsl(190 74% 18% / 0.28), transparent 36rem),
+    linear-gradient(180deg, hsl(var(--s2k-theme-bg) / 0.9), hsl(var(--s2k-theme-bg) / 0.96)),
     url('/wallpapers/wallpaper-3-desktop.webp') center center / cover fixed,
     hsl(var(--s2k-theme-bg));
   background-attachment: fixed;
@@ -105,12 +101,13 @@ body {
 
 .header {
   border-bottom-color: hsl(var(--s2k-line) / 0.72);
-  background: hsl(var(--s2k-surface) / 0.86);
+  background: hsl(var(--s2k-surface) / 0.92);
   backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 }
 
 :root[data-theme='dark'] .header {
-  background: hsl(var(--s2k-surface) / 0.9);
+  background: hsl(var(--s2k-surface) / 0.95);
 }
 
 .site-title {
@@ -120,10 +117,8 @@ body {
 }
 
 .site-title img {
-  height: 2.75rem;
+  height: 1.8rem;
   width: auto;
-  transform: scale(1.1);
-  transform-origin: left center;
 }
 
 .s2k-version-switcher {
@@ -189,12 +184,24 @@ body {
 }
 
 .sidebar-content details.s2k-version-hidden {
-  opacity: 0;
-  transform: translateY(-6px);
-  max-height: 0;
-  margin: 0;
-  overflow: hidden;
-  pointer-events: none;
+  display: none !important;
+}
+
+.sidebar-content > ul.top-level > li > details {
+  border: none !important;
+  background: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.sidebar-content > ul.top-level > li > details > summary {
+  display: none !important;
+}
+
+.sidebar-content > ul.top-level > li > details > ul {
+  padding: 0 !important;
+  margin: 0 !important;
+  border-inline-start: none !important;
 }
 
 .sidebar-pane,
@@ -269,11 +276,11 @@ body {
 
 .hero {
   gap: clamp(2rem, 6vw, 5rem);
-  padding-block: clamp(3.5rem, 8vw, 6rem);
+  padding-block: clamp(2.75rem, 7vw, 5rem);
 }
 
 .hero .title {
-  max-width: 11ch;
+  max-width: 12ch;
   color: hsl(var(--s2k-ink));
 }
 
@@ -294,7 +301,7 @@ body {
 .s2k-hero-visual {
   position: relative;
   width: min(100%, 28rem);
-  min-height: 24rem;
+  min-height: 22rem;
   border: 1px solid hsl(var(--s2k-line) / 0.4);
   border-radius: 1rem;
   overflow: hidden;
@@ -413,6 +420,7 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
   gap: 1rem;
+  margin-top: 1rem;
 }
 
 .s2k-stat-card {
@@ -540,8 +548,9 @@ body {
   color: hsl(var(--s2k-brand));
   font-size: 0.78rem;
   font-weight: 800;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
+  margin-bottom: 1rem;
 }
 
 .s2k-framework-grid a {
@@ -592,7 +601,7 @@ body {
 
 @media (max-width: 50rem) {
   .site-title img {
-    height: 1.6rem;
+    height: 1.4rem;
     width: auto;
   }
 
@@ -606,7 +615,130 @@ body {
   }
 
   .hero .title {
-    max-width: 14ch;
+    max-width: 15ch;
+    font-size: clamp(2.45rem, 12vw, 3.25rem);
+    line-height: 1.02;
+    text-align: center;
+    margin-inline: auto;
+  }
+
+  .hero .tagline {
+    text-align: center;
+    font-size: 1rem;
+    line-height: 1.65;
+    margin-inline: auto;
+  }
+
+  .hero .actions {
+    justify-content: center;
+    gap: 0.65rem;
+  }
+
+  .hero .actions a {
+    min-height: 2.85rem;
+    justify-content: center;
+  }
+
+  .hero .hero-html {
+    order: 2;
+    width: 100%;
+  }
+
+  .hero .stack {
+    order: 1;
+  }
+
+  .s2k-hero-visual {
+    width: min(100%, 22rem);
+    min-height: auto;
+    margin-inline: auto;
+    border-radius: 0.85rem;
+  }
+
+  .s2k-hero-visual__brand {
+    padding: 1rem;
+    font-size: 0.95rem;
+    overflow-wrap: anywhere;
+  }
+
+  .s2k-hero-visual__mark {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .s2k-hero-visual__terminal {
+    margin-inline: 1rem;
+    padding: 0.9rem;
+    font-size: 0.78rem;
+  }
+
+  .s2k-hero-visual__layers {
+    gap: 0.55rem;
+    padding: 1rem;
+  }
+
+  .s2k-hero-visual__layers span {
+    padding: 0.65rem 0.75rem;
+    font-size: 0.78rem;
+  }
+
+  .s2k-stats-grid,
+  .s2k-framework-grid,
+  .s2k-home-steps,
+  .s2k-home-paths {
+    grid-template-columns: 1fr;
+  }
+
+  .s2k-home-card,
+  .s2k-framework-grid a,
+  .s2k-stat-card {
+    box-shadow: 0 10px 28px hsl(var(--s2k-shadow) / 0.07);
+  }
+
+  .sl-markdown-content h1,
+  .sl-markdown-content h2 {
+    text-wrap: balance;
+  }
+
+  .sl-markdown-content h1 {
+    font-size: clamp(2.15rem, 11vw, 2.8rem);
+    line-height: 1.08;
+    margin-bottom: 1rem;
+  }
+
+  .sl-markdown-content h2 {
+    margin-top: 2rem;
+  }
+
+  .sl-markdown-content .expressive-code {
+    border-radius: 0.75rem;
+    box-shadow: 0 12px 30px hsl(var(--s2k-shadow) / 0.1);
+  }
+
+  .sl-markdown-content .expressive-code .header {
+    justify-content: flex-start;
+    padding-inline: 3rem 2.6rem;
+  }
+
+  .sl-markdown-content .expressive-code .title {
+    position: static;
+    transform: none;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  mobile-starlight-toc nav {
+    position: static;
+    inset: auto;
+    margin-block: 0.75rem 1.5rem;
+  }
+
+  #starlight__mobile-toc {
+    border: 1px solid hsl(var(--s2k-line) / 0.72);
+    border-radius: var(--s2k-radius);
+    background: hsl(var(--s2k-surface) / 0.82);
+    box-shadow: 0 10px 28px hsl(var(--s2k-shadow) / 0.08);
   }
 }
 

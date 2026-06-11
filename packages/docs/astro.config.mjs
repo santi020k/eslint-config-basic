@@ -17,61 +17,65 @@ const socialImage = new URL('/cover.webp', site).toString()
 const sidebar = [
   {
     items: [
-      { label: 'Introduction', link: '/' },
-      { label: 'Quick Start', slug: 'guide/getting-started' },
-      { label: 'Installation', slug: 'guide/installation' },
-      { label: 'Configuration', slug: 'guide/configuration' },
-      { badge: { text: 'Migration', variant: 'tip' }, label: 'Migrate from v1', slug: 'guide/migration-v1-to-v2' }
+      {
+        items: [
+          { label: 'Introduction', link: '/' },
+          { label: 'Quick Start', slug: 'guide/getting-started' },
+          { label: 'Installation', slug: 'guide/installation' },
+          { label: 'Configuration', slug: 'guide/configuration' },
+          { badge: { text: 'Migration', variant: 'tip' }, label: 'Migrate from v1', slug: 'guide/migration-v1-to-v2' }
+        ],
+        label: 'Getting Started'
+      },
+      {
+        items: [
+          { badge: { text: 'Core', variant: 'success' }, label: 'TypeScript', slug: 'frameworks/typescript' },
+          { label: 'React', slug: 'frameworks/react' },
+          { label: 'Next.js', slug: 'frameworks/next' },
+          { label: 'Astro', slug: 'frameworks/astro' },
+          { label: 'Vue', slug: 'frameworks/vue' },
+          { label: 'Svelte', slug: 'frameworks/svelte' },
+          { label: 'Solid', slug: 'frameworks/solid' },
+          { label: 'Angular', slug: 'frameworks/angular' },
+          { label: 'NestJS', slug: 'frameworks/nest' },
+          { label: 'Hono', slug: 'frameworks/hono' },
+          { label: 'Expo', slug: 'frameworks/expo' },
+          { label: 'Qwik', slug: 'frameworks/qwik' },
+          { label: 'Remix', slug: 'frameworks/remix' },
+          { label: 'Vite', slug: 'frameworks/vite' },
+          { label: 'Slidev', slug: 'frameworks/slidev' }
+        ],
+        label: 'Frameworks'
+      },
+      {
+        items: [
+          { label: 'Ecosystem Overview', slug: 'tooling/overview' },
+          { label: 'Testing Tools', slug: 'tooling/testing' },
+          { label: 'Formatters', slug: 'tooling/formats' },
+          { label: 'Libraries', slug: 'tooling/libraries' },
+          { label: 'Utilities', slug: 'tooling/tools' },
+          { label: 'Extensions', slug: 'tooling/extensions' }
+        ],
+        label: 'Tooling & Integrations'
+      },
+      {
+        items: [
+          { label: 'Architecture Notes', slug: 'guide/architecture' },
+          { label: 'Development Guide', slug: 'guide/development' },
+          { badge: { text: 'Main', variant: 'note' }, label: 'Core Config', slug: 'packages/basic' },
+          { label: 'Base Rules', slug: 'packages/core' },
+          { label: 'Integrations', slug: 'packages/integrations' },
+          { label: 'Playground', slug: 'packages/playground' },
+          { label: 'Testing Suite', slug: 'packages/tests' },
+          { label: 'API Reference', slug: 'api' },
+          { label: 'Generated Types', slug: 'api/reference' }
+        ],
+        label: 'Architecture & API'
+      }
     ],
-    label: 'Getting Started'
+    label: 'Current Docs (v2)'
   },
   {
-    items: [
-      { badge: { text: 'Core', variant: 'success' }, label: 'TypeScript', slug: 'frameworks/typescript' },
-      { label: 'React', slug: 'frameworks/react' },
-      { label: 'Next.js', slug: 'frameworks/next' },
-      { label: 'Astro', slug: 'frameworks/astro' },
-      { label: 'Vue', slug: 'frameworks/vue' },
-      { label: 'Svelte', slug: 'frameworks/svelte' },
-      { label: 'Solid', slug: 'frameworks/solid' },
-      { label: 'Angular', slug: 'frameworks/angular' },
-      { label: 'NestJS', slug: 'frameworks/nest' },
-      { label: 'Hono', slug: 'frameworks/hono' },
-      { label: 'Expo', slug: 'frameworks/expo' },
-      { label: 'Qwik', slug: 'frameworks/qwik' },
-      { label: 'Remix', slug: 'frameworks/remix' },
-      { label: 'Vite', slug: 'frameworks/vite' },
-      { label: 'Slidev', slug: 'frameworks/slidev' }
-    ],
-    label: 'Frameworks'
-  },
-  {
-    items: [
-      { label: 'Ecosystem Overview', slug: 'tooling/overview' },
-      { label: 'Testing Tools', slug: 'tooling/testing' },
-      { label: 'Formatters', slug: 'tooling/formats' },
-      { label: 'Libraries', slug: 'tooling/libraries' },
-      { label: 'Utilities', slug: 'tooling/tools' },
-      { label: 'Extensions', slug: 'tooling/extensions' }
-    ],
-    label: 'Tooling & Integrations'
-  },
-  {
-    items: [
-      { label: 'Architecture Notes', slug: 'guide/architecture' },
-      { label: 'Development Guide', slug: 'guide/development' },
-      { badge: { text: 'Main', variant: 'note' }, label: 'Core Config', slug: 'packages/basic' },
-      { label: 'Base Rules', slug: 'packages/core' },
-      { label: 'Integrations', slug: 'packages/integrations' },
-      { label: 'Playground', slug: 'packages/playground' },
-      { label: 'Testing Suite', slug: 'packages/tests' },
-      { label: 'API Reference', slug: 'api' },
-      { label: 'Generated Types', slug: 'api/reference' }
-    ],
-    label: 'Architecture & API'
-  },
-  {
-    collapsed: true,
     items: [
       { label: 'Overview', slug: 'v1' },
       { label: 'Getting Started', slug: 'v1/guide/getting-started' },
@@ -122,7 +126,7 @@ const sidebar = [
         label: 'Packages and API'
       }
     ],
-    label: 'Legacy (v1)'
+    label: 'Frozen Docs (v1)'
   }
 ]
 
@@ -155,7 +159,7 @@ export default defineConfig({
         {
           attrs: { is: 'inline' },
           content:
-            '(() => { const VERSION_ID = \'s2k-version-switcher\'; const getVersionTarget = version => { const { pathname, search, hash } = window.location; const isV1 = pathname.startsWith(\'/v1/\'); if (version === \'v1\') { const nextPath = isV1 ? pathname : `/v1${pathname === \'/\' ? \'/\' : pathname}`; return `${nextPath}${search}${hash}`; } const nextPath = isV1 ? pathname.replace(/^\\/v1/, \'\') || \'/\' : pathname; return `${nextPath}${search}${hash}`; }; const ensureSwitcher = () => { const header = document.querySelector(\'.header .right-group\'); if (!header) return; let wrapper = document.getElementById(VERSION_ID); if (!wrapper) { wrapper = document.createElement(\'label\'); wrapper.id = VERSION_ID; wrapper.className = \'s2k-version-switcher\'; wrapper.setAttribute(\'aria-label\', \'Select docs version\'); const select = document.createElement(\'select\'); select.innerHTML = \'<option value="v2">v2</option><option value="v1">v1</option>\'; select.addEventListener(\'change\', () => { window.location.assign(getVersionTarget(select.value)); }); wrapper.appendChild(select); header.prepend(wrapper); } const select = wrapper.querySelector(\'select\'); if (!select) return; select.value = window.location.pathname.startsWith(\'/v1/\') ? \'v1\' : \'v2\'; }; if (document.readyState === \'loading\') { document.addEventListener(\'DOMContentLoaded\', ensureSwitcher, { once: true }); } else { ensureSwitcher(); } document.addEventListener(\'astro:page-load\', ensureSwitcher); })();',
+            '(() => { const VERSION_ID = \'s2k-version-switcher\'; const getVersionTarget = version => { const { pathname, search, hash } = window.location; const isV1 = pathname.startsWith(\'/v1/\'); if (version === \'v1\') { const nextPath = isV1 ? pathname : `/v1${pathname === \'/\' ? \'/\' : pathname}`; return `${nextPath}${search}${hash}`; } const nextPath = isV1 ? pathname.replace(/^\\/v1/, \'\') || \'/\' : pathname; return `${nextPath}${search}${hash}`; }; const ensureSwitcher = () => { const header = document.querySelector(\'.header .right-group\'); if (!header) return; let wrapper = document.getElementById(VERSION_ID); if (!wrapper) { wrapper = document.createElement(\'label\'); wrapper.id = VERSION_ID; wrapper.className = \'s2k-version-switcher\'; wrapper.setAttribute(\'aria-label\', \'Select docs version\'); const select = document.createElement(\'select\'); select.innerHTML = \'<option value="v2">v2</option><option value="v1">v1</option>\'; select.addEventListener(\'change\', () => { const target = getVersionTarget(select.value); fetch(target, { method: \'HEAD\' }).then(res => { if (res.ok) { window.location.assign(target); } else { window.location.assign(select.value === \'v1\' ? \'/v1/\' : \'/\'); } }).catch(() => window.location.assign(target)); }); wrapper.appendChild(select); header.prepend(wrapper); } const select = wrapper.querySelector(\'select\'); if (!select) return; select.value = window.location.pathname.startsWith(\'/v1/\') ? \'v1\' : \'v2\'; }; if (document.readyState === \'loading\') { document.addEventListener(\'DOMContentLoaded\', ensureSwitcher, { once: true }); } else { ensureSwitcher(); } document.addEventListener(\'astro:page-load\', ensureSwitcher); })();',
           tag: 'script'
         }
       ],

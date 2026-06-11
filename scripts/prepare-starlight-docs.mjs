@@ -1,8 +1,11 @@
 /* eslint func-style: off -- generator + recursive helpers read clearly as declarations */
 import { readdir, readFile, writeFile } from 'node:fs/promises'
 import { join, relative } from 'node:path'
+import { pathToFileURL } from 'node:url'
 
-const docsRoot = new URL('../packages/docs/src/content/docs/', import.meta.url)
+const docsRoot = process.env.DOCS_ROOT
+  ? pathToFileURL(`${process.env.DOCS_ROOT.replace(/\/$/u, '')}/`)
+  : new URL('../packages/docs/src/content/docs/', import.meta.url)
 
 const titleCase = value => value
   .replaceAll('-', ' ')
