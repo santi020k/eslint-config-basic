@@ -6,7 +6,7 @@ import { defineConfig, Extension, Library, Preset, Runtime, Testing, Tool } from
 
 describe('v1.0.0 Roadmap Features', () => {
   it('should apply strict mode (warnings to errors)', async () => {
-    const config = await defineConfig({ strict: true, tools: [] })
+    const config = await defineConfig({ detection: false, strict: true, tools: [] })
     const configsWithRules = config.filter(c => 'rules' in c && c.rules)
     const allRules = configsWithRules.flatMap(c => Object.values(c.rules ?? {}))
     const arrayWarnings = allRules.filter(
@@ -91,7 +91,7 @@ describe('v1.0.0 Roadmap Features', () => {
   })
 
   it('should support pedantic strict mode', async () => {
-    const config = await defineConfig({ strict: 'pedantic', tools: [] })
+    const config = await defineConfig({ detection: false, strict: 'pedantic', tools: [] })
     const rules = extractRuleNames(config)
 
     expect(rules).toContain('no-console')

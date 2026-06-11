@@ -371,7 +371,7 @@ describe('eslintConfig Function', () => {
     const names = extractConfigNames(config)
 
     expect(names).toContain('eslint-config/prettier')
-    expect(names).not.toContain('integrations/jsdoc')
+    expect(names).not.toContain('eslint-config-integrations/jsdoc')
   })
 
   it('should union explicit values with detected values when optionMergeStrategy is merge', async () => {
@@ -384,7 +384,7 @@ describe('eslintConfig Function', () => {
     const names = extractConfigNames(config)
 
     expect(names).toContain('eslint-config/prettier')
-    expect(names).toContain('integrations/jsdoc')
+    expect(names).toContain('eslint-config-integrations/jsdoc')
   })
 
   it('should replace detected values with explicit values when optionMergeStrategy is replace', async () => {
@@ -397,7 +397,7 @@ describe('eslintConfig Function', () => {
     const names = extractConfigNames(config)
 
     expect(names).not.toContain('eslint-config/prettier')
-    expect(names).toContain('integrations/jsdoc')
+    expect(names).toContain('eslint-config-integrations/jsdoc')
   })
 
   it('should disable default extensions when detection is false', async () => {

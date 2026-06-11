@@ -69,6 +69,7 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
   it('should include Astro-specific rules logic', async () => {
     // Note: Astro rules are in the astro package, but we test composition here
     const config = await defineConfig({
+      detection: false,
       frameworks: {
         astro: [{
           name: 'mock-astro',

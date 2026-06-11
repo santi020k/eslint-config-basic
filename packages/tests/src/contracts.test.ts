@@ -15,11 +15,13 @@ const noDetectRootDir = '/__eslint-config-basic_contract_tests_no_detect__'
 
 const createBaseOptions = (): EslintConfigOptions => ({
   autoFrameworks: false,
+  detection: false,
   detectRootDir: noDetectRootDir,
   extensions: [],
   formats: [],
   frameworks: {},
   libraries: [],
+  optionMergeStrategy: 'replace',
   testing: [],
   tools: [],
   typescript: false

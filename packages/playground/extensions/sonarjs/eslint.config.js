@@ -2,6 +2,6 @@
 import { defineConfig, Extension } from '@santi020k/eslint-config-basic'
 
 export default await defineConfig({
-  tsconfigRootDir: import.meta.dirname,
-  extensions: [Extension.Sonarjs]
+  extensions: [Extension.Sonarjs],
+  tsconfigRootDir: import.meta.dirname
 })

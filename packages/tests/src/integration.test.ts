@@ -26,7 +26,7 @@ const FIXTURES_DIR = join(__dirname, '../fixtures')
 describe('Integration Tests', () => {
   describe('JavaScript', () => {
     it('should report warnings for stylistic issues in javascript.js', async () => {
-      const config = await defineConfig({ tools: [] })
+      const config = await defineConfig({ detection: false, tools: [] })
       const filePath = join(FIXTURES_DIR, 'javascript.js')
       const results = await lintFile(filePath, config)
 
@@ -39,7 +39,7 @@ describe('Integration Tests', () => {
     })
 
     it('should pass for clean javascript code', async () => {
-      const config = await defineConfig({ tools: [] })
+      const config = await defineConfig({ detection: false, tools: [] })
       const code = 'const x = \'clean\'\n\nconsole.log(x)\n'
       const results = await lintText(code, config, 'clean.js')
 
@@ -51,6 +51,7 @@ describe('Integration Tests', () => {
   describe('TypeScript', () => {
     it('should report TypeScript-specific issues', async () => {
       const config = await defineConfig({
+        detection: false,
         tools: [],
         tsconfigRootDir: FIXTURES_DIR,
         typescript: true
@@ -67,6 +68,7 @@ describe('Integration Tests', () => {
 
     it('should report issues in nest.ts', async () => {
       const config = await defineConfig({
+        detection: false,
         tools: [],
         tsconfigRootDir: FIXTURES_DIR,
         typescript: true
@@ -154,6 +156,7 @@ describe('Integration Tests', () => {
   describe('Svelte', () => {
     it('should detect stylistic issues in svelte.svelte', async () => {
       const config = await defineConfig({
+        detection: false,
         frameworks: { svelte: svelteConfig },
         tools: []
       })
