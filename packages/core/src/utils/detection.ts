@@ -211,6 +211,10 @@ const detectLibraries = (allDeps: DependencyMap): Library[] => {
 
   if (allDeps['@modelcontextprotocol/sdk']) libraries.push(Library.Mcp)
 
+  if (allDeps['@mastra/core']) libraries.push(Library.Mastra)
+
+  if (allDeps['@openai/agents']) libraries.push(Library.OpenAiAgents)
+
   if (allDeps.typeorm) libraries.push(Library.Typeorm)
 
   if (allDeps.prisma || allDeps['@prisma/client']) libraries.push(Library.Prisma)

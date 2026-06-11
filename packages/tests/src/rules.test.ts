@@ -41,7 +41,7 @@ describe('TypeScript Rules', () => {
   })
 
   it('should target TypeScript files', () => {
-    const hasTypeScriptFiles = typescriptConfig.some(c => c.files?.some(pattern => typeof pattern === 'string' && pattern.includes('.ts')))
+    const hasTypeScriptFiles = typescriptConfig.some(c => c.files?.some((pattern: unknown) => typeof pattern === 'string' && pattern.includes('.ts')))
     expect(hasTypeScriptFiles).toBe(true)
   })
 

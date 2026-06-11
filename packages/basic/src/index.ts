@@ -89,9 +89,11 @@ export {
   jsdoc,
   jsonc,
   markdown,
+  mastra,
   mcp,
   mdx,
   mikroOrm,
+  openAiAgents,
   perfectionist,
   playwright,
   prettier,
@@ -300,7 +302,7 @@ const scopeConfigToProject = (
   return {
     ...config,
     files: Array.isArray(config.files) ?
-      config.files.map(pattern => scopeFilePattern(projectPath, pattern)) as TSESLint.FlatConfig.Config['files'] :
+      config.files.map((pattern: unknown) => scopeFilePattern(projectPath, pattern)) as TSESLint.FlatConfig.Config['files'] :
       [`${projectPath.replace(/\/$/, '')}/**/*`]
   }
 }

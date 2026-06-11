@@ -18,9 +18,11 @@ import {
   jsdoc,
   jsonc,
   markdown,
+  mastra,
   mcp,
   mdx,
   mikroOrm,
+  openAiAgents,
   perfectionist,
   playwright,
   prettier,
@@ -63,6 +65,10 @@ export const getIntegrationConfigs = async (
   if (libraries.includes(Library.AiSdk)) configs.push(...await aiSdk())
 
   if (libraries.includes(Library.Mcp)) configs.push(...mcp())
+
+  if (libraries.includes(Library.Mastra)) configs.push(...mastra())
+
+  if (libraries.includes(Library.OpenAiAgents)) configs.push(...openAiAgents())
 
   if (libraries.includes(Library.Typeorm)) configs.push(...typeorm())
 

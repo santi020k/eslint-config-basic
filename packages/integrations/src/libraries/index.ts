@@ -1,6 +1,8 @@
 export { aiSdk } from './ai.js'
 export { i18next } from './i18next.js'
+export { mastra } from './mastra.js'
 export { mcp } from './mcp.js'
+export { openAiAgents } from './openai-agents.js'
 export { drizzle, mikroOrm, prisma, sequelize, typeorm } from './orm.js'
 export { stencil } from './stencil.js'
 export { storybook } from './storybook.js'
