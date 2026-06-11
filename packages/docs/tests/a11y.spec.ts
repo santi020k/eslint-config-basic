@@ -1,24 +1,62 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
 import { expectNoUnexpectedAccessibilityViolations } from './helpers/accessibility.js'
 
 import { test } from '@playwright/test'
 
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+function getDocUrls(dir: string, baseDir = dir): string[] {
+  let urls: string[] = []
+  if (!fs.existsSync(dir)) {
+    return urls
+  }
+  const files = fs.readdirSync(dir, { withFileTypes: true })
+  for (const file of files) {
+    const res = path.resolve(dir, file.name)
+    if (file.isDirectory()) {
+      urls = urls.concat(getDocUrls(res, baseDir))
+    } else if (file.name.endsWith('.md') || file.name.endsWith('.mdx')) {
+      const relativePath = path.relative(baseDir, res)
+      // Remove file extension
+      const withoutExt = relativePath.replace(/\.(md|mdx)$/, '')
+      
+      // Convert to URL path format (using forward slashes, lowercase)
+      let urlPath = '/' + withoutExt.split(path.sep).join('/').toLowerCase()
+      
+      // If it ends with /index, map to the directory itself
+      if (urlPath === '/index') {
+        urlPath = '/'
+      } else if (urlPath.endsWith('/index')) {
+        urlPath = urlPath.slice(0, -5) // keep trailing slash
+      } else {
+        urlPath = urlPath + '/'
+      }
+      
+      urls.push(urlPath)
+    }
+  }
+  return urls
+}
+
+const docsDir = path.resolve(__dirname, '../src/content/docs')
+const urls = getDocUrls(docsDir).sort()
+
 test.describe('Accessibility', () => {
-  test('homepage should have no accessibility violations', async ({ page }) => {
-    await page.goto('/')
-    // Wait for the page to be fully loaded and settled
-    await page.waitForLoadState('networkidle')
-    await expectNoUnexpectedAccessibilityViolations(page)
-  })
-
-  test('installation guide should have no accessibility violations', async ({ page }) => {
-    await page.goto('/guide/installation/')
-    await page.waitForLoadState('networkidle')
-    await expectNoUnexpectedAccessibilityViolations(page)
-  })
-
-  test('v1 overview should have no accessibility violations', async ({ page }) => {
-    await page.goto('/v1/')
-    await page.waitForLoadState('networkidle')
-    await expectNoUnexpectedAccessibilityViolations(page)
-  })
+  for (const url of urls) {
+    test(`page ${url} should have no accessibility violations`, async ({ page }) => {
+      await page.goto(url)
+      await page.waitForLoadState('networkidle')
+      await expectNoUnexpectedAccessibilityViolations(page, [
+        {
+          htmlIncludes: 'role="region"',
+          id: 'landmark-unique'
+        }
+      ])
+    })
+  }
 })
+

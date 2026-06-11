@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    "rootDir": ".",
     "target": "ES2022",
     "module": "Node16",
     "lib": [
