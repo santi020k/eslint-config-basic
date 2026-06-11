@@ -278,6 +278,33 @@ describe('Integration Rule Assertions — Libraries', () => {
     expect(rules).toContain('no-restricted-imports')
   })
 
+  it('should include Google GenAI import safety rules when GoogleGenAi library is enabled', async () => {
+    const config = await defineConfig({
+      libraries: [Library.GoogleGenAi]
+    })
+
+    const names = extractConfigNames(config)
+    expect(names).toContain('eslint-config-integrations/google-genai')
+  })
+
+  it('should include AutoGen import safety rules when Autogen library is enabled', async () => {
+    const config = await defineConfig({
+      libraries: [Library.Autogen]
+    })
+
+    const names = extractConfigNames(config)
+    expect(names).toContain('eslint-config-integrations/autogen')
+  })
+
+  it('should include Zod validation rules when Zod library is enabled', async () => {
+    const config = await defineConfig({
+      libraries: [Library.Zod]
+    })
+
+    const names = extractConfigNames(config)
+    expect(names).toContain('eslint-config-integrations/zod')
+  })
+
   it('should include tailwind config when Tailwind library is enabled', async () => {
     const config = await defineConfig({
       libraries: [Library.Tailwind]
@@ -385,14 +412,16 @@ describe('Integration Rule Assertions — Tools', () => {
     expect(rules).toContain('@cspell/spellchecker')
   })
 
-  it('should include JSDoc rules when Jsdoc tool is enabled', async () => {
+  it('should include JSDoc and TSDoc rules when Jsdoc tool is enabled', async () => {
     const config = await defineConfig({
-      tools: [Tool.Jsdoc]
+      tools: [Tool.Jsdoc],
+      typescript: true
     })
 
     const rules = extractRuleNames(config)
 
     expect(rules).toContain('jsdoc/check-access')
+    expect(rules).toContain('tsdoc/syntax')
   })
 
   it('should include Swagger rules when Swagger tool is enabled', async () => {
@@ -492,5 +521,23 @@ describe('Integration Rule Assertions — Extensions', () => {
     const rules = extractRuleNames(config)
 
     expect(rules).toContain('security/detect-object-injection')
+  })
+
+  it('should include A11y rules when A11y extension is enabled', async () => {
+    const config = await defineConfig({
+      extensions: [Extension.A11y]
+    })
+
+    const names = extractConfigNames(config)
+    expect(names).toContain('eslint-config-integrations/a11y/jsx')
+  })
+
+  it('should include Biome rules when Biome extension is enabled', async () => {
+    const config = await defineConfig({
+      extensions: [Extension.Biome]
+    })
+
+    const names = extractConfigNames(config)
+    expect(names).toContain('eslint-config-integrations/biome')
   })
 })

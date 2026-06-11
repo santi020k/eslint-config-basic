@@ -1,6 +1,8 @@
 // @ts-check
 import pluginReactConfig from 'eslint-plugin-react/configs/recommended.js'
+import pluginReactCompiler from 'eslint-plugin-react-compiler'
 import pluginReactHooks from 'eslint-plugin-react-hooks'
+import pluginReactRefresh from 'eslint-plugin-react-refresh'
 import globals from 'globals'
 
 import { rules } from './rules.js'
@@ -41,10 +43,14 @@ export const reactConfig: TSESLint.FlatConfig.ConfigArray = [
     languageOptions,
     name: 'eslint-config-react/custom',
     plugins: {
-      'react-hooks': pluginReactHooks
+      'react-compiler': pluginReactCompiler,
+      'react-hooks': pluginReactHooks,
+      'react-refresh': pluginReactRefresh
     },
     rules: {
       ...pluginReactHooks.configs.recommended.rules,
+      'react-compiler/react-compiler': 'warn',
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       ...rules
     }
   }

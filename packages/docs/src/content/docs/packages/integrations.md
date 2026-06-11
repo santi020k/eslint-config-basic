@@ -9,11 +9,11 @@ This package contains the integrations consumed by the main package through the 
 
 ## Categories
 
-- Libraries: AI SDK, OpenAI Agents SDK, Mastra, MCP, LangChain, LlamaIndex, Tailwind, I18next, Storybook, Stencil, TanStack Query, TanStack Router, TypeORM, Prisma, Drizzle, MikroORM, and Sequelize.
+- Libraries: AI SDK, OpenAI Agents SDK, Mastra, MCP, LangChain, LlamaIndex, Google Gen AI, AutoGen, Tailwind, I18next, Storybook, Stencil, TanStack Query, TanStack Router, TypeORM, Prisma, Drizzle, MikroORM, Sequelize, and Zod.
 - Testing: Vitest, Jest, Cypress, Playwright, Testing Library.
 - Formats: Markdown, MDX, JSONC, YAML, TOML, GraphQL.
-- Tools: Prettier, CSpell, JSDoc, Swagger.
-- Extensions: RegExp, Unicorn, SonarJS, Security, Perfectionist, BestPractices.
+- Tools: Prettier, CSpell, JSDoc (with TSDoc), Swagger.
+- Extensions: RegExp, Unicorn, SonarJS, Security, Perfectionist, BestPractices, A11y, Biome.
 
 ## How to Use It
 

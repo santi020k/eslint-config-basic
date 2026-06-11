@@ -13,6 +13,10 @@ The `libraries` option enables integrations that usually correspond to major pro
 | Model Context Protocol | `Library.Mcp` | The project uses the MCP TypeScript SDK. | Yes |
 | LangChain | `Library.Langchain` | The project uses LangChain.js (`langchain` or `@langchain/*` packages). | Yes |
 | LlamaIndex | `Library.LlamaIndex` | The project uses LlamaIndex.TS (`llamaindex` or `@llamaindex/*` packages). | Yes |
+| Google Gen AI | `Library.GoogleGenAi` | The project uses the official Google Gen AI SDK. | Yes |
+| AutoGen | `Library.Autogen` | The project uses Microsoft AutoGen (`@microsoft/autogen*` packages). | Yes |
+| Turborepo | `Library.Turbo` | The project uses Turborepo. | Yes |
+| Zod | `Library.Zod` | The project uses Zod schema validation. | Yes |
 | TypeORM | `Library.Typeorm` | The project uses TypeORM entities, repositories, data sources, subscribers, or migrations. | Yes |
 | Prisma | `Library.Prisma` | The project uses Prisma Client or Prisma CLI. | Yes |
 | Drizzle ORM | `Library.Drizzle` | The project uses Drizzle ORM schemas, queries, or migrations. | Yes |
@@ -53,6 +57,14 @@ export default await defineConfig({
 `Library.Langchain` adds import safety rules for LangChain.js projects so chains, agents, and retrievers import from documented `langchain` and `@langchain/*` entry points instead of source or distribution internals.
 
 `Library.LlamaIndex` adds import safety rules for LlamaIndex.TS projects so indexes, retrievers, and query engines import from documented `llamaindex` and `@llamaindex/*` entry points instead of package internals.
+
+`Library.GoogleGenAi` adds import safety rules for `@google/genai` projects to ensure proper module imports.
+
+`Library.Autogen` adds import safety rules for Microsoft AutoGen projects.
+
+`Library.Turbo` validates that environment variables used in source code are properly declared in your Turborepo `turbo.json` configuration.
+
+`Library.Zod` enables Zod-specific rules for robust schema validation patterns.
 
 ## ORM Integrations
 

@@ -26,6 +26,24 @@ export const getGlobalsForRuntime = (runtime: Runtime = Runtime.Universal): TSES
     case Runtime.Browser:
       return { ...globals.browser }
 
+    case Runtime.Bun:
+      return {
+        ...globals.bunBuiltin,
+        ...globals.node,
+        ...globals.browser
+      }
+
+    case Runtime.Cloudflare:
+
+    case Runtime.Worker:
+      return { ...globals.worker, ...globals.serviceworker }
+
+    case Runtime.Deno:
+      return {
+        Deno: 'readonly',
+        ...globals.browser
+      }
+
     case Runtime.Node:
       return { ...globals.node }
 
@@ -34,9 +52,6 @@ export const getGlobalsForRuntime = (runtime: Runtime = Runtime.Universal): TSES
         ...globals.browser,
         ...globals.node
       }
-
-    case Runtime.Worker:
-      return { ...globals.worker, ...globals.serviceworker }
 
     default:
       return {

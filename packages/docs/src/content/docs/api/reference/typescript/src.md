@@ -9,7 +9,7 @@ description: "@santi020k/eslint-config-basic"
 
 > `const` **standardRules**: `TSESLint.Linter.RulesRecord`
 
-Defined in: [typescript/src/rules.ts:3](https://github.com/santi020k/eslint-config-basic/blob/9c2dfbd2cfd832a7e973619eef5a449f5fa1c5d5/packages/typescript/src/rules.ts#L3)
+Defined in: [typescript/src/rules.ts:3](https://github.com/santi020k/eslint-config-basic/blob/60bb20828470274a155bb6788d4af182189bfcce/packages/typescript/src/rules.ts#L3)
 
 ***
 
@@ -17,7 +17,7 @@ Defined in: [typescript/src/rules.ts:3](https://github.com/santi020k/eslint-conf
 
 > `const` **typeCheckedRules**: `TSESLint.Linter.RulesRecord`
 
-Defined in: [typescript/src/rules.ts:37](https://github.com/santi020k/eslint-config-basic/blob/9c2dfbd2cfd832a7e973619eef5a449f5fa1c5d5/packages/typescript/src/rules.ts#L37)
+Defined in: [typescript/src/rules.ts:37](https://github.com/santi020k/eslint-config-basic/blob/60bb20828470274a155bb6788d4af182189bfcce/packages/typescript/src/rules.ts#L37)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [typescript/src/rules.ts:37](https://github.com/santi020k/eslint-con
 
 > `const` **typescriptConfig**: `ConfigArray`
 
-Defined in: [typescript/src/index.ts:104](https://github.com/santi020k/eslint-config-basic/blob/9c2dfbd2cfd832a7e973619eef5a449f5fa1c5d5/packages/typescript/src/index.ts#L104)
+Defined in: [typescript/src/index.ts:104](https://github.com/santi020k/eslint-config-basic/blob/60bb20828470274a155bb6788d4af182189bfcce/packages/typescript/src/index.ts#L104)
 
 ## Functions
 
@@ -33,7 +33,7 @@ Defined in: [typescript/src/index.ts:104](https://github.com/santi020k/eslint-co
 
 > **createTypescriptConfig**(`options?`): `ConfigArray`
 
-Defined in: [typescript/src/index.ts:20](https://github.com/santi020k/eslint-config-basic/blob/9c2dfbd2cfd832a7e973619eef5a449f5fa1c5d5/packages/typescript/src/index.ts#L20)
+Defined in: [typescript/src/index.ts:20](https://github.com/santi020k/eslint-config-basic/blob/60bb20828470274a155bb6788d4af182189bfcce/packages/typescript/src/index.ts#L20)
 
 TypeScript ESLint configuration factory
 Extends typescript-eslint strict + stylistic type-checked presets with custom rules

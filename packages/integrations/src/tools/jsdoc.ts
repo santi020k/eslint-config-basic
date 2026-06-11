@@ -9,8 +9,9 @@ import type { TSESLint } from '@typescript-eslint/utils'
  */
 export const jsdoc: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('jsdoc', async () => {
   const pluginJsdoc = await loadDefault<PluginWithConfigs<'flat/recommended-error'>>('eslint-plugin-jsdoc')
+  const pluginTsdoc = await loadDefault<{ rules: TSESLint.FlatConfig.Plugin['rules'] }>('eslint-plugin-tsdoc')
 
-  return [
+  const configs: TSESLint.FlatConfig.ConfigArray = [
     {
       files: GLOB_JS_TS,
       name: 'eslint-config-integrations/jsdoc',
@@ -20,6 +21,18 @@ export const jsdoc: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyC
       rules: {
         ...pluginJsdoc.configs['flat/recommended-error'].rules
       }
+    },
+    {
+      files: ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts'],
+      name: 'eslint-config-integrations/tsdoc',
+      plugins: {
+        tsdoc: pluginTsdoc
+      },
+      rules: {
+        'tsdoc/syntax': 'warn'
+      }
     }
   ]
+
+  return configs
 })

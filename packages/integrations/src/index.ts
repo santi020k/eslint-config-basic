@@ -1,7 +1,9 @@
 // Re-export all integrations from categorized subdirectories
 
 // Extensions
-export { bestPractices } from './extensions/best-practices.js'
+export * from './extensions/a11y.js'
+export * from './extensions/best-practices.js'
+export * from './extensions/biome.js'
 export { perfectionist } from './extensions/perfectionist.js'
 export { regexp } from './extensions/regexp.js'
 export { security } from './extensions/security.js'
@@ -15,6 +17,8 @@ export { mdx } from './formats/mdx.js'
 export { toml } from './formats/toml.js'
 export { yaml } from './formats/yaml.js'
 export { aiSdk } from './libraries/ai.js'
+export { autogen } from './libraries/autogen.js'
+export { googleGenAi } from './libraries/google-genai.js'
 export { i18next } from './libraries/i18next.js'
 export { langchain } from './libraries/langchain.js'
 export { llamaIndex } from './libraries/llamaindex.js'
@@ -27,6 +31,8 @@ export { stencil } from './libraries/stencil.js'
 export { storybook } from './libraries/storybook.js'
 export { tailwind } from './libraries/tailwind.js'
 export { tanstackQuery, tanstackRouter } from './libraries/tanstack.js'
+export * from './libraries/turbo.js'
+export * from './libraries/zod.js'
 // Testing
 export { cypress } from './testing/cypress.js'
 export { jest } from './testing/jest.js'

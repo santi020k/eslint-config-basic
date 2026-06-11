@@ -35,10 +35,20 @@ export const GLOB_VIRTUAL_TS = [
 export enum Extension {
 
   /**
+   * Accessibility (a11y) rules for JSX and Vue
+   */
+  A11y = 'a11y',
+
+  /**
    * Built-in best-practice rules: no-console, no-alert, cyclomatic complexity,
    * max nesting depth. No extra dependencies required.
    */
   BestPractices = 'best-practices',
+
+  /**
+   * Disables formatting rules that conflict with Biome
+   */
+  Biome = 'biome',
   Perfectionist = 'perfectionist',
   Regexp = 'regexp',
   Security = 'security',
@@ -64,7 +74,9 @@ export enum Format {
  */
 export enum Library {
   AiSdk = 'ai-sdk',
+  Autogen = 'autogen',
   Drizzle = 'drizzle',
+  GoogleGenAi = 'google-genai',
   I18next = 'i18next',
   Langchain = 'langchain',
   LlamaIndex = 'llamaindex',
@@ -79,7 +91,9 @@ export enum Library {
   Tailwind = 'tailwind',
   TanstackQuery = 'tanstack-query',
   TanstackRouter = 'tanstack-router',
-  Typeorm = 'typeorm'
+  Turbo = 'turbo',
+  Typeorm = 'typeorm',
+  Zod = 'zod'
 }
 
 /**
@@ -130,6 +144,15 @@ export enum Runtime {
 
   /** Only Browser globals (window, document, etc.) */
   Browser = 'browser',
+
+  /** Bun runtime globals */
+  Bun = 'bun',
+
+  /** Cloudflare Workers globals */
+  Cloudflare = 'cloudflare',
+
+  /** Deno runtime globals */
+  Deno = 'deno',
 
   /** Only Node.js globals (process, __dirname, etc.) */
   Node = 'node',

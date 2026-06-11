@@ -7,11 +7,15 @@ import {
   Tool
 } from '@santi020k/eslint-config-core'
 import {
+  a11y,
   aiSdk,
+  autogen,
   bestPractices,
+  biome,
   cspell,
   cypress,
   drizzle,
+  googleGenAi,
   graphql,
   i18next,
   jest,
@@ -41,10 +45,12 @@ import {
   tanstackRouter,
   testingLibrary,
   toml,
+  turbo,
   typeorm,
   unicorn,
   vitest,
-  yaml
+  yaml,
+  zod
 } from '@santi020k/eslint-config-integrations'
 
 /**
@@ -72,6 +78,10 @@ export const getIntegrationConfigs = async (
 
   if (libraries.includes(Library.OpenAiAgents)) configs.push(...openAiAgents())
 
+  if (libraries.includes(Library.GoogleGenAi)) configs.push(...googleGenAi())
+
+  if (libraries.includes(Library.Autogen)) configs.push(...autogen())
+
   if (libraries.includes(Library.Langchain)) configs.push(...langchain())
 
   if (libraries.includes(Library.LlamaIndex)) configs.push(...llamaIndex())
@@ -98,6 +108,10 @@ export const getIntegrationConfigs = async (
 
   if (libraries.includes(Library.Storybook)) configs.push(...await storybook())
 
+  if (libraries.includes(Library.Zod)) configs.push(...await zod())
+
+  if (libraries.includes(Library.Turbo)) configs.push(...turbo())
+
   // Testing
   if (testing.includes(Testing.Vitest)) configs.push(...await vitest())
 
@@ -123,6 +137,10 @@ export const getIntegrationConfigs = async (
   if (formats.includes(Format.Graphql)) configs.push(...await graphql())
 
   // Extensions
+  if (extensions.includes(Extension.A11y)) configs.push(...a11y)
+
+  if (extensions.includes(Extension.Biome)) configs.push(...biome)
+
   if (extensions.includes(Extension.BestPractices)) configs.push(...bestPractices)
 
   if (extensions.includes(Extension.Regexp)) configs.push(...await regexp())

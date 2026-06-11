@@ -78,11 +78,15 @@ export {
 
 // Re-export integrations
 export {
+  a11y,
   aiSdk,
+  autogen,
   bestPractices,
+  biome,
   cspell,
   cypress,
   drizzle,
+  googleGenAi,
   graphql,
   i18next,
   jest,
@@ -114,8 +118,8 @@ export {
   toml,
   typeorm,
   unicorn,
-  vitest,
-  yaml
+  yaml,
+  zod
 } from '@santi020k/eslint-config-integrations'
 
 // Re-export framework configs
