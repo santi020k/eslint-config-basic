@@ -170,9 +170,27 @@ npx @santi020k/eslint-config-basic migrate --write
 
 ## Generate Agent Standards (Beta)
 
-The `generate-skill` command creates or updates ESLint standards files for AI coding assistants (Cursor, Claude, Copilot, etc.) based on your project's active configuration.
+The `generate-skill` command creates or updates ESLint standards files for AI coding assistants based on your project's active configuration.
 
-This is a **beta** feature and is **non-breaking** (it only adds/updates files in `.agent`, `.cursor`, `.claude`, etc. folders).
+This is a **beta** feature and is **non-breaking** (it only adds/updates files in existing agent folders and instruction files).
+
+Supported targets:
+
+| Tool | Location | Format |
+| :--- | :--- | :--- |
+| Generic agents | `.agent/skills/`, `.agents/skills/` | Markdown + front-matter |
+| Claude Code | `.claude/commands/` | Markdown |
+| Cursor | `.cursor/rules/` | MDC front-matter |
+| Windsurf | `.windsurf/rules/` | Markdown + front-matter |
+| GitHub Copilot | `.copilot/instructions/`, `.github/copilot-instructions.md` | Markdown / guarded section |
+| Aider | `.aider/` | Markdown |
+| Gemini | `.gemini/styleguide.md` | Markdown |
+| Cline | `.clinerules/` | Markdown |
+| Roo Code | `.roo/rules/` | Markdown |
+| Kiro | `.kiro/steering/` | Markdown + `inclusion: always` front-matter |
+| AGENTS.md standard (Codex CLI, OpenCode, Jules, Amp, etc.) | root `AGENTS.md` | Guarded section appended/updated |
+
+Folder targets are only written when the folder already exists, and `AGENTS.md` / `.github/copilot-instructions.md` are only updated when those files already exist — the command never creates tool folders for tools you do not use.
 
 
 ```sh title="pnpm"

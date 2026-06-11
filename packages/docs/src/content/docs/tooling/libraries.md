@@ -11,6 +11,8 @@ The `libraries` option enables integrations that usually correspond to major pro
 | OpenAI Agents SDK | `Library.OpenAiAgents` | The project uses OpenAI's TypeScript Agents SDK. | Yes |
 | Mastra | `Library.Mastra` | The project uses Mastra agents, workflows, tools, or memory. | Yes |
 | Model Context Protocol | `Library.Mcp` | The project uses the MCP TypeScript SDK. | Yes |
+| LangChain | `Library.Langchain` | The project uses LangChain.js (`langchain` or `@langchain/*` packages). | Yes |
+| LlamaIndex | `Library.LlamaIndex` | The project uses LlamaIndex.TS (`llamaindex` or `@llamaindex/*` packages). | Yes |
 | TypeORM | `Library.Typeorm` | The project uses TypeORM entities, repositories, data sources, subscribers, or migrations. | Yes |
 | Prisma | `Library.Prisma` | The project uses Prisma Client or Prisma CLI. | Yes |
 | Drizzle ORM | `Library.Drizzle` | The project uses Drizzle ORM schemas, queries, or migrations. | Yes |
@@ -47,6 +49,10 @@ export default await defineConfig({
 `Library.Mastra` adds import safety rules for Mastra projects so agents, workflows, tools, and memory integrations stay on documented package entry points.
 
 `Library.Mcp` adds import safety rules for `@modelcontextprotocol/sdk` projects so MCP servers and clients use documented SDK entry points instead of package internals.
+
+`Library.Langchain` adds import safety rules for LangChain.js projects so chains, agents, and retrievers import from documented `langchain` and `@langchain/*` entry points instead of source or distribution internals.
+
+`Library.LlamaIndex` adds import safety rules for LlamaIndex.TS projects so indexes, retrievers, and query engines import from documented `llamaindex` and `@llamaindex/*` entry points instead of package internals.
 
 ## ORM Integrations
 

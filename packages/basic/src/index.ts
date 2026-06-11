@@ -88,6 +88,8 @@ export {
   jest,
   jsdoc,
   jsonc,
+  langchain,
+  llamaIndex,
   markdown,
   mastra,
   mcp,

@@ -514,6 +514,55 @@ describe('generateAgentSkills', () => {
     expect(content).toContain('ESLint Code Standards')
   })
 
+  it('should append a guarded section to AGENTS.md when it exists', async () => {
+    const cwd = createTempProject({ name: 'tmp-project' })
+
+    writeFileSync(join(cwd, 'AGENTS.md'), '# Agent guide\n')
+
+    const result = await generateAgentSkills({ cwd })
+
+    expect(result.written.some(f => f.endsWith('AGENTS.md'))).toBe(true)
+
+    const content = readFileSync(join(cwd, 'AGENTS.md'), 'utf8')
+
+    expect(content).toContain('# Agent guide')
+    expect(content).toContain('eslint-standards:start')
+    expect(content).toContain('ESLint Code Standards')
+  })
+
+  it('should skip AGENTS.md section when it already exists and force is false', async () => {
+    const cwd = createTempProject({ name: 'tmp-project' })
+
+    writeFileSync(
+      join(cwd, 'AGENTS.md'), '# Agent guide\n\n<!-- eslint-standards:start -->\nold content\n<!-- eslint-standards:end -->\n'
+    )
+
+    const result = await generateAgentSkills({ cwd })
+
+    expect(result.skipped.some(f => f.endsWith('AGENTS.md'))).toBe(true)
+
+    const content = readFileSync(join(cwd, 'AGENTS.md'), 'utf8')
+
+    expect(content).toContain('old content')
+  })
+
+  it('should update the AGENTS.md section when force is true and section exists', async () => {
+    const cwd = createTempProject({ name: 'tmp-project' })
+
+    writeFileSync(
+      join(cwd, 'AGENTS.md'), '# Agent guide\n\n<!-- eslint-standards:start -->\nold content\n<!-- eslint-standards:end -->\n'
+    )
+
+    const result = await generateAgentSkills({ cwd, force: true })
+
+    expect(result.written.some(f => f.endsWith('AGENTS.md'))).toBe(true)
+
+    const content = readFileSync(join(cwd, 'AGENTS.md'), 'utf8')
+
+    expect(content).not.toContain('old content')
+    expect(content).toContain('ESLint Code Standards')
+  })
+
   it('should use display labels when falling back to package.json detection', async () => {
     const cwd = createTempProject({
       devDependencies: {
@@ -572,5 +621,21 @@ describe('generateAgentSkills', () => {
     expect(markerFolders).toContain('.copilot')
     expect(markerFolders).toContain('.aider')
     expect(markerFolders).toContain('.agents')
+    expect(markerFolders).toContain('.gemini')
+    expect(markerFolders).toContain('.clinerules')
+    expect(markerFolders).toContain('.roo')
+    expect(markerFolders).toContain('.kiro')
+  })
+
+  it('should generate a Kiro steering file with always-on inclusion front-matter', () => {
+    const kiroTarget = AGENT_TARGETS.find(target => target.markerFolder === '.kiro')
+
+    expect(kiroTarget).toBeDefined()
+    expect(kiroTarget?.format).toBe('kiro')
+    expect(kiroTarget?.skillSubdir).toBe('steering')
+
+    const content = generateSkillContent(makeFeatures(), 'kiro')
+
+    expect(content.startsWith('---\ninclusion: always\n---')).toBe(true)
   })
 })

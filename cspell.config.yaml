@@ -13,6 +13,7 @@ words:
   - changesets
   - codecov
   - commitizen
+  - clinerules
   - commonmark
   - cspell
   - darraghor
@@ -33,10 +34,13 @@ words:
   - istanbul
   - jsonc
   - jsx
+  - kiro
   - knip
+  - langchain
   - lint-staged
   - linted
   - linter
+  - llamaindex
   - llm
   - llms
   - lockfiles
@@ -57,6 +61,7 @@ words:
   - nonoctal
   - nonwords
   - openai
+  - opencode
   - opengraph
   - orchestrates
   - packagemanager
@@ -80,6 +85,7 @@ words:
   - st
   - stnl
   - stringly
+  - styleguide
   - stylistic
   - svelte
   - Tanstack

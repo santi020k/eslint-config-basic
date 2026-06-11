@@ -7,6 +7,8 @@ import {
   drizzle,
   graphql,
   jest as jestConfig,
+  langchain,
+  llamaIndex,
   mastra,
   mcp,
   mikroOrm,
@@ -46,5 +48,7 @@ describe('Public API Re-exports', () => {
     expect(typeof mastra).toBe("function")
     expect(typeof mcp).toBe("function")
     expect(typeof openAiAgents).toBe("function")
+    expect(typeof langchain).toBe("function")
+    expect(typeof llamaIndex).toBe("function")
   })
 })

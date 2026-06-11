@@ -841,9 +841,15 @@
     "Library": {
       "description": "Enum for application-level runtime dependencies and styling",
       "enum": [
+        "ai-sdk",
         "drizzle",
         "i18next",
+        "langchain",
+        "llamaindex",
+        "mastra",
+        "mcp",
         "mikro-orm",
+        "openai-agents",
         "prisma",
         "sequelize",
         "stencil",

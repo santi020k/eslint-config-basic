@@ -26,6 +26,10 @@ describe('Type Exports', () => {
 
     expect(options).toContain('openai-agents')
 
+    expect(options).toContain('langchain')
+
+    expect(options).toContain('llamaindex')
+
     expect(options).toContain('stencil')
 
     expect(options).toContain('tanstack-query')

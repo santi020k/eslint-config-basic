@@ -66,6 +66,8 @@ export enum Library {
   AiSdk = 'ai-sdk',
   Drizzle = 'drizzle',
   I18next = 'i18next',
+  Langchain = 'langchain',
+  LlamaIndex = 'llamaindex',
   Mastra = 'mastra',
   Mcp = 'mcp',
   MikroOrm = 'mikro-orm',

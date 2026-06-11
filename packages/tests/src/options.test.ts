@@ -254,6 +254,30 @@ describe('Integration Rule Assertions — Libraries', () => {
     expect(rules).toContain('no-restricted-imports')
   })
 
+  it('should include LangChain import safety rules when LangChain library is enabled', async () => {
+    const config = await defineConfig({
+      libraries: [Library.Langchain]
+    })
+
+    const names = extractConfigNames(config)
+    const rules = extractRuleNames(config)
+
+    expect(names).toContain('eslint-config-integrations/langchain')
+    expect(rules).toContain('no-restricted-imports')
+  })
+
+  it('should include LlamaIndex import safety rules when LlamaIndex library is enabled', async () => {
+    const config = await defineConfig({
+      libraries: [Library.LlamaIndex]
+    })
+
+    const names = extractConfigNames(config)
+    const rules = extractRuleNames(config)
+
+    expect(names).toContain('eslint-config-integrations/llamaindex')
+    expect(rules).toContain('no-restricted-imports')
+  })
+
   it('should include tailwind config when Tailwind library is enabled', async () => {
     const config = await defineConfig({
       libraries: [Library.Tailwind]

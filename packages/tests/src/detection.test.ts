@@ -133,6 +133,22 @@ describe('detectProjectOptions', () => {
     expect(options.libraries).toContain(Library.OpenAiAgents)
   })
 
+  it('should detect LangChain and LlamaIndex libraries', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      dependencies: {
+        '@langchain/core': 'latest',
+        llamaindex: 'latest'
+      }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.libraries).toContain(Library.Langchain)
+    expect(options.libraries).toContain(Library.LlamaIndex)
+  })
+
   it('should detect ORM libraries', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 

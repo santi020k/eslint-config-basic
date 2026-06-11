@@ -17,6 +17,8 @@ import {
   jest,
   jsdoc,
   jsonc,
+  langchain,
+  llamaIndex,
   markdown,
   mastra,
   mcp,
@@ -69,6 +71,10 @@ export const getIntegrationConfigs = async (
   if (libraries.includes(Library.Mastra)) configs.push(...mastra())
 
   if (libraries.includes(Library.OpenAiAgents)) configs.push(...openAiAgents())
+
+  if (libraries.includes(Library.Langchain)) configs.push(...langchain())
+
+  if (libraries.includes(Library.LlamaIndex)) configs.push(...llamaIndex())
 
   if (libraries.includes(Library.Typeorm)) configs.push(...typeorm())
 

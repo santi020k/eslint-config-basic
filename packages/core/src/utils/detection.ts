@@ -215,6 +215,10 @@ const detectLibraries = (allDeps: DependencyMap): Library[] => {
 
   if (allDeps['@openai/agents']) libraries.push(Library.OpenAiAgents)
 
+  if (allDeps.langchain || allDeps['@langchain/core']) libraries.push(Library.Langchain)
+
+  if (allDeps.llamaindex || allDeps['@llamaindex/core']) libraries.push(Library.LlamaIndex)
+
   if (allDeps.typeorm) libraries.push(Library.Typeorm)
 
   if (allDeps.prisma || allDeps['@prisma/client']) libraries.push(Library.Prisma)

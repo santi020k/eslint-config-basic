@@ -35,8 +35,8 @@ This project follows a **DX-First & Stability-First** mission. We prioritize a s
 - **🧭 Explainable Detection**: `basic-eslint explain` shows exactly which frameworks, runtimes, and integrations were detected.
 - **🏗️ Monorepo Projects**: Scope presets and integrations per workspace folder with the `projects` option.
 - **💅 Prettier Integrated**: Seamlessly integrated with Prettier out of the box for consistent code formatting.
-- **🤖 Agent Skill Generator (Beta)**: Automatically generates tailored ESLint standards for AI agents (Cursor, Claude, Copilot, etc.) based on your active config. A non-breaking, opt-in feature to boost AI assistance.
-- **🧩 Extensive Plugin Support**: Tailored rules for AI SDK, OpenAI Agents SDK, Mastra, MCP, Tailwind CSS, Vitest, Testing Library, Storybook, TanStack (Query/Router), and more.
+- **🤖 Agent Skill Generator (Beta)**: Automatically generates tailored ESLint standards for AI agents (Cursor, Claude Code, Copilot, Windsurf, Aider, Gemini, Cline, Roo Code, Kiro, and any `AGENTS.md`-based tool such as Codex CLI or OpenCode) based on your active config. A non-breaking, opt-in feature to boost AI assistance.
+- **🧩 Extensive Plugin Support**: Tailored rules for AI SDK, OpenAI Agents SDK, Mastra, MCP, LangChain, LlamaIndex, Tailwind CSS, Vitest, Testing Library, Storybook, TanStack (Query/Router), and more.
 
 ## 🚀 Quick Start
 
@@ -135,12 +135,14 @@ export default await defineConfig({
 
 ## 🤖 Agent Skill Generator (Beta)
 
-The Agent Skill Generator is a new, **beta** feature designed to help AI coding assistants (like Cursor, Claude Code, Copilot, Windsurf, and Aider) understand and follow your project's specific ESLint standards.
+The Agent Skill Generator is a new, **beta** feature designed to help AI coding assistants (like Cursor, Claude Code, Copilot, Windsurf, Aider, Gemini, Cline, Roo Code, and Kiro) understand and follow your project's specific ESLint standards.
 
 It is **non-breaking** and strictly opt-in. It works by:
-1. Scanning for agent-specific folders (e.g., `.cursor/rules`, `.claude/commands`).
+1. Scanning for agent-specific folders (e.g., `.cursor/rules`, `.claude/commands`, `.clinerules`, `.roo/rules`, `.kiro/steering`, `.gemini`).
 2. Analyzing your `eslint.config.js` to see which frameworks and tools are active.
 3. Generating a tailored `.md` or `.mdc` file that explains your coding conventions to the AI.
+
+It also maintains a guarded ESLint-standards section inside an existing root `AGENTS.md` (the open standard read by Codex CLI, OpenCode, Jules, Amp, and others) and inside `.github/copilot-instructions.md`.
 
 To use it, run:
 ```bash

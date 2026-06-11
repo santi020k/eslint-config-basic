@@ -86,7 +86,7 @@ Framework files (.svelte, .astro, .vue, .qwik, Remix .tsx) generate virtual Type
 
 **Testing**: `Testing.Vitest`, `Testing.Jest`, `Testing.Playwright`, `Testing.Cypress`, `Testing.TestingLibrary`
 **Tools**: `Tool.Prettier`, `Tool.Cspell`, `Tool.Jsdoc`, `Tool.Swagger`
-**Libraries**: `Library.Tailwind` (via `better-tailwindcss`), `Library.I18next`, `Library.Stencil`, `Library.TanstackQuery`, `Library.TanstackRouter`, `Library.Storybook`, `Library.Typeorm`, `Library.Prisma`, `Library.Drizzle`, `Library.MikroOrm`, `Library.Sequelize`
+**Libraries**: `Library.AiSdk`, `Library.OpenAiAgents`, `Library.Mastra`, `Library.Mcp`, `Library.Langchain`, `Library.LlamaIndex`, `Library.Tailwind` (via `better-tailwindcss`), `Library.I18next`, `Library.Stencil`, `Library.TanstackQuery`, `Library.TanstackRouter`, `Library.Storybook`, `Library.Typeorm`, `Library.Prisma`, `Library.Drizzle`, `Library.MikroOrm`, `Library.Sequelize`
 **Formats**: `Format.Mdx`, `Format.Markdown`, `Format.Jsonc`, `Format.Yaml`, `Format.Toml`, `Format.Graphql`
 **Extensions**: `Extension.Regexp`, `Extension.Unicorn`, `Extension.Sonarjs`, `Extension.Security`, `Extension.Perfectionist`
 

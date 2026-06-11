@@ -9,7 +9,7 @@ import { detectProjectOptions } from './index.js'
 export interface AgentTarget {
 
   /** Format variant used when generating content */
-  format: 'cursor' | 'frontmatter' | 'plain'
+  format: 'cursor' | 'frontmatter' | 'kiro' | 'plain'
 
   /** Human-readable label for logging */
   label: string
@@ -123,6 +123,34 @@ export const AGENT_TARGETS: AgentTarget[] = [
     markerFolder: '.aider',
     skillFile: 'eslint-standards.md',
     skillSubdir: '.'
+  },
+  {
+    format: 'plain',
+    label: 'Gemini (.gemini)',
+    markerFolder: '.gemini',
+    skillFile: 'styleguide.md',
+    skillSubdir: '.'
+  },
+  {
+    format: 'plain',
+    label: 'Cline (.clinerules)',
+    markerFolder: '.clinerules',
+    skillFile: 'eslint-standards.md',
+    skillSubdir: '.'
+  },
+  {
+    format: 'plain',
+    label: 'Roo Code (.roo/rules)',
+    markerFolder: '.roo',
+    skillFile: 'eslint-standards.md',
+    skillSubdir: 'rules'
+  },
+  {
+    format: 'kiro',
+    label: 'Kiro (.kiro/steering)',
+    markerFolder: '.kiro',
+    skillFile: 'eslint-standards.md',
+    skillSubdir: 'steering'
   }
 ]
 
@@ -173,6 +201,12 @@ const FEATURE_MAP: readonly [pattern: string, category: FeatureCategory, label: 
   ['optionals/swagger',          'tools', 'Swagger'],
 
   // Libraries
+  ['eslint-config-integrations/ai-sdk',    'libraries', 'AI SDK'],
+  ['eslint-config-integrations/mcp',       'libraries', 'MCP'],
+  ['eslint-config-integrations/mastra',    'libraries', 'Mastra'],
+  ['eslint-config-integrations/openai-agents', 'libraries', 'OpenAI Agents'],
+  ['eslint-config-integrations/langchain', 'libraries', 'LangChain'],
+  ['eslint-config-integrations/llamaindex', 'libraries', 'LlamaIndex'],
   ['santi020k/tailwind/',                  'libraries', 'Tailwind CSS'],
   ['optionals/i18next',                    'libraries', 'i18next'],
   ['optionals/stencil',                    'libraries', 'Stencil'],
@@ -471,11 +505,12 @@ const featuresFromDetection = (cwd: string): EslintConfigFeatures => {
 
 /**
  * Builds the skill document body from the project's {@link EslintConfigFeatures}.
- * Three format variants are produced:
+ * Four format variants are produced:
  *
  * - `frontmatter` — YAML front-matter + Markdown (`.agent`, `.agents`, `.windsurf`)
  * - `cursor`      — Cursor MDC front-matter + Markdown
- * - `plain`       — pure Markdown, no front-matter (Claude Code, Copilot, Aider)
+ * - `kiro`        — Kiro steering front-matter (`inclusion: always`) + Markdown
+ * - `plain`       — pure Markdown, no front-matter (Claude Code, Copilot, Aider, Gemini, Cline, Roo Code)
  */
 export const generateSkillContent = (
   features: EslintConfigFeatures,
@@ -679,6 +714,14 @@ alwaysApply: true
 ${body}`
   }
 
+  if (format === 'kiro') {
+    return `---
+inclusion: always
+---
+
+${body}`
+  }
+
   // plain — no front-matter
   return body
 }
@@ -707,6 +750,47 @@ const handleCopilotInstructions = (
   force: boolean
 ): 'skipped' | 'written' | null => {
   const filePath = join(cwd, COPILOT_INSTRUCTIONS_PATH)
+
+  if (!existsSync(filePath)) return null
+
+  const existing = readFileSync(filePath, 'utf-8')
+
+  if (existing.includes(COPILOT_SECTION_START)) {
+    if (!force) return 'skipped'
+
+    const updated = existing.replaceAll(
+      new RegExp(`${COPILOT_SECTION_START}[\\s\\S]*?${COPILOT_SECTION_END}`, 'g'), `${COPILOT_SECTION_START}\n${body}\n${COPILOT_SECTION_END}`
+    )
+
+    writeFileSync(filePath, updated, 'utf-8')
+
+    return 'written'
+  }
+
+  writeFileSync(
+    filePath, `${existing}\n${COPILOT_SECTION_START}\n${body}\n${COPILOT_SECTION_END}\n`, 'utf-8'
+  )
+
+  return 'written'
+}
+
+// ─── AGENTS.md special case ───────────────────────────────────────────────────
+
+const AGENTS_MD_PATH = 'AGENTS.md'
+
+/**
+ * Appends or updates a guarded ESLint-standards section inside a root
+ * `AGENTS.md`, the open agent-instructions standard read by Codex CLI,
+ * OpenCode, Jules, Amp, and many other AI coding tools.
+ *
+ * Only runs when `AGENTS.md` already exists — the generator never creates it.
+ */
+const handleAgentsMd = (
+  cwd: string,
+  body: string,
+  force: boolean
+): 'skipped' | 'written' | null => {
+  const filePath = join(cwd, AGENTS_MD_PATH)
 
   if (!existsSync(filePath)) return null
 
@@ -765,6 +849,12 @@ export const generateAgentSkills = async (
   if (copilotResult === 'written') written.push(join(cwd, COPILOT_INSTRUCTIONS_PATH))
   else if (copilotResult === 'skipped') skipped.push(join(cwd, COPILOT_INSTRUCTIONS_PATH))
 
+  // ── AGENTS.md (append/update guarded section, Codex CLI / OpenCode / etc.) ─
+  const agentsMdResult = handleAgentsMd(cwd, plainBody, force)
+
+  if (agentsMdResult === 'written') written.push(join(cwd, AGENTS_MD_PATH))
+  else if (agentsMdResult === 'skipped') skipped.push(join(cwd, AGENTS_MD_PATH))
+
   // ── Standard agent targets ─────────────────────────────────────────────────
   for (const target of AGENT_TARGETS) {
     const agentFolder = join(cwd, target.markerFolder)
@@ -803,7 +893,7 @@ export const handleGenerateSkill = async (
 
   if (result.written.length === 0 && result.skipped.length === 0) {
     console.log(
-      '\n⚠️  No agent folders found (.agent, .agents, .claude, .cursor, .windsurf, .copilot, .aider).'
+      '\n⚠️  No agent folders found (.agent, .agents, .claude, .cursor, .windsurf, .copilot, .aider, .gemini, .clinerules, .roo, .kiro) and no AGENTS.md.'
     )
 
     console.log('   Create one of those folders first, then re-run this command.')

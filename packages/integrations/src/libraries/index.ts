@@ -1,5 +1,7 @@
 export { aiSdk } from './ai.js'
 export { i18next } from './i18next.js'
+export { langchain } from './langchain.js'
+export { llamaIndex } from './llamaindex.js'
 export { mastra } from './mastra.js'
 export { mcp } from './mcp.js'
 export { openAiAgents } from './openai-agents.js'

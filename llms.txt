@@ -11,7 +11,7 @@
 - Strictly Flat Config (no legacy `.eslintrc`).
 - Composable design via direct options (`typescript`, `frameworks`, and integration enums).
 - **Zero-Config Auto-Detection**: Automatically detects frameworks and plugins from `package.json`. Detected framework configs are enabled by default (reported via `detectedFrameworks`); use `autoFrameworks: false` (or `optionMergeStrategy: 'replace'` with explicit `frameworks`) to opt out, or booleans like `frameworks.react: true` to opt in manually. Explicit options merge with detected/preset values by default.
-- **Agent Skill Generator (Beta)**: Automatically generates tailored ESLint standards for AI agents (Cursor, Claude, Copilot, etc.) based on your active config. This is a non-breaking, opt-in feature.
+- **Agent Skill Generator (Beta)**: Automatically generates tailored ESLint standards for AI agents (Cursor, Claude Code, Copilot, Windsurf, Aider, Gemini, Cline, Roo Code, Kiro, and `AGENTS.md`-based tools) based on your active config. This is a non-breaking, opt-in feature.
 - **Next.js App Router**: Optimized rules for the `app/` directory.
 - **Bundled Frameworks (v2)**: Framework configs ship behind the main package — application projects install only `@santi020k/eslint-config-basic` and enable frameworks via booleans or auto-detection.
 - **Strict Mode**: `strict: true` promotes all warnings to errors.
@@ -73,7 +73,7 @@ This is a monorepo containing multiple config packages.
 
 **Testing**: Vitest, Jest, Playwright, Cypress, TestingLibrary
 **Tools**: Prettier, CSpell, JSDoc, Swagger
-**Libraries**: Tailwind (via `better-tailwindcss`), i18next, Stencil, TanStack Query, TanStack Router, Storybook, TypeORM, Prisma, Drizzle, MikroORM, Sequelize
+**Libraries**: AI SDK, OpenAI Agents SDK, Mastra, MCP, LangChain, LlamaIndex, Tailwind (via `better-tailwindcss`), i18next, Stencil, TanStack Query, TanStack Router, Storybook, TypeORM, Prisma, Drizzle, MikroORM, Sequelize
 **Formats**: MDX, Markdown, JSONC, YAML, TOML, GraphQL
 **Extensions**: Regexp, Unicorn, SonarJS, Security, Perfectionist
 
