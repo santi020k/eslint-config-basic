@@ -528,9 +528,9 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
       detectRootDir: detectRootDir ?? process.cwd(),
       extensions: uniqueExtensions,
       formats: uniqueFormats,
-      frameworks: Object.keys(resolvedFrameworks).filter(
-        key => Boolean((resolvedFrameworks as Record<string, unknown>)[key])
-      ),
+      frameworks: Object.entries(resolvedFrameworks)
+        .filter(([_, value]) => Boolean(value))
+        .map(([key]) => key),
       libraries: uniqueLibraries,
       nextMode,
       optionMergeStrategy,

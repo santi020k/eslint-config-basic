@@ -43,7 +43,7 @@ export const getEffectiveRuleValue = (
     const rules = entry.rules as Record<string, unknown> | undefined
 
     if (rules && ruleName in rules) {
-      value = rules[ruleName]
+      value = Reflect.get(rules, ruleName)
     }
   }
 

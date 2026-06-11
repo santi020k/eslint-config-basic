@@ -203,52 +203,52 @@ interface RawFlatConfigEntry {
   rules?: unknown
 }
 
-const DETECTED_FRAMEWORK_LABELS: Record<string, string> = {
-  angular: 'Angular',
-  astro: 'Astro',
-  expo: 'Expo',
-  hono: 'Hono',
-  nest: 'NestJS',
-  next: 'Next.js',
-  qwik: 'Qwik',
-  react: 'React',
-  remix: 'Remix',
-  solid: 'SolidJS',
-  svelte: 'Svelte',
-  vue: 'Vue'
-}
+const DETECTED_FRAMEWORK_LABELS = new Map<string, string>([
+  ['angular', 'Angular'],
+  ['astro', 'Astro'],
+  ['expo', 'Expo'],
+  ['hono', 'Hono'],
+  ['nest', 'NestJS'],
+  ['next', 'Next.js'],
+  ['qwik', 'Qwik'],
+  ['react', 'React'],
+  ['remix', 'Remix'],
+  ['solid', 'SolidJS'],
+  ['svelte', 'Svelte'],
+  ['vue', 'Vue']
+])
 
-const FEATURE_LABELS: Record<string, string> = {
-  'best-practices': 'Best Practices',
-  cspell: 'CSpell',
-  cypress: 'Cypress',
-  graphql: 'GraphQL',
-  i18next: 'i18next',
-  jest: 'Jest',
-  jsdoc: 'JSDoc',
-  jsonc: 'JSONC',
-  markdown: 'Markdown',
-  mdx: 'MDX',
-  perfectionist: 'Perfectionist',
-  playwright: 'Playwright',
-  prettier: 'Prettier',
-  regexp: 'Regexp',
-  security: 'Security',
-  sonarjs: 'SonarJS',
-  stencil: 'Stencil',
-  storybook: 'Storybook',
-  swagger: 'Swagger',
-  tailwind: 'Tailwind CSS',
-  'tanstack-query': 'TanStack Query',
-  'tanstack-router': 'TanStack Router',
-  'testing-library': 'Testing Library',
-  toml: 'TOML',
-  unicorn: 'Unicorn',
-  vitest: 'Vitest',
-  yaml: 'YAML'
-}
+const FEATURE_LABELS = new Map<string, string>([
+  ['best-practices', 'Best Practices'],
+  ['cspell', 'CSpell'],
+  ['cypress', 'Cypress'],
+  ['graphql', 'GraphQL'],
+  ['i18next', 'i18next'],
+  ['jest', 'Jest'],
+  ['jsdoc', 'JSDoc'],
+  ['jsonc', 'JSONC'],
+  ['markdown', 'Markdown'],
+  ['mdx', 'MDX'],
+  ['perfectionist', 'Perfectionist'],
+  ['playwright', 'Playwright'],
+  ['prettier', 'Prettier'],
+  ['regexp', 'Regexp'],
+  ['security', 'Security'],
+  ['sonarjs', 'SonarJS'],
+  ['stencil', 'Stencil'],
+  ['storybook', 'Storybook'],
+  ['swagger', 'Swagger'],
+  ['tailwind', 'Tailwind CSS'],
+  ['tanstack-query', 'TanStack Query'],
+  ['tanstack-router', 'TanStack Router'],
+  ['testing-library', 'Testing Library'],
+  ['toml', 'TOML'],
+  ['unicorn', 'Unicorn'],
+  ['vitest', 'Vitest'],
+  ['yaml', 'YAML']
+])
 
-const toFeatureLabel = (value: string): string => FEATURE_LABELS[value] ?? value
+const toFeatureLabel = (value: string): string => FEATURE_LABELS.get(value) ?? value
 
 /**
  * Extracts all searchable tokens from a flat-config array:
@@ -323,7 +323,37 @@ const extractFeatures = (
     if (category === 'typescript') {
       features.typescript = true
     } else {
-      features[category].push(label)
+      switch (category) {
+        case 'extensions':
+          features.extensions.push(label)
+
+          break
+
+        case 'formats':
+          features.formats.push(label)
+
+          break
+
+        case 'frameworks':
+          features.frameworks.push(label)
+
+          break
+
+        case 'libraries':
+          features.libraries.push(label)
+
+          break
+
+        case 'testing':
+          features.testing.push(label)
+
+          break
+
+        case 'tools':
+          features.tools.push(label)
+
+          break
+      }
     }
   }
 
@@ -421,7 +451,7 @@ export const analyzeEslintConfig = async (cwd: string): Promise<EslintConfigFeat
 const featuresFromDetection = (cwd: string): EslintConfigFeatures => {
   const opts = detectProjectOptions(cwd)
   const lintCommand = detectLintCommand(cwd)
-  const frameworks = (opts.detectedFrameworks ?? []).map(f => DETECTED_FRAMEWORK_LABELS[f] ?? f)
+  const frameworks = (opts.detectedFrameworks ?? []).map(f => DETECTED_FRAMEWORK_LABELS.get(f) ?? f)
 
   return {
     configFile: null,

@@ -60,7 +60,7 @@ const extractRuleEntries = (
     if (!rules) continue
 
     for (const ruleName of ruleNames) {
-      if (ruleName in rules) selected.set(ruleName, rules[ruleName])
+      if (ruleName in rules) selected.set(ruleName, Reflect.get(rules, ruleName))
     }
   }
 

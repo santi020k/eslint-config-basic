@@ -31,7 +31,7 @@ const hasDefaultExport = (module: unknown): module is { default?: unknown } => (
 
 const isVitest = typeof process !== 'undefined' && process.env.VITEST
 
-const dynamicImport = isVitest
+const dynamicImport: (specifier: string) => Promise<unknown> = isVitest
   ? (specifier: string) => import(/* @vite-ignore */ specifier)
   : Reflect.construct(Function, ['specifier', 'return import(specifier)']) as (specifier: string) => Promise<unknown>
 

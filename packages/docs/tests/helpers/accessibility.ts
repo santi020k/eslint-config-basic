@@ -44,7 +44,7 @@ export const expectNoUnexpectedAccessibilityViolations = async (
       a => a.effect?.getTiming().iterations !== Infinity
     )
 
-    await Promise.all(finiteAnimations.map(a => a.finished.catch(() => {})))
+    await Promise.all(finiteAnimations.map(a => a.finished.catch(() => { /* noop */ })))
   })
 
   const accessibilityScanResults = await new AxeBuilder({ page }).analyze()

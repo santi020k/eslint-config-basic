@@ -10,12 +10,12 @@ interface PackageJson {
   devDependencies?: Record<string, string | undefined>
 }
 
-const runtimePriority: Record<Runtime, number> = {
-  [Runtime.Browser]: 1,
-  [Runtime.Node]: 2,
-  [Runtime.Universal]: 0,
-  [Runtime.Worker]: 3
-}
+const runtimePriority = new Map<Runtime, number>([
+  [Runtime.Browser, 1],
+  [Runtime.Node, 2],
+  [Runtime.Universal, 0],
+  [Runtime.Worker, 3]
+])
 
 const createDefaultOptions = (): EslintConfigOptions => ({
   detectedFrameworks: [],
@@ -53,7 +53,7 @@ const collectAllDependencies = (pkg: PackageJson): DependencyMap => ({
 const createRuntimeSetter = (options: EslintConfigOptions) => (runtime: Runtime): void => {
   const currentRuntime = options.runtime ?? Runtime.Universal
 
-  if (runtimePriority[runtime] > runtimePriority[currentRuntime]) {
+  if ((runtimePriority.get(runtime) ?? 0) > (runtimePriority.get(currentRuntime) ?? 0)) {
     options.runtime = runtime
   }
 }
