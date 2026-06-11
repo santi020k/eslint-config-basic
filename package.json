@@ -18,7 +18,8 @@
     "lint:changed:fix": "node scripts/lint-changed-files.mjs --fix",
     "lint:spell": "cspell \"**\" --gitignore --cache --show-suggestions --show-context",
     "lint:knip": "knip",
-    "test": "pnpm run build && pnpm --filter @santi020k/eslint-config-tests run test",
+    "test": "pnpm run build && pnpm run test:run",
+    "test:run": "pnpm --filter @santi020k/eslint-config-tests run test",
     "test:coverage": "pnpm run build && pnpm --filter @santi020k/eslint-config-tests run test:coverage",
     "check:exports": "turbo run check:exports",
     "inspector": "eslint-config-inspector",
@@ -42,7 +43,8 @@
     "docs:clean": "pnpm --filter @santi020k/eslint-config-docs run docs:clean",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "turbo run build && changeset publish"
+    "release:check": "TURBO_LOG_ORDER=grouped pnpm run build && pnpm run check:exports && pnpm run typecheck && pnpm run test:run",
+    "release": "pnpm run release:check && changeset publish"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.7.0",
