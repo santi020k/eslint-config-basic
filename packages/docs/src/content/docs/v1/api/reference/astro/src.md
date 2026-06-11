@@ -5,7 +5,7 @@ banner:
   content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
 ---
 
-[**@santi020k/eslint-config-basic**](../index.md)
+[**@santi020k/eslint-config-basic**](/v1/api/reference/)
 
 
 

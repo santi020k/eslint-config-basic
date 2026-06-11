@@ -23,6 +23,9 @@ const sidebar = [
           { label: 'Quick Start', slug: 'guide/getting-started' },
           { label: 'Installation', slug: 'guide/installation' },
           { label: 'Configuration', slug: 'guide/configuration' },
+          { label: 'Presets', slug: 'guide/presets' },
+          { label: 'Runtime', slug: 'guide/runtime' },
+          { label: 'Monorepo', slug: 'guide/monorepo' },
           { badge: { text: 'Beta', variant: 'caution' }, label: 'AI & Agents', slug: 'guide/ai-agents' },
           { badge: { text: 'Migration', variant: 'tip' }, label: 'Migrate from v1', slug: 'guide/migration-v1-to-v2' }
         ],
@@ -63,13 +66,17 @@ const sidebar = [
         items: [
           { label: 'Architecture Notes', slug: 'guide/architecture' },
           { label: 'Development Guide', slug: 'guide/development' },
+          { label: 'Inspector', slug: 'guide/inspector' },
+          { label: 'Playgrounds', slug: 'guide/playgrounds' },
+          { label: 'CLI Reference', slug: 'guide/cli' },
           { badge: { text: 'Main', variant: 'note' }, label: 'Core Config', slug: 'packages/basic' },
           { label: 'Base Rules', slug: 'packages/core' },
           { label: 'Integrations', slug: 'packages/integrations' },
           { label: 'Playground', slug: 'packages/playground' },
           { label: 'Testing Suite', slug: 'packages/tests' },
           { label: 'API Reference', slug: 'api' },
-          { label: 'Generated Types', slug: 'api/reference' }
+          { label: 'Generated Types', slug: 'api/reference' },
+          { badge: { text: 'New', variant: 'success' }, label: 'Troubleshooting', slug: 'guide/troubleshooting' }
         ],
         label: 'Architecture & API'
       }
