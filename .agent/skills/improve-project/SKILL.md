@@ -15,7 +15,7 @@ The project is a Turborepo monorepo using pnpm workspaces. It exports a composab
 
 - `packages/basic` - Main entry point (`@santi020k/eslint-config-basic`); exports `eslintConfig()`
 - `packages/core` - Base logic, types, utilities
-- `packages/optionals` - Optional feature configurations (e.g., Tailwind, Prettier)
+- `packages/integrations` - Optional integrations (e.g., Tailwind, Prettier)
 - `packages/{framework}` - Framework-specific configs (typescript, react, next, astro, expo, nest, vue, etc.)
 
 ## 2. Key Files to Understand
@@ -24,7 +24,7 @@ The project is a Turborepo monorepo using pnpm workspaces. It exports a composab
 - `.agent/rules/context.md` - Context, architecture decisions, and known gotchas
 - `.agent/rules/guidelines.md` - Detailed coding guidelines and structure rules
 - `packages/basic/src/index.ts` - Main entry point that composes configurations
-- `packages/core/src/types.ts` - Contains enums for `OptionalOption`, `SettingOption`
+- `packages/core/src/types.ts` - Single source of truth for enums: `Library`, `Testing`, `Format`, `Tool`, `Extension`, `Setting`, `Runtime`, `Preset`
 
 ## 3. Modification Patterns
 
@@ -37,19 +37,19 @@ The project is a Turborepo monorepo using pnpm workspaces. It exports a composab
 
 ### When adding a new Optional Config
 
-1. Create the new optional in `packages/optionals/src/{category}/{name}.ts` (category = `tools`, `libraries`, `testing`, `formats`, or `extensions`).
-2. Export the optional from `packages/optionals/src/index.ts`.
+1. Create the new optional in `packages/integrations/src/{category}/{name}.ts` (category = `tools`, `libraries`, `testing`, `formats`, or `extensions`).
+2. Export the optional from `packages/integrations/src/index.ts`.
 3. Add the enum value to the appropriate enum in `packages/core/src/types.ts` (`Tool`, `Library`, `Testing`, `Format`, or `Extension`).
-4. Import and wire it into `packages/basic/src/optionals.ts` using the matching enum check (e.g. `libraries.includes(Library.X)`).
+4. Import and wire it into `packages/basic/src/integrations.ts` using the matching enum check (e.g. `libraries.includes(Library.X)`).
 
 ## 4. Documentation Is Part of the Feature
 
 Treat documentation as required work, not cleanup.
 
-- If you add or publish a new framework package, update the matching framework guide in `packages/docs/frameworks/`, the install/configuration guides, API coverage page, homepage counts/copy, package README, and root `README.md`.
-- If you add or publish a new optional integration, update the matching tooling page in `packages/docs/tooling/`, the tooling overview, any affected setup guides, homepage counts/copy, and public README summaries.
+- If you add or publish a new framework package, update the matching framework guide in `packages/docs/src/content/docs/frameworks/`, the install/configuration guides, API coverage page, homepage counts/copy, package README, root `README.md`, `llms.txt`/`llms-full.txt`, and `CLAUDE.md`.
+- If you add or publish a new optional integration, update the matching tooling page in `packages/docs/src/content/docs/tooling/`, the tooling overview, any affected setup guides, homepage counts/copy, and public README summaries.
 - If the docs site changes in a meaningful way, add an entry to `packages/docs/CHANGELOG.md` under `Unreleased`.
-- Do not consider the task done if the package exists but the VitePress docs do not explain how to use it.
+- Do not consider the task done if the package exists but the docs site (Astro Starlight, `packages/docs`) does not explain how to use it.
 
 ## 5. Code Conventions
 

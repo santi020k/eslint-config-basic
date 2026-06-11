@@ -10,7 +10,7 @@
 
 ![ESLint toolkit branding](./cover.webp)
 
-Composable ESLint 10+ flat-config tooling for JavaScript and TypeScript projects, with optional framework packages for React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, and Remix.
+Composable ESLint 10+ flat-config tooling for JavaScript and TypeScript projects, with optional framework packages for React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, Remix, Vite, and Slidev.
 
 ## Canonical Docs
 
@@ -130,6 +130,8 @@ export default await defineConfig({
 - Expo: [`@santi020k/eslint-config-expo`](https://eslint.santi020k.com/frameworks/expo.html)
 - Qwik: [`@santi020k/eslint-config-qwik`](https://eslint.santi020k.com/frameworks/qwik.html)
 - Remix: [`@santi020k/eslint-config-remix`](https://eslint.santi020k.com/frameworks/remix.html)
+- Vite: [`@santi020k/eslint-config-vite`](https://eslint.santi020k.com/frameworks/vite.html)
+- Slidev: [`@santi020k/eslint-config-slidev`](https://eslint.santi020k.com/frameworks/slidev.html)
 
 ## 🤖 Agent Skill Generator (Beta)
 

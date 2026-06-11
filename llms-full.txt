@@ -16,13 +16,15 @@ core → typescript → react → next
      ↘ expo
      ↘ qwik
      ↘ remix
+     ↘ vite
+     ↘ slidev
      ↘ integrations
 basic (composes all above)
 ```
 
-## Modular Frameworks (v1.5.0+)
+## Bundled Frameworks (v2+)
 
-Framework-specific configurations are optional peer dependencies. They are dynamically imported by `eslintConfig()` only when requested and installed. This keeps the core installation footprint small and prevents peer dependency conflicts. Supported frameworks: React, Next.js, Astro, Vue, Svelte, SolidJS, Angular, NestJS, Hono, Expo, Qwik, and Remix.
+Framework-specific configurations are bundled behind the main package as workspace dependencies of `packages/basic`. Application projects install only `@santi020k/eslint-config-basic` and enable frameworks with booleans (e.g. `frameworks.react: true`) or rely on auto-detection, which enables detected framework configs by default (`frameworks: {}` opts out). Next.js, Expo, and Remix automatically include React rules. Supported frameworks: React, Next.js, Astro, Vue, Svelte, SolidJS, Angular, NestJS, Hono, Expo, Qwik, Remix, Vite, and Slidev.
 
 ## Package Management
 
@@ -47,15 +49,11 @@ Only supports the Flat Config format. All configurations must be exported as `TS
 ### 2. Composable API
 Instead of traditional `extends`, a functional composition API is used:
 ```typescript
-eslintConfig({ typescript: true, frameworks: { react: reactConfig }, strict: true })
+eslintConfig({ typescript: true, frameworks: { react: true }, strict: true })
 ```
 This enables dynamic detection, strict mode enforcement, and modular framework loading.
 
-**Important**: Framework values must be the imported config object — passing `true` throws. Users must do:
-```ts
-import reactConfig from '@santi020k/eslint-config-react'
-eslintConfig({ frameworks: { react: reactConfig } })
-```
+**Framework values** (see `resolveFramework` in `packages/basic/src/resolvers.ts`): `true` enables the bundled config; a config array, factory function, or module default export is also accepted. Anything else throws a `TypeError`.
 
 ### 3. Type Safety
 - Every package exports its config with explicit types.
@@ -109,7 +107,7 @@ const config = eslintConfig({ typescript: false, frameworks: { react: reactConfi
 1. Create `packages/{name}/src/index.ts` exporting `TSESLint.FlatConfig.ConfigArray`
 2. Add `package.json`, `tsconfig.json` (extending `../../tsconfig.base.json`), `tsup.config.ts`
 3. Add the framework to `frameworks` type in `packages/core/src/types.ts`
-4. Compose in `packages/basic/src/index.ts` + add as optional peer dep in `packages/basic/package.json`
+4. Compose in `packages/basic/src/index.ts` (wire into `packages/basic/src/frameworks.ts`) + add as a workspace dependency in `packages/basic/package.json`
 5. Add playground under `packages/playground/{name}/`
 6. Update tests (configs, composition, snapshots, options, detection)
 
@@ -123,6 +121,6 @@ const config = eslintConfig({ typescript: false, frameworks: { react: reactConfi
 ## Validation & CI
 
 - **Lint**: ESLint + CSpell + Knip (run from root only)
-- **Test**: Vitest integration tests in `packages/tests` (11 test files)
+- **Test**: Vitest integration tests in `packages/tests` (17 test files)
 - **Build**: `tsup` for ESM bundling per package
 - **CI**: GitHub Actions — build, lint, test, CodeQL, audit, dry-run publish on every PR

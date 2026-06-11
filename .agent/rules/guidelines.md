@@ -16,7 +16,8 @@ The project is a **monorepo** using Turborepo and pnpm Workspaces.
 ### Packages
 
 - `packages/basic/src/index.ts` - Main entry point; exports `eslintConfig()` and re-exports all enums/configs
-- `packages/basic/src/optionals.ts` - Maps optional enums to config arrays; this is where optionals are wired
+- `packages/basic/src/integrations.ts` - Maps integration enums to config arrays; this is where integrations are wired
+- `packages/basic/src/frameworks.ts` - Bundled framework configs and detected-framework flags
 - `packages/basic/src/resolvers.ts` - Framework and preset resolution logic
 - `packages/basic/src/compose.ts` - Strict mode and typed-rules override helpers
 - `packages/core/src/index.ts` - Core JS config, runtime globals, gitignore setting
@@ -25,7 +26,7 @@ The project is a **monorepo** using Turborepo and pnpm Workspaces.
 - `packages/typescript/src/index.ts` - TypeScript config
 - `packages/react/src/index.ts` - React + Hooks config
 - `packages/next/src/index.ts` - Next.js config
-- `packages/optionals/src/index.ts` - Re-exports all optional configs by category
+- `packages/integrations/src/index.ts` - Re-exports all integration configs by category
 
 ### Tests
 
@@ -40,6 +41,10 @@ The project is a **monorepo** using Turborepo and pnpm Workspaces.
 - `packages/tests/src/public-api.test.ts` - Public API surface tests (re-exports, enum values)
 - `packages/tests/src/cli.test.ts` - CLI scaffolding tests (`npx santi-eslint init`)
 - `packages/tests/src/types.test.ts` - Type-level enum value tests
+- `packages/tests/src/contracts.test.ts`, `invariants.test.ts`, `public-api.test.ts` - API surface and ordering contracts
+- `packages/tests/src/detection-fixtures.test.ts`, `detection-internals.test.ts` - Detection internals and fixture-based detection
+- `packages/tests/src/playground-frameworks.test.ts` - Lints playground environments per framework
+- `packages/tests/src/roadmap.test.ts` - Tracks planned-feature expectations
 - `packages/tests/fixtures/` - Real source files linted in integration tests (`.ts`, `.tsx`, `.vue`, `.svelte`)
 - `packages/tests/vitest.config.ts` - Vitest configuration
 
@@ -113,9 +118,9 @@ packages/{name}/
     └── ambient.d.ts  # Type declarations for plugins (LAST RESORT ONLY)
 ```
 
-The `packages/optionals/` package organizes configs into subdirectories:
+The `packages/integrations/` package organizes configs into subdirectories:
 ```text
-packages/optionals/src/
+packages/integrations/src/
 ├── tools/        # Tool.Prettier, Tool.Cspell, Tool.Jsdoc, Tool.Swagger
 ├── libraries/    # Library.Tailwind, Library.I18next, Library.Stencil, etc.
 ├── testing/      # Testing.Vitest, Testing.Playwright, Testing.Jest, Testing.Cypress, Testing.TestingLibrary
@@ -137,27 +142,27 @@ mkdir -p packages/myframework/src
 # 5. Create src/index.ts with config (use virtual-script-rules block if framework has embedded scripts)
 # 6. Add framework to `frameworks` type in `packages/core/src/types.ts`
 # 7. Wire into `eslintConfig()` function in `packages/basic/src/index.ts`
-# 8. Add as optional peer dep in `packages/basic/package.json`
+# 8. Add as a workspace dependency in `packages/basic/package.json` + wire into `packages/basic/src/frameworks.ts` (v2 bundles frameworks)
 # 9. Add playground under `packages/playground/{name}/`
 # 10. Update tests (configs.test.ts, composition.test.ts, snapshots.test.ts, options.test.ts, detection.test.ts)
 ```
 
-### New Optional
+### New Integration
 ```typescript
-// packages/optionals/src/{category}/{name}.ts
+// packages/integrations/src/{category}/{name}.ts
 import type { TSESLint } from '@typescript-eslint/utils'
 
-export const myoptional: TSESLint.FlatConfig.ConfigArray = [
-  // optional rules
+export const myintegration: TSESLint.FlatConfig.ConfigArray = [
+  // integration rules
 ]
 
-// Add to packages/optionals/src/index.ts
-export { myoptional } from './{category}/{name}.js'
+// Add to packages/integrations/src/index.ts
+export { myintegration } from './{category}/{name}.js'
 
 // Add enum value to the appropriate enum in `packages/core/src/types.ts`
 // e.g., for a library: Library.MyLib = 'mylib'
 
-// Wire in `packages/basic/src/optionals.ts`
+// Wire in `packages/basic/src/integrations.ts`
 // e.g.: if (libraries.includes(Library.MyLib)) configs.push(...myoptional)
 
 // Update tests: options.test.ts (rule assertion) + detection.test.ts (if auto-detectable)
@@ -179,7 +184,7 @@ pnpm run inspector  # Visual config inspection
 3. **Type exports**: May need explicit type annotations to avoid TS2742 errors
 4. **Ambient declarations**: Create `.d.ts` files for plugins only as a last resort. ALWAYS check if built-in types or `@types/*` packages are available first.
 5. **Workspace lint**: Don't add lint scripts to individual packages - lint runs from root only.
-6. **Framework config value**: Passing `frameworks.react = true` throws — users must pass the imported config array from the framework package (e.g., `import reactConfig from '@santi020k/eslint-config-react'`).
+6. **Framework config value**: `true` enables the bundled config (preferred for apps in v2); a config array, factory, or module default export is also accepted. Anything else throws a `TypeError` (see `resolveFramework` in `packages/basic/src/resolvers.ts`).
 7. **Virtual script files**: Do NOT add `allowDefaultProject: true` alongside `projectService: false` — this is invalid and will override correct TS rule configuration in framework files.
 8. **Integration test projectService**: In `integration.test.ts`, use `typescript: false` when linting virtual file paths — auto-detection will find the tests package's own tsconfig and activate `projectService`, which rejects paths not in any real tsconfig.
 9. **Tailwind plugin**: `better-tailwindcss` recommended config entries don't contain "tailwind" in entry names — check for rule prefix `better-tailwindcss/` when asserting tailwind is active.

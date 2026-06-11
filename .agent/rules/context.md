@@ -15,7 +15,7 @@ trigger: always_on
 
 This is `@santi020k/eslint-config-basic`, a composable ESLint 9+ and 10+ Flat Config package supporting:
 
-- JavaScript, TypeScript, React, Next.js, Astro, Expo, Vue, Svelte, Solid, Angular, NestJS, Hono, Qwik, Remix
+- JavaScript, TypeScript, React, Next.js, Astro, Expo, Vue, Svelte, Solid, Angular, NestJS, Hono, Qwik, Remix, Vite, Slidev
 - Optional integrations: Tailwind, Vitest, Jest, Playwright, Cypress, cspell, i18next, MDX, Markdown, YAML, JSONC, TOML, Storybook, Swagger, Stencil, TanStack Query, TanStack Router, Perfectionist, Unicorn, SonarJS, Security, Regexp
 
 ## Monorepo Architecture
@@ -40,7 +40,9 @@ This project uses **Turborepo** with **pnpm Workspaces** for modular package man
 | `@santi020k/eslint-config-expo` | `packages/expo` | Expo / React Native |
 | `@santi020k/eslint-config-qwik` | `packages/qwik` | Qwik |
 | `@santi020k/eslint-config-remix` | `packages/remix` | Remix |
-| `@santi020k/eslint-config-optionals` | `packages/optionals` | All optional integrations |
+| `@santi020k/eslint-config-vite` | `packages/vite` | Vite |
+| `@santi020k/eslint-config-slidev` | `packages/slidev` | Slidev |
+| `@santi020k/eslint-config-integrations` | `packages/integrations` | All optional integrations |
 | `@santi020k/eslint-config-basic` | `packages/basic` | Main entry point — `eslintConfig()` |
 
 ### Dependency Graph
@@ -57,7 +59,9 @@ core → typescript → react → next
      ↘ expo
      ↘ qwik
      ↘ remix
-     ↘ optionals
+     ↘ vite
+     ↘ slidev
+     ↘ integrations
 basic (composes all above)
 ```
 
@@ -113,14 +117,14 @@ All commands must pass before considering work complete.
 2. Create `packages/{name}/src/index.ts` exporting the config
 3. Add to `frameworks` type in `packages/core/src/types.ts`
 4. Wire into `eslintConfig()` function in `packages/basic/src/index.ts`
-5. Add as optional peer dependency in `packages/basic/package.json`
+5. Add as a workspace dependency in `packages/basic/package.json` and wire into `packages/basic/src/frameworks.ts` (v2 bundles frameworks)
 6. Add playground at `packages/playground/{name}/`
 7. Update tests in `packages/tests/src/` (configs, composition, snapshots, options, detection)
 
-### When adding a new optional
+### When adding a new integration
 
-1. Create `packages/optionals/src/{category}/{name}.ts` (category = `tools`, `libraries`, `testing`, `formats`, or `extensions`)
-2. Export from `packages/optionals/src/index.ts`
+1. Create `packages/integrations/src/{category}/{name}.ts` (category = `tools`, `libraries`, `testing`, `formats`, or `extensions`)
+2. Export from `packages/integrations/src/index.ts`
 3. Add to the appropriate enum in `packages/core/src/types.ts` (`Tool`, `Library`, `Testing`, `Format`, or `Extension`)
-4. Wire into `packages/basic/src/optionals.ts` using the matching enum check (e.g. `libraries.includes(Library.X)`)
+4. Wire into `packages/basic/src/integrations.ts` using the matching enum check (e.g. `libraries.includes(Library.X)`)
 5. Update tests in `packages/tests/src/options.test.ts` and `packages/tests/src/detection.test.ts`

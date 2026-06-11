@@ -51,8 +51,10 @@ packages/
   expo/        ← Expo / React Native
   qwik/        ← Qwik
   remix/       ← Remix
+  vite/        ← Vite
+  slidev/      ← Slidev
   tests/       ← Vitest integration tests
-  docs/        ← VitePress documentation site
+  docs/        ← Astro Starlight documentation site
   playground/  ← 20+ real ESLint environments for manual validation
 ```
 
@@ -150,7 +152,7 @@ const config = eslintConfig({ frameworks: { react: reactConfig }, typescript: fa
 
 ## Common Pitfalls
 
-1. `frameworks.react = true` throws — users must pass the imported config object (e.g., `import reactConfig from '@santi020k/eslint-config-react'`)
+1. Framework options accept `true` (bundled config), a config array, a factory, or a module default export — anything else throws a `TypeError` (see `resolveFramework` in `packages/basic/src/resolvers.ts`). App configs should prefer booleans like `frameworks.react: true`
 2. Plugin loading: use direct plugin object references, not string-based resolution (avoids `FlatCompat` issues)
 3. Type exports: may need explicit type annotations to avoid TS2742 errors
 4. Peer dependencies: use `$` references in pnpm `overrides` for version alignment

@@ -92,6 +92,8 @@ See [Configuration](/guide/configuration#additional-global-ignores) for presets,
 | Qwik | `@santi020k/eslint-config-basic` | `frameworks.qwik: true` |
 | Remix | `@santi020k/eslint-config-basic` | `frameworks.remix: true` |
 | Expo | `@santi020k/eslint-config-basic` | `frameworks.expo: true` |
+| Vite | `@santi020k/eslint-config-basic` | `frameworks.vite: true` |
+| Slidev | `@santi020k/eslint-config-basic` | `frameworks.slidev: true` |
 
 ## Integrations
 

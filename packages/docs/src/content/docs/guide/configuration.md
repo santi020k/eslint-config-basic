@@ -83,6 +83,8 @@ Next.js, Expo, and Remix automatically include React rules. You can still pass i
 | Expo | `frameworks.expo` |
 | Qwik | `frameworks.qwik` |
 | Remix | `frameworks.remix` |
+| Vite | `frameworks.vite` |
+| Slidev | `frameworks.slidev` |
 
 ## Configuration Priority
 

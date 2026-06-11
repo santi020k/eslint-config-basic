@@ -147,14 +147,11 @@ configs.push(...resolveFramework('myframework', frameworks.myframework))
 
 ### `packages/basic/package.json`
 
-Add the new package as an optional peer dependency:
+Add the new package as a workspace dependency (v2 bundles frameworks behind the main package) and wire it into `packages/basic/src/frameworks.ts` (`getBundledFrameworkConfig` + re-export):
 
 ```json
-"peerDependencies": {
-  "@santi020k/eslint-config-myframework": "*"
-},
-"peerDependenciesMeta": {
-  "@santi020k/eslint-config-myframework": { "optional": true }
+"dependencies": {
+  "@santi020k/eslint-config-myframework": "workspace:^"
 }
 ```
 
@@ -165,7 +162,7 @@ Create a minimal playground at `packages/playground/myframework/` to allow manua
 The playground must have:
 
 - `package.json` with the framework as a dependency
-- `eslint.config.js` using `eslintConfig({ frameworks: { myframework: myframeworkConfig } })`
+- `eslint.config.js` using `eslintConfig({ frameworks: { myframework: true } })`
 - At least one sample file in the framework's format
 
 ## 8. Update Tests
@@ -185,11 +182,11 @@ Documentation updates are required whenever a new framework package is added or 
 
 At minimum, review and update:
 
-- **`packages/docs/frameworks/{name}.md`** — add or expand the dedicated framework guide
-- **`packages/docs/guide/installation.md`** — add the package to install examples and the framework matrix
-- **`packages/docs/guide/configuration.md`** — add the framework to the framework matrix and related examples when needed
-- **`packages/docs/api/index.md`** — update covered package lists when docs coverage changes
-- **`packages/docs/index.md`** and **`packages/docs/.vitepress/theme/components/HomePageSections.vue`** — update homepage counts, framework lists, or marketing copy when totals change
+- **`packages/docs/src/content/docs/frameworks/{name}.md`** — add or expand the dedicated framework guide, and register it in the sidebar in `packages/docs/astro.config.mjs`
+- **`packages/docs/src/content/docs/guide/installation.md`** — add the framework to the framework matrix
+- **`packages/docs/src/content/docs/guide/configuration.md`** — add the framework to the framework matrix and related examples when needed
+- **`packages/docs/src/content/docs/api/index.md`** — update covered package lists when docs coverage changes
+- **`packages/docs/src/content/docs/index.md`** — update homepage counts, framework lists, or marketing copy when totals change
 - **`packages/{name}/README.md`** — keep the package README aligned with the canonical docs link
 - **`README.md`** — update public package coverage lists when a new published package is introduced
 - **`packages/docs/CHANGELOG.md`** — add an unreleased documentation note when the docs site meaningfully changes

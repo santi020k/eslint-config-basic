@@ -19,7 +19,7 @@ Optionals are categorized into five types. Choose the right category before star
 
 ## 1. Create the Configuration File
 
-Create `packages/optionals/src/{category}/{name}.ts`:
+Create `packages/integrations/src/{category}/{name}.ts`:
 
 ```typescript
 import pluginMyOptional from 'eslint-plugin-myoptional'
@@ -32,7 +32,7 @@ import type { TSESLint } from '@typescript-eslint/utils'
  */
 export const myOptional: TSESLint.FlatConfig.ConfigArray = [
   {
-    name: 'optionals/myoptional',
+    name: 'integrations/myoptional',
     plugins: {
       myoptional: pluginMyOptional
     },
@@ -50,7 +50,7 @@ export const myOptional: TSESLint.FlatConfig.ConfigArray = [
 
 ## 2. Export the Config
 
-In `packages/optionals/src/index.ts`, add an export:
+In `packages/integrations/src/index.ts`, add an export:
 
 ```typescript
 export { myOptional } from './{category}/{name}.js'
@@ -75,22 +75,22 @@ export enum Tool {
 // etc.
 ```
 
-## 4. Wire the Optional into the Optionals Module
+## 4. Wire the Optional into the Integrations Module
 
-Open `packages/basic/src/optionals.ts`. Add the import and the conditional push in the matching section of `getOptionalConfigs()`:
+Open `packages/basic/src/integrations.ts`. Add the import and the conditional push in the matching section of `getIntegrationConfigs()`:
 
 ```typescript
 // At the top of the file, add to imports:
-import { myOptional } from '@santi020k/eslint-config-optionals'
+import { myOptional } from '@santi020k/eslint-config-integrations'
 
-// In getOptionalConfigs(), in the appropriate section:
+// In getIntegrationConfigs(), in the appropriate section:
 if (libraries.includes(Library.MyLib)) configs.push(...myOptional)
 
 // For a tool (non-Prettier):
 if (tools.includes(Tool.MyTool)) configs.push(...myOptional)
 ```
 
-**Important**: Prettier must always be the last config applied. It goes through `getPrettierConfig()`, not `getOptionalConfigs()`. Never push Prettier inside `getOptionalConfigs()`.
+**Important**: Prettier must always be the last config applied. It goes through `getPrettierConfig()`, not `getIntegrationConfigs()`. Never push Prettier inside `getIntegrationConfigs()`.
 
 ## 5. Update Tests
 
@@ -110,11 +110,11 @@ Documentation updates are required whenever a new optional integration is added 
 
 At minimum, review and update:
 
-- **`packages/docs/tooling/overview.md`** — keep the overview aligned with the supported optional surface area
-- **`packages/docs/tooling/{category}.md`** — add the new integration to the matching category page (`libraries`, `testing`, `formats`, `tools`, or `extensions`)
-- **`packages/docs/guide/installation.md`** and **`packages/docs/guide/configuration.md`** — update setup examples when the optional affects recommended workflows
-- **`packages/docs/index.md`** and **`packages/docs/.vitepress/theme/components/HomePageSections.vue`** — update homepage counts or marketing copy when optional totals change
-- **`packages/optionals/README.md`** and **`README.md`** — keep public summaries aligned when the supported tooling surface expands
+- **`packages/docs/src/content/docs/tooling/overview.md`** — keep the overview aligned with the supported optional surface area
+- **`packages/docs/src/content/docs/tooling/{category}.md`** — add the new integration to the matching category page (`libraries`, `testing`, `formats`, `tools`, or `extensions`)
+- **`packages/docs/src/content/docs/guide/installation.md`** and **`packages/docs/src/content/docs/guide/configuration.md`** — update setup examples when the optional affects recommended workflows
+- **`packages/docs/src/content/docs/index.md`** — update homepage counts or marketing copy when integration totals change
+- **`packages/integrations/README.md`** and **`README.md`** — keep public summaries aligned when the supported tooling surface expands
 - **`packages/docs/CHANGELOG.md`** — add an unreleased documentation note when the docs site meaningfully changes
 
 If an optional integration is published, the docs should already show where it lives, which category it belongs to, and how users enable it from the main package.

@@ -1,6 +1,6 @@
 # @santi020k/eslint-config-basic
 
-> A comprehensive, composable ESLint 9/10+ Flat Config package for JavaScript, TypeScript, React, Next.js, Astro, Expo, Vue, Svelte, Solid, Angular, NestJS, Qwik, and Remix.
+> A comprehensive, composable ESLint 9/10+ Flat Config package for JavaScript, TypeScript, React, Next.js, Astro, Expo, Vue, Svelte, Solid, Angular, NestJS, Qwik, Remix, Vite, and Slidev.
 
 
 ## AI Assistant Context
@@ -10,10 +10,10 @@
 **Conventions**:
 - Strictly Flat Config (no legacy `.eslintrc`).
 - Composable design via direct options (`typescript`, `frameworks`, and integration enums).
-- **Zero-Config Auto-Detection**: Automatically detects frameworks and plugins from `package.json`. Detected frameworks are reported via `detectedFrameworks` but still require explicit imports for the best DX.
+- **Zero-Config Auto-Detection**: Automatically detects frameworks and plugins from `package.json`. Detected framework configs are enabled by default (reported via `detectedFrameworks`); pass an explicit `frameworks: {}` to opt out, or booleans like `frameworks.react: true` to opt in manually.
 - **Agent Skill Generator (Beta)**: Automatically generates tailored ESLint standards for AI agents (Cursor, Claude, Copilot, etc.) based on your active config. This is a non-breaking, opt-in feature.
 - **Next.js App Router**: Optimized rules for the `app/` directory.
-- **Lazy Loading**: Framework-specific configs are lazy-loaded to prevent peer dep issues.
+- **Bundled Frameworks (v2)**: Framework configs ship behind the main package — application projects install only `@santi020k/eslint-config-basic` and enable frameworks via booleans or auto-detection.
 - **Strict Mode**: `strict: true` promotes all warnings to errors.
 - Monorepo using Turborepo and pnpm Workspaces.
 - Dependency alignment via pnpm `overrides` with `$` references.
@@ -46,6 +46,7 @@ This is a monorepo containing multiple config packages.
 - `packages/angular/`, `packages/nest/`, `packages/hono/` — Enterprise, backend, and edge frameworks
 - `packages/expo/` — React Native / Expo
 - `packages/qwik/`, `packages/remix/` — Modern meta-frameworks
+- `packages/vite/`, `packages/slidev/` — Vite tooling and Slidev presentations
 - `packages/integrations/` — All integrations (tools, libraries, testing, formats, extensions)
 - `packages/basic/` — Main entry point composing all packages
 
@@ -65,6 +66,8 @@ This is a monorepo containing multiple config packages.
 | Expo | `@santi020k/eslint-config-expo` |
 | Qwik | `@santi020k/eslint-config-qwik` |
 | Remix | `@santi020k/eslint-config-remix` |
+| Vite | `@santi020k/eslint-config-vite` |
+| Slidev | `@santi020k/eslint-config-slidev` |
 
 ### Supported Integrations
 

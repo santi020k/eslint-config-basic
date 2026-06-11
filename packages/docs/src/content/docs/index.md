@@ -30,7 +30,7 @@ import { Card, CardGrid, LinkCard, Icon } from '@astrojs/starlight/components';
       <span>flat config</span>
     </div>
     <div class="s2k-stat-card">
-      <strong>13</strong>
+      <strong>15</strong>
       <span>framework guides</span>
     </div>
     <div class="s2k-stat-card">
