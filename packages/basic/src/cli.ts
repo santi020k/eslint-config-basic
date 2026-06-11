@@ -397,7 +397,13 @@ export const handleDoctor = async (cwd: string = process.cwd()) => {
     }
   }
 
-  const status = issues.length > 0 ? 'failed' : warnings.length > 0 ? 'passed with warnings' : 'passed'
+  let status = 'passed'
+
+  if (issues.length > 0) {
+    status = 'failed'
+  } else if (warnings.length > 0) {
+    status = 'passed with warnings'
+  }
 
   console.log([
     `ESLint Basic doctor: ${status}`,

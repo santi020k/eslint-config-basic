@@ -9,6 +9,7 @@
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -25,10 +26,13 @@
     "check:exports": "publint",
     "typecheck": "tsc --noEmit"
   },
+  "dependencies": {
+    "@typescript-eslint/utils": "^8.61.0",
+    "eslint": "^10.2.1",
+    "eslint-plugin-jsx-a11y": "^6.10.2"
+  },
   "devDependencies": {
     "@types/eslint-plugin-jsx-a11y": "^6.10.1",
-    "@typescript-eslint/utils": "^8.61.0",
-    "eslint-plugin-jsx-a11y": "^6.10.2",
     "publint": "^0.3.21",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"

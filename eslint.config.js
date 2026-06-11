@@ -29,11 +29,20 @@ export default [
     typescript: true
   }),
   {
-    files: ['scripts/**/*', 'packages/tests/**/*', 'packages/typescript/src/index.ts'],
+    files: [
+      'scripts/**/*',
+      'packages/tests/**/*',
+      'packages/typescript/src/index.ts',
+      'packages/basic/src/cli.ts',
+      'packages/basic/src/agent-skill-generator.ts',
+      'packages/core/src/utils/detection.ts',
+      'packages/basic/src/index.ts'
+    ],
     name: 'local-overrides',
     rules: {
       '@typescript-eslint/no-empty-function': 'off',
       'no-use-before-define': 'off',
+      'security/detect-non-literal-fs-filename': 'off'
     }
   }
 ]

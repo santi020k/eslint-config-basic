@@ -9,6 +9,7 @@
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -27,10 +28,11 @@
   },
   "dependencies": {
     "@darraghor/eslint-plugin-nestjs-typed": "^7.2.4",
-    "@santi020k/eslint-config-core": "workspace:^"
+    "@santi020k/eslint-config-core": "workspace:^",
+    "@typescript-eslint/utils": "^8.61.0",
+    "eslint": "^10.2.1"
   },
   "devDependencies": {
-    "@typescript-eslint/utils": "^8.61.0",
     "publint": "^0.3.21",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
