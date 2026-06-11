@@ -78,7 +78,7 @@ Users select configs via direct options rather than extending named configs:
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
-defineConfig({ typescript: true, frameworks: { react: true } })
+export default await defineConfig({ typescript: true, frameworks: { react: true } })
 ```
 
 Note: In v2, you can pass `true` to framework values to enable the bundled config, and auto-detected frameworks are enabled by default.

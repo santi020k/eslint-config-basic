@@ -11,8 +11,25 @@ import type { TSESLint } from '@typescript-eslint/utils'
 export const jsonc: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('jsonc', async () => {
   const pluginJsonc = await loadDefault<typeof PluginJsonc>('eslint-plugin-jsonc')
 
+  const recommended = (pluginJsonc.configs['flat/recommended-with-jsonc'] as TSESLint.FlatConfig.ConfigArray).map((config) => {
+    if (config.rules && !config.files) {
+      return {
+        ...config,
+        files: [
+          '*.json',
+          '**/*.json',
+          '*.json5',
+          '**/*.json5',
+          '*.jsonc',
+          '**/*.jsonc'
+        ]
+      }
+    }
+    return config
+  })
+
   return [
-    ...(pluginJsonc.configs['flat/recommended-with-jsonc']),
+    ...recommended,
     {
       files: ['**/package.json'],
       name: 'integrations/jsonc/sorting',

@@ -1,8 +1,8 @@
-import { existsSync, readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { basename, dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { handleGenerateSkill } from './agent-skill-generator.js'
+import { analyzeEslintConfig, handleGenerateSkill } from './agent-skill-generator.js'
 import { detectProjectOptions } from './index.js'
 
 const getDefaultConfigFilename = (cwd: string): string => {
@@ -36,6 +36,126 @@ const getFrameworkKeys = (detectedFrameworks?: string[]): string[] => {
   }
 
   return [...frameworkKeys].sort()
+}
+
+const FRAMEWORK_PACKAGE_TO_KEY: Record<string, string> = {
+  '@santi020k/eslint-config-angular': 'angular',
+  '@santi020k/eslint-config-astro': 'astro',
+  '@santi020k/eslint-config-expo': 'expo',
+  '@santi020k/eslint-config-hono': 'hono',
+  '@santi020k/eslint-config-nest': 'nest',
+  '@santi020k/eslint-config-next': 'next',
+  '@santi020k/eslint-config-qwik': 'qwik',
+  '@santi020k/eslint-config-react': 'react',
+  '@santi020k/eslint-config-remix': 'remix',
+  '@santi020k/eslint-config-slidev': 'slidev',
+  '@santi020k/eslint-config-solid': 'solid',
+  '@santi020k/eslint-config-svelte': 'svelte',
+  '@santi020k/eslint-config-vite': 'vite',
+  '@santi020k/eslint-config-vue': 'vue'
+}
+
+const getConfigPathIfPresent = (cwd: string): null | string => {
+  const configPath = [
+    'eslint.config.js',
+    'eslint.config.mjs',
+    'eslint.config.cjs'
+  ].map(filename => join(cwd, filename)).find(p => existsSync(p))
+
+  return configPath ?? null
+}
+
+const readPackageJson = (cwd: string): null | Record<string, unknown> => {
+  const packageJsonPath = join(cwd, 'package.json')
+
+  if (!existsSync(packageJsonPath)) return null
+
+  try {
+    return JSON.parse(readFileSync(packageJsonPath, 'utf-8')) as Record<string, unknown>
+  } catch {
+    return null
+  }
+}
+
+const detectPackageManager = (cwd: string): string => {
+  if (existsSync(join(cwd, 'pnpm-lock.yaml')) || existsSync(join(cwd, 'pnpm-workspace.yaml'))) return 'pnpm'
+
+  if (existsSync(join(cwd, 'yarn.lock'))) return 'yarn'
+
+  if (existsSync(join(cwd, 'bun.lockb')) || existsSync(join(cwd, 'bun.lock'))) return 'bun'
+
+  return 'npm'
+}
+
+const hasLintScript = (cwd: string): boolean => {
+  const packageJson = readPackageJson(cwd) as null | { scripts?: Record<string, string> }
+
+  return Boolean(packageJson?.scripts?.lint)
+}
+
+const getWorkspacePatternsFromPackageJson = (packageJson: null | Record<string, unknown>): string[] => {
+  const workspaces = packageJson?.workspaces
+
+  if (Array.isArray(workspaces)) {
+    return workspaces.filter((value): value is string => typeof value === 'string')
+  }
+
+  if (workspaces && typeof workspaces === 'object' && Array.isArray((workspaces as { packages?: unknown }).packages)) {
+    return (workspaces as { packages: unknown[] }).packages.filter((value): value is string => typeof value === 'string')
+  }
+
+  return []
+}
+
+const getWorkspacePatternsFromPnpm = (cwd: string): string[] => {
+  const workspacePath = join(cwd, 'pnpm-workspace.yaml')
+
+  if (!existsSync(workspacePath)) return []
+
+  const content = readFileSync(workspacePath, 'utf8')
+  const patterns: string[] = []
+  let inPackages = false
+
+  for (const line of content.split(/\r?\n/)) {
+    if (/^packages:\s*$/.test(line)) {
+      inPackages = true
+
+      continue
+    }
+
+    if (inPackages && /^\S/.test(line)) break
+
+    const match = inPackages ? /^\s*-\s*['"]?([^'"]+)['"]?\s*$/.exec(line) : null
+
+    if (match?.[1] && !match[1].startsWith('!')) patterns.push(match[1])
+  }
+
+  return patterns
+}
+
+const expandWorkspacePattern = (cwd: string, pattern: string): string[] => {
+  const normalized = pattern.replace(/\/$/, '')
+
+  if (!normalized.endsWith('/*')) return []
+
+  const base = normalized.slice(0, -2)
+  const basePath = join(cwd, base)
+
+  if (!existsSync(basePath)) return []
+
+  return readdirSync(basePath, { withFileTypes: true })
+    .filter(entry => entry.isDirectory())
+    .map(entry => `${base}/${entry.name}`)
+    .filter(projectPath => existsSync(join(cwd, projectPath, 'package.json')))
+}
+
+const detectWorkspaceProjects = (cwd: string): string[] => {
+  const patterns = [
+    ...getWorkspacePatternsFromPackageJson(readPackageJson(cwd)),
+    ...getWorkspacePatternsFromPnpm(cwd)
+  ]
+
+  return [...new Set(patterns.flatMap(pattern => expandWorkspacePattern(cwd, pattern)))].sort()
 }
 
 const createConfigContent = (cwd: string): { configContent: string, configPath: string } => {
@@ -74,6 +194,7 @@ const formatList = (values: undefined | unknown[]): string => {
 
 const getProjectSummary = (cwd: string) => {
   const options = detectProjectOptions(cwd)
+  const workspaceProjects = detectWorkspaceProjects(cwd)
 
   return {
     extensions: options.extensions ?? [],
@@ -85,7 +206,8 @@ const getProjectSummary = (cwd: string) => {
     runtime: options.runtime ?? 'universal',
     testing: options.testing ?? [],
     tools: options.tools ?? [],
-    typescript: Boolean(options.typescript)
+    typescript: Boolean(options.typescript),
+    workspaceProjects
   }
 }
 
@@ -143,12 +265,16 @@ const printUsage = () => {
     '  init            Create eslint.config.js/mjs if missing',
     '  update          Regenerate eslint.config.js/mjs from detection',
     '  explain         Print detected v2 config inputs',
+    '  inspect         Print detected inputs and active config features',
+    '  doctor          Check project setup for common v2 adoption issues',
     '  docs            Generate ESLINT_STANDARDS.md from detection',
     '  migrate         Report v1-to-v2 migration suggestions',
     '  generate-skill  Generate AI agent standards files',
     '',
     'Options:',
     '  --force         Overwrite existing generated skill sections/files',
+    '  --json          Print JSON for commands that support it',
+    '  --write         Apply safe migrations for commands that support it',
     '  --help, -h      Show this help message',
     '  --version, -v   Show CLI version'
   ].join('\n'))
@@ -204,6 +330,87 @@ export const handleExplain = (cwd: string = process.cwd()) => {
   ].join('\n'))
 }
 
+export const handleInspect = async (cwd: string = process.cwd(), json = false) => {
+  const summary = getProjectSummary(cwd)
+  const activeConfig = await analyzeEslintConfig(cwd)
+
+  const payload = {
+    activeConfig,
+    detected: summary,
+    packageManager: detectPackageManager(cwd)
+  }
+
+  if (json) {
+    console.log(JSON.stringify(payload, null, 2))
+
+    return
+  }
+
+  console.log([
+    'ESLint Basic inspection:',
+    `- Package manager: ${payload.packageManager}`,
+    `- Config source: ${activeConfig?.source ?? 'not found'}`,
+    `- Config file: ${activeConfig?.configFile ?? 'none'}`,
+    `- TypeScript: ${summary.typescript ? 'enabled' : 'disabled'}`,
+    `- Preset: ${summary.preset}`,
+    `- Runtime: ${summary.runtime}`,
+    `- Frameworks: ${formatList(summary.frameworks)}`,
+    `- Libraries: ${formatList(summary.libraries)}`,
+    `- Testing: ${formatList(summary.testing)}`,
+    `- Formats: ${formatList(summary.formats)}`,
+    `- Tools: ${formatList(summary.tools)}`,
+    `- Extensions: ${formatList(summary.extensions)}`,
+    `- Workspace projects: ${formatList(summary.workspaceProjects)}`
+  ].join('\n'))
+}
+
+export const handleDoctor = async (cwd: string = process.cwd()) => {
+  const issues: string[] = []
+  const warnings: string[] = []
+  const configPath = getConfigPathIfPresent(cwd)
+  const summary = getProjectSummary(cwd)
+  const activeConfig = await analyzeEslintConfig(cwd)
+
+  if (!readPackageJson(cwd)) {
+    issues.push('package.json is missing or invalid.')
+  }
+
+  if (!configPath) {
+    warnings.push('No eslint.config.js/mjs/cjs file found. Run `basic-eslint init` to create one.')
+  } else if (!activeConfig) {
+    issues.push(`${basename(configPath)} could not be loaded. Run ESLint directly to see the import error.`)
+  }
+
+  if (!hasLintScript(cwd)) {
+    warnings.push('No `lint` script found in package.json.')
+  }
+
+  if (configPath) {
+    const configContent = readFileSync(configPath, 'utf8')
+
+    if (Object.keys(FRAMEWORK_PACKAGE_TO_KEY).some(packageName => configContent.includes(packageName))) {
+      warnings.push('Config still imports v1 framework packages. Run `basic-eslint migrate --write` or switch to framework booleans.')
+    }
+
+    if (summary.workspaceProjects.length > 0 && !configContent.includes('projects:')) {
+      warnings.push('Workspace packages were detected, but the root config does not use `projects` scoping.')
+    }
+  }
+
+  const status = issues.length > 0 ? 'failed' : warnings.length > 0 ? 'passed with warnings' : 'passed'
+
+  console.log([
+    `ESLint Basic doctor: ${status}`,
+    `- Package manager: ${detectPackageManager(cwd)}`,
+    `- Config file: ${configPath ? basename(configPath) : 'none'}`,
+    `- Workspace projects: ${formatList(summary.workspaceProjects)}`,
+    ...(issues.length > 0 ? ['', 'Issues:', ...issues.map(issue => `- ${issue}`)] : []),
+    ...(warnings.length > 0 ? ['', 'Warnings:', ...warnings.map(warning => `- ${warning}`)] : [])
+  ].join('\n'))
+
+  if (issues.length > 0) process.exitCode = 1
+}
+
 export const handleDocs = (cwd: string = process.cwd()) => {
   const outputPath = join(cwd, 'ESLINT_STANDARDS.md')
 
@@ -212,7 +419,32 @@ export const handleDocs = (cwd: string = process.cwd()) => {
   console.log('✅ Generated ESLINT_STANDARDS.md')
 }
 
-export const handleMigrate = (cwd: string = process.cwd()) => {
+const migrateConfigContent = (content: string): { changed: boolean, content: string, frameworks: string[] } => {
+  const importedFrameworks = Object.entries(FRAMEWORK_PACKAGE_TO_KEY)
+    .filter(([packageName]) => content.includes(packageName))
+    .map(([, framework]) => framework)
+
+  if (importedFrameworks.length === 0) {
+    return { changed: false, content, frameworks: [] }
+  }
+
+  const frameworks = getFrameworkKeys(importedFrameworks)
+
+  const migrated = [
+    'import { eslintConfig } from \'@santi020k/eslint-config-basic\'',
+    '',
+    'export default await eslintConfig({',
+    '  frameworks: {',
+    `    ${frameworks.map(key => `${key}: true`).join(',\n    ')}`,
+    '  }',
+    '})',
+    ''
+  ].join('\n')
+
+  return { changed: true, content: migrated, frameworks }
+}
+
+export const handleMigrate = (cwd: string = process.cwd(), write = false) => {
   const configPath = resolveConfigPath(cwd)
 
   const suggestions = [
@@ -230,6 +462,20 @@ export const handleMigrate = (cwd: string = process.cwd()) => {
     if (configContent.includes('@santi020k/eslint-config-') && !configContent.includes('frameworks:')) {
       suggestions.push('- This config appears to import v1 framework packages; replace those imports with framework booleans.')
     }
+
+    if (write) {
+      const result = migrateConfigContent(configContent)
+
+      if (result.changed) {
+        writeFileSync(configPath, result.content)
+
+        suggestions.push(`- Rewrote ${basename(configPath)} with v2 framework booleans: ${result.frameworks.join(', ')}.`)
+      } else {
+        suggestions.push('- No v1 framework imports were found to rewrite.')
+      }
+    }
+  } else if (write) {
+    suggestions.push('- No ESLint config file was found to rewrite.')
   }
 
   console.log(suggestions.join('\n'))
@@ -238,6 +484,8 @@ export const handleMigrate = (cwd: string = process.cwd()) => {
 export const runCli = (argv: string[] = process.argv, cwd: string = process.cwd()) => {
   const command = argv[2]
   const hasForce = argv.includes('--force')
+  const hasJson = argv.includes('--json')
+  const hasWrite = argv.includes('--write')
   const isHelp = command === '--help' || command === '-h'
   const isVersion = command === '--version' || command === '-v'
 
@@ -256,6 +504,16 @@ export const runCli = (argv: string[] = process.argv, cwd: string = process.cwd(
   switch (command) {
     case 'docs': {
       handleDocs(cwd)
+
+      break
+    }
+
+    case 'doctor': {
+      handleDoctor(cwd).catch((error: unknown) => {
+        console.error('❌ Failed to run doctor:', error)
+
+        process.exitCode = 1
+      })
 
       break
     }
@@ -282,8 +540,18 @@ export const runCli = (argv: string[] = process.argv, cwd: string = process.cwd(
       break
     }
 
+    case 'inspect': {
+      handleInspect(cwd, hasJson).catch((error: unknown) => {
+        console.error('❌ Failed to inspect project:', error)
+
+        process.exitCode = 1
+      })
+
+      break
+    }
+
     case 'migrate': {
-      handleMigrate(cwd)
+      handleMigrate(cwd, hasWrite)
 
       break
     }

@@ -100,6 +100,28 @@ describe('detectProjectOptions', () => {
     expect(options.libraries).toContain(Library.TanstackRouter)
   })
 
+  it('should detect ORM libraries', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      dependencies: {
+        '@mikro-orm/core': 'latest',
+        '@prisma/client': 'latest',
+        '@sequelize/core': 'latest',
+        'drizzle-orm': 'latest',
+        typeorm: 'latest'
+      }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.libraries).toContain(Library.Typeorm)
+    expect(options.libraries).toContain(Library.Prisma)
+    expect(options.libraries).toContain(Library.Drizzle)
+    expect(options.libraries).toContain(Library.MikroOrm)
+    expect(options.libraries).toContain(Library.Sequelize)
+  })
+
   it('should detect Jest if jest is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 

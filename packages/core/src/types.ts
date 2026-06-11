@@ -63,12 +63,17 @@ export enum Format {
  * Enum for application-level runtime dependencies and styling
  */
 export enum Library {
+  Drizzle = 'drizzle',
   I18next = 'i18next',
+  MikroOrm = 'mikro-orm',
+  Prisma = 'prisma',
+  Sequelize = 'sequelize',
   Stencil = 'stencil',
   Storybook = 'storybook',
   Tailwind = 'tailwind',
   TanstackQuery = 'tanstack-query',
-  TanstackRouter = 'tanstack-router'
+  TanstackRouter = 'tanstack-router',
+  Typeorm = 'typeorm'
 }
 
 /**
@@ -134,9 +139,17 @@ export enum Runtime {
  * Enum for settings options in ESLint
  */
 export enum Setting {
+
+  /** Default behavior — accepted for symmetry with `NoDefaultIgnores`; passing it changes nothing. */
   DefaultIgnores = 'default-ignores',
+
+  /** Default behavior — accepted for symmetry with `NoGitignore`; passing it changes nothing. */
   Gitignore = 'gitignore',
+
+  /** Disable the built-in default ignore globs (dist, build, coverage, etc.). */
   NoDefaultIgnores = 'no-default-ignores',
+
+  /** Disable automatic `.gitignore`-based ignores. */
   NoGitignore = 'no-gitignore'
 }
 
@@ -165,6 +178,7 @@ export enum Tool {
  * Controls automatic project detection by category.
  */
 export interface DetectionOptions {
+  extensions?: boolean
   formats?: boolean
   frameworks?: boolean
   libraries?: boolean
@@ -337,9 +351,10 @@ export interface EslintConfigOptions {
 export type FlatConfigArray = TSESLint.FlatConfig.ConfigArray
 
 /**
- * Type to handle both direct config arrays and imported modules with a default export.
- * User-facing framework options should always pass imported config arrays/modules explicitly
- * — boolean values are not accepted and will throw a descriptive error.
+ * Type for framework option values: `true` enables the bundled v2 config,
+ * or pass a config array, a factory function, or an imported module with a
+ * default export. Any other value throws a descriptive `TypeError`
+ * (see `resolveFramework` in `@santi020k/eslint-config-basic`).
  */
 export type ImportedFramework =
   ((options?: Record<string, unknown>) => FlatConfigArray) |
@@ -348,7 +363,12 @@ export type ImportedFramework =
   { default: ((options?: Record<string, unknown>) => FlatConfigArray) | FlatConfigArray }
 
 /**
- * TypeScript configuration options
+ * TypeScript configuration options.
+ *
+ * @deprecated Since v2, `typescript` only toggles TypeScript support and the
+ * `project` field is ignored — type-aware linting uses `projectService` with
+ * `tsconfigRootDir`. Pass `typescript: true` and use `tsconfigRootDir` instead.
+ * This interface remains only for v1 compatibility and will be removed in v3.
  */
 export interface TsOptions {
   project?: boolean | string | string[]

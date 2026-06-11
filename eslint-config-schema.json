@@ -34,18 +34,20 @@
     "DetectedFrameworkName": {
       "description": "Framework names that can be auto-detected by `detectProjectOptions`. These are informational only — you still need to import and pass the actual framework config via `frameworks.<name>` in `eslintConfig()`.",
       "enum": [
-        "react",
-        "next",
+        "angular",
         "astro",
         "expo",
-        "vue",
-        "svelte",
-        "solid",
-        "angular",
-        "nest",
         "hono",
+        "nest",
+        "next",
         "qwik",
-        "remix"
+        "react",
+        "remix",
+        "slidev",
+        "solid",
+        "svelte",
+        "vite",
+        "vue"
       ],
       "type": "string"
     },
@@ -53,6 +55,9 @@
       "additionalProperties": false,
       "description": "Controls automatic project detection by category.",
       "properties": {
+        "extensions": {
+          "type": "boolean"
+        },
         "formats": {
           "type": "boolean"
         },
@@ -270,10 +275,16 @@
             "remix": {
               "$ref": "#/definitions/ImportedFramework"
             },
+            "slidev": {
+              "$ref": "#/definitions/ImportedFramework"
+            },
             "solid": {
               "$ref": "#/definitions/ImportedFramework"
             },
             "svelte": {
+              "$ref": "#/definitions/ImportedFramework"
+            },
+            "vite": {
               "$ref": "#/definitions/ImportedFramework"
             },
             "vue": {
@@ -283,7 +294,7 @@
           "type": "object"
         },
         "ignores": {
-          "description": "Extra global ignore globs (flat config `ignores` only, no `files`). Patterns are relative to ESLint’s working directory, like a manual ignore block. Not merged from presets or detection. For `projects` entries, patterns are not auto-prefixed with the subproject path; use repo-root-relative globs when needed.",
+          "description": "Extra global ignore globs (flat config `ignores` only, no `files`). Patterns are relative to ESLint's working directory, like a manual ignore block. Not merged from presets or detection. For `projects` entries, patterns are not auto-prefixed with the subproject path; use repo-root-relative globs when needed.",
           "items": {
             "type": "string"
           },
@@ -370,12 +381,12 @@
     "Extension": {
       "description": "Enum for specialized ESLint extensions and strict rule sets",
       "enum": [
-        "regexp",
-        "unicorn",
-        "sonarjs",
-        "security",
+        "best-practices",
         "perfectionist",
-        "best-practices"
+        "regexp",
+        "security",
+        "sonarjs",
+        "unicorn"
       ],
       "type": "string"
     },
@@ -606,52 +617,17 @@
     "Format": {
       "description": "Enum for linting non-JS/TS file formats",
       "enum": [
-        "mdx",
-        "markdown",
+        "graphql",
         "jsonc",
-        "yaml",
+        "markdown",
+        "mdx",
         "toml",
-        "graphql"
+        "yaml"
       ],
       "type": "string"
     },
     "ImportedFramework": {
       "anyOf": [
-        {
-          "$ref": "#/definitions/FlatConfigArray"
-        },
-        {
-          "additionalProperties": false,
-          "properties": {
-            "default": {
-              "anyOf": [
-                {
-                  "$ref": "#/definitions/FlatConfigArray"
-                },
-                {
-                  "$comment": "(options?: Record<string, unknown>) => FlatConfigArray",
-                  "properties": {
-                    "namedArgs": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "options": {
-                          "additionalProperties": {},
-                          "type": "object"
-                        }
-                      },
-                      "type": "object"
-                    }
-                  },
-                  "type": "object"
-                }
-              ]
-            }
-          },
-          "required": [
-            "default"
-          ],
-          "type": "object"
-        },
         {
           "$comment": "(options?: Record<string, unknown>) => FlatConfigArray",
           "properties": {
@@ -669,11 +645,46 @@
           "type": "object"
         },
         {
+          "$ref": "#/definitions/FlatConfigArray"
+        },
+        {
           "const": true,
           "type": "boolean"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "default": {
+              "anyOf": [
+                {
+                  "$comment": "(options?: Record<string, unknown>) => FlatConfigArray",
+                  "properties": {
+                    "namedArgs": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "options": {
+                          "additionalProperties": {},
+                          "type": "object"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                },
+                {
+                  "$ref": "#/definitions/FlatConfigArray"
+                }
+              ]
+            }
+          },
+          "required": [
+            "default"
+          ],
+          "type": "object"
         }
       ],
-      "description": "Type to handle both direct config arrays and imported modules with a default export. User-facing framework options should always pass imported config arrays/modules explicitly — boolean values are not accepted and will throw a descriptive error."
+      "description": "Type for framework option values: `true` enables the bundled v2 config, or pass a config array, a factory function, or an imported module with a default export. Any other value throws a descriptive `TypeError` (see `resolveFramework` in `@santi020k/eslint-config-basic`)."
     },
     "JSDocParsingMode": {
       "enum": [
@@ -810,12 +821,17 @@
     "Library": {
       "description": "Enum for application-level runtime dependencies and styling",
       "enum": [
-        "tailwind",
+        "drizzle",
         "i18next",
+        "mikro-orm",
+        "prisma",
+        "sequelize",
         "stencil",
+        "storybook",
+        "tailwind",
         "tanstack-query",
         "tanstack-router",
-        "storybook"
+        "typeorm"
       ],
       "type": "string"
     },
@@ -861,8 +877,8 @@
     "NextMode": {
       "description": "Enum for Next.js mode options",
       "enum": [
-        "pages",
-        "app-router"
+        "app-router",
+        "pages"
       ],
       "type": "string"
     },
@@ -1112,15 +1128,15 @@
     "Preset": {
       "description": "Enum for named presets",
       "enum": [
-        "basic",
         "all",
-        "node",
-        "browser",
-        "worker",
-        "library",
         "app",
+        "basic",
+        "browser",
         "ci",
-        "monorepo"
+        "library",
+        "monorepo",
+        "node",
+        "worker"
       ],
       "type": "string"
     },
@@ -1225,17 +1241,19 @@
     "Runtime": {
       "description": "Enum for runtime environment presets",
       "enum": [
-        "node",
         "browser",
-        "worker",
-        "universal"
+        "node",
+        "universal",
+        "worker"
       ],
       "type": "string"
     },
     "Setting": {
       "description": "Enum for settings options in ESLint",
       "enum": [
+        "default-ignores",
         "gitignore",
+        "no-default-ignores",
         "no-gitignore"
       ],
       "type": "string"
@@ -1354,19 +1372,19 @@
     "StrictMode": {
       "anyOf": [
         {
-          "type": "boolean"
-        },
-        {
-          "const": "recommended",
-          "type": "string"
-        },
-        {
           "const": "ci",
           "type": "string"
         },
         {
           "const": "pedantic",
           "type": "string"
+        },
+        {
+          "const": "recommended",
+          "type": "string"
+        },
+        {
+          "type": "boolean"
         }
       ],
       "description": "Severity profiles for teams adopting the config progressively."
@@ -1374,27 +1392,28 @@
     "Testing": {
       "description": "Enum for testing frameworks and environments",
       "enum": [
-        "vitest",
-        "playwright",
-        "jest",
         "cypress",
-        "testing-library"
+        "jest",
+        "playwright",
+        "testing-library",
+        "vitest"
       ],
       "type": "string"
     },
     "Tool": {
       "description": "Enum for integrating external standalone utilities",
       "enum": [
-        "prettier",
         "cspell",
         "jsdoc",
+        "prettier",
         "swagger"
       ],
       "type": "string"
     },
     "TsOptions": {
       "additionalProperties": false,
-      "description": "TypeScript configuration options",
+      "deprecated": "Since v2, `typescript` only toggles TypeScript support and the\n`project` field is ignored — type-aware linting uses `projectService` with\n`tsconfigRootDir`. Pass `typescript: true` and use `tsconfigRootDir` instead.\nThis interface remains only for v1 compatibility and will be removed in v3.",
+      "description": "TypeScript configuration options.",
       "properties": {
         "project": {
           "anyOf": [

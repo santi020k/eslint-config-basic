@@ -7,6 +7,11 @@ The `libraries` option enables integrations that usually correspond to major pro
 
 | Integration | Enum | Use It When | Auto-Detected |
 | :--- | :--- | :--- | :--- |
+| TypeORM | `Library.Typeorm` | The project uses TypeORM entities, repositories, data sources, subscribers, or migrations. | Yes |
+| Prisma | `Library.Prisma` | The project uses Prisma Client or Prisma CLI. | Yes |
+| Drizzle ORM | `Library.Drizzle` | The project uses Drizzle ORM schemas, queries, or migrations. | Yes |
+| MikroORM | `Library.MikroOrm` | The project uses MikroORM entities, repositories, or migrations. | Yes |
+| Sequelize | `Library.Sequelize` | The project uses Sequelize models, repositories, or migrations. | Yes |
 | Tailwind CSS | `Library.Tailwind` | The project uses Tailwind CSS. | Yes |
 | I18next | `Library.I18next` | The project uses I18next. | Yes |
 | Stencil | `Library.Stencil` | The project uses Stencil. | Yes |
@@ -20,7 +25,7 @@ The `libraries` option enables integrations that usually correspond to major pro
 import { defineConfig, Library } from '@santi020k/eslint-config-basic'
 
 export default await defineConfig({
-  libraries: [Library.Tailwind, Library.Storybook]
+  libraries: [Library.Typeorm, Library.Prisma, Library.Tailwind, Library.Storybook]
 })
 ```
 
@@ -28,6 +33,39 @@ export default await defineConfig({
 
 - The library integrations stay optional, so projects only install and enable what they use.
 - Detection helps the CLI and zero-argument config path, but you can still choose the final composition explicitly.
+
+## ORM Integrations
+
+The ORM integrations are dependency-free ESLint flat configs. They use stable core rules instead of loading ORM-specific plugins, because several ORM ESLint plugins are either unavailable, not maintained for ESLint 9/10 flat config, or too framework-specific for a shared base preset.
+
+### TypeORM
+
+`Library.Typeorm` catches legacy TypeORM global helpers such as `getRepository` and `getConnection`, nudging code toward `DataSource`, `EntityManager`, or injected `Repository` instances. It also blocks TypeORM subpath imports so entities and migrations stay on the documented `typeorm` entry point.
+
+```js
+import { defineConfig, Library } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig({
+  libraries: [Library.Typeorm],
+  tsconfigRootDir: import.meta.dirname
+})
+```
+
+### Prisma
+
+`Library.Prisma` blocks imports from generated runtime internals such as `@prisma/client/runtime/*` and `.prisma/client/*`. Application code should import Prisma Client APIs from `@prisma/client`.
+
+### Drizzle ORM
+
+`Library.Drizzle` protects public driver, schema, migration, and query APIs by rejecting internal session, migrator, and query-builder module imports.
+
+### MikroORM
+
+`Library.MikroOrm` blocks imports from unstable `@mikro-orm/core` internals such as entity, platform, unit-of-work, and utility submodules.
+
+### Sequelize
+
+`Library.Sequelize` blocks `sequelize/lib/*`, `sequelize/types/*`, and non-semver internal `@sequelize/core` modules so applications use the public Sequelize package surface.
 
 ## Tailwind CSS Performance (v4)
 

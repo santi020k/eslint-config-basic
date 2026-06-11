@@ -10,6 +10,8 @@ The main package ships a CLI that can scaffold or refresh the project config.
 pnpm dlx @santi020k/eslint-config-basic init
 pnpm dlx @santi020k/eslint-config-basic update
 pnpm dlx @santi020k/eslint-config-basic explain
+pnpm dlx @santi020k/eslint-config-basic inspect
+pnpm dlx @santi020k/eslint-config-basic doctor
 pnpm dlx @santi020k/eslint-config-basic docs
 pnpm dlx @santi020k/eslint-config-basic migrate
 ```
@@ -18,6 +20,8 @@ pnpm dlx @santi020k/eslint-config-basic migrate
 npx @santi020k/eslint-config-basic init
 npx @santi020k/eslint-config-basic update
 npx @santi020k/eslint-config-basic explain
+npx @santi020k/eslint-config-basic inspect
+npx @santi020k/eslint-config-basic doctor
 npx @santi020k/eslint-config-basic docs
 npx @santi020k/eslint-config-basic migrate
 ```
@@ -26,6 +30,8 @@ npx @santi020k/eslint-config-basic migrate
 yarn dlx @santi020k/eslint-config-basic init
 yarn dlx @santi020k/eslint-config-basic update
 yarn dlx @santi020k/eslint-config-basic explain
+yarn dlx @santi020k/eslint-config-basic inspect
+yarn dlx @santi020k/eslint-config-basic doctor
 yarn dlx @santi020k/eslint-config-basic docs
 yarn dlx @santi020k/eslint-config-basic migrate
 ```
@@ -34,6 +40,8 @@ yarn dlx @santi020k/eslint-config-basic migrate
 bunx @santi020k/eslint-config-basic init
 bunx @santi020k/eslint-config-basic update
 bunx @santi020k/eslint-config-basic explain
+bunx @santi020k/eslint-config-basic inspect
+bunx @santi020k/eslint-config-basic doctor
 bunx @santi020k/eslint-config-basic docs
 bunx @santi020k/eslint-config-basic migrate
 bunx @santi020k/eslint-config-basic generate-skill
@@ -48,6 +56,8 @@ bunx @santi020k/eslint-config-basic generate-skill
 - Uses bundled framework booleans (`frameworks.<name>: true`) in generated configs.
 - Adds React automatically when Next.js or Expo is detected.
 - Prints detected config inputs with `explain`.
+- Prints detected inputs, package-manager details, workspace projects, and active config features with `inspect`.
+- Checks common v2 adoption issues with `doctor`.
 - Generates human-readable `ESLINT_STANDARDS.md` docs with `docs`.
 - Reports v1-to-v2 migration suggestions with `migrate`.
 
@@ -110,6 +120,28 @@ npx @santi020k/eslint-config-basic explain
 
 It prints the detected TypeScript state, preset, runtime, framework list, optional integrations, tools, and formats.
 
+## Inspect the Active Setup
+
+Use `inspect` when you want a fuller view than `explain`, including package-manager detection, workspace package discovery, and features read from the active ESLint config when it can be loaded.
+
+```sh
+npx @santi020k/eslint-config-basic inspect
+```
+
+For automation, use JSON output:
+
+```sh
+npx @santi020k/eslint-config-basic inspect --json
+```
+
+## Diagnose Setup Issues
+
+Use `doctor` while adopting v2 or after moving a project into a workspace. It reports missing config files, configs that cannot be loaded, lingering v1 framework imports, missing lint scripts, and detected workspace packages that are not represented with `projects` scoping.
+
+```sh
+npx @santi020k/eslint-config-basic doctor
+```
+
 ## Generate Team Standards
 
 Use `docs` to create a project-local `ESLINT_STANDARDS.md` summary for humans.
@@ -129,6 +161,12 @@ npx @santi020k/eslint-config-basic migrate
 ```
 
 The command reports the main migration steps and calls out configs that still appear to import old framework config packages.
+
+For straightforward v1 configs that only import framework packages, `--write` can replace those imports with the v2 bundled framework boolean form.
+
+```sh
+npx @santi020k/eslint-config-basic migrate --write
+```
 
 ## Generate Agent Standards (Beta)
 
@@ -161,6 +199,8 @@ Use `--force` if you want to overwrite existing standards files.
 - Use `init` when the project does not have an ESLint flat config yet.
 - Use `update` when the dependency graph changed and you want a fresh generated baseline.
 - Use `explain` when you want to review what auto-detection found.
+- Use `inspect` when you need machine-readable details or active config feature extraction.
+- Use `doctor` when a v2 setup is not behaving as expected.
 - Use `docs` when you want a committed standards summary.
 - Use `migrate` when moving a v1 config to v2.
 - Use manual editing when the config already has custom organization that you do not want regenerated.

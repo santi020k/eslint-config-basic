@@ -198,6 +198,16 @@ const detectTypescript = (detectRootDir: string): boolean => pathExists(join(det
 const detectLibraries = (allDeps: DependencyMap): Library[] => {
   const libraries: Library[] = []
 
+  if (allDeps.typeorm) libraries.push(Library.Typeorm)
+
+  if (allDeps.prisma || allDeps['@prisma/client']) libraries.push(Library.Prisma)
+
+  if (allDeps['drizzle-orm']) libraries.push(Library.Drizzle)
+
+  if (allDeps['@mikro-orm/core']) libraries.push(Library.MikroOrm)
+
+  if (allDeps.sequelize || allDeps['@sequelize/core']) libraries.push(Library.Sequelize)
+
   if (
     allDeps.tailwindcss ||
     allDeps['@tailwindcss/postcss'] ||

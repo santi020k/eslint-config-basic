@@ -121,7 +121,7 @@ export default await defineConfig({
 })
 ```
 
-Supported detection keys are `typescript`, `frameworks`, `libraries`, `testing`, `formats`, `tools`, `runtime`, and `nextMode`.
+Supported detection keys are `typescript`, `frameworks`, `libraries`, `testing`, `formats`, `tools`, `extensions`, `runtime`, and `nextMode`.
 
 ## Additional global ignores
 

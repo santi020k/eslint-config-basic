@@ -81,18 +81,22 @@ export {
   bestPractices,
   cspell,
   cypress,
+  drizzle,
   graphql,
   i18next,
   jest,
   jsdoc,
   jsonc,
   markdown,
+  mikroOrm,
   mdx,
   perfectionist,
   playwright,
   prettier,
+  prisma,
   regexp,
   security,
+  sequelize,
   sonarjs,
   stencil,
   storybook,
@@ -102,6 +106,7 @@ export {
   tanstackRouter,
   testingLibrary,
   toml,
+  typeorm,
   unicorn,
   vitest,
   yaml
@@ -184,6 +189,7 @@ const resolveDetectionOptions = (
   detection: EslintConfigOptions['detection']
 ): Required<DetectionOptions> => {
   const defaults = {
+    extensions: true,
     formats: true,
     frameworks: true,
     libraries: true,
@@ -219,6 +225,7 @@ const applyDetectionControls = (
   return {
     ...detected,
     detectedFrameworks: controls.frameworks ? detected.detectedFrameworks : [],
+    extensions: controls.extensions ? detected.extensions : [],
     formats: controls.formats ? detected.formats : [],
     libraries: controls.libraries ? detected.libraries : [],
     nextMode: controls.nextMode ? detected.nextMode : undefined,
@@ -266,7 +273,11 @@ const findTailwindEntryPoint = (rootDir: string): string | undefined => TAILWIND
 
 const scopeFilePattern = (projectPath: string, pattern: unknown): unknown => {
   if (typeof pattern === 'string') {
-    return `${projectPath.replace(/\/$/, '')}/${pattern.replace(/^\.\//, '')}`
+    const isNegated = pattern.startsWith('!')
+    const basePattern = (isNegated ? pattern.slice(1) : pattern).replace(/^\.\//, '')
+    const scoped = `${projectPath.replace(/\/$/, '')}/${basePattern}`
+
+    return isNegated ? `!${scoped}` : scoped
   }
 
   if (Array.isArray(pattern)) {
@@ -315,31 +326,40 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
     createDetectedFrameworkFlags(detected.detectedFrameworks) :
     {}
 
-  const {
-    extensions: configuredExtensions = mergeArrayOption(
-      detected.extensions ?? [], presetDefaults.extensions, options?.extensions, optionMergeStrategy
-    ),
-    formats = mergeArrayOption(
-      detected.formats ?? [], presetDefaults.formats, options?.formats, optionMergeStrategy
-    ),
-    frameworks = mergeFrameworkOption(
-      frameworkDefaults, presetDefaults.frameworks, options?.frameworks, optionMergeStrategy
-    ),
-    libraries = mergeArrayOption(
-      detected.libraries ?? [], presetDefaults.libraries, options?.libraries, optionMergeStrategy
-    ),
-    nextMode = (options?.nextMode ?? presetDefaults.nextMode ?? detected.nextMode ?? NextMode.Pages),
-    runtime = (options?.runtime ?? presetDefaults.runtime ?? detected.runtime ?? Runtime.Universal),
-    settings = options?.settings ?? detected.settings ?? [],
-    strict = getStrictMode(options?.strict, presetDefaults.strict),
-    testing = mergeArrayOption(
-      detected.testing ?? [], presetDefaults.testing, options?.testing, optionMergeStrategy
-    ),
-    tools = mergeArrayOption(
-      detected.tools ?? [], presetDefaults.tools, options?.tools, optionMergeStrategy
-    ),
-    typescript = (options?.typescript ?? presetDefaults.typescript ?? detected.typescript ?? false)
-  } = options ?? {}
+  // NOTE: these must be computed unconditionally (not via destructuring defaults)
+  // so that `optionMergeStrategy: 'merge'` actually unions explicit values with
+  // detected/preset values. Destructuring defaults are skipped whenever the
+  // option is provided, which silently turned 'merge' into 'replace'.
+  const configuredExtensions = mergeArrayOption(
+    detected.extensions ?? [], presetDefaults.extensions, options?.extensions, optionMergeStrategy
+  )
+
+  const formats = mergeArrayOption(
+    detected.formats ?? [], presetDefaults.formats, options?.formats, optionMergeStrategy
+  )
+
+  const frameworks = mergeFrameworkOption(
+    frameworkDefaults, presetDefaults.frameworks, options?.frameworks, optionMergeStrategy
+  )
+
+  const libraries = mergeArrayOption(
+    detected.libraries ?? [], presetDefaults.libraries, options?.libraries, optionMergeStrategy
+  )
+
+  const nextMode = options?.nextMode ?? presetDefaults.nextMode ?? detected.nextMode ?? NextMode.Pages
+  const runtime = options?.runtime ?? presetDefaults.runtime ?? detected.runtime ?? Runtime.Universal
+  const settings = options?.settings ?? detected.settings ?? []
+  const strict = getStrictMode(options?.strict, presetDefaults.strict)
+
+  const testing = mergeArrayOption(
+    detected.testing ?? [], presetDefaults.testing, options?.testing, optionMergeStrategy
+  )
+
+  const tools = mergeArrayOption(
+    detected.tools ?? [], presetDefaults.tools, options?.tools, optionMergeStrategy
+  )
+
+  const typescript = options?.typescript ?? presetDefaults.typescript ?? detected.typescript ?? false
 
   const rootDir = detectRootDir ?? process.cwd()
   const tsconfigRootDir = resolveTsconfigRootDir(rootDir, typescript, options?.tsconfigRootDir)

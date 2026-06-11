@@ -1,0 +1,32 @@
+{
+  "name": "@playground/drizzle",
+  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "clean": "rm -rf dist node_modules",
+    "check:exports": "echo \"No exports to check\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@santi020k/eslint-config-basic": "workspace:^",
+    "drizzle-orm": "^0.45.1",
+    "eslint": "^10.2.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.2"
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/santi020k/eslint-config-basic.git",
+    "directory": "packages/playground/libraries/drizzle"
+  },
+  "author": "santi020k",
+  "license": "MIT"
+}

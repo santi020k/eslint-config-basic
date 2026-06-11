@@ -15,6 +15,7 @@ export { mdx } from './formats/mdx.js'
 export { toml } from './formats/toml.js'
 export { yaml } from './formats/yaml.js'
 // Libraries
+export { drizzle, mikroOrm, prisma, sequelize, typeorm } from './libraries/orm.js'
 export { i18next } from './libraries/i18next.js'
 export { stencil } from './libraries/stencil.js'
 export { storybook } from './libraries/storybook.js'

@@ -374,6 +374,81 @@ describe('eslintConfig Function', () => {
     expect(names).not.toContain('integrations/jsdoc')
   })
 
+  it('should union explicit values with detected values when optionMergeStrategy is merge', async () => {
+    // Detection defaults always include Tool.Prettier; explicit Jsdoc must be added, not replace it
+    const config = await defineConfig({
+      autoFrameworks: false,
+      tools: [Tool.Jsdoc]
+    })
+
+    const names = extractConfigNames(config)
+
+    expect(names).toContain('eslint-config/prettier')
+    expect(names).toContain('integrations/jsdoc')
+  })
+
+  it('should replace detected values with explicit values when optionMergeStrategy is replace', async () => {
+    const config = await defineConfig({
+      autoFrameworks: false,
+      optionMergeStrategy: 'replace',
+      tools: [Tool.Jsdoc]
+    })
+
+    const names = extractConfigNames(config)
+
+    expect(names).not.toContain('eslint-config/prettier')
+    expect(names).toContain('integrations/jsdoc')
+  })
+
+  it('should disable default extensions when detection is false', async () => {
+    const config = await defineConfig({
+      autoFrameworks: false,
+      detection: false
+    })
+
+    const names = extractConfigNames(config)
+
+    expect(names.some(name => name.includes('unicorn'))).toBe(false)
+    expect(names.some(name => name.includes('perfectionist'))).toBe(false)
+    expect(names.some(name => name.includes('security'))).toBe(false)
+  })
+
+  it('should disable only extensions via granular detection control', async () => {
+    const config = await defineConfig({
+      autoFrameworks: false,
+      detection: { extensions: false }
+    })
+
+    const names = extractConfigNames(config)
+
+    expect(names.some(name => name.includes('unicorn'))).toBe(false)
+    // Tools detection stays active (Prettier is a detected default)
+    expect(names).toContain('eslint-config/prettier')
+  })
+
+  it('should preserve negated globs when scoping project configs', async () => {
+    const config = await defineConfig({
+      detection: false,
+      projects: {
+        'apps/web': {
+          frameworks: {
+            react: [{
+              files: ['**/*.tsx', '!**/legacy/**'],
+              name: 'mock-negated-files',
+              rules: {}
+            }]
+          },
+          typescript: false
+        }
+      }
+    })
+
+    const scoped = config.find(entry => entry.name === 'mock-negated-files')
+
+    expect(scoped?.files).toContain('apps/web/**/*.tsx')
+    expect(scoped?.files).toContain('!apps/web/**/legacy/**')
+  })
+
   it('should use detectRootDir independently from tsconfigRootDir', async () => {
     const cwd = mkdtempSync(join(tmpdir(), 'eslint-config-detect-root-'))
     try {

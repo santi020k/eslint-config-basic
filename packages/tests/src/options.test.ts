@@ -278,6 +278,28 @@ describe('Integration Rule Assertions — Libraries', () => {
 
     expect(rules.some(r => r.startsWith('@tanstack/query/'))).toBe(true)
   })
+
+  it('should include ORM import safety rules when ORM libraries are enabled', async () => {
+    const config = await defineConfig({
+      libraries: [
+        Library.Typeorm,
+        Library.Prisma,
+        Library.Drizzle,
+        Library.MikroOrm,
+        Library.Sequelize
+      ]
+    })
+
+    const names = extractConfigNames(config)
+    const rules = extractRuleNames(config)
+
+    expect(names).toContain('eslint-config-integrations/typeorm')
+    expect(names).toContain('eslint-config-integrations/prisma')
+    expect(names).toContain('eslint-config-integrations/drizzle')
+    expect(names).toContain('eslint-config-integrations/mikro-orm')
+    expect(names).toContain('eslint-config-integrations/sequelize')
+    expect(rules).toContain('no-restricted-imports')
+  })
 })
 
 describe('Integration Rule Assertions — Tools', () => {

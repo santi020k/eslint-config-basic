@@ -9,7 +9,16 @@ import {
   generateAgentSkills,
   generateSkillContent
 } from '../../basic/src/agent-skill-generator.js'
-import { handleDocs, handleExplain, handleInit, handleMigrate, handleUpdate, runCli } from '../../basic/src/cli.js'
+import {
+  handleDocs,
+  handleDoctor,
+  handleExplain,
+  handleInit,
+  handleInspect,
+  handleMigrate,
+  handleUpdate,
+  runCli
+} from '../../basic/src/cli.js'
 
 const tempDirs: string[] = []
 
@@ -170,6 +179,100 @@ describe('CLI command UX', () => {
     expect(output).toContain('v1 to v2 migration suggestions:')
     expect(output).toContain('framework booleans')
     logSpy.mockRestore()
+  })
+
+  it('should rewrite simple v1 framework imports when migrate --write is used', () => {
+    const cwd = createTempProject({ name: 'tmp-project', type: 'module' })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    writeFileSync(
+      join(cwd, 'eslint.config.js'),
+      'import next from \'@santi020k/eslint-config-next\'\nimport react from \'@santi020k/eslint-config-react\'\nexport default [...next, ...react]\n'
+    )
+
+    handleMigrate(cwd, true)
+
+    const config = readFileSync(join(cwd, 'eslint.config.js'), 'utf8')
+    const output = logSpy.mock.calls.flat().join('\n')
+
+    expect(config).toContain('eslintConfig')
+    expect(config).toContain('next: true')
+    expect(config).toContain('react: true')
+    expect(config).not.toContain('@santi020k/eslint-config-next')
+    expect(output).toContain('Rewrote eslint.config.js')
+    logSpy.mockRestore()
+  })
+
+  it('should inspect detected inputs and active config features', async () => {
+    const cwd = createTempProject({
+      dependencies: {
+        react: '19.0.0'
+      },
+      name: 'tmp-project',
+      type: 'module'
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    writeFileSync(
+      join(cwd, 'eslint.config.js'), `export default [
+        { name: 'eslint-config-react/recommended', plugins: { react: {} }, rules: {} }
+      ]`
+    )
+
+    await handleInspect(cwd)
+
+    const output = logSpy.mock.calls.flat().join('\n')
+
+    expect(output).toContain('ESLint Basic inspection:')
+    expect(output).toContain('Config source: config-file')
+    expect(output).toContain('Frameworks: react')
+    logSpy.mockRestore()
+  })
+
+  it('should print inspect data as JSON', async () => {
+    const cwd = createTempProject({ name: 'tmp-project' })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    await handleInspect(cwd, true)
+
+    const payload = JSON.parse(String(logSpy.mock.calls[0]?.[0])) as {
+      detected?: { preset?: string }
+      packageManager?: string
+    }
+
+    expect(payload.detected?.preset).toBe('basic')
+    expect(payload.packageManager).toBe('npm')
+    logSpy.mockRestore()
+  })
+
+  it('should report doctor warnings for v1 imports and unscoped workspaces', async () => {
+    const cwd = createTempProject({
+      name: 'tmp-project',
+      scripts: {
+        lint: 'eslint .'
+      },
+      type: 'module',
+      workspaces: ['packages/*']
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    mkdirSync(join(cwd, 'packages', 'app'), { recursive: true })
+    writeFileSync(join(cwd, 'packages', 'app', 'package.json'), JSON.stringify({ name: 'app' }))
+    writeFileSync(
+      join(cwd, 'eslint.config.js'),
+      'import react from \'@santi020k/eslint-config-react\'\nexport default []'
+    )
+
+    await handleDoctor(cwd)
+
+    const output = logSpy.mock.calls.flat().join('\n')
+
+    expect(output).toContain('ESLint Basic doctor: failed')
+    expect(output).toContain('could not be loaded')
+    expect(output).toContain('Config still imports v1 framework packages')
+    expect(output).toContain('Workspace packages were detected')
+    logSpy.mockRestore()
+    process.exitCode = undefined
   })
 })
 

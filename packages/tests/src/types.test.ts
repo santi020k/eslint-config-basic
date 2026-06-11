@@ -6,6 +6,16 @@ describe('Type Exports', () => {
   it('should have all Library values', () => {
     const options = Object.values(Library)
 
+    expect(options).toContain('typeorm')
+
+    expect(options).toContain('prisma')
+
+    expect(options).toContain('drizzle')
+
+    expect(options).toContain('mikro-orm')
+
+    expect(options).toContain('sequelize')
+
     expect(options).toContain('tailwind')
 
     expect(options).toContain('i18next')

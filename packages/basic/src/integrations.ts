@@ -10,18 +10,22 @@ import {
   bestPractices,
   cspell,
   cypress,
+  drizzle,
   graphql,
   i18next,
   jest,
   jsdoc,
   jsonc,
   markdown,
+  mikroOrm,
   mdx,
   perfectionist,
   playwright,
   prettier,
+  prisma,
   regexp,
   security,
+  sequelize,
   sonarjs,
   stencil,
   storybook,
@@ -31,6 +35,7 @@ import {
   tanstackRouter,
   testingLibrary,
   toml,
+  typeorm,
   unicorn,
   vitest,
   yaml
@@ -53,6 +58,16 @@ export const getIntegrationConfigs = async (
   if (tools.includes(Tool.Cspell)) configs.push(...await cspell())
 
   // Libraries
+  if (libraries.includes(Library.Typeorm)) configs.push(...typeorm())
+
+  if (libraries.includes(Library.Prisma)) configs.push(...prisma())
+
+  if (libraries.includes(Library.Drizzle)) configs.push(...drizzle())
+
+  if (libraries.includes(Library.MikroOrm)) configs.push(...mikroOrm())
+
+  if (libraries.includes(Library.Sequelize)) configs.push(...sequelize())
+
   if (libraries.includes(Library.Tailwind)) configs.push(...await tailwind())
 
   if (libraries.includes(Library.I18next)) configs.push(...await i18next())
