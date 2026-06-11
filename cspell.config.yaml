@@ -77,6 +77,7 @@ words:
   - santi
   - santi020k
   - scopedslots
+  - sequelize
   - serviceworker
   - Slidev
   - slidev
@@ -99,6 +100,7 @@ words:
   - turborepo
   - typedarrays
   - typedoc
+  - typeorm
   - urql
   - v8
   - vdom
