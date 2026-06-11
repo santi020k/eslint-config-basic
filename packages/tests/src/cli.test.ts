@@ -7,7 +7,8 @@ import type { EslintConfigFeatures } from '../../basic/src/agent-skill-generator
 import {
   AGENT_TARGETS,
   generateAgentSkills,
-  generateSkillContent
+  generateSkillContent,
+  handleGenerateSkill
 } from '../../basic/src/agent-skill-generator.js'
 import {
   handleDocs,
@@ -625,6 +626,45 @@ describe('generateAgentSkills', () => {
     expect(markerFolders).toContain('.clinerules')
     expect(markerFolders).toContain('.roo')
     expect(markerFolders).toContain('.kiro')
+  })
+
+  it('should run the generate-skill CLI handler end to end', async () => {
+    const cwd = createTempProject({
+      name: 'tmp-project',
+      scripts: { lint: 'eslint .' }
+    })
+
+    mkdirSync(join(cwd, '.cursor'))
+    writeFileSync(join(cwd, 'AGENTS.md'), '# My agents\n')
+
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    await handleGenerateSkill(cwd)
+
+    const output = logSpy.mock.calls.map(call => String(call[0])).join('\n')
+
+    expect(output).toContain('Generated 2 skill file(s)!')
+
+    const cursorSkill = readFileSync(join(cwd, '.cursor', 'rules', 'eslint-standards.mdc'), 'utf8')
+
+    expect(cursorSkill).toContain('ESLint Code Standards')
+    expect(readFileSync(join(cwd, 'AGENTS.md'), 'utf8')).toContain('eslint-standards:start')
+
+    logSpy.mockRestore()
+  })
+
+  it('should warn via the CLI handler when no agent folders or AGENTS.md exist', async () => {
+    const cwd = createTempProject({ name: 'tmp-project' })
+
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    await handleGenerateSkill(cwd)
+
+    const output = logSpy.mock.calls.map(call => String(call[0])).join('\n')
+
+    expect(output).toContain('No agent folders found')
+
+    logSpy.mockRestore()
   })
 
   it('should generate a Kiro steering file with always-on inclusion front-matter', () => {
