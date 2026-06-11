@@ -23,6 +23,7 @@ const sidebar = [
           { label: 'Quick Start', slug: 'guide/getting-started' },
           { label: 'Installation', slug: 'guide/installation' },
           { label: 'Configuration', slug: 'guide/configuration' },
+          { badge: { text: 'Beta', variant: 'caution' }, label: 'AI & Agents', slug: 'guide/ai-agents' },
           { badge: { text: 'Migration', variant: 'tip' }, label: 'Migrate from v1', slug: 'guide/migration-v1-to-v2' }
         ],
         label: 'Getting Started'

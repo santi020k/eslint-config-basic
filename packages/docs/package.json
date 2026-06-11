@@ -8,15 +8,15 @@
   "description": "Astro Starlight documentation site for the @santi020k/eslint-config-basic monorepo",
   "type": "module",
   "scripts": {
-    "docs:build": "node ../../scripts/prepare-starlight-docs.mjs && astro build",
-    "docs:dev": "node ../../scripts/prepare-starlight-docs.mjs && astro dev",
+    "docs:build": "node ../../scripts/prepare-starlight-docs.mjs && rm -rf .astro && astro build",
+    "docs:dev": "node ../../scripts/prepare-starlight-docs.mjs && rm -rf .astro && astro dev",
     "docs:preview": "astro preview",
     "docs:clean": "rm -rf dist .astro src/content/docs/api/reference",
     "build": "echo \"No direct build step required\"",
     "dev": "echo \"No direct build step required\"",
     "clean": "rm -rf dist .astro node_modules",
     "check:exports": "echo \"No exports to check\"",
-    "typecheck": "node ../../scripts/prepare-starlight-docs.mjs && astro check",
+    "typecheck": "node ../../scripts/prepare-starlight-docs.mjs && rm -rf .astro && astro check",
     "test:a11y": "playwright test",
     "test:a11y:ui": "playwright test --ui",
     "lighthouse": "lhci autoreview"

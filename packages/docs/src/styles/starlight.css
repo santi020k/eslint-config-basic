@@ -184,24 +184,24 @@ body {
 }
 
 .sidebar-content details.s2k-version-hidden {
-  display: none !important;
+  display: none;
 }
 
 .sidebar-content > ul.top-level > li > details {
-  border: none !important;
-  background: none !important;
-  padding: 0 !important;
-  margin: 0 !important;
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
 }
 
 .sidebar-content > ul.top-level > li > details > summary {
-  display: none !important;
+  display: none;
 }
 
 .sidebar-content > ul.top-level > li > details > ul {
-  padding: 0 !important;
-  margin: 0 !important;
-  border-inline-start: none !important;
+  padding: 0;
+  margin: 0;
+  border-inline-start: none;
 }
 
 .sidebar-pane,
