@@ -11,7 +11,8 @@ The main package composes the final flat config array from one public install: `
 - Let project detection enable TypeScript, frameworks, runtime, and supported tooling.
 - Make options explicit when you want stable, reviewable config.
 - Use booleans for bundled framework configs.
-- Use enums for integrations.
+- Use enums or matching strings for integrations.
+- Use `features` when you want one simple opt-in/opt-out map for optional configs.
 - Use `optionMergeStrategy` when you want strict replace behavior.
 - Use `detection` for granular auto-detection control.
 - Use `projects` for package-aware monorepo configuration.
@@ -37,6 +38,41 @@ export default await defineConfig({
   typescript: true
 })
 ```
+
+## Optional Configs
+
+Optional configs are grouped into five categories: `extensions`, `formats`, `libraries`, `testing`, and `tools`. You can enable them with enums or with the matching string values.
+
+```js
+import { defineConfig, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig({
+  libraries: [Library.Zod, 'tailwind'],
+  testing: [Testing.Playwright, 'vitest'],
+  tools: [Tool.Prettier, 'cspell']
+})
+```
+
+For the simplest manual configuration, use `features`. Keys are the same public string names used by the enums.
+
+```js
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig({
+  features: {
+    boundaries: true,
+    cspell: true,
+    'github-actions': true,
+    playwright: true,
+    prettier: true,
+    tailwind: true,
+    unicorn: false,
+    zod: true
+  }
+})
+```
+
+`features` participates in the same merge flow as the category arrays. `true` enables an optional config, and `false` disables it even if it was detected or enabled by a preset. `integrations` is an alias for `features`.
 
 ## Presets
 
@@ -99,6 +135,8 @@ List options (`libraries`, `testing`, `formats`, `tools`, `extensions`) and `fra
 - `optionMergeStrategy: 'merge'` (default): detected + preset + explicit are combined and deduplicated.
 - `optionMergeStrategy: 'replace'`: explicit values replace preset/detected values.
 
+`features` and `integrations` are applied to the optional-config lists too. Use `true` to add a config and `false` to remove it from the final merged set.
+
 Use `autoFrameworks: false` when you want manual framework control only (no detected framework auto-enable).
 
 ## Detection Controls
@@ -121,7 +159,7 @@ export default await defineConfig({
 })
 ```
 
-Supported detection keys are `typescript`, `frameworks`, `libraries`, `testing`, `formats`, `tools`, `extensions`, `runtime`, and `nextMode`.
+Supported detection keys are `typescript`, `frameworks`, `libraries`, `testing`, `formats`, `tools`, `extensions`, `runtime`, `nextMode`, and `projects`.
 
 ## Additional global ignores
 
@@ -137,7 +175,7 @@ export default await defineConfig({
 
 ### Default ignores
 
-The composed config ships a default ignore block (`dist`, `build`, `coverage`, framework output folders, `node_modules`, and similar). It also ignores AI coding-assistant artifact folders — `.agent`, `.agents`, `.aider*`, `.claude`, `.clinerules`, `.codex`, `.copilot`, `.cursor`, `.gemini`, `.kiro`, `.opencode`, `.roo`, and `.windsurf` — so generated agent rules and skills are never linted as source code. Disable the whole block with `settings: [Setting.NoDefaultIgnores]`.
+The composed config ships a default ignore block (`dist`, `build`, `coverage`, framework output folders, `node_modules`, and similar). It also ignores common generated-code folders and files such as `__generated__`, `generated`, `codegen`, `*.generated.*`, `*.gen.*`, GraphQL generated output, and `.prisma`. AI coding-assistant artifact folders — `.agent`, `.agents`, `.aider*`, `.claude`, `.clinerules`, `.codex`, `.copilot`, `.cursor`, `.gemini`, `.kiro`, `.opencode`, `.roo`, and `.windsurf` — are ignored too. Disable the whole block with `settings: [Setting.NoDefaultIgnores]`, or disable only generated-code ignores with `settings: [Setting.NoGeneratedCodeIgnores]`.
 
 ## Detection and Root Directories
 
@@ -157,12 +195,13 @@ export default await defineConfig({
 
 ## Monorepo Projects
 
-Use `projects` to scope package-specific presets and integrations to workspace folders.
+Use `projects` to scope package-specific presets and integrations to workspace folders. With `preset: Preset.Monorepo`, workspace project detection is enabled by default for common workspace folders and `package.json#workspaces`. Outside the monorepo preset, use `detection: { projects: true }` to opt in.
 
 ```js
 import { defineConfig, Preset, Runtime } from '@santi020k/eslint-config-basic'
 
 export default await defineConfig({
+  detection: { projects: true },
   preset: Preset.Monorepo,
   projects: {
     'apps/api': {
@@ -191,13 +230,15 @@ export default await defineConfig({
     Extension.Perfectionist,
     Extension.Security,
     Extension.Regexp,
-    Extension.BestPractices
+    Extension.BestPractices,
+    Extension.Boundaries
   ],
   formats: [
     Format.Mdx,
     Format.Markdown,
     Format.Jsonc,
     Format.Graphql,
+    Format.PackageJson,
     Format.Yaml,
     Format.Toml
   ],
@@ -231,10 +272,14 @@ export default await defineConfig({
   tools: [
     Tool.Prettier,
     Tool.Cspell,
+    Tool.Command,
+    Tool.GithubActions,
+    Tool.Docker,
+    Tool.Nx,
     Tool.Jsdoc,
     Tool.Swagger
   ],
-  typescript: true
+  typescript: 'strict'
 })
 ```
 

@@ -10,6 +10,10 @@ The `tools` option enables integrations for standalone developer tooling that co
 | Prettier | `Tool.Prettier` | The project uses Prettier and needs ESLint compatibility. | No |
 | CSpell | `Tool.Cspell` | The project wants spell checking coverage. | No |
 | JSDoc | `Tool.Jsdoc` | The project relies on JSDoc conventions. | No |
+| Command | `Tool.Command` | The project wants micro-fixes via magic comments (`/// @keep`, etc). | No |
+| Docker | `Tool.Docker` | The project has Docker Compose YAML files. | Yes |
+| GitHub Actions | `Tool.GithubActions` | The project has workflow files under `.github/workflows`. | Yes |
+| Nx | `Tool.Nx` | The project uses Nx workspace configuration. | Yes |
 | Swagger | `Tool.Swagger` | The project uses Nest Swagger tooling. | Yes |
 
 ## Example
@@ -18,13 +22,15 @@ The `tools` option enables integrations for standalone developer tooling that co
 import { defineConfig, Tool } from '@santi020k/eslint-config-basic'
 
 export default await defineConfig({
-  tools: [Tool.Prettier, Tool.Cspell]
+  tools: [Tool.Prettier, Tool.Cspell, Tool.GithubActions, Tool.Docker, Tool.Nx]
 })
 ```
 
 ## Notes
 
 - Prettier is intentionally applied last in the final config array.
+- GitHub Actions and Docker Compose build on the YAML integration.
+- Nx builds on the JSON/JSONC integration for `nx.json` and `project.json`.
 - Swagger is automatically detected when the project includes `@nestjs/swagger`.
 
 ## Repository Examples

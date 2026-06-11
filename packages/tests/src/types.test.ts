@@ -49,6 +49,14 @@ describe('Type Exports', () => {
     expect(options).toContain('jsdoc')
 
     expect(options).toContain('swagger')
+
+    expect(options).toContain('command')
+
+    expect(options).toContain('docker')
+
+    expect(options).toContain('github-actions')
+
+    expect(options).toContain('nx')
   })
 
   it('should have all Testing values', () => {
@@ -57,6 +65,8 @@ describe('Type Exports', () => {
     expect(options).toContain('vitest')
 
     expect(options).toContain('playwright')
+
+    expect(options).toContain('jest-dom')
   })
 
   it('should have all Format values', () => {
@@ -71,6 +81,8 @@ describe('Type Exports', () => {
     expect(options).toContain('yaml')
 
     expect(options).toContain('toml')
+
+    expect(options).toContain('package-json')
   })
 
   it('should have all Extension values', () => {
@@ -85,6 +97,8 @@ describe('Type Exports', () => {
     expect(options).toContain('security')
 
     expect(options).toContain('perfectionist')
+
+    expect(options).toContain('boundaries')
   })
 
   it('should have all Setting values', () => {
@@ -93,5 +107,9 @@ describe('Type Exports', () => {
     expect(options).toContain('gitignore')
 
     expect(options).toContain('no-gitignore')
+
+    expect(options).toContain('generated-code-ignores')
+
+    expect(options).toContain('no-generated-code-ignores')
   })
 })

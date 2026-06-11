@@ -13,6 +13,7 @@ The `extensions` option enables specialized rule packs that are useful across ma
 | Security | `Extension.Security` | The project wants additional security-oriented checks. | Yes |
 | Perfectionist | `Extension.Perfectionist` | The project wants ordering and consistency rules. | No |
 | BestPractices | `Extension.BestPractices` | The project wants light-weight quality rules with no extra dependencies. | No |
+| Boundaries | `Extension.Boundaries` | The project wants dependency-free import boundary guardrails for package, generated-code, and test imports. | No |
 | A11y | `Extension.A11y` | The project wants accessibility linting for JSX and Vue. | Yes |
 | Biome | `Extension.Biome` | The project wants to enforce Biome formatting and rules. | No |
 
@@ -22,7 +23,7 @@ The `extensions` option enables specialized rule packs that are useful across ma
 import { defineConfig, Extension } from '@santi020k/eslint-config-basic'
 
 export default await defineConfig({
-  extensions: [Extension.Unicorn, Extension.Security, Extension.Perfectionist, Extension.BestPractices]
+  extensions: [Extension.Unicorn, Extension.Security, Extension.Perfectionist, Extension.BestPractices, Extension.Boundaries]
 })
 ```
 
@@ -36,6 +37,14 @@ The `Extension.BestPractices` pack adds four quality rules that don't require an
 - `no-alert` (error) — disallows browser `alert`, `confirm`, and `prompt`
 - `complexity` (warn, max 10) — flags overly complex functions
 - `max-depth` (warn, max 4) — flags deeply nested blocks
+
+### Boundaries
+
+The `Extension.Boundaries` pack adds dependency-free import guardrails:
+
+- `import/no-relative-packages` (warn) — catches relative imports across package boundaries.
+- `import/no-self-import` (error) — prevents a module from importing itself.
+- `no-restricted-imports` (error) — blocks production imports from generated-code and test-only paths.
 
 ## Notes
 

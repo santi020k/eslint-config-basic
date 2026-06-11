@@ -49,6 +49,11 @@ export enum Extension {
    * Disables formatting rules that conflict with Biome
    */
   Biome = 'biome',
+
+  /**
+   * Import boundary rules for common app, workspace, and generated-code edges.
+   */
+  Boundaries = 'boundaries',
   Perfectionist = 'perfectionist',
   Regexp = 'regexp',
   Security = 'security',
@@ -65,6 +70,7 @@ export enum Format {
   Jsonc = 'jsonc',
   Markdown = 'markdown',
   Mdx = 'mdx',
+  PackageJson = 'package-json',
   Toml = 'toml',
   Yaml = 'yaml'
 }
@@ -172,11 +178,17 @@ export enum Setting {
   /** Default behavior — accepted for symmetry with `NoDefaultIgnores`; passing it changes nothing. */
   DefaultIgnores = 'default-ignores',
 
+  /** Default behavior — accepted for symmetry with `NoGeneratedCodeIgnores`; passing it changes nothing. */
+  GeneratedCodeIgnores = 'generated-code-ignores',
+
   /** Default behavior — accepted for symmetry with `NoGitignore`; passing it changes nothing. */
   Gitignore = 'gitignore',
 
   /** Disable the built-in default ignore globs (dist, build, coverage, etc.). */
   NoDefaultIgnores = 'no-default-ignores',
+
+  /** Disable generated-code ignore globs. */
+  NoGeneratedCodeIgnores = 'no-generated-code-ignores',
 
   /** Disable automatic `.gitignore`-based ignores. */
   NoGitignore = 'no-gitignore'
@@ -188,6 +200,7 @@ export enum Setting {
 export enum Testing {
   Cypress = 'cypress',
   Jest = 'jest',
+  JestDom = 'jest-dom',
   Playwright = 'playwright',
   TestingLibrary = 'testing-library',
   Vitest = 'vitest'
@@ -197,8 +210,12 @@ export enum Testing {
  * Enum for integrating external standalone utilities
  */
 export enum Tool {
+  Command = 'command',
   Cspell = 'cspell',
+  Docker = 'docker',
+  GithubActions = 'github-actions',
   Jsdoc = 'jsdoc',
+  Nx = 'nx',
   Prettier = 'prettier',
   Swagger = 'swagger'
 }
@@ -212,16 +229,59 @@ export interface DetectionOptions {
   frameworks?: boolean
   libraries?: boolean
   nextMode?: boolean
+  projects?: boolean
   runtime?: boolean
   testing?: boolean
   tools?: boolean
   typescript?: boolean
 }
+export type ExtensionName = `${Extension}`
+export type ExtensionOption = Extension | ExtensionName
+export type FormatName = `${Format}`
+export type FormatOption = Format | FormatName
+export type LibraryName = `${Library}`
+export type LibraryOption = Library | LibraryName
+export type NextModeName = `${NextMode}`
+export type NextModeOption = NextMode | NextModeName
 
+/**
+ * Simple opt-in/opt-out map for optional configs. Keys match the public enum
+ * string values, so both `features: { zod: true }` and `libraries: [Library.Zod]`
+ * resolve to the same underlying config.
+ */
+export type OptionalConfigMap = Partial<Record<OptionalConfigName, boolean>>
+export type OptionalConfigName =
+  ExtensionName |
+  FormatName |
+  LibraryName |
+  TestingName |
+  ToolName
+export type PresetName = `${Preset}`
+export type PresetOption = Preset | PresetName
+export type RuntimeName = `${Runtime}`
+export type RuntimeOption = Runtime | RuntimeName
+export type SettingName = `${Setting}`
+export type SettingOption = Setting | SettingName
 /**
  * Severity profiles for teams adopting the config progressively.
  */
 export type StrictMode = 'ci' | 'pedantic' | 'recommended' | boolean
+
+export type TestingName = `${Testing}`
+
+export type TestingOption = Testing | TestingName
+
+export type ToolName = `${Tool}`
+
+export type ToolOption = Tool | ToolName
+
+export type TypeScriptMode = 'off' | 'strict' | 'syntax' | 'type-aware'
+
+export interface TypeScriptOptions {
+  mode?: TypeScriptMode
+  projectService?: boolean
+  tsconfigRootDir?: string
+}
 
 /**
  * Array of configurations that require React
@@ -285,10 +345,17 @@ export interface EslintConfigOptions {
   detectRootDir?: string
 
   /** List of specialized ESLint rules and extensions */
-  extensions?: Extension[]
+  extensions?: ExtensionOption[]
+
+  /**
+   * Simple optional-config switchboard. Enables or disables entries from
+   * `extensions`, `formats`, `libraries`, `testing`, and `tools` using their
+   * string names. `integrations` is an alias for the same map.
+   */
+  features?: OptionalConfigMap
 
   /** Additional non-JS/TS file formats to lint */
-  formats?: Format[]
+  formats?: FormatOption[]
 
   /**
    * Framework and library specific configurations.
@@ -323,10 +390,12 @@ export interface EslintConfigOptions {
   ignores?: string[]
 
   /** List of application-level dependencies configurations */
-  libraries?: Library[]
+  integrations?: OptionalConfigMap
+
+  libraries?: LibraryOption[]
 
   /** Next.js specific routing mode */
-  nextMode?: NextMode
+  nextMode?: NextModeOption
 
   /**
    * Controls how explicit arrays/frameworks combine with auto-detected and preset values.
@@ -336,7 +405,7 @@ export interface EslintConfigOptions {
   optionMergeStrategy?: 'merge' | 'replace'
 
   /** High-level configuration preset */
-  preset?: Preset
+  preset?: PresetOption
 
   /**
    * Package-aware subproject configuration for monorepos.
@@ -345,10 +414,10 @@ export interface EslintConfigOptions {
   projects?: Record<string, Omit<EslintConfigOptions, 'projects'>>
 
   /** Runtime environment preset (Node, Browser, Universal) */
-  runtime?: Runtime
+  runtime?: RuntimeOption
 
   /** List of global settings and behavioral flags */
-  settings?: Setting[]
+  settings?: SettingOption[]
 
   /**
    * Severity profile.
@@ -359,10 +428,10 @@ export interface EslintConfigOptions {
   strict?: StrictMode
 
   /** List of testing frameworks and testing environments */
-  testing?: Testing[]
+  testing?: TestingOption[]
 
   /** List of integrations for external standalone tools */
-  tools?: Tool[]
+  tools?: ToolOption[]
 
   /**
    * Root directory of the project.
@@ -371,7 +440,7 @@ export interface EslintConfigOptions {
   tsconfigRootDir?: string
 
   /** Enable TypeScript support with optional settings */
-  typescript?: boolean
+  typescript?: boolean | TypeScriptMode | TypeScriptOptions
 }
 
 /**
@@ -390,5 +459,3 @@ export type ImportedFramework =
   FlatConfigArray |
   true |
   { default: ((options?: Record<string, unknown>) => FlatConfigArray) | FlatConfigArray }
-
-

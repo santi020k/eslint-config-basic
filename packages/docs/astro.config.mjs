@@ -76,7 +76,8 @@ const sidebar = [
           { label: 'Testing Suite', slug: 'packages/tests' },
           { label: 'API Reference', slug: 'api' },
           { label: 'Generated Types', slug: 'api/reference' },
-          { badge: { text: 'New', variant: 'success' }, label: 'Troubleshooting', slug: 'guide/troubleshooting' }
+          { badge: { text: 'New', variant: 'success' }, label: 'Troubleshooting', slug: 'guide/troubleshooting' },
+          { label: 'Thank You', slug: 'guide/acknowledgements' }
         ],
         label: 'Architecture & API'
       }

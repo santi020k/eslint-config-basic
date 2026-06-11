@@ -11,6 +11,46 @@ const typedFiles = [...GLOB_TS, ...GLOB_SLOT]
 const typeCheckedFiles = [...GLOB_TS, ...GLOB_SLOT, ...GLOB_VIRTUAL_TS]
 const virtualTypeCheckedFiles = GLOB_VIRTUAL_TS
 
+type TypeScriptMode = 'off' | 'strict' | 'syntax' | 'type-aware'
+
+const strictModeRules: TSESLint.Linter.RulesRecord = {
+  '@typescript-eslint/consistent-type-imports': ['error', {
+    fixStyle: 'inline-type-imports',
+    prefer: 'type-imports'
+  }],
+  '@typescript-eslint/no-explicit-any': 'error',
+  '@typescript-eslint/no-unsafe-assignment': 'error',
+  '@typescript-eslint/no-unsafe-call': 'error',
+  '@typescript-eslint/no-unsafe-member-access': 'error',
+  '@typescript-eslint/no-unsafe-return': 'error'
+}
+
+interface CreateTypescriptConfigOptions {
+  mode?: Exclude<TypeScriptMode, 'off'>
+  projectService?: boolean
+  tsconfigRootDir?: string
+}
+
+const mapRulesToSlots = (
+  config: TSESLint.FlatConfig.Config,
+  fallbackName: string
+): TSESLint.FlatConfig.ConfigArray => [
+  {
+    ...config,
+    files: GLOB_TS,
+    ignores: [...(config.ignores ?? []), ...virtualTypeCheckedFiles]
+  },
+  ...(config.rules ?
+    [
+      {
+        files: [...GLOB_SLOT, ...GLOB_VIRTUAL_TS],
+        name: `${config.name ?? fallbackName}/rules-only`,
+        rules: config.rules
+      }
+    ] :
+    [])
+]
+
 /**
  * TypeScript ESLint configuration factory
  * Extends typescript-eslint strict + stylistic type-checked presets with custom rules
@@ -18,7 +58,7 @@ const virtualTypeCheckedFiles = GLOB_VIRTUAL_TS
  * @throws {Error} If `tsconfigRootDir` is provided but does not exist on disk.
  */
 export const createTypescriptConfig = (
-  options: { tsconfigRootDir?: string } = {}
+  options: CreateTypescriptConfigOptions = {}
 ): TSESLint.FlatConfig.ConfigArray => {
   if (options.tsconfigRootDir && !existsSync(options.tsconfigRootDir)) {
     throw new Error(
@@ -27,64 +67,44 @@ export const createTypescriptConfig = (
     )
   }
 
+  const mode = options.mode ?? 'type-aware'
+  const projectService = options.projectService ?? mode !== 'syntax'
+
+  const parserOptions = {
+    extraFileExtensions: ['.astro', '.svelte', '.vue'],
+    parser: tsParser,
+    ...(projectService ? { projectService: true } : {}),
+    tsconfigRootDir: options.tsconfigRootDir
+  }
+
+  const baseConfigs = mode === 'syntax' ?
+    [
+      ...(tsEslint.configs.strict as TSESLint.FlatConfig.ConfigArray),
+      ...(tsEslint.configs.stylistic as TSESLint.FlatConfig.ConfigArray)
+    ] :
+    [
+      ...(tsEslint.configs.strictTypeChecked as TSESLint.FlatConfig.ConfigArray),
+      ...(tsEslint.configs.stylisticTypeChecked as TSESLint.FlatConfig.ConfigArray)
+    ]
+
   return [
     {
       files: typedFiles,
       languageOptions: {
-        parserOptions: {
-          extraFileExtensions: ['.astro', '.svelte', '.vue'],
-          parser: tsParser,
-          projectService: true,
-          tsconfigRootDir: options.tsconfigRootDir
-        }
+        parserOptions
       },
       name: 'eslint-config-typescript/setup',
       plugins: {
         '@typescript-eslint': tsEslint.plugin
       }
     },
-    ...(tsEslint.configs.strictTypeChecked as TSESLint.FlatConfig.ConfigArray).flatMap(c => [
-      {
-        ...c,
-        files: GLOB_TS,
-        ignores: [...(c.ignores ?? []), ...virtualTypeCheckedFiles]
-      },
-      ...(c.rules ?
-        [
-          {
-            files: [...GLOB_SLOT, ...GLOB_VIRTUAL_TS],
-            name: `${c.name ?? 'ts-strict'}/rules-only`,
-            rules: c.rules
-          }
-        ] :
-        [])
-    ]),
-    ...(tsEslint.configs.stylisticTypeChecked as TSESLint.FlatConfig.ConfigArray).flatMap(c => [
-      {
-        ...c,
-        files: GLOB_TS,
-        ignores: [...(c.ignores ?? []), ...virtualTypeCheckedFiles]
-      },
-      ...(c.rules ?
-        [
-          {
-            files: [...GLOB_SLOT, ...GLOB_VIRTUAL_TS],
-            name: `${c.name ?? 'ts-stylistic'}/rules-only`,
-            rules: c.rules
-          }
-        ] :
-        [])
-    ]),
+    ...baseConfigs.flatMap(c => mapRulesToSlots(c, `ts-${mode}`)),
     {
       files: GLOB_TS,
       languageOptions: {
         ecmaVersion: 'latest',
         parser: tsParser,
-        parserOptions: {
-          extraFileExtensions: ['.astro', '.svelte', '.vue'],
-          projectService: true,
-          tsconfigRootDir: options.tsconfigRootDir
-        }
+        parserOptions
       },
       name: 'eslint-config-typescript/parser-setup'
     },
@@ -93,11 +113,18 @@ export const createTypescriptConfig = (
       name: 'eslint-config-typescript/standard-rules',
       rules: standardRules
     },
-    {
+    ...(mode === 'syntax' ? [] : [{
       files: typeCheckedFiles,
       name: 'eslint-config-typescript/type-checked-rules',
       rules: typeCheckedRules
-    }
+    }]),
+    ...(mode === 'strict' ?
+      [{
+        files: typedFiles,
+        name: 'eslint-config-typescript/strict-mode-rules',
+        rules: strictModeRules
+      }] :
+      [])
   ]
 }
 

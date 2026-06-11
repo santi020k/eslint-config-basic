@@ -12,7 +12,7 @@ describe('detection internals', () => {
       expo: 'latest',
       next: 'latest',
       react: 'latest'
-    }, setRuntime)
+    }, process.cwd(), setRuntime)
 
     const reactCount = frameworks?.filter(name => name === 'react').length ?? 0
 

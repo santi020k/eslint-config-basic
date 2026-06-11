@@ -29,11 +29,12 @@ This project follows a **DX-First & Stability-First** mission. We prioritize a s
 
 - **🎯 Composable & Modular**: Mix and match configurations for different frameworks and tools using a clean, options-based API.
 - **🔍 Deep Auto-Detection**: Automatically detects your project's frameworks, libraries, and tools. Core features like TypeScript and runtime presets are enabled by default if detected.
+- **🧩 Simple Optional Features**: Enable optional configs with enums, matching strings, or a single `features` boolean map.
 - **⚡ Lazy Loading**: Framework-specific configurations are loaded only when needed.
 - **🛡️ Strict Mode**: Opt-in `strict: true` to promote all warnings to errors, perfect for CI/CD and maintaining high code standards.
-- **🌐 Smart Runtime Support**: Built-in support for Node.js, Browser, Worker, or Universal runtimes with appropriate globals and rules.
+- **🌐 Smart Runtime Support**: Built-in support for Node.js, Browser, Worker, Cloudflare, Bun, Deno, and Universal runtimes with appropriate globals and rules.
 - **🧭 Explainable Detection**: `basic-eslint explain` shows exactly which frameworks, runtimes, and integrations were detected.
-- **🏗️ Monorepo Projects**: Scope presets and integrations per workspace folder with the `projects` option.
+- **🏗️ Monorepo Projects**: Scope presets and integrations per workspace folder with the `projects` option, or let `Preset.Monorepo` detect workspace packages.
 - **💅 Prettier Integrated**: Seamlessly integrated with Prettier out of the box for consistent code formatting.
 - **🤖 Agent Skill Generator (Beta)**: Automatically generates tailored ESLint standards for AI agents (Cursor, Claude Code, Copilot, Windsurf, Aider, Gemini, Cline, Roo Code, Kiro, and any `AGENTS.md`-based tool such as Codex CLI or OpenCode) based on your active config. A non-breaking, opt-in feature to boost AI assistance.
 - **🧩 Extensive Plugin Support**: Tailored rules for AI SDK, OpenAI Agents SDK, Mastra, MCP, LangChain, LlamaIndex, Tailwind CSS, Vitest, Testing Library, Storybook, TanStack (Query/Router), and more.
@@ -60,6 +61,24 @@ export default await defineConfig()
 
 Optional integrations are loaded only when you enable them. A Node-only project can use the base config without installing unrelated peer packages such as Storybook, GraphQL, Cypress, or Testing Library.
 
+For a compact manual setup, use the `features` map. Set a key to `true` to enable an optional config, or `false` to disable one that was detected or enabled by a preset:
+
+```js
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig({
+  features: {
+    boundaries: true,
+    'github-actions': true,
+    playwright: true,
+    prettier: true,
+    tailwind: true,
+    unicorn: false,
+    zod: true
+  }
+})
+```
+
 Inspect what v2 auto-detected:
 
 ```bash
@@ -74,9 +93,9 @@ Here is an example with many features activated. Note that many of these are aut
 import { defineConfig, Extension, Format, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
 
 export default await defineConfig({
-  extensions: [Extension.Unicorn, Extension.Sonarjs, Extension.Perfectionist],
+  extensions: [Extension.Unicorn, Extension.Sonarjs, Extension.Perfectionist, Extension.Boundaries],
 
-  formats: [Format.Mdx, Format.Jsonc, Format.Graphql],
+  formats: [Format.Mdx, Format.Jsonc, 'graphql'],
 
   // Frameworks
   frameworks: {
@@ -85,13 +104,13 @@ export default await defineConfig({
   },
 
   // Optional integrations
-  libraries: [Library.AiSdk, Library.OpenAiAgents, Library.Mastra, Library.Mcp, Library.Tailwind, Library.TanstackQuery],
+  libraries: [Library.AiSdk, Library.OpenAiAgents, Library.Mastra, Library.Mcp, Library.Tailwind, 'tanstack-query'],
   // Strict mode: warnings become errors
   strict: 'ci',
-  testing: [Testing.Vitest, Testing.Playwright, Testing.TestingLibrary],
-  tools: [Tool.Prettier, Tool.Cspell],
-  // Explicitly enable TypeScript (auto-detected if tsconfig.json exists)
-  typescript: true
+  testing: [Testing.Vitest, Testing.Playwright, 'testing-library'],
+  tools: [Tool.Prettier, Tool.Cspell, Tool.GithubActions, Tool.Docker, Tool.Nx],
+  // Explicitly enable strict TypeScript mode (auto-detected if tsconfig.json exists)
+  typescript: 'strict'
 })
 ```
 

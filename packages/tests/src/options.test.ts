@@ -69,6 +69,108 @@ describe('Deep Rule Assertions (#5)', () => {
     expect(rules).toContain('unicorn/prefer-array-flat-map')
   })
 
+  it('should accept string optional names in existing option arrays', async () => {
+    const config = await defineConfig({
+      extensions: ['unicorn'],
+      testing: ['playwright'],
+      tools: ['prettier']
+    })
+
+    const names = extractConfigNames(config)
+    const rules = extractRuleNames(config)
+
+    expect(names).toContain('integrations/playwright')
+    expect(names).toContain('eslint-config/prettier')
+    expect(rules).toContain('unicorn/prefer-array-flat-map')
+  })
+
+  it('should enable optional configs from the features map', async () => {
+    const config = await defineConfig({
+      features: {
+        playwright: true,
+        prettier: true,
+        zod: true
+      }
+    })
+
+    const names = extractConfigNames(config)
+
+    expect(names).toContain('integrations/playwright')
+    expect(names).toContain('eslint-config/prettier')
+    expect(names).toContain('eslint-config-integrations/zod')
+  })
+
+  it('should allow the features map to disable detected or default optional configs', async () => {
+    const config = await defineConfig({
+      features: {
+        prettier: false,
+        unicorn: false
+      }
+    })
+
+    const names = extractConfigNames(config)
+    const rules = extractRuleNames(config)
+
+    expect(names).not.toContain('eslint-config/prettier')
+    expect(rules).not.toContain('unicorn/prefer-array-flat-map')
+  })
+
+  it('should include boundary rules when the Boundaries extension is enabled', async () => {
+    const config = await defineConfig({
+      extensions: [Extension.Boundaries]
+    })
+
+    const names = extractConfigNames(config)
+    const rules = extractRuleNames(config)
+
+    expect(names).toContain('eslint-config-basic/import-boundaries')
+    expect(rules).toContain('import/no-relative-packages')
+  })
+
+  it('should include generated-code ignores by default and allow disabling them', async () => {
+    const config = await defineConfig({})
+    const defaultIgnoreBlock = config.find(entry => entry.name === 'eslint-config-basic/default-ignores')
+
+    expect(defaultIgnoreBlock?.ignores).toContain('**/__generated__/**')
+
+    const withoutGeneratedIgnores = await defineConfig({
+      settings: ['no-generated-code-ignores']
+    })
+    const ignoreBlock = withoutGeneratedIgnores.find(entry => entry.name === 'eslint-config-basic/default-ignores')
+
+    expect(ignoreBlock?.ignores).not.toContain('**/__generated__/**')
+  })
+
+  it('should support TypeScript syntax and strict modes', async () => {
+    const syntaxConfig = await defineConfig({ typescript: 'syntax' })
+    const syntaxNames = extractConfigNames(syntaxConfig)
+
+    expect(syntaxNames).toContain('eslint-config-typescript/standard-rules')
+    expect(syntaxNames).not.toContain('eslint-config-typescript/type-checked-rules')
+
+    const strictConfig = await defineConfig({ typescript: 'strict' })
+    const strictNames = extractConfigNames(strictConfig)
+
+    expect(strictNames).toContain('eslint-config-typescript/type-checked-rules')
+    expect(strictNames).toContain('eslint-config-typescript/strict-mode-rules')
+  })
+
+  it('should include new tool integrations from feature strings', async () => {
+    const config = await defineConfig({
+      features: {
+        docker: true,
+        'github-actions': true,
+        nx: true
+      }
+    })
+
+    const names = extractConfigNames(config)
+
+    expect(names).toContain('eslint-config-integrations/docker')
+    expect(names).toContain('eslint-config-integrations/github-actions')
+    expect(names).toContain('eslint-config-integrations/nx')
+  })
+
   it('should include sonarjs rules when Sonarjs optional is enabled', async () => {
     const config = await defineConfig({
       extensions: [Extension.Sonarjs]

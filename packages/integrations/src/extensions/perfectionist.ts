@@ -21,9 +21,10 @@ export const perfectionist: () => Promise<TSESLint.FlatConfig.ConfigArray> = def
       },
       rules: {
         ...pluginPerfectionist.configs['recommended-natural'].rules,
-        // Disabled: simple-import-sort handles import ordering to avoid circular fix conflicts
         'perfectionist/sort-imports': 'off',
-        'perfectionist/sort-named-imports': 'off'
+        'perfectionist/sort-named-imports': 'off',
+        // Disable simple-import-sort/exports so that perfectionist can handle export sorting without conflicts
+        'simple-import-sort/exports': 'off'
       }
     }
   ]

@@ -15,7 +15,17 @@ export default await defineConfig({
 })
 ```
 
-`Preset.Monorepo` sets universal TypeScript defaults that work as a safe base across mixed project types. Auto-detection reads the root `package.json` and project structure to activate frameworks and integrations found there.
+`Preset.Monorepo` sets universal TypeScript defaults that work as a safe base across mixed project types. It also enables workspace project detection by default, so common workspace folders and `package.json#workspaces` entries can become scoped project configs automatically. Auto-detection reads each package's `package.json` and project structure to activate frameworks and integrations found there.
+
+Outside `Preset.Monorepo`, project detection is opt-in:
+
+```js
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig({
+  detection: { projects: true }
+})
+```
 
 ## Scoping Packages with `projects`
 
@@ -91,7 +101,7 @@ export default await defineConfig({
 
 ## Merge Strategy
 
-By default, project-level `libraries`, `testing`, `formats`, `tools`, and `extensions` are **merged** with root-level values (`optionMergeStrategy: 'merge'`). Use `'replace'` at the project level when a specific package should override the root completely:
+By default, project-level `libraries`, `testing`, `formats`, `tools`, and `extensions` are **merged** with root-level values (`optionMergeStrategy: 'merge'`). Use `'replace'` at the project level when a specific package should override the root completely. These arrays accept enum values or matching strings, and `features` can add or remove optional configs inside each project:
 
 ```js
 import { defineConfig, Preset, Testing } from '@santi020k/eslint-config-basic'
@@ -100,6 +110,9 @@ export default await defineConfig({
   preset: Preset.Monorepo,
   projects: {
     'apps/e2e': {
+      features: {
+        prettier: false
+      },
       optionMergeStrategy: 'replace',
       testing: [Testing.Playwright]
     }

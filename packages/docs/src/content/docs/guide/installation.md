@@ -42,6 +42,34 @@ export default await defineConfig()
 
 The composer detects TypeScript, frameworks, runtime, and supported optional tooling from your project. You can keep the config minimal or make any choice explicit.
 
+## Optional Features
+
+When auto-detection is not enough, optional configs can be enabled by category arrays or by the simple `features` map.
+
+```js
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig({
+  features: {
+    playwright: true,
+    prettier: true,
+    tailwind: true,
+    zod: true
+  }
+})
+```
+
+The category arrays also accept enum values or their matching strings:
+
+```js
+import { defineConfig, Library, Tool } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig({
+  libraries: [Library.Tailwind, 'zod'],
+  tools: [Tool.Prettier, 'cspell']
+})
+```
+
 ## Explicit Frameworks
 
 Use booleans when you want to enable framework configs manually:
@@ -106,6 +134,8 @@ Optional integrations still use the same categories:
 | Formats | `formats` | [Formats](/tooling/formats) |
 | Tools | `tools` | [Tools](/tooling/tools) |
 | Extensions | `extensions` | [Extensions](/tooling/extensions) |
+
+Use `features` or its alias `integrations` when you prefer one boolean map instead of separate category arrays.
 
 ## Migration
 

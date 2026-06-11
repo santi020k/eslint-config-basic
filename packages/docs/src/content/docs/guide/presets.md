@@ -150,6 +150,20 @@ export default await defineConfig({
 
 Any explicit option you pass overrides the preset default for that field. List options (`libraries`, `testing`, `formats`, `tools`, `extensions`) are merged with preset defaults under `optionMergeStrategy: 'merge'` (the default). Use `optionMergeStrategy: 'replace'` when you want your explicit lists to fully replace what the preset provides.
 
+Optional configs can be enabled with enum values, matching strings, or the `features` map. A `features` value of `false` removes that optional config after detection and preset defaults are merged.
+
+```js
+import { defineConfig, Preset } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig({
+  features: {
+    prettier: false,
+    zod: true
+  },
+  preset: Preset.App
+})
+```
+
 ## Related Pages
 
 - [Configuration](/guide/configuration) — full option reference

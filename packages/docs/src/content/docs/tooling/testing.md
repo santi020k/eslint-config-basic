@@ -12,6 +12,7 @@ The `testing` option enables linting support for test runners, test environments
 | Jest | `Testing.Jest` | The project uses Jest. | No |
 | Cypress | `Testing.Cypress` | The project uses Cypress. | No |
 | Testing Library | `Testing.TestingLibrary` | The project uses Testing Library. | No |
+| Jest DOM | `Testing.JestDom` | The project uses Testing Library with Jest DOM assertions. | No |
 
 ## Example
 

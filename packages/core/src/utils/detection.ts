@@ -8,10 +8,16 @@ type DependencyMap = Record<string, string | undefined>
 interface PackageJson {
   dependencies?: Record<string, string | undefined>
   devDependencies?: Record<string, string | undefined>
+  packageManager?: string
+  scripts?: Record<string, string | undefined>
+  workspaces?: string[] | { packages?: string[] }
 }
 
 const runtimePriority = new Map<Runtime, number>([
   [Runtime.Browser, 1],
+  [Runtime.Bun, 4],
+  [Runtime.Cloudflare, 5],
+  [Runtime.Deno, 4],
   [Runtime.Node, 2],
   [Runtime.Universal, 0],
   [Runtime.Worker, 3]
@@ -50,15 +56,57 @@ const collectAllDependencies = (pkg: PackageJson): DependencyMap => ({
   ...(pkg.devDependencies ?? {})
 })
 
+const hasAnyDependency = (allDeps: DependencyMap, names: string[]): boolean => names.some(
+  // eslint-disable-next-line security/detect-object-injection
+  name => Boolean(allDeps[name])
+)
+
 const createRuntimeSetter = (options: EslintConfigOptions) => (runtime: Runtime): void => {
-  const currentRuntime = options.runtime ?? Runtime.Universal
+  const currentRuntime = (options.runtime ?? Runtime.Universal) as Runtime
 
   if ((runtimePriority.get(runtime) ?? 0) > (runtimePriority.get(currentRuntime) ?? 0)) {
     options.runtime = runtime
   }
 }
 
-const detectFrameworks = (allDeps: DependencyMap, setRuntime: (runtime: Runtime) => void): EslintConfigOptions['detectedFrameworks'] => {
+const hasCloudflareSignal = (allDeps: DependencyMap, detectRootDir: string): boolean => (
+  hasAnyDependency(allDeps, ['wrangler', '@cloudflare/workers-types', '@cloudflare/vitest-pool-workers']) ||
+  pathExists(join(detectRootDir, 'wrangler.toml')) ||
+  pathExists(join(detectRootDir, 'wrangler.json')) ||
+  pathExists(join(detectRootDir, 'wrangler.jsonc'))
+)
+
+const detectRuntime = (
+  allDeps: DependencyMap,
+  detectRootDir: string,
+  detectedFrameworks: EslintConfigOptions['detectedFrameworks'],
+  setRuntime: (runtime: Runtime) => void
+): void => {
+  const hasDetectedFramework = (detectedFrameworks?.length ?? 0) > 0
+
+  if (
+    hasAnyDependency(allDeps, ['bun-types']) ||
+    (!hasDetectedFramework && pathExists(join(detectRootDir, 'bunfig.toml')))
+  ) {
+    setRuntime(Runtime.Bun)
+  }
+
+  if (
+    hasAnyDependency(allDeps, ['@deno/eslint-plugin']) ||
+    (!hasDetectedFramework && (
+      pathExists(join(detectRootDir, 'deno.json')) ||
+      pathExists(join(detectRootDir, 'deno.jsonc'))
+    ))
+  ) {
+    setRuntime(Runtime.Deno)
+  }
+}
+
+const detectFrameworks = (
+  allDeps: DependencyMap,
+  detectRootDir: string,
+  setRuntime: (runtime: Runtime) => void
+): EslintConfigOptions['detectedFrameworks'] => {
   const detected: NonNullable<EslintConfigOptions['detectedFrameworks']> = []
 
   if (allDeps.next) {
@@ -88,8 +136,8 @@ const detectFrameworks = (allDeps: DependencyMap, setRuntime: (runtime: Runtime)
   if (allDeps.hono) {
     detected.push('hono')
 
-    if (allDeps.wrangler || allDeps['@cloudflare/workers-types'] || allDeps['@cloudflare/vitest-pool-workers']) {
-      setRuntime(Runtime.Worker)
+    if (hasAnyDependency(allDeps, ['wrangler', '@cloudflare/workers-types', '@cloudflare/vitest-pool-workers'])) {
+      setRuntime(Runtime.Cloudflare)
     }
   }
 
@@ -158,24 +206,12 @@ const detectFrameworks = (allDeps: DependencyMap, setRuntime: (runtime: Runtime)
     (
       allDeps.wrangler ||
       allDeps['@cloudflare/workers-types'] ||
-      allDeps['@cloudflare/vitest-pool-workers']
+      allDeps['@cloudflare/vitest-pool-workers'] ||
+      hasCloudflareSignal(allDeps, detectRootDir)
     ) &&
-    !detected.some(framework => [
-      'angular',
-      'astro',
-      'expo',
-      'next',
-      'qwik',
-      'react',
-      'remix',
-      'slidev',
-      'solid',
-      'svelte',
-      'vite',
-      'vue'
-    ].includes(framework))
+    detected.length === 0
   ) {
-    setRuntime(Runtime.Worker)
+    setRuntime(Runtime.Cloudflare)
   }
 
   return dedupe(detected)
@@ -214,6 +250,10 @@ const detectLibraries = (allDeps: DependencyMap): Library[] => {
   if (allDeps['@mastra/core']) libraries.push(Library.Mastra)
 
   if (allDeps['@openai/agents']) libraries.push(Library.OpenAiAgents)
+
+  if (allDeps['@google/genai']) libraries.push(Library.GoogleGenAi)
+
+  if (allDeps['@microsoft/autogen'] || allDeps['@microsoft/autogen-core']) libraries.push(Library.Autogen)
 
   if (allDeps.langchain || allDeps['@langchain/core']) libraries.push(Library.Langchain)
 
@@ -272,6 +312,10 @@ const detectLibraries = (allDeps: DependencyMap): Library[] => {
     libraries.push(Library.TanstackRouter)
   }
 
+  if (allDeps.turbo || allDeps['eslint-plugin-turbo']) libraries.push(Library.Turbo)
+
+  if (allDeps.zod || allDeps['eslint-plugin-zod']) libraries.push(Library.Zod)
+
   return dedupe(libraries)
 }
 
@@ -283,6 +327,8 @@ const detectTesting = (allDeps: DependencyMap): Testing[] => {
   if (allDeps.playwright || allDeps['@playwright/test']) testing.push(Testing.Playwright)
 
   if (allDeps.jest || allDeps['@jest/core'] || allDeps['jest-circus']) testing.push(Testing.Jest)
+
+  if (allDeps['@testing-library/jest-dom'] || allDeps['eslint-plugin-jest-dom']) testing.push(Testing.JestDom)
 
   if (allDeps.cypress) testing.push(Testing.Cypress)
 
@@ -345,6 +391,10 @@ const detectFormats = (allDeps: DependencyMap, detectRootDir: string): Format[] 
     formats.push(Format.Jsonc)
   }
 
+  if (allDeps['eslint-plugin-package-json']) {
+    formats.push(Format.PackageJson)
+  }
+
   if (
     pathExists(join(detectRootDir, 'pnpm-workspace.yaml')) ||
     pathExists(join(detectRootDir, 'cspell.config.yaml')) ||
@@ -368,6 +418,8 @@ const detectTools = (allDeps: DependencyMap, detectRootDir: string): Tool[] => {
   const tools: Tool[] = []
 
   if (allDeps['@nestjs/swagger']) tools.push(Tool.Swagger)
+
+  if (allDeps['eslint-plugin-command']) tools.push(Tool.Command)
 
   if (
     allDeps.prettier ||
@@ -401,7 +453,74 @@ const detectTools = (allDeps: DependencyMap, detectRootDir: string): Tool[] => {
     pathExists(join(detectRootDir, 'jsdoc.config.mjs'))
   ) tools.push(Tool.Jsdoc)
 
+  if (
+    allDeps.nx ||
+    allDeps['@nx/js'] ||
+    allDeps['@nx/eslint'] ||
+    allDeps['@nrwl/workspace'] ||
+    pathExists(join(detectRootDir, 'nx.json'))
+  ) tools.push(Tool.Nx)
+
+  if (
+    pathExists(join(detectRootDir, 'Dockerfile')) ||
+    pathExists(join(detectRootDir, 'docker-compose.yml')) ||
+    pathExists(join(detectRootDir, 'docker-compose.yaml')) ||
+    hasFileMatching(detectRootDir, fileName => fileName === 'Dockerfile' || fileName.startsWith('Dockerfile.'))
+  ) tools.push(Tool.Docker)
+
+  if (pathExists(join(detectRootDir, '.github/workflows'))) tools.push(Tool.GithubActions)
+
   return dedupe(tools)
+}
+
+const getWorkspacePatterns = (pkg: PackageJson): string[] => {
+  if (Array.isArray(pkg.workspaces)) return pkg.workspaces
+
+  return pkg.workspaces?.packages ?? []
+}
+
+const hasWorkspaceSignal = (pkg: PackageJson, detectRootDir: string): boolean => (
+  getWorkspacePatterns(pkg).length > 0 ||
+  pathExists(join(detectRootDir, 'pnpm-workspace.yaml')) ||
+  pathExists(join(detectRootDir, 'turbo.json')) ||
+  pathExists(join(detectRootDir, 'nx.json'))
+)
+
+const getWorkspaceBaseDirs = (pkg: PackageJson, detectRootDir: string): string[] => {
+  const bases = getWorkspacePatterns(pkg)
+    .map(pattern => pattern.replace(/^\.\//, '').split('*')[0]?.replace(/\/$/, ''))
+    .filter((pattern): pattern is string => Boolean(pattern) && !pattern.startsWith('!'))
+
+  if (bases.length > 0) return dedupe(bases)
+
+  return ['apps', 'packages', 'workers', 'examples'].filter(base => pathExists(join(detectRootDir, base)))
+}
+
+const detectProjects = (pkg: PackageJson, detectRootDir: string): NonNullable<EslintConfigOptions['projects']> => {
+  if (!hasWorkspaceSignal(pkg, detectRootDir)) return {}
+
+  const projects: NonNullable<EslintConfigOptions['projects']> = {}
+
+  for (const baseDir of getWorkspaceBaseDirs(pkg, detectRootDir)) {
+    const fullBaseDir = join(detectRootDir, baseDir)
+
+    try {
+      for (const entry of readdirSync(fullBaseDir, { withFileTypes: true })) {
+        if (!entry.isDirectory()) continue
+
+        const projectPath = `${baseDir}/${entry.name}`
+
+        if (pathExists(join(detectRootDir, projectPath, 'package.json'))) {
+          // eslint-disable-next-line security/detect-object-injection
+          projects[projectPath] = {}
+        }
+      }
+    } catch {
+      // Missing or unreadable workspace folders are ignored; detection stays best-effort.
+    }
+  }
+
+  return projects
 }
 
 const resolvePreset = (options: EslintConfigOptions): Preset => {
@@ -409,7 +528,7 @@ const resolvePreset = (options: EslintConfigOptions): Preset => {
     return Preset.Basic
   }
 
-  if (options.runtime === Runtime.Node) {
+  if (options.runtime === Runtime.Node || options.runtime === Runtime.Bun || options.runtime === Runtime.Deno) {
     return Preset.Node
   }
 
@@ -417,7 +536,7 @@ const resolvePreset = (options: EslintConfigOptions): Preset => {
     return Preset.Browser
   }
 
-  if (options.runtime === Runtime.Worker) {
+  if (options.runtime === Runtime.Worker || options.runtime === Runtime.Cloudflare) {
     return Preset.Worker
   }
 
@@ -437,6 +556,8 @@ export const __detectionInternals = {
   detectFrameworks,
   detectLibraries,
   detectNextMode,
+  detectProjects,
+  detectRuntime,
   detectTesting,
   detectTools,
   detectTypescript,
@@ -462,7 +583,9 @@ export const detectProjectOptions = (detectRootDir: string = process.cwd()): Esl
     const allDeps = collectAllDependencies(pkg)
     const setRuntime = createRuntimeSetter(options)
 
-    options.detectedFrameworks = detectFrameworks(allDeps, setRuntime)
+    options.detectedFrameworks = detectFrameworks(allDeps, detectRootDir, setRuntime)
+
+    detectRuntime(allDeps, detectRootDir, options.detectedFrameworks, setRuntime)
 
     options.nextMode = detectNextMode(allDeps, detectRootDir)
 
@@ -475,6 +598,8 @@ export const detectProjectOptions = (detectRootDir: string = process.cwd()): Esl
     options.formats = dedupe([...(options.formats ?? []), ...detectFormats(allDeps, detectRootDir)])
 
     options.tools = dedupe([...(options.tools ?? []), ...detectTools(allDeps, detectRootDir)])
+
+    options.projects = detectProjects(pkg, detectRootDir)
 
     options.extensions = dedupe(options.extensions)
 

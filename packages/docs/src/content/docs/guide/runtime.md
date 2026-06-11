@@ -20,7 +20,10 @@ export default await defineConfig({
 | Universal | `Runtime.Universal` | Full-stack projects, or when you are unsure — adds both Node.js and browser globals. |
 | Browser | `Runtime.Browser` | Front-end-only code. Removes Node.js globals to prevent accidental server-side assumptions. |
 | Node | `Runtime.Node` | Back-end-only code (APIs, CLIs, scripts). Removes browser globals. |
-| Worker | `Runtime.Worker` | Edge runtimes, Cloudflare Workers, service workers — adds Fetch API and WinterCG globals instead. |
+| Worker | `Runtime.Worker` | Generic service workers and edge runtimes — adds Fetch API and worker globals. |
+| Cloudflare | `Runtime.Cloudflare` | Cloudflare Workers projects — adds worker globals plus Cloudflare-specific globals such as `DurableObject` and `WebSocketPair`. |
+| Bun | `Runtime.Bun` | Bun runtime projects. |
+| Deno | `Runtime.Deno` | Deno runtime projects. |
 
 ## Runtime Details
 
@@ -88,7 +91,29 @@ export default await defineConfig({
 })
 ```
 
-Use `Runtime.Worker` for: Cloudflare Workers, Vercel Edge Functions, Next.js middleware, and Browser service workers.
+Use `Runtime.Worker` for: generic edge functions, Next.js middleware, and browser service workers.
+
+### `Runtime.Cloudflare`
+
+Adds service worker globals plus Cloudflare Workers-specific globals such as `DurableObject`, `WebSocketPair`, and `caches`.
+
+```js
+import { defineConfig, Runtime } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig({
+  runtime: Runtime.Cloudflare
+})
+```
+
+Hono projects with `wrangler`, `@cloudflare/workers-types`, or `@cloudflare/vitest-pool-workers` are detected as Cloudflare automatically. Browser frameworks deployed with Wrangler stay browser-first unless you explicitly choose `Runtime.Cloudflare`.
+
+### `Runtime.Bun`
+
+Adds Bun, Node, and browser-compatible globals. Detection looks for Bun runtime types or Bun runtime configuration.
+
+### `Runtime.Deno`
+
+Adds `Deno` and browser-compatible globals. Detection looks for Deno config files or the Deno ESLint plugin.
 
 ## Auto-Detection
 
@@ -97,11 +122,14 @@ When no `runtime` is set explicitly, auto-detection reads `package.json` and the
 | Signal | Detected Runtime |
 | :--- | :--- |
 | Presence of `next`, `astro`, `vite`, `solid-js`, `svelte`, `vue` | `Browser` |
-| Presence of `express`, `fastify`, `nestjs`, `hono`, `koa` | `Node` |
-| Presence of `@cloudflare/workers-types`, `wrangler`, `@vercel/edge` | `Worker` |
+| Presence of `@nestjs/core` | `Node` |
+| Presence of Hono plus `wrangler`, `@cloudflare/workers-types`, or `@cloudflare/vitest-pool-workers` | `Cloudflare` |
+| Presence of Cloudflare worker signals without a browser framework | `Cloudflare` |
+| Presence of Bun runtime config/types | `Bun` |
+| Presence of Deno config/plugin signals | `Deno` |
 | No clear signal | `Universal` |
 
-Detection precedence (highest wins): `Worker > Node > Browser > Universal`.
+Detection precedence (highest wins): `Cloudflare > Bun/Deno > Worker > Node > Browser > Universal`.
 
 Use `detection: { runtime: false }` to disable runtime auto-detection and rely solely on your explicit `runtime` option.
 

@@ -12,6 +12,7 @@ The `formats` option enables linting for non-code or mixed-content file formats.
 | JSONC | `Format.Jsonc` | The project uses JSON with comments. |
 | YAML | `Format.Yaml` | The project contains YAML configuration files. |
 | TOML | `Format.Toml` | The project contains TOML configuration files. |
+| Package.json | `Format.PackageJson` | The project's package.json should be semantically validated for npm standards. |
 | GraphQL | `Format.Graphql` | The project contains GraphQL documents. |
 
 ## Example

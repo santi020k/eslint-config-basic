@@ -9,10 +9,12 @@ words:
   - asynciterable
   - behaviour
   - better-tailwindcss
+  - bunfig
   - canonicalurl
   - changeset
   - changesets
   - codecov
+  - codegen
   - commitizen
   - clinerules
   - commonmark

@@ -545,7 +545,47 @@ describe('detectProjectOptions', () => {
     const options = detectProjectOptions()
 
     expect(options.detectedFrameworks).toContain('hono')
-    expect(options.runtime).toBe(Runtime.Worker)
+    expect(options.runtime).toBe(Runtime.Cloudflare)
+  })
+
+  it('should detect Bun, Deno, and Cloudflare runtime signals', () => {
+    vi.mocked(fs.existsSync).mockImplementation(path => {
+      const p = path.toString()
+
+      return p.includes('package.json') || p.endsWith('bun.lock') || p.endsWith('deno.json') || p.endsWith('wrangler.jsonc')
+    })
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      devDependencies: {
+        '@deno/eslint-plugin': 'latest',
+        wrangler: 'latest'
+      },
+      packageManager: 'bun@1.2.0'
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.runtime).toBe(Runtime.Cloudflare)
+  })
+
+  it('should detect workspace projects from package workspaces', () => {
+    vi.mocked(fs.existsSync).mockImplementation(path => {
+      const p = path.toString()
+
+      return p.includes('package.json') || p.endsWith('packages') || p.endsWith('packages/core/package.json')
+    })
+
+    vi.mocked(fs.readdirSync).mockReturnValue([
+      { isDirectory: () => true, isFile: () => false, name: 'core' }
+    ] as unknown as ReturnType<typeof fs.readdirSync>)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      workspaces: ['packages/*']
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.projects).toHaveProperty('packages/core')
   })
 
   it('should detect Cloudflare Worker runtime for non-framework worker packages', () => {
@@ -558,7 +598,7 @@ describe('detectProjectOptions', () => {
     const options = detectProjectOptions()
 
     expect(options.detectedFrameworks).toEqual([])
-    expect(options.runtime).toBe(Runtime.Worker)
+    expect(options.runtime).toBe(Runtime.Cloudflare)
   })
 
   it('should not force Worker runtime for browser frameworks deployed with Wrangler', () => {
@@ -801,7 +841,7 @@ describe('detectProjectOptions', () => {
 
     const options = detectProjectOptions()
 
-    expect(options.runtime).toBe(Runtime.Worker)
+    expect(options.runtime).toBe(Runtime.Cloudflare)
   })
 
   it('should not downgrade runtime when universal frameworks are combined with node frameworks', () => {

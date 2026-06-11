@@ -12,13 +12,17 @@ import {
   autogen,
   bestPractices,
   biome,
+  command,
   cspell,
   cypress,
+  docker,
   drizzle,
+  githubActions,
   googleGenAi,
   graphql,
   i18next,
   jest,
+  jestDom,
   jsdoc,
   jsonc,
   langchain,
@@ -28,7 +32,9 @@ import {
   mcp,
   mdx,
   mikroOrm,
+  nx,
   openAiAgents,
+  packageJson,
   perfectionist,
   playwright,
   prettier,
@@ -119,6 +125,8 @@ export const getIntegrationConfigs = async (
 
   if (testing.includes(Testing.Jest)) configs.push(...await jest())
 
+  if (testing.includes(Testing.JestDom)) configs.push(...await jestDom())
+
   if (testing.includes(Testing.Cypress)) configs.push(...await cypress())
 
   if (testing.includes(Testing.TestingLibrary)) configs.push(...await testingLibrary())
@@ -127,6 +135,8 @@ export const getIntegrationConfigs = async (
   if (formats.includes(Format.Mdx)) configs.push(...await mdx())
 
   if (formats.includes(Format.Markdown)) configs.push(...await markdown())
+
+  if (formats.includes(Format.PackageJson)) configs.push(...await packageJson())
 
   if (formats.includes(Format.Jsonc)) configs.push(...await jsonc())
 
@@ -154,6 +164,14 @@ export const getIntegrationConfigs = async (
   if (extensions.includes(Extension.Perfectionist)) configs.push(...await perfectionist())
 
   // Standalone tools
+  if (tools.includes(Tool.Command)) configs.push(...await command())
+
+  if (tools.includes(Tool.GithubActions)) configs.push(...await githubActions())
+
+  if (tools.includes(Tool.Docker)) configs.push(...await docker())
+
+  if (tools.includes(Tool.Nx)) configs.push(...await nx())
+
   if (tools.includes(Tool.Jsdoc)) configs.push(...await jsdoc())
 
   if (tools.includes(Tool.Swagger)) configs.push(...await swagger())

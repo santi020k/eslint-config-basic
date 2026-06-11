@@ -56,7 +56,7 @@ describe('detectProjectOptions fixture matrix', () => {
     expect(options.nextMode).toBe(NextMode.AppRouter)
   })
 
-  it('resolves Worker runtime for Hono Cloudflare fixtures', () => {
+  it('resolves Cloudflare runtime for Hono Cloudflare fixtures', () => {
     const dir = createFixtureProject(
       {
         dependencies: { hono: 'latest' },
@@ -66,7 +66,7 @@ describe('detectProjectOptions fixture matrix', () => {
 
     const options = detectProjectOptions(dir)
 
-    expect(options.runtime).toBe(Runtime.Worker)
+    expect(options.runtime).toBe(Runtime.Cloudflare)
     expect(options.preset).toBe(Preset.Worker)
     expect(options.detectedFrameworks).toContain('hono')
   })

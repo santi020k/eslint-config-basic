@@ -25,6 +25,36 @@ export default await defineConfig({
 })
 ```
 
+The same optional configs can be written with strings:
+
+```js
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig({
+  extensions: ['unicorn', 'security'],
+  formats: ['markdown'],
+  libraries: ['tailwind', 'storybook'],
+  testing: ['vitest'],
+  tools: ['prettier']
+})
+```
+
+Or use `features` when you want a single boolean map:
+
+```js
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig({
+  features: {
+    markdown: true,
+    prettier: true,
+    security: true,
+    tailwind: true,
+    vitest: true
+  }
+})
+```
+
 ## How to Read the Tooling Docs
 
 - Use [Libraries](/tooling/libraries) for framework-adjacent integrations such as Tailwind or Storybook.
@@ -35,7 +65,7 @@ export default await defineConfig({
 
 ## Detection Notes
 
-Some integrations can be inferred from `package.json`, but the final configuration still stays explicit in the source you write or the file the CLI scaffolds for you.
+Some integrations can be inferred from `package.json`, but you can still make the final configuration explicit with enums, strings, or `features`. Set a `features` entry to `false` to remove a detected or preset-enabled optional config.
 
 ## Repository Examples
 

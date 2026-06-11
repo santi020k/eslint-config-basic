@@ -9,7 +9,7 @@ description: "@santi020k/eslint-config-basic"
 
 > `const` **reactConfig**: `TSESLint.FlatConfig.ConfigArray`
 
-Defined in: [react/src/index.ts:26](https://github.com/santi020k/eslint-config-basic/blob/60bb20828470274a155bb6788d4af182189bfcce/packages/react/src/index.ts#L26)
+Defined in: [react/src/index.ts:28](https://github.com/santi020k/eslint-config-basic/blob/6304c1f95871853c2710ecedbe454bb6946a03ab/packages/react/src/index.ts#L28)
 
 React ESLint configuration
 Includes React plugin recommended rules and React Hooks
@@ -20,7 +20,7 @@ Includes React plugin recommended rules and React Hooks
 
 > `const` **rules**: `TSESLint.Linter.RulesRecord`
 
-Defined in: [react/src/rules.ts:4](https://github.com/santi020k/eslint-config-basic/blob/60bb20828470274a155bb6788d4af182189bfcce/packages/react/src/rules.ts#L4)
+Defined in: [react/src/rules.ts:4](https://github.com/santi020k/eslint-config-basic/blob/6304c1f95871853c2710ecedbe454bb6946a03ab/packages/react/src/rules.ts#L4)
 
 ## References
 
