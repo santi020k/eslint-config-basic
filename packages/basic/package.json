@@ -54,7 +54,6 @@
     "eslint": "^10.2.1"
   },
   "devDependencies": {
-    "eslint": "^10.2.1",
     "publint": "^0.3.21",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"

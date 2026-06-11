@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://eslint.santi020k.com/sitemap-index.xml

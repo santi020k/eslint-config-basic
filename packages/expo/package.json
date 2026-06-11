@@ -28,7 +28,6 @@
   },
   "dependencies": {
     "@eslint/eslintrc": "^3.3.5",
-    "@santi020k/eslint-config-core": "workspace:^",
     "cross-dirname": "^0.1.0",
     "eslint-config-expo": "^56.0.4",
     "@typescript-eslint/utils": "^8.61.0",

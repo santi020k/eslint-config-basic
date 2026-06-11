@@ -49,9 +49,28 @@ const urls = getDocUrls(docsDir).sort()
 
 test.describe('Accessibility', () => {
   for (const url of urls) {
-    test(`page ${url} should have no accessibility violations`, async ({ page }) => {
+    test(`page ${url} should have no accessibility violations in light mode`, async ({ page }) => {
       await page.goto(url)
       await page.waitForLoadState('networkidle')
+      await page.evaluate(() => {
+        document.documentElement.dataset.theme = 'light'
+      })
+      await expectNoUnexpectedAccessibilityViolations(page, [
+        {
+          htmlIncludes: 'role="region"',
+          id: 'landmark-unique'
+        }
+      ])
+    })
+
+    test(`page ${url} should have no accessibility violations in dark mode`, async ({ page }) => {
+      await page.goto(url)
+      await page.waitForLoadState('networkidle')
+      await page.evaluate(() => {
+        document.documentElement.dataset.theme = 'dark'
+      })
+      // wait for theme to apply
+      await page.waitForTimeout(100)
       await expectNoUnexpectedAccessibilityViolations(page, [
         {
           htmlIncludes: 'role="region"',

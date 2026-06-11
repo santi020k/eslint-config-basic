@@ -293,9 +293,10 @@ body {
   border-radius: var(--s2k-radius);
 }
 
-.hero .actions a[data-variant='primary'] {
-  background: hsl(var(--s2k-brand-solid));
-  color: white;
+.hero .actions a[data-variant='primary'],
+.sl-link-button.primary {
+  background: hsl(var(--s2k-brand-solid)) !important;
+  color: white !important;
 }
 
 .s2k-hero-visual {

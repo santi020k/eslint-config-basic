@@ -269,10 +269,34 @@ describe('CLI command UX', () => {
 
     const output = logSpy.mock.calls.flat().join('\n')
 
-    expect(output).toContain('ESLint Basic doctor: failed')
-    expect(output).toContain('could not be loaded')
+    expect(output).toContain('ESLint Basic doctor: passed with warnings')
     expect(output).toContain('Config still imports v1 framework packages')
     expect(output).toContain('Workspace packages were detected')
+    logSpy.mockRestore()
+    process.exitCode = undefined
+  })
+
+  it('should fail doctor when the config file cannot be loaded', async () => {
+    const cwd = createTempProject({
+      name: 'tmp-project',
+      scripts: {
+        lint: 'eslint .'
+      },
+      type: 'module'
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    writeFileSync(
+      join(cwd, 'eslint.config.js'),
+      'import missingConfig from \'missing-eslint-config-package\'\nexport default [missingConfig]'
+    )
+
+    await handleDoctor(cwd)
+
+    const output = logSpy.mock.calls.flat().join('\n')
+
+    expect(output).toContain('ESLint Basic doctor: failed')
+    expect(output).toContain('could not be loaded')
     logSpy.mockRestore()
     process.exitCode = undefined
   })

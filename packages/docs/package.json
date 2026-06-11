@@ -28,7 +28,6 @@
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.60.0",
     "astro": "^6.4.4",
-    "axe-html-reporter": "^2.2.11",
     "typescript": "^5.9.3"
   },
   "engines": {

@@ -1,9 +1,11 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
-  "ignore": [
+  "ignoreWorkspaces": [
+    "packages/playground",
     "packages/playground/**"
   ],
   "ignoreDependencies": [
+    "@santi020k/eslint-config-basic",
     "typedoc-plugin-markdown",
     "tailwindcss"
   ],
@@ -25,8 +27,11 @@
       "project": ["src/**/*.{js,jsx,ts,tsx,vue,svelte,astro}"]
     },
     "packages/docs": {
-      "project": [".vitepress/**/*.ts"],
-      "entry": []
+      "project": ["src/**/*.ts", "tests/**/*.ts"]
+    },
+    "packages/tests": {
+      "entry": ["src/**/*.test.ts"],
+      "project": ["src/**/*.ts"]
     },
     "packages/basic": {
       "ignoreDependencies": []
@@ -42,7 +47,8 @@
         "eslint-plugin-jsdoc",
         "eslint-plugin-playwright",
         "eslint-plugin-security",
-        "eslint-plugin-sonarjs"
+        "eslint-plugin-sonarjs",
+        "eslint-plugin-vercel-ai-security"
       ]
     },
     "packages/expo": {

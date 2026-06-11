@@ -22,33 +22,33 @@ export default defineConfig({
   resolve: {
     alias: workspacePackageAliases
   },
+  root: rootDir,
   test: {
     coverage: {
-      all: true,
       exclude: [
         'node_modules/**',
-        '../docs/**',
-        '../tests/**',
-        '../playground/**',
+        'packages/docs/**',
+        'packages/tests/**',
+        'packages/playground/**',
         '**/*.d.ts',
         '**/*.test.ts',
         '**/*.config.ts'
       ],
-      include: ['../*/src/**/*.ts'],
+      include: ['packages/*/src/**/*.ts'],
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
-      reportsDirectory: './coverage',
+      reportsDirectory: './packages/tests/coverage',
       thresholds: {
         100: false,
-        branches: 50,
-        functions: 65,
-        lines: 70,
-        statements: 70
+        branches: 80,
+        functions: 90,
+        lines: 85,
+        statements: 85
       },
-      thresholdsAutoUpdate: false
     },
     environment: 'node',
     globals: true,
+    include: ['packages/tests/src/**/*.test.ts'],
     pool: 'forks'
   }
 })
