@@ -20,7 +20,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup && tsc -p tsconfig.json --emitDeclarationOnly --declaration --declarationMap --outDir dist --rootDir src --noEmit false",
+    "build": "tsup",
     "dev": "tsup --watch",
     "clean": "rm -rf dist",
     "check:exports": "publint",

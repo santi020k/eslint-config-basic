@@ -25,7 +25,7 @@
     "basic-eslint": "./dist/cli.js"
   },
   "scripts": {
-    "build": "tsup && tsc -p tsconfig.json --emitDeclarationOnly --declaration --declarationMap --outDir dist --rootDir src --noEmit false",
+    "build": "tsup",
     "build:pack": "npm pack",
     "dev": "tsup --watch",
     "clean": "rm -rf dist",

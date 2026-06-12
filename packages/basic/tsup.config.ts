@@ -5,6 +5,13 @@ const env = process.env.NODE_ENV
 const shared = {
   splitting: true,
   clean: true,
+  // TODO(tsup): remove this once tsup's DTS pipeline supports TypeScript 6
+  // without injecting deprecated baseUrl. See egoist/tsup#1388 and #1389.
+  dts: {
+    compilerOptions: {
+      ignoreDeprecations: '6.0'
+    }
+  },
   bundle: false,
   format: ['esm' as const],
   minify: false,
