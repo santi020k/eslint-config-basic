@@ -1,0 +1,15 @@
+{
+  "name": "@santi020k/playground-nuxt",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint . --no-warn-ignored",
+    "lint:fix": "eslint . --fix --no-warn-ignored",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@santi020k/eslint-config-basic": "workspace:*",
+    "eslint": "^10.2.1",
+    "typescript": "^5.9.3"
+  }
+}

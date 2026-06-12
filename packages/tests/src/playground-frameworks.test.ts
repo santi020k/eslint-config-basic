@@ -24,4 +24,20 @@ describe('new framework playgrounds', () => {
   it('lints the Slidev playground with the bundled framework config', async () => {
     await expect(lintPlayground('@santi020k/playground-slidev')).resolves.toBeUndefined()
   })
-}, 120_000)
+
+  it('lints the Lit playground with the bundled framework config', async () => {
+    await expect(lintPlayground('@santi020k/playground-lit')).resolves.toBeUndefined()
+  })
+
+  it('lints the Nuxt playground with the bundled framework config', async () => {
+    await expect(lintPlayground('@santi020k/playground-nuxt')).resolves.toBeUndefined()
+  })
+
+  it('lints the React Router playground with the bundled framework config', async () => {
+    await expect(lintPlayground('@santi020k/playground-react-router')).resolves.toBeUndefined()
+  })
+
+  it('lints the TanStack Start playground with the bundled framework config', async () => {
+    await expect(lintPlayground('@santi020k/playground-tanstack-start')).resolves.toBeUndefined()
+  })
+}, 360_000)

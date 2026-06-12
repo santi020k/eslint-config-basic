@@ -479,6 +479,105 @@ describe('detectProjectOptions', () => {
     expect(options.detectedFrameworks).toContain('remix')
   })
 
+  it('should detect React Router if @react-router/dev is a dependency', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      devDependencies: { '@react-router/dev': 'latest' }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.detectedFrameworks).toContain('react-router')
+    expect(options.detectedFrameworks).toContain('react') // react-router implies react
+    expect(options.frameworks).not.toHaveProperty('react-router')
+    expect(options.runtime).toBe(Runtime.Browser)
+  })
+
+  it('should detect Nuxt if nuxt is a dependency', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      dependencies: { nuxt: 'latest' }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.detectedFrameworks).toContain('nuxt')
+    expect(options.detectedFrameworks).toContain('vue') // nuxt implies vue
+    expect(options.frameworks?.nuxt).toBeUndefined()
+    expect(options.runtime).toBe(Runtime.Universal)
+  })
+
+  it('should detect Lit if lit is a dependency', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      dependencies: { lit: 'latest' }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.detectedFrameworks).toContain('lit')
+    expect(options.frameworks?.lit).toBeUndefined()
+    expect(options.runtime).toBe(Runtime.Browser)
+  })
+
+  it('should detect Lit if lit-element is a dependency', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      dependencies: { 'lit-element': 'latest' }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.detectedFrameworks).toContain('lit')
+  })
+
+  it('should detect TanStack Start if @tanstack/react-start is a dependency', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      dependencies: { '@tanstack/react-start': 'latest' }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.detectedFrameworks).toContain('tanstack-start')
+    expect(options.detectedFrameworks).toContain('react') // react-start implies react
+    expect(options.frameworks).not.toHaveProperty('tanstack-start')
+    expect(options.runtime).toBe(Runtime.Universal)
+  })
+
+  it('should detect TanStack Start if @tanstack/solid-start is a dependency', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      dependencies: { '@tanstack/solid-start': 'latest' }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.detectedFrameworks).toContain('tanstack-start')
+    expect(options.detectedFrameworks).toContain('solid') // solid-start implies solid
+    expect(options.runtime).toBe(Runtime.Universal)
+  })
+
+  it('should not detect Vite framework config when a meta-framework owns the build', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      dependencies: { '@tanstack/react-start': 'latest' },
+      devDependencies: { vite: 'latest' }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.detectedFrameworks).toContain('tanstack-start')
+    expect(options.detectedFrameworks).not.toContain('vite')
+  })
+
   it('should detect Expo if expo is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 

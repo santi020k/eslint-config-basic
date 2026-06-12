@@ -617,20 +617,53 @@ describe('Framework Composition — remaining frameworks', () => {
     expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-remix')
   })
 
-  it('should handle all twelve frameworks combined', async () => {
+  it('should return config with Lit when lit framework is specified', async () => {
+    const config = await defineConfig({
+      frameworks: { lit: [{ name: 'mock-lit', rules: {} }] }
+    })
+
+    expect(Array.isArray(config)).toBe(true)
+
+    expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-lit')
+  })
+
+  it('should return config with Nuxt when nuxt framework is specified', async () => {
+    const config = await defineConfig({
+      frameworks: { nuxt: [{ name: 'mock-nuxt', rules: {} }] }
+    })
+
+    expect(Array.isArray(config)).toBe(true)
+
+    expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-nuxt')
+  })
+
+  it('should return config with TanStack Start when tanstack-start framework is specified', async () => {
+    const config = await defineConfig({
+      frameworks: { 'tanstack-start': [{ name: 'mock-tanstack-start', rules: {} }] }
+    })
+
+    expect(Array.isArray(config)).toBe(true)
+
+    expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-tanstack-start')
+  })
+
+  it('should handle all bundled frameworks combined', async () => {
     const config = await defineConfig({
       frameworks: {
         angular: [{ name: 'mock-angular', rules: {} }],
         astro: [{ name: 'mock-astro', rules: {} }],
         expo: [{ name: 'mock-expo', rules: {} }],
         hono: [{ name: 'mock-hono', rules: {} }],
+        lit: [{ name: 'mock-lit', rules: {} }],
         nest: [{ name: 'mock-nest', rules: {} }],
         next: [{ name: 'mock-next', rules: {} }],
+        nuxt: [{ name: 'mock-nuxt', rules: {} }],
         qwik: [{ name: 'mock-qwik', rules: {} }],
         react: [{ name: 'mock-react', rules: {} }],
         'react-router': [{ name: 'mock-remix', rules: {} }],
         solid: [{ name: 'mock-solid', rules: {} }],
         svelte: [{ name: 'mock-svelte', rules: {} }],
+        'tanstack-start': [{ name: 'mock-tanstack-start', rules: {} }],
         vue: [{ name: 'mock-vue', rules: {} }]
       },
       typescript: true
@@ -646,6 +679,9 @@ describe('Framework Composition — remaining frameworks', () => {
     expect(names).toContain('mock-angular')
     expect(names).toContain('mock-qwik')
     expect(names).toContain('mock-remix')
+    expect(names).toContain('mock-lit')
+    expect(names).toContain('mock-nuxt')
+    expect(names).toContain('mock-tanstack-start')
   })
 
   it('should handle all formats combined', async () => {

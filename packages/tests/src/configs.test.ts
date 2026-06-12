@@ -14,14 +14,17 @@ import {
 } from '@santi020k/eslint-config-core'
 import { expoConfig } from '@santi020k/eslint-config-expo'
 import { createHonoConfig, honoConfig } from '@santi020k/eslint-config-hono'
+import { lit as litConfig } from '@santi020k/eslint-config-lit'
 import { nestConfig } from '@santi020k/eslint-config-nest'
 import { nextConfig } from '@santi020k/eslint-config-next'
+import { nuxt as nuxtConfig } from '@santi020k/eslint-config-nuxt'
 import { qwik as qwikConfig } from '@santi020k/eslint-config-qwik'
 import { reactConfig } from '@santi020k/eslint-config-react'
 import { reactRouter as reactRouterConfig } from '@santi020k/eslint-config-react-router'
 import { slidevConfig } from '@santi020k/eslint-config-slidev'
 import { solidConfig } from '@santi020k/eslint-config-solid'
 import { svelteConfig } from '@santi020k/eslint-config-svelte'
+import { tanstackStart as tanstackStartConfig } from '@santi020k/eslint-config-tanstack-start'
 import { typescriptConfig } from '@santi020k/eslint-config-typescript'
 import { viteConfig } from '@santi020k/eslint-config-vite'
 import { vueConfig } from '@santi020k/eslint-config-vue'
@@ -244,6 +247,72 @@ describe('React Router Config', () => {
   it('should include jsx-a11y plugin', () => {
     const plugins = reactRouterConfig.flatMap(c => Object.keys(c.plugins ?? {}))
     expect(plugins).toContain('jsx-a11y')
+  })
+
+  it('should disable unused-expression rules in virtual script blocks', () => {
+    const virtualConfig = reactRouterConfig.find(config => config.name === 'eslint-config-react-router/virtual-script-rules')
+
+    expect(virtualConfig?.rules?.['@typescript-eslint/no-unused-expressions']).toBe('off')
+  })
+})
+
+describe('Lit Config', () => {
+  it('should export lit as an array', () => {
+    expect(Array.isArray(litConfig)).toBe(true)
+  })
+
+  it('should include wc and lit recommended entries', () => {
+    const names = litConfig.flatMap(c => (c.name ? [c.name] : []))
+
+    expect(names).toContain('eslint-config-lit/wc-recommended')
+    expect(names).toContain('eslint-config-lit/lit-recommended')
+  })
+
+  it('should include wc and lit plugins', () => {
+    const plugins = litConfig.flatMap(c => Object.keys(c.plugins ?? {}))
+
+    expect(plugins).toContain('wc')
+    expect(plugins).toContain('lit')
+  })
+})
+
+describe('Nuxt Config', () => {
+  it('should export nuxt as an array', () => {
+    expect(Array.isArray(nuxtConfig)).toBe(true)
+  })
+
+  it('should include rules and server-runtime entries', () => {
+    const names = nuxtConfig.flatMap(c => (c.name ? [c.name] : []))
+
+    expect(names).toContain('eslint-config-nuxt/rules')
+    expect(names).toContain('eslint-config-nuxt/server-runtime')
+  })
+
+  it('should include the nuxt plugin with prefer-import-meta enabled', () => {
+    const rulesConfig = nuxtConfig.find(config => config.name === 'eslint-config-nuxt/rules')
+
+    expect(Object.keys(rulesConfig?.plugins ?? {})).toContain('nuxt')
+    expect(rulesConfig?.rules?.['nuxt/prefer-import-meta']).toBe('error')
+  })
+})
+
+describe('TanStack Start Config', () => {
+  it('should export tanstackStart as an array', () => {
+    expect(Array.isArray(tanstackStartConfig)).toBe(true)
+  })
+
+  it('should include router and query entries', () => {
+    const names = tanstackStartConfig.flatMap(c => (c.name ? [c.name] : []))
+
+    expect(names).toContain('eslint-config-tanstack-start/router')
+    expect(names).toContain('eslint-config-tanstack-start/query')
+  })
+
+  it('should include TanStack router and query plugins', () => {
+    const plugins = tanstackStartConfig.flatMap(c => Object.keys(c.plugins ?? {}))
+
+    expect(plugins).toContain('@tanstack/router')
+    expect(plugins).toContain('@tanstack/query')
   })
 })
 

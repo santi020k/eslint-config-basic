@@ -1,0 +1,21 @@
+{
+  "name": "@santi020k/playground-react-router",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint . --no-warn-ignored",
+    "lint:fix": "eslint . --fix --no-warn-ignored",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@santi020k/eslint-config-basic": "workspace:*",
+    "eslint": "^10.2.1",
+    "react": "19.2.5",
+    "react-dom": "19.2.5",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3"
+  }
+}
