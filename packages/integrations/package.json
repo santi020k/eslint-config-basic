@@ -40,7 +40,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && tsc -p tsconfig.json --emitDeclarationOnly --declaration --declarationMap --outDir dist --rootDir src --noEmit false",
     "dev": "tsup --watch",
     "clean": "rm -rf dist",
     "check:exports": "publint",
@@ -107,7 +107,13 @@
     "typescript": "^6.0.3"
   },
   "peerDependencies": {
-    "eslint": "^9.0.0 || ^10.0.0"
+    "eslint": "^9.0.0 || ^10.0.0",
+    "typescript": ">=5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
   },
   "engines": {
     "node": ">=22.18.0"

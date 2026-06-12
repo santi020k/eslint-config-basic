@@ -24,6 +24,7 @@ words:
   - dev-dependency
   - dts
   - eslint-config
+  - esbuild
   - esmodule
   - expo
   - fetchcontent
@@ -78,6 +79,7 @@ words:
   - project-type
   - proptypes
   - qwik
+  - rimraf
   - root-dir
   - ACMR
   - santi

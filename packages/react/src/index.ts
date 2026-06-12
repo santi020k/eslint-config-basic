@@ -29,9 +29,8 @@ const languageOptions: TSESLint.FlatConfig.LanguageOptions = {
 
 /**
  * React ESLint configuration
- * Uses `@eslint-react/eslint-plugin` (modern, ESLint 10-native successor to
- * eslint-plugin-react, including the hooks rules) plus React Compiler and
- * React Refresh.
+ * Uses `@eslint-react/eslint-plugin` for React and hooks rules, plus React
+ * Compiler and React Refresh.
  */
 export const reactConfig: TSESLint.FlatConfig.ConfigArray = [
   {

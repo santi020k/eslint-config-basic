@@ -36,7 +36,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && tsc -p tsconfig.json --emitDeclarationOnly --declaration --declarationMap --outDir dist --rootDir src --noEmit false",
     "dev": "tsup --watch",
     "clean": "rm -rf dist",
     "check:exports": "publint",
@@ -44,7 +44,7 @@
   },
   "dependencies": {
     "@eslint/config-helpers": "^0.6.0",
-    "@eslint/js": "^9.0.0 || ^10.0.0",
+    "@eslint/js": "^9.0.0",
     "@stylistic/eslint-plugin": "^5.10.0",
     "eslint-plugin-import-x": "^4.16.2",
     "eslint-plugin-jsx-a11y": "^6.10.2",
