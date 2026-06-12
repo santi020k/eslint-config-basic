@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs'
 import { join } from 'node:path'
 
 import { applyStrictMode } from './compose.js'
-import { createDetectedFrameworkFlags } from './frameworks.js'
+import { createDetectedFrameworkFlags, remix as internalRemix  } from './frameworks.js'
 import { getIntegrationConfigs, getPrettierConfig } from './integrations.js'
 import { resolveFramework, resolvePreset } from './resolvers.js'
 
@@ -41,17 +41,29 @@ export {
   astro,
   expoConfig,
   hono,
+  lit,
   nestConfig,
   nextConfig,
+  nuxt,
   qwik,
   reactConfig,
-  remix,
+  reactRouter,
+
   slidev,
   solidConfig,
   svelteConfig,
+  tanstackStart,
   vite,
   vueConfig
 } from './frameworks.js'
+
+/**
+ * @deprecated Remix merged into React Router v7. Use
+ * `@santi020k/eslint-config-react-router` (the `react-router` framework key)
+ * instead. This alias re-exports the React Router config and will be removed
+ * in the next major version.
+ */
+export const remix = internalRemix
 
 // Re-export core types and utilities
 export type {
@@ -112,13 +124,18 @@ export {
   bestPractices,
   biome,
   command,
+  compat,
   cspell,
+  css,
   cypress,
+  deMorgan,
+  depend,
   docker,
   drizzle,
   githubActions,
   googleGenAi,
   graphql,
+  html,
   i18next,
   jest,
   jestDom,
@@ -131,11 +148,14 @@ export {
   mcp,
   mdx,
   mikroOrm,
+  node,
   nx,
   openAiAgents,
+  oxlint,
   packageJson,
   perfectionist,
   playwright,
+  pnpm,
   prettier,
   prisma,
   regexp,
@@ -582,11 +602,25 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
   const extensions = applyStrictProfileDefaults(configuredExtensions, strict)
   const resolvedFrameworks = { ...frameworks }
 
-  if ((resolvedFrameworks.next || resolvedFrameworks.expo || resolvedFrameworks.remix) && !resolvedFrameworks.react) {
+  if (
+    (
+      resolvedFrameworks.next ||
+      resolvedFrameworks.expo ||
+      // eslint-disable-next-line @typescript-eslint/no-deprecated
+      resolvedFrameworks.remix ||
+      resolvedFrameworks['react-router'] ||
+      resolvedFrameworks['tanstack-start']
+    ) &&
+    !resolvedFrameworks.react
+  ) {
     resolvedFrameworks.react = true
   }
 
   if (resolvedFrameworks.slidev && !resolvedFrameworks.vue) {
+    resolvedFrameworks.vue = true
+  }
+
+  if (resolvedFrameworks.nuxt && !resolvedFrameworks.vue) {
     resolvedFrameworks.vue = true
   }
 
@@ -624,7 +658,12 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
   const solidParam = resolveFramework('solid', resolvedFrameworks.solid)
   const angularParam = resolveFramework('angular', resolvedFrameworks.angular)
   const qwikParam = resolveFramework('qwik', resolvedFrameworks.qwik)
+  // eslint-disable-next-line @typescript-eslint/no-deprecated
   const remixParam = resolveFramework('remix', resolvedFrameworks.remix)
+  const reactRouterParam = resolveFramework('react-router', resolvedFrameworks['react-router'])
+  const tanstackStartParam = resolveFramework('tanstack-start', resolvedFrameworks['tanstack-start'])
+  const nuxtParam = resolveFramework('nuxt', resolvedFrameworks.nuxt)
+  const litParam = resolveFramework('lit', resolvedFrameworks.lit)
   const slidevParam = resolveFramework('slidev', resolvedFrameworks.slidev, { runtime })
   const viteParam = resolveFramework('vite', resolvedFrameworks.vite, { runtime })
 
@@ -700,6 +739,10 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
     ...angularParam,
     ...qwikParam,
     ...remixParam,
+    ...reactRouterParam,
+    ...tanstackStartParam,
+    ...nuxtParam,
+    ...litParam,
     ...slidevParam,
     ...viteParam,
 

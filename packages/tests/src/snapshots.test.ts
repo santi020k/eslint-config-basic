@@ -9,7 +9,7 @@ import { nestConfig } from '@santi020k/eslint-config-nest'
 import { nextConfig } from '@santi020k/eslint-config-next'
 import { qwik as qwikConfig } from '@santi020k/eslint-config-qwik'
 import { reactConfig } from '@santi020k/eslint-config-react'
-import { remix as remixConfig } from '@santi020k/eslint-config-remix'
+import remixConfig from '@santi020k/eslint-config-remix'
 import { solidConfig } from '@santi020k/eslint-config-solid'
 import { svelteConfig } from '@santi020k/eslint-config-svelte'
 import { typescriptConfig } from '@santi020k/eslint-config-typescript'
@@ -264,10 +264,10 @@ describe('Config Snapshots — Critical Rule Entries', () => {
 
   it('react critical rule entries should match snapshot', () => {
     const entries = extractRuleEntries(reactConfig as Record<string, unknown>[], [
-      'react/jsx-pascal-case',
-      'react/self-closing-comp',
-      'react-hooks/rules-of-hooks',
-      'react-hooks/exhaustive-deps'
+      '@eslint-react/no-missing-key',
+      '@eslint-react/rules-of-hooks',
+      '@eslint-react/exhaustive-deps',
+      'react-compiler/react-compiler'
     ])
 
     expect(entries).toMatchSnapshot()

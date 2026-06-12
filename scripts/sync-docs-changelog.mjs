@@ -3,7 +3,7 @@ import { join } from 'node:path'
 
 const rootDir = process.cwd()
 const sourcePath = join(rootDir, 'packages/basic/CHANGELOG.md')
-const targetPath = join(rootDir, 'packages/docs/src/content/docs/guide/changelog.md')
+const targetPath = join(rootDir, 'apps/docs/src/content/docs/guide/changelog.md')
 
 try {
   const content = readFileSync(sourcePath, 'utf8')

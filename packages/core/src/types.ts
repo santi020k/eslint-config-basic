@@ -54,6 +54,31 @@ export enum Extension {
    * Import boundary rules for common app, workspace, and generated-code edges.
    */
   Boundaries = 'boundaries',
+
+  /**
+   * Browser compatibility checks against the project browserslist
+   */
+  Compat = 'compat',
+
+  /**
+   * Simplifies negated logical expressions (De Morgan's laws)
+   */
+  DeMorgan = 'de-morgan',
+
+  /**
+   * Suggests lighter or native alternatives to heavy dependencies
+   */
+  Depend = 'depend',
+
+  /**
+   * Node.js rules from eslint-plugin-n for server-side codebases
+   */
+  Node = 'node',
+
+  /**
+   * Disables rules already covered by Oxlint for hybrid linting setups
+   */
+  Oxlint = 'oxlint',
   Perfectionist = 'perfectionist',
   Regexp = 'regexp',
   Security = 'security',
@@ -66,7 +91,9 @@ export enum Extension {
  * Enum for linting non-JS/TS file formats
  */
 export enum Format {
+  Css = 'css',
   Graphql = 'graphql',
+  Html = 'html',
   Jsonc = 'jsonc',
   Markdown = 'markdown',
   Mdx = 'mdx',
@@ -216,6 +243,7 @@ export enum Tool {
   GithubActions = 'github-actions',
   Jsdoc = 'jsdoc',
   Nx = 'nx',
+  Pnpm = 'pnpm',
   Prettier = 'prettier',
   Swagger = 'swagger'
 }
@@ -291,7 +319,9 @@ export const ReactConfigKeys = [
   'react',
   'next',
   'expo',
-  'remix'
+  'react-router',
+  'remix',
+  'tanstack-start'
 ] as const
 
 /**
@@ -304,14 +334,18 @@ export type DetectedFrameworkName =
   'astro' |
   'expo' |
   'hono' |
+  'lit' |
   'nest' |
   'next' |
+  'nuxt' |
   'qwik' |
   'react' |
+  'react-router' |
   'remix' |
   'slidev' |
   'solid' |
   'svelte' |
+  'tanstack-start' |
   'vite' |
   'vue'
 
@@ -369,14 +403,24 @@ export interface EslintConfigOptions {
     astro?: ImportedFramework
     expo?: ImportedFramework
     hono?: ImportedFramework
+    lit?: ImportedFramework
     nest?: ImportedFramework
     next?: ImportedFramework
+    nuxt?: ImportedFramework
     qwik?: ImportedFramework
     react?: ImportedFramework
+
+    /** New name for Remix projects on React Router v7+. */
+    'react-router'?: ImportedFramework
+
+    /** @deprecated Remix merged into React Router v7 — use `react-router` instead. */
     remix?: ImportedFramework
     slidev?: ImportedFramework
     solid?: ImportedFramework
     svelte?: ImportedFramework
+
+    /** TanStack Start (React/Solid full-stack framework). */
+    'tanstack-start'?: ImportedFramework
     vite?: ImportedFramework
     vue?: ImportedFramework
   }

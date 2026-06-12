@@ -607,9 +607,9 @@ describe('Framework Composition — remaining frameworks', () => {
     expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-qwik')
   })
 
-  it('should return config with Remix when remix framework is specified', async () => {
+  it('should return config with React Router when react-router framework is specified', async () => {
     const config = await defineConfig({
-      frameworks: { remix: [{ name: 'mock-remix', rules: {} }] }
+      frameworks: { 'react-router': [{ name: 'mock-remix', rules: {} }] }
     })
 
     expect(Array.isArray(config)).toBe(true)
@@ -628,7 +628,7 @@ describe('Framework Composition — remaining frameworks', () => {
         next: [{ name: 'mock-next', rules: {} }],
         qwik: [{ name: 'mock-qwik', rules: {} }],
         react: [{ name: 'mock-react', rules: {} }],
-        remix: [{ name: 'mock-remix', rules: {} }],
+        'react-router': [{ name: 'mock-remix', rules: {} }],
         solid: [{ name: 'mock-solid', rules: {} }],
         svelte: [{ name: 'mock-svelte', rules: {} }],
         vue: [{ name: 'mock-vue', rules: {} }]

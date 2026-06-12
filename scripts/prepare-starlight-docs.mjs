@@ -5,7 +5,7 @@ import { pathToFileURL } from 'node:url'
 
 const docsRoot = process.env.DOCS_ROOT
   ? pathToFileURL(`${process.env.DOCS_ROOT.replace(/\/$/u, '')}/`)
-  : new URL('../packages/docs/src/content/docs/', import.meta.url)
+  : new URL('../apps/docs/src/content/docs/', import.meta.url)
 
 const titleCase = value => value
   .replaceAll('-', ' ')

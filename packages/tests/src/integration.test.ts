@@ -13,7 +13,7 @@ import { nestConfig } from '@santi020k/eslint-config-nest'
 import { nextConfig } from '@santi020k/eslint-config-next'
 import { qwik as qwikConfig } from '@santi020k/eslint-config-qwik'
 import { reactConfig } from '@santi020k/eslint-config-react'
-import { remix as remixConfig } from '@santi020k/eslint-config-remix'
+import remixConfig from '@santi020k/eslint-config-remix'
 import { slidev as slidevConfig } from '@santi020k/eslint-config-slidev'
 import { svelteConfig } from '@santi020k/eslint-config-svelte'
 import { vite as viteConfig } from '@santi020k/eslint-config-vite'
@@ -280,7 +280,7 @@ describe('Integration Tests', () => {
   describe('Remix', () => {
     it('should include Remix-specific rules in config', async () => {
       const config = await defineConfig({
-        frameworks: { remix: remixConfig },
+        frameworks: { 'react-router': remixConfig },
         typescript: false
       })
       const names = config.flatMap(c => (c.name ? [c.name] : []))

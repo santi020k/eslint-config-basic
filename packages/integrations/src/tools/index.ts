@@ -1,4 +1,5 @@
 export { cspell } from './cspell.js'
 export { jsdoc } from './jsdoc.js'
+export { pnpm } from './pnpm.js'
 export { prettier } from './prettier.js'
 export { swagger } from './swagger.js'

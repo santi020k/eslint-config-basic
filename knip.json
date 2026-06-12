@@ -26,7 +26,7 @@
     "packages/playground/*": {
       "project": ["src/**/*.{js,jsx,ts,tsx,vue,svelte,astro}"]
     },
-    "packages/docs": {
+    "apps/docs": {
       "project": ["src/**/*.ts", "tests/**/*.ts"]
     },
     "packages/tests": {

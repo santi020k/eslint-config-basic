@@ -147,7 +147,7 @@ export default defineConfig({
       customCss: ['./src/styles/starlight.css'],
       description: siteDescription,
       editLink: {
-        baseUrl: 'https://github.com/santi020k/eslint-config-basic/edit/main/packages/docs/'
+        baseUrl: 'https://github.com/santi020k/eslint-config-basic/edit/main/apps/docs/'
       },
       favicon: '/favicon.svg',
       head: [

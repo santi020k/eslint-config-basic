@@ -110,12 +110,12 @@ Documentation updates are required whenever a new optional integration is added 
 
 At minimum, review and update:
 
-- **`packages/docs/src/content/docs/tooling/overview.md`** — keep the overview aligned with the supported optional surface area
-- **`packages/docs/src/content/docs/tooling/{category}.md`** — add the new integration to the matching category page (`libraries`, `testing`, `formats`, `tools`, or `extensions`)
-- **`packages/docs/src/content/docs/guide/installation.md`** and **`packages/docs/src/content/docs/guide/configuration.md`** — update setup examples when the optional affects recommended workflows
-- **`packages/docs/src/content/docs/index.md`** — update homepage counts or marketing copy when integration totals change
-- **`packages/integrations/README.md`** and **`README.md`** — keep public summaries aligned when the supported tooling surface expands
-- **`packages/docs/CHANGELOG.md`** — add an unreleased documentation note when the docs site meaningfully changes
+- **`apps/docs/src/content/docs/tooling/overview.md`** — keep the overview aligned with the supported optional surface area
+- **`apps/docs/src/content/docs/tooling/{category}.md`** — add the new integration to the matching category page (`libraries`, `testing`, `formats`, `tools`, or `extensions`)
+- **`apps/docs/src/content/docs/guide/installation.md`** and **`apps/docs/src/content/docs/guide/configuration.md`** — update setup examples when the optional affects recommended workflows
+- **`apps/docs/src/content/docs/index.md`** — update homepage counts or marketing copy when integration totals change
+- **`README.md`** — update public README summaries if a new major capability is introduced
+- **`apps/docs/CHANGELOG.md`** — add an unreleased documentation note when the docs site meaningfully changes
 
 If an optional integration is published, the docs should already show where it lives, which category it belongs to, and how users enable it from the main package.
 

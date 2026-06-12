@@ -13,13 +13,18 @@ import {
   bestPractices,
   biome,
   command,
+  compat,
   cspell,
+  css,
   cypress,
+  deMorgan,
+  depend,
   docker,
   drizzle,
   githubActions,
   googleGenAi,
   graphql,
+  html,
   i18next,
   jest,
   jestDom,
@@ -32,11 +37,14 @@ import {
   mcp,
   mdx,
   mikroOrm,
+  node,
   nx,
   openAiAgents,
+  oxlint,
   packageJson,
   perfectionist,
   playwright,
+  pnpm,
   prettier,
   prisma,
   regexp,
@@ -132,6 +140,10 @@ export const getIntegrationConfigs = async (
   if (testing.includes(Testing.TestingLibrary)) configs.push(...await testingLibrary())
 
   // Formats
+  if (formats.includes(Format.Css)) configs.push(...await css())
+
+  if (formats.includes(Format.Html)) configs.push(...await html())
+
   if (formats.includes(Format.Mdx)) configs.push(...await mdx())
 
   if (formats.includes(Format.Markdown)) configs.push(...await markdown())
@@ -163,6 +175,17 @@ export const getIntegrationConfigs = async (
 
   if (extensions.includes(Extension.Perfectionist)) configs.push(...await perfectionist())
 
+  if (extensions.includes(Extension.Node)) configs.push(...await node())
+
+  if (extensions.includes(Extension.Compat)) configs.push(...await compat())
+
+  if (extensions.includes(Extension.DeMorgan)) configs.push(...await deMorgan())
+
+  if (extensions.includes(Extension.Depend)) configs.push(...await depend())
+
+  // Oxlint goes after other extensions so its rule disables win
+  if (extensions.includes(Extension.Oxlint)) configs.push(...await oxlint())
+
   // Standalone tools
   if (tools.includes(Tool.Command)) configs.push(...await command())
 
@@ -171,6 +194,8 @@ export const getIntegrationConfigs = async (
   if (tools.includes(Tool.Docker)) configs.push(...await docker())
 
   if (tools.includes(Tool.Nx)) configs.push(...await nx())
+
+  if (tools.includes(Tool.Pnpm)) configs.push(...await pnpm())
 
   if (tools.includes(Tool.Jsdoc)) configs.push(...await jsdoc())
 

@@ -44,14 +44,18 @@ const FRAMEWORK_PACKAGE_TO_KEY: Record<string, string> = {
   '@santi020k/eslint-config-astro': 'astro',
   '@santi020k/eslint-config-expo': 'expo',
   '@santi020k/eslint-config-hono': 'hono',
+  '@santi020k/eslint-config-lit': 'lit',
   '@santi020k/eslint-config-nest': 'nest',
   '@santi020k/eslint-config-next': 'next',
+  '@santi020k/eslint-config-nuxt': 'nuxt',
   '@santi020k/eslint-config-qwik': 'qwik',
   '@santi020k/eslint-config-react': 'react',
+  '@santi020k/eslint-config-react-router': 'react-router',
   '@santi020k/eslint-config-remix': 'remix',
   '@santi020k/eslint-config-slidev': 'slidev',
   '@santi020k/eslint-config-solid': 'solid',
   '@santi020k/eslint-config-svelte': 'svelte',
+  '@santi020k/eslint-config-tanstack-start': 'tanstack-start',
   '@santi020k/eslint-config-vite': 'vite',
   '@santi020k/eslint-config-vue': 'vue'
 }

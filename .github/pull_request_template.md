@@ -60,7 +60,7 @@ The changeset bot will also comment on this PR if a changeset is missing.
 - [ ] I have performed a self-review of my own code
 - [ ] I have commented my code, particularly in hard-to-understand areas
 - [ ] I have made corresponding changes to the documentation
-- [ ] If docs were changed, I followed `packages/docs/DOCS_GOVERNANCE.md` (current docs vs `v1` policy)
+- [ ] If docs were changed, I followed `apps/docs/DOCS_GOVERNANCE.md` (current docs vs `v1` policy)
 - [ ] I have added tests that prove my fix is effective or that my feature works
 - [ ] New and existing unit tests pass locally with my changes (`pnpm run test`)
 - [ ] I have run the build script and it passes (`pnpm run build`)

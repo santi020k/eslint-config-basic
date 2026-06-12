@@ -5,13 +5,13 @@ This policy defines how the current docs set and `v1` docs coexist.
 ## Scope
 
 - Current docs live at:
-  - `packages/docs/src/content/docs/guide`
-  - `packages/docs/src/content/docs/frameworks`
-  - `packages/docs/src/content/docs/tooling`
-  - `packages/docs/src/content/docs/packages`
-  - `packages/docs/src/content/docs/api`
+  - `apps/docs/src/content/docs/guide`
+  - `apps/docs/src/content/docs/frameworks`
+  - `apps/docs/src/content/docs/tooling`
+  - `apps/docs/src/content/docs/packages`
+  - `apps/docs/src/content/docs/api`
 - Legacy docs archive lives under:
-  - `packages/docs/src/content/docs/v1`
+  - `apps/docs/src/content/docs/v1`
 
 ## Ownership Model
 
@@ -37,7 +37,7 @@ This policy defines how the current docs set and `v1` docs coexist.
 
 ## Contribution Checklist
 
-- For current-doc changes, update `packages/docs/CHANGELOG.md` under `Unreleased`.
+- For current-doc changes, update `apps/docs/CHANGELOG.md` under `Unreleased`.
 - If `v1` must be edited for emergency reasons, explain the reason in PR.
 - Validate with:
   - `pnpm run docs:sync-readmes`

@@ -46,10 +46,10 @@ The project is a Turborepo monorepo using pnpm workspaces. It exports a composab
 
 Treat documentation as required work, not cleanup.
 
-- If you add or publish a new framework package, update the matching framework guide in `packages/docs/src/content/docs/frameworks/`, the install/configuration guides, API coverage page, homepage counts/copy, package README, root `README.md`, `llms.txt`/`llms-full.txt`, and `CLAUDE.md`.
-- If you add or publish a new optional integration, update the matching tooling page in `packages/docs/src/content/docs/tooling/`, the tooling overview, any affected setup guides, homepage counts/copy, and public README summaries.
-- If the docs site changes in a meaningful way, add an entry to `packages/docs/CHANGELOG.md` under `Unreleased`.
-- Do not consider the task done if the package exists but the docs site (Astro Starlight, `packages/docs`) does not explain how to use it.
+- If you add or publish a new framework package, update the matching framework guide in `apps/docs/src/content/docs/frameworks/`, the install/configuration guides, API coverage page, homepage counts/copy, package README, root `README.md`, `llms.txt`/`llms-full.txt`, and `CLAUDE.md`.
+- If you add or publish a new optional integration, update the matching tooling page in `apps/docs/src/content/docs/tooling/`, the tooling overview, any affected setup guides, homepage counts/copy, and public README summaries.
+- If the docs site changes in a meaningful way, add an entry to `apps/docs/CHANGELOG.md` under `Unreleased`.
+- Do not consider the task done if the package exists but the docs site (Astro Starlight, `apps/docs`) does not explain how to use it.
 
 ## 5. Code Conventions
 

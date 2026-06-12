@@ -7,14 +7,18 @@ import {
 } from '@santi020k/eslint-config-core'
 import { expoConfig } from '@santi020k/eslint-config-expo'
 import { hono } from '@santi020k/eslint-config-hono'
+import { lit } from '@santi020k/eslint-config-lit'
 import { nestConfig } from '@santi020k/eslint-config-nest'
 import { nextConfig } from '@santi020k/eslint-config-next'
+import { nuxt } from '@santi020k/eslint-config-nuxt'
 import { qwik } from '@santi020k/eslint-config-qwik'
 import { reactConfig } from '@santi020k/eslint-config-react'
-import { remix } from '@santi020k/eslint-config-remix'
+import { reactRouter } from '@santi020k/eslint-config-react-router'
+import remixConfig from '@santi020k/eslint-config-remix'
 import { slidev } from '@santi020k/eslint-config-slidev'
 import { solidConfig } from '@santi020k/eslint-config-solid'
 import { svelteConfig } from '@santi020k/eslint-config-svelte'
+import { tanstackStart } from '@santi020k/eslint-config-tanstack-start'
 import { vite } from '@santi020k/eslint-config-vite'
 import { vueConfig } from '@santi020k/eslint-config-vue'
 
@@ -54,11 +58,17 @@ export const getBundledFrameworkConfig = (
     case 'hono':
       return hono(options)
 
+    case 'lit':
+      return lit
+
     case 'nest':
       return nestConfig
 
     case 'next':
       return nextConfig
+
+    case 'nuxt':
+      return nuxt
 
     case 'qwik':
       return qwik
@@ -66,8 +76,11 @@ export const getBundledFrameworkConfig = (
     case 'react':
       return reactConfig
 
+    case 'react-router':
+      return reactRouter
+
     case 'remix':
-      return remix
+      return remixConfig
 
     case 'slidev':
       return slidev(options)
@@ -78,11 +91,17 @@ export const getBundledFrameworkConfig = (
     case 'svelte':
       return svelteConfig
 
+    case 'tanstack-start':
+      return tanstackStart
+
     case 'vite':
       return vite(options)
 
     case 'vue':
       return vueConfig
+
+    default:
+      return []
   }
 }
 
@@ -91,14 +110,18 @@ export {
   astro,
   expoConfig,
   hono,
+  lit,
   nestConfig,
   nextConfig,
+  nuxt,
   qwik,
   reactConfig,
-  remix,
+  reactRouter,
+  remixConfig as remix,
   slidev,
   solidConfig,
   svelteConfig,
+  tanstackStart,
   vite,
   vueConfig
 }

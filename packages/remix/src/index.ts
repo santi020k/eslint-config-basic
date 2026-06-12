@@ -1,27 +1,19 @@
-import pluginJsxA11y from 'eslint-plugin-jsx-a11y'
-
+import { reactRouter } from '@santi020k/eslint-config-react-router'
 import type { TSESLint } from '@typescript-eslint/utils'
 
-export const remix: TSESLint.FlatConfig.ConfigArray = [
-  {
-    name: 'eslint-config-remix/jsx-a11y',
-    plugins: {
-      'jsx-a11y': pluginJsxA11y
-    },
-    rules: {
-      ...pluginJsxA11y.flatConfigs.recommended.rules
-    }
-  },
-  {
-    files: ['**/*.tsx/*.ts', '**/*.ts/*.ts'],
-    // Disable rules that cause false positives in Remix virtual script blocks.
-    // Type-checked rule disabling is handled by @santi020k/eslint-config-typescript.
-    name: 'eslint-config-remix/virtual-script-rules',
-    rules: {
-      '@typescript-eslint/no-unused-expressions': 'off',
-      'no-unused-expressions': 'off'
-    }
-  }
-]
+const remixConfig: TSESLint.FlatConfig.ConfigArray = reactRouter.map(config => ({
+  ...config,
+  name: config.name?.replace('eslint-config-react-router', 'eslint-config-remix')
+}))
 
-export default remix
+/**
+ * Remix ESLint configuration
+ *
+ * @deprecated Remix merged into React Router v7. Use
+ * `@santi020k/eslint-config-react-router` (the `react-router` framework key)
+ * instead. This alias re-exports the React Router config and will be removed
+ * in the next major version.
+ */
+export const remix = remixConfig
+
+export default remixConfig

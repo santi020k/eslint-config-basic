@@ -1,4 +1,6 @@
+export { css } from './css.js'
 export { graphql } from './graphql.js'
+export { html } from './html.js'
 export { jsonc } from './jsonc.js'
 export { markdown } from './markdown.js'
 export { mdx } from './mdx.js'

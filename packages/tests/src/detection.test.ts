@@ -464,7 +464,7 @@ describe('detectProjectOptions', () => {
     const options = detectProjectOptions()
 
     expect(options.detectedFrameworks).toContain('remix')
-    expect(options.frameworks?.remix).toBeUndefined()
+    expect((options.frameworks as Record<string, unknown>).remix).toBeUndefined()
   })
 
   it('should detect Remix if @remix-run/node is a dependency', () => {

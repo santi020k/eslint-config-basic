@@ -5,8 +5,8 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const repoRoot = fileURLToPath(new URL('../', import.meta.url)).replace(/\/$/u, '')
-const tempRoot = join(repoRoot, 'packages/docs/.tmp-api-reference')
-const targetRoot = join(repoRoot, 'packages/docs/src/content/docs/api/reference')
+const tempRoot = join(repoRoot, 'apps/docs/.tmp-api-reference')
+const targetRoot = join(repoRoot, 'apps/docs/src/content/docs/api/reference')
 
 async function run(command, args, options = {}) {
   await new Promise((resolve, reject) => {

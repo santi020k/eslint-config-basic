@@ -68,6 +68,7 @@ words:
   - opencode
   - opengraph
   - orchestrates
+  - oxlint
   - packagemanager
   - peer-dependency
   - peerdep

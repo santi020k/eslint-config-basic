@@ -1,0 +1,57 @@
+{
+  "name": "@santi020k/eslint-config-lit",
+  "version": "1.6.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "Lit and Web Components ESLint configuration",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "clean": "rm -rf dist",
+    "check:exports": "publint",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@santi020k/eslint-config-core": "workspace:^",
+    "@typescript-eslint/utils": "^8.61.0",
+    "eslint-plugin-lit": "^2.3.1",
+    "eslint-plugin-wc": "^3.1.0"
+  },
+  "devDependencies": {
+    "publint": "^0.3.21",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  },
+  "peerDependencies": {
+    "eslint": "^9.0.0 || ^10.0.0"
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/santi020k/eslint-config-basic.git",
+    "directory": "packages/lit"
+  },
+  "homepage": "https://eslint.santi020k.com/frameworks/lit.html",
+  "bugs": {
+    "url": "https://github.com/santi020k/eslint-config-basic/issues"
+  },
+  "author": "santi020k",
+  "license": "MIT"
+}

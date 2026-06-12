@@ -105,10 +105,10 @@ Meaningful docs-site updates belong in the same release notes when `@santi020k/e
 
 If you add a new published framework package or integration, updating the documentation is required in the same task.
 
-- Add or update the dedicated guides under `packages/docs/src/content/docs/` (framework/tooling paths as appropriate)
-- Update `packages/docs/src/content/docs/guide/installation.md` and `packages/docs/src/content/docs/guide/configuration.md` when setup paths change
-- Update `packages/docs/src/content/docs/api/index.md` when package coverage changes
-- Update homepage counts or package lists in `packages/docs/src/content/docs/index.md` when totals change
+- Add or update the dedicated guides under `apps/docs/src/content/docs/` (framework/tooling paths as appropriate)
+- Update `apps/docs/src/content/docs/guide/installation.md` and `apps/docs/src/content/docs/guide/configuration.md` when setup paths change
+- Update `apps/docs/src/content/docs/api/index.md` when package coverage changes
+- Update homepage counts or package lists in `apps/docs/src/content/docs/index.md` when totals change
 - Keep root `README.md` and package-level `README.md` files aligned with the published surface area
 
 ## Critical Conventions

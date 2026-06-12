@@ -147,6 +147,18 @@ const detectFrameworks = (
     setRuntime(Runtime.Browser)
   }
 
+  if (allDeps.nuxt) {
+    detected.push('nuxt', 'vue')
+
+    setRuntime(Runtime.Universal)
+  }
+
+  if (allDeps.lit || allDeps['lit-element']) {
+    detected.push('lit')
+
+    setRuntime(Runtime.Browser)
+  }
+
   if (allDeps.expo || allDeps['react-native']) {
     detected.push('expo', 'react')
   }
@@ -187,14 +199,35 @@ const detectFrameworks = (
     setRuntime(Runtime.Browser)
   }
 
+  if (allDeps['@react-router/dev']) {
+    detected.push('react-router', 'react')
+
+    setRuntime(Runtime.Browser)
+  }
+
+  if (allDeps['@tanstack/react-start']) {
+    detected.push('tanstack-start', 'react')
+
+    setRuntime(Runtime.Universal)
+  }
+
+  if (allDeps['@tanstack/solid-start']) {
+    detected.push('tanstack-start', 'solid')
+
+    setRuntime(Runtime.Universal)
+  }
+
   if (
     allDeps.vite &&
     !detected.some(framework => [
       'astro',
       'next',
+      'nuxt',
       'qwik',
+      'react-router',
       'remix',
-      'slidev'
+      'slidev',
+      'tanstack-start'
     ].includes(framework))
   ) {
     detected.push('vite')
