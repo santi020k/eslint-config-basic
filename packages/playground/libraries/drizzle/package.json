@@ -13,11 +13,11 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
-    "drizzle-orm": "^0.45.1",
-    "eslint": "^10.2.1"
+    "drizzle-orm": "^0.45.2",
+    "eslint": "^10.5.0"
   },
   "devDependencies": {
-    "typescript": "^5.8.2"
+    "typescript": "^6.0.3"
   },
   "engines": {
     "node": ">=22.18.0"

@@ -23,12 +23,12 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
-    "@astrojs/starlight": "^0.39.3",
+    "@astrojs/starlight": "^0.40.0",
     "@axe-core/playwright": "^4.11.3",
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.60.0",
-    "astro": "^6.4.4",
-    "typescript": "^5.9.3"
+    "astro": "^6.4.6",
+    "typescript": "^6.0.3"
   },
   "engines": {
     "node": ">=22.18.0"

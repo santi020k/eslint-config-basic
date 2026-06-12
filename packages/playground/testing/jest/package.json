@@ -14,8 +14,8 @@
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
     "@types/jest": "^30.0.0",
-    "eslint": "^10.2.1",
-    "jest": "^30.3.0"
+    "eslint": "^10.5.0",
+    "jest": "^30.4.2"
   },
   "engines": {
     "node": ">=22.18.0"

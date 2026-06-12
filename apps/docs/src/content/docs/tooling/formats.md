@@ -14,6 +14,8 @@ The `formats` option enables linting for non-code or mixed-content file formats.
 | TOML | `Format.Toml` | The project contains TOML configuration files. |
 | Package.json | `Format.PackageJson` | The project's package.json should be semantically validated for npm standards. |
 | GraphQL | `Format.Graphql` | The project contains GraphQL documents. |
+| CSS | `Format.Css` | The project contains plain CSS files (uses the official `@eslint/css` plugin). |
+| HTML | `Format.Html` | The project contains plain HTML files (uses `@html-eslint`). |
 
 ## Example
 

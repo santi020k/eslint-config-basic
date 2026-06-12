@@ -13,11 +13,11 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
-    "eslint": "^10.2.1",
-    "sequelize": "^6.37.7"
+    "eslint": "^10.5.0",
+    "sequelize": "^6.37.8"
   },
   "devDependencies": {
-    "typescript": "^5.8.2"
+    "typescript": "^6.0.3"
   },
   "engines": {
     "node": ">=22.18.0"

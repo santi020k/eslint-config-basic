@@ -12,12 +12,12 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@mikro-orm/core": "^6.6.1",
+    "@mikro-orm/core": "^7.1.4",
     "@santi020k/eslint-config-basic": "workspace:^",
-    "eslint": "^10.2.1"
+    "eslint": "^10.5.0"
   },
   "devDependencies": {
-    "typescript": "^5.8.2"
+    "typescript": "^6.0.3"
   },
   "engines": {
     "node": ">=22.18.0"

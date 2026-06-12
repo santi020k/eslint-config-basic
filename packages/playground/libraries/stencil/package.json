@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
-    "@stencil/core": "^4.43.4",
-    "eslint": "^10.2.1"
+    "@stencil/core": "^4.43.5",
+    "eslint": "^10.5.0"
   },
   "engines": {
     "node": ">=22.18.0"

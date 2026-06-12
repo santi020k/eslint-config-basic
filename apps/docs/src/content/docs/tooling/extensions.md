@@ -16,6 +16,11 @@ The `extensions` option enables specialized rule packs that are useful across ma
 | Boundaries | `Extension.Boundaries` | The project wants dependency-free import boundary guardrails for package, generated-code, and test imports. | No |
 | A11y | `Extension.A11y` | The project wants accessibility linting for JSX and Vue. | Yes |
 | Biome | `Extension.Biome` | The project wants to enforce Biome formatting and rules. | No |
+| Node | `Extension.Node` | The project is a Node.js codebase that wants `eslint-plugin-n` rules. | No |
+| Compat | `Extension.Compat` | The project wants browser-compatibility checks against its browserslist. | No |
+| DeMorgan | `Extension.DeMorgan` | The project wants negated logical expressions simplified automatically. | No |
+| Depend | `Extension.Depend` | The project wants suggestions for lighter or native dependency alternatives. | No |
+| Oxlint | `Extension.Oxlint` | The project runs Oxlint alongside ESLint and wants duplicate rules disabled. | No |
 
 ## Example
 
@@ -46,10 +51,19 @@ The `Extension.Boundaries` pack adds dependency-free import guardrails:
 - `import/no-self-import` (error) — prevents a module from importing itself.
 - `no-restricted-imports` (error) — blocks production imports from generated-code and test-only paths.
 
+### Node
+
+The `Extension.Node` pack applies `eslint-plugin-n` recommended rules. Module-resolution rules (`n/no-missing-import`, `n/no-missing-require`) are disabled for TypeScript files because the compiler already validates imports.
+
+### Oxlint
+
+The `Extension.Oxlint` pack disables ESLint rules already covered by [Oxlint](https://oxc.rs) so both linters can run side by side without duplicate reports — the same hybrid-linting model as the Biome extension.
+
 ## Notes
 
 - The Security extension is enabled by default through detection.
 - These extensions can be layered with frameworks, formats, and tooling without changing the core composition model.
+- Like Prettier and Biome, the Oxlint extension is applied after other extensions so its rule disables win.
 
 ## Repository Examples
 

@@ -5,7 +5,11 @@ const env = process.env.NODE_ENV
 const shared = {
   splitting: true,
   clean: true,
-  dts: true,
+  dts: {
+    compilerOptions: {
+      ignoreDeprecations: '6.0'
+    }
+  },
   bundle: false,
   format: ['esm' as const],
   minify: false,

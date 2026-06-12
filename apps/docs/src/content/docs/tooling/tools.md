@@ -14,6 +14,7 @@ The `tools` option enables integrations for standalone developer tooling that co
 | Docker | `Tool.Docker` | The project has Docker Compose YAML files. | Yes |
 | GitHub Actions | `Tool.GithubActions` | The project has workflow files under `.github/workflows`. | Yes |
 | Nx | `Tool.Nx` | The project uses Nx workspace configuration. | Yes |
+| pnpm | `Tool.Pnpm` | The project uses pnpm catalogs or workspace settings that should be enforced. | No |
 | Swagger | `Tool.Swagger` | The project uses Nest Swagger tooling. | Yes |
 
 ## Example
@@ -31,6 +32,7 @@ export default await defineConfig({
 - Prettier is intentionally applied last in the final config array.
 - GitHub Actions and Docker Compose build on the YAML integration.
 - Nx builds on the JSON/JSONC integration for `nx.json` and `project.json`.
+- pnpm enforces catalogs and workspace settings in `package.json` and `pnpm-workspace.yaml` via `eslint-plugin-pnpm`.
 - Swagger is automatically detected when the project includes `@nestjs/swagger`.
 
 ## Repository Examples

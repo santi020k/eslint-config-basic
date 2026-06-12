@@ -50,18 +50,18 @@
     "@changesets/cli": "^2.31.0",
     "@eslint/config-inspector": "^3.0.4",
     "@santi020k/eslint-config-basic": "workspace:^",
-    "@types/node": "^25.9.2",
+    "@types/node": "^25.9.3",
     "cspell": "^10.0.1",
-    "eslint": "^10.2.1",
+    "eslint": "^10.5.0",
     "husky": "^9.1.7",
     "knip": "^6.16.1",
     "lint-staged": "^17.0.7",
-    "tailwindcss": "^4.3.0",
+    "tailwindcss": "^4.3.1",
     "ts-json-schema-generator": "^2.9.0",
-    "turbo": "^2.9.16",
+    "turbo": "^2.9.18",
     "typedoc": "^0.28.19",
     "typedoc-plugin-markdown": "^4.12.0",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   },
   "engines": {
     "node": ">=22.18.0"
@@ -74,14 +74,14 @@
   "homepage": "https://eslint.santi020k.com/",
   "pnpm": {
     "overrides": {
-      "eslint": "^10.2.1",
+      "eslint": "^10.5.0",
       "glob": "^13.0.6",
       "rimraf": "^6.1.3",
       "lodash": "^4.18.1",
-      "esbuild": "^0.28.0",
+      "esbuild": "^0.28.1",
       "path-to-regexp": "^8.4.2",
-      "defu": "^6.1.5",
-      "vite": "^7.3.2"
+      "defu": "^6.1.7",
+      "vite": "^8.0.16"
     }
   },
   "lint-staged": {

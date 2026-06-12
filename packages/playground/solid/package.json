@@ -13,12 +13,12 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
-    "eslint": "^10.2.1",
-    "solid-js": "^1.9.11"
+    "eslint": "^10.5.0",
+    "solid-js": "^1.9.13"
   },
   "devDependencies": {
-    "@types/node": "^22.18.0",
-    "typescript": "^5.8.2"
+    "@types/node": "^25.9.3",
+    "typescript": "^6.0.3"
   },
   "engines": {
     "node": ">=22.18.0"

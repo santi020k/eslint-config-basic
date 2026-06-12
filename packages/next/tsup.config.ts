@@ -4,7 +4,11 @@ export default defineConfig({
   entry: ["src/index.ts", "src/rules.ts"],
   bundle: false,
   format: ['esm'],
-  dts: true,
+  dts: {
+    compilerOptions: {
+      ignoreDeprecations: '6.0'
+    }
+  },
   clean: true,
   splitting: false,
   sourcemap: true,
