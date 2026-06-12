@@ -11,6 +11,7 @@ import { expoConfig } from '@santi020k/eslint-config-expo'
 import { honoConfig } from '@santi020k/eslint-config-hono'
 import { nestConfig } from '@santi020k/eslint-config-nest'
 import { nextConfig } from '@santi020k/eslint-config-next'
+import { qwik as qwikConfig } from '@santi020k/eslint-config-qwik'
 import { reactConfig } from '@santi020k/eslint-config-react'
 import { reactRouter as reactRouterConfig } from '@santi020k/eslint-config-react-router'
 import { slidev as slidevConfig } from '@santi020k/eslint-config-slidev'
@@ -112,7 +113,7 @@ describe('Integration Tests', () => {
       const messages = results[0].messages
       const ruleIds = messages.map(m => m.ruleId)
 
-      expect(ruleIds).toContain('react-hooks/exhaustive-deps')
+      expect(ruleIds).toContain('@eslint-react/exhaustive-deps')
     })
 
     it('should pass for clean React JSX code', async () => {
@@ -123,8 +124,7 @@ describe('Integration Tests', () => {
       // Use plain JSX without TS type annotations since typescript: false
       // Use double quotes for JSX attributes to satisfy @stylistic/jsx-quotes
       const code = [
-        'import React from \'react\'',
-        '',
+
         'export const Button = ({ label }) => (',
         '  <button type="button">{label}</button>',
         ')',

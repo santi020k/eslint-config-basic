@@ -14,11 +14,11 @@ describe('Deep Rule Assertions (#5)', () => {
     const config = await defineConfig({ frameworks: { react } })
     const rules = extractRuleNames(config)
 
-    expect(rules).toContain('react/jsx-pascal-case')
+    expect(rules).toContain('@eslint-react/dom-no-unsafe-target-blank')
 
-    expect(rules).toContain('react/self-closing-comp')
+    expect(rules).toContain('@eslint-react/dom-no-missing-button-type')
 
-    expect(rules).toContain('react-hooks/exhaustive-deps')
+    expect(rules).toContain('@eslint-react/exhaustive-deps')
   })
 
   it('should include TypeScript rules when typescript is enabled', async () => {

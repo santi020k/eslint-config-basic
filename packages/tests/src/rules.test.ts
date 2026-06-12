@@ -53,17 +53,11 @@ describe('TypeScript Rules', () => {
 
 describe('React Rules', () => {
   it('should include React plugin configuration', () => {
-    const hasReactPlugin = reactConfig.some(c => c.plugins && ('react' in c.plugins || 'react-hooks' in c.plugins))
+    const hasReactPlugin = reactConfig.some(c => c.plugins && ('@eslint-react' in c.plugins || 'react-compiler' in c.plugins))
     expect(hasReactPlugin).toBe(true)
   })
 
-  it('should have React version detection setting', () => {
-    const hasReactSettings = reactConfig.some(c => (c.settings?.react as undefined | { version?: string })?.version === 'detect')
-    expect(hasReactSettings).toBe(true)
-  })
-
   it('should have React Hooks rules enabled', () => {
-    expect(getEffectiveRuleValue(reactConfig, 'react-hooks/rules-of-hooks')).toBe('error')
-    expect(getEffectiveRuleValue(reactConfig, 'react-hooks/exhaustive-deps')).toBe('warn')
+    expect(getEffectiveRuleValue(reactConfig, '@eslint-react/exhaustive-deps')).toBe('warn')
   })
 })
