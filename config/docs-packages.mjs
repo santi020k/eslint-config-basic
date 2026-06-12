@@ -104,6 +104,34 @@ export const packageDocs = [
     title: 'Remix guide'
   },
   {
+    description: 'React Router v7 (framework mode) rules, successor to the Remix configuration.',
+    docsPath: '/frameworks/react-router.html',
+    packageName: '@santi020k/eslint-config-react-router',
+    packagePath: 'packages/react-router',
+    title: 'React Router guide'
+  },
+  {
+    description: 'Nuxt-specific rules layered on top of the Vue configuration.',
+    docsPath: '/frameworks/nuxt.html',
+    packageName: '@santi020k/eslint-config-nuxt',
+    packagePath: 'packages/nuxt',
+    title: 'Nuxt guide'
+  },
+  {
+    description: 'TanStack Start rules bundling TanStack Router and TanStack Query support.',
+    docsPath: '/frameworks/tanstack-start.html',
+    packageName: '@santi020k/eslint-config-tanstack-start',
+    packagePath: 'packages/tanstack-start',
+    title: 'TanStack Start guide'
+  },
+  {
+    description: 'Lit and Web Components rules for modern flat-config projects.',
+    docsPath: '/frameworks/lit.html',
+    packageName: '@santi020k/eslint-config-lit',
+    packagePath: 'packages/lit',
+    title: 'Lit guide'
+  },
+  {
     description: 'Vite support for browser apps and Vite config files.',
     docsPath: '/frameworks/vite.html',
     packageName: '@santi020k/eslint-config-vite',

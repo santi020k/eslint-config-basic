@@ -39,7 +39,6 @@
     "docs:md": "pnpm run docs:api",
     "docs:sync-readmes": "node scripts/generate-package-readmes.mjs",
     "docs:sync-changelog": "node scripts/sync-docs-changelog.mjs",
-    "metadata:sync": "node scripts/sync-package-metadata.mjs",
     "docs:clean": "pnpm --filter @santi020k/eslint-config-docs run docs:clean",
     "changeset": "changeset",
     "version-packages": "changeset version",
