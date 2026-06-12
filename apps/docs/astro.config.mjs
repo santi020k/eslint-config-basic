@@ -7,10 +7,10 @@ const site = process.env.DOCS_SITE_URL ?? 'https://eslint.santi020k.com'
 const siteName = 'ESLint Config'
 
 const siteDescription =
-  'Production-ready ESLint flat-config documentation for JavaScript and TypeScript teams using React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, Remix, and opt-in integrations.'
+  'Production-ready ESLint flat-config documentation for JavaScript and TypeScript teams using React, Next.js, Astro, Vue, Nuxt, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, Remix, React Router, TanStack Start, Lit, and opt-in integrations.'
 
 const siteKeywords =
-  'ESLint flat config, JavaScript linting, TypeScript linting, React ESLint, Next.js ESLint, Astro ESLint, Vue ESLint, Svelte ESLint, Solid ESLint, Angular ESLint, NestJS ESLint, Hono ESLint, Expo ESLint, Qwik ESLint, Remix ESLint, developer experience'
+  'ESLint flat config, JavaScript linting, TypeScript linting, React ESLint, Next.js ESLint, Astro ESLint, Vue ESLint, Nuxt ESLint, Svelte ESLint, Solid ESLint, Angular ESLint, NestJS ESLint, Hono ESLint, Expo ESLint, Qwik ESLint, Remix ESLint, React Router ESLint, TanStack Start ESLint, Lit ESLint, developer experience'
 
 const socialImage = new URL('/cover.webp', site).toString()
 
@@ -42,10 +42,14 @@ const sidebar = [
           { label: 'Solid', slug: 'frameworks/solid' },
           { label: 'Angular', slug: 'frameworks/angular' },
           { label: 'NestJS', slug: 'frameworks/nest' },
+          { label: 'Nuxt', slug: 'frameworks/nuxt' },
           { label: 'Hono', slug: 'frameworks/hono' },
           { label: 'Expo', slug: 'frameworks/expo' },
           { label: 'Qwik', slug: 'frameworks/qwik' },
           { label: 'Remix', slug: 'frameworks/remix' },
+          { label: 'React Router', slug: 'frameworks/react-router' },
+          { label: 'TanStack Start', slug: 'frameworks/tanstack-start' },
+          { label: 'Lit', slug: 'frameworks/lit' },
           { label: 'Vite', slug: 'frameworks/vite' },
           { label: 'Slidev', slug: 'frameworks/slidev' }
         ],

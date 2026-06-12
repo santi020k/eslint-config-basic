@@ -7,7 +7,7 @@ This document provides deep technical details for AI agents performing maintenan
 ```text
 core → typescript → react → next
      ↘ astro
-     ↘ vue
+     ↘ vue → nuxt
      ↘ svelte
      ↘ solid
      ↘ angular
@@ -16,6 +16,9 @@ core → typescript → react → next
      ↘ expo
      ↘ qwik
      ↘ remix
+     ↘ react-router
+     ↘ tanstack-start
+     ↘ lit
      ↘ vite
      ↘ slidev
      ↘ integrations
@@ -24,7 +27,7 @@ basic (composes all above)
 
 ## Bundled Frameworks (v2+)
 
-Framework-specific configurations are bundled behind the main package as workspace dependencies of `packages/basic`. Application projects install only `@santi020k/eslint-config-basic` and enable frameworks with booleans (e.g. `frameworks.react: true`) or rely on auto-detection, which enables detected framework configs by default (`autoFrameworks: false` opts out; explicit `frameworks` values merge with detected ones under the default `optionMergeStrategy: 'merge'`). Next.js, Expo, and Remix automatically include React rules. Supported frameworks: React, Next.js, Astro, Vue, Svelte, SolidJS, Angular, NestJS, Hono, Expo, Qwik, Remix, Vite, and Slidev.
+Framework-specific configurations are bundled behind the main package as workspace dependencies of `packages/basic`. Application projects install only `@santi020k/eslint-config-basic` and enable frameworks with booleans (e.g. `frameworks.react: true`) or rely on auto-detection, which enables detected framework configs by default (`autoFrameworks: false` opts out; explicit `frameworks` values merge with detected ones under the default `optionMergeStrategy: 'merge'`). Next.js, Expo, and Remix automatically include React rules. Supported frameworks: React, Next.js, Astro, Vue, Nuxt, Svelte, SolidJS, Angular, NestJS, Hono, Expo, Qwik, Remix, React Router, TanStack Start, Lit, Vite, and Slidev.
 
 ## Package Management
 

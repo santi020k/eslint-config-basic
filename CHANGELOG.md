@@ -1,5 +1,7 @@
 # Changelog
 
+> **Note:** Since v1, releases are managed with [Changesets](https://github.com/changesets/changesets) and release notes live in each package's own changelog (for example [`packages/basic/CHANGELOG.md`](./packages/basic/CHANGELOG.md)). This file only covers the pre-Changesets 0.x releases and is kept for historical reference.
+
 ## [0.2.0](https://github.com/santi020k/eslint-config-basic/compare/v0.1.0...v0.2.0) (2026-02-10)
 
 ### Features

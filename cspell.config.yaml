@@ -64,6 +64,7 @@ words:
   - nonconstructor
   - nonoctal
   - nonwords
+  - nuxt
   - openai
   - opencode
   - opengraph

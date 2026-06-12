@@ -10,7 +10,7 @@
 
 ![ESLint toolkit branding](./cover.webp)
 
-Composable ESLint 10+ flat-config tooling for JavaScript and TypeScript projects, with optional framework packages for React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, Remix, Vite, and Slidev.
+Composable ESLint 10+ flat-config tooling for JavaScript and TypeScript projects, with optional framework packages for React, Next.js, Astro, Vue, Nuxt, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, Remix, React Router, TanStack Start, Lit, Vite, and Slidev.
 
 ## Canonical Docs
 
@@ -141,6 +141,7 @@ export default await defineConfig({
 - Next.js: [`@santi020k/eslint-config-next`](https://eslint.santi020k.com/frameworks/next.html)
 - Astro: [`@santi020k/eslint-config-astro`](https://eslint.santi020k.com/frameworks/astro.html)
 - Vue: [`@santi020k/eslint-config-vue`](https://eslint.santi020k.com/frameworks/vue.html)
+- Nuxt: [`@santi020k/eslint-config-nuxt`](https://eslint.santi020k.com/frameworks/nuxt.html)
 - Svelte: [`@santi020k/eslint-config-svelte`](https://eslint.santi020k.com/frameworks/svelte.html)
 - Solid: [`@santi020k/eslint-config-solid`](https://eslint.santi020k.com/frameworks/solid.html)
 - Angular: [`@santi020k/eslint-config-angular`](https://eslint.santi020k.com/frameworks/angular.html)
@@ -149,6 +150,9 @@ export default await defineConfig({
 - Expo: [`@santi020k/eslint-config-expo`](https://eslint.santi020k.com/frameworks/expo.html)
 - Qwik: [`@santi020k/eslint-config-qwik`](https://eslint.santi020k.com/frameworks/qwik.html)
 - Remix: [`@santi020k/eslint-config-remix`](https://eslint.santi020k.com/frameworks/remix.html)
+- React Router: [`@santi020k/eslint-config-react-router`](https://eslint.santi020k.com/frameworks/react-router.html)
+- TanStack Start: [`@santi020k/eslint-config-tanstack-start`](https://eslint.santi020k.com/frameworks/tanstack-start.html)
+- Lit: [`@santi020k/eslint-config-lit`](https://eslint.santi020k.com/frameworks/lit.html)
 - Vite: [`@santi020k/eslint-config-vite`](https://eslint.santi020k.com/frameworks/vite.html)
 - Slidev: [`@santi020k/eslint-config-slidev`](https://eslint.santi020k.com/frameworks/slidev.html)
 

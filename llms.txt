@@ -1,6 +1,6 @@
 # @santi020k/eslint-config-basic
 
-> A comprehensive, composable ESLint 9/10+ Flat Config package for JavaScript, TypeScript, React, Next.js, Astro, Expo, Vue, Svelte, Solid, Angular, NestJS, Qwik, Remix, Vite, and Slidev.
+> A comprehensive, composable ESLint 9/10+ Flat Config package for JavaScript, TypeScript, React, Next.js, Astro, Expo, Vue, Nuxt, Svelte, Solid, Angular, NestJS, Hono, Qwik, Remix, React Router, TanStack Start, Lit, Vite, and Slidev.
 
 
 ## AI Assistant Context
@@ -42,10 +42,10 @@ This is a monorepo containing multiple config packages.
 - `packages/core/` — Base JS config, utilities, and shared types/enums
 - `packages/typescript/` — TypeScript rules
 - `packages/react/`, `packages/next/` — React ecosystem
-- `packages/astro/`, `packages/vue/`, `packages/svelte/`, `packages/solid/` — Frontend frameworks
+- `packages/astro/`, `packages/vue/`, `packages/nuxt/`, `packages/svelte/`, `packages/solid/`, `packages/lit/` — Frontend frameworks and Web Components
 - `packages/angular/`, `packages/nest/`, `packages/hono/` — Enterprise, backend, and edge frameworks
 - `packages/expo/` — React Native / Expo
-- `packages/qwik/`, `packages/remix/` — Modern meta-frameworks
+- `packages/qwik/`, `packages/remix/`, `packages/react-router/`, `packages/tanstack-start/` — Modern meta-frameworks
 - `packages/vite/`, `packages/slidev/` — Vite tooling and Slidev presentations
 - `packages/integrations/` — All integrations (tools, libraries, testing, formats, extensions)
 - `packages/basic/` — Main entry point composing all packages
@@ -58,6 +58,7 @@ This is a monorepo containing multiple config packages.
 | Next.js | `@santi020k/eslint-config-next` |
 | Astro | `@santi020k/eslint-config-astro` |
 | Vue | `@santi020k/eslint-config-vue` |
+| Nuxt | `@santi020k/eslint-config-nuxt` |
 | Svelte | `@santi020k/eslint-config-svelte` |
 | SolidJS | `@santi020k/eslint-config-solid` |
 | Angular | `@santi020k/eslint-config-angular` |
@@ -66,6 +67,9 @@ This is a monorepo containing multiple config packages.
 | Expo | `@santi020k/eslint-config-expo` |
 | Qwik | `@santi020k/eslint-config-qwik` |
 | Remix | `@santi020k/eslint-config-remix` |
+| React Router | `@santi020k/eslint-config-react-router` |
+| TanStack Start | `@santi020k/eslint-config-tanstack-start` |
+| Lit | `@santi020k/eslint-config-lit` |
 | Vite | `@santi020k/eslint-config-vite` |
 | Slidev | `@santi020k/eslint-config-slidev` |
 
