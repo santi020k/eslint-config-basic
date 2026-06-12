@@ -18,7 +18,7 @@ import { nestConfig } from '@santi020k/eslint-config-nest'
 import { nextConfig } from '@santi020k/eslint-config-next'
 import { qwik as qwikConfig } from '@santi020k/eslint-config-qwik'
 import { reactConfig } from '@santi020k/eslint-config-react'
-import remixConfig from '@santi020k/eslint-config-remix'
+import { reactRouter as reactRouterConfig } from '@santi020k/eslint-config-react-router'
 import { slidevConfig } from '@santi020k/eslint-config-slidev'
 import { solidConfig } from '@santi020k/eslint-config-solid'
 import { svelteConfig } from '@santi020k/eslint-config-svelte'
@@ -232,20 +232,17 @@ describe('Qwik Config', () => {
   })
 })
 
-describe('Remix Config', () => {
-  it('should export remix as an array', () => {
-     
-    expect(Array.isArray(remixConfig)).toBe(true)
+describe('React Router Config', () => {
+  it('should export reactRouterConfig as an array', () => {
+    expect(Array.isArray(reactRouterConfig)).toBe(true)
   })
 
   it('should have at least one config entry', () => {
-     
-    expect(remixConfig.length).toBeGreaterThan(0)
+    expect(reactRouterConfig.length).toBeGreaterThan(0)
   })
 
   it('should include jsx-a11y plugin', () => {
-     
-    const plugins = remixConfig.flatMap(c => Object.keys(c.plugins ?? {}))
+    const plugins = reactRouterConfig.flatMap(c => Object.keys(c.plugins ?? {}))
     expect(plugins).toContain('jsx-a11y')
   })
 })

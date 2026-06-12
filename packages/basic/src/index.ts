@@ -606,8 +606,7 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
     (
       resolvedFrameworks.next ||
       resolvedFrameworks.expo ||
-      // eslint-disable-next-line @typescript-eslint/no-deprecated
-      resolvedFrameworks.remix ||
+      (resolvedFrameworks as Record<string, unknown>).remix ||
       resolvedFrameworks['react-router'] ||
       resolvedFrameworks['tanstack-start']
     ) &&
@@ -658,8 +657,7 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
   const solidParam = resolveFramework('solid', resolvedFrameworks.solid)
   const angularParam = resolveFramework('angular', resolvedFrameworks.angular)
   const qwikParam = resolveFramework('qwik', resolvedFrameworks.qwik)
-  // eslint-disable-next-line @typescript-eslint/no-deprecated
-  const remixParam = resolveFramework('remix', resolvedFrameworks.remix)
+  const remixParam = resolveFramework('remix', (resolvedFrameworks as Record<string, unknown>).remix as ImportedFramework | undefined)
   const reactRouterParam = resolveFramework('react-router', resolvedFrameworks['react-router'])
   const tanstackStartParam = resolveFramework('tanstack-start', resolvedFrameworks['tanstack-start'])
   const nuxtParam = resolveFramework('nuxt', resolvedFrameworks.nuxt)

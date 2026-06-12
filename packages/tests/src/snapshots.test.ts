@@ -9,7 +9,7 @@ import { nestConfig } from '@santi020k/eslint-config-nest'
 import { nextConfig } from '@santi020k/eslint-config-next'
 import { qwik as qwikConfig } from '@santi020k/eslint-config-qwik'
 import { reactConfig } from '@santi020k/eslint-config-react'
-import remixConfig from '@santi020k/eslint-config-remix'
+import { reactRouter as reactRouterConfig } from '@santi020k/eslint-config-react-router'
 import { solidConfig } from '@santi020k/eslint-config-solid'
 import { svelteConfig } from '@santi020k/eslint-config-svelte'
 import { typescriptConfig } from '@santi020k/eslint-config-typescript'
@@ -146,8 +146,8 @@ describe('Config Snapshots — Rule Names', () => {
     expect(rules).toMatchSnapshot()
   })
 
-  it('remix config rules should match snapshot', () => {
-    const rules = extractRuleNames(remixConfig as Record<string, unknown>[])
+  it('react-router config rules should match snapshot', () => {
+    const rules = extractRuleNames(reactRouterConfig as Record<string, unknown>[])
 
     expect(rules).toMatchSnapshot()
   })
@@ -232,8 +232,8 @@ describe('Config Snapshots — Entry Names', () => {
     expect(names).toMatchSnapshot()
   })
 
-  it('remix config entries should match snapshot', () => {
-    const names = extractConfigNames(remixConfig as Record<string, unknown>[])
+  it('react-router config entries should match snapshot', () => {
+    const names = extractConfigNames(reactRouterConfig as Record<string, unknown>[])
 
     expect(names).toMatchSnapshot()
   })

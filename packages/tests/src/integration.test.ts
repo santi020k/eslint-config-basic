@@ -11,9 +11,8 @@ import { expoConfig } from '@santi020k/eslint-config-expo'
 import { honoConfig } from '@santi020k/eslint-config-hono'
 import { nestConfig } from '@santi020k/eslint-config-nest'
 import { nextConfig } from '@santi020k/eslint-config-next'
-import { qwik as qwikConfig } from '@santi020k/eslint-config-qwik'
 import { reactConfig } from '@santi020k/eslint-config-react'
-import remixConfig from '@santi020k/eslint-config-remix'
+import { reactRouter as reactRouterConfig } from '@santi020k/eslint-config-react-router'
 import { slidev as slidevConfig } from '@santi020k/eslint-config-slidev'
 import { svelteConfig } from '@santi020k/eslint-config-svelte'
 import { vite as viteConfig } from '@santi020k/eslint-config-vite'
@@ -277,15 +276,16 @@ describe('Integration Tests', () => {
     })
   })
 
-  describe('Remix', () => {
-    it('should include Remix-specific rules in config', async () => {
+  describe('React Router', () => {
+    it('should include React Router-specific rules in config', async () => {
       const config = await defineConfig({
-        frameworks: { 'react-router': remixConfig },
+         
+        frameworks: { 'react-router': reactRouterConfig },
         typescript: false
       })
       const names = config.flatMap(c => (c.name ? [c.name] : []))
 
-      expect(names).toContain('eslint-config-remix/jsx-a11y')
+      expect(names).toContain('eslint-config-react-router/jsx-a11y')
     })
   })
 
