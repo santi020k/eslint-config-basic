@@ -76,10 +76,10 @@ This is a monorepo containing multiple config packages.
 ### Supported Integrations
 
 **Testing**: Vitest, Jest, Playwright, Cypress, TestingLibrary
-**Tools**: Prettier, CSpell, JSDoc, Swagger
+**Tools**: Prettier, CSpell, JSDoc, Swagger, pnpm, Command, Docker, GitHub Actions, Nx
 **Libraries**: AI SDK, OpenAI Agents SDK, Mastra, MCP, LangChain, LlamaIndex, Tailwind (via `better-tailwindcss`), i18next, Stencil, TanStack Query, TanStack Router, Storybook, TypeORM, Prisma, Drizzle, MikroORM, Sequelize
-**Formats**: MDX, Markdown, JSONC, YAML, TOML, GraphQL
-**Extensions**: Regexp, Unicorn, SonarJS, Security, Perfectionist
+**Formats**: MDX, Markdown, JSONC, YAML, TOML, GraphQL, CSS (`@eslint/css`), HTML (`@html-eslint`)
+**Extensions**: Regexp, Unicorn, SonarJS, Security, Perfectionist, Node (`eslint-plugin-n`), Compat, DeMorgan, Depend, Oxlint, Biome, A11y, BestPractices, Boundaries
 
 ## Commands
 

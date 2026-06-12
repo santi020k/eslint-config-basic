@@ -38,14 +38,18 @@
         "astro",
         "expo",
         "hono",
+        "lit",
         "nest",
         "next",
+        "nuxt",
         "qwik",
         "react",
+        "react-router",
         "remix",
         "slidev",
         "solid",
         "svelte",
+        "tanstack-start",
         "vite",
         "vue"
       ],
@@ -68,6 +72,9 @@
           "type": "boolean"
         },
         "nextMode": {
+          "type": "boolean"
+        },
+        "projects": {
           "type": "boolean"
         },
         "runtime": {
@@ -233,14 +240,18 @@
         "extensions": {
           "description": "List of specialized ESLint rules and extensions",
           "items": {
-            "$ref": "#/definitions/Extension"
+            "$ref": "#/definitions/ExtensionOption"
           },
           "type": "array"
+        },
+        "features": {
+          "$ref": "#/definitions/OptionalConfigMap",
+          "description": "Simple optional-config switchboard. Enables or disables entries from `extensions`, `formats`, `libraries`, `testing`, and `tools` using their string names. `integrations` is an alias for the same map."
         },
         "formats": {
           "description": "Additional non-JS/TS file formats to lint",
           "items": {
-            "$ref": "#/definitions/Format"
+            "$ref": "#/definitions/FormatOption"
           },
           "type": "array"
         },
@@ -260,10 +271,16 @@
             "hono": {
               "$ref": "#/definitions/ImportedFramework"
             },
+            "lit": {
+              "$ref": "#/definitions/ImportedFramework"
+            },
             "nest": {
               "$ref": "#/definitions/ImportedFramework"
             },
             "next": {
+              "$ref": "#/definitions/ImportedFramework"
+            },
+            "nuxt": {
               "$ref": "#/definitions/ImportedFramework"
             },
             "qwik": {
@@ -272,8 +289,13 @@
             "react": {
               "$ref": "#/definitions/ImportedFramework"
             },
+            "react-router": {
+              "$ref": "#/definitions/ImportedFramework",
+              "description": "New name for Remix projects on React Router v7+."
+            },
             "remix": {
-              "$ref": "#/definitions/ImportedFramework"
+              "$ref": "#/definitions/ImportedFramework",
+              "deprecated": "Remix merged into React Router v7 — use `react-router` instead."
             },
             "slidev": {
               "$ref": "#/definitions/ImportedFramework"
@@ -283,6 +305,10 @@
             },
             "svelte": {
               "$ref": "#/definitions/ImportedFramework"
+            },
+            "tanstack-start": {
+              "$ref": "#/definitions/ImportedFramework",
+              "description": "TanStack Start (React/Solid full-stack framework)."
             },
             "vite": {
               "$ref": "#/definitions/ImportedFramework"
@@ -300,15 +326,18 @@
           },
           "type": "array"
         },
+        "integrations": {
+          "$ref": "#/definitions/OptionalConfigMap",
+          "description": "List of application-level dependencies configurations"
+        },
         "libraries": {
-          "description": "List of application-level dependencies configurations",
           "items": {
-            "$ref": "#/definitions/Library"
+            "$ref": "#/definitions/LibraryOption"
           },
           "type": "array"
         },
         "nextMode": {
-          "$ref": "#/definitions/NextMode",
+          "$ref": "#/definitions/NextModeOption",
           "description": "Next.js specific routing mode"
         },
         "optionMergeStrategy": {
@@ -320,7 +349,7 @@
           "type": "string"
         },
         "preset": {
-          "$ref": "#/definitions/Preset",
+          "$ref": "#/definitions/PresetOption",
           "description": "High-level configuration preset"
         },
         "projects": {
@@ -332,13 +361,13 @@
           "type": "object"
         },
         "runtime": {
-          "$ref": "#/definitions/Runtime",
+          "$ref": "#/definitions/RuntimeOption",
           "description": "Runtime environment preset (Node, Browser, Universal)"
         },
         "settings": {
           "description": "List of global settings and behavioral flags",
           "items": {
-            "$ref": "#/definitions/Setting"
+            "$ref": "#/definitions/SettingOption"
           },
           "type": "array"
         },
@@ -349,14 +378,14 @@
         "testing": {
           "description": "List of testing frameworks and testing environments",
           "items": {
-            "$ref": "#/definitions/Testing"
+            "$ref": "#/definitions/TestingOption"
           },
           "type": "array"
         },
         "tools": {
           "description": "List of integrations for external standalone tools",
           "items": {
-            "$ref": "#/definitions/Tool"
+            "$ref": "#/definitions/ToolOption"
           },
           "type": "array"
         },
@@ -365,7 +394,17 @@
           "type": "string"
         },
         "typescript": {
-          "type": "boolean",
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "$ref": "#/definitions/TypeScriptMode"
+            },
+            {
+              "$ref": "#/definitions/TypeScriptOptions"
+            }
+          ],
           "description": "Enable TypeScript support with optional settings"
         }
       },
@@ -374,7 +413,15 @@
     "Extension": {
       "description": "Enum for specialized ESLint extensions and strict rule sets",
       "enum": [
+        "a11y",
         "best-practices",
+        "biome",
+        "boundaries",
+        "compat",
+        "de-morgan",
+        "depend",
+        "node",
+        "oxlint",
         "perfectionist",
         "regexp",
         "security",
@@ -382,6 +429,35 @@
         "unicorn"
       ],
       "type": "string"
+    },
+    "ExtensionName": {
+      "enum": [
+        "a11y",
+        "best-practices",
+        "biome",
+        "boundaries",
+        "compat",
+        "de-morgan",
+        "depend",
+        "node",
+        "oxlint",
+        "perfectionist",
+        "regexp",
+        "security",
+        "sonarjs",
+        "unicorn"
+      ],
+      "type": "string"
+    },
+    "ExtensionOption": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/Extension"
+        },
+        {
+          "$ref": "#/definitions/ExtensionName"
+        }
+      ]
     },
     "FlatConfig.Config": {
       "additionalProperties": false,
@@ -610,14 +686,41 @@
     "Format": {
       "description": "Enum for linting non-JS/TS file formats",
       "enum": [
+        "css",
         "graphql",
+        "html",
         "jsonc",
         "markdown",
         "mdx",
+        "package-json",
         "toml",
         "yaml"
       ],
       "type": "string"
+    },
+    "FormatName": {
+      "enum": [
+        "css",
+        "graphql",
+        "html",
+        "jsonc",
+        "markdown",
+        "mdx",
+        "package-json",
+        "toml",
+        "yaml"
+      ],
+      "type": "string"
+    },
+    "FormatOption": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/Format"
+        },
+        {
+          "$ref": "#/definitions/FormatName"
+        }
+      ]
     },
     "ImportedFramework": {
       "anyOf": [
@@ -815,7 +918,9 @@
       "description": "Enum for application-level runtime dependencies and styling",
       "enum": [
         "ai-sdk",
+        "autogen",
         "drizzle",
+        "google-genai",
         "i18next",
         "langchain",
         "llamaindex",
@@ -830,9 +935,47 @@
         "tailwind",
         "tanstack-query",
         "tanstack-router",
-        "typeorm"
+        "turbo",
+        "typeorm",
+        "zod"
       ],
       "type": "string"
+    },
+    "LibraryName": {
+      "enum": [
+        "ai-sdk",
+        "autogen",
+        "drizzle",
+        "google-genai",
+        "i18next",
+        "langchain",
+        "llamaindex",
+        "mastra",
+        "mcp",
+        "mikro-orm",
+        "openai-agents",
+        "prisma",
+        "sequelize",
+        "stencil",
+        "storybook",
+        "tailwind",
+        "tanstack-query",
+        "tanstack-router",
+        "turbo",
+        "typeorm",
+        "zod"
+      ],
+      "type": "string"
+    },
+    "LibraryOption": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/Library"
+        },
+        {
+          "$ref": "#/definitions/LibraryName"
+        }
+      ]
     },
     "LooseRuleCreateFunction": {
       "$comment": "(context: any) => Record<string, Function | undefined>",
@@ -880,6 +1023,207 @@
         "pages"
       ],
       "type": "string"
+    },
+    "NextModeName": {
+      "enum": [
+        "app-router",
+        "pages"
+      ],
+      "type": "string"
+    },
+    "NextModeOption": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/NextMode"
+        },
+        {
+          "$ref": "#/definitions/NextModeName"
+        }
+      ]
+    },
+    "OptionalConfigMap": {
+      "additionalProperties": false,
+      "description": "Simple opt-in/opt-out map for optional configs. Keys match the public enum string values, so both `features: { zod: true }` and `libraries: [Library.Zod]` resolve to the same underlying config.",
+      "properties": {
+        "a11y": {
+          "type": "boolean"
+        },
+        "ai-sdk": {
+          "type": "boolean"
+        },
+        "autogen": {
+          "type": "boolean"
+        },
+        "best-practices": {
+          "type": "boolean"
+        },
+        "biome": {
+          "type": "boolean"
+        },
+        "boundaries": {
+          "type": "boolean"
+        },
+        "command": {
+          "type": "boolean"
+        },
+        "compat": {
+          "type": "boolean"
+        },
+        "cspell": {
+          "type": "boolean"
+        },
+        "css": {
+          "type": "boolean"
+        },
+        "cypress": {
+          "type": "boolean"
+        },
+        "de-morgan": {
+          "type": "boolean"
+        },
+        "depend": {
+          "type": "boolean"
+        },
+        "docker": {
+          "type": "boolean"
+        },
+        "drizzle": {
+          "type": "boolean"
+        },
+        "github-actions": {
+          "type": "boolean"
+        },
+        "google-genai": {
+          "type": "boolean"
+        },
+        "graphql": {
+          "type": "boolean"
+        },
+        "html": {
+          "type": "boolean"
+        },
+        "i18next": {
+          "type": "boolean"
+        },
+        "jest": {
+          "type": "boolean"
+        },
+        "jest-dom": {
+          "type": "boolean"
+        },
+        "jsdoc": {
+          "type": "boolean"
+        },
+        "jsonc": {
+          "type": "boolean"
+        },
+        "langchain": {
+          "type": "boolean"
+        },
+        "llamaindex": {
+          "type": "boolean"
+        },
+        "markdown": {
+          "type": "boolean"
+        },
+        "mastra": {
+          "type": "boolean"
+        },
+        "mcp": {
+          "type": "boolean"
+        },
+        "mdx": {
+          "type": "boolean"
+        },
+        "mikro-orm": {
+          "type": "boolean"
+        },
+        "node": {
+          "type": "boolean"
+        },
+        "nx": {
+          "type": "boolean"
+        },
+        "openai-agents": {
+          "type": "boolean"
+        },
+        "oxlint": {
+          "type": "boolean"
+        },
+        "package-json": {
+          "type": "boolean"
+        },
+        "perfectionist": {
+          "type": "boolean"
+        },
+        "playwright": {
+          "type": "boolean"
+        },
+        "pnpm": {
+          "type": "boolean"
+        },
+        "prettier": {
+          "type": "boolean"
+        },
+        "prisma": {
+          "type": "boolean"
+        },
+        "regexp": {
+          "type": "boolean"
+        },
+        "security": {
+          "type": "boolean"
+        },
+        "sequelize": {
+          "type": "boolean"
+        },
+        "sonarjs": {
+          "type": "boolean"
+        },
+        "stencil": {
+          "type": "boolean"
+        },
+        "storybook": {
+          "type": "boolean"
+        },
+        "swagger": {
+          "type": "boolean"
+        },
+        "tailwind": {
+          "type": "boolean"
+        },
+        "tanstack-query": {
+          "type": "boolean"
+        },
+        "tanstack-router": {
+          "type": "boolean"
+        },
+        "testing-library": {
+          "type": "boolean"
+        },
+        "toml": {
+          "type": "boolean"
+        },
+        "turbo": {
+          "type": "boolean"
+        },
+        "typeorm": {
+          "type": "boolean"
+        },
+        "unicorn": {
+          "type": "boolean"
+        },
+        "vitest": {
+          "type": "boolean"
+        },
+        "yaml": {
+          "type": "boolean"
+        },
+        "zod": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
     },
     "Parser.LooseParserModule": {
       "anyOf": [
@@ -1139,6 +1483,30 @@
       ],
       "type": "string"
     },
+    "PresetName": {
+      "enum": [
+        "all",
+        "app",
+        "basic",
+        "browser",
+        "ci",
+        "library",
+        "monorepo",
+        "node",
+        "worker"
+      ],
+      "type": "string"
+    },
+    "PresetOption": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/Preset"
+        },
+        {
+          "$ref": "#/definitions/PresetName"
+        }
+      ]
+    },
     "Processor.LooseProcessorModule": {
       "additionalProperties": false,
       "description": "A loose definition of the ParserModule type for use with configs This type intended to relax validation of configs so that parsers that have different AST types or scope managers can still be passed to configs",
@@ -1241,21 +1609,69 @@
       "description": "Enum for runtime environment presets",
       "enum": [
         "browser",
+        "bun",
+        "cloudflare",
+        "deno",
         "node",
         "universal",
         "worker"
       ],
       "type": "string"
     },
+    "RuntimeName": {
+      "enum": [
+        "browser",
+        "bun",
+        "cloudflare",
+        "deno",
+        "node",
+        "universal",
+        "worker"
+      ],
+      "type": "string"
+    },
+    "RuntimeOption": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/Runtime"
+        },
+        {
+          "$ref": "#/definitions/RuntimeName"
+        }
+      ]
+    },
     "Setting": {
       "description": "Enum for settings options in ESLint",
       "enum": [
         "default-ignores",
+        "generated-code-ignores",
         "gitignore",
         "no-default-ignores",
+        "no-generated-code-ignores",
         "no-gitignore"
       ],
       "type": "string"
+    },
+    "SettingName": {
+      "enum": [
+        "default-ignores",
+        "generated-code-ignores",
+        "gitignore",
+        "no-default-ignores",
+        "no-generated-code-ignores",
+        "no-gitignore"
+      ],
+      "type": "string"
+    },
+    "SettingOption": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/Setting"
+        },
+        {
+          "$ref": "#/definitions/SettingName"
+        }
+      ]
     },
     "SharedConfig.GlobalVariableOption": {
       "anyOf": [
@@ -1393,21 +1809,96 @@
       "enum": [
         "cypress",
         "jest",
+        "jest-dom",
         "playwright",
         "testing-library",
         "vitest"
       ],
       "type": "string"
     },
+    "TestingName": {
+      "enum": [
+        "cypress",
+        "jest",
+        "jest-dom",
+        "playwright",
+        "testing-library",
+        "vitest"
+      ],
+      "type": "string"
+    },
+    "TestingOption": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/Testing"
+        },
+        {
+          "$ref": "#/definitions/TestingName"
+        }
+      ]
+    },
     "Tool": {
       "description": "Enum for integrating external standalone utilities",
       "enum": [
+        "command",
         "cspell",
+        "docker",
+        "github-actions",
         "jsdoc",
+        "nx",
+        "pnpm",
         "prettier",
         "swagger"
       ],
       "type": "string"
+    },
+    "ToolName": {
+      "enum": [
+        "command",
+        "cspell",
+        "docker",
+        "github-actions",
+        "jsdoc",
+        "nx",
+        "pnpm",
+        "prettier",
+        "swagger"
+      ],
+      "type": "string"
+    },
+    "ToolOption": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/Tool"
+        },
+        {
+          "$ref": "#/definitions/ToolName"
+        }
+      ]
+    },
+    "TypeScriptMode": {
+      "enum": [
+        "off",
+        "strict",
+        "syntax",
+        "type-aware"
+      ],
+      "type": "string"
+    },
+    "TypeScriptOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "$ref": "#/definitions/TypeScriptMode"
+        },
+        "projectService": {
+          "type": "boolean"
+        },
+        "tsconfigRootDir": {
+          "type": "string"
+        }
+      },
+      "type": "object"
     },
     "ts.Program": {
       "additionalProperties": false,
