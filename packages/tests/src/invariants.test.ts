@@ -1,4 +1,5 @@
 import { defineConfig, Library, Tool } from '@santi020k/eslint-config-basic'
+
 import { describe, expect, test } from 'vitest'
 
 import { extractConfigNames, getEffectiveRuleValue } from './test-utils.js'

@@ -20,17 +20,17 @@
     "test:a11y": "playwright test",
     "test:a11y:ui": "playwright test --ui",
     "lighthouse": "lhci autorun",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint": "eslint . --no-warn-ignored --pass-on-no-patterns",
+    "lint:fix": "eslint . --fix --no-warn-ignored --pass-on-no-patterns"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.9",
-    "@astrojs/starlight": "^0.40.0",
-    "@axe-core/playwright": "^4.11.3",
-    "@lhci/cli": "^0.15.1",
-    "@playwright/test": "^1.60.0",
-    "astro": "^6.4.6",
-    "typescript": "^6.0.3"
+    "@astrojs/check": "catalog:",
+    "@astrojs/starlight": "catalog:",
+    "@axe-core/playwright": "catalog:",
+    "@lhci/cli": "catalog:",
+    "@playwright/test": "catalog:",
+    "astro": "catalog:",
+    "typescript": "catalog:"
   },
   "engines": {
     "node": ">=22.18.0"

@@ -1,4 +1,5 @@
 import { getGlobalsForRuntime, GLOB_JS_TS, Runtime } from '@santi020k/eslint-config-core'
+
 import type { TSESLint } from '@typescript-eslint/utils'
 import pluginVue from 'eslint-plugin-vue'
 

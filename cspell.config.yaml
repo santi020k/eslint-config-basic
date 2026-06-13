@@ -5,6 +5,7 @@ words:
   - agentchat
   - app-router
   - astro
+  - astrojs
   - asyncgenerator
   - attw
   - arethetypeswrong
@@ -45,6 +46,7 @@ words:
   - kiro
   - knip
   - langchain
+  - lhci
   - lint-staged
   - linted
   - linter
@@ -81,6 +83,7 @@ words:
   - postpack
   - project-type
   - proptypes
+  - publint
   - qwik
   - rimraf
   - root-dir
@@ -105,6 +108,7 @@ words:
   - textnodes
   - toml
   - tsconfig
+  - tsdoc
   - TSES
   - TSESLint
   - tsup
@@ -116,6 +120,7 @@ words:
   - urql
   - v8
   - vdom
+  - vercel
   - virtuals
   - vite
   - vitepress

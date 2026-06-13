@@ -13,6 +13,7 @@ import {
   Testing,
   Tool
 } from '@santi020k/eslint-config-basic'
+
 import { describe, expect, test } from 'vitest'
 
 import { extractConfigNames, extractRuleNames } from './test-utils.js'

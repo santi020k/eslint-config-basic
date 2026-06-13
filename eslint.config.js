@@ -1,33 +1,28 @@
-import { defineConfig, Format, Testing } from './packages/basic/dist/index.js'
+import { defineConfig, Extension, Format, Preset, Testing, Tool } from "@santi020k/eslint-config-basic"
 
 export default [
-  {
+  ...await defineConfig({
+    // Root lists tailwindcss for tooling; do not enable Tailwind ESLint for the whole monorepo.
+    detection: { libraries: false },
+    detectRootDir: import.meta.dirname,
+    extensions: [Extension.Boundaries],
+    formats: [Format.Jsonc, Format.Mdx, Format.Markdown],
     ignores: [
-      'dist/*',
-      'packages/*/dist/*',
       '**/tsup.config.ts',
       'docs/*',
-      '**/.agent/**',
       'packages/tests/fixtures/**',
       'packages/playground/**',
-      'apps/docs/.astro/**',
-      'apps/docs/playwright-report/**',
-      'apps/docs/test-results/**',
       'apps/docs/src/content/docs/api/reference/**',
       'apps/docs/src/content/docs/v1/api/reference/**',
       'typedoc.config.mjs',
       'typedoc.markdown.mjs'
     ],
-    name: 'local-global-ignores'
-  },
-  ...await defineConfig({
-    // Root lists tailwindcss for tooling; do not enable Tailwind ESLint for the whole monorepo.
-    detection: { libraries: false },
-    formats: [Format.Mdx, Format.Markdown],
-    libraries: [],
+    preset: Preset.Monorepo,
     testing: [Testing.Vitest],
+    tools: [Tool.Pnpm],
     tsconfigRootDir: import.meta.dirname,
-    typescript: true
+    typescript: true,
+    workspacePrefixes: ['@santi020k']
   }),
   {
     files: [

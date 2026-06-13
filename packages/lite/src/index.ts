@@ -23,6 +23,7 @@ import {
   type TypeScriptOptions
 } from '@santi020k/eslint-config-core'
 import { createTypescriptConfig } from '@santi020k/eslint-config-typescript'
+
 import type { TSESLint } from '@typescript-eslint/utils'
 
 import { applyStrictMode } from './compose.js'

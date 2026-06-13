@@ -13,6 +13,7 @@ import { solidConfig } from '@santi020k/eslint-config-solid'
 import { svelteConfig } from '@santi020k/eslint-config-svelte'
 import { typescriptConfig } from '@santi020k/eslint-config-typescript'
 import { vueConfig } from '@santi020k/eslint-config-vue'
+
 import { describe, expect, test } from 'vitest'
 
 /**

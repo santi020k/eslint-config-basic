@@ -15,6 +15,7 @@ import { slidev as slidevConfig } from '@santi020k/eslint-config-slidev'
 import { svelteConfig } from '@santi020k/eslint-config-svelte'
 import { vite as viteConfig } from '@santi020k/eslint-config-vite'
 import { vueConfig } from '@santi020k/eslint-config-vue'
+
 import { describe, expect, test } from 'vitest'
 
 import { lintFile, lintText } from './test-utils.js'

@@ -2,6 +2,7 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import { defineConfig, Extension, Format, Library, Preset, Runtime, Setting, Testing, Tool } from '@santi020k/eslint-config-basic'
+
 import { describe, expect, test } from 'vitest'
 
 import { extractConfigNames, getEffectiveRuleValue } from './test-utils.js'

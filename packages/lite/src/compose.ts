@@ -1,4 +1,5 @@
 import type { FlatConfigArray } from '@santi020k/eslint-config-core'
+
 import type { TSESLint } from '@typescript-eslint/utils'
 
 export type NormalizedStrictMode = 'ci' | 'pedantic' | 'recommended'

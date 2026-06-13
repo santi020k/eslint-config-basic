@@ -1,5 +1,6 @@
-import pluginReact from '@eslint-react/eslint-plugin'
 import { GLOB_JS_TS } from '@santi020k/eslint-config-core'
+
+import pluginReact from '@eslint-react/eslint-plugin'
 import type { TSESLint } from '@typescript-eslint/utils'
 import pluginReactCompiler from 'eslint-plugin-react-compiler'
 import pluginReactRefresh from 'eslint-plugin-react-refresh'

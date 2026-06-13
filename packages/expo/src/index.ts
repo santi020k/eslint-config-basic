@@ -1,7 +1,6 @@
-import { getDirname } from 'cross-dirname'
-
 import { FlatCompat } from '@eslint/eslintrc'
 import type { TSESLint } from '@typescript-eslint/utils'
+import { getDirname } from 'cross-dirname'
 
 // Initialize FlatCompat with the base directory
 const flatCompat = new FlatCompat({

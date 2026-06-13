@@ -25,21 +25,21 @@
     "clean": "rm -rf dist",
     "check:exports": "publint",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint": "eslint . --no-warn-ignored --pass-on-no-patterns",
+    "lint:fix": "eslint . --fix --no-warn-ignored --pass-on-no-patterns"
   },
   "dependencies": {
-    "@eslint-react/eslint-plugin": "^5.8.19",
+    "@eslint-react/eslint-plugin": "catalog:",
     "@santi020k/eslint-config-core": "workspace:^",
-    "@typescript-eslint/utils": "^8.61.0",
-    "eslint-plugin-react-compiler": "19.1.0-rc.2",
-    "eslint-plugin-react-refresh": "^0.5.2",
-    "globals": "^17.6.0"
+    "@typescript-eslint/utils": "catalog:",
+    "eslint-plugin-react-compiler": "catalog:",
+    "eslint-plugin-react-refresh": "catalog:",
+    "globals": "catalog:"
   },
   "devDependencies": {
-    "publint": "^0.3.21",
-    "tsup": "^8.5.1",
-    "typescript": "^6.0.3"
+    "publint": "catalog:",
+    "tsup": "catalog:",
+    "typescript": "catalog:"
   },
   "peerDependencies": {
     "eslint": "^10.0.0",

@@ -1,4 +1,5 @@
 import { Extension, Format, Library, Setting, Testing, Tool } from '@santi020k/eslint-config-basic'
+
 import { describe, expect, test } from 'vitest'
 
 describe('Type Exports', () => {

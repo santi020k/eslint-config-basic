@@ -7,6 +7,7 @@ test.describe('Visual Regression', () => {
 
   test('homepage should match snapshot', async ({ page }) => {
     await page.goto('/')
+
     await page.waitForLoadState('networkidle')
 
     // Hide dynamic elements if necessary (e.g., date-based content)
@@ -23,7 +24,9 @@ test.describe('Visual Regression', () => {
 
   test('dark mode homepage should match snapshot', async ({ page }) => {
     await page.goto('/')
+
     await page.emulateMedia({ colorScheme: 'dark' })
+
     await page.waitForLoadState('networkidle')
 
     await expect(page).toHaveScreenshot('homepage-dark.png', {

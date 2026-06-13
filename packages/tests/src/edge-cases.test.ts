@@ -2,6 +2,7 @@ import { tmpdir } from 'node:os'
 
 import astro from '@santi020k/eslint-config-astro'
 import { defineConfig, Extension, Format, Library, NextMode, Testing, Tool } from '@santi020k/eslint-config-basic'
+
 import { describe, expect, test } from 'vitest'
 
 import { extractConfigNames, extractRuleNames, getEffectiveRuleValue } from './test-utils.js'

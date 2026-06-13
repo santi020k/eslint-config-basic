@@ -6,7 +6,16 @@ import pluginSvelte from 'eslint-plugin-svelte'
  * Extends eslint-plugin-svelte recommended flat config
  */
 export const svelteConfig: TSESLint.FlatConfig.ConfigArray = [
-  ...(pluginSvelte.configs['flat/recommended']),
+  ...(pluginSvelte.configs['flat/recommended'] as TSESLint.FlatConfig.ConfigArray).map(config => {
+    if (config.rules && !config.files) {
+      return {
+        ...config,
+        files: ['**/*.svelte']
+      }
+    }
+
+    return config
+  }),
   {
     files: ['**/*.svelte'],
     name: 'eslint-config-svelte/rules',

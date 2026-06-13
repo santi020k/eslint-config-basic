@@ -1,4 +1,5 @@
 import { GLOB_JS_TS } from '@santi020k/eslint-config-core'
+
 import pluginTanstackQuery from '@tanstack/eslint-plugin-query'
 import pluginTanstackRouter from '@tanstack/eslint-plugin-router'
 import type { TSESLint } from '@typescript-eslint/utils'

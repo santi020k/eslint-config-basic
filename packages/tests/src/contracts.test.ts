@@ -8,6 +8,7 @@ import {
   Testing,
   Tool
 } from '@santi020k/eslint-config-basic'
+
 import { describe, expect, test } from 'vitest'
 
 const noDetectRootDir = '/__eslint-config-basic_contract_tests_no_detect__'

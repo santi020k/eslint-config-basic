@@ -64,6 +64,11 @@ import { swagger } from './tools/swagger.js'
 /**
  * Gets integration configs based on selected options.
  * This function maintains the recommended ordering (e.g. Prettier last).
+ * @param libraries
+ * @param tools
+ * @param testing
+ * @param formats
+ * @param extensions
  */
 export const getIntegrationConfigs = async (
   libraries: Library[],
@@ -200,5 +205,6 @@ export const getIntegrationConfigs = async (
 
 /**
  * Returns the Prettier configuration if selected.
+ * @param tools
  */
 export const getPrettierConfig = async (tools: Tool[]): Promise<FlatConfigArray> => tools.includes(Tool.Prettier) ? await prettier() : []

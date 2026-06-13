@@ -1,4 +1,5 @@
 import { reactRouter } from '@santi020k/eslint-config-react-router'
+
 import type { TSESLint } from '@typescript-eslint/utils'
 
 const remixConfig: TSESLint.FlatConfig.ConfigArray = reactRouter.map(config => ({

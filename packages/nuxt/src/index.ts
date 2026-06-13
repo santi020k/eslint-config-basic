@@ -1,5 +1,6 @@
-import pluginNuxt from '@nuxt/eslint-plugin'
 import { getGlobalsForRuntime, GLOB_JS_TS, GLOB_VUE, Runtime } from '@santi020k/eslint-config-core'
+
+import pluginNuxt from '@nuxt/eslint-plugin'
 import type { TSESLint } from '@typescript-eslint/utils'
 
 const NUXT_SERVER_FILES = [

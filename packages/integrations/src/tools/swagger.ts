@@ -1,5 +1,6 @@
-import type NestjsTyped from '@darraghor/eslint-plugin-nestjs-typed'
 import { GLOB_TS } from '@santi020k/eslint-config-core'
+
+import type NestjsTyped from '@darraghor/eslint-plugin-nestjs-typed'
 import type { TSESLint } from '@typescript-eslint/utils'
 
 import { defineLazyConfig, loadModule } from '../lazy.js'

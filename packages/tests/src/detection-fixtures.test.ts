@@ -3,6 +3,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
 import { detectProjectOptions, Format, Library, NextMode, Preset, Runtime, Tool } from '@santi020k/eslint-config-basic'
+
 import { afterEach, describe, expect, test } from 'vitest'
 
 const tempDirs: string[] = []

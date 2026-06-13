@@ -25,19 +25,19 @@
     "clean": "rm -rf dist",
     "check:exports": "publint",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint": "eslint . --no-warn-ignored --pass-on-no-patterns",
+    "lint:fix": "eslint . --fix --no-warn-ignored --pass-on-no-patterns"
   },
   "dependencies": {
     "@santi020k/eslint-config-core": "workspace:^",
-    "@typescript-eslint/utils": "^8.61.0",
-    "eslint-plugin-lit": "^2.3.1",
-    "eslint-plugin-wc": "^3.1.0"
+    "@typescript-eslint/utils": "catalog:",
+    "eslint-plugin-lit": "catalog:",
+    "eslint-plugin-wc": "catalog:"
   },
   "devDependencies": {
-    "publint": "^0.3.21",
-    "tsup": "^8.5.1",
-    "typescript": "^6.0.3"
+    "publint": "catalog:",
+    "tsup": "catalog:",
+    "typescript": "catalog:"
   },
   "peerDependencies": {
     "eslint": "^10.0.0"

@@ -1,5 +1,6 @@
 import { Runtime } from '@santi020k/eslint-config-basic'
 import { __detectionInternals } from '@santi020k/eslint-config-core'
+
 import { describe, expect, test } from 'vitest'
 
 describe('detection internals', () => {

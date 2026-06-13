@@ -24,6 +24,7 @@ import {
   type TypeScriptOptions
 } from '@santi020k/eslint-config-core'
 import { createTypescriptConfig } from '@santi020k/eslint-config-typescript'
+
 import type { TSESLint } from '@typescript-eslint/utils'
 
 import { applyStrictMode } from './compose.js'
@@ -867,6 +868,7 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
 
   const workspaceImportOverride: TSESLint.FlatConfig.Config[] = workspacePrefixes?.length ?
     [{
+      files: ['**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx}'],
       name: 'eslint-config-basic/workspace-import-groups',
       rules: {
         'simple-import-sort/imports': ['warn', {

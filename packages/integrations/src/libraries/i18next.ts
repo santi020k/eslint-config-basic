@@ -1,5 +1,6 @@
-import { fixupPluginRules } from '@eslint/compat'
 import { GLOB_JS_TS_ALL } from '@santi020k/eslint-config-core'
+
+import { fixupPluginRules } from '@eslint/compat'
 import type { TSESLint } from '@typescript-eslint/utils'
 import type PluginI18next from 'eslint-plugin-i18next'
 

@@ -8,7 +8,7 @@
     "dev": "echo \"No dev step required\"",
     "clean": "rm -rf dist node_modules",
     "check:exports": "echo \"No exports to check\"",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix --no-warn-ignored --pass-on-no-patterns"
   },
   "author": "santi020k",
   "license": "MIT",
