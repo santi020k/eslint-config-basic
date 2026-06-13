@@ -1,0 +1,33 @@
+{
+  "mode": "pre",
+  "tag": "beta",
+  "initialVersions": {
+    "@santi020k/eslint-config-docs": "1.6.0",
+    "@santi020k/eslint-config-angular": "1.6.0",
+    "@santi020k/eslint-config-astro": "1.6.0",
+    "@santi020k/eslint-config-basic": "1.6.0",
+    "@santi020k/eslint-config-core": "1.6.0",
+    "@santi020k/eslint-config-expo": "1.6.0",
+    "@santi020k/eslint-config-hono": "1.6.0",
+    "@santi020k/eslint-config-integrations": "1.6.0",
+    "@santi020k/eslint-config-lit": "1.6.0",
+    "@santi020k/eslint-config-nest": "1.6.0",
+    "@santi020k/eslint-config-next": "1.6.0",
+    "@santi020k/eslint-config-nuxt": "1.6.0",
+    "@santi020k/playground": "0.8.1",
+    "@playground/hono": "0.0.0",
+    "@santi020k/eslint-config-qwik": "1.6.0",
+    "@santi020k/eslint-config-react": "1.6.0",
+    "@santi020k/eslint-config-react-router": "1.6.0",
+    "@santi020k/eslint-config-remix": "1.6.0",
+    "@santi020k/eslint-config-slidev": "1.6.0",
+    "@santi020k/eslint-config-solid": "1.6.0",
+    "@santi020k/eslint-config-svelte": "1.6.0",
+    "@santi020k/eslint-config-tanstack-start": "1.6.0",
+    "@santi020k/eslint-config-tests": "1.0.0",
+    "@santi020k/eslint-config-typescript": "1.6.0",
+    "@santi020k/eslint-config-vite": "1.6.0",
+    "@santi020k/eslint-config-vue": "1.6.0"
+  },
+  "changesets": []
+}

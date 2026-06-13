@@ -31,6 +31,7 @@ export default defineConfig([
       'src/compose.ts',
       'src/frameworks.ts',
       'src/integrations.ts',
+      'src/lazy.ts',
       'src/resolvers.ts',
     ],
   },
