@@ -24,6 +24,7 @@ This project follows a **DX-First & Stability-First** mission. We prioritize a s
 
 - **Handled Versioning**: Core packages like `eslint` and `@eslint/js` are included as hard dependencies. This ensures the config "just works" with tested versions, preventing the dreaded "peer dependency hell."
 - **Modern Baseline**: Built for **ESLint 10** flat config, taking advantage of v10 improvements like per-file config lookup and JSX reference tracking.
+- **Install Size, Explained**: Bundling every framework and plugin behind one install is a deliberate tradeoff — `node_modules` is larger, but versions are vetted together, installs never break on peer conflicts, and lazy loading means unused frameworks are never imported at lint time. Disk is cheap; debugging plugin version mismatches is not.
 
 ## ✨ Key Features
 

@@ -17,6 +17,41 @@ The internal architecture is still modular, but application projects no longer n
 | Next.js and Expo required an explicit React config. | Next.js, Expo, and Remix automatically include React rules. |
 | Manual inspection required reading generated config. | `basic-eslint explain` prints detected v2 inputs. |
 | Migration was fully manual. | `basic-eslint migrate` reports v1-to-v2 changes to make. |
+| ESLint 9 and 10 supported. | ESLint 10 only. |
+| Framework exports were config arrays with mixed names (`reactConfig`, `astro`). | Framework exports are lazy async factories with bare names (`react`, `astro`). |
+
+## ESLint 10 Required
+
+v2 requires ESLint 10 (`"eslint": "^10.0.0"` peer dependency). ESLint 9 reaches end-of-life on 2026-08-06; if you cannot upgrade yet, stay on the v1.x line of these packages.
+
+```sh
+pnpm add -D eslint@^10
+```
+
+Targeting v10 only lets the configs rely on v10 behavior: per-file config lookup (each linted file resolves the nearest `eslint.config.*`), JSX reference tracking without plugin workarounds, and the updated `eslint:recommended` baseline.
+
+## Renamed Framework Exports
+
+If you composed configs manually from named exports, two things changed:
+
+1. **Bare names**: the mixed v1 naming (`reactConfig`, `vueConfig`, `nextConfig` next to bare `astro`, `hono`, `vite`) is normalized to bare framework names: `angular`, `astro`, `expo`, `hono`, `lit`, `nest`, `next`, `nuxt`, `qwik`, `react`, `reactRouter`, `slidev`, `solid`, `svelte`, `tanstackStart`, `vite`, `vue`. The old `*Config` names still exist as deprecated aliases.
+2. **Async factories**: every framework export is now a lazy factory returning `Promise<FlatConfigArray>` — the framework's plugins are only imported when you call it. Exports that used to be plain arrays must now be called and awaited.
+
+```js
+// v1
+import { reactConfig } from '@santi020k/eslint-config-basic'
+
+export default [...reactConfig]
+```
+
+```js
+// v2
+import { react } from '@santi020k/eslint-config-basic'
+
+export default [...(await react())]
+```
+
+If you only use `frameworks: { react: true }` or auto-detection, nothing changes — `defineConfig()` handles the loading internally.
 
 ## Package Changes
 

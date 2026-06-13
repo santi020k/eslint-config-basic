@@ -23,6 +23,20 @@ npx @santi020k/eslint-config-basic explain
 
 ---
 
+## Install Size
+
+### Why does one package install so many plugins?
+
+v2 bundles every framework config and integration plugin as regular dependencies of `@santi020k/eslint-config-basic`. This is a deliberate DX-first tradeoff:
+
+- **Vetted together**: every plugin version is tested against the others in CI, so you never resolve peer-dependency conflicts yourself.
+- **Installs never break**: there are no optional peers to forget or mismatch — `pnpm add -D @santi020k/eslint-config-basic` is the whole setup.
+- **Lazy at runtime**: framework packages and integration plugins are imported only when enabled, so unused frameworks cost disk space but zero lint startup time.
+
+If install size is critical (e.g. tight CI caches), the individual `@santi020k/eslint-config-*` packages remain published and can be composed manually.
+
+---
+
 ## Framework and Detection Issues
 
 ### A framework I did not enable is being linted

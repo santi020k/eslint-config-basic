@@ -9,7 +9,7 @@ description: "@santi020k/eslint-config-basic"
 
 > `const` **expoConfig**: `TSESLint.FlatConfig.ConfigArray`
 
-Defined in: [expo/src/index.ts:49](https://github.com/santi020k/eslint-config-basic/blob/5eece8230e1812c4be0f81dcae3145ab20b23e8a/packages/expo/src/index.ts#L49)
+Defined in: [expo/src/index.ts:49](https://github.com/santi020k/eslint-config-basic/blob/6d2b81961bdf9bdc20fb1f67906d34572d141636/packages/expo/src/index.ts#L49)
 
 Expo ESLint configuration
 Extends the expo config with React Native/Expo rules.
