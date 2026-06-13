@@ -280,7 +280,7 @@ describe('Integration Tests', () => {
   describe('React Router', () => {
     test('should include React Router-specific rules in config', async () => {
       const config = await defineConfig({
-         
+
         frameworks: { 'react-router': reactRouterConfig },
         typescript: false
       })

@@ -130,6 +130,8 @@ words:
   - weakref
   - workspace
   - workspaces
+  - unrs
+  - workerd
 ignorePaths:
   - node_modules
   - dist
