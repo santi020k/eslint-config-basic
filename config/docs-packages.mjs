@@ -174,5 +174,12 @@ export const packageDocs = [
     packageName: '@santi020k/eslint-config-basic',
     packagePath: 'packages/basic',
     title: 'Main package'
+  },
+  {
+    description: 'Lite composer for projects that install framework and integration config packages manually.',
+    docsPath: '/packages/lite.html',
+    packageName: '@santi020k/eslint-config-lite',
+    packagePath: 'packages/lite',
+    title: 'Lite package'
   }
 ]

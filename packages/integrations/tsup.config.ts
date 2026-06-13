@@ -2,6 +2,7 @@ import { defineConfig } from 'tsup'
 export default defineConfig({
   entry: [
     'src/index.ts',
+    'src/compose.ts',
     'src/lazy.ts',
     'src/tools/*.ts',
     'src/libraries/*.ts',

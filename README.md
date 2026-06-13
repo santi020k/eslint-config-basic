@@ -24,7 +24,7 @@ This project follows a **DX-First & Stability-First** mission. We prioritize a s
 
 - **Handled Versioning**: Core packages like `eslint` and `@eslint/js` are included as hard dependencies. This ensures the config "just works" with tested versions, preventing the dreaded "peer dependency hell."
 - **Modern Baseline**: Built for **ESLint 10** flat config, taking advantage of v10 improvements like per-file config lookup and JSX reference tracking.
-- **Install Size, Explained**: Bundling every framework and plugin behind one install is a deliberate tradeoff — `node_modules` is larger, but versions are vetted together, installs never break on peer conflicts, and lazy loading means unused frameworks are never imported at lint time. Disk is cheap; debugging plugin version mismatches is not.
+- **Install Size, Explained**: Bundling every framework and plugin behind one install is a deliberate tradeoff — `node_modules` is larger, but versions are vetted together, installs never break on peer conflicts, and lazy loading means unused frameworks are never imported at lint time. For dependency-sensitive projects, `@santi020k/eslint-config-lite` keeps the same composer API while letting you install framework and integration config packages manually.
 
 ## ✨ Key Features
 
@@ -49,6 +49,12 @@ npm install -D @santi020k/eslint-config-basic
 ```
 
 *(No need to install `eslint` manually; it's handled as a dependency of the config to ensure the best DX!)*
+
+For a smaller opt-in install where you manage framework and integration packages yourself:
+
+```bash
+npm install -D @santi020k/eslint-config-lite eslint
+```
 
 ### Usage
 

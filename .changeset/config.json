@@ -10,6 +10,7 @@
       "@santi020k/eslint-config-core",
       "@santi020k/eslint-config-expo",
       "@santi020k/eslint-config-hono",
+      "@santi020k/eslint-config-lite",
       "@santi020k/eslint-config-lit",
       "@santi020k/eslint-config-nest",
       "@santi020k/eslint-config-next",

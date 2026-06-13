@@ -1,4 +1,5 @@
 // Re-export all integrations from categorized subdirectories
+export { getIntegrationConfigs, getPrettierConfig } from './compose.js'
 
 // Extensions
 export * from './extensions/a11y.js'

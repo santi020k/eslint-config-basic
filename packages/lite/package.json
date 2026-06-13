@@ -1,0 +1,120 @@
+{
+  "name": "@santi020k/eslint-config-lite",
+  "version": "1.6.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "Lite ESLint flat-config composer with manual framework and integration package installs.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "build:pack": "npm pack",
+    "dev": "tsup --watch",
+    "clean": "rm -rf dist",
+    "check:exports": "publint",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@santi020k/eslint-config-core": "workspace:^",
+    "@santi020k/eslint-config-typescript": "workspace:^",
+    "@typescript-eslint/utils": "^8.61.0"
+  },
+  "devDependencies": {
+    "@santi020k/eslint-config-angular": "workspace:^",
+    "@santi020k/eslint-config-astro": "workspace:^",
+    "@santi020k/eslint-config-expo": "workspace:^",
+    "@santi020k/eslint-config-hono": "workspace:^",
+    "@santi020k/eslint-config-integrations": "workspace:^",
+    "@santi020k/eslint-config-lit": "workspace:^",
+    "@santi020k/eslint-config-nest": "workspace:^",
+    "@santi020k/eslint-config-next": "workspace:^",
+    "@santi020k/eslint-config-nuxt": "workspace:^",
+    "@santi020k/eslint-config-qwik": "workspace:^",
+    "@santi020k/eslint-config-react": "workspace:^",
+    "@santi020k/eslint-config-react-router": "workspace:^",
+    "@santi020k/eslint-config-remix": "workspace:^",
+    "@santi020k/eslint-config-slidev": "workspace:^",
+    "@santi020k/eslint-config-solid": "workspace:^",
+    "@santi020k/eslint-config-svelte": "workspace:^",
+    "@santi020k/eslint-config-tanstack-start": "workspace:^",
+    "@santi020k/eslint-config-vite": "workspace:^",
+    "@santi020k/eslint-config-vue": "workspace:^",
+    "publint": "^0.3.21",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3"
+  },
+  "peerDependencies": {
+    "@santi020k/eslint-config-angular": "^1.6.0",
+    "@santi020k/eslint-config-astro": "^1.6.0",
+    "@santi020k/eslint-config-expo": "^1.6.0",
+    "@santi020k/eslint-config-hono": "^1.6.0",
+    "@santi020k/eslint-config-integrations": "^1.6.0",
+    "@santi020k/eslint-config-lit": "^1.6.0",
+    "@santi020k/eslint-config-nest": "^1.6.0",
+    "@santi020k/eslint-config-next": "^1.6.0",
+    "@santi020k/eslint-config-nuxt": "^1.6.0",
+    "@santi020k/eslint-config-qwik": "^1.6.0",
+    "@santi020k/eslint-config-react": "^1.6.0",
+    "@santi020k/eslint-config-react-router": "^1.6.0",
+    "@santi020k/eslint-config-remix": "^1.6.0",
+    "@santi020k/eslint-config-slidev": "^1.6.0",
+    "@santi020k/eslint-config-solid": "^1.6.0",
+    "@santi020k/eslint-config-svelte": "^1.6.0",
+    "@santi020k/eslint-config-tanstack-start": "^1.6.0",
+    "@santi020k/eslint-config-vite": "^1.6.0",
+    "@santi020k/eslint-config-vue": "^1.6.0",
+    "eslint": "^10.0.0",
+    "typescript": ">=5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@santi020k/eslint-config-angular": { "optional": true },
+    "@santi020k/eslint-config-astro": { "optional": true },
+    "@santi020k/eslint-config-expo": { "optional": true },
+    "@santi020k/eslint-config-hono": { "optional": true },
+    "@santi020k/eslint-config-integrations": { "optional": true },
+    "@santi020k/eslint-config-lit": { "optional": true },
+    "@santi020k/eslint-config-nest": { "optional": true },
+    "@santi020k/eslint-config-next": { "optional": true },
+    "@santi020k/eslint-config-nuxt": { "optional": true },
+    "@santi020k/eslint-config-qwik": { "optional": true },
+    "@santi020k/eslint-config-react": { "optional": true },
+    "@santi020k/eslint-config-react-router": { "optional": true },
+    "@santi020k/eslint-config-remix": { "optional": true },
+    "@santi020k/eslint-config-slidev": { "optional": true },
+    "@santi020k/eslint-config-solid": { "optional": true },
+    "@santi020k/eslint-config-svelte": { "optional": true },
+    "@santi020k/eslint-config-tanstack-start": { "optional": true },
+    "@santi020k/eslint-config-vite": { "optional": true },
+    "@santi020k/eslint-config-vue": { "optional": true },
+    "typescript": { "optional": true }
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/santi020k/eslint-config-basic.git",
+    "directory": "packages/lite"
+  },
+  "homepage": "https://eslint.santi020k.com/packages/lite.html",
+  "bugs": {
+    "url": "https://github.com/santi020k/eslint-config-basic/issues"
+  },
+  "author": "santi020k",
+  "license": "MIT"
+}

@@ -25,6 +25,9 @@
       "@santi020k/eslint-config-basic": [
         "./packages/basic/src/index.ts"
       ],
+      "@santi020k/eslint-config-lite": [
+        "./packages/lite/src/index.ts"
+      ],
       "@santi020k/eslint-config-core": [
         "./packages/core/src/index.ts"
       ],

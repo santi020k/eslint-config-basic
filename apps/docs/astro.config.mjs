@@ -74,6 +74,7 @@ const sidebar = [
           { label: 'Playgrounds', slug: 'guide/playgrounds' },
           { label: 'CLI Reference', slug: 'guide/cli' },
           { badge: { text: 'Main', variant: 'note' }, label: 'Core Config', slug: 'packages/basic' },
+          { badge: { text: 'Lite', variant: 'tip' }, label: 'Lite Config', slug: 'packages/lite' },
           { label: 'Base Rules', slug: 'packages/core' },
           { label: 'Integrations', slug: 'packages/integrations' },
           { label: 'Playground', slug: 'packages/playground' },

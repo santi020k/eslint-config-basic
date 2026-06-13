@@ -7,6 +7,8 @@ Package: [`@santi020k/eslint-config-basic`](https://www.npmjs.com/package/@santi
 
 This is the public package application projects install in v2.
 
+Use this package by default. If a project needs a smaller install and is willing to install framework and integration config packages manually, see the [Lite Package](/packages/lite).
+
 ## What It Owns
 
 - The `eslintConfig()` composer used in application `eslint.config.*` files.
@@ -74,6 +76,7 @@ bunx @santi020k/eslint-config-basic update
 ## Related Pages
 
 - [Installation](/guide/installation)
+- [Lite Package](/packages/lite)
 - [Configuration](/guide/configuration)
 - [v1 to v2 Migration](/guide/migration-v1-to-v2)
 - [API Reference](/api/)

@@ -35,6 +35,8 @@ v2 bundles every framework config and integration plugin as regular dependencies
 
 If install size is critical (e.g. tight CI caches), the individual `@santi020k/eslint-config-*` packages remain published and can be composed manually.
 
+For projects that still want the main composer API with a smaller default install, use `@santi020k/eslint-config-lite`. It installs the core composer and TypeScript support, but requires you to install framework config packages and `@santi020k/eslint-config-integrations` yourself when you enable those features.
+
 ---
 
 ## Framework and Detection Issues

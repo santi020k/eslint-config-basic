@@ -10,6 +10,7 @@
     "@santi020k/eslint-config-expo": "1.6.0",
     "@santi020k/eslint-config-hono": "1.6.0",
     "@santi020k/eslint-config-integrations": "1.6.0",
+    "@santi020k/eslint-config-lite": "1.6.0",
     "@santi020k/eslint-config-lit": "1.6.0",
     "@santi020k/eslint-config-nest": "1.6.0",
     "@santi020k/eslint-config-next": "1.6.0",

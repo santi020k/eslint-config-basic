@@ -32,6 +32,29 @@ bun add -d @santi020k/eslint-config-basic
 
 That package brings the framework config packages used by the composer. You no longer install `@santi020k/eslint-config-react`, `@santi020k/eslint-config-next`, or another framework config package in normal application projects.
 
+## Lite Install
+
+If your project needs a smaller install or wants to manage framework config packages manually, use the optional lite entry point:
+
+```sh title="pnpm"
+pnpm add -D @santi020k/eslint-config-lite eslint
+```
+
+```js
+import { defineConfig } from '@santi020k/eslint-config-lite'
+
+export default await defineConfig()
+```
+
+With `@santi020k/eslint-config-lite`, install framework and integration config packages only when you enable them:
+
+```sh title="pnpm"
+pnpm add -D @santi020k/eslint-config-react
+pnpm add -D @santi020k/eslint-config-integrations
+```
+
+The full `@santi020k/eslint-config-basic` package remains the recommended default. Use lite for dependency-sensitive projects and CI caches where manual package ownership is worth the extra setup.
+
 ## Minimal Config
 
 ```js
@@ -107,6 +130,7 @@ See [Configuration](/guide/configuration#additional-global-ignores) for presets,
 | Project Type | Package To Install | Enable With |
 | :--- | :--- | :--- |
 | JavaScript | `@santi020k/eslint-config-basic` | `eslintConfig()` |
+| JavaScript, manual packages | `@santi020k/eslint-config-lite` | `eslintConfig()` |
 | TypeScript | `@santi020k/eslint-config-basic` | `typescript: true` or auto-detection |
 | React | `@santi020k/eslint-config-basic` | `frameworks.react: true` |
 | Next.js | `@santi020k/eslint-config-basic` | `frameworks.next: true` |
