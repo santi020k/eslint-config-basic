@@ -140,3 +140,5 @@ ignorePaths:
   - packages/playground/**
   - packages/tests/src/__snapshots__/**
   - .vscode
+  - solid-config.json
+

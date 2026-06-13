@@ -24,7 +24,9 @@
     "dev": "tsup --watch",
     "clean": "rm -rf dist",
     "check:exports": "publint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "@nuxt/eslint-plugin": "^1.16.0",

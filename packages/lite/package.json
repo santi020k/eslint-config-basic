@@ -27,7 +27,9 @@
     "dev": "tsup --watch",
     "clean": "rm -rf dist",
     "check:exports": "publint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "@santi020k/eslint-config-core": "workspace:^",
@@ -82,26 +84,66 @@
     "typescript": ">=5.0.0"
   },
   "peerDependenciesMeta": {
-    "@santi020k/eslint-config-angular": { "optional": true },
-    "@santi020k/eslint-config-astro": { "optional": true },
-    "@santi020k/eslint-config-expo": { "optional": true },
-    "@santi020k/eslint-config-hono": { "optional": true },
-    "@santi020k/eslint-config-integrations": { "optional": true },
-    "@santi020k/eslint-config-lit": { "optional": true },
-    "@santi020k/eslint-config-nest": { "optional": true },
-    "@santi020k/eslint-config-next": { "optional": true },
-    "@santi020k/eslint-config-nuxt": { "optional": true },
-    "@santi020k/eslint-config-qwik": { "optional": true },
-    "@santi020k/eslint-config-react": { "optional": true },
-    "@santi020k/eslint-config-react-router": { "optional": true },
-    "@santi020k/eslint-config-remix": { "optional": true },
-    "@santi020k/eslint-config-slidev": { "optional": true },
-    "@santi020k/eslint-config-solid": { "optional": true },
-    "@santi020k/eslint-config-svelte": { "optional": true },
-    "@santi020k/eslint-config-tanstack-start": { "optional": true },
-    "@santi020k/eslint-config-vite": { "optional": true },
-    "@santi020k/eslint-config-vue": { "optional": true },
-    "typescript": { "optional": true }
+    "@santi020k/eslint-config-angular": {
+      "optional": true
+    },
+    "@santi020k/eslint-config-astro": {
+      "optional": true
+    },
+    "@santi020k/eslint-config-expo": {
+      "optional": true
+    },
+    "@santi020k/eslint-config-hono": {
+      "optional": true
+    },
+    "@santi020k/eslint-config-integrations": {
+      "optional": true
+    },
+    "@santi020k/eslint-config-lit": {
+      "optional": true
+    },
+    "@santi020k/eslint-config-nest": {
+      "optional": true
+    },
+    "@santi020k/eslint-config-next": {
+      "optional": true
+    },
+    "@santi020k/eslint-config-nuxt": {
+      "optional": true
+    },
+    "@santi020k/eslint-config-qwik": {
+      "optional": true
+    },
+    "@santi020k/eslint-config-react": {
+      "optional": true
+    },
+    "@santi020k/eslint-config-react-router": {
+      "optional": true
+    },
+    "@santi020k/eslint-config-remix": {
+      "optional": true
+    },
+    "@santi020k/eslint-config-slidev": {
+      "optional": true
+    },
+    "@santi020k/eslint-config-solid": {
+      "optional": true
+    },
+    "@santi020k/eslint-config-svelte": {
+      "optional": true
+    },
+    "@santi020k/eslint-config-tanstack-start": {
+      "optional": true
+    },
+    "@santi020k/eslint-config-vite": {
+      "optional": true
+    },
+    "@santi020k/eslint-config-vue": {
+      "optional": true
+    },
+    "typescript": {
+      "optional": true
+    }
   },
   "engines": {
     "node": ">=22.18.0"

@@ -7,7 +7,8 @@
     "lint": "turbo run lint --filter=\"@playground/*\" --",
     "dev": "echo \"No dev step required\"",
     "clean": "rm -rf dist node_modules",
-    "check:exports": "echo \"No exports to check\""
+    "check:exports": "echo \"No exports to check\"",
+    "lint:fix": "eslint . --fix"
   },
   "author": "santi020k",
   "license": "MIT",

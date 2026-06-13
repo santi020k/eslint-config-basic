@@ -13,7 +13,9 @@
     "build": "echo \"No direct build step required\"",
     "dev": "echo \"No direct build step required\"",
     "clean": "rm -rf dist node_modules",
-    "check:exports": "echo \"No exports to check\""
+    "check:exports": "echo \"No exports to check\"",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "devDependencies": {
     "@santi020k/eslint-config-angular": "workspace:^",
