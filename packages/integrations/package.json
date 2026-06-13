@@ -103,6 +103,7 @@
   },
   "devDependencies": {
     "@types/eslint-plugin-jsx-a11y": "catalog:",
+    "eslint": "catalog:",
     "publint": "catalog:",
     "tailwindcss": "catalog:",
     "tsup": "catalog:",

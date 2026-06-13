@@ -50,8 +50,9 @@ export const loadModule = async <T = unknown>(specifier: string): Promise<T> => 
 
 /**
  * Keeps optional integrations import-safe for consumers that do not enable them.
- * @param name
- * @param load
+ * @param name - The name of the integration
+ * @param load - Function to load the configuration
+ * @returns A function that resolves the configuration array lazily
  */
 export const defineLazyConfig = (
   name: string,

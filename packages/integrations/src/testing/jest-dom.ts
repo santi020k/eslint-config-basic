@@ -7,7 +7,7 @@ import { defineLazyConfig, loadDefault } from '../lazy.js'
 
 /**
  * Jest DOM ESLint configuration
- * Provides rules for @testing-library/jest-dom
+ * Provides rules for \@testing-library/jest-dom
  */
 export const jestDom: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('jestDom', async () => {
   const pluginJestDom = await loadDefault<typeof PluginJestDom>('eslint-plugin-jest-dom')

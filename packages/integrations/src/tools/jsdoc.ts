@@ -30,6 +30,9 @@ export const jsdoc: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyC
         tsdoc: pluginTsdoc
       },
       rules: {
+        'jsdoc/require-param-type': 'off',
+        'jsdoc/require-returns': 'off',
+        'jsdoc/require-returns-type': 'off',
         'tsdoc/syntax': 'warn'
       }
     }

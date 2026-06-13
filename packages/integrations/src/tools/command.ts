@@ -7,7 +7,7 @@ import { defineLazyConfig, loadDefault } from '../lazy.js'
 
 /**
  * Command ESLint configuration
- * Provides in-editor micro-fixes via magic comments (e.g., /// @keep)
+ * Provides in-editor micro-fixes via magic comments (e.g., /// \@keep)
  */
 export const command: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('command', async () => {
   const pluginCommandConfig = await loadDefault<typeof PluginCommand>('eslint-plugin-command/config')
