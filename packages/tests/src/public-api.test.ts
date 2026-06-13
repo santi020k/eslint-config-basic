@@ -61,6 +61,11 @@ import {
   yaml,
   zod
 } from '@santi020k/eslint-config-basic'
+import * as integrationExtensions from '@santi020k/eslint-config-integrations/extensions'
+import * as integrationFormats from '@santi020k/eslint-config-integrations/formats'
+import * as integrationLibraries from '@santi020k/eslint-config-integrations/libraries'
+import * as integrationTesting from '@santi020k/eslint-config-integrations/testing'
+import * as integrationTools from '@santi020k/eslint-config-integrations/tools'
 
 import { describe, expect, test } from 'vitest'
 
@@ -198,10 +203,8 @@ describe('Public API Re-exports', () => {
 })
 
 describe('Integrations subpath exports', () => {
-  test('extensions subpath exports expected configs', async () => {
-    const exports = await import('@santi020k/eslint-config-integrations/extensions') as Record<string, unknown>
-
-    expect(Object.keys(exports).sort()).toEqual([
+  test('extensions subpath exports expected configs', () => {
+    expect(Object.keys(integrationExtensions).sort()).toEqual([
       'bestPractices',
       'compat',
       'deMorgan',
@@ -216,10 +219,8 @@ describe('Integrations subpath exports', () => {
     ])
   })
 
-  test('formats subpath exports expected configs', async () => {
-    const exports = await import('@santi020k/eslint-config-integrations/formats') as Record<string, unknown>
-
-    expect(Object.keys(exports).sort()).toEqual([
+  test('formats subpath exports expected configs', () => {
+    expect(Object.keys(integrationFormats).sort()).toEqual([
       'css',
       'graphql',
       'html',
@@ -231,10 +232,8 @@ describe('Integrations subpath exports', () => {
     ])
   })
 
-  test('libraries subpath exports expected configs', async () => {
-    const exports = await import('@santi020k/eslint-config-integrations/libraries') as Record<string, unknown>
-
-    expect(Object.keys(exports).sort()).toEqual([
+  test('libraries subpath exports expected configs', () => {
+    expect(Object.keys(integrationLibraries).sort()).toEqual([
       'aiSdk',
       'drizzle',
       'i18next',
@@ -256,10 +255,8 @@ describe('Integrations subpath exports', () => {
     ])
   })
 
-  test('testing subpath exports expected configs', async () => {
-    const exports = await import('@santi020k/eslint-config-integrations/testing') as Record<string, unknown>
-
-    expect(Object.keys(exports).sort()).toEqual([
+  test('testing subpath exports expected configs', () => {
+    expect(Object.keys(integrationTesting).sort()).toEqual([
       'cypress',
       'jest',
       'playwright',
@@ -268,10 +265,8 @@ describe('Integrations subpath exports', () => {
     ])
   })
 
-  test('tools subpath exports expected configs', async () => {
-    const exports = await import('@santi020k/eslint-config-integrations/tools') as Record<string, unknown>
-
-    expect(Object.keys(exports).sort()).toEqual([
+  test('tools subpath exports expected configs', () => {
+    expect(Object.keys(integrationTools).sort()).toEqual([
       'cspell',
       'jsdoc',
       'pnpm',
