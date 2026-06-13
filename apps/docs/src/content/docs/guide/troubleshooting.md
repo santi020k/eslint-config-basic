@@ -15,6 +15,12 @@ npx @santi020k/eslint-config-basic doctor
 
 `doctor` checks for missing config files, configs that cannot be loaded, lingering v1 imports, missing lint scripts, workspace packages not covered by `projects`, and parallel ESLint version copies.
 
+For automation, use structured output:
+
+```sh
+npx @santi020k/eslint-config-basic doctor --json
+```
+
 ```sh
 npx @santi020k/eslint-config-basic explain
 ```
@@ -142,7 +148,7 @@ export default await defineConfig({
 
 ### Two ESLint versions are installed
 
-`doctor` warns when two different ESLint copies are installed. Fix with pnpm overrides:
+`doctor` warns when two different ESLint copies are installed. The current release line supports ESLint 10, so align your app and workspace packages on the same ESLint 10 version. With pnpm, use overrides:
 
 ```json
 {

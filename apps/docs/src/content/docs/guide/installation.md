@@ -1,12 +1,21 @@
 ---
 title: "Installation"
-description: "- Node.js =22.18.0 - ESLint 10+"
+description: "- Node.js >=22.18.0 - ESLint 10+"
 ---
 
 ## Requirements
 
 - Node.js `>=22.18.0`
-- ESLint `9+` or `10+`
+- ESLint `10+`
+
+## Compatibility Matrix
+
+| Runtime | Supported Version | Notes |
+| :--- | :--- | :--- |
+| Node.js | `>=22.18.0` | Required by the published packages and CI matrix. |
+| ESLint | `^10.0.0` | The current release line targets ESLint 10 flat config. |
+| TypeScript | `>=5.0.0` | Optional unless `typescript` linting is enabled. |
+| Package managers | pnpm, npm, yarn, bun | CI validates package artifacts; consumer e2e tests load the built package from outside the repo. |
 
 ## Install
 
@@ -32,6 +41,12 @@ bun add -d @santi020k/eslint-config-basic
 
 That package brings the framework config packages used by the composer. You no longer install `@santi020k/eslint-config-react`, `@santi020k/eslint-config-next`, or another framework config package in normal application projects.
 
+## Dependency Policy
+
+The full package intentionally installs the framework config packages and integration plugin set as regular dependencies. This keeps app installs boring: one package, one tested dependency graph, and no peer-dependency puzzle for every framework.
+
+Unused framework configs are lazy-loaded only when enabled or detected. They still affect disk usage, but not lint-time imports. For dependency-sensitive projects, use `@santi020k/eslint-config-lite` and install only the framework/integration packages you enable.
+
 ## Lite Install
 
 If your project needs a smaller install or wants to manage framework config packages manually, use the optional lite entry point:
@@ -54,6 +69,12 @@ pnpm add -D @santi020k/eslint-config-integrations
 ```
 
 The full `@santi020k/eslint-config-basic` package remains the recommended default. Use lite for dependency-sensitive projects and CI caches where manual package ownership is worth the extra setup.
+
+| Option | Best For | Dependency Model |
+| :--- | :--- | :--- |
+| `@santi020k/eslint-config-basic` | Most application projects | Full tested stack is installed together. |
+| `@santi020k/eslint-config-lite` | Dependency-sensitive projects and tight CI caches | Core composer by default; framework and integration config packages are manual. |
+| Individual `@santi020k/eslint-config-*` packages | Advanced custom composition | You assemble imported configs yourself. |
 
 ## Minimal Config
 

@@ -25,6 +25,14 @@ bun add -d @santi020k/eslint-config-basic
 ```
 
 
+## Using Lite
+
+The lite package already includes TypeScript support, so dependency-sensitive projects can start with:
+
+```sh title="pnpm"
+pnpm add -D @santi020k/eslint-config-lite eslint typescript
+```
+
 ## Configure
 
 ```js

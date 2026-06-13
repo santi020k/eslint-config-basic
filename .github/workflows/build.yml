@@ -70,9 +70,10 @@ jobs:
       - name: Check package READMEs are in sync
         if: matrix.node-version == '22.x'
         run: git diff --exit-code -- 'packages/*/README.md' || (echo 'Package READMEs are stale. Run `pnpm run docs:sync-readmes` and commit the result.' && exit 1)
+      - name: Package metrics
+        run: pnpm run check:package-metrics
       - name: Dry-run publish check
-        run: pnpm --filter @santi020k/eslint-config-basic publish --dry-run
-          --no-git-checks
+        run: pnpm run check:publish-dry-run
       - name: Check published types (attw)
         if: matrix.node-version == '22.x'
         run: pnpm run check:attw

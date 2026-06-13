@@ -15,7 +15,7 @@
     "@angular/core": "22.0.1",
     "@angular/router": "22.0.1",
     "@santi020k/eslint-config-basic": "workspace:^",
-    "eslint": "^10.5.0",
+    "eslint": "^10.0.0",
     "rxjs": "^7.8.2"
   },
   "devDependencies": {

@@ -134,14 +134,28 @@ For automation, use JSON output:
 npx @santi020k/eslint-config-basic inspect --json
 ```
 
+`explain`, `doctor`, and `migrate` also support `--json` for CI and migration tooling:
+
+```sh
+npx @santi020k/eslint-config-basic explain --json
+npx @santi020k/eslint-config-basic doctor --json
+npx @santi020k/eslint-config-basic migrate --json
+```
+
 ## Diagnose Setup Issues
 
 Use `doctor` while adopting v2 or after moving a project into a workspace. It reports missing config files, configs that cannot be loaded, lingering v1 framework imports, missing lint scripts, and detected workspace packages that are not represented with `projects` scoping.
 
-It also detects when two different ESLint copies are installed — for example a project pinning an older ESLint while the config packages resolve their own ESLint 10 dependency. Only ESLint 10 is supported, and parallel copies can make your editor and CLI apply slightly different rule behavior, so `doctor` warns and suggests aligning or deduping.
+It also detects when two different ESLint copies are installed — for example a project pinning an older ESLint while the config packages resolve their own ESLint dependency. The current release line supports ESLint 10, and parallel copies can make your editor and CLI apply slightly different rule behavior, so `doctor` warns and suggests aligning or deduping.
 
 ```sh
 npx @santi020k/eslint-config-basic doctor
+```
+
+Use `init --check` when CI should verify that a project already has an ESLint flat config without writing a file:
+
+```sh
+npx @santi020k/eslint-config-basic init --check
 ```
 
 ## Generate Team Standards

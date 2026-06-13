@@ -11,6 +11,14 @@ Use Vite support from the main v2 package.
 pnpm add -D @santi020k/eslint-config-basic
 ```
 
+## Using Lite
+
+The default install above remains recommended. If you use the manual-dependency lite package, install this framework config package too:
+
+```sh title="pnpm"
+pnpm add -D @santi020k/eslint-config-lite @santi020k/eslint-config-vite eslint
+```
+
 ## Configure
 
 ```js

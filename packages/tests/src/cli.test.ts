@@ -147,6 +147,47 @@ describe('CLI command UX', () => {
     logSpy.mockRestore()
   })
 
+  it('should print detected project settings as JSON', () => {
+    const cwd = createTempProject({
+      dependencies: {
+        react: '19.0.0'
+      },
+      name: 'tmp-project'
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    handleExplain(cwd, true)
+
+    const payload = JSON.parse(String(logSpy.mock.calls[0]?.[0])) as {
+      frameworks?: string[]
+      runtime?: string
+    }
+
+    expect(payload.frameworks).toContain('react')
+    expect(payload.runtime).toBe('browser')
+    logSpy.mockRestore()
+  })
+
+  it('should check whether init has an existing config without writing', () => {
+    process.exitCode = undefined
+    const cwd = createTempProject({ name: 'tmp-project' })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    handleInit(cwd, true)
+
+    const payload = JSON.parse(String(logSpy.mock.calls[0]?.[0])) as {
+      exists?: boolean
+      ok?: boolean
+    }
+
+    expect(payload.exists).toBe(false)
+    expect(payload.ok).toBe(false)
+    expect(existsSync(join(cwd, 'eslint.config.mjs'))).toBe(false)
+    expect(process.exitCode).toBe(1)
+    logSpy.mockRestore()
+    process.exitCode = undefined
+  })
+
   it('should generate human-readable ESLint standards docs', () => {
     const cwd = createTempProject({
       dependencies: {
@@ -180,6 +221,27 @@ describe('CLI command UX', () => {
 
     expect(output).toContain('v1 to v2 migration suggestions:')
     expect(output).toContain('framework booleans')
+    logSpy.mockRestore()
+  })
+
+  it('should print migration suggestions as JSON', () => {
+    const cwd = createTempProject({ name: 'tmp-project', type: 'module' })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    writeFileSync(
+      join(cwd, 'eslint.config.js'),
+      'import react from \'@santi020k/eslint-config-react\'\nexport default []'
+    )
+
+    handleMigrate(cwd, false, true)
+
+    const payload = JSON.parse(String(logSpy.mock.calls[0]?.[0])) as {
+      suggestions?: string[]
+      title?: string
+    }
+
+    expect(payload.title).toBe('v1 to v2 migration suggestions:')
+    expect(payload.suggestions?.some(suggestion => suggestion.includes('framework booleans'))).toBe(true)
     logSpy.mockRestore()
   })
 
@@ -272,6 +334,58 @@ describe('CLI command UX', () => {
     expect(output).toContain('ESLint Basic doctor: passed with warnings')
     expect(output).toContain('Config still imports v1 framework packages')
     expect(output).toContain('Workspace packages were detected')
+    logSpy.mockRestore()
+    process.exitCode = undefined
+  })
+
+  it('should print doctor data as JSON', async () => {
+    const cwd = createTempProject({
+      name: 'tmp-project',
+      type: 'module'
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    await handleDoctor(cwd, true)
+
+    const payload = JSON.parse(String(logSpy.mock.calls[0]?.[0])) as {
+      status?: string
+      warnings?: string[]
+    }
+
+    expect(payload.status).toBe('passed with warnings')
+    expect(payload.warnings?.some(warning => warning.includes('No eslint.config'))).toBe(true)
+    logSpy.mockRestore()
+    process.exitCode = undefined
+  })
+
+  it('should warn when lite config packages are not declared', async () => {
+    const cwd = createTempProject({
+      dependencies: {
+        react: '19.0.0'
+      },
+      devDependencies: {
+        '@santi020k/eslint-config-lite': '1.0.0',
+        vitest: 'latest'
+      },
+      name: 'tmp-project',
+      scripts: {
+        lint: 'eslint .'
+      },
+      type: 'module'
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    writeFileSync(
+      join(cwd, 'eslint.config.js'),
+      'import { defineConfig } from \'@santi020k/eslint-config-lite\'\nexport default await defineConfig()'
+    )
+
+    await handleDoctor(cwd)
+
+    const output = logSpy.mock.calls.flat().join('\n')
+
+    expect(output).toContain('@santi020k/eslint-config-react')
+    expect(output).toContain('@santi020k/eslint-config-integrations')
     logSpy.mockRestore()
     process.exitCode = undefined
   })

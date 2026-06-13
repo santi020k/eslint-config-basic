@@ -56,7 +56,7 @@ banner:
 - [#70](https://github.com/santi020k/eslint-config-basic/pull/70) [`ef658c1`](https://github.com/santi020k/eslint-config-basic/commit/ef658c170f6eaadce14a7e662eaa2a3762362e82) Thanks [@santi020k](https://github.com/santi020k)! - # 1.1.0 Release
 
   ## Update Highlights
-  - **ESLint 10 Support**: Harmonized ESLint version to `^10.1.0` across the monorepo and playgrounds.
+  - **ESLint 9 Support**: Harmonized ESLint version to `^10.0.0` across the monorepo and playgrounds.
   - **Security Patches**: Fixed vulnerabilities in `lodash`, `esbuild`, and `path-to-regexp` via root overrides.
   - **Solid Playground Fix**: Resolved `MODULE_NOT_FOUND` error in the Solid playground linting process.
 
@@ -67,7 +67,7 @@ banner:
 - [#66](https://github.com/santi020k/eslint-config-basic/pull/66) [`6f2f473`](https://github.com/santi020k/eslint-config-basic/commit/6f2f4733642087eb9eac22a7b6193b71453f375d) Thanks [@santi020k](https://github.com/santi020k)! - v0.10.0 Release
 
   ## Major Changes
-  - **Migration to pnpm**: Full migration of the monorepo from npm to pnpm workspaces (pnpm v10+). This includes better performance, stricter dependency management, and corepack integration.
+  - **Migration to pnpm**: Full migration of the monorepo from npm to pnpm workspaces (pnpm v9+). This includes better performance, stricter dependency management, and corepack integration.
   - **neostandard removal**: Removed `neostandard` dependency to provide more granular control and modularity in core rules.
   - **Stylistic v4 -> v5**: Upgraded to `@stylistic/eslint-plugin` version 5.x for improved formatting rules and TypeScript 5.7+ support.
   - **GraphQL Integration**: Added comprehensive support for GraphQL schemas and operations. This includes automated project detection for GraphQL files and specialized linting rules for both schema definitions and operation documents.

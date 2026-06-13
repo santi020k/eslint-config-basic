@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
-    "eslint": "^10.5.0",
+    "eslint": "^10.0.0",
     "storybook": "^10.4.4"
   },
   "engines": {

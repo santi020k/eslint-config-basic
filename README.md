@@ -26,6 +26,16 @@ This project follows a **DX-First & Stability-First** mission. We prioritize a s
 - **Modern Baseline**: Built for **ESLint 10** flat config, taking advantage of v10 improvements like per-file config lookup and JSX reference tracking.
 - **Install Size, Explained**: Bundling every framework and plugin behind one install is a deliberate tradeoff — `node_modules` is larger, but versions are vetted together, installs never break on peer conflicts, and lazy loading means unused frameworks are never imported at lint time. For dependency-sensitive projects, `@santi020k/eslint-config-lite` keeps the same composer API while letting you install framework and integration config packages manually.
 
+## Compatibility
+
+| Runtime | Supported Version |
+| :--- | :--- |
+| Node.js | `>=22.18.0` |
+| ESLint | `^10.0.0` |
+| TypeScript | `>=5.0.0` when TypeScript linting is enabled |
+
+`@santi020k/eslint-config-basic` owns the tested plugin set for the full install. Use `@santi020k/eslint-config-lite` when you want the same composer API but prefer to install framework and integration config packages yourself.
+
 ## ✨ Key Features
 
 - **🎯 Composable & Modular**: Mix and match configurations for different frameworks and tools using a clean, options-based API.
