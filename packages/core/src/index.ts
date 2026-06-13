@@ -1,3 +1,6 @@
+import eslint from '@eslint/js'
+import pluginStylistic from '@stylistic/eslint-plugin'
+import type { TSESLint } from '@typescript-eslint/utils'
 import pluginImport from 'eslint-plugin-import-x'
 import pluginJsxA11y from 'eslint-plugin-jsx-a11y'
 import pluginN from 'eslint-plugin-n'
@@ -9,12 +12,9 @@ import globals from 'globals'
 import { rules } from './rules.js'
 import { GLOB_JS_TS, GLOB_JS_TS_ALL, GLOB_SLOT, Runtime } from './types.js'
 
-import eslint from '@eslint/js'
-import pluginStylistic from '@stylistic/eslint-plugin'
-import type { TSESLint } from '@typescript-eslint/utils'
-
-// Export rules and groups for use by other packages
-export { groups, rules } from './rules.js'
+// Export rules, groups, and import-group factory for use by other packages
+export { createImportGroups, groups, rules } from './rules.js'
+export type { ImportGroupOptions } from './rules.js'
 // Export settings
 export { gitignore } from './settings/index.js'
 

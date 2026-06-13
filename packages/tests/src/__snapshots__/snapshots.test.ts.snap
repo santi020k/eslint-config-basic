@@ -67,7 +67,7 @@ exports[`Config Snapshots — Critical Rule Entries > core critical rule entries
           "^(ws|@/ws|@ws)(/.*|$)",
         ],
         [
-          "^\\w",
+          "^@?\\w",
         ],
         [
           "^\\u0000",
@@ -802,6 +802,7 @@ exports[`Config Snapshots — Rule Names > typescript config rules should match 
   "@typescript-eslint/consistent-indexed-object-style",
   "@typescript-eslint/consistent-type-assertions",
   "@typescript-eslint/consistent-type-definitions",
+  "@typescript-eslint/consistent-type-exports",
   "@typescript-eslint/consistent-type-imports",
   "@typescript-eslint/dot-notation",
   "@typescript-eslint/indent",

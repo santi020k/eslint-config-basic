@@ -1,11 +1,3 @@
-import { existsSync } from 'node:fs'
-import { join } from 'node:path'
-
-import { applyStrictMode } from './compose.js'
-import { createDetectedFrameworkFlags } from './frameworks.js'
-import { getIntegrationConfigs, getPrettierConfig } from './integrations.js'
-import { resolveFramework, resolvePreset } from './resolvers.js'
-
 import {
   coreConfig,
   createCoreConfig,
@@ -29,6 +21,13 @@ import {
 } from '@santi020k/eslint-config-core'
 import { createTypescriptConfig } from '@santi020k/eslint-config-typescript'
 import type { TSESLint } from '@typescript-eslint/utils'
+import { existsSync } from 'node:fs'
+import { join } from 'node:path'
+
+import { applyStrictMode } from './compose.js'
+import { createDetectedFrameworkFlags } from './frameworks.js'
+import { getIntegrationConfigs, getPrettierConfig } from './integrations.js'
+import { resolveFramework, resolvePreset } from './resolvers.js'
 
 export type { AgentTarget, GenerateSkillOptions, GenerateSkillResult } from './agent-skill-generator.js'
 export {
@@ -80,6 +79,7 @@ export type {
   FormatName,
   FormatOption,
   ImportedFramework,
+  ImportGroupOptions,
   LibraryName,
   LibraryOption,
   NextModeName,
@@ -103,11 +103,13 @@ export type {
 export {
   coreConfig,
   createCoreConfig,
+  createImportGroups,
   detectProjectOptions,
   Extension,
   Format,
   getGlobalsForRuntime,
   gitignore,
+  groups,
   hasReactConfig,
   jsConfig,
   Library,

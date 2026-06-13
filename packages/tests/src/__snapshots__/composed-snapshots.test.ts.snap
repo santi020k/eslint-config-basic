@@ -89,7 +89,7 @@ exports[`composed config snapshots > snapshots Next.js app router overrides 1`] 
             "^(ws|@/ws|@ws)(/.*|$)",
           ],
           [
-            "^\\w",
+            "^@?\\w",
           ],
           [
             "^\\u0000",
@@ -216,7 +216,7 @@ exports[`composed config snapshots > snapshots React app integrations 1`] = `
             "^(ws|@/ws|@ws)(/.*|$)",
           ],
           [
-            "^\\w",
+            "^@?\\w",
           ],
           [
             "^\\u0000",
@@ -332,7 +332,7 @@ exports[`composed config snapshots > snapshots TypeScript syntax mode with Prett
             "^(ws|@/ws|@ws)(/.*|$)",
           ],
           [
-            "^\\w",
+            "^@?\\w",
           ],
           [
             "^\\u0000",
@@ -519,7 +519,7 @@ exports[`composed config snapshots > snapshots monorepo project scoping 1`] = `
             "^(ws|@/ws|@ws)(/.*|$)",
           ],
           [
-            "^\\w",
+            "^@?\\w",
           ],
           [
             "^\\u0000",
@@ -620,7 +620,7 @@ exports[`composed config snapshots > snapshots the default no-detection JavaScri
             "^(ws|@/ws|@ws)(/.*|$)",
           ],
           [
-            "^\\w",
+            "^@?\\w",
           ],
           [
             "^\\u0000",

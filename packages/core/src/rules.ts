@@ -1,36 +1,149 @@
 import type { TSESLint } from '@typescript-eslint/utils'
 
-const groups: string[][] = [
-  // Internal packages.
-  // Atomic Design and components
-  ['^(components|@/components|@components)(/.*|$)'],
-  ['^(ui|@/ui|@ui)(/.*|$)'],
-  ['^(atoms|@/atoms|@atoms)(/.*|$)'],
-  ['^(molecules|@/molecules|@molecules)(/.*|$)'],
-  ['^(organisms|@/organisms|@organisms)(/.*|$)'],
-  ['^(templates|@/templates|@templates)(/.*|$)'],
-  ['^(pages|@/pages|@pages)(/.*|$)'],
-  // Other possible folders
-  ['^(store|@/store|@store)(/.*|$)'],
-  ['^(api|@/api|@api)(/.*|$)'],
-  ['^(contexts|@/contexts|@contexts)(/.*|$)'],
-  ['^(hooks|@/hooks|@hooks)(/.*|$)'],
-  ['^(lib|@/lib|@lib)(/.*|$)'],
-  ['^(services|@/services|@services)(/.*|$)'],
-  ['^(models|@/models|@models)(/.*|$)'],
-  ['^(utils|@/utils|@utils)(/.*|$)'],
-  ['^(ws|@/ws|@ws)(/.*|$)'],
-  // npm packages (bare specifiers and scoped packages like @tanstack/query)
-  ['^@?\\w'],
-  // Side effect imports.
-  ['^\\u0000'],
-  // Other relative imports. Put same-folder imports and `.` last.
-  ['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'],
-  // Parent imports. Put `..` last.
-  ['^\\.\\.(?!/?$)', '^\\.\\./?$'],
-  // Style imports.
-  ['^.+\\.?(css|scss)$']
-]
+// ─── Import group constants ───────────────────────────────────────────────────
+
+/**
+ * All Node.js built-in module names (without the `node:` prefix).
+ * Used to catch legacy `import fs from 'fs'` alongside modern `import fs from 'node:fs'`.
+ */
+const NODE_BUILTINS =
+  'assert|async_hooks|buffer|child_process|cluster|console|crypto|' +
+  'dgram|diagnostics_channel|dns|domain|events|fs|http|http2|https|inspector|' +
+  'module|net|os|path|perf_hooks|process|punycode|querystring|readline|repl|' +
+  'stream|string_decoder|sys|timers|tls|tty|url|util|v8|vm|wasi|worker_threads|zlib'
+
+/**
+ * Folder names that belong to the UI / presentation layer.
+ * Covers Atomic Design layers, generic component dirs, and view-based naming.
+ */
+const UI_LAYER_NAMES =
+  'layouts?|pages?|templates?|organisms?|molecules?|atoms?|components?|ui|views?|screens?'
+
+/**
+ * Folder names that belong to the application / logic layer.
+ * State, data fetching, services, utilities, and cross-cutting concerns.
+ */
+const APP_LAYER_NAMES =
+  'stores?|api|contexts?|hooks?|composables?|services?|lib|models?|' +
+  'utils?|helpers?|configs?|constants?|types?|plugins?|middlewares?|ws|assets?'
+
+// ─── Factory ──────────────────────────────────────────────────────────────────
+
+/**
+ * Options for {@link createImportGroups}.
+ */
+export interface ImportGroupOptions {
+  /**
+   * Workspace / monorepo package prefixes that should sort with internal code
+   * rather than external npm packages.
+   *
+   * They are placed in their own group **before** the external npm packages group.
+   *
+   * @example
+   * // Treat @acme/ui, @acme/shared, etc. as internal
+   * createImportGroups({ workspacePrefixes: ['@acme'] })
+   */
+  workspacePrefixes?: string[]
+}
+
+/**
+ * Creates the `groups` array for `simple-import-sort/imports`.
+ *
+ * Group ordering (each becomes its own import section):
+ *  1. Side effects  — polyfills, `reflect-metadata`, `zone.js`
+ *  2. Node built-ins — `node:fs` and legacy `fs`
+ *  3. Framework virtual modules — Vite `virtual:`, Astro `astro:`, SvelteKit `$app/$env/$lib`, Nuxt `#imports`
+ *  4. Internal UI / presentation layer — `components/`, `@/pages/`, etc.
+ *  5. Internal application / logic layer — `store/`, `@/hooks/`, etc.
+ *  6. Style imports — `.css`, `.scss`, `.sass`, `@/styles/theme.css`, `./Button.module.css`
+ *  7. Workspace packages (when `workspacePrefixes` is set) — `@acme/shared`
+ *  8. External npm packages — `react`, `@tanstack/query`
+ *  9. Remaining internal aliases — `@/`, `~/`, `#`, custom extras
+ * 10. Parent-relative imports — `../`
+ * 11. Same-directory relative imports — `./`
+ *
+ * **Why internal layers and styles come before externals:**
+ * Bare internal paths like `components/Button` and bare CSS like `theme.css` match
+ * `^@?\w`. Placing these groups first ensures correct classification before falling
+ * through to the npm packages group.
+ */
+export const createImportGroups = (options: ImportGroupOptions = {}): string[][] => {
+  const workspacePatterns = (options.workspacePrefixes ?? []).map(
+    p => `^${p.replaceAll(/[.*+?^${}()|[\]\\]/g, '\\$&')}(/.*|$)`
+  )
+
+  return [
+    // [1] Side effects — polyfills and global module registrations
+    // e.g.: import 'reflect-metadata', import 'zone.js', import '@angular/localize/init'
+    ['^\\u0000'],
+
+    // [2] Node.js built-in modules
+    // Modern `node:` prefix is preferred; legacy bare names included for compatibility.
+    // e.g.: import fs from 'node:fs', import path from 'path'
+    [`^node:`, `^(${NODE_BUILTINS})(/.*|$)`],
+
+    // [3] Framework virtual modules — must precede externals
+    // `virtual:icons` and `astro:content` also match ^@?\w, so they go here first.
+    // Vite:     virtual:*
+    // Astro:    astro:*
+    // SvelteKit: $app/*, $env/*, $lib/*
+    // Nuxt:     #imports, #build/*, #app/*
+    ['^virtual:', '^astro:', '^\\$app/', '^\\$env/', '^\\$lib/', '^#imports', '^#build/', '^#app/'],
+
+    // [4] Internal — UI / presentation layer — must precede externals
+    // Bare subdirectory paths (components/Button) and @/ ~/ aliases.
+    // Note: bare paths require a trailing `/` to avoid matching npm packages with
+    // the same name (e.g. the `ui` npm package vs the `ui/` internal folder).
+    [
+      `^(${UI_LAYER_NAMES})/`,
+      `^(@/|~/)(${UI_LAYER_NAMES})(/.*|$)`
+    ],
+
+    // [5] Internal — application / logic layer — must precede externals
+    // Same rule: bare paths require a trailing `/`.
+    [
+      `^(${APP_LAYER_NAMES})/`,
+      `^(@/|~/)(${APP_LAYER_NAMES})(/.*|$)`
+    ],
+
+    // [6] Style imports — must precede externals and relatives
+    // Bare CSS filenames (theme.css) match ^@?\w; relative paths (./Button.module.css)
+    // match relative groups. Placing styles here ensures they are always caught before
+    // the externals and relative groups regardless of import style.
+    // Covers: CSS Modules, plain CSS, Sass/SCSS, Less, Stylus, PostCSS
+    // e.g.: import './Button.module.css', import '@/styles/globals.scss', import 'theme.sass'
+    ['^.+\\.(css|scss|sass|less|styl|stylus|postcss)$'],
+
+    // [7] Workspace / monorepo packages (optional, only when workspacePrefixes is set)
+    // Inserted before external packages so @acme/shared sorts separately from @tanstack/query.
+    ...(workspacePatterns.length ? [workspacePatterns] : []),
+
+    // [8] External npm packages — scoped (@org/pkg) and unscoped (pkg)
+    // @/... and ~/... aliases do NOT reach here because @ must be followed by a
+    // word character (not /), so path aliases are correctly excluded.
+    ['^@?\\w'],
+
+    // [9] Remaining internal path aliases — catch-all for anything not matched above
+    // @/  — common in Next.js, Vite, Vue CLI projects
+    // ~/  — common in Nuxt, Vue CLI, Webpack projects
+    // #   — Node.js subpath imports (e.g. #app/config) not already handled above
+    ['^@/', '^~/', '^#'],
+
+    // [10] Parent-relative imports (../) — farther ancestors first
+    ['^\\.\\.(?!/?$)', '^\\.\\./?$'],
+
+    // [11] Same-directory relative imports (./)
+    ['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$']
+  ]
+}
+
+/**
+ * Default import sort groups used by the core config.
+ * Export allows downstream packages and end users to reference or extend them.
+ */
+export const groups = createImportGroups()
+
+// ─── Rules ────────────────────────────────────────────────────────────────────
 
 export const rules: TSESLint.Linter.RulesRecord = {
   '@stylistic/array-element-newline': ['warn', 'consistent'],
@@ -150,18 +263,12 @@ export const rules: TSESLint.Linter.RulesRecord = {
   'promise/always-return': 'warn',
   'promise/catch-or-return': 'warn',
   'quote-props': 'off',
-
   quotes: 'off',
   'simple-import-sort/imports': [
     'warn',
-    {
-      groups
-    }
+    { groups }
   ],
   'space-before-function-paren': 'off',
-
   'unused-imports/no-unused-imports': 'warn',
   'valid-typeof': 'warn'
 }
-
-export { groups }

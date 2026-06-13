@@ -28,7 +28,6 @@ export const standardRules: TSESLint.Linter.RulesRecord = {
   '@typescript-eslint/no-var-requires': 'warn',
   '@typescript-eslint/no-wrapper-object-types': 'warn',
   '@typescript-eslint/prefer-for-of': 'warn',
-  '@typescript-eslint/prefer-optional-chain': 'warn',
   'no-undef': 'off',
   'no-unused-vars': 'off',
   // Disable rules that conflict with TypeScript
@@ -59,6 +58,7 @@ export const typeCheckedRules: TSESLint.Linter.RulesRecord = {
   '@typescript-eslint/prefer-nullish-coalescing': ['warn', {
     ignorePrimitives: { string: true }
   }],
+  '@typescript-eslint/prefer-optional-chain': 'warn',
   '@typescript-eslint/require-await': 'warn',
   '@typescript-eslint/restrict-template-expressions': ['warn', {
     allowBoolean: true,
