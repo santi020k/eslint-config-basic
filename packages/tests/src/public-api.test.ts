@@ -66,6 +66,12 @@ import * as integrationFormats from '@santi020k/eslint-config-integrations/forma
 import * as integrationLibraries from '@santi020k/eslint-config-integrations/libraries'
 import * as integrationTesting from '@santi020k/eslint-config-integrations/testing'
 import * as integrationTools from '@santi020k/eslint-config-integrations/tools'
+import {
+  createImportGroups as createLiteImportGroups,
+  defineConfig as defineLiteConfig,
+  preact as litePreact,
+  preactConfig as litePreactConfig
+} from '@santi020k/eslint-config-lite'
 
 import { describe, expect, test } from 'vitest'
 
@@ -120,6 +126,14 @@ describe('Public API Re-exports', () => {
     const config = await defineConfig({ detection: false })
     const overrideEntry = config.find(c => c.name === 'eslint-config-basic/workspace-import-groups')
     expect(overrideEntry).toBeUndefined()
+  })
+
+  test('lite package should expose expected composer utilities and Preact factories', async () => {
+    expect(typeof defineLiteConfig).toBe('function')
+    expect(typeof createLiteImportGroups).toBe('function')
+    expect(typeof litePreact).toBe('function')
+    expect(typeof litePreactConfig).toBe('function')
+    expect(Array.isArray(await defineLiteConfig({ detection: false }))).toBe(true)
   })
 
   test('should re-export all testing configs from the main package', () => {
