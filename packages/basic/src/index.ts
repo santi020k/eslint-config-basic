@@ -480,7 +480,10 @@ const scopeConfigToProject = (
   projectPath: string
 ): TSESLint.FlatConfig.Config => {
   if ('ignores' in config && !config.files) {
-    return config
+    return {
+      ...config,
+      ignores: config.ignores?.map(pattern => scopeFilePattern(projectPath, pattern) as string)
+    }
   }
 
   return {

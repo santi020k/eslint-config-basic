@@ -17,7 +17,7 @@ cd eslint-config-basic
 
 # Enable corepack
 corepack enable
-corepack use pnpm@10.33.0
+corepack use pnpm@11.6.0
 
 # Install dependencies
 pnpm install
@@ -45,7 +45,7 @@ This project uses **Turborepo** with **pnpm Workspaces**. Each ESLint config liv
 | `@santi020k/eslint-config-angular` | `packages/angular` | Angular rules |
 | `@santi020k/eslint-config-qwik` | `packages/qwik` | Qwik rules |
 | `@santi020k/eslint-config-remix` | `packages/remix` | Remix rules |
-| `@santi020k/eslint-config-optionals` | `packages/optionals` | Optional configs (Tailwind, Vitest, etc.) |
+| `@santi020k/eslint-config-integrations` | `packages/integrations` | Optional configs (Tailwind, Vitest, etc.) |
 
 ## Adding a New Framework Config
 
@@ -131,9 +131,9 @@ These are already implemented. See their respective `packages/` for reference.
 
 ## Adding a New Optional
 
-1. Create `packages/optionals/src/configs/myoptional.ts` with your config.
-2. Export from `packages/optionals/src/index.ts`.
-3. Compose in `packages/basic/src/index.ts`.
+1. Create `packages/integrations/src/<category>/myoptional.ts` with your config.
+2. Export from the category barrel (`packages/integrations/src/<category>/index.ts`) and the root barrel (`packages/integrations/src/index.ts`).
+3. Compose in `packages/basic/src/integrations.ts` (delegates to `@santi020k/eslint-config-integrations`).
 
 ## Available Commands
 

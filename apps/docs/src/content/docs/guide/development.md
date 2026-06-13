@@ -8,7 +8,7 @@ description: Local development setup, commands, structure, and validation workfl
 ```bash
 # Enable corepack and use pnpm
 corepack enable
-corepack use pnpm@10.33.0
+corepack use pnpm@11.6.0
 
 # Install dependencies
 pnpm install
@@ -46,7 +46,7 @@ This is a **monorepo** using Turborepo + pnpm Workspaces. Each config lives unde
 - `packages/expo` — Expo/React Native rules
 - `packages/nest` — NestJS rules
 - `packages/vue` — Vue rules
-- `packages/optionals` — Optional configs (Tailwind, Vitest, Prettier, Unicorn, etc.)
+- `packages/integrations` — Optional configs (Tailwind, Vitest, Prettier, Unicorn, etc.)
 - `packages/tests` — Integration tests
 - `packages/playground` — Local testing playground
 
