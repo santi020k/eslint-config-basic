@@ -1,13 +1,15 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core'
+import { defineEntity, p } from '@mikro-orm/core'
 
-@Entity({ tableName: 'users' })
-export class User {
-  @Property()
-  active = true
+const UserSchema = defineEntity({
+  name: 'User',
+  properties: {
+    active: p.boolean().default(true),
+    email: p.string().unique(),
+    id: p.integer().primary(),
+  },
+  tableName: 'users',
+})
 
-  @Property({ unique: true })
-  email!: string
+export class User extends UserSchema.class {}
 
-  @PrimaryKey()
-  id!: number
-}
+UserSchema.setClass(User)

@@ -62,6 +62,7 @@ if (rows.length === 0) {
 }
 
 console.info('Package metrics are informational; this script does not enforce size budgets.')
+
 console.table(rows.map(row => ({
   dependencies: row.dependencies,
   dist: formatBytes(row.dist),

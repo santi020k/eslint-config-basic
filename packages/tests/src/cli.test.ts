@@ -390,6 +390,58 @@ describe('CLI command UX', () => {
     process.exitCode = undefined
   })
 
+  it('should print the lite install command from detected features', async () => {
+    const cwd = createTempProject({
+      dependencies: {
+        react: '19.0.0'
+      },
+      devDependencies: {
+        vitest: 'latest'
+      },
+      name: 'tmp-project',
+      type: 'module'
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    await handleDoctor(cwd, false, true)
+
+    const output = String(logSpy.mock.calls[0]?.[0])
+
+    expect(output).toContain('npm install -D')
+    expect(output).toContain('@santi020k/eslint-config-lite')
+    expect(output).toContain('@santi020k/eslint-config-react')
+    expect(output).toContain('@santi020k/eslint-config-integrations')
+    logSpy.mockRestore()
+  })
+
+  it('should warn when lite config uses Preset.All', async () => {
+    const cwd = createTempProject({
+      devDependencies: {
+        '@santi020k/eslint-config-integrations': '1.0.0',
+        '@santi020k/eslint-config-lite': '1.0.0'
+      },
+      name: 'tmp-project',
+      scripts: {
+        lint: 'eslint .'
+      },
+      type: 'module'
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    writeFileSync(
+      join(cwd, 'eslint.config.js'),
+      'import { defineConfig, Preset } from \'@santi020k/eslint-config-lite\'\nexport default await defineConfig({ preset: Preset.All })'
+    )
+
+    await handleDoctor(cwd)
+
+    const output = logSpy.mock.calls.flat().join('\n')
+
+    expect(output).toContain('Lite config uses Preset.All')
+    logSpy.mockRestore()
+    process.exitCode = undefined
+  })
+
   it('should fail doctor when the config file cannot be loaded', async () => {
     const cwd = createTempProject({
       name: 'tmp-project',

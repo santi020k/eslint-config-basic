@@ -43,6 +43,8 @@ If install size is critical (e.g. tight CI caches), the individual `@santi020k/e
 
 For projects that still want the main composer API with a smaller default install, use `@santi020k/eslint-config-lite`. It installs the core composer and TypeScript support, but requires you to install framework config packages and `@santi020k/eslint-config-integrations` yourself when you enable those features.
 
+Run `basic-eslint doctor --lite-install` to generate the install command for the current project before switching.
+
 ---
 
 ## Framework and Detection Issues

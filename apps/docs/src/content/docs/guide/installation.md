@@ -76,6 +76,8 @@ The full `@santi020k/eslint-config-basic` package remains the recommended defaul
 | `@santi020k/eslint-config-lite` | Dependency-sensitive projects and tight CI caches | Core composer by default; framework and integration config packages are manual. |
 | Individual `@santi020k/eslint-config-*` packages | Advanced custom composition | You assemble imported configs yourself. |
 
+For an existing project, `basic-eslint doctor --lite-install` prints the lite install command from detected project features.
+
 ## Minimal Config
 
 ```js

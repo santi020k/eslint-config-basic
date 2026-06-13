@@ -21,6 +21,16 @@ Use `@santi020k/eslint-config-lite` when install size or dependency ownership ma
 | `@santi020k/eslint-config-lite` | Dependency-sensitive projects and tight CI caches | Core composer by default; framework and integration config packages are manual. |
 | Individual `@santi020k/eslint-config-*` packages | Advanced custom composition | You assemble imported configs yourself. |
 
+## Package Metrics
+
+These are direct package-manifest counts, not a package-manager-specific transitive install measurement.
+
+| Package | Direct Dependencies | Peer Dependencies | Optional Peers |
+| :--- | ---: | ---: | ---: |
+| `@santi020k/eslint-config-basic` | 22 | 2 | 1 |
+| `@santi020k/eslint-config-lite` | 3 | 21 | 20 |
+| `@santi020k/eslint-config-integrations` | 51 | 2 | 1 |
+
 ## Minimal Install
 
 ```sh title="pnpm"
@@ -96,9 +106,16 @@ If a framework or integration package is enabled but not installed, the lite pac
 
 You can also run `basic-eslint doctor` in a project that imports `@santi020k/eslint-config-lite`; it warns when detected frameworks or integrations do not have their matching manual config packages declared.
 
+```sh
+basic-eslint doctor --lite-install
+```
+
+Use `--lite-install` to print the package-manager-specific install command for the current project.
+
 ## Related Pages
 
 - [Installation](/guide/installation)
+- [Switch from Basic to Lite](/guide/lite-migration)
 - [Configuration](/guide/configuration)
 - [Basic Package](/packages/basic)
 - [Integrations](/packages/integrations)

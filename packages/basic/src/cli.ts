@@ -66,6 +66,7 @@ const FRAMEWORK_KEY_TO_PACKAGE = Object.fromEntries(
 
 const LITE_PACKAGE_NAME = '@santi020k/eslint-config-lite'
 const INTEGRATIONS_PACKAGE_NAME = '@santi020k/eslint-config-integrations'
+const TYPESCRIPT_PACKAGE_NAME = 'typescript'
 
 const getConfigPathIfPresent = (cwd: string): null | string => {
   const configPath = [
@@ -120,6 +121,58 @@ const needsIntegrationPackage = (summary: ReturnType<typeof getProjectSummary>):
   summary.tools.length > 0 ||
   summary.extensions.some(extension => extension !== 'boundaries')
 )
+
+const hasPresetAll = (configContent: null | string): boolean => Boolean(
+  configContent && (
+    /\bPreset\.All\b/.test(configContent) ||
+    /preset\s*:\s*['"]all['"]/.test(configContent)
+  )
+)
+
+const getLiteInstallPackages = (
+  summary: ReturnType<typeof getProjectSummary>,
+  declaredDependencies: Set<string>
+): string[] => {
+  const packages = new Set<string>([
+    'eslint',
+    LITE_PACKAGE_NAME
+  ])
+
+  for (const framework of summary.frameworks) {
+    // eslint-disable-next-line security/detect-object-injection -- framework values come from known detection keys
+    const packageName = FRAMEWORK_KEY_TO_PACKAGE[framework]
+
+    if (packageName) packages.add(packageName)
+  }
+
+  if (needsIntegrationPackage(summary)) {
+    packages.add(INTEGRATIONS_PACKAGE_NAME)
+  }
+
+  if (summary.typescript && !declaredDependencies.has(TYPESCRIPT_PACKAGE_NAME)) {
+    packages.add(TYPESCRIPT_PACKAGE_NAME)
+  }
+
+  return [...packages]
+}
+
+const createInstallCommand = (packageManager: string, packages: string[]): string => {
+  const packageList = packages.join(' ')
+
+  switch (packageManager) {
+    case 'bun':
+      return `bun add -d ${packageList}`
+
+    case 'npm':
+      return `npm install -D ${packageList}`
+
+    case 'yarn':
+      return `yarn add -D ${packageList}`
+
+    default:
+      return `pnpm add -D ${packageList}`
+  }
+}
 
 const detectPackageManager = (cwd: string): string => {
   if (existsSync(join(cwd, 'pnpm-lock.yaml')) || existsSync(join(cwd, 'pnpm-workspace.yaml'))) return 'pnpm'
@@ -316,10 +369,11 @@ const printUsage = () => {
     '  generate-skill  Generate AI agent standards files',
     '',
     'Options:',
-  '  --force         Overwrite existing generated skill sections/files',
-  '  --check         init: verify config exists; generate-skill: verify files are up to date',
-  '  --create        generate-skill: scaffold a root AGENTS.md when missing',
-  '  --json          Print JSON for commands that support it',
+    '  --force         Overwrite existing generated skill sections/files',
+    '  --check         init: verify config exists; generate-skill: verify files are up to date',
+    '  --create        generate-skill: scaffold a root AGENTS.md when missing',
+    '  --json          Print JSON for commands that support it',
+    '  --lite-install  doctor: print the detected lite install command',
     '  --write         Apply safe migrations for commands that support it',
     '  --help, -h      Show this help message',
     '  --version, -v   Show CLI version'
@@ -463,7 +517,7 @@ export const findDuplicateEslint = (cwd: string = process.cwd()): DuplicateEslin
   }
 }
 
-export const handleDoctor = async (cwd: string = process.cwd(), json = false) => {
+export const handleDoctor = async (cwd: string = process.cwd(), json = false, liteInstall = false) => {
   const issues: string[] = []
   const warnings: string[] = []
   const configPath = getConfigPathIfPresent(cwd)
@@ -472,10 +526,29 @@ export const handleDoctor = async (cwd: string = process.cwd(), json = false) =>
   const summary = getProjectSummary(cwd)
   const activeConfig = await analyzeEslintConfig(cwd)
   const configContent = configPath ? readFileSync(configPath, 'utf8') : null
+  const packageManager = detectPackageManager(cwd)
+  const liteInstallPackages = getLiteInstallPackages(summary, declaredDependencies)
+  const liteInstallCommand = createInstallCommand(packageManager, liteInstallPackages)
 
   const hasV1FrameworkImports = configContent ?
     Object.keys(FRAMEWORK_PACKAGE_TO_KEY).some(packageName => configContent.includes(packageName)) :
     false
+
+  if (liteInstall) {
+    if (json) {
+      console.log(JSON.stringify({
+        command: liteInstallCommand,
+        packageManager,
+        packages: liteInstallPackages
+      }, null, 2))
+
+      return
+    }
+
+    console.log(liteInstallCommand)
+
+    return
+  }
 
   if (!packageJson) {
     issues.push('package.json is missing or invalid.')
@@ -520,6 +593,13 @@ export const handleDoctor = async (cwd: string = process.cwd(), json = false) =>
           'Install it or remove the selected libraries, testing tools, formats, tools, and extension integrations.'
         )
       }
+
+      if (hasPresetAll(configContent)) {
+        warnings.push(
+          'Lite config uses Preset.All, which enables every optional integration and reduces the dependency benefits of lite. ' +
+          'Prefer enabling only the integrations this project uses.'
+        )
+      }
     }
   }
 
@@ -544,6 +624,7 @@ export const handleDoctor = async (cwd: string = process.cwd(), json = false) =>
   const payload = {
     configFile: configPath ? basename(configPath) : null,
     issues,
+    liteInstallCommand,
     packageManager: detectPackageManager(cwd),
     status,
     warnings,
@@ -663,6 +744,7 @@ export const runCli = (argv: string[] = process.argv, cwd: string = process.cwd(
   const hasCheck = argv.includes('--check')
   const hasCreate = argv.includes('--create')
   const hasJson = argv.includes('--json')
+  const hasLiteInstall = argv.includes('--lite-install')
   const hasWrite = argv.includes('--write')
   const isHelp = command === '--help' || command === '-h'
   const isVersion = command === '--version' || command === '-v'
@@ -687,7 +769,7 @@ export const runCli = (argv: string[] = process.argv, cwd: string = process.cwd(
     }
 
     case 'doctor': {
-      handleDoctor(cwd, hasJson).catch((error: unknown) => {
+      handleDoctor(cwd, hasJson, hasLiteInstall).catch((error: unknown) => {
         console.error('❌ Failed to run doctor:', error)
 
         process.exitCode = 1

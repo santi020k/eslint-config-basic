@@ -9,12 +9,8 @@ export const sonarjs: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLaz
   return [
     {
       ...sonarjsPlugin.configs.recommended,
-      files: GLOB_JS_TS
-    },
-    {
       files: GLOB_JS_TS,
-      name: 'eslint-config/sonarjs',
-      rules: {}
+      name: 'eslint-config/sonarjs'
     }
   ]
 })

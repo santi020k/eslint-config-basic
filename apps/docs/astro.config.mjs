@@ -23,6 +23,7 @@ const sidebar = [
           { label: 'Quick Start', slug: 'guide/getting-started' },
           { label: 'Installation', slug: 'guide/installation' },
           { label: 'Configuration', slug: 'guide/configuration' },
+          { badge: { text: 'Lite', variant: 'tip' }, label: 'Switch to Lite', slug: 'guide/lite-migration' },
           { label: 'Presets', slug: 'guide/presets' },
           { label: 'Runtime', slug: 'guide/runtime' },
           { label: 'Monorepo', slug: 'guide/monorepo' },

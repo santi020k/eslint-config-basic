@@ -152,6 +152,12 @@ It also detects when two different ESLint copies are installed — for example a
 npx @santi020k/eslint-config-basic doctor
 ```
 
+Use `doctor --lite-install` to preview the install command for switching the current project to `@santi020k/eslint-config-lite`:
+
+```sh
+npx @santi020k/eslint-config-basic doctor --lite-install
+```
+
 Use `init --check` when CI should verify that a project already has an ESLint flat config without writing a file:
 
 ```sh
