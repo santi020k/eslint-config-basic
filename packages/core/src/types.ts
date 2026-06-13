@@ -338,6 +338,7 @@ export type DetectedFrameworkName =
   'nest' |
   'next' |
   'nuxt' |
+  'preact' |
   'qwik' |
   'react' |
   'react-router' |
@@ -407,6 +408,7 @@ export interface EslintConfigOptions {
     nest?: ImportedFramework
     next?: ImportedFramework
     nuxt?: ImportedFramework
+    preact?: ImportedFramework
     qwik?: ImportedFramework
     react?: ImportedFramework
 
@@ -485,6 +487,19 @@ export interface EslintConfigOptions {
 
   /** Enable TypeScript support with optional settings */
   typescript?: boolean | TypeScriptMode | TypeScriptOptions
+
+  /**
+   * Monorepo / workspace package scope prefixes that should sort in their own
+   * import group, **before** external npm packages.
+   *
+   * Passed to `createImportGroups` and applied to `simple-import-sort/imports`
+   * automatically — no manual rule override needed.
+   *
+   * @example
+   * // Imports from @acme/* sort between internal app code and external npm packages
+   * defineConfig({ workspacePrefixes: ['@acme'] })
+   */
+  workspacePrefixes?: string[]
 }
 
 /**

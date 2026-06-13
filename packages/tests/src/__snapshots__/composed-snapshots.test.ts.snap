@@ -41,70 +41,49 @@ exports[`composed config snapshots > snapshots Next.js app router overrides 1`] 
             "^(next)(/.*|$)?",
           ],
           [
-            "^(components|@/components|@components)(/.*|$)",
+            "^\\u0000",
           ],
           [
-            "^(ui|@/ui|@ui)(/.*|$)",
+            "^node:",
+            "^(assert|async_hooks|buffer|child_process|cluster|console|crypto|dgram|diagnostics_channel|dns|domain|events|fs|http|http2|https|inspector|module|net|os|path|perf_hooks|process|punycode|querystring|readline|repl|stream|string_decoder|sys|timers|tls|tty|url|util|v8|vm|wasi|worker_threads|zlib)(/.*|$)",
           ],
           [
-            "^(atoms|@/atoms|@atoms)(/.*|$)",
+            "^virtual:",
+            "^astro:",
+            "^\\$app/",
+            "^\\$env/",
+            "^\\$lib/",
+            "^#imports",
+            "^#build/",
+            "^#app/",
           ],
           [
-            "^(molecules|@/molecules|@molecules)(/.*|$)",
+            "^(layouts?|pages?|templates?|organisms?|molecules?|atoms?|components?|ui|views?|screens?)/",
+            "^(@/|~/)(layouts?|pages?|templates?|organisms?|molecules?|atoms?|components?|ui|views?|screens?)(/.*|$)",
           ],
           [
-            "^(organisms|@/organisms|@organisms)(/.*|$)",
+            "^(stores?|api|contexts?|hooks?|composables?|services?|lib|models?|utils?|helpers?|configs?|constants?|types?|plugins?|middlewares?|ws|assets?)/",
+            "^(@/|~/)(stores?|api|contexts?|hooks?|composables?|services?|lib|models?|utils?|helpers?|configs?|constants?|types?|plugins?|middlewares?|ws|assets?)(/.*|$)",
           ],
           [
-            "^(templates|@/templates|@templates)(/.*|$)",
-          ],
-          [
-            "^(pages|@/pages|@pages)(/.*|$)",
-          ],
-          [
-            "^(store|@/store|@store)(/.*|$)",
-          ],
-          [
-            "^(api|@/api|@api)(/.*|$)",
-          ],
-          [
-            "^(contexts|@/contexts|@contexts)(/.*|$)",
-          ],
-          [
-            "^(hooks|@/hooks|@hooks)(/.*|$)",
-          ],
-          [
-            "^(lib|@/lib|@lib)(/.*|$)",
-          ],
-          [
-            "^(services|@/services|@services)(/.*|$)",
-          ],
-          [
-            "^(models|@/models|@models)(/.*|$)",
-          ],
-          [
-            "^(utils|@/utils|@utils)(/.*|$)",
-          ],
-          [
-            "^(ws|@/ws|@ws)(/.*|$)",
+            "^.+\\.(css|scss|sass|less|styl|stylus|postcss)$",
           ],
           [
             "^@?\\w",
           ],
           [
-            "^\\u0000",
-          ],
-          [
-            "^\\./(?=.*/)(?!/?$)",
-            "^\\.(?!/?$)",
-            "^\\./?$",
+            "^@/",
+            "^~/",
+            "^#",
           ],
           [
             "^\\.\\.(?!/?$)",
             "^\\.\\./?$",
           ],
           [
-            "^.+\\.?(css|scss)$",
+            "^\\./(?=.*/)(?!/?$)",
+            "^\\.(?!/?$)",
+            "^\\./?$",
           ],
         ],
       },
@@ -168,70 +147,49 @@ exports[`composed config snapshots > snapshots React app integrations 1`] = `
             "^react",
           ],
           [
-            "^(components|@/components|@components)(/.*|$)",
+            "^\\u0000",
           ],
           [
-            "^(ui|@/ui|@ui)(/.*|$)",
+            "^node:",
+            "^(assert|async_hooks|buffer|child_process|cluster|console|crypto|dgram|diagnostics_channel|dns|domain|events|fs|http|http2|https|inspector|module|net|os|path|perf_hooks|process|punycode|querystring|readline|repl|stream|string_decoder|sys|timers|tls|tty|url|util|v8|vm|wasi|worker_threads|zlib)(/.*|$)",
           ],
           [
-            "^(atoms|@/atoms|@atoms)(/.*|$)",
+            "^virtual:",
+            "^astro:",
+            "^\\$app/",
+            "^\\$env/",
+            "^\\$lib/",
+            "^#imports",
+            "^#build/",
+            "^#app/",
           ],
           [
-            "^(molecules|@/molecules|@molecules)(/.*|$)",
+            "^(layouts?|pages?|templates?|organisms?|molecules?|atoms?|components?|ui|views?|screens?)/",
+            "^(@/|~/)(layouts?|pages?|templates?|organisms?|molecules?|atoms?|components?|ui|views?|screens?)(/.*|$)",
           ],
           [
-            "^(organisms|@/organisms|@organisms)(/.*|$)",
+            "^(stores?|api|contexts?|hooks?|composables?|services?|lib|models?|utils?|helpers?|configs?|constants?|types?|plugins?|middlewares?|ws|assets?)/",
+            "^(@/|~/)(stores?|api|contexts?|hooks?|composables?|services?|lib|models?|utils?|helpers?|configs?|constants?|types?|plugins?|middlewares?|ws|assets?)(/.*|$)",
           ],
           [
-            "^(templates|@/templates|@templates)(/.*|$)",
-          ],
-          [
-            "^(pages|@/pages|@pages)(/.*|$)",
-          ],
-          [
-            "^(store|@/store|@store)(/.*|$)",
-          ],
-          [
-            "^(api|@/api|@api)(/.*|$)",
-          ],
-          [
-            "^(contexts|@/contexts|@contexts)(/.*|$)",
-          ],
-          [
-            "^(hooks|@/hooks|@hooks)(/.*|$)",
-          ],
-          [
-            "^(lib|@/lib|@lib)(/.*|$)",
-          ],
-          [
-            "^(services|@/services|@services)(/.*|$)",
-          ],
-          [
-            "^(models|@/models|@models)(/.*|$)",
-          ],
-          [
-            "^(utils|@/utils|@utils)(/.*|$)",
-          ],
-          [
-            "^(ws|@/ws|@ws)(/.*|$)",
+            "^.+\\.(css|scss|sass|less|styl|stylus|postcss)$",
           ],
           [
             "^@?\\w",
           ],
           [
-            "^\\u0000",
-          ],
-          [
-            "^\\./(?=.*/)(?!/?$)",
-            "^\\.(?!/?$)",
-            "^\\./?$",
+            "^@/",
+            "^~/",
+            "^#",
           ],
           [
             "^\\.\\.(?!/?$)",
             "^\\.\\./?$",
           ],
           [
-            "^.+\\.?(css|scss)$",
+            "^\\./(?=.*/)(?!/?$)",
+            "^\\.(?!/?$)",
+            "^\\./?$",
           ],
         ],
       },
@@ -284,70 +242,49 @@ exports[`composed config snapshots > snapshots TypeScript syntax mode with Prett
       {
         "groups": [
           [
-            "^(components|@/components|@components)(/.*|$)",
+            "^\\u0000",
           ],
           [
-            "^(ui|@/ui|@ui)(/.*|$)",
+            "^node:",
+            "^(assert|async_hooks|buffer|child_process|cluster|console|crypto|dgram|diagnostics_channel|dns|domain|events|fs|http|http2|https|inspector|module|net|os|path|perf_hooks|process|punycode|querystring|readline|repl|stream|string_decoder|sys|timers|tls|tty|url|util|v8|vm|wasi|worker_threads|zlib)(/.*|$)",
           ],
           [
-            "^(atoms|@/atoms|@atoms)(/.*|$)",
+            "^virtual:",
+            "^astro:",
+            "^\\$app/",
+            "^\\$env/",
+            "^\\$lib/",
+            "^#imports",
+            "^#build/",
+            "^#app/",
           ],
           [
-            "^(molecules|@/molecules|@molecules)(/.*|$)",
+            "^(layouts?|pages?|templates?|organisms?|molecules?|atoms?|components?|ui|views?|screens?)/",
+            "^(@/|~/)(layouts?|pages?|templates?|organisms?|molecules?|atoms?|components?|ui|views?|screens?)(/.*|$)",
           ],
           [
-            "^(organisms|@/organisms|@organisms)(/.*|$)",
+            "^(stores?|api|contexts?|hooks?|composables?|services?|lib|models?|utils?|helpers?|configs?|constants?|types?|plugins?|middlewares?|ws|assets?)/",
+            "^(@/|~/)(stores?|api|contexts?|hooks?|composables?|services?|lib|models?|utils?|helpers?|configs?|constants?|types?|plugins?|middlewares?|ws|assets?)(/.*|$)",
           ],
           [
-            "^(templates|@/templates|@templates)(/.*|$)",
-          ],
-          [
-            "^(pages|@/pages|@pages)(/.*|$)",
-          ],
-          [
-            "^(store|@/store|@store)(/.*|$)",
-          ],
-          [
-            "^(api|@/api|@api)(/.*|$)",
-          ],
-          [
-            "^(contexts|@/contexts|@contexts)(/.*|$)",
-          ],
-          [
-            "^(hooks|@/hooks|@hooks)(/.*|$)",
-          ],
-          [
-            "^(lib|@/lib|@lib)(/.*|$)",
-          ],
-          [
-            "^(services|@/services|@services)(/.*|$)",
-          ],
-          [
-            "^(models|@/models|@models)(/.*|$)",
-          ],
-          [
-            "^(utils|@/utils|@utils)(/.*|$)",
-          ],
-          [
-            "^(ws|@/ws|@ws)(/.*|$)",
+            "^.+\\.(css|scss|sass|less|styl|stylus|postcss)$",
           ],
           [
             "^@?\\w",
           ],
           [
-            "^\\u0000",
-          ],
-          [
-            "^\\./(?=.*/)(?!/?$)",
-            "^\\.(?!/?$)",
-            "^\\./?$",
+            "^@/",
+            "^~/",
+            "^#",
           ],
           [
             "^\\.\\.(?!/?$)",
             "^\\.\\./?$",
           ],
           [
-            "^.+\\.?(css|scss)$",
+            "^\\./(?=.*/)(?!/?$)",
+            "^\\.(?!/?$)",
+            "^\\./?$",
           ],
         ],
       },
@@ -471,70 +408,49 @@ exports[`composed config snapshots > snapshots monorepo project scoping 1`] = `
             "^react",
           ],
           [
-            "^(components|@/components|@components)(/.*|$)",
+            "^\\u0000",
           ],
           [
-            "^(ui|@/ui|@ui)(/.*|$)",
+            "^node:",
+            "^(assert|async_hooks|buffer|child_process|cluster|console|crypto|dgram|diagnostics_channel|dns|domain|events|fs|http|http2|https|inspector|module|net|os|path|perf_hooks|process|punycode|querystring|readline|repl|stream|string_decoder|sys|timers|tls|tty|url|util|v8|vm|wasi|worker_threads|zlib)(/.*|$)",
           ],
           [
-            "^(atoms|@/atoms|@atoms)(/.*|$)",
+            "^virtual:",
+            "^astro:",
+            "^\\$app/",
+            "^\\$env/",
+            "^\\$lib/",
+            "^#imports",
+            "^#build/",
+            "^#app/",
           ],
           [
-            "^(molecules|@/molecules|@molecules)(/.*|$)",
+            "^(layouts?|pages?|templates?|organisms?|molecules?|atoms?|components?|ui|views?|screens?)/",
+            "^(@/|~/)(layouts?|pages?|templates?|organisms?|molecules?|atoms?|components?|ui|views?|screens?)(/.*|$)",
           ],
           [
-            "^(organisms|@/organisms|@organisms)(/.*|$)",
+            "^(stores?|api|contexts?|hooks?|composables?|services?|lib|models?|utils?|helpers?|configs?|constants?|types?|plugins?|middlewares?|ws|assets?)/",
+            "^(@/|~/)(stores?|api|contexts?|hooks?|composables?|services?|lib|models?|utils?|helpers?|configs?|constants?|types?|plugins?|middlewares?|ws|assets?)(/.*|$)",
           ],
           [
-            "^(templates|@/templates|@templates)(/.*|$)",
-          ],
-          [
-            "^(pages|@/pages|@pages)(/.*|$)",
-          ],
-          [
-            "^(store|@/store|@store)(/.*|$)",
-          ],
-          [
-            "^(api|@/api|@api)(/.*|$)",
-          ],
-          [
-            "^(contexts|@/contexts|@contexts)(/.*|$)",
-          ],
-          [
-            "^(hooks|@/hooks|@hooks)(/.*|$)",
-          ],
-          [
-            "^(lib|@/lib|@lib)(/.*|$)",
-          ],
-          [
-            "^(services|@/services|@services)(/.*|$)",
-          ],
-          [
-            "^(models|@/models|@models)(/.*|$)",
-          ],
-          [
-            "^(utils|@/utils|@utils)(/.*|$)",
-          ],
-          [
-            "^(ws|@/ws|@ws)(/.*|$)",
+            "^.+\\.(css|scss|sass|less|styl|stylus|postcss)$",
           ],
           [
             "^@?\\w",
           ],
           [
-            "^\\u0000",
-          ],
-          [
-            "^\\./(?=.*/)(?!/?$)",
-            "^\\.(?!/?$)",
-            "^\\./?$",
+            "^@/",
+            "^~/",
+            "^#",
           ],
           [
             "^\\.\\.(?!/?$)",
             "^\\.\\./?$",
           ],
           [
-            "^.+\\.?(css|scss)$",
+            "^\\./(?=.*/)(?!/?$)",
+            "^\\.(?!/?$)",
+            "^\\./?$",
           ],
         ],
       },
@@ -572,70 +488,49 @@ exports[`composed config snapshots > snapshots the default no-detection JavaScri
       {
         "groups": [
           [
-            "^(components|@/components|@components)(/.*|$)",
+            "^\\u0000",
           ],
           [
-            "^(ui|@/ui|@ui)(/.*|$)",
+            "^node:",
+            "^(assert|async_hooks|buffer|child_process|cluster|console|crypto|dgram|diagnostics_channel|dns|domain|events|fs|http|http2|https|inspector|module|net|os|path|perf_hooks|process|punycode|querystring|readline|repl|stream|string_decoder|sys|timers|tls|tty|url|util|v8|vm|wasi|worker_threads|zlib)(/.*|$)",
           ],
           [
-            "^(atoms|@/atoms|@atoms)(/.*|$)",
+            "^virtual:",
+            "^astro:",
+            "^\\$app/",
+            "^\\$env/",
+            "^\\$lib/",
+            "^#imports",
+            "^#build/",
+            "^#app/",
           ],
           [
-            "^(molecules|@/molecules|@molecules)(/.*|$)",
+            "^(layouts?|pages?|templates?|organisms?|molecules?|atoms?|components?|ui|views?|screens?)/",
+            "^(@/|~/)(layouts?|pages?|templates?|organisms?|molecules?|atoms?|components?|ui|views?|screens?)(/.*|$)",
           ],
           [
-            "^(organisms|@/organisms|@organisms)(/.*|$)",
+            "^(stores?|api|contexts?|hooks?|composables?|services?|lib|models?|utils?|helpers?|configs?|constants?|types?|plugins?|middlewares?|ws|assets?)/",
+            "^(@/|~/)(stores?|api|contexts?|hooks?|composables?|services?|lib|models?|utils?|helpers?|configs?|constants?|types?|plugins?|middlewares?|ws|assets?)(/.*|$)",
           ],
           [
-            "^(templates|@/templates|@templates)(/.*|$)",
-          ],
-          [
-            "^(pages|@/pages|@pages)(/.*|$)",
-          ],
-          [
-            "^(store|@/store|@store)(/.*|$)",
-          ],
-          [
-            "^(api|@/api|@api)(/.*|$)",
-          ],
-          [
-            "^(contexts|@/contexts|@contexts)(/.*|$)",
-          ],
-          [
-            "^(hooks|@/hooks|@hooks)(/.*|$)",
-          ],
-          [
-            "^(lib|@/lib|@lib)(/.*|$)",
-          ],
-          [
-            "^(services|@/services|@services)(/.*|$)",
-          ],
-          [
-            "^(models|@/models|@models)(/.*|$)",
-          ],
-          [
-            "^(utils|@/utils|@utils)(/.*|$)",
-          ],
-          [
-            "^(ws|@/ws|@ws)(/.*|$)",
+            "^.+\\.(css|scss|sass|less|styl|stylus|postcss)$",
           ],
           [
             "^@?\\w",
           ],
           [
-            "^\\u0000",
-          ],
-          [
-            "^\\./(?=.*/)(?!/?$)",
-            "^\\.(?!/?$)",
-            "^\\./?$",
+            "^@/",
+            "^~/",
+            "^#",
           ],
           [
             "^\\.\\.(?!/?$)",
             "^\\.\\./?$",
           ],
           [
-            "^.+\\.?(css|scss)$",
+            "^\\./(?=.*/)(?!/?$)",
+            "^\\.(?!/?$)",
+            "^\\./?$",
           ],
         ],
       },

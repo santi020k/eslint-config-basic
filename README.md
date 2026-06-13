@@ -10,7 +10,7 @@
 
 ![ESLint toolkit branding](./cover.webp)
 
-Composable ESLint 10+ flat-config tooling for JavaScript and TypeScript projects, with optional framework packages for React, Next.js, Astro, Vue, Nuxt, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, Remix, React Router, TanStack Start, Lit, Vite, and Slidev.
+Composable ESLint 10+ flat-config tooling for JavaScript and TypeScript projects, with optional framework packages for React, Next.js, Astro, Vue, Nuxt, Svelte, Solid, Angular, NestJS, Hono, Expo, Preact, Qwik, Remix, React Router, TanStack Start, Lit, Vite, and Slidev.
 
 ## Canonical Docs
 
@@ -165,6 +165,7 @@ export default await defineConfig({
 - NestJS: [`@santi020k/eslint-config-nest`](https://eslint.santi020k.com/frameworks/nest.html)
 - Hono: [`@santi020k/eslint-config-hono`](https://eslint.santi020k.com/frameworks/hono.html)
 - Expo: [`@santi020k/eslint-config-expo`](https://eslint.santi020k.com/frameworks/expo.html)
+- Preact: [`@santi020k/eslint-config-preact`](https://eslint.santi020k.com/frameworks/preact.html)
 - Qwik: [`@santi020k/eslint-config-qwik`](https://eslint.santi020k.com/frameworks/qwik.html)
 - Remix: [`@santi020k/eslint-config-remix`](https://eslint.santi020k.com/frameworks/remix.html)
 - React Router: [`@santi020k/eslint-config-react-router`](https://eslint.santi020k.com/frameworks/react-router.html)

@@ -1,10 +1,10 @@
-import { loadModule } from './lazy.js'
-
 import {
   type DetectedFrameworkName,
   type FlatConfigArray,
   type Runtime
 } from '@santi020k/eslint-config-core'
+
+import { loadModule } from './lazy.js'
 
 export type FrameworkFlags = Partial<Record<FrameworkName, true>>
 
@@ -50,6 +50,7 @@ const frameworkLoaders = new Map<FrameworkName, FrameworkLoader>([
   ['nest', async () => (await loadModule<{ nestConfig: FlatConfigArray }>('@santi020k/eslint-config-nest')).nestConfig],
   ['next', async () => (await loadModule<{ nextConfig: FlatConfigArray }>('@santi020k/eslint-config-next')).nextConfig],
   ['nuxt', async () => (await loadModule<{ nuxt: FlatConfigArray }>('@santi020k/eslint-config-nuxt')).nuxt],
+  ['preact', async () => (await loadModule<{ preactConfig: FlatConfigArray }>('@santi020k/eslint-config-preact')).preactConfig],
   ['qwik', async () => (await loadModule<{ qwik: FlatConfigArray }>('@santi020k/eslint-config-qwik')).qwik],
   ['react', async () => (await loadModule<{ reactConfig: FlatConfigArray }>('@santi020k/eslint-config-react')).reactConfig],
   ['react-router', async () => (await loadModule<{ reactRouter: FlatConfigArray }>('@santi020k/eslint-config-react-router')).reactRouter],
@@ -104,6 +105,7 @@ export const lit = createBundledFramework('lit')
 export const nest = createBundledFramework('nest')
 export const next = createBundledFramework('next')
 export const nuxt = createBundledFramework('nuxt')
+export const preact = createBundledFramework('preact')
 export const qwik = createBundledFramework('qwik')
 export const react = createBundledFramework('react')
 export const reactRouter = createBundledFramework('react-router')
@@ -132,6 +134,9 @@ export const nestConfig = nest
 
 /** @deprecated Use `next` instead. */
 export const nextConfig = next
+
+/** @deprecated Use `preact` instead. */
+export const preactConfig = preact
 
 /** @deprecated Use `react` instead. */
 export const reactConfig = react

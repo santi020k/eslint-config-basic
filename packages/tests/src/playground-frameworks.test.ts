@@ -2,7 +2,8 @@ import { execFile } from 'node:child_process'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { promisify } from 'node:util'
-import { describe, expect, it } from 'vitest'
+
+import { describe, expect, test } from 'vitest'
 
 const execFileAsync = promisify(execFile)
 const __filename = fileURLToPath(import.meta.url)
@@ -17,27 +18,31 @@ const lintPlayground = async (filter: string): Promise<void> => {
 }
 
 describe('new framework playgrounds', () => {
-  it('lints the Vite playground with the bundled framework config', async () => {
+  test('lints the Vite playground with the bundled framework config', async () => {
     await expect(lintPlayground('@santi020k/playground-vite')).resolves.toBeUndefined()
   })
 
-  it('lints the Slidev playground with the bundled framework config', async () => {
+  test('lints the Slidev playground with the bundled framework config', async () => {
     await expect(lintPlayground('@santi020k/playground-slidev')).resolves.toBeUndefined()
   })
 
-  it('lints the Lit playground with the bundled framework config', async () => {
+  test('lints the Lit playground with the bundled framework config', async () => {
     await expect(lintPlayground('@santi020k/playground-lit')).resolves.toBeUndefined()
   })
 
-  it('lints the Nuxt playground with the bundled framework config', async () => {
+  test('lints the Nuxt playground with the bundled framework config', async () => {
     await expect(lintPlayground('@santi020k/playground-nuxt')).resolves.toBeUndefined()
   })
 
-  it('lints the React Router playground with the bundled framework config', async () => {
+  test('lints the React Router playground with the bundled framework config', async () => {
     await expect(lintPlayground('@santi020k/playground-react-router')).resolves.toBeUndefined()
   })
 
-  it('lints the TanStack Start playground with the bundled framework config', async () => {
+  test('lints the Preact playground with the bundled framework config', async () => {
+    await expect(lintPlayground('@playground/preact')).resolves.toBeUndefined()
+  })
+
+  test('lints the TanStack Start playground with the bundled framework config', async () => {
     await expect(lintPlayground('@santi020k/playground-tanstack-start')).resolves.toBeUndefined()
   })
 }, 360_000)

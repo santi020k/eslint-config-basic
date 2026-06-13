@@ -19,74 +19,61 @@ exports[`Config Snapshots — Critical Rule Entries > core critical rule entries
     {
       "groups": [
         [
-          "^(components|@/components|@components)(/.*|$)",
+          "^\\u0000",
         ],
         [
-          "^(ui|@/ui|@ui)(/.*|$)",
+          "^node:",
+          "^(assert|async_hooks|buffer|child_process|cluster|console|crypto|dgram|diagnostics_channel|dns|domain|events|fs|http|http2|https|inspector|module|net|os|path|perf_hooks|process|punycode|querystring|readline|repl|stream|string_decoder|sys|timers|tls|tty|url|util|v8|vm|wasi|worker_threads|zlib)(/.*|$)",
         ],
         [
-          "^(atoms|@/atoms|@atoms)(/.*|$)",
+          "^virtual:",
+          "^astro:",
+          "^\\$app/",
+          "^\\$env/",
+          "^\\$lib/",
+          "^#imports",
+          "^#build/",
+          "^#app/",
         ],
         [
-          "^(molecules|@/molecules|@molecules)(/.*|$)",
+          "^(layouts?|pages?|templates?|organisms?|molecules?|atoms?|components?|ui|views?|screens?)/",
+          "^(@/|~/)(layouts?|pages?|templates?|organisms?|molecules?|atoms?|components?|ui|views?|screens?)(/.*|$)",
         ],
         [
-          "^(organisms|@/organisms|@organisms)(/.*|$)",
+          "^(stores?|api|contexts?|hooks?|composables?|services?|lib|models?|utils?|helpers?|configs?|constants?|types?|plugins?|middlewares?|ws|assets?)/",
+          "^(@/|~/)(stores?|api|contexts?|hooks?|composables?|services?|lib|models?|utils?|helpers?|configs?|constants?|types?|plugins?|middlewares?|ws|assets?)(/.*|$)",
         ],
         [
-          "^(templates|@/templates|@templates)(/.*|$)",
-        ],
-        [
-          "^(pages|@/pages|@pages)(/.*|$)",
-        ],
-        [
-          "^(store|@/store|@store)(/.*|$)",
-        ],
-        [
-          "^(api|@/api|@api)(/.*|$)",
-        ],
-        [
-          "^(contexts|@/contexts|@contexts)(/.*|$)",
-        ],
-        [
-          "^(hooks|@/hooks|@hooks)(/.*|$)",
-        ],
-        [
-          "^(lib|@/lib|@lib)(/.*|$)",
-        ],
-        [
-          "^(services|@/services|@services)(/.*|$)",
-        ],
-        [
-          "^(models|@/models|@models)(/.*|$)",
-        ],
-        [
-          "^(utils|@/utils|@utils)(/.*|$)",
-        ],
-        [
-          "^(ws|@/ws|@ws)(/.*|$)",
+          "^.+\\.(css|scss|sass|less|styl|stylus|postcss)$",
         ],
         [
           "^@?\\w",
         ],
         [
-          "^\\u0000",
-        ],
-        [
-          "^\\./(?=.*/)(?!/?$)",
-          "^\\.(?!/?$)",
-          "^\\./?$",
+          "^@/",
+          "^~/",
+          "^#",
         ],
         [
           "^\\.\\.(?!/?$)",
           "^\\.\\./?$",
         ],
         [
-          "^.+\\.?(css|scss)$",
+          "^\\./(?=.*/)(?!/?$)",
+          "^\\.(?!/?$)",
+          "^\\./?$",
         ],
       ],
     },
   ],
+}
+`;
+
+exports[`Config Snapshots — Critical Rule Entries > preact critical rule entries should match snapshot 1`] = `
+{
+  "@eslint-react/exhaustive-deps": "warn",
+  "@eslint-react/no-missing-key": "error",
+  "@eslint-react/rules-of-hooks": "error",
 }
 `;
 
@@ -186,6 +173,13 @@ exports[`Config Snapshots — Entry Names > next config entries should match sna
   "eslint-config-next/custom",
   "eslint-config-next/ignores",
   "eslint-config-next/plugin",
+]
+`;
+
+exports[`Config Snapshots — Entry Names > preact config entries should match snapshot 1`] = `
+[
+  "eslint-config-preact/custom",
+  "eslint-config-preact/recommended",
 ]
 `;
 
@@ -580,6 +574,79 @@ exports[`Config Snapshots — Rule Names > next config rules should match snapsh
   "@next/next/no-title-in-document-head",
   "@next/next/no-typos",
   "@next/next/no-unwanted-polyfillio",
+  "simple-import-sort/imports",
+]
+`;
+
+exports[`Config Snapshots — Rule Names > preact config rules should match snapshot 1`] = `
+[
+  "@eslint-react/dom-no-dangerously-set-innerhtml",
+  "@eslint-react/dom-no-dangerously-set-innerhtml-with-children",
+  "@eslint-react/dom-no-find-dom-node",
+  "@eslint-react/dom-no-flush-sync",
+  "@eslint-react/dom-no-hydrate",
+  "@eslint-react/dom-no-missing-button-type",
+  "@eslint-react/dom-no-render",
+  "@eslint-react/dom-no-render-return-value",
+  "@eslint-react/dom-no-script-url",
+  "@eslint-react/dom-no-unsafe-iframe-sandbox",
+  "@eslint-react/dom-no-unsafe-target-blank",
+  "@eslint-react/dom-no-use-form-state",
+  "@eslint-react/dom-no-void-elements-with-children",
+  "@eslint-react/error-boundaries",
+  "@eslint-react/exhaustive-deps",
+  "@eslint-react/jsx-no-children-prop",
+  "@eslint-react/jsx-no-children-prop-with-children",
+  "@eslint-react/jsx-no-comment-textnodes",
+  "@eslint-react/jsx-no-key-after-spread",
+  "@eslint-react/jsx-no-leaked-dollar",
+  "@eslint-react/jsx-no-leaked-semicolon",
+  "@eslint-react/jsx-no-namespace",
+  "@eslint-react/naming-convention-context-name",
+  "@eslint-react/naming-convention-id-name",
+  "@eslint-react/naming-convention-ref-name",
+  "@eslint-react/no-access-state-in-setstate",
+  "@eslint-react/no-array-index-key",
+  "@eslint-react/no-children-count",
+  "@eslint-react/no-children-for-each",
+  "@eslint-react/no-children-map",
+  "@eslint-react/no-children-only",
+  "@eslint-react/no-children-to-array",
+  "@eslint-react/no-clone-element",
+  "@eslint-react/no-component-will-mount",
+  "@eslint-react/no-component-will-receive-props",
+  "@eslint-react/no-component-will-update",
+  "@eslint-react/no-context-provider",
+  "@eslint-react/no-create-ref",
+  "@eslint-react/no-direct-mutation-state",
+  "@eslint-react/no-forward-ref",
+  "@eslint-react/no-missing-key",
+  "@eslint-react/no-nested-component-definitions",
+  "@eslint-react/no-nested-lazy-component-declarations",
+  "@eslint-react/no-set-state-in-component-did-mount",
+  "@eslint-react/no-set-state-in-component-did-update",
+  "@eslint-react/no-set-state-in-component-will-update",
+  "@eslint-react/no-unnecessary-use-prefix",
+  "@eslint-react/no-unsafe-component-will-mount",
+  "@eslint-react/no-unsafe-component-will-receive-props",
+  "@eslint-react/no-unsafe-component-will-update",
+  "@eslint-react/no-unstable-default-props",
+  "@eslint-react/no-unused-class-component-members",
+  "@eslint-react/no-use-context",
+  "@eslint-react/purity",
+  "@eslint-react/rsc-function-definition",
+  "@eslint-react/rules-of-hooks",
+  "@eslint-react/set-state-in-effect",
+  "@eslint-react/set-state-in-render",
+  "@eslint-react/static-components",
+  "@eslint-react/unsupported-syntax",
+  "@eslint-react/use-memo",
+  "@eslint-react/use-state",
+  "@eslint-react/web-api-no-leaked-event-listener",
+  "@eslint-react/web-api-no-leaked-fetch",
+  "@eslint-react/web-api-no-leaked-interval",
+  "@eslint-react/web-api-no-leaked-resize-observer",
+  "@eslint-react/web-api-no-leaked-timeout",
   "simple-import-sort/imports",
 ]
 `;

@@ -164,6 +164,7 @@ See [Configuration](/guide/configuration#additional-global-ignores) for presets,
 | Angular | `@santi020k/eslint-config-basic` | `frameworks.angular: true` |
 | NestJS | `@santi020k/eslint-config-basic` | `frameworks.nest: true` |
 | Hono | `@santi020k/eslint-config-basic` | `frameworks.hono: true` |
+| Preact | `@santi020k/eslint-config-basic` | `frameworks.preact: true` |
 | Qwik | `@santi020k/eslint-config-basic` | `frameworks.qwik: true` |
 | Remix | `@santi020k/eslint-config-basic` | `frameworks.remix: true` |
 | Expo | `@santi020k/eslint-config-basic` | `frameworks.expo: true` |

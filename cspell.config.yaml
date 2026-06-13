@@ -116,6 +116,7 @@ words:
   - urql
   - v8
   - vdom
+  - virtuals
   - vite
   - vitepress
   - vitest

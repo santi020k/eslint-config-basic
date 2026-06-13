@@ -1141,6 +1141,22 @@ importers:
         specifier: ^6.0.3
         version: 6.0.3
 
+  packages/playground/preact:
+    dependencies:
+      '@santi020k/eslint-config-basic':
+        specifier: workspace:^
+        version: link:../../basic
+      eslint:
+        specifier: ^10.5.0
+        version: 10.5.0(jiti@2.7.0)
+      preact:
+        specifier: ^10.22.0
+        version: 10.29.2
+    devDependencies:
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
+
   packages/playground/qwik:
     dependencies:
       '@builder.io/qwik':
@@ -1489,6 +1505,37 @@ importers:
       '@types/node':
         specifier: ^25.9.3
         version: 25.9.3
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
+
+  packages/preact:
+    dependencies:
+      '@eslint-react/eslint-plugin':
+        specifier: ^5.8.19
+        version: 5.8.19(eslint@10.5.0(jiti@2.7.0))(typescript@6.0.3)
+      '@santi020k/eslint-config-core':
+        specifier: workspace:^
+        version: link:../core
+      '@typescript-eslint/utils':
+        specifier: ^8.61.0
+        version: 8.61.0(eslint@10.5.0(jiti@2.7.0))(typescript@6.0.3)
+      eslint:
+        specifier: ^10.5.0
+        version: 10.5.0(jiti@2.7.0)
+      globals:
+        specifier: ^17.6.0
+        version: 17.6.0
+      preact:
+        specifier: '>=10.0.0'
+        version: 10.29.2
+    devDependencies:
+      publint:
+        specifier: ^0.3.21
+        version: 0.3.21
+      tsup:
+        specifier: ^8.5.1
+        version: 8.5.1(jiti@2.7.0)(postcss@8.5.15)(typescript@6.0.3)(yaml@2.9.0)
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -11727,6 +11774,9 @@ packages:
 
   pptxgenjs@4.0.1:
     resolution: {integrity: sha512-TeJISr8wouAuXw4C1F/mC33xbZs/FuEG6nH9FG1Zj+nuPcGMP5YRHl6X+j3HSUnS1f3at6k75ZZXPMZlA5Lj9A==}
+
+  preact@10.29.2:
+    resolution: {integrity: sha512-7tNmwg/7mzzAoB/8kSg6Hl37JraAZw3Z3A0JSY7VXlZwo82Xn0G7wKbNNs2qoF4ZEEsQGTwDAroNdqKs1ofJxQ==}
 
   prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
@@ -25884,6 +25934,8 @@ snapshots:
       https: 1.0.0
       image-size: 1.2.1
       jszip: 3.10.1
+
+  preact@10.29.2: {}
 
   prelude-ls@1.2.1: {}
 

@@ -287,23 +287,14 @@ export default await defineConfig({
 
 Import sorting is enabled by default via `simple-import-sort`. The built-in groups handle Node built-ins, framework virtual modules (Vite, Astro, SvelteKit, Nuxt), internal UI and app layers, styles, external npm packages, and relative imports — all without any configuration.
 
-For monorepos where you want your own workspace packages to sort in a dedicated block before external npm packages, use `createImportGroups`:
+For monorepos where you want your own workspace packages to sort in a dedicated block before external npm packages, pass `workspacePrefixes` to `defineConfig`:
 
 ```js
-import { createImportGroups, defineConfig } from '@santi020k/eslint-config-basic'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
-const groups = createImportGroups({
+export default await defineConfig({
   workspacePrefixes: ['@acme'] // @acme/* sorts before react, lodash, etc.
 })
-
-export default await defineConfig({ typescript: true }).then(config => [
-  ...config,
-  {
-    rules: {
-      'simple-import-sort/imports': ['warn', { groups }]
-    }
-  }
-])
 ```
 
 See the [Core Package](/packages/core#import-sorting) page for the full group order and more details.

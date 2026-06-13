@@ -127,6 +127,12 @@ const detectFrameworks = (
     setRuntime(Runtime.Browser)
   }
 
+  if (allDeps.preact) {
+    detected.push('preact')
+
+    setRuntime(Runtime.Browser)
+  }
+
   if (allDeps['@nestjs/core']) {
     detected.push('nest')
 

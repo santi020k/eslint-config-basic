@@ -1,6 +1,10 @@
+import { existsSync } from 'node:fs'
+import { join } from 'node:path'
+
 import {
   coreConfig,
   createCoreConfig,
+  createImportGroups,
   type DetectionOptions,
   detectProjectOptions,
   type EslintConfigOptions,
@@ -21,8 +25,6 @@ import {
 } from '@santi020k/eslint-config-core'
 import { createTypescriptConfig } from '@santi020k/eslint-config-typescript'
 import type { TSESLint } from '@typescript-eslint/utils'
-import { existsSync } from 'node:fs'
-import { join } from 'node:path'
 
 import { applyStrictMode } from './compose.js'
 import { createDetectedFrameworkFlags } from './frameworks.js'
@@ -51,6 +53,8 @@ export {
   next,
   nextConfig,
   nuxt,
+  preact,
+  preactConfig,
   qwik,
   react,
   reactConfig,
@@ -662,6 +666,7 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
     reactRouterParam,
     tanstackStartParam,
     nuxtParam,
+    preactParam,
     litParam,
     slidevParam,
     viteParam
@@ -686,6 +691,7 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
     resolveFramework('react-router', resolvedFrameworks['react-router']),
     resolveFramework('tanstack-start', resolvedFrameworks['tanstack-start']),
     resolveFramework('nuxt', resolvedFrameworks.nuxt),
+    resolveFramework('preact', resolvedFrameworks.preact),
     resolveFramework('lit', resolvedFrameworks.lit),
     resolveFramework('slidev', resolvedFrameworks.slidev, { runtime }),
     resolveFramework('vite', resolvedFrameworks.vite, { runtime })
@@ -766,6 +772,7 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
     ...reactRouterParam,
     ...tanstackStartParam,
     ...nuxtParam,
+    ...preactParam,
     ...litParam,
     ...slidevParam,
     ...viteParam,
@@ -853,7 +860,23 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
     })
   )
 
-  return applyStrictMode([...configs, ...projectConfigs.flat()], strict)
+  // Apply custom workspace import groups when workspacePrefixes is set.
+  // This overrides simple-import-sort/imports with groups that have a dedicated
+  // block for the specified workspace scopes, placed before external npm packages.
+  const workspacePrefixes = options?.workspacePrefixes
+
+  const workspaceImportOverride: TSESLint.FlatConfig.Config[] = workspacePrefixes?.length ?
+    [{
+      name: 'eslint-config-basic/workspace-import-groups',
+      rules: {
+        'simple-import-sort/imports': ['warn', {
+          groups: createImportGroups({ workspacePrefixes })
+        }]
+      }
+    }] :
+    []
+
+  return applyStrictMode([...configs, ...projectConfigs.flat(), ...workspaceImportOverride], strict)
 }
 
 /**

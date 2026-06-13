@@ -1,0 +1,63 @@
+{
+  "name": "@santi020k/eslint-config-preact",
+  "version": "1.6.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "Preact ESLint configuration with hooks and JSX rules",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "clean": "rm -rf dist",
+    "check:exports": "publint",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@eslint-react/eslint-plugin": "^5.8.19",
+    "@santi020k/eslint-config-core": "workspace:^",
+    "@typescript-eslint/utils": "^8.61.0",
+    "globals": "^17.6.0"
+  },
+  "devDependencies": {
+    "publint": "^0.3.21",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3"
+  },
+  "peerDependencies": {
+    "eslint": "^10.0.0",
+    "preact": ">=10.0.0"
+  },
+  "peerDependenciesMeta": {
+    "preact": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/santi020k/eslint-config-basic.git",
+    "directory": "packages/preact"
+  },
+  "homepage": "https://eslint.santi020k.com/frameworks/preact.html",
+  "bugs": {
+    "url": "https://github.com/santi020k/eslint-config-basic/issues"
+  },
+  "author": "santi020k",
+  "license": "MIT"
+}

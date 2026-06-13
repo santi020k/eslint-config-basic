@@ -58,31 +58,22 @@ Internal UI and app layer patterns are placed before external npm packages so th
 
 ### Customizing import groups
 
-For most projects the default `groups` export is all you need — it is used automatically when you consume the core config. If you are working in a monorepo and want to sort your own workspace packages separately from external npm packages, use `createImportGroups`:
+For most projects the default `groups` export is all you need — it is used automatically when you consume the core config. If you are working in a monorepo and want to sort your own workspace packages separately from external npm packages, pass `workspacePrefixes` directly to `defineConfig`:
+
+```js
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig({
+  workspacePrefixes: ['@acme'] // @acme/* sorts before react, lodash, etc.
+})
+```
+
+If you need the groups array directly (e.g. to inspect or extend it), use `createImportGroups`:
 
 ```ts
 import { createImportGroups } from '@santi020k/eslint-config-basic'
 
-// Produces a groups array where @acme/* imports land in their own block
-// before external npm packages.
-const groups = createImportGroups({
-  workspacePrefixes: ['@acme']
-})
-```
-
-Pass the result to `simple-import-sort/imports` in your `eslint.config.*` overrides:
-
-```js
-export default await defineConfig({
-  // ... your normal options
-}).then(config => [
-  ...config,
-  {
-    rules: {
-      'simple-import-sort/imports': ['warn', { groups }]
-    }
-  }
-])
+const groups = createImportGroups({ workspacePrefixes: ['@acme'] })
 ```
 
 ## When to Use It Directly
