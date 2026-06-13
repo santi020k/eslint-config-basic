@@ -208,6 +208,12 @@ const DEFAULT_IGNORES = [
   '**/test-results/**',
   '**/node_modules/**',
   '**/tsconfig.tsbuildinfo',
+  // Package manager lock files (machine-generated, slow to lint)
+  '**/pnpm-lock.yaml',
+  '**/yarn.lock',
+  '**/package-lock.json',
+  '**/bun.lock',
+  '**/bun.lockb',
   // AI coding-assistant artifacts (rule/skill folders managed by tools, not source code)
   '**/.agent/**',
   '**/.agents/**',
