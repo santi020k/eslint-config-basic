@@ -625,9 +625,9 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
   ])
 
   // Use runtime-aware core config
-  const runtimeCoreConfig = runtime !== Runtime.Universal ?
-    createCoreConfig(runtime) :
-    coreConfig
+  const runtimeCoreConfig = runtime === Runtime.Universal ?
+    coreConfig :
+    createCoreConfig(runtime)
 
   const defaultIgnores = useDefaultIgnores ?
     [{

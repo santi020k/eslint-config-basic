@@ -125,7 +125,7 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
     const prettierIndex = names.lastIndexOf('eslint-config/prettier')
 
     const maxNonPrettierIndex = names.reduce(
-      (max, name, idx) => name !== 'eslint-config/prettier' ? Math.max(max, idx) : max, -1
+      (max, name, idx) => name === 'eslint-config/prettier' ? max : Math.max(max, idx), -1
     )
 
     expect(prettierIndex).toBeGreaterThan(maxNonPrettierIndex)
