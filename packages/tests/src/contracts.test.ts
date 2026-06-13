@@ -110,6 +110,11 @@ describe('eslintConfig framework contracts', () => {
     'hono',
     'qwik',
     'remix',
+    'react-router',
+    'tanstack-start',
+    'nuxt',
+    'lit',
+    'preact',
     'slidev',
     'vite'
   ]

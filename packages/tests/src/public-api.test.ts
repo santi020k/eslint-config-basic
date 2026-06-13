@@ -1,22 +1,65 @@
 import {
+  a11y,
   aiSdk,
+  autogen,
+  bestPractices,
+  biome,
+  command,
+  compat,
   createImportGroups,
+  cspell,
+  css,
   cypress,
   defineConfig,
+  deMorgan,
+  depend,
+  docker,
   drizzle,
+  githubActions,
+  googleGenAi,
   graphql,
   groups,
+  html,
+  i18next,
   jest as jestConfig,
+  jestDom,
+  jsdoc,
+  jsonc,
   langchain,
   llamaIndex,
+  markdown,
   mastra,
   mcp,
+  mdx,
   mikroOrm,
+  node,
+  nx,
   openAiAgents,
+  oxlint,
+  packageJson,
+  perfectionist,
+  playwright,
+  pnpm,
+  prettier,
   prisma,
+  regexp,
+  security,
   sequelize,
+  sonarjs,
+  stencil,
+  storybook,
+  swagger,
+  tailwind,
+  tanstackQuery,
+  tanstackRouter,
   testingLibrary,
-  typeorm
+  toml,
+  turbo,
+  typeorm,
+  unicorn,
+  vitest,
+  yaml,
+  zod
 } from '@santi020k/eslint-config-basic'
 
 import { describe, expect, test } from 'vitest'
@@ -75,29 +118,81 @@ describe('Public API Re-exports', () => {
   })
 
   test('should re-export all testing configs from the main package', () => {
-    expect(typeof jestConfig).toBe("function")
-    expect(typeof cypress).toBe("function")
-    expect(typeof testingLibrary).toBe("function")
+    expect(typeof jestConfig).toBe('function')
+    expect(typeof jestDom).toBe('function')
+    expect(typeof cypress).toBe('function')
+    expect(typeof playwright).toBe('function')
+    expect(typeof testingLibrary).toBe('function')
+    expect(typeof vitest).toBe('function')
   })
 
   test('should re-export all format configs from the main package', () => {
-    expect(typeof graphql).toBe("function")
+    expect(typeof css).toBe('function')
+    expect(typeof graphql).toBe('function')
+    expect(typeof html).toBe('function')
+    expect(typeof jsonc).toBe('function')
+    expect(typeof markdown).toBe('function')
+    expect(typeof mdx).toBe('function')
+    expect(typeof packageJson).toBe('function')
+    expect(typeof toml).toBe('function')
+    expect(typeof yaml).toBe('function')
   })
 
-  test('should re-export ORM library configs from the main package', () => {
-    expect(typeof typeorm).toBe("function")
-    expect(typeof prisma).toBe("function")
-    expect(typeof drizzle).toBe("function")
-    expect(typeof mikroOrm).toBe("function")
-    expect(typeof sequelize).toBe("function")
+  test('should re-export all ORM library configs from the main package', () => {
+    expect(typeof typeorm).toBe('function')
+    expect(typeof prisma).toBe('function')
+    expect(typeof drizzle).toBe('function')
+    expect(typeof mikroOrm).toBe('function')
+    expect(typeof sequelize).toBe('function')
   })
 
-  test('should re-export AI and agent library configs from the main package', () => {
-    expect(typeof aiSdk).toBe("function")
-    expect(typeof mastra).toBe("function")
-    expect(typeof mcp).toBe("function")
-    expect(typeof openAiAgents).toBe("function")
-    expect(typeof langchain).toBe("function")
-    expect(typeof llamaIndex).toBe("function")
+  test('should re-export all AI and agent library configs from the main package', () => {
+    expect(typeof aiSdk).toBe('function')
+    expect(typeof autogen).toBe('function')
+    expect(typeof googleGenAi).toBe('function')
+    expect(typeof langchain).toBe('function')
+    expect(typeof llamaIndex).toBe('function')
+    expect(typeof mastra).toBe('function')
+    expect(typeof mcp).toBe('function')
+    expect(typeof openAiAgents).toBe('function')
+  })
+
+  test('should re-export all tool configs from the main package', () => {
+    expect(typeof command).toBe('function')
+    expect(typeof cspell).toBe('function')
+    expect(typeof docker).toBe('function')
+    expect(typeof githubActions).toBe('function')
+    expect(typeof jsdoc).toBe('function')
+    expect(typeof nx).toBe('function')
+    expect(typeof pnpm).toBe('function')
+    expect(typeof prettier).toBe('function')
+    expect(typeof swagger).toBe('function')
+  })
+
+  test('should re-export all extension configs from the main package', () => {
+    expect(Array.isArray(a11y)).toBe(true)
+    expect(Array.isArray(bestPractices)).toBe(true)
+    expect(Array.isArray(biome)).toBe(true)
+    expect(typeof compat).toBe('function')
+    expect(typeof deMorgan).toBe('function')
+    expect(typeof depend).toBe('function')
+    expect(typeof node).toBe('function')
+    expect(typeof oxlint).toBe('function')
+    expect(typeof perfectionist).toBe('function')
+    expect(typeof regexp).toBe('function')
+    expect(typeof security).toBe('function')
+    expect(typeof sonarjs).toBe('function')
+    expect(typeof unicorn).toBe('function')
+  })
+
+  test('should re-export all remaining library configs from the main package', () => {
+    expect(typeof i18next).toBe('function')
+    expect(typeof stencil).toBe('function')
+    expect(typeof storybook).toBe('function')
+    expect(typeof tailwind).toBe('function')
+    expect(typeof tanstackQuery).toBe('function')
+    expect(typeof tanstackRouter).toBe('function')
+    expect(typeof turbo).toBe('function')
+    expect(typeof zod).toBe('function')
   })
 })

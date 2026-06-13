@@ -181,6 +181,7 @@ export {
   tanstackRouter,
   testingLibrary,
   toml,
+  turbo,
   typeorm,
   unicorn,
   vitest,

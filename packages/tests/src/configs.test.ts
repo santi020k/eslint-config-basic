@@ -16,9 +16,11 @@ import { lit as litConfig } from '@santi020k/eslint-config-lit'
 import { nestConfig } from '@santi020k/eslint-config-nest'
 import { nextConfig } from '@santi020k/eslint-config-next'
 import { nuxt as nuxtConfig } from '@santi020k/eslint-config-nuxt'
+import { preactConfig } from '@santi020k/eslint-config-preact'
 import { qwik as qwikConfig } from '@santi020k/eslint-config-qwik'
 import { reactConfig } from '@santi020k/eslint-config-react'
 import { reactRouter as reactRouterConfig } from '@santi020k/eslint-config-react-router'
+import { remix as remixConfig } from '@santi020k/eslint-config-remix'
 import { slidevConfig } from '@santi020k/eslint-config-slidev'
 import { solidConfig } from '@santi020k/eslint-config-solid'
 import { svelteConfig } from '@santi020k/eslint-config-svelte'
@@ -356,59 +358,130 @@ describe('Slidev Config', () => {
   })
 })
 
+describe('Preact Config', () => {
+  test('should export preactConfig as an array', () => {
+    expect(Array.isArray(preactConfig)).toBe(true)
+  })
+
+  test('should have at least one config entry', () => {
+    expect(preactConfig.length).toBeGreaterThan(0)
+  })
+
+  test('should include recommended and custom entries', () => {
+    const names = preactConfig.flatMap((c: TSESLint.FlatConfig.Config) => (c.name ? [c.name] : []))
+
+    expect(names).toContain('eslint-config-preact/recommended')
+    expect(names).toContain('eslint-config-preact/custom')
+  })
+})
+
+describe('Remix Config', () => {
+  test('should export remix as an array', () => {
+    expect(Array.isArray(remixConfig)).toBe(true)
+  })
+
+  test('should have at least one config entry', () => {
+    expect(remixConfig.length).toBeGreaterThan(0)
+  })
+
+  test('should re-export react-router config with eslint-config-remix prefix', () => {
+    const names = remixConfig.flatMap((c: TSESLint.FlatConfig.Config) => (c.name ? [c.name] : []))
+
+    expect(names.every((name: string) => name.startsWith('eslint-config-remix'))).toBe(true)
+  })
+})
+
 describe('Config Enums', () => {
   test('should export all Library enum values', () => {
     expect(Library.AiSdk).toBeDefined()
-    expect(Library.Typeorm).toBeDefined()
-    expect(Library.Prisma).toBeDefined()
+    expect(Library.Autogen).toBeDefined()
     expect(Library.Drizzle).toBeDefined()
-    expect(Library.Mastra).toBeDefined()
-    expect(Library.MikroOrm).toBeDefined()
-    expect(Library.Mcp).toBeDefined()
-    expect(Library.OpenAiAgents).toBeDefined()
-    expect(Library.Sequelize).toBeDefined()
-    expect(Library.Tailwind).toBeDefined()
+    expect(Library.GoogleGenAi).toBeDefined()
     expect(Library.I18next).toBeDefined()
+    expect(Library.Langchain).toBeDefined()
+    expect(Library.LlamaIndex).toBeDefined()
+    expect(Library.Mastra).toBeDefined()
+    expect(Library.Mcp).toBeDefined()
+    expect(Library.MikroOrm).toBeDefined()
+    expect(Library.OpenAiAgents).toBeDefined()
+    expect(Library.Prisma).toBeDefined()
+    expect(Library.Sequelize).toBeDefined()
     expect(Library.Stencil).toBeDefined()
+    expect(Library.Storybook).toBeDefined()
+    expect(Library.Tailwind).toBeDefined()
     expect(Library.TanstackQuery).toBeDefined()
     expect(Library.TanstackRouter).toBeDefined()
-    expect(Library.Storybook).toBeDefined()
+    expect(Library.Turbo).toBeDefined()
+    expect(Library.Typeorm).toBeDefined()
+    expect(Library.Zod).toBeDefined()
   })
 
   test('should export all Testing enum values', () => {
-    expect(Testing.Vitest).toBeDefined()
-    expect(Testing.Jest).toBeDefined()
-    expect(Testing.Playwright).toBeDefined()
     expect(Testing.Cypress).toBeDefined()
+    expect(Testing.Jest).toBeDefined()
+    expect(Testing.JestDom).toBeDefined()
+    expect(Testing.Playwright).toBeDefined()
     expect(Testing.TestingLibrary).toBeDefined()
+    expect(Testing.Vitest).toBeDefined()
   })
 
   test('should export all Tool enum values', () => {
+    expect(Tool.Command).toBeDefined()
     expect(Tool.Cspell).toBeDefined()
-    expect(Tool.Prettier).toBeDefined()
+    expect(Tool.Docker).toBeDefined()
+    expect(Tool.GithubActions).toBeDefined()
     expect(Tool.Jsdoc).toBeDefined()
+    expect(Tool.Nx).toBeDefined()
+    expect(Tool.Pnpm).toBeDefined()
+    expect(Tool.Prettier).toBeDefined()
     expect(Tool.Swagger).toBeDefined()
   })
 
   test('should export all Extension enum values', () => {
-    expect(Extension.Unicorn).toBeDefined()
-    expect(Extension.Sonarjs).toBeDefined()
+    expect(Extension.A11y).toBeDefined()
+    expect(Extension.BestPractices).toBeDefined()
+    expect(Extension.Biome).toBeDefined()
+    expect(Extension.Boundaries).toBeDefined()
+    expect(Extension.Compat).toBeDefined()
+    expect(Extension.DeMorgan).toBeDefined()
+    expect(Extension.Depend).toBeDefined()
+    expect(Extension.Node).toBeDefined()
+    expect(Extension.Oxlint).toBeDefined()
+    expect(Extension.Perfectionist).toBeDefined()
     expect(Extension.Regexp).toBeDefined()
     expect(Extension.Security).toBeDefined()
-    expect(Extension.Perfectionist).toBeDefined()
+    expect(Extension.Sonarjs).toBeDefined()
+    expect(Extension.Unicorn).toBeDefined()
   })
 
   test('should export all Format enum values', () => {
-    expect(Format.Mdx).toBeDefined()
-    expect(Format.Markdown).toBeDefined()
-    expect(Format.Jsonc).toBeDefined()
-    expect(Format.Yaml).toBeDefined()
-    expect(Format.Toml).toBeDefined()
+    expect(Format.Css).toBeDefined()
     expect(Format.Graphql).toBeDefined()
+    expect(Format.Html).toBeDefined()
+    expect(Format.Jsonc).toBeDefined()
+    expect(Format.Markdown).toBeDefined()
+    expect(Format.Mdx).toBeDefined()
+    expect(Format.PackageJson).toBeDefined()
+    expect(Format.Toml).toBeDefined()
+    expect(Format.Yaml).toBeDefined()
   })
 
-  test('should export Setting enum with expected values', () => {
+  test('should export all Setting enum values', () => {
+    expect(Setting.DefaultIgnores).toBeDefined()
+    expect(Setting.GeneratedCodeIgnores).toBeDefined()
     expect(Setting.Gitignore).toBeDefined()
+    expect(Setting.NoDefaultIgnores).toBeDefined()
+    expect(Setting.NoGeneratedCodeIgnores).toBeDefined()
     expect(Setting.NoGitignore).toBeDefined()
+  })
+
+  test('should export all Runtime enum values', () => {
+    expect(Runtime.Browser).toBeDefined()
+    expect(Runtime.Bun).toBeDefined()
+    expect(Runtime.Cloudflare).toBeDefined()
+    expect(Runtime.Deno).toBeDefined()
+    expect(Runtime.Node).toBeDefined()
+    expect(Runtime.Universal).toBeDefined()
+    expect(Runtime.Worker).toBeDefined()
   })
 })

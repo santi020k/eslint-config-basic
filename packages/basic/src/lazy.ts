@@ -1,6 +1,9 @@
 // Dynamic-import helper for lazily loading bundled framework packages.
 // Mirrors the pattern in @santi020k/eslint-config-integrations (src/lazy.ts).
 
+import { createRequire } from 'node:module'
+import { pathToFileURL } from 'node:url'
+
 // Bypass jiti/bundler transformation of import() to require().
 // Reflect.construct avoids a direct `new Function()` reference (which triggers
 // no-implied-eval) while achieving the same runtime behaviour: the string body
@@ -12,4 +15,16 @@ const dynamicImport: (specifier: string) => Promise<unknown> = isVitest
   ? (specifier: string) => import(/* @vite-ignore */ specifier)
   : Reflect.construct(Function, ['specifier', 'return import(specifier)']) as (specifier: string) => Promise<unknown>
 
-export const loadModule = async <T = unknown>(specifier: string): Promise<T> => await dynamicImport(specifier) as T
+const req = createRequire(import.meta.url)
+
+export const loadModule = async <T = unknown>(specifier: string): Promise<T> => {
+  let resolved = specifier
+
+  try {
+    resolved = pathToFileURL(req.resolve(specifier)).href
+  } catch {
+    // Ignore and let dynamicImport throw natural error
+  }
+
+  return await dynamicImport(resolved) as T
+}

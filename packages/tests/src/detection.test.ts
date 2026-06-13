@@ -510,6 +510,20 @@ describe('detectProjectOptions', () => {
     expect(options.runtime).toBe(Runtime.Universal)
   })
 
+  test('should detect Preact if preact is a dependency', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      dependencies: { preact: 'latest' }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.detectedFrameworks).toContain('preact')
+    expect(options.frameworks?.preact).toBeUndefined()
+    expect(options.runtime).toBe(Runtime.Browser)
+  })
+
   test('should detect Lit if lit is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 

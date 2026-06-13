@@ -1,3 +1,6 @@
+import { createRequire } from 'node:module'
+import { pathToFileURL } from 'node:url'
+
 import type { TSESLint } from '@typescript-eslint/utils'
 
 export type ConfigWithRules = FlatConfig & { rules?: FlatRules }
@@ -35,9 +38,22 @@ const dynamicImport: (specifier: string) => Promise<unknown> = isVitest
   ? (specifier: string) => import(/* @vite-ignore */ specifier)
   : Reflect.construct(Function, ['specifier', 'return import(specifier)']) as (specifier: string) => Promise<unknown>
 
+const req = createRequire(import.meta.url)
+
+const resolveSpecifier = (specifier: string): string => {
+  let resolved = specifier
+
+  try {
+    resolved = pathToFileURL(req.resolve(specifier)).href
+  } catch {
+    // Ignore and let dynamicImport throw natural error
+  }
+
+  return resolved
+}
 
 export const loadDefault = async <T = unknown>(specifier: string): Promise<T> => {
-  const module = await dynamicImport(specifier)
+  const module = await dynamicImport(resolveSpecifier(specifier))
 
   if (hasDefaultExport(module)) {
     return (module.default ?? module) as T
@@ -46,7 +62,7 @@ export const loadDefault = async <T = unknown>(specifier: string): Promise<T> =>
   return module as T
 }
 
-export const loadModule = async <T = unknown>(specifier: string): Promise<T> => await dynamicImport(specifier) as T
+export const loadModule = async <T = unknown>(specifier: string): Promise<T> => await dynamicImport(resolveSpecifier(specifier)) as T
 
 /**
  * Keeps optional integrations import-safe for consumers that do not enable them.
