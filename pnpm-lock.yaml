@@ -2084,18 +2084,30 @@ importers:
       '@santi020k/eslint-config-hono':
         specifier: workspace:^
         version: link:../hono
+      '@santi020k/eslint-config-lit':
+        specifier: workspace:^
+        version: link:../lit
       '@santi020k/eslint-config-nest':
         specifier: workspace:^
         version: link:../nest
       '@santi020k/eslint-config-next':
         specifier: workspace:^
         version: link:../next
+      '@santi020k/eslint-config-nuxt':
+        specifier: workspace:^
+        version: link:../nuxt
+      '@santi020k/eslint-config-preact':
+        specifier: workspace:^
+        version: link:../preact
       '@santi020k/eslint-config-qwik':
         specifier: workspace:^
         version: link:../qwik
       '@santi020k/eslint-config-react':
         specifier: workspace:^
         version: link:../react
+      '@santi020k/eslint-config-react-router':
+        specifier: workspace:^
+        version: link:../react-router
       '@santi020k/eslint-config-remix':
         specifier: workspace:^
         version: link:../remix
@@ -2108,6 +2120,9 @@ importers:
       '@santi020k/eslint-config-svelte':
         specifier: workspace:^
         version: link:../svelte
+      '@santi020k/eslint-config-tanstack-start':
+        specifier: workspace:^
+        version: link:../tanstack-start
       '@santi020k/eslint-config-typescript':
         specifier: workspace:^
         version: link:../typescript

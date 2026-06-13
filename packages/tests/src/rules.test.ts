@@ -11,7 +11,7 @@ import { getEffectiveRuleValue } from './test-utils.js'
 const classify = (importPath: string, groupPatterns: string[][]): number => {
   for (const [i, groupPattern] of groupPatterns.entries()) {
     for (const pattern of groupPattern) {
-      if (new RegExp(pattern).test(importPath)) return i
+      if (importPath.match(pattern)) return i
     }
   }
 
@@ -81,7 +81,7 @@ describe('Import Groups', () => {
     for (const group of groups) {
       expect(Array.isArray(group)).toBe(true)
       for (const pattern of group) {
-        expect(() => new RegExp(pattern)).not.toThrow()
+        expect(() => ''.match(pattern)).not.toThrow()
       }
     }
   })

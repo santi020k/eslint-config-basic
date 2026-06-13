@@ -27,6 +27,7 @@ import { typescriptConfig } from '@santi020k/eslint-config-typescript'
 import { viteConfig } from '@santi020k/eslint-config-vite'
 import { vueConfig } from '@santi020k/eslint-config-vue'
 
+import type { TSESLint } from '@typescript-eslint/utils'
 import { describe, expect, test } from 'vitest'
 
 describe('Core Config', () => {
@@ -245,12 +246,12 @@ describe('React Router Config', () => {
   })
 
   test('should include jsx-a11y plugin', () => {
-    const plugins = reactRouterConfig.flatMap(c => Object.keys(c.plugins ?? {}))
+    const plugins = reactRouterConfig.flatMap((c: TSESLint.FlatConfig.Config) => Object.keys(c.plugins ?? {}))
     expect(plugins).toContain('jsx-a11y')
   })
 
   test('should disable unused-expression rules in virtual script blocks', () => {
-    const virtualConfig = reactRouterConfig.find(config => config.name === 'eslint-config-react-router/virtual-script-rules')
+    const virtualConfig = reactRouterConfig.find((config: TSESLint.FlatConfig.Config) => config.name === 'eslint-config-react-router/virtual-script-rules')
 
     expect(virtualConfig?.rules?.['@typescript-eslint/no-unused-expressions']).toBe('off')
   })
@@ -262,14 +263,14 @@ describe('Lit Config', () => {
   })
 
   test('should include wc and lit recommended entries', () => {
-    const names = litConfig.flatMap(c => (c.name ? [c.name] : []))
+    const names = litConfig.flatMap((c: TSESLint.FlatConfig.Config) => (c.name ? [c.name] : []))
 
     expect(names).toContain('eslint-config-lit/wc-recommended')
     expect(names).toContain('eslint-config-lit/lit-recommended')
   })
 
   test('should include wc and lit plugins', () => {
-    const plugins = litConfig.flatMap(c => Object.keys(c.plugins ?? {}))
+    const plugins = litConfig.flatMap((c: TSESLint.FlatConfig.Config) => Object.keys(c.plugins ?? {}))
 
     expect(plugins).toContain('wc')
     expect(plugins).toContain('lit')
@@ -282,14 +283,14 @@ describe('Nuxt Config', () => {
   })
 
   test('should include rules and server-runtime entries', () => {
-    const names = nuxtConfig.flatMap(c => (c.name ? [c.name] : []))
+    const names = nuxtConfig.flatMap((c: TSESLint.FlatConfig.Config) => (c.name ? [c.name] : []))
 
     expect(names).toContain('eslint-config-nuxt/rules')
     expect(names).toContain('eslint-config-nuxt/server-runtime')
   })
 
   test('should include the nuxt plugin with prefer-import-meta enabled', () => {
-    const rulesConfig = nuxtConfig.find(config => config.name === 'eslint-config-nuxt/rules')
+    const rulesConfig = nuxtConfig.find((config: TSESLint.FlatConfig.Config) => config.name === 'eslint-config-nuxt/rules')
 
     expect(Object.keys(rulesConfig?.plugins ?? {})).toContain('nuxt')
     expect(rulesConfig?.rules?.['nuxt/prefer-import-meta']).toBe('error')
@@ -302,14 +303,14 @@ describe('TanStack Start Config', () => {
   })
 
   test('should include router and query entries', () => {
-    const names = tanstackStartConfig.flatMap(c => (c.name ? [c.name] : []))
+    const names = tanstackStartConfig.flatMap((c: TSESLint.FlatConfig.Config) => (c.name ? [c.name] : []))
 
     expect(names).toContain('eslint-config-tanstack-start/router')
     expect(names).toContain('eslint-config-tanstack-start/query')
   })
 
   test('should include TanStack router and query plugins', () => {
-    const plugins = tanstackStartConfig.flatMap(c => Object.keys(c.plugins ?? {}))
+    const plugins = tanstackStartConfig.flatMap((c: TSESLint.FlatConfig.Config) => Object.keys(c.plugins ?? {}))
 
     expect(plugins).toContain('@tanstack/router')
     expect(plugins).toContain('@tanstack/query')

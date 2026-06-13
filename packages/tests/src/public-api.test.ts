@@ -51,8 +51,9 @@ describe('Public API Re-exports', () => {
     // The workspace group pattern should match @acme/...
     const workspaceGroup = withWorkspace.find(g => g.some(p => p.includes('@acme')))
     expect(workspaceGroup).toBeDefined()
-    expect(new RegExp(workspaceGroup![0]).test('@acme/shared')).toBe(true)
-    expect(new RegExp(workspaceGroup![0]).test('@other/pkg')).toBe(false)
+    if (!workspaceGroup) throw new Error('Workspace group should be defined')
+    expect('@acme/shared'.match(workspaceGroup[0]) !== null).toBe(true)
+    expect('@other/pkg'.match(workspaceGroup[0]) !== null).toBe(false)
   })
 
   test('workspacePrefixes in defineConfig should produce a config with the workspace import override', async () => {
