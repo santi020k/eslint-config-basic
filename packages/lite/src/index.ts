@@ -47,6 +47,8 @@ export {
   next,
   nextConfig,
   nuxt,
+  preact,
+  preactConfig,
   qwik,
   react,
   reactConfig,
@@ -98,6 +100,7 @@ export type {
 export {
   coreConfig,
   createCoreConfig,
+  createImportGroups,
   detectProjectOptions,
   Extension,
   Format,
@@ -596,6 +599,7 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
     reactRouterParam,
     tanstackStartParam,
     nuxtParam,
+    preactParam,
     litParam,
     slidevParam,
     viteParam
@@ -620,6 +624,7 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
     resolveFramework('react-router', resolvedFrameworks['react-router']),
     resolveFramework('tanstack-start', resolvedFrameworks['tanstack-start']),
     resolveFramework('nuxt', resolvedFrameworks.nuxt),
+    resolveFramework('preact', resolvedFrameworks.preact),
     resolveFramework('lit', resolvedFrameworks.lit),
     resolveFramework('slidev', resolvedFrameworks.slidev, { runtime }),
     resolveFramework('vite', resolvedFrameworks.vite, { runtime })
@@ -700,6 +705,7 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
     ...reactRouterParam,
     ...tanstackStartParam,
     ...nuxtParam,
+    ...preactParam,
     ...litParam,
     ...slidevParam,
     ...viteParam,

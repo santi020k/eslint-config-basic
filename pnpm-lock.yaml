@@ -885,6 +885,9 @@ importers:
       '@santi020k/eslint-config-nuxt':
         specifier: workspace:^
         version: link:../nuxt
+      '@santi020k/eslint-config-preact':
+        specifier: workspace:^
+        version: link:../preact
       '@santi020k/eslint-config-qwik':
         specifier: workspace:^
         version: link:../qwik
@@ -2084,6 +2087,12 @@ importers:
       '@santi020k/eslint-config-hono':
         specifier: workspace:^
         version: link:../hono
+      '@santi020k/eslint-config-integrations':
+        specifier: workspace:^
+        version: link:../integrations
+      '@santi020k/eslint-config-lite':
+        specifier: workspace:^
+        version: link:../lite
       '@santi020k/eslint-config-lit':
         specifier: workspace:^
         version: link:../lit

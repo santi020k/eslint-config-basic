@@ -196,3 +196,87 @@ describe('Public API Re-exports', () => {
     expect(typeof zod).toBe('function')
   })
 })
+
+describe('Integrations subpath exports', () => {
+  test('extensions subpath exports expected configs', async () => {
+    const exports = await import('@santi020k/eslint-config-integrations/extensions') as Record<string, unknown>
+
+    expect(Object.keys(exports).sort()).toEqual([
+      'bestPractices',
+      'compat',
+      'deMorgan',
+      'depend',
+      'node',
+      'oxlint',
+      'perfectionist',
+      'regexp',
+      'security',
+      'sonarjs',
+      'unicorn'
+    ])
+  })
+
+  test('formats subpath exports expected configs', async () => {
+    const exports = await import('@santi020k/eslint-config-integrations/formats') as Record<string, unknown>
+
+    expect(Object.keys(exports).sort()).toEqual([
+      'css',
+      'graphql',
+      'html',
+      'jsonc',
+      'markdown',
+      'mdx',
+      'toml',
+      'yaml'
+    ])
+  })
+
+  test('libraries subpath exports expected configs', async () => {
+    const exports = await import('@santi020k/eslint-config-integrations/libraries') as Record<string, unknown>
+
+    expect(Object.keys(exports).sort()).toEqual([
+      'aiSdk',
+      'drizzle',
+      'i18next',
+      'langchain',
+      'llamaIndex',
+      'mastra',
+      'mcp',
+      'mikroOrm',
+      'openAiAgents',
+      'prisma',
+      'sequelize',
+      'stencil',
+      'storybook',
+      'tailwind',
+      'tanstackQuery',
+      'tanstackRouter',
+      'turbo',
+      'typeorm'
+    ])
+  })
+
+  test('testing subpath exports expected configs', async () => {
+    const exports = await import('@santi020k/eslint-config-integrations/testing') as Record<string, unknown>
+
+    expect(Object.keys(exports).sort()).toEqual([
+      'cypress',
+      'jest',
+      'playwright',
+      'testingLibrary',
+      'vitest'
+    ])
+  })
+
+  test('tools subpath exports expected configs', async () => {
+    const exports = await import('@santi020k/eslint-config-integrations/tools') as Record<string, unknown>
+
+    expect(Object.keys(exports).sort()).toEqual([
+      'cspell',
+      'jsdoc',
+      'pnpm',
+      'prettier',
+      'swagger'
+    ])
+  })
+})

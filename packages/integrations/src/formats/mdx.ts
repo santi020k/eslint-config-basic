@@ -23,8 +23,7 @@ export const mdx: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyCon
     'no-multi-spaces': 'off',
     'no-unused-vars': 'off',
     'no-var': 'error',
-    'prefer-const': 'error',
-    'react/react-in-jsx-scope': 0
+    'prefer-const': 'error'
   }
 
   return [

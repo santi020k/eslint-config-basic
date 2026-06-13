@@ -46,6 +46,7 @@
     "@santi020k/eslint-config-nest": "workspace:^",
     "@santi020k/eslint-config-next": "workspace:^",
     "@santi020k/eslint-config-nuxt": "workspace:^",
+    "@santi020k/eslint-config-preact": "workspace:^",
     "@santi020k/eslint-config-qwik": "workspace:^",
     "@santi020k/eslint-config-react": "workspace:^",
     "@santi020k/eslint-config-react-router": "workspace:^",
@@ -70,6 +71,7 @@
     "@santi020k/eslint-config-nest": "^1.6.0",
     "@santi020k/eslint-config-next": "^1.6.0",
     "@santi020k/eslint-config-nuxt": "^1.6.0",
+    "@santi020k/eslint-config-preact": "^1.6.0",
     "@santi020k/eslint-config-qwik": "^1.6.0",
     "@santi020k/eslint-config-react": "^1.6.0",
     "@santi020k/eslint-config-react-router": "^1.6.0",
@@ -109,6 +111,9 @@
       "optional": true
     },
     "@santi020k/eslint-config-nuxt": {
+      "optional": true
+    },
+    "@santi020k/eslint-config-preact": {
       "optional": true
     },
     "@santi020k/eslint-config-qwik": {

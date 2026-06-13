@@ -83,15 +83,8 @@ export const getRules = (options: AstroOptions = {}): TSESLint.Linter.RulesRecor
   // JSX-specific rules shared by React and Solid when used in .astro files
   const jsxRules: TSESLint.Linter.RulesRecord = (hasReact || hasSolid) ?
     {
-      'react/destructuring-assignment': 'off',
-      'react/jsx-filename-extension': [1, { extensions: ['.astro'] }],
-      'react/jsx-key': 'off',
-      'react/jsx-no-undef': 'off',
-      'react/jsx-props-no-spreading': 'off',
-      'react/no-unescaped-entities': 'off',
-      'react/no-unknown-property': 'off',
-      'react/react-in-jsx-scope': 'off',
-      'react/require-default-props': 'off'
+      '@eslint-react/dom-no-unknown-property': 'off',
+      '@eslint-react/no-missing-key': 'off'
     } :
     {}
 

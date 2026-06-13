@@ -19,9 +19,20 @@ const workspacePackageAliases = Object.fromEntries(
     })
 )
 
+const integrationSubpathAliases = {
+  '@santi020k/eslint-config-integrations/extensions': join(packagesDir, 'integrations/src/extensions/index.ts'),
+  '@santi020k/eslint-config-integrations/formats': join(packagesDir, 'integrations/src/formats/index.ts'),
+  '@santi020k/eslint-config-integrations/libraries': join(packagesDir, 'integrations/src/libraries/index.ts'),
+  '@santi020k/eslint-config-integrations/testing': join(packagesDir, 'integrations/src/testing/index.ts'),
+  '@santi020k/eslint-config-integrations/tools': join(packagesDir, 'integrations/src/tools/index.ts')
+}
+
 export default defineConfig({
   resolve: {
-    alias: workspacePackageAliases
+    alias: {
+      ...integrationSubpathAliases,
+      ...workspacePackageAliases
+    }
   },
   root: rootDir,
   test: {
