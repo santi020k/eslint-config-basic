@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs'
 import { join } from 'node:path'
 
 import { applyStrictMode } from './compose.js'
-import { createDetectedFrameworkFlags, remix as internalRemix  } from './frameworks.js'
+import { createDetectedFrameworkFlags } from './frameworks.js'
 import { getIntegrationConfigs, getPrettierConfig } from './integrations.js'
 import { resolveFramework, resolvePreset } from './resolvers.js'
 
@@ -36,34 +36,38 @@ export {
   generateAgentSkills,
   generateSkillContent
 } from './agent-skill-generator.js'
+// Lazy framework factories (v2 naming: bare framework names) plus
+// deprecated *Config aliases for the old mixed naming.
+/* eslint-disable @typescript-eslint/no-deprecated -- deliberate re-export of deprecated v1 aliases for migration */
 export {
+  angular,
   angularConfig,
   astro,
+  expo,
   expoConfig,
   hono,
   lit,
+  nest,
   nestConfig,
+  next,
   nextConfig,
   nuxt,
   qwik,
+  react,
   reactConfig,
   reactRouter,
-
+  remix,
   slidev,
+  solid,
   solidConfig,
+  svelte,
   svelteConfig,
   tanstackStart,
   vite,
+  vue,
   vueConfig
 } from './frameworks.js'
-
-/**
- * @deprecated Remix merged into React Router v7. Use
- * `@santi020k/eslint-config-react-router` (the `react-router` framework key)
- * instead. This alias re-exports the React Router config and will be removed
- * in the next major version.
- */
-export const remix = internalRemix
+/* eslint-enable @typescript-eslint/no-deprecated */
 
 // Re-export core types and utilities
 export type {
@@ -638,32 +642,52 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
   const useDefaultIgnores = !uniqueSettings.includes(Setting.NoDefaultIgnores)
   const useGeneratedCodeIgnores = !uniqueSettings.includes(Setting.NoGeneratedCodeIgnores)
   const tailwindEntryPoint = uniqueLibraries.includes(Library.Tailwind) ? findTailwindEntryPoint(rootDir) : undefined
-  // Resolve Frameworks
-  const reactParam = resolveFramework('react', resolvedFrameworks.react)
-  const nextParam = resolveFramework('next', resolvedFrameworks.next)
 
-  const astroParam = resolveFramework('astro', resolvedFrameworks.astro, {
-    hasReact,
-    hasSolid,
-    hasSvelte,
-    hasVue
-  })
-
-  const expoParam = resolveFramework('expo', resolvedFrameworks.expo)
-  const nestParam = resolveFramework('nest', resolvedFrameworks.nest)
-  const honoParam = resolveFramework('hono', resolvedFrameworks.hono, { runtime })
-  const vueParam = resolveFramework('vue', resolvedFrameworks.vue)
-  const svelteParam = resolveFramework('svelte', resolvedFrameworks.svelte)
-  const solidParam = resolveFramework('solid', resolvedFrameworks.solid)
-  const angularParam = resolveFramework('angular', resolvedFrameworks.angular)
-  const qwikParam = resolveFramework('qwik', resolvedFrameworks.qwik)
-  const remixParam = resolveFramework('remix', (resolvedFrameworks as Record<string, unknown>).remix as ImportedFramework | undefined)
-  const reactRouterParam = resolveFramework('react-router', resolvedFrameworks['react-router'])
-  const tanstackStartParam = resolveFramework('tanstack-start', resolvedFrameworks['tanstack-start'])
-  const nuxtParam = resolveFramework('nuxt', resolvedFrameworks.nuxt)
-  const litParam = resolveFramework('lit', resolvedFrameworks.lit)
-  const slidevParam = resolveFramework('slidev', resolvedFrameworks.slidev, { runtime })
-  const viteParam = resolveFramework('vite', resolvedFrameworks.vite, { runtime })
+  // Resolve Frameworks (lazily — only enabled frameworks import their packages)
+  const [
+    reactParam,
+    nextParam,
+    astroParam,
+    expoParam,
+    nestParam,
+    honoParam,
+    vueParam,
+    svelteParam,
+    solidParam,
+    angularParam,
+    qwikParam,
+    remixParam,
+    reactRouterParam,
+    tanstackStartParam,
+    nuxtParam,
+    litParam,
+    slidevParam,
+    viteParam
+  ] = await Promise.all([
+    resolveFramework('react', resolvedFrameworks.react),
+    resolveFramework('next', resolvedFrameworks.next),
+    resolveFramework('astro', resolvedFrameworks.astro, {
+      hasReact,
+      hasSolid,
+      hasSvelte,
+      hasVue
+    }),
+    resolveFramework('expo', resolvedFrameworks.expo),
+    resolveFramework('nest', resolvedFrameworks.nest),
+    resolveFramework('hono', resolvedFrameworks.hono, { runtime }),
+    resolveFramework('vue', resolvedFrameworks.vue),
+    resolveFramework('svelte', resolvedFrameworks.svelte),
+    resolveFramework('solid', resolvedFrameworks.solid),
+    resolveFramework('angular', resolvedFrameworks.angular),
+    resolveFramework('qwik', resolvedFrameworks.qwik),
+    resolveFramework('remix', (resolvedFrameworks as Record<string, unknown>).remix as ImportedFramework | undefined),
+    resolveFramework('react-router', resolvedFrameworks['react-router']),
+    resolveFramework('tanstack-start', resolvedFrameworks['tanstack-start']),
+    resolveFramework('nuxt', resolvedFrameworks.nuxt),
+    resolveFramework('lit', resolvedFrameworks.lit),
+    resolveFramework('slidev', resolvedFrameworks.slidev, { runtime }),
+    resolveFramework('vite', resolvedFrameworks.vite, { runtime })
+  ])
 
   // Use runtime-aware core config
   const runtimeCoreConfig = runtime !== Runtime.Universal ?

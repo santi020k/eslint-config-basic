@@ -36,7 +36,7 @@
     "typescript": "^6.0.3"
   },
   "peerDependencies": {
-    "eslint": "^9.0.0 || ^10.0.0"
+    "eslint": "^10.0.0"
   },
   "peerDependenciesMeta": {
     "@angular/core": {

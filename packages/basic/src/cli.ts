@@ -378,9 +378,10 @@ interface DuplicateEslintInfo {
 
 /**
  * Detects whether the project and the config packages resolve two different
- * physical copies of ESLint (e.g. an ESLint 9 project pulling in the config's
- * ESLint 10 dependency). Both major versions are supported, but two parallel
- * copies can apply subtly different rule behavior between editor and CLI.
+ * physical copies of ESLint (e.g. a project pinning an older ESLint while the
+ * config packages resolve their own ESLint 10 dependency). Only ESLint 10 is
+ * supported; two parallel copies can also apply subtly different rule behavior
+ * between editor and CLI.
  */
 export const findDuplicateEslint = (cwd: string = process.cwd()): DuplicateEslintInfo | null => {
   try {
@@ -441,7 +442,7 @@ export const handleDoctor = async (cwd: string = process.cwd()) => {
   if (duplicateEslint) {
     warnings.push(
       `Two ESLint copies are installed: the project resolves ${duplicateEslint.projectVersion} while the config packages resolve ${duplicateEslint.configVersion}. ` +
-      'Both ESLint 9 and 10 are supported, but parallel copies can apply different rule behavior between your editor and CLI. ' +
+      'Only ESLint 10 is supported, and parallel copies can apply different rule behavior between your editor and CLI. ' +
       'Align the project\'s eslint version with the config\'s (or dedupe via your package manager).'
     )
   }

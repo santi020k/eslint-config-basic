@@ -68,7 +68,7 @@ export default await defineConfig({
 
 ## ORM Integrations
 
-The ORM integrations are dependency-free ESLint flat configs. They use stable core rules instead of loading ORM-specific plugins, because several ORM ESLint plugins are either unavailable, not maintained for ESLint 9/10 flat config, or too framework-specific for a shared base preset.
+The ORM integrations are dependency-free ESLint flat configs. They use stable core rules instead of loading ORM-specific plugins, because several ORM ESLint plugins are either unavailable, not maintained for ESLint 10 flat config, or too framework-specific for a shared base preset.
 
 ### TypeORM
 

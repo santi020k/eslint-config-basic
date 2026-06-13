@@ -23,7 +23,7 @@ Composable ESLint 10+ flat-config tooling for JavaScript and TypeScript projects
 This project follows a **DX-First & Stability-First** mission. We prioritize a seamless developer experience and reliable installations. To achieve this:
 
 - **Handled Versioning**: Core packages like `eslint` and `@eslint/js` are included as hard dependencies. This ensures the config "just works" with tested versions, preventing the dreaded "peer dependency hell."
-- **Broad Compatibility**: We support both **ESLint 9** and **ESLint 10** through flexible internal mapping and robust dependency management.
+- **Modern Baseline**: Built for **ESLint 10** flat config, taking advantage of v10 improvements like per-file config lookup and JSX reference tracking.
 
 ## ✨ Key Features
 

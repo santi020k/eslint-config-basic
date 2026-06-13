@@ -6,6 +6,8 @@ words:
   - app-router
   - astro
   - asyncgenerator
+  - attw
+  - arethetypeswrong
   - asynciterable
   - behaviour
   - better-tailwindcss
@@ -24,6 +26,7 @@ words:
   - dev-dependency
   - dts
   - eslint-config
+  - esac
   - esbuild
   - esmodule
   - expo

@@ -5,6 +5,7 @@
     "packages/playground/**"
   ],
   "ignoreDependencies": [
+    "@arethetypeswrong/cli",
     "@santi020k/eslint-config-basic",
     "typedoc-plugin-markdown",
     "tailwindcss"

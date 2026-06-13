@@ -12,14 +12,14 @@ This file provides Claude-specific guidance for working in this monorepo. Read t
 
 ## Quick Project Summary
  
- `@santi020k/eslint-config-basic` is a composable ESLint 9/10+ Flat Config package for JS/TS projects. 
+ `@santi020k/eslint-config-basic` is a composable ESLint 10+ Flat Config package for JS/TS projects. 
  
 ## 🎯 Philosophy: DX Above All
 
 This project follows a **DX-First & Stability-First** mission. We prioritize a seamless developer experience and reliable installations. To achieve this:
 
 - **Handled Versioning**: Core packages like `eslint` and `@eslint/js` are included as hard dependencies. This ensures the config "just works" with tested versions, preventing the dreaded "peer dependency hell."
-- **Broad Compatibility**: We support both **ESLint 9** and **ESLint 10** through flexible internal mapping and robust dependency management.
+- **Modern Baseline**: We target **ESLint 10** only, taking advantage of v10 improvements like per-file config lookup and JSX reference tracking.
 
 ## ✨ Key Features
 
@@ -113,7 +113,7 @@ If you add a new published framework package or integration, updating the docume
 
 ## Critical Conventions
 
-- **ESLint 9/10 Flat Config only** — no legacy `.eslintrc` support
+- **ESLint 10 Flat Config only** — no legacy `.eslintrc` support (eslintrc was fully removed in ESLint 10)
 - **DX Above All** — prioritize stability and ease of use over library size
 - **Handled Versioning** — `eslint` and `@eslint/js` are hard dependencies to ensure a vetted baseline
 - **All configs return `TSESLint.FlatConfig.ConfigArray`**
@@ -147,13 +147,14 @@ When writing integration tests that call `lintText()`, **do not rely on auto-det
 Use `typescript: false` when the test doesn't need TS-specific rule checking:
 
 ```ts
-const config = eslintConfig({ frameworks: { react: reactConfig }, typescript: false })
+const config = eslintConfig({ frameworks: { react: true }, typescript: false })
 ```
 
 ## Common Pitfalls
 
-1. Framework options accept `true` (bundled config), a config array, a factory, or a module default export — anything else throws a `TypeError` (see `resolveFramework` in `packages/basic/src/resolvers.ts`). App configs should prefer booleans like `frameworks.react: true`
-2. Plugin loading: use direct plugin object references, not string-based resolution (avoids `FlatCompat` issues)
-3. Type exports: may need explicit type annotations to avoid TS2742 errors
-4. Peer dependencies: use `$` references in pnpm `overrides` for version alignment
-5. The `better-tailwindcss` plugin does NOT include "tailwind" in its config entry names — check for rule prefix `better-tailwindcss/` instead
+1. Framework options accept `true` (bundled config), a config array, a factory (sync or async), or a module default export — anything else throws a `TypeError` (see `resolveFramework` in `packages/basic/src/resolvers.ts`). App configs should prefer booleans like `frameworks.react: true`
+2. Framework exports from `@santi020k/eslint-config-basic` (`react`, `vue`, `next`, …) are **lazy async factories** returning `Promise<FlatConfigArray>` — the framework package is only imported on first call (see `packages/basic/src/frameworks.ts`). The old `*Config` names are deprecated aliases of the same factories, not config arrays.
+3. Plugin loading: use direct plugin object references, not string-based resolution (avoids `FlatCompat` issues)
+4. Type exports: may need explicit type annotations to avoid TS2742 errors
+5. Peer dependencies: use `$` references in pnpm `overrides` for version alignment
+6. The `better-tailwindcss` plugin does NOT include "tailwind" in its config entry names — check for rule prefix `better-tailwindcss/` instead

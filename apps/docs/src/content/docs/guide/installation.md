@@ -1,6 +1,6 @@
 ---
 title: "Installation"
-description: "- Node.js =22.18.0 - ESLint 9+ or 10+"
+description: "- Node.js =22.18.0 - ESLint 10+"
 ---
 
 ## Requirements

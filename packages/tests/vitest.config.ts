@@ -27,7 +27,7 @@ export default defineConfig({
     coverage: {
       exclude: [
         'node_modules/**',
-        'packages/docs/**',
+        'apps/docs/**',
         'packages/tests/**',
         'packages/playground/**',
         '**/*.d.ts',

@@ -5,6 +5,8 @@ description: "This package has first-class monorepo support through the projects
 
 This package has first-class monorepo support through the `projects` option and the `Monorepo` preset. A single `eslint.config.mjs` at the repo root can scope different presets, runtimes, and frameworks to each workspace package.
 
+ESLint 10 also resolves `eslint.config.*` starting from each linted file's directory rather than the working directory. That means workspace packages can ship their own `eslint.config.mjs` (each calling `defineConfig()` with package-specific options) and a single ESLint run from the repo root picks up every config automatically. Use `projects` when you want one root config to rule them all; use per-package configs when packages should own their lint setup — both work with v10.
+
 ## Minimal Setup
 
 ```js title="eslint.config.mjs"

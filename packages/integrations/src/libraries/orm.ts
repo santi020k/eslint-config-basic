@@ -15,7 +15,7 @@ const createOrmConfig = (
 /**
  * TypeORM ESLint configuration.
  *
- * TypeORM does not currently provide an ESLint 9/10-ready recommended flat
+ * TypeORM does not currently provide an ESLint 10-ready recommended flat
  * config. This integration focuses on stable imports and avoids legacy global
  * helpers that make migrations and tests harder to reason about.
  */

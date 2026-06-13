@@ -46,7 +46,7 @@ Framework-specific configurations are bundled behind the main package as workspa
 
 ## Technical Decisions
 
-### 1. Flat Config (ESLint 9+)
+### 1. Flat Config (ESLint 10+)
 Only supports the Flat Config format. All configurations must be exported as `TSESLint.FlatConfig.ConfigArray`. No legacy `.eslintrc` support.
 
 ### 2. Composable API
@@ -101,7 +101,7 @@ When writing integration tests that call `lintText()` in `packages/tests/src/int
 
 Always pass `typescript: false` when the test doesn't need TS-specific rule checking:
 ```ts
-const config = eslintConfig({ typescript: false, frameworks: { react: reactConfig } })
+const config = eslintConfig({ typescript: false, frameworks: { react: true } })
 ```
 
 ## Development Workflows

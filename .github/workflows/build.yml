@@ -73,3 +73,23 @@ jobs:
       - name: Dry-run publish check
         run: pnpm --filter @santi020k/eslint-config-basic publish --dry-run
           --no-git-checks
+      - name: Check published types (attw)
+        if: matrix.node-version == '22.x'
+        run: pnpm run check:attw
+
+  windows-smoke:
+    name: Windows smoke (CLI + detection)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install pnpm
+        uses: pnpm/action-setup@v5
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22.x
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build
+      - name: Run CLI and detection tests on Windows
+        run: pnpm --filter @santi020k/eslint-config-tests exec vitest run src/cli.test.ts src/detection.test.ts src/detection-fixtures.test.ts src/detection-internals.test.ts --maxWorkers=1

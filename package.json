@@ -42,10 +42,12 @@
     "docs:clean": "pnpm --filter @santi020k/eslint-config-docs run docs:clean",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release:check": "TURBO_LOG_ORDER=grouped pnpm run build && pnpm run check:exports && pnpm run typecheck && pnpm run test:run",
+    "check:attw": "node scripts/check-attw.mjs",
+    "release:check": "TURBO_LOG_ORDER=grouped pnpm run build && pnpm run check:exports && pnpm run check:attw && pnpm run typecheck && pnpm run test:run",
     "release": "pnpm run release:check && changeset publish"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.3",
     "@changesets/changelog-github": "^0.7.0",
     "@changesets/cli": "^2.31.0",
     "@eslint/config-inspector": "^3.0.4",
@@ -73,10 +75,10 @@
   },
   "homepage": "https://eslint.santi020k.com/",
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,md,json,yaml,yml}": [
+    "*.{js,jsx,ts,tsx,md,mdx,json,yaml,yml,toml,vue,svelte,astro}": [
       "cspell --no-must-find-files"
     ],
-    "*.{js,jsx,ts,tsx,md}": [
+    "*.{js,jsx,ts,tsx,md,mdx,vue,svelte,astro}": [
       "eslint --fix --no-warn-ignored"
     ]
   },

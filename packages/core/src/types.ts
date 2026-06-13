@@ -494,12 +494,13 @@ export type FlatConfigArray = TSESLint.FlatConfig.ConfigArray
 
 /**
  * Type for framework option values: `true` enables the bundled v2 config,
- * or pass a config array, a factory function, or an imported module with a
- * default export. Any other value throws a descriptive `TypeError`
- * (see `resolveFramework` in `@santi020k/eslint-config-basic`).
+ * or pass a config array, a factory function (sync or async, like the lazy
+ * framework factories exported from `@santi020k/eslint-config-basic`), or an
+ * imported module with a default export. Any other value throws a descriptive
+ * `TypeError` (see `resolveFramework` in `@santi020k/eslint-config-basic`).
  */
 export type ImportedFramework =
-  ((options?: Record<string, unknown>) => FlatConfigArray) |
+  ((options?: Record<string, unknown>) => FlatConfigArray | Promise<FlatConfigArray>) |
   FlatConfigArray |
   true |
-  { default: ((options?: Record<string, unknown>) => FlatConfigArray) | FlatConfigArray }
+  { default: ((options?: Record<string, unknown>) => FlatConfigArray | Promise<FlatConfigArray>) | FlatConfigArray }

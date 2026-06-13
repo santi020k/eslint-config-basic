@@ -80,8 +80,7 @@
     }
   ],
   "ignorePaths": [
-    "packages/playground/**",
-    "packages/docs/**"
+    "packages/playground/**"
   ],
   "pnpm": {
     "enabled": true

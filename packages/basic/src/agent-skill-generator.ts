@@ -688,7 +688,7 @@ export const generateSkillContent = (
   const body = `# ESLint Code Standards
 
 This project uses [\`@santi020k/eslint-config-basic\`](https://github.com/santi020k/eslint-config-basic) —
-a composable ESLint 9/10+ Flat Config package.
+a composable ESLint 10+ Flat Config package.
 
 **Always run \`${lintCommand}\` to validate your changes before finishing any task.**
 
@@ -700,7 +700,7 @@ ${summaryLines.join('\n')}
 ${tsSection}${frameworkSections.join('')}${testingSections.join('')}${toolSections.join('')}
 ### General
 
-- ESLint 9/10 **Flat Config** format only — no \`.eslintrc\` files
+- ESLint 10 **Flat Config** format only — no \`.eslintrc\` files
 - Use \`.js\` extensions on relative imports (ESM requirement)
 - Use \`type\` imports for type-only values; regular imports for runtime values
 

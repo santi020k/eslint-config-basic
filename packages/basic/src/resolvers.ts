@@ -16,19 +16,21 @@ import {
 
 /**
  * Resolves an imported framework (either array, object with default, or factory function) into a config array.
+ * Bundled configs (`true`) and async factories are loaded lazily, so framework
+ * packages are only imported when actually enabled.
  */
-export const resolveFramework = (
+export const resolveFramework = async (
   frameworkName: DetectedFrameworkName,
   framework?: ImportedFramework,
   options?: FrameworkOptions
-): FlatConfigArray => {
+): Promise<FlatConfigArray> => {
   if (!framework) return []
 
   if ((framework as unknown) === true) {
     return getBundledFrameworkConfig(frameworkName, options)
   }
 
-  // Handle factory functions directly
+  // Handle factory functions directly (sync or async)
   if (typeof framework === 'function') {
     return (framework)(options)
   }
