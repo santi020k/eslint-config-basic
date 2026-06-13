@@ -1,9 +1,8 @@
+import { GLOB_JS_TS } from '@santi020k/eslint-config-core'
+import type { TSESLint } from '@typescript-eslint/utils'
 import type PluginUnicorn from 'eslint-plugin-unicorn'
 
 import { defineLazyConfig, loadDefault } from '../lazy.js'
-
-import { GLOB_JS_TS } from '@santi020k/eslint-config-core'
-import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
  * Unicorn ESLint configuration

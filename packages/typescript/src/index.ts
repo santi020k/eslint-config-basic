@@ -1,11 +1,11 @@
 import { existsSync } from 'node:fs'
-import tsEslint from 'typescript-eslint'
-
-import { standardRules, typeCheckedRules } from './rules.js'
 
 import { GLOB_SLOT, GLOB_TS, GLOB_VIRTUAL_TS } from '@santi020k/eslint-config-core'
 import tsParser from '@typescript-eslint/parser'
 import type { TSESLint } from '@typescript-eslint/utils'
+import tsEslint from 'typescript-eslint'
+
+import { standardRules, typeCheckedRules } from './rules.js'
 
 const typedFiles = [...GLOB_TS, ...GLOB_SLOT]
 const typeCheckedFiles = [...GLOB_TS, ...GLOB_SLOT, ...GLOB_VIRTUAL_TS]

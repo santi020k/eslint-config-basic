@@ -1,12 +1,11 @@
+import pluginReact from '@eslint-react/eslint-plugin'
+import { GLOB_JS_TS } from '@santi020k/eslint-config-core'
+import type { TSESLint } from '@typescript-eslint/utils'
 import pluginReactCompiler from 'eslint-plugin-react-compiler'
 import pluginReactRefresh from 'eslint-plugin-react-refresh'
 import globals from 'globals'
 
 import { rules } from './rules.js'
-
-import pluginReact from '@eslint-react/eslint-plugin'
-import { GLOB_JS_TS } from '@santi020k/eslint-config-core'
-import type { TSESLint } from '@typescript-eslint/utils'
 
 const recommended = pluginReact.configs.recommended as TSESLint.FlatConfig.Config & {
   rules: TSESLint.FlatConfig.Rules

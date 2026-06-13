@@ -1,6 +1,7 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+
 import { defineConfig } from 'vitest/config'
 
 const testsDir = dirname(fileURLToPath(import.meta.url))

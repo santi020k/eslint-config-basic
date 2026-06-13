@@ -1,10 +1,10 @@
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { describe, expect, it } from 'vitest'
-
-import { extractConfigNames, getEffectiveRuleValue } from './test-utils.js'
 
 import { defineConfig, Extension, Format, Library, Preset, Runtime, Setting, Testing, Tool } from '@santi020k/eslint-config-basic'
+import { describe, expect, test } from 'vitest'
+
+import { extractConfigNames, getEffectiveRuleValue } from './test-utils.js'
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '../../..')
 
@@ -24,7 +24,7 @@ const summarizeConfig = async (options: Parameters<typeof defineConfig>[0]) => {
 }
 
 describe('composed config snapshots', () => {
-  it('snapshots the default no-detection JavaScript config', async () => {
+  test('snapshots the default no-detection JavaScript config', async () => {
     await expect(summarizeConfig({
       detection: false,
       settings: [Setting.NoGitignore],
@@ -32,7 +32,7 @@ describe('composed config snapshots', () => {
     })).resolves.toMatchSnapshot()
   })
 
-  it('snapshots TypeScript syntax mode with Prettier last', async () => {
+  test('snapshots TypeScript syntax mode with Prettier last', async () => {
     await expect(summarizeConfig({
       detection: false,
       settings: [Setting.NoGitignore],
@@ -41,7 +41,7 @@ describe('composed config snapshots', () => {
     })).resolves.toMatchSnapshot()
   })
 
-  it('snapshots React app integrations', async () => {
+  test('snapshots React app integrations', async () => {
     await expect(summarizeConfig({
       detection: false,
       extensions: [Extension.Boundaries],
@@ -55,7 +55,7 @@ describe('composed config snapshots', () => {
     })).resolves.toMatchSnapshot()
   })
 
-  it('snapshots Next.js app router overrides', async () => {
+  test('snapshots Next.js app router overrides', async () => {
     await expect(summarizeConfig({
       detection: false,
       frameworks: {
@@ -69,7 +69,7 @@ describe('composed config snapshots', () => {
     })).resolves.toMatchSnapshot()
   })
 
-  it('snapshots monorepo project scoping', async () => {
+  test('snapshots monorepo project scoping', async () => {
     await expect(summarizeConfig({
       detection: false,
       preset: Preset.Monorepo,

@@ -1,9 +1,8 @@
+import { fixupPluginRules } from '@eslint/compat'
+import type { TSESLint } from '@typescript-eslint/utils'
 import type PluginTestingLibrary from 'eslint-plugin-testing-library'
 
 import { defineLazyConfig, loadDefault } from '../lazy.js'
-
-import { fixupPluginRules } from '@eslint/compat'
-import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
  * Testing Library ESLint configuration

@@ -1,6 +1,6 @@
-import { yaml } from '../formats/yaml.js'
-
 import type { TSESLint } from '@typescript-eslint/utils'
+
+import { yaml } from '../formats/yaml.js'
 
 /**
  * Docker tooling ESLint configuration

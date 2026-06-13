@@ -1,8 +1,7 @@
+import type { TSESLint } from '@typescript-eslint/utils'
 import type ConfigPrettier from 'eslint-config-prettier'
 
 import { defineLazyConfig, loadDefault } from '../lazy.js'
-
-import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
  * Prettier interop configuration

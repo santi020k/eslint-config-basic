@@ -1,10 +1,9 @@
-import { describe, expect, it } from 'vitest'
-
 import { Runtime } from '@santi020k/eslint-config-basic'
 import { __detectionInternals } from '@santi020k/eslint-config-core'
+import { describe, expect, test } from 'vitest'
 
 describe('detection internals', () => {
-  it('detectFrameworks deduplicates implied react entries', () => {
+  test('detectFrameworks deduplicates implied react entries', () => {
     const options = __detectionInternals.createDefaultOptions()
     const setRuntime = __detectionInternals.createRuntimeSetter(options)
 
@@ -19,7 +18,7 @@ describe('detection internals', () => {
     expect(reactCount).toBe(1)
   })
 
-  it('runtime setter always keeps higher-priority runtime', () => {
+  test('runtime setter always keeps higher-priority runtime', () => {
     const options = __detectionInternals.createDefaultOptions()
     const setRuntime = __detectionInternals.createRuntimeSetter(options)
 

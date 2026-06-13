@@ -1,8 +1,5 @@
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { describe, expect, it } from 'vitest'
-
-import { lintFile, lintText } from './test-utils.js'
 
 import { angularConfig } from '@santi020k/eslint-config-angular'
 import astro, { astroConfig } from '@santi020k/eslint-config-astro'
@@ -18,6 +15,9 @@ import { slidev as slidevConfig } from '@santi020k/eslint-config-slidev'
 import { svelteConfig } from '@santi020k/eslint-config-svelte'
 import { vite as viteConfig } from '@santi020k/eslint-config-vite'
 import { vueConfig } from '@santi020k/eslint-config-vue'
+import { describe, expect, test } from 'vitest'
+
+import { lintFile, lintText } from './test-utils.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -25,7 +25,7 @@ const FIXTURES_DIR = join(__dirname, '../fixtures')
 
 describe('Integration Tests', () => {
   describe('JavaScript', () => {
-    it('should report warnings for stylistic issues in javascript.js', async () => {
+    test('should report warnings for stylistic issues in javascript.js', async () => {
       const config = await defineConfig({ detection: false, tools: [] })
       const filePath = join(FIXTURES_DIR, 'javascript.js')
       const results = await lintFile(filePath, config)
@@ -38,7 +38,7 @@ describe('Integration Tests', () => {
       expect(ruleIds).toContain('no-empty')
     })
 
-    it('should pass for clean javascript code', async () => {
+    test('should pass for clean javascript code', async () => {
       const config = await defineConfig({ detection: false, tools: [] })
       const code = 'const x = \'clean\'\n\nconsole.log(x)\n'
       const results = await lintText(code, config, 'clean.js')
@@ -49,7 +49,7 @@ describe('Integration Tests', () => {
   })
 
   describe('TypeScript', () => {
-    it('should report TypeScript-specific issues', async () => {
+    test('should report TypeScript-specific issues', async () => {
       const config = await defineConfig({
         detection: false,
         tools: [],
@@ -66,7 +66,7 @@ describe('Integration Tests', () => {
       expect(ruleIds).toContain('@stylistic/quotes')
     })
 
-    it('should report issues in nest.ts', async () => {
+    test('should report issues in nest.ts', async () => {
       const config = await defineConfig({
         detection: false,
         tools: [],
@@ -83,7 +83,7 @@ describe('Integration Tests', () => {
       expect(ruleIds).toContain('@stylistic/quotes')
     })
 
-    it('should not report TypeScript-unrelated issues on typed code', async () => {
+    test('should not report TypeScript-unrelated issues on typed code', async () => {
       // Use typescript: false to avoid projectService rejecting virtual file paths
       const config = await defineConfig({ typescript: false })
       const code = [
@@ -103,7 +103,7 @@ describe('Integration Tests', () => {
   })
 
   describe('React', () => {
-    it('should report React hooks issues', async () => {
+    test('should report React hooks issues', async () => {
       const config = await defineConfig({
         frameworks: { react: reactConfig }
       })
@@ -116,7 +116,7 @@ describe('Integration Tests', () => {
       expect(ruleIds).toContain('@eslint-react/exhaustive-deps')
     })
 
-    it('should pass for clean React JSX code', async () => {
+    test('should pass for clean React JSX code', async () => {
       const config = await defineConfig({
         frameworks: { react: reactConfig },
         typescript: false
@@ -137,7 +137,7 @@ describe('Integration Tests', () => {
   })
 
   describe('Vue', () => {
-    it('should detect Vue-specific issues in vue.vue', async () => {
+    test('should detect Vue-specific issues in vue.vue', async () => {
       const config = await defineConfig({
         frameworks: { vue: vueConfig }
       })
@@ -153,7 +153,7 @@ describe('Integration Tests', () => {
   })
 
   describe('Svelte', () => {
-    it('should detect stylistic issues in svelte.svelte', async () => {
+    test('should detect stylistic issues in svelte.svelte', async () => {
       const config = await defineConfig({
         detection: false,
         frameworks: { svelte: svelteConfig },
@@ -171,7 +171,7 @@ describe('Integration Tests', () => {
   })
 
   describe('Angular', () => {
-    it('should include Angular-specific rules in config', async () => {
+    test('should include Angular-specific rules in config', async () => {
       const config = await defineConfig({
         frameworks: { angular: angularConfig },
         typescript: false
@@ -183,7 +183,7 @@ describe('Integration Tests', () => {
   })
 
   describe('Astro', () => {
-    it('should include Astro-specific rules in config', async () => {
+    test('should include Astro-specific rules in config', async () => {
       const config = await defineConfig({
         frameworks: { astro: astroConfig },
         typescript: false
@@ -193,7 +193,7 @@ describe('Integration Tests', () => {
       expect(names.some(n => n.includes('astro'))).toBe(true)
     })
 
-    it('should avoid Astro template false positives when TypeScript is enabled', async () => {
+    test('should avoid Astro template false positives when TypeScript is enabled', async () => {
       const config = await defineConfig({
         frameworks: { astro },
         tsconfigRootDir: FIXTURES_DIR,
@@ -209,7 +209,7 @@ describe('Integration Tests', () => {
   })
 
   describe('Expo', () => {
-    it('should include Expo-specific rules in config', async () => {
+    test('should include Expo-specific rules in config', async () => {
       // Expo requires react to be passed alongside
       const config = await defineConfig({
         frameworks: {
@@ -226,7 +226,7 @@ describe('Integration Tests', () => {
   })
 
   describe('NestJS', () => {
-    it('should include NestJS-specific rules in config', async () => {
+    test('should include NestJS-specific rules in config', async () => {
       const config = await defineConfig({
         frameworks: { nest: nestConfig },
         typescript: false
@@ -238,7 +238,7 @@ describe('Integration Tests', () => {
   })
 
   describe('Hono', () => {
-    it('should include Hono-specific rules in config', async () => {
+    test('should include Hono-specific rules in config', async () => {
       const config = await defineConfig({
         frameworks: { hono: honoConfig },
         typescript: false
@@ -250,7 +250,7 @@ describe('Integration Tests', () => {
   })
 
   describe('Next.js', () => {
-    it('should include Next.js-specific rules in config', async () => {
+    test('should include Next.js-specific rules in config', async () => {
       const config = await defineConfig({
         frameworks: {
           next: nextConfig,
@@ -265,7 +265,7 @@ describe('Integration Tests', () => {
   })
 
   describe('Qwik', () => {
-    it('should include Qwik-specific rules in config', async () => {
+    test('should include Qwik-specific rules in config', async () => {
       const config = await defineConfig({
         frameworks: { qwik: qwikConfig },
         typescript: false
@@ -277,7 +277,7 @@ describe('Integration Tests', () => {
   })
 
   describe('React Router', () => {
-    it('should include React Router-specific rules in config', async () => {
+    test('should include React Router-specific rules in config', async () => {
       const config = await defineConfig({
          
         frameworks: { 'react-router': reactRouterConfig },
@@ -290,7 +290,7 @@ describe('Integration Tests', () => {
   })
 
   describe('Vite', () => {
-    it('should include Vite-specific config entries', async () => {
+    test('should include Vite-specific config entries', async () => {
       const config = await defineConfig({
         frameworks: { vite: viteConfig },
         typescript: false
@@ -301,7 +301,7 @@ describe('Integration Tests', () => {
       expect(names).toContain('eslint-config-vite/config-files')
     })
 
-    it('should report errors in the intentionally bad Vite fixture', async () => {
+    test('should report errors in the intentionally bad Vite fixture', async () => {
       const config = await defineConfig({
         detection: false,
         frameworks: { vite: viteConfig },
@@ -317,7 +317,7 @@ describe('Integration Tests', () => {
       expect(ruleIds).not.toContain('no-undef')
     })
 
-    it('should pass for the corrected Vite fixture', async () => {
+    test('should pass for the corrected Vite fixture', async () => {
       const config = await defineConfig({
         detection: false,
         frameworks: { vite: viteConfig },
@@ -333,7 +333,7 @@ describe('Integration Tests', () => {
   })
 
   describe('Slidev', () => {
-    it('should include Slidev-specific config entries', async () => {
+    test('should include Slidev-specific config entries', async () => {
       const config = await defineConfig({
         detection: false,
         formats: [Format.Markdown],
@@ -349,7 +349,7 @@ describe('Integration Tests', () => {
       expect(names).toContain('eslint-config-slidev/deck-markdown')
     })
 
-    it('should report errors in the intentionally bad Slidev fixture', async () => {
+    test('should report errors in the intentionally bad Slidev fixture', async () => {
       const config = await defineConfig({
         detection: false,
         formats: [Format.Markdown],
@@ -368,7 +368,7 @@ describe('Integration Tests', () => {
       expect(ruleIds).not.toContain('vue/multi-word-component-names')
     })
 
-    it('should pass for the corrected Slidev fixture', async () => {
+    test('should pass for the corrected Slidev fixture', async () => {
       const config = await defineConfig({
         detection: false,
         formats: [Format.Markdown],

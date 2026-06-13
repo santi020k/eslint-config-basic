@@ -1,6 +1,5 @@
-import { defineConfig } from 'astro/config'
-
 import starlight from '@astrojs/starlight'
+import { defineConfig } from 'astro/config'
 
 const base = process.env.DOCS_BASE ?? '/'
 const site = process.env.DOCS_SITE_URL ?? 'https://eslint.santi020k.com'

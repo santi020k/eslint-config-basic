@@ -1,8 +1,7 @@
-import pluginJsxA11y from 'eslint-plugin-jsx-a11y'
-import pluginVueA11y from 'eslint-plugin-vuejs-accessibility'
-
 import { GLOB_JS_TS_ALL, GLOB_VUE } from '@santi020k/eslint-config-core'
 import type { TSESLint } from '@typescript-eslint/utils'
+import pluginJsxA11y from 'eslint-plugin-jsx-a11y'
+import pluginVueA11y from 'eslint-plugin-vuejs-accessibility'
 
 /**
  * A11y extension configurations

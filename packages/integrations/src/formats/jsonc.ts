@@ -1,8 +1,7 @@
+import type { TSESLint } from '@typescript-eslint/utils'
 import type PluginJsonc from 'eslint-plugin-jsonc'
 
 import { defineLazyConfig, loadDefault } from '../lazy.js'
-
-import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
  * JSON/JSONC ESLint configuration

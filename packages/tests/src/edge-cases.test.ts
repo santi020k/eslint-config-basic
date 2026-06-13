@@ -1,13 +1,13 @@
 import { tmpdir } from 'node:os'
-import { describe, expect, it } from 'vitest'
-
-import { extractConfigNames, extractRuleNames, getEffectiveRuleValue } from './test-utils.js'
 
 import astro from '@santi020k/eslint-config-astro'
 import { defineConfig, Extension, Format, Library, NextMode, Testing, Tool } from '@santi020k/eslint-config-basic'
+import { describe, expect, test } from 'vitest'
+
+import { extractConfigNames, extractRuleNames, getEffectiveRuleValue } from './test-utils.js'
 
 describe('Edge-Case & Conflict Tests (#6)', () => {
-  it('should handle Expo + Next together without crashing', async () => {
+  test('should handle Expo + Next together without crashing', async () => {
     const config = await defineConfig({
       frameworks: {
         expo: [{ name: 'mock-expo', rules: { 'react/jsx-pascal-case': 'error' } }],
@@ -27,7 +27,7 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
     expect(names.some(n => n.includes('react'))).toBe(true)
   })
 
-  it('should include React config when next framework is specified (implicit React)', async () => {
+  test('should include React config when next framework is specified (implicit React)', async () => {
     const config = await defineConfig({
       frameworks: {
         next: [{ name: 'mock-next', rules: {} }],
@@ -40,7 +40,7 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
     expect(rules).toContain('react/jsx-pascal-case')
   })
 
-  it('should include React config when expo framework is specified (implicit React)', async () => {
+  test('should include React config when expo framework is specified (implicit React)', async () => {
     const config = await defineConfig({
       frameworks: {
         expo: [{ name: 'mock-expo', rules: {} }],
@@ -53,7 +53,7 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
     expect(rules).toContain('react/jsx-pascal-case')
   })
 
-  it('should handle Astro configuration with react framework passed', async () => {
+  test('should handle Astro configuration with react framework passed', async () => {
     const config = await defineConfig({
       frameworks: {
         astro: [{ name: 'mock-astro', rules: {} }],
@@ -66,7 +66,7 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
     expect(rules).toContain('react/jsx-pascal-case')
   })
 
-  it('should include Astro-specific rules logic', async () => {
+  test('should include Astro-specific rules logic', async () => {
     // Note: Astro rules are in the astro package, but we test composition here
     const config = await defineConfig({
       detection: false,
@@ -87,7 +87,7 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
     expect(getEffectiveRuleValue(config as Record<string, unknown>[], '@stylistic/comma-dangle')).toEqual(['warn', 'never'])
   })
 
-  it('should apply Astro parser and rule workarounds through the framework factory', async () => {
+  test('should apply Astro parser and rule workarounds through the framework factory', async () => {
     const config = await defineConfig({
       frameworks: { astro },
       tsconfigRootDir: tmpdir(), // os.tmpdir() always exists on any platform
@@ -98,7 +98,7 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
     expect(getEffectiveRuleValue(config as Record<string, unknown>[], '@stylistic/jsx-indent-props')).toBe('off')
   })
 
-  it('should handle duplicate optionals without doubling', async () => {
+  test('should handle duplicate optionals without doubling', async () => {
     const single = await defineConfig({
       libraries: [Library.Tailwind],
       tools: [Tool.Prettier]
@@ -112,7 +112,7 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
     expect(single).toHaveLength(doubled.length)
   })
 
-  it('Prettier optional should be applied last', async () => {
+  test('Prettier optional should be applied last', async () => {
     const config = await defineConfig({
       formats: [Format.Mdx],
       libraries: [Library.Tailwind],
@@ -131,7 +131,7 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
     expect(prettierIndex).toBeGreaterThan(maxNonPrettierIndex)
   })
 
-  it('should apply NextMode.AppRouter override for app/** files', async () => {
+  test('should apply NextMode.AppRouter override for app/** files', async () => {
     const config = await defineConfig({
       frameworks: {
         next: [{ name: 'mock-next', rules: {} }],
@@ -149,7 +149,7 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
     expect((appRouterEntry)?.rules).toHaveProperty('@next/next/no-html-link-for-pages', 'off')
   })
 
-  it('should NOT apply app-router overrides when NextMode.Pages is used', async () => {
+  test('should NOT apply app-router overrides when NextMode.Pages is used', async () => {
     const config = await defineConfig({
       frameworks: {
         next: [{ name: 'mock-next', rules: {} }],
@@ -166,14 +166,14 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
     expect(appRouterEntry).toBeUndefined()
   })
 
-  it('should throw a clear error when tsconfigRootDir does not exist', async () => {
+  test('should throw a clear error when tsconfigRootDir does not exist', async () => {
     await expect(defineConfig({
       tsconfigRootDir: '/this/path/does/not/exist',
       typescript: true
     })).rejects.toThrow(/tsconfigRootDir does not exist/)
   })
 
-  it('should include best-practices rules when Extension.BestPractices is requested', async () => {
+  test('should include best-practices rules when Extension.BestPractices is requested', async () => {
     const config = await defineConfig({
       extensions: [Extension.BestPractices]
     })
@@ -187,7 +187,7 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
     expect(Array.isArray(complexityValue)).toBe(true)
   })
 
-  it('should disable no-undef for TypeScript configs (#3)', async () => {
+  test('should disable no-undef for TypeScript configs (#3)', async () => {
     const config = await defineConfig({ typescript: true })
 
     const effectiveValue = getEffectiveRuleValue(
@@ -197,7 +197,7 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
     expect(effectiveValue).toBe('off')
   })
 
-  it('should NOT include typescript configs when typescript is disabled', async () => {
+  test('should NOT include typescript configs when typescript is disabled', async () => {
     const config = await defineConfig({ typescript: false })
 
     const names = extractConfigNames(config)
@@ -205,7 +205,7 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
     expect(names).not.toContain('eslint-config-typescript/standard-rules')
   })
 
-  it('should include typescript configs when typescript is enabled', async () => {
+  test('should include typescript configs when typescript is enabled', async () => {
     const config = await defineConfig({ typescript: true })
 
     const names = extractConfigNames(config)

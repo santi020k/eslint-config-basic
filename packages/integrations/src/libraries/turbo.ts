@@ -1,7 +1,6 @@
-import pluginTurbo from 'eslint-plugin-turbo'
-
 import { GLOB_JS_TS, GLOB_JS_TS_ALL } from '@santi020k/eslint-config-core'
 import type { TSESLint } from '@typescript-eslint/utils'
+import pluginTurbo from 'eslint-plugin-turbo'
 
 /**
  * Turborepo ESLint configuration

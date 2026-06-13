@@ -1,11 +1,10 @@
-import { describe, expect, it } from 'vitest'
+import { defineConfig, Library, Tool } from '@santi020k/eslint-config-basic'
+import { describe, expect, test } from 'vitest'
 
 import { extractConfigNames, getEffectiveRuleValue } from './test-utils.js'
 
-import { defineConfig, Library, Tool } from '@santi020k/eslint-config-basic'
-
 describe('Configuration invariants', () => {
-  it('keeps gitignore before core plugin setup', async () => {
+  test('keeps gitignore before core plugin setup', async () => {
     const names = extractConfigNames(await defineConfig({}))
     const gitignoreIndex = names.findIndex(name => name.includes('gitignore'))
     const corePluginsIndex = names.indexOf('eslint-config/core-plugins')
@@ -15,7 +14,7 @@ describe('Configuration invariants', () => {
     expect(gitignoreIndex).toBeLessThan(corePluginsIndex)
   })
 
-  it('keeps prettier as the final config block when enabled', async () => {
+  test('keeps prettier as the final config block when enabled', async () => {
     const names = extractConfigNames(await defineConfig({
       libraries: [Library.Tailwind],
       tools: [Tool.Prettier]
@@ -24,7 +23,7 @@ describe('Configuration invariants', () => {
     expect(names.at(-1)).toBe('eslint-config/prettier')
   })
 
-  it('places typescript setup after core config blocks', async () => {
+  test('places typescript setup after core config blocks', async () => {
     const names = extractConfigNames(await defineConfig({ typescript: true }))
     const corePluginsIndex = names.indexOf('eslint-config/core-plugins')
     const tsSetupIndex = names.indexOf('eslint-config-typescript/setup')
@@ -34,7 +33,7 @@ describe('Configuration invariants', () => {
     expect(corePluginsIndex).toBeLessThan(tsSetupIndex)
   })
 
-  it('promotes warning-level rules to errors when strict mode is enabled', async () => {
+  test('promotes warning-level rules to errors when strict mode is enabled', async () => {
     const config = await defineConfig({
       frameworks: {
         react: [

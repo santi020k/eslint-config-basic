@@ -1,9 +1,8 @@
-import { describe, expect, it } from 'vitest'
-
 import { Extension, Format, Library, Setting, Testing, Tool } from '@santi020k/eslint-config-basic'
+import { describe, expect, test } from 'vitest'
 
 describe('Type Exports', () => {
-  it('should have all Library values', () => {
+  test('should have all Library values', () => {
     const options = Object.values(Library)
 
     expect(options).toContain('typeorm')
@@ -39,7 +38,7 @@ describe('Type Exports', () => {
     expect(options).toContain('storybook')
   })
 
-  it('should have all Tool values', () => {
+  test('should have all Tool values', () => {
     const options = Object.values(Tool)
 
     expect(options).toContain('cspell')
@@ -59,7 +58,7 @@ describe('Type Exports', () => {
     expect(options).toContain('nx')
   })
 
-  it('should have all Testing values', () => {
+  test('should have all Testing values', () => {
     const options = Object.values(Testing)
 
     expect(options).toContain('vitest')
@@ -69,7 +68,7 @@ describe('Type Exports', () => {
     expect(options).toContain('jest-dom')
   })
 
-  it('should have all Format values', () => {
+  test('should have all Format values', () => {
     const options = Object.values(Format)
 
     expect(options).toContain('mdx')
@@ -85,7 +84,7 @@ describe('Type Exports', () => {
     expect(options).toContain('package-json')
   })
 
-  it('should have all Extension values', () => {
+  test('should have all Extension values', () => {
     const options = Object.values(Extension)
 
     expect(options).toContain('regexp')
@@ -101,7 +100,7 @@ describe('Type Exports', () => {
     expect(options).toContain('boundaries')
   })
 
-  it('should have all Setting values', () => {
+  test('should have all Setting values', () => {
     const options = Object.values(Setting)
 
     expect(options).toContain('gitignore')

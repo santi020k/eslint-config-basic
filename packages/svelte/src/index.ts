@@ -1,6 +1,5 @@
-import pluginSvelte from 'eslint-plugin-svelte'
-
 import type { TSESLint } from '@typescript-eslint/utils'
+import pluginSvelte from 'eslint-plugin-svelte'
 
 /**
  * Svelte ESLint configuration

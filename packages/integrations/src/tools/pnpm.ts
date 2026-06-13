@@ -1,6 +1,6 @@
-import { defineLazyConfig, loadModule } from '../lazy.js'
-
 import type { TSESLint } from '@typescript-eslint/utils'
+
+import { defineLazyConfig, loadModule } from '../lazy.js'
 
 interface PnpmPluginModule {
   configs: Record<'json' | 'recommended' | 'yaml', TSESLint.FlatConfig.ConfigArray>

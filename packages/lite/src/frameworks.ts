@@ -1,10 +1,10 @@
-import { loadModule } from './lazy.js'
-
 import {
   type DetectedFrameworkName,
   type FlatConfigArray,
   type Runtime
 } from '@santi020k/eslint-config-core'
+
+import { loadModule } from './lazy.js'
 
 export type FrameworkFlags = Partial<Record<FrameworkName, true>>
 

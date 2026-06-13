@@ -1,6 +1,5 @@
-import pluginJsxA11y from 'eslint-plugin-jsx-a11y'
-
 import type { TSESLint } from '@typescript-eslint/utils'
+import pluginJsxA11y from 'eslint-plugin-jsx-a11y'
 
 /**
  * React Router v7 (framework mode) ESLint configuration

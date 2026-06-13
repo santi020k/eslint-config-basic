@@ -1,8 +1,7 @@
+import type { TSESLint } from '@typescript-eslint/utils'
 import type PluginStorybook from 'eslint-plugin-storybook'
 
 import { defineLazyConfig, loadDefault } from '../lazy.js'
-
-import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
  * Storybook ESLint configuration

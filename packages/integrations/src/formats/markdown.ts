@@ -1,6 +1,6 @@
-import { type ConfigWithRules, defineLazyConfig, loadDefault } from '../lazy.js'
-
 import type { TSESLint } from '@typescript-eslint/utils'
+
+import { type ConfigWithRules, defineLazyConfig, loadDefault } from '../lazy.js'
 
 interface MarkdownPlugin {
   configs: {

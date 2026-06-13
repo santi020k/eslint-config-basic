@@ -1,7 +1,8 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
-import { describe, expect, it } from 'vitest'
+
+import { describe, expect, test } from 'vitest'
 
 interface ExportEntry {
   import?: string
@@ -34,7 +35,7 @@ const publicPackages = readdirSync(packagesDir, { withFileTypes: true })
   .filter(({ manifest }) => manifest.private !== true)
 
 describe('package artifacts', () => {
-  it.each(publicPackages)('$manifest.name exposes built entry points', async ({ dir, manifest }) => {
+  test.each(publicPackages)('$manifest.name exposes built entry points', async ({ dir, manifest }) => {
     expect(manifest.exports, `${manifest.name} should declare package exports`).toBeDefined()
 
     for (const [exportPath, entry] of Object.entries(manifest.exports ?? {})) {
@@ -56,7 +57,7 @@ describe('package artifacts', () => {
     }
   })
 
-  it.each(publicPackages)('$manifest.name exposes executable bin files', ({ dir, manifest }) => {
+  test.each(publicPackages)('$manifest.name exposes executable bin files', ({ dir, manifest }) => {
     if (!manifest.bin) {
       return
     }

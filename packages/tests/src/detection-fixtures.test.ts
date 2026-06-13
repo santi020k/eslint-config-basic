@@ -1,9 +1,9 @@
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { afterEach, describe, expect, it } from 'vitest'
 
 import { detectProjectOptions, Format, Library, NextMode, Preset, Runtime, Tool } from '@santi020k/eslint-config-basic'
+import { afterEach, describe, expect, test } from 'vitest'
 
 const tempDirs: string[] = []
 
@@ -39,7 +39,7 @@ afterEach(() => {
 })
 
 describe('detectProjectOptions fixture matrix', () => {
-  it('resolves runtime and preset for Next + Nest + TypeScript fixtures', () => {
+  test('resolves runtime and preset for Next + Nest + TypeScript fixtures', () => {
     const dir = createFixtureProject(
       {
         dependencies: {
@@ -56,7 +56,7 @@ describe('detectProjectOptions fixture matrix', () => {
     expect(options.nextMode).toBe(NextMode.AppRouter)
   })
 
-  it('resolves Cloudflare runtime for Hono Cloudflare fixtures', () => {
+  test('resolves Cloudflare runtime for Hono Cloudflare fixtures', () => {
     const dir = createFixtureProject(
       {
         dependencies: { hono: 'latest' },
@@ -71,7 +71,7 @@ describe('detectProjectOptions fixture matrix', () => {
     expect(options.detectedFrameworks).toContain('hono')
   })
 
-  it('detects graphql format when only schema file exists', () => {
+  test('detects graphql format when only schema file exists', () => {
     const dir = createFixtureProject(
       { dependencies: {} }, [], { 'schema.graphql': 'type Query { hello: String }' }
     )
@@ -81,7 +81,7 @@ describe('detectProjectOptions fixture matrix', () => {
     expect(options.formats).toContain(Format.Graphql)
   })
 
-  it('keeps Expo runtime universal while still implying react', () => {
+  test('keeps Expo runtime universal while still implying react', () => {
     const dir = createFixtureProject({
       dependencies: { expo: 'latest' }
     })
@@ -93,7 +93,7 @@ describe('detectProjectOptions fixture matrix', () => {
     expect(options.detectedFrameworks).toContain('react')
   })
 
-  it('detects Vite fixtures with Tailwind adapter packages and config files', () => {
+  test('detects Vite fixtures with Tailwind adapter packages and config files', () => {
     const dir = createFixtureProject(
       {
         devDependencies: {
@@ -121,7 +121,7 @@ describe('detectProjectOptions fixture matrix', () => {
     expect(options.preset).toBe(Preset.Browser)
   })
 
-  it('detects Slidev fixtures as Slidev + Vue without adding Vite separately', () => {
+  test('detects Slidev fixtures as Slidev + Vue without adding Vite separately', () => {
     const dir = createFixtureProject(
       {
         dependencies: {

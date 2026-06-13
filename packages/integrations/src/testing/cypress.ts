@@ -1,9 +1,8 @@
+import { fixupPluginRules } from '@eslint/compat'
+import type { TSESLint } from '@typescript-eslint/utils'
 import type PluginCypress from 'eslint-plugin-cypress'
 
 import { defineLazyConfig, loadDefault } from '../lazy.js'
-
-import { fixupPluginRules } from '@eslint/compat'
-import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
  * Cypress ESLint configuration

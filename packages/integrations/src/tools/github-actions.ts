@@ -1,6 +1,6 @@
-import { yaml } from '../formats/yaml.js'
-
 import type { TSESLint } from '@typescript-eslint/utils'
+
+import { yaml } from '../formats/yaml.js'
 
 /**
  * GitHub Actions ESLint configuration

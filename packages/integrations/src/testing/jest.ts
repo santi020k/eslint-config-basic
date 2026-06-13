@@ -1,8 +1,7 @@
+import type { TSESLint } from '@typescript-eslint/utils'
 import type PluginJest from 'eslint-plugin-jest'
 
 import { defineLazyConfig, loadDefault } from '../lazy.js'
-
-import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
  * Jest ESLint configuration

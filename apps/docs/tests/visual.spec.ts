@@ -1,6 +1,6 @@
-import { shouldRunVisualSnapshots, visualSnapshotSkipReason } from './helpers/visual-regression.js'
-
 import { expect, test } from '@playwright/test'
+
+import { shouldRunVisualSnapshots, visualSnapshotSkipReason } from './helpers/visual-regression.js'
 
 test.describe('Visual Regression', () => {
   test.skip(!shouldRunVisualSnapshots, visualSnapshotSkipReason)

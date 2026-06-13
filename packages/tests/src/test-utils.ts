@@ -1,7 +1,6 @@
+import type { TSESLint } from '@typescript-eslint/utils'
 import type { Linter } from 'eslint'
 import { ESLint } from 'eslint'
-
-import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
  * Helper: collect all rule names from a composed config

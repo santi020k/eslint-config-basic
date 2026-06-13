@@ -1,5 +1,3 @@
-import { type FrameworkOptions, getBundledFrameworkConfig } from './frameworks.js'
-
 import {
   type DetectedFrameworkName,
   type EslintConfigOptions,
@@ -13,6 +11,8 @@ import {
   Testing,
   Tool
 } from '@santi020k/eslint-config-core'
+
+import { type FrameworkOptions, getBundledFrameworkConfig } from './frameworks.js'
 
 /**
  * Resolves an imported framework (either array, object with default, or factory function) into a config array.

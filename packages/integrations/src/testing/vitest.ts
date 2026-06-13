@@ -1,8 +1,7 @@
+import type { TSESLint } from '@typescript-eslint/utils'
 import type Globals from 'globals'
 
 import { defineLazyConfig, loadDefault, type PluginWithConfigs } from '../lazy.js'
-
-import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
  * Vitest ESLint configuration

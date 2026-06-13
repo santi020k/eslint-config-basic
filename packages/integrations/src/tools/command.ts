@@ -1,9 +1,8 @@
+import { GLOB_JS_TS_ALL } from '@santi020k/eslint-config-core'
+import type { TSESLint } from '@typescript-eslint/utils'
 import type PluginCommand from 'eslint-plugin-command/config'
 
 import { defineLazyConfig, loadDefault } from '../lazy.js'
-
-import { GLOB_JS_TS_ALL } from '@santi020k/eslint-config-core'
-import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
  * Command ESLint configuration

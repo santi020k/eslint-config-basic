@@ -1,6 +1,5 @@
-import pluginQwik from 'eslint-plugin-qwik'
-
 import type { TSESLint } from '@typescript-eslint/utils'
+import pluginQwik from 'eslint-plugin-qwik'
 
 export const qwik: TSESLint.FlatConfig.ConfigArray = [
   {

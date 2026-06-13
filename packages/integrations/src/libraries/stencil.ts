@@ -1,8 +1,8 @@
-import { defineLazyConfig, loadDefault } from '../lazy.js'
-
 import { fixupPluginRules } from '@eslint/compat'
 import type StencilPlugin from '@stencil-community/eslint-plugin'
 import type { TSESLint } from '@typescript-eslint/utils'
+
+import { defineLazyConfig, loadDefault } from '../lazy.js'
 
 /**
  * Stencil ESLint configuration

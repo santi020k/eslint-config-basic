@@ -1,9 +1,8 @@
+import { GLOB_JS_TS } from '@santi020k/eslint-config-core'
+import type { TSESLint } from '@typescript-eslint/utils'
 import type PluginJestDom from 'eslint-plugin-jest-dom'
 
 import { defineLazyConfig, loadDefault } from '../lazy.js'
-
-import { GLOB_JS_TS } from '@santi020k/eslint-config-core'
-import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
  * Jest DOM ESLint configuration

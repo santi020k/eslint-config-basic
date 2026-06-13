@@ -1,8 +1,7 @@
+import type { TSESLint } from '@typescript-eslint/utils'
 import pluginAstro from 'eslint-plugin-astro'
 
 import { type AstroOptions, getRules } from './rules.js'
-
-import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
  * Creates Astro ESLint configuration based on enabled frameworks

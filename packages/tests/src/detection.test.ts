@@ -1,12 +1,12 @@
 import * as fs from 'node:fs'
-import { describe, expect, it, vi } from 'vitest'
 
 import { detectProjectOptions, Extension, Format, Library, NextMode, Preset, Runtime, Testing, Tool } from '@santi020k/eslint-config-basic'
+import { describe, expect, test,vi } from 'vitest'
 
 vi.mock('node:fs')
 
 describe('detectProjectOptions', () => {
-  it('should detect TypeScript if tsconfig.json exists', () => {
+  test('should detect TypeScript if tsconfig.json exists', () => {
     vi.mocked(fs.existsSync).mockImplementation(path => path.toString().includes('tsconfig.json') || path.toString().includes('package.json'))
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({ dependencies: {} }))
@@ -16,7 +16,7 @@ describe('detectProjectOptions', () => {
     expect(options.typescript).toBe(true)
   })
 
-  it('should detect React if react is a dependency', () => {
+  test('should detect React if react is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -30,7 +30,7 @@ describe('detectProjectOptions', () => {
     expect(options.frameworks?.react).toBeUndefined()
   })
 
-  it('should detect Next.js if next is a dependency', () => {
+  test('should detect Next.js if next is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -44,7 +44,7 @@ describe('detectProjectOptions', () => {
     expect(options.frameworks?.next).toBeUndefined()
   })
 
-  it('should detect Tailwind if tailwindcss is a dependency', () => {
+  test('should detect Tailwind if tailwindcss is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -56,7 +56,7 @@ describe('detectProjectOptions', () => {
     expect(options.libraries).toContain(Library.Tailwind)
   })
 
-  it('should detect Tailwind from first-party Tailwind adapter packages', () => {
+  test('should detect Tailwind from first-party Tailwind adapter packages', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -71,7 +71,7 @@ describe('detectProjectOptions', () => {
     expect(options.libraries).toContain(Library.Tailwind)
   })
 
-  it('should detect Vitest if vitest is a dependency', () => {
+  test('should detect Vitest if vitest is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -83,7 +83,7 @@ describe('detectProjectOptions', () => {
     expect(options.testing).toContain(Testing.Vitest)
   })
 
-  it('should detect TanStack Query/Router', () => {
+  test('should detect TanStack Query/Router', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -100,7 +100,7 @@ describe('detectProjectOptions', () => {
     expect(options.libraries).toContain(Library.TanstackRouter)
   })
 
-  it('should detect AI SDK and MCP libraries', () => {
+  test('should detect AI SDK and MCP libraries', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -117,7 +117,7 @@ describe('detectProjectOptions', () => {
     expect(options.libraries).toContain(Library.Mcp)
   })
 
-  it('should detect OpenAI Agents SDK and Mastra libraries', () => {
+  test('should detect OpenAI Agents SDK and Mastra libraries', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -133,7 +133,7 @@ describe('detectProjectOptions', () => {
     expect(options.libraries).toContain(Library.OpenAiAgents)
   })
 
-  it('should detect LangChain and LlamaIndex libraries', () => {
+  test('should detect LangChain and LlamaIndex libraries', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -149,7 +149,7 @@ describe('detectProjectOptions', () => {
     expect(options.libraries).toContain(Library.LlamaIndex)
   })
 
-  it('should detect ORM libraries', () => {
+  test('should detect ORM libraries', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -171,7 +171,7 @@ describe('detectProjectOptions', () => {
     expect(options.libraries).toContain(Library.Sequelize)
   })
 
-  it('should detect Jest if jest is a dependency', () => {
+  test('should detect Jest if jest is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -183,7 +183,7 @@ describe('detectProjectOptions', () => {
     expect(options.testing).toContain(Testing.Jest)
   })
 
-  it('should detect Cypress if cypress is a dependency', () => {
+  test('should detect Cypress if cypress is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -195,7 +195,7 @@ describe('detectProjectOptions', () => {
     expect(options.testing).toContain(Testing.Cypress)
   })
 
-  it('should detect Testing Library if @testing-library/react is a dependency', () => {
+  test('should detect Testing Library if @testing-library/react is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -207,7 +207,7 @@ describe('detectProjectOptions', () => {
     expect(options.testing).toContain(Testing.TestingLibrary)
   })
 
-  it('should detect Prettier if prettier is a dependency', () => {
+  test('should detect Prettier if prettier is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -219,7 +219,7 @@ describe('detectProjectOptions', () => {
     expect(options.tools).toContain(Tool.Prettier)
   })
 
-  it('should detect Prettier from plugins and config files', () => {
+  test('should detect Prettier from plugins and config files', () => {
     vi.mocked(fs.existsSync).mockImplementation(path => {
       const p = path.toString()
 
@@ -235,7 +235,7 @@ describe('detectProjectOptions', () => {
     expect(options.tools).toContain(Tool.Prettier)
   })
 
-  it('should detect CSpell from config files', () => {
+  test('should detect CSpell from config files', () => {
     vi.mocked(fs.existsSync).mockImplementation(path => {
       const p = path.toString()
 
@@ -250,7 +250,7 @@ describe('detectProjectOptions', () => {
     expect(options.formats).toContain(Format.Yaml)
   })
 
-  it('should detect JSDoc from its ESLint plugin', () => {
+  test('should detect JSDoc from its ESLint plugin', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -262,7 +262,7 @@ describe('detectProjectOptions', () => {
     expect(options.tools).toContain(Tool.Jsdoc)
   })
 
-  it('should detect Storybook via @storybook/core', () => {
+  test('should detect Storybook via @storybook/core', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -274,7 +274,7 @@ describe('detectProjectOptions', () => {
     expect(options.libraries).toContain(Library.Storybook)
   })
 
-  it('should detect GraphQL when graphql is a dependency', () => {
+  test('should detect GraphQL when graphql is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -286,7 +286,7 @@ describe('detectProjectOptions', () => {
     expect(options.formats).toContain(Format.Graphql)
   })
 
-  it('should detect MDX from Astro MDX', () => {
+  test('should detect MDX from Astro MDX', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -298,7 +298,7 @@ describe('detectProjectOptions', () => {
     expect(options.formats).toContain(Format.Mdx)
   })
 
-  it('should detect Markdown from Markdown tooling packages', () => {
+  test('should detect Markdown from Markdown tooling packages', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -313,7 +313,7 @@ describe('detectProjectOptions', () => {
     expect(options.formats).toContain(Format.Markdown)
   })
 
-  it('should detect GraphQL when schema.graphql exists', () => {
+  test('should detect GraphQL when schema.graphql exists', () => {
     vi.mocked(fs.existsSync).mockImplementation(path => path.toString().includes('schema.graphql') || path.toString().includes('package.json'))
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({ dependencies: {} }))
@@ -323,7 +323,7 @@ describe('detectProjectOptions', () => {
     expect(options.formats).toContain(Format.Graphql)
   })
 
-  it('should handle missing package.json gracefully', () => {
+  test('should handle missing package.json gracefully', () => {
     vi.mocked(fs.existsSync).mockImplementation(path => !path.toString().includes('package.json'))
 
     vi.mocked(fs.readFileSync).mockImplementation(() => {
@@ -343,7 +343,7 @@ describe('detectProjectOptions', () => {
     expect(options.runtime).toBe(Runtime.Universal)
   })
 
-  it('should detect Astro if astro is a dependency', () => {
+  test('should detect Astro if astro is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -356,7 +356,7 @@ describe('detectProjectOptions', () => {
     expect(options.frameworks?.astro).toBeUndefined()
   })
 
-  it('should detect Svelte if svelte is a dependency', () => {
+  test('should detect Svelte if svelte is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -370,7 +370,7 @@ describe('detectProjectOptions', () => {
     expect(options.runtime).toBe(Runtime.Browser)
   })
 
-  it('should detect Solid if solid-js is a dependency', () => {
+  test('should detect Solid if solid-js is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -384,7 +384,7 @@ describe('detectProjectOptions', () => {
     expect(options.runtime).toBe(Runtime.Browser)
   })
 
-  it('should detect Angular if @angular/core is a dependency', () => {
+  test('should detect Angular if @angular/core is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -398,7 +398,7 @@ describe('detectProjectOptions', () => {
     expect(options.runtime).toBe(Runtime.Browser)
   })
 
-  it('should detect Qwik if @builder.io/qwik is a dependency', () => {
+  test('should detect Qwik if @builder.io/qwik is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -411,7 +411,7 @@ describe('detectProjectOptions', () => {
     expect(options.frameworks?.qwik).toBeUndefined()
   })
 
-  it('should detect Slidev if @slidev/cli is a dependency', () => {
+  test('should detect Slidev if @slidev/cli is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -426,7 +426,7 @@ describe('detectProjectOptions', () => {
     expect(options.runtime).toBe(Runtime.Browser)
   })
 
-  it('should detect Vite if vite is a dependency', () => {
+  test('should detect Vite if vite is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -440,7 +440,7 @@ describe('detectProjectOptions', () => {
     expect(options.runtime).toBe(Runtime.Browser)
   })
 
-  it('should not add Vite as a separate framework for Vite-backed meta-frameworks', () => {
+  test('should not add Vite as a separate framework for Vite-backed meta-frameworks', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -454,7 +454,7 @@ describe('detectProjectOptions', () => {
     expect(options.detectedFrameworks).not.toContain('vite')
   })
 
-  it('should detect Remix if @remix-run/react is a dependency', () => {
+  test('should detect Remix if @remix-run/react is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -467,7 +467,7 @@ describe('detectProjectOptions', () => {
     expect(options.frameworks).not.toHaveProperty('remix')
   })
 
-  it('should detect Remix if @remix-run/node is a dependency', () => {
+  test('should detect Remix if @remix-run/node is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -479,7 +479,7 @@ describe('detectProjectOptions', () => {
     expect(options.detectedFrameworks).toContain('remix')
   })
 
-  it('should detect React Router if @react-router/dev is a dependency', () => {
+  test('should detect React Router if @react-router/dev is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -494,7 +494,7 @@ describe('detectProjectOptions', () => {
     expect(options.runtime).toBe(Runtime.Browser)
   })
 
-  it('should detect Nuxt if nuxt is a dependency', () => {
+  test('should detect Nuxt if nuxt is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -509,7 +509,7 @@ describe('detectProjectOptions', () => {
     expect(options.runtime).toBe(Runtime.Universal)
   })
 
-  it('should detect Lit if lit is a dependency', () => {
+  test('should detect Lit if lit is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -523,7 +523,7 @@ describe('detectProjectOptions', () => {
     expect(options.runtime).toBe(Runtime.Browser)
   })
 
-  it('should detect Lit if lit-element is a dependency', () => {
+  test('should detect Lit if lit-element is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -535,7 +535,7 @@ describe('detectProjectOptions', () => {
     expect(options.detectedFrameworks).toContain('lit')
   })
 
-  it('should detect TanStack Start if @tanstack/react-start is a dependency', () => {
+  test('should detect TanStack Start if @tanstack/react-start is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -550,7 +550,7 @@ describe('detectProjectOptions', () => {
     expect(options.runtime).toBe(Runtime.Universal)
   })
 
-  it('should detect TanStack Start if @tanstack/solid-start is a dependency', () => {
+  test('should detect TanStack Start if @tanstack/solid-start is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -564,7 +564,7 @@ describe('detectProjectOptions', () => {
     expect(options.runtime).toBe(Runtime.Universal)
   })
 
-  it('should not detect Vite framework config when a meta-framework owns the build', () => {
+  test('should not detect Vite framework config when a meta-framework owns the build', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -578,7 +578,7 @@ describe('detectProjectOptions', () => {
     expect(options.detectedFrameworks).not.toContain('vite')
   })
 
-  it('should detect Expo if expo is a dependency', () => {
+  test('should detect Expo if expo is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -592,7 +592,7 @@ describe('detectProjectOptions', () => {
     expect(options.frameworks?.expo).toBeUndefined()
   })
 
-  it('should detect Expo if react-native is a dependency', () => {
+  test('should detect Expo if react-native is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -605,7 +605,7 @@ describe('detectProjectOptions', () => {
     expect(options.detectedFrameworks).toContain('react')
   })
 
-  it('should detect NestJS and set Node runtime', () => {
+  test('should detect NestJS and set Node runtime', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -619,7 +619,7 @@ describe('detectProjectOptions', () => {
     expect(options.runtime).toBe(Runtime.Node)
   })
 
-  it('should detect Hono without forcing a runtime adapter', () => {
+  test('should detect Hono without forcing a runtime adapter', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -633,7 +633,7 @@ describe('detectProjectOptions', () => {
     expect(options.runtime).toBe(Runtime.Universal)
   })
 
-  it('should detect Hono on Cloudflare Workers as Worker runtime', () => {
+  test('should detect Hono on Cloudflare Workers as Worker runtime', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -647,7 +647,7 @@ describe('detectProjectOptions', () => {
     expect(options.runtime).toBe(Runtime.Cloudflare)
   })
 
-  it('should detect Bun, Deno, and Cloudflare runtime signals', () => {
+  test('should detect Bun, Deno, and Cloudflare runtime signals', () => {
     vi.mocked(fs.existsSync).mockImplementation(path => {
       const p = path.toString()
 
@@ -667,7 +667,7 @@ describe('detectProjectOptions', () => {
     expect(options.runtime).toBe(Runtime.Cloudflare)
   })
 
-  it('should detect workspace projects from package workspaces', () => {
+  test('should detect workspace projects from package workspaces', () => {
     vi.mocked(fs.existsSync).mockImplementation(path => {
       const p = path.toString()
 
@@ -687,7 +687,7 @@ describe('detectProjectOptions', () => {
     expect(options.projects).toHaveProperty('packages/core')
   })
 
-  it('should detect Cloudflare Worker runtime for non-framework worker packages', () => {
+  test('should detect Cloudflare Worker runtime for non-framework worker packages', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -700,7 +700,7 @@ describe('detectProjectOptions', () => {
     expect(options.runtime).toBe(Runtime.Cloudflare)
   })
 
-  it('should not force Worker runtime for browser frameworks deployed with Wrangler', () => {
+  test('should not force Worker runtime for browser frameworks deployed with Wrangler', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -714,7 +714,7 @@ describe('detectProjectOptions', () => {
     expect(options.runtime).toBe(Runtime.Browser)
   })
 
-  it('should not force Worker runtime for Qwik deployed with Wrangler', () => {
+  test('should not force Worker runtime for Qwik deployed with Wrangler', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -728,7 +728,7 @@ describe('detectProjectOptions', () => {
     expect(options.runtime).toBe(Runtime.Browser)
   })
 
-  it('should detect i18next if i18next is a dependency', () => {
+  test('should detect i18next if i18next is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -740,7 +740,7 @@ describe('detectProjectOptions', () => {
     expect(options.libraries).toContain(Library.I18next)
   })
 
-  it('should detect Stencil if @stencil/core is a dependency', () => {
+  test('should detect Stencil if @stencil/core is a dependency', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -752,7 +752,7 @@ describe('detectProjectOptions', () => {
     expect(options.libraries).toContain(Library.Stencil)
   })
 
-  it('should detect Storybook via @storybook/react', () => {
+  test('should detect Storybook via @storybook/react', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -764,7 +764,7 @@ describe('detectProjectOptions', () => {
     expect(options.libraries).toContain(Library.Storybook)
   })
 
-  it('should detect Storybook via @storybook/svelte', () => {
+  test('should detect Storybook via @storybook/svelte', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -776,7 +776,7 @@ describe('detectProjectOptions', () => {
     expect(options.libraries).toContain(Library.Storybook)
   })
 
-  it('should detect Playwright via @playwright/test', () => {
+  test('should detect Playwright via @playwright/test', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -788,7 +788,7 @@ describe('detectProjectOptions', () => {
     expect(options.testing).toContain(Testing.Playwright)
   })
 
-  it('should detect Jest via @jest/core', () => {
+  test('should detect Jest via @jest/core', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -800,7 +800,7 @@ describe('detectProjectOptions', () => {
     expect(options.testing).toContain(Testing.Jest)
   })
 
-  it('should detect Testing Library via @testing-library/vue', () => {
+  test('should detect Testing Library via @testing-library/vue', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -812,7 +812,7 @@ describe('detectProjectOptions', () => {
     expect(options.testing).toContain(Testing.TestingLibrary)
   })
 
-  it('should detect TanStack Query via @tanstack/vue-query', () => {
+  test('should detect TanStack Query via @tanstack/vue-query', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -824,7 +824,7 @@ describe('detectProjectOptions', () => {
     expect(options.libraries).toContain(Library.TanstackQuery)
   })
 
-  it('should detect GraphQL via Apollo Client', () => {
+  test('should detect GraphQL via Apollo Client', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -836,7 +836,7 @@ describe('detectProjectOptions', () => {
     expect(options.formats).toContain(Format.Graphql)
   })
 
-  it('should use default extensions, formats, and tools when package.json is present', () => {
+  test('should use default extensions, formats, and tools when package.json is present', () => {
     vi.mocked(fs.existsSync).mockImplementation(path => path.toString().includes('package.json'))
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -850,7 +850,7 @@ describe('detectProjectOptions', () => {
     expect(options.extensions).toEqual([Extension.Unicorn, Extension.Perfectionist, Extension.Security])
   })
 
-  it('should detect tsconfig.base.json as TypeScript project', () => {
+  test('should detect tsconfig.base.json as TypeScript project', () => {
     vi.mocked(fs.existsSync).mockImplementation(
       path => path.toString().includes('tsconfig.base.json') || path.toString().includes('package.json')
     )
@@ -863,7 +863,7 @@ describe('detectProjectOptions', () => {
   })
 
   describe('NextMode detection', () => {
-    it('should detect NextMode.AppRouter when app/ directory exists', () => {
+    test('should detect NextMode.AppRouter when app/ directory exists', () => {
       vi.mocked(fs.existsSync).mockImplementation(path => {
         const p = path.toString()
 
@@ -879,7 +879,7 @@ describe('detectProjectOptions', () => {
       expect(options.nextMode).toBe(NextMode.AppRouter)
     })
 
-    it('should detect NextMode.Pages when only pages/ directory exists (no app/)', () => {
+    test('should detect NextMode.Pages when only pages/ directory exists (no app/)', () => {
       vi.mocked(fs.existsSync).mockImplementation(path => {
         const p = path.toString()
 
@@ -896,7 +896,7 @@ describe('detectProjectOptions', () => {
       expect(options.nextMode).toBe(NextMode.Pages)
     })
 
-    it('should not set nextMode when next is not a dependency', () => {
+    test('should not set nextMode when next is not a dependency', () => {
       vi.mocked(fs.existsSync).mockReturnValue(true)
 
       vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -910,7 +910,7 @@ describe('detectProjectOptions', () => {
   })
 
   describe('detectedFrameworks deduplication', () => {
-    it('should not duplicate react when next is detected (next implies react)', () => {
+    test('should not duplicate react when next is detected (next implies react)', () => {
       vi.mocked(fs.existsSync).mockReturnValue(true)
 
       vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -924,7 +924,7 @@ describe('detectProjectOptions', () => {
     })
   })
 
-  it('should keep runtime deterministic by priority regardless of detection order', () => {
+  test('should keep runtime deterministic by priority regardless of detection order', () => {
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -943,7 +943,7 @@ describe('detectProjectOptions', () => {
     expect(options.runtime).toBe(Runtime.Cloudflare)
   })
 
-  it('should not downgrade runtime when universal frameworks are combined with node frameworks', () => {
+  test('should not downgrade runtime when universal frameworks are combined with node frameworks', () => {
     vi.mocked(fs.existsSync).mockImplementation(path => path.toString().includes('package.json'))
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -959,7 +959,7 @@ describe('detectProjectOptions', () => {
     expect(options.preset).toBe(Preset.Basic)
   })
 
-  it('should keep Expo runtime universal while still implying react', () => {
+  test('should keep Expo runtime universal while still implying react', () => {
     vi.mocked(fs.existsSync).mockImplementation(path => path.toString().includes('package.json'))
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
@@ -975,7 +975,7 @@ describe('detectProjectOptions', () => {
 })
 
 describe('detectProjectOptions — does not pollute frameworks with booleans', () => {
-  it('passing detectProjectOptions() result directly to eslintConfig() should not throw', async () => {
+  test('passing detectProjectOptions() result directly to eslintConfig() should not throw', async () => {
     const { eslintConfig } = await import('@santi020k/eslint-config-basic')
 
     vi.mocked(fs.existsSync).mockReturnValue(true)

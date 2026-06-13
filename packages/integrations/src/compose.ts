@@ -1,3 +1,12 @@
+import {
+  Extension,
+  type FlatConfigArray,
+  Format,
+  Library,
+  Testing,
+  Tool
+} from '@santi020k/eslint-config-core'
+
 import { a11y } from './extensions/a11y.js'
 import { bestPractices } from './extensions/best-practices.js'
 import { biome } from './extensions/biome.js'
@@ -51,15 +60,6 @@ import { nx } from './tools/nx.js'
 import { pnpm } from './tools/pnpm.js'
 import { prettier } from './tools/prettier.js'
 import { swagger } from './tools/swagger.js'
-
-import {
-  Extension,
-  type FlatConfigArray,
-  Format,
-  Library,
-  Testing,
-  Tool
-} from '@santi020k/eslint-config-core'
 
 /**
  * Gets integration configs based on selected options.

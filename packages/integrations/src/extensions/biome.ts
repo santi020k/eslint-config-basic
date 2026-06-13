@@ -1,7 +1,6 @@
-import biomeConfig from 'eslint-config-biome'
-
 import { GLOB_JS_TS_ALL } from '@santi020k/eslint-config-core'
 import type { TSESLint } from '@typescript-eslint/utils'
+import biomeConfig from 'eslint-config-biome'
 
 /**
  * Biome extension configurations

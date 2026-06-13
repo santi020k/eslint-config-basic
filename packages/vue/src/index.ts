@@ -1,9 +1,8 @@
+import type { TSESLint } from '@typescript-eslint/utils'
 import pluginVue from 'eslint-plugin-vue'
 import vueParser from 'vue-eslint-parser'
 
 import { rules } from './rules.js'
-
-import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
  * Vue ESLint configuration

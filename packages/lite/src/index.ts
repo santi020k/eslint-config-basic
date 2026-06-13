@@ -1,11 +1,6 @@
 import { existsSync } from 'node:fs'
 import { join } from 'node:path'
 
-import { applyStrictMode } from './compose.js'
-import { createDetectedFrameworkFlags } from './frameworks.js'
-import { getIntegrationConfigs, getPrettierConfig } from './integrations.js'
-import { resolveFramework, resolvePreset } from './resolvers.js'
-
 import {
   coreConfig,
   createCoreConfig,
@@ -29,6 +24,11 @@ import {
 } from '@santi020k/eslint-config-core'
 import { createTypescriptConfig } from '@santi020k/eslint-config-typescript'
 import type { TSESLint } from '@typescript-eslint/utils'
+
+import { applyStrictMode } from './compose.js'
+import { createDetectedFrameworkFlags } from './frameworks.js'
+import { getIntegrationConfigs, getPrettierConfig } from './integrations.js'
+import { resolveFramework, resolvePreset } from './resolvers.js'
 
 // Lazy framework factories (v2 naming: bare framework names) plus
 // deprecated *Config aliases for the old mixed naming.

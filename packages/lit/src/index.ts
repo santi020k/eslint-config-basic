@@ -1,8 +1,7 @@
-import pluginLit from 'eslint-plugin-lit'
-import pluginWc from 'eslint-plugin-wc'
-
 import { GLOB_JS_TS } from '@santi020k/eslint-config-core'
 import type { TSESLint } from '@typescript-eslint/utils'
+import pluginLit from 'eslint-plugin-lit'
+import pluginWc from 'eslint-plugin-wc'
 
 type PluginWithFlatConfigs = TSESLint.FlatConfig.Plugins[string] & {
   configs: Record<string, TSESLint.FlatConfig.Config>

@@ -1,10 +1,9 @@
-import type PluginI18next from 'eslint-plugin-i18next'
-
-import { defineLazyConfig, loadDefault } from '../lazy.js'
-
 import { fixupPluginRules } from '@eslint/compat'
 import { GLOB_JS_TS_ALL } from '@santi020k/eslint-config-core'
 import type { TSESLint } from '@typescript-eslint/utils'
+import type PluginI18next from 'eslint-plugin-i18next'
+
+import { defineLazyConfig, loadDefault } from '../lazy.js'
 
 /**
  * i18next ESLint configuration

@@ -1,7 +1,7 @@
-import { defineLazyConfig, loadDefault, type PluginWithConfigs } from '../lazy.js'
-
 import { GLOB_JS_TS } from '@santi020k/eslint-config-core'
 import type { TSESLint } from '@typescript-eslint/utils'
+
+import { defineLazyConfig, loadDefault, type PluginWithConfigs } from '../lazy.js'
 
 /**
  * Security ESLint configuration

@@ -3,7 +3,8 @@ import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
-import { afterEach, describe, expect, it } from 'vitest'
+
+import { afterEach, describe, expect, test } from 'vitest'
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '../../..')
 const tempDirs: string[] = []
@@ -77,7 +78,7 @@ afterEach(() => {
 })
 
 describe('external consumer e2e', () => {
-  it('loads the built package from an external JavaScript project and reports core rules', () => {
+  test('loads the built package from an external JavaScript project and reports core rules', () => {
     const cwd = createConsumerProject({
       'src/index.js': 'const unused = 1\n'
     })
@@ -93,7 +94,7 @@ describe('external consumer e2e', () => {
     expect(result.ruleIds).toContain('no-unused-vars')
   })
 
-  it('loads TypeScript syntax mode from an external project', () => {
+  test('loads TypeScript syntax mode from an external project', () => {
     const cwd = createConsumerProject({
       'src/index.ts': 'const value = \'hello\'\nconsole.log(value)\n'
     })
@@ -116,7 +117,7 @@ describe('external consumer e2e', () => {
     expect(result.errorCount).toBe(0)
   })
 
-  it('loads bundled React config from an external TSX project', () => {
+  test('loads bundled React config from an external TSX project', () => {
     const cwd = createConsumerProject({
       'src/Button.tsx': [
         'export const Button = ({ label }) => (',

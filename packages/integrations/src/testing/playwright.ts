@@ -1,6 +1,6 @@
-import { defineLazyConfig, loadDefault, type PluginWithConfigs } from '../lazy.js'
-
 import type { TSESLint } from '@typescript-eslint/utils'
+
+import { defineLazyConfig, loadDefault, type PluginWithConfigs } from '../lazy.js'
 
 /**
  * Playwright ESLint configuration

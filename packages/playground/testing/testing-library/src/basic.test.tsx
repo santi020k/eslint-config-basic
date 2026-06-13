@@ -4,13 +4,13 @@ import userEvent from '@testing-library/user-event'
 const Button = ({ label, onClick }: { label: string, onClick: () => void }) => <button onClick={onClick} type="button">{label}</button>
 
 describe('Testing Library playground', () => {
-  it('renders a button', () => {
+  test('renders a button', () => {
     render(<Button label="Click me" onClick={() => { /* noop */ }} />)
 
     expect(screen.getByRole('button', { name: 'Click me' })).toBeDefined()
   })
 
-  it('calls onClick when clicked', async () => {
+  test('calls onClick when clicked', async () => {
     const user = userEvent.setup()
     const handleClick = vi.fn()
 

@@ -1,6 +1,6 @@
-import { jsonc } from '../formats/jsonc.js'
-
 import type { TSESLint } from '@typescript-eslint/utils'
+
+import { jsonc } from '../formats/jsonc.js'
 
 /**
  * Nx ESLint configuration

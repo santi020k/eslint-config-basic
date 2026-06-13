@@ -1,9 +1,8 @@
+import { GLOB_JS_TS } from '@santi020k/eslint-config-core'
+import type { TSESLint } from '@typescript-eslint/utils'
 import type PluginRegexp from 'eslint-plugin-regexp'
 
 import { defineLazyConfig, loadModule } from '../lazy.js'
-
-import { GLOB_JS_TS } from '@santi020k/eslint-config-core'
-import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
  * RegExp ESLint configuration

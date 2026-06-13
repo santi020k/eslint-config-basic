@@ -1,6 +1,6 @@
-import { defineLazyConfig, loadDefault } from '../lazy.js'
-
 import type { TSESLint } from '@typescript-eslint/utils'
+
+import { defineLazyConfig, loadDefault } from '../lazy.js'
 
 interface OxlintPlugin {
   configs: Record<string, TSESLint.FlatConfig.ConfigArray>

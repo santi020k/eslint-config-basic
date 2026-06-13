@@ -1,6 +1,6 @@
-import { defineLazyConfig, loadDefault, loadModule } from '../lazy.js'
-
 import type { TSESLint } from '@typescript-eslint/utils'
+
+import { defineLazyConfig, loadDefault, loadModule } from '../lazy.js'
 
 interface HtmlPlugin {
   configs: Record<'flat/recommended', TSESLint.FlatConfig.Config>
