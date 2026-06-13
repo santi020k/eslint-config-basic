@@ -134,3 +134,6 @@ allowBuilds:
   sharp: true
   unrs-resolver: false
   workerd: true
+catalogs:
+  conflicts_eslint_h10_5_0:
+    eslint: ^10.5.0
