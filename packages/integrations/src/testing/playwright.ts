@@ -13,9 +13,9 @@ export const playwright: () => Promise<TSESLint.FlatConfig.ConfigArray> = define
     {
       files: [
         '**/e2e/**/*.{js,ts,jsx,tsx}',
-        '**/tests/**/*.{js,ts,jsx,tsx}',
-        '**/*.e2e.{js,ts,jsx,tsx}',
         '**/tests/e2e/**/*.{js,ts,jsx,tsx}',
+        '**/*.e2e.{js,ts,jsx,tsx}',
+        '**/*.e2e.spec.{js,ts,jsx,tsx}',
         '**/playwright/**/*.{js,ts,jsx,tsx}'
       ],
       name: 'integrations/playwright',

@@ -20,8 +20,8 @@ const groups: string[][] = [
   ['^(models|@/models|@models)(/.*|$)'],
   ['^(utils|@/utils|@utils)(/.*|$)'],
   ['^(ws|@/ws|@ws)(/.*|$)'],
-  // npm packages
-  ['^\\w'],
+  // npm packages (bare specifiers and scoped packages like @tanstack/query)
+  ['^@?\\w'],
   // Side effect imports.
   ['^\\u0000'],
   // Other relative imports. Put same-folder imports and `.` last.
@@ -42,7 +42,7 @@ export const rules: TSESLint.Linter.RulesRecord = {
   '@stylistic/function-paren-newline': ['warn', 'consistent'],
   '@stylistic/implicit-arrow-linebreak': 'warn',
   '@stylistic/indent': ['warn', 2],
-  '@stylistic/lines-around-comment': ['error', { allowBlockStart: true, allowClassStart: true, beforeLineComment: false }],
+  '@stylistic/lines-around-comment': ['warn', { allowBlockStart: true, allowClassStart: true }],
   '@stylistic/max-len': [
     'warn',
     {
@@ -81,7 +81,7 @@ export const rules: TSESLint.Linter.RulesRecord = {
     'warn',
     { allowAllPropertiesOnSameLine: true }
   ],
-  '@stylistic/operator-linebreak': ['error', 'after'],
+  '@stylistic/operator-linebreak': ['warn', 'after'],
   '@stylistic/padded-blocks': ['warn', 'never'],
   '@stylistic/padding-line-between-statements': [
     'warn',
@@ -111,7 +111,7 @@ export const rules: TSESLint.Linter.RulesRecord = {
   camelcase: 'warn',
   'comma-dangle': 'off',
   eqeqeq: 'warn',
-  'func-style': ['warn', 'expression', { allowArrowFunctions: true }],
+  'func-style': ['warn', 'expression'],
   'import/export': 'warn',
   'import/no-duplicates': 'warn',
   indent: 'off',

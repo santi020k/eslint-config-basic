@@ -30,7 +30,9 @@ export const testingLibrary: () => Promise<TSESLint.FlatConfig.ConfigArray> = de
         'testing-library/await-async-queries': 'error',
         'testing-library/no-await-sync-queries': 'error',
         'testing-library/no-debugging-utils': 'warn',
-        'testing-library/no-dom-import': ['error', 'react'],
+        'testing-library/no-dom-import': 'error',
+        'testing-library/no-unnecessary-act': 'warn',
+        'testing-library/prefer-find-by': 'warn',
         'testing-library/prefer-screen-queries': 'error'
       }
     }

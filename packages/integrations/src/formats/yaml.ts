@@ -17,7 +17,8 @@ export const yaml: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyCo
       files: ['**/*.{yml,yaml}'],
       name: 'integrations/yaml/rules',
       rules: {
-        'yml/no-empty-mapping-value': 'warn'
+        'yml/no-empty-mapping-value': 'warn',
+        'yml/no-empty-sequence-entry': 'warn'
       }
     }
   ]

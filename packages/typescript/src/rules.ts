@@ -45,6 +45,7 @@ export const typeCheckedRules: TSESLint.Linter.RulesRecord = {
     prefer: 'type-imports'
   }],
   // Type-aware correctness rules (high-value, require parserOptions.project)
+  '@typescript-eslint/no-deprecated': 'warn',
   '@typescript-eslint/no-floating-promises': 'error',
   '@typescript-eslint/no-misused-promises': ['error', {
     checksVoidReturn: { attributes: false }

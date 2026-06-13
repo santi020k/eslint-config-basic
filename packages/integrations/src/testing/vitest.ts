@@ -23,7 +23,9 @@ export const vitest: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazy
         '**/__spec__/**/*.{js,ts,jsx,tsx}',
         '**/*.test.{js,ts,jsx,tsx}',
         '**/*.spec.{js,ts,jsx,tsx}',
-        'vitest.config.{js,ts}'
+        'vitest.config.{js,ts}',
+        'vitest.setup.{js,ts}',
+        'vitest.workspace.{js,ts}'
       ],
       languageOptions: {
         globals: {
@@ -41,6 +43,7 @@ export const vitest: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazy
         '@stylistic/padding-line-between-statements': 'off',
         // Disable some rules that conflict with test patterns
         '@typescript-eslint/no-explicit-any': 'off',
+        'vitest/consistent-test-it': ['warn', { fn: 'test' }],
         'vitest/expect-expect': [
           'error',
           {
@@ -53,7 +56,6 @@ export const vitest: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazy
         'vitest/no-focused-tests': 'error',
         'vitest/no-identical-title': 'error',
         'vitest/prefer-to-be': 'warn',
-
         'vitest/prefer-to-have-length': 'warn',
         'vitest/valid-expect': 'error'
       }
