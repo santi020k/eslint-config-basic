@@ -15,7 +15,8 @@ export const yaml: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyCo
       ignores: [
         // Lockfiles are machine-generated; linting them is extremely slow (6+ s)
         '**/pnpm-lock.yaml',
-        '**/yarn.lock'
+        '**/yarn.lock',
+        '**/bun.lock'
       ],
       name: 'integrations/yaml/lockfile-ignores'
     },
