@@ -476,7 +476,6 @@ const detectTools = (allDeps: DependencyMap, detectRootDir: string): Tool[] => {
   ) tools.push(Tool.Prettier)
 
   if (
-    allDeps.cspell ||
     allDeps['@cspell/eslint-plugin'] ||
     pathExists(join(detectRootDir, 'cspell.config.yaml')) ||
     pathExists(join(detectRootDir, 'cspell.config.yml')) ||
