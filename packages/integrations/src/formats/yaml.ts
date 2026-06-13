@@ -11,6 +11,14 @@ export const yaml: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyCo
   const pluginYml = await loadDefault<typeof PluginYml>('eslint-plugin-yml')
 
   return [
+    {
+      ignores: [
+        // Lockfiles are machine-generated; linting them is extremely slow (6+ s)
+        '**/pnpm-lock.yaml',
+        '**/yarn.lock'
+      ],
+      name: 'integrations/yaml/lockfile-ignores'
+    },
     ...(pluginYml.configs['flat/recommended']),
     {
       files: ['**/*.{yml,yaml}'],
