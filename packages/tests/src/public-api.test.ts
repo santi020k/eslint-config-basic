@@ -219,7 +219,9 @@ describe('Public API Re-exports', () => {
 describe('Integrations subpath exports', () => {
   test('extensions subpath exports expected configs', () => {
     expect(Object.keys(integrationExtensions).sort()).toEqual([
+      'a11y',
       'bestPractices',
+      'biome',
       'compat',
       'deMorgan',
       'depend',
@@ -241,6 +243,7 @@ describe('Integrations subpath exports', () => {
       'jsonc',
       'markdown',
       'mdx',
+      'packageJson',
       'toml',
       'yaml'
     ])
@@ -249,7 +252,9 @@ describe('Integrations subpath exports', () => {
   test('libraries subpath exports expected configs', () => {
     expect(Object.keys(integrationLibraries).sort()).toEqual([
       'aiSdk',
+      'autogen',
       'drizzle',
+      'googleGenAi',
       'i18next',
       'langchain',
       'llamaIndex',
@@ -265,7 +270,8 @@ describe('Integrations subpath exports', () => {
       'tanstackQuery',
       'tanstackRouter',
       'turbo',
-      'typeorm'
+      'typeorm',
+      'zod'
     ])
   })
 
@@ -273,6 +279,7 @@ describe('Integrations subpath exports', () => {
     expect(Object.keys(integrationTesting).sort()).toEqual([
       'cypress',
       'jest',
+      'jestDom',
       'playwright',
       'testingLibrary',
       'vitest'
@@ -281,8 +288,12 @@ describe('Integrations subpath exports', () => {
 
   test('tools subpath exports expected configs', () => {
     expect(Object.keys(integrationTools).sort()).toEqual([
+      'command',
       'cspell',
+      'docker',
+      'githubActions',
       'jsdoc',
+      'nx',
       'pnpm',
       'prettier',
       'swagger'
