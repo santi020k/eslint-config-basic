@@ -4,7 +4,6 @@ import { join } from 'node:path'
 import {
   coreConfig,
   createCoreConfig,
-  createImportGroups,
   type DetectionOptions,
   detectProjectOptions,
   type EslintConfigOptions,
@@ -871,24 +870,49 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
     })
   )
 
-  // Apply custom workspace import groups when workspacePrefixes is set.
-  // This overrides simple-import-sort/imports with groups that have a dedicated
-  // block for the specified workspace scopes, placed before external npm packages.
+  // Merge workspace import group into any existing simple-import-sort/imports rules
+  // so framework-specific group ordering (e.g. React-first) is preserved.
   const workspacePrefixes = options?.workspacePrefixes
+  const allConfigs = [...configs, ...projectConfigs.flat()]
 
-  const workspaceImportOverride: TSESLint.FlatConfig.Config[] = workspacePrefixes?.length ?
-    [{
-      files: ['**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx}'],
-      name: 'eslint-config-basic/workspace-import-groups',
-      rules: {
-        'simple-import-sort/imports': ['warn', {
-          groups: createImportGroups({ workspacePrefixes })
-        }]
+  if (workspacePrefixes?.length) {
+    const workspacePatterns = workspacePrefixes.map(
+      p => `^${p.replaceAll(/[.*+?^${}()|[\]\\]/g, '\\$&')}(/.*|$)`
+    )
+
+    for (let i = 0; i < allConfigs.length; i++) {
+      const item = allConfigs[i]
+
+      if (Array.isArray(item)) continue
+
+      const rule = item.rules?.['simple-import-sort/imports']
+
+      // Only patch array-form rules that carry an explicit groups list — skip
+      // string-severity rules and option-less arrays to avoid overwriting defaults.
+      if (!Array.isArray(rule) || !rule[1]) continue
+
+      const ruleOpts = rule[1] as { groups?: string[][] }
+      const existingGroups = ruleOpts.groups ?? []
+
+      if (existingGroups.length === 0) continue
+
+      const externalIdx = existingGroups.findIndex(g => g.some(p => p.includes('^@?\\w')))
+      const insertAt = externalIdx >= 0 ? externalIdx : existingGroups.length
+
+      allConfigs[i] = {
+        ...item,
+        rules: {
+          ...item.rules,
+          'simple-import-sort/imports': [
+            rule[0],
+            { ...ruleOpts, groups: [...existingGroups.slice(0, insertAt), workspacePatterns, ...existingGroups.slice(insertAt)] }
+          ] as TSESLint.FlatConfig.RuleEntry
+        }
       }
-    }] :
-    []
+    }
+  }
 
-  return applyStrictMode([...configs, ...projectConfigs.flat(), ...workspaceImportOverride], strict)
+  return applyStrictMode(allConfigs, strict)
 }
 
 /**

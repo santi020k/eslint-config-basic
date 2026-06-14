@@ -42,7 +42,7 @@ This project follows a **DX-First & Stability-First** mission. We prioritize a s
 - **🔍 Deep Auto-Detection**: Automatically detects your project's frameworks, libraries, and tools. Core features like TypeScript and runtime presets are enabled by default if detected.
 - **🧩 Simple Optional Features**: Enable optional configs with enums, matching strings, or a single `features` boolean map.
 - **⚡ Lazy Loading**: Framework-specific configurations are loaded only when needed.
-- **🛡️ Strict Mode**: Opt-in `strict: true` to promote all warnings to errors, perfect for CI/CD and maintaining high code standards.
+- **🛡️ Strict Mode**: Opt-in strict mode with three levels — `true`/`'ci'` promotes all warnings to errors; `'pedantic'` additionally enables best-practice rules (`no-console`, `no-alert`, cyclomatic complexity ≤ 10, block nesting ≤ 4).
 - **🌐 Smart Runtime Support**: Built-in support for Node.js, Browser, Worker, Cloudflare, Bun, Deno, and Universal runtimes with appropriate globals and rules.
 - **🧭 Explainable Detection**: `basic-eslint explain` shows exactly which frameworks, runtimes, and integrations were detected.
 - **🏗️ Monorepo Projects**: Scope presets and integrations per workspace folder with the `projects` option, or let `Preset.Monorepo` detect workspace packages.

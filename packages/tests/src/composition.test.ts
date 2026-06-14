@@ -695,3 +695,58 @@ describe('Framework Composition — remaining frameworks', () => {
     expect(config.length).toBeGreaterThan(0)
   })
 })
+
+describe('Monorepo project scoping', () => {
+  test('ignore-only configs inside a project are scoped to the project path', async () => {
+    const config = await defineConfig({
+      detection: false,
+      projects: {
+        'apps/web': {
+          frameworks: {
+            react: [{ ignores: ['dist/**', 'tmp/**'], name: 'mock-ignore-only' }]
+          },
+          typescript: false
+        }
+      }
+    })
+
+    const entry = config.find((e: any) => e?.name === 'mock-ignore-only')
+    // Ignores must be prefixed with the project path — not global
+    expect(entry?.ignores).toEqual(['apps/web/dist/**', 'apps/web/tmp/**'])
+  })
+
+  test('negated ignores inside a project are also scoped correctly', async () => {
+    const config = await defineConfig({
+      detection: false,
+      projects: {
+        'packages/lib': {
+          frameworks: {
+            react: [{ ignores: ['!src/**'], name: 'mock-negated-ignore' }]
+          },
+          typescript: false
+        }
+      }
+    })
+
+    const entry = config.find((e: any) => e?.name === 'mock-negated-ignore')
+    expect(entry?.ignores).toEqual(['!packages/lib/src/**'])
+  })
+
+  test('file patterns in project configs are prefixed with the project path', async () => {
+    const config = await defineConfig({
+      detection: false,
+      projects: {
+        'apps/web': {
+          frameworks: {
+            react: [{ files: ['**/*.tsx'], name: 'mock-files', rules: {} }]
+          },
+          typescript: false
+        }
+      }
+    })
+
+    const entry = config.find((e: any) => e?.name === 'mock-files')
+    expect(entry?.files).toContain('apps/web/**/*.tsx')
+    expect(entry?.files).not.toContain('**/*.tsx')
+  })
+})

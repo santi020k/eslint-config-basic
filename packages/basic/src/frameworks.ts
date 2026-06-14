@@ -74,7 +74,13 @@ const loadFrameworkConfigInput = (frameworkName: FrameworkName): Promise<Framewo
 
   if (!loader) return Promise.resolve([])
 
-  const pending = loader()
+  const pending = loader().catch((error: unknown) => {
+    throw new Error(
+      `Unable to load optional framework config "${frameworkName}". ` +
+      `Install "@santi020k/eslint-config-${frameworkName}" or remove that framework from your eslintConfig options.`,
+      { cause: error }
+    )
+  })
 
   frameworkConfigCache.set(frameworkName, pending)
 

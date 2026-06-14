@@ -110,22 +110,46 @@ describe('Public API Re-exports', () => {
     expect('@other/pkg'.match(workspaceGroup[0]) !== null).toBe(false)
   })
 
-  test('workspacePrefixes in defineConfig should produce a config with the workspace import override', async () => {
+  test('workspacePrefixes in defineConfig should inject @acme group into existing import sort rules', async () => {
     const config = await defineConfig({ detection: false, workspacePrefixes: ['@acme'] })
-    const overrideEntry = config.find(c => c.name === 'eslint-config-basic/workspace-import-groups')
-    expect(overrideEntry).toBeDefined()
-    const ruleValue = overrideEntry?.rules?.['simple-import-sort/imports'] as [string, { groups: string[][] }]
-    expect(ruleValue).toBeDefined()
-    expect(Array.isArray(ruleValue[1].groups)).toBe(true)
-    // The groups should contain the @acme workspace pattern
-    const hasAcme = ruleValue[1].groups.some(g => g.some(p => p.includes('@acme')))
+    // No separate override config — workspace patterns are merged into existing rules
+    const overrideEntry = config.flat(Infinity).find((c: any) => c?.name === 'eslint-config-basic/workspace-import-groups')
+    expect(overrideEntry).toBeUndefined()
+    // @acme pattern must appear inside an existing simple-import-sort/imports rule
+    const hasAcme = config.flat(Infinity).some((c: any) => {
+      const rule = c?.rules?.['simple-import-sort/imports']
+      if (!Array.isArray(rule) || !rule[1]) return false
+      const groups: string[][] = (rule[1]).groups ?? []
+      return groups.some(g => g.some(p => p.includes('@acme')))
+    })
     expect(hasAcme).toBe(true)
   })
 
-  test('defineConfig without workspacePrefixes should not include the workspace import override', async () => {
+  test('workspacePrefixes injects @acme group before the external packages group', async () => {
+    const config = await defineConfig({ detection: false, workspacePrefixes: ['@acme'] })
+
+    // Find a patched sort rule that contains the @acme workspace group
+    const patchedGroups = config.flat(Infinity).flatMap((c: any) => {
+      const rule = c?.rules?.['simple-import-sort/imports']
+      if (!Array.isArray(rule) || !rule[1]) return []
+      const groups: string[][] = (rule[1]).groups ?? []
+      return groups.some(g => g.some(p => p.includes('@acme'))) ? [groups] : []
+    })
+
+    expect(patchedGroups.length).toBeGreaterThan(0)
+
+    // @acme group must come BEFORE the external packages group (^@?\\w)
+    const groups = patchedGroups[0]
+    const acmeIdx = groups.findIndex(g => g.some(p => p.includes('@acme')))
+    const externalIdx = groups.findIndex(g => g.some(p => p.includes('^@?\\w')))
+    expect(acmeIdx).toBeGreaterThanOrEqual(0)
+    expect(externalIdx).toBeGreaterThan(acmeIdx)
+  })
+
+  test('defineConfig without workspacePrefixes should not inject any workspace group', async () => {
     const config = await defineConfig({ detection: false })
-    const overrideEntry = config.find(c => c.name === 'eslint-config-basic/workspace-import-groups')
-    expect(overrideEntry).toBeUndefined()
+    const hasWorkspaceGroup = config.flat(Infinity).some((c: any) => c?.name === 'eslint-config-basic/workspace-import-groups')
+    expect(hasWorkspaceGroup).toBe(false)
   })
 
   test('lite package should expose expected composer utilities and Preact factories', async () => {

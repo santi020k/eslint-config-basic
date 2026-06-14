@@ -643,3 +643,63 @@ describe('Integration Rule Assertions — Extensions', () => {
     expect(names).toContain('eslint-config-integrations/biome')
   })
 })
+
+describe('optionMergeStrategy', () => {
+  const noDetect = '/__eslint-config_basic_strategy_tests_no_detect__'
+
+  test('replace: explicit extensions: [] discards all preset-provided extensions', async () => {
+    const config = await defineConfig({
+      detection: false,
+      detectRootDir: noDetect,
+      extensions: [],
+      optionMergeStrategy: 'replace',
+      preset: 'all',
+      typescript: false
+    })
+    const names = extractConfigNames(config)
+    expect(names.some(n => n.includes('unicorn'))).toBe(false)
+    expect(names.some(n => n.includes('perfectionist'))).toBe(false)
+    expect(names.some(n => n.includes('sonarjs'))).toBe(false)
+  })
+
+  test('merge (default): preset extensions are combined with explicit extensions', async () => {
+    const [mergeConfig, replaceConfig] = await Promise.all([
+      defineConfig({
+        detection: false,
+        detectRootDir: noDetect,
+        extensions: [Extension.Unicorn],
+        optionMergeStrategy: 'merge',
+        typescript: false
+      }),
+      defineConfig({
+        detection: false,
+        detectRootDir: noDetect,
+        extensions: [Extension.Unicorn],
+        optionMergeStrategy: 'replace',
+        typescript: false
+      })
+    ])
+    const mergeNames = extractConfigNames(mergeConfig)
+    const replaceNames = extractConfigNames(replaceConfig)
+    // Both have unicorn (explicit)
+    expect(mergeNames.some(n => n.includes('unicorn'))).toBe(true)
+    expect(replaceNames.some(n => n.includes('unicorn'))).toBe(true)
+    // merge combined detected values → may have more config entries overall
+    expect(mergeConfig.flat(Infinity).length).toBeGreaterThanOrEqual(replaceConfig.flat(Infinity).length)
+  })
+
+  test('replace: explicit testing: [] discards preset-provided testing configs', async () => {
+    const config = await defineConfig({
+      detection: false,
+      detectRootDir: noDetect,
+      extensions: [],
+      optionMergeStrategy: 'replace',
+      preset: 'all',
+      testing: [],
+      typescript: false
+    })
+    const names = extractConfigNames(config)
+    expect(names.some(n => n.includes('vitest'))).toBe(false)
+    expect(names.some(n => n.includes('playwright'))).toBe(false)
+  })
+})
