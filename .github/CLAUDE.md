@@ -98,6 +98,7 @@ For detailed step-by-step procedures:
 | :--- | :--- |
 | Add a new framework package | `.claude/skills/add-framework.md` |
 | Add a new optional integration | `.claude/skills/add-integration.md` |
+| Add auto-detection for a framework/library | `.claude/skills/detection.md` |
 | Write or update tests | `.claude/skills/testing.md` |
 | Release & versioning | `.claude/skills/release.md` |
 | Add ambient type declarations | `.claude/workflows/add-ambient-decl.md` |

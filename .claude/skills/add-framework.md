@@ -5,22 +5,53 @@ description: Step-by-step guide for adding a new framework package to the monore
 
 # Adding a New Framework Config
 
-Follow these steps in order. Read `.agent/rules/guidelines.md` for code conventions.
+Framework packages live at `packages/{name}/` and are lazy-loaded via a `Map` in `packages/basic/src/frameworks.ts`.
 
-## TDD: Write tests first
+## How Framework Wiring Works
 
-Before any implementation, add the framework to `contracts.test.ts` and `types.test.ts`, then verify tests are RED. See `.claude/skills/testing.md` § TDD Workflow.
+`packages/basic/src/frameworks.ts` maintains `frameworkLoaders: Map<FrameworkName, FrameworkLoader>`. Each entry is an async function that uses `loadModule()` to import the framework package's named export on demand. The package is only loaded when the framework is actually enabled — keeping startup cheap.
 
-## 1. Create the Package Structure
+```typescript
+// Pattern used for all frameworks:
+['myframework', async () =>
+  (await loadModule<{ myframework: FlatConfigArray }>('@santi020k/eslint-config-myframework')).myframework
+]
+```
+
+This means the framework package must export a named export that matches what `frameworkLoaders` expects.
+
+## Step 1 — Update types (triggers Red)
+
+`packages/core/src/types.ts` — add to the `DetectedFrameworkName` union AND the `EslintConfigOptions.frameworks` interface:
+
+```typescript
+export type DetectedFrameworkName =
+  // ... existing
+  | 'myframework'
+
+export interface EslintConfigOptions {
+  frameworks?: {
+    // ... existing
+    myframework?: ImportedFramework
+  }
+}
+```
+
+Unlike integrations, `contracts.test.ts` does NOT test framework enum coverage — framework tests are manual. Add test entries in `configs.test.ts` and `composition.test.ts` before building the package to get a Red state:
+
+```bash
+pnpm run test  # → RED: import or assertion fails because package doesn't exist yet
+```
+
+## Step 2 — Create the package structure
 
 ```bash
 mkdir -p packages/myframework/src
 ```
 
-## 2. Setup `package.json`
+Copy `package.json`, `tsconfig.json`, `tsup.config.ts` from a similar framework (e.g., `packages/hono/` for a minimal framework, `packages/svelte/` for one with virtual script files).
 
-Copy from an existing framework (e.g., `packages/svelte/package.json`) and adjust:
-
+`packages/myframework/package.json`:
 ```json
 {
   "name": "@santi020k/eslint-config-myframework",
@@ -35,49 +66,28 @@ Copy from an existing framework (e.g., `packages/svelte/package.json`) and adjus
       "types": "./dist/index.d.ts"
     }
   },
-  "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
-    "clean": "rm -rf dist"
-  },
-  "dependencies": {
-    "@santi020k/eslint-config-core": "*"
-  },
-  "peerDependencies": {
-    "eslint-plugin-myframework": ">=1.0.0"
-  }
+  "scripts": { "build": "tsup", "dev": "tsup --watch", "clean": "rm -rf dist" },
+  "dependencies": { "@santi020k/eslint-config-core": "*" },
+  "peerDependencies": { "eslint-plugin-myframework": ">=1.0.0" },
+  "devDependencies": { "eslint-plugin-myframework": "..." }
 }
 ```
 
-## 3. Setup TypeScript and Build Configs
-
-`packages/myframework/tsconfig.json`:
-```json
-{
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": { "outDir": "./dist", "rootDir": "./src" },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist"]
-}
-```
-
-Copy `tsup.config.ts` from an existing framework package.
-
-## 4. Handle Types
+## Step 3 — Handle types
 
 Before adding `ambient.d.ts`:
-1. Check `package.json` for `types`/`typings` field
-2. Search for `@types/eslint-plugin-myframework`
-3. Only create `src/ambient.d.ts` as a last resort — see `.claude/workflows/add-ambient-decl.md`
+1. Check `package.json` of the plugin for `types`/`typings` field
+2. `npm info @types/eslint-plugin-myframework` — check for official types
+3. Only create `src/ambient.d.ts` as last resort — see `.claude/workflows/add-ambient-decl.md`
 
-## 5. Implement the Configuration
+## Step 4 — Implement the config
 
 `packages/myframework/src/index.ts`:
 ```typescript
 import pluginMyframework from 'eslint-plugin-myframework'
 import type { TSESLint } from '@typescript-eslint/utils'
 
-export const myframeworkConfig: TSESLint.FlatConfig.ConfigArray = [
+export const myframework: TSESLint.FlatConfig.ConfigArray = [
   ...pluginMyframework.configs['flat/recommended'],
   {
     name: 'eslint-config-myframework/rules',
@@ -89,7 +99,8 @@ export const myframeworkConfig: TSESLint.FlatConfig.ConfigArray = [
 
 ### If the framework generates virtual script files (.svelte, .astro, .vue, .qwik)
 
-Add a virtual script block — **do NOT** add `allowDefaultProject: true` or re-apply `disableTypeChecked`:
+Add a dedicated block — **do NOT** add `allowDefaultProject: true` or re-apply `disableTypeChecked` (the `typescript` package already handles this):
+
 ```typescript
 {
   name: 'eslint-config-myframework/virtual-script-rules',
@@ -101,60 +112,65 @@ Add a virtual script block — **do NOT** add `allowDefaultProject: true` or re-
 }
 ```
 
-## 6. Wire into Core
+## Step 5 — Wire into frameworkLoaders Map
 
-### `packages/core/src/types.ts`
+`packages/basic/src/frameworks.ts` — add an entry to `frameworkLoaders`:
+
 ```typescript
-export type DetectedFrameworkName = /* existing */ | 'myframework'
-
-export interface EslintConfigOptions {
-  frameworks?: { /* existing */ myframework?: ImportedFramework }
-}
+const frameworkLoaders = new Map<FrameworkName, FrameworkLoader>([
+  // ... existing entries
+  ['myframework', async () =>
+    (await loadModule<{ myframework: FlatConfigArray }>('@santi020k/eslint-config-myframework')).myframework
+  ]
+])
 ```
 
-### `packages/basic/src/frameworks.ts`
-Add lazy loader registration following the existing pattern.
+The named export in the loader must match what `packages/myframework/src/index.ts` actually exports. Check existing entries for the exact pattern (some export `xConfig`, some export `x`, some export `default`).
 
-### `packages/basic/src/index.ts`
-```typescript
-configs.push(...resolveFramework('myframework', frameworks.myframework))
-```
+## Step 6 — Add workspace dependency
 
-### `packages/basic/package.json`
+`packages/basic/package.json`:
 ```json
 "dependencies": {
   "@santi020k/eslint-config-myframework": "workspace:^"
 }
 ```
 
-## 7. Add a Playground
+## Step 7 — Add a Playground
 
-Create `packages/playground/myframework/` from an existing playground. Minimum:
+`packages/playground/myframework/` — copy from an existing playground and adjust:
 - `package.json` with the framework as a dependency
 - `eslint.config.js` using `eslintConfig({ frameworks: { myframework: true } })`
 - At least one sample file in the framework's format
 
-## 8. Update Tests (Green phase)
+## Step 8 — Update tests (Green phase)
 
-See `.claude/skills/testing.md` § Adding New Tests. Tests were already written in Red phase — now make them pass:
-- `packages/tests/package.json` — add the new package as devDependency
-- `configs.test.ts`, `composition.test.ts`, `snapshots.test.ts`, `options.test.ts`, `detection.test.ts`
+The tests written in Step 1 should now pass. Also add:
+- `packages/tests/package.json` — add `@santi020k/eslint-config-myframework` as devDependency
+- `configs.test.ts` — import and assert `config.length > 0`, check plugin object
+- `composition.test.ts` — assert config entry name appears when framework is passed
+- `options.test.ts` — assert a framework-specific rule is present
+- `snapshots.test.ts` — rule name and entry name snapshots
+- `detection.test.ts` — if the framework is auto-detectable from `package.json` deps
 
-## 9. Update Documentation
+```bash
+pnpm run test  # → GREEN
+```
 
-Required whenever a new framework package is published:
-- `apps/docs/src/content/docs/frameworks/{name}.md` — add framework guide; register in sidebar (`astro.config.mjs`)
+## Step 9 — Update Documentation
+
+Required for every new published framework package:
+- `apps/docs/src/content/docs/frameworks/{name}.md` — framework guide; register in sidebar (`astro.config.mjs`)
 - `apps/docs/src/content/docs/guide/installation.md` — add to framework matrix
 - `apps/docs/src/content/docs/guide/configuration.md` — add examples
 - `apps/docs/src/content/docs/api/index.md` — update package coverage
 - `apps/docs/src/content/docs/index.md` — update counts/copy
-- `packages/{name}/README.md` — keep aligned with docs
+- `packages/{name}/README.md` — aligned with docs
 - `README.md` — update public package lists
 
-## 10. Validate
+## Step 10 — Validate and changeset
 
 ```bash
 pnpm run build && pnpm run lint && pnpm run test
+pnpm run changeset
 ```
-
-All three must pass. Create a changeset: `pnpm run changeset`
