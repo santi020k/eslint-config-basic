@@ -213,9 +213,9 @@ describe('Public API Re-exports', () => {
   })
 
   test('should re-export all extension configs from the main package', () => {
-    expect(Array.isArray(a11y)).toBe(true)
+    expect(typeof a11y).toBe('function')
     expect(Array.isArray(bestPractices)).toBe(true)
-    expect(Array.isArray(biome)).toBe(true)
+    expect(typeof biome).toBe('function')
     expect(typeof compat).toBe('function')
     expect(typeof deMorgan).toBe('function')
     expect(typeof depend).toBe('function')
