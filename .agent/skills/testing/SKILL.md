@@ -91,7 +91,38 @@ const results = await lintText(code, config, 'Button.tsx')
 
 Also make sure fixture code matches the active stylistic rules — for example, use double quotes for JSX attributes (`type="button"`, not `type='button'`) to satisfy `@stylistic/jsx-quotes`.
 
-## 5. Adding New Tests
+## 5. TDD Workflow
+
+This project uses **Test-Driven Development**. Write tests before the implementation. `contracts.test.ts` is the specification layer — failing it intentionally is the correct first step.
+
+### Red → Green → Refactor
+
+**Red phase** (before any implementation code):
+```bash
+# 1. Add enum value to packages/core/src/types.ts
+# 2. Add it to the coverage arrays in contracts.test.ts and types.test.ts
+pnpm run test  # → MUST FAIL here. If it passes, the test isn't covering anything real.
+```
+
+**Green phase** (implement until tests pass):
+```bash
+# 3. Create the factory / package
+# 4. Register in the lazy loader
+# 5. Add re-exports
+pnpm run test  # → MUST PASS now
+```
+
+**Refactor phase** (deepen coverage without changing behavior):
+```bash
+# 6. Add rule assertions in options.test.ts
+# 7. Add detection test in detection.test.ts (if auto-detectable)
+# 8. Add snapshot in snapshots.test.ts
+pnpm run build && pnpm run test  # → still green
+```
+
+**Rule:** A test that passes before the factory is implemented is not a contract — it's a false positive. Always verify the Red state before writing implementation.
+
+## 7. Adding New Tests
 
 ### When adding a new framework
 
@@ -145,7 +176,7 @@ Also make sure fixture code matches the active stylistic rules — for example, 
 
 3. **`detection.test.ts`** — If auto-detectable from `package.json` deps, add a detection test.
 
-## 6. Pre-Commit Validation
+## 8. Pre-Commit Validation
 
 Before pushing any changes, always run the full suite from the repo root:
 

@@ -111,6 +111,31 @@ If you add a new published framework package or integration, updating the docume
 - Update homepage counts or package lists in `apps/docs/src/content/docs/index.md` when totals change
 - Keep root `README.md` and package-level `README.md` files aligned with the published surface area
 
+## Development Workflow: TDD
+
+This project follows **Test-Driven Development**. Tests are written before implementation. The `contracts.test.ts` file acts as the specification — registering an enum value there makes the test fail until the factory exists, which is the intended Red→Green cycle.
+
+### Red → Green → Refactor for a new integration
+
+**Red** — define the contract first:
+1. Add the enum value to `packages/core/src/types.ts`
+2. Add it to the coverage array in `packages/tests/src/contracts.test.ts`
+3. Run `pnpm run test` → it must **fail** here (no factory yet)
+
+**Green** — implement until the test passes:
+4. Create the factory file in `packages/integrations/src/` (or new framework package)
+5. Register it in the lazy loader (`integrations/src/lazy.ts` or `basic/src/frameworks.ts`)
+6. Re-export from `integrations/src/index.ts` and `basic/src/index.ts`
+7. Run `pnpm run test` → must **pass** now
+
+**Refactor** — add coverage depth:
+8. Add rule-specific assertions in `options.test.ts`
+9. Add detection test in `detection.test.ts` if auto-detectable
+10. Add snapshot test in `snapshots.test.ts`
+11. `pnpm run build && pnpm run test` → still green
+
+**Never skip Red.** If tests pass before you implement the factory, the test isn't testing anything real.
+
 ## Critical Conventions
 
 - **ESLint 10 Flat Config only** — no legacy `.eslintrc` support (eslintrc was fully removed in ESLint 10)

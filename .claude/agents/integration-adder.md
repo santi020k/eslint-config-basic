@@ -56,39 +56,56 @@ I need to replicate this pattern for a new integration: [NAME] using eslint plug
 Output a spec (not code) describing every file I need to create or modify."
 ```
 
-### Step 3 — Plan all file changes
+### Step 3 — Write the failing tests first (Red)
 
-Before writing code, list every file that changes:
+This project uses TDD. Before any factory code is written, register the contract:
+
+1. Add the enum value to `packages/core/src/types.ts`
+2. Add it to the coverage arrays in `packages/tests/src/contracts.test.ts` and `packages/tests/src/types.test.ts`
+3. Run tests — **it must fail here.** A passing test before implementation means the test isn't verifying anything real.
+
+```bash
+pnpm run test  # Expected: RED — contracts test fails because no factory exists yet
+```
+
+### Step 4 — Implement until green (Green)
+
+Delegate the factory implementation to Codex. Use `Agent` with `subagent_type: "codex:codex-rescue"`. Pass:
+- The Gemini spec from Step 2
+- The complete list of files to create/modify
+- The eslint plugin npm package name for peer dependencies
+- The enum value name and its category
+- The explicit constraint: tests are currently red, implementation must make `contracts.test.ts` pass
+
+Files that need to change:
 
 | File | Change |
 |------|--------|
-| `packages/core/src/types.ts` | Add enum value |
 | `packages/integrations/src/[category]/[name].ts` | New factory file (or new framework package) |
 | `packages/integrations/src/lazy.ts` | Register lazy loader |
 | `packages/integrations/src/index.ts` | Re-export |
 | `packages/basic/src/index.ts` | Re-export from main package |
-| `packages/tests/src/contracts.test.ts` | Add to coverage array |
 | New `packages/[name]/package.json` | Only for new framework packages |
 
-### Step 4 — Delegate code writing to Codex
-
-Use `Agent` with `subagent_type: "codex:codex-rescue"`. Pass:
-- The Gemini spec from Step 2
-- The complete file list with exact changes from Step 3
-- The eslint plugin npm package name for peer dependencies
-- The enum value name and its category
-
-### Step 5 — Validate
+### Step 5 — Validate and deepen coverage (Green → Refactor)
 
 ```bash
-pnpm run build && pnpm run test
+pnpm run build && pnpm run test  # Must be GREEN now
 ```
 
-`contracts.test.ts` is the acceptance criterion. If it fails: the enum exists but the factory is missing, wrong shape, or not registered in the lazy loader.
+After green, add coverage depth:
+- `options.test.ts`: assert a specific rule from the integration is present
+- `detection.test.ts`: add detection test if auto-detectable from `package.json` deps
+- `snapshots.test.ts`: add snapshot for rule names and config entry names
+
+```bash
+pnpm run test  # Must still pass after refactor additions
+```
 
 ## Hard Rules
 
-- **Enum first.** Never write the factory before the enum value is in `packages/core/src/types.ts`.
+- **Enum and test first, always.** Never write the factory before the enum value and its test registration exist.
+- **Verify the Red state.** If `pnpm run test` passes before you write the factory, stop — the test is not covering the contract.
 - **Lazy loading is mandatory.** Integrations must never be eagerly imported. Register through the lazy loader.
 - **Async vs sync.** Format integrations return `Promise<ConfigArray>`. Library/tool/extension integrations return `ConfigArray` or `() => ConfigArray`. Match the existing category pattern exactly.
-- **Contracts test is non-negotiable.** The build is not done until `pnpm run test` passes with the new enum covered.
+- **Contracts test is the acceptance criterion.** The task is not done until `pnpm run test` passes green with the new enum covered.
