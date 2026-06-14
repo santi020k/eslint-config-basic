@@ -14,5 +14,5 @@ export default defineConfig({
   },
   sourcemap: true,
   splitting: false,
-  external: [/^node:/]
+  external: [/^node:/, /^@santi020k\//]
 })

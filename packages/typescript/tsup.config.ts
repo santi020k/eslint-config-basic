@@ -16,5 +16,5 @@ export default defineConfig({
   sourcemap: true,
   // Prevent rollup-plugin-dts from attempting to bundle node built-in types
   // (node:fs), which causes a silent worker crash,
-  external: [/^node:/]
+  external: [/^node:/, /^@santi020k\//]
 })

@@ -15,5 +15,5 @@ export default defineConfig({
   target: 'es2022',
   // Prevent rollup-plugin-dts from attempting to bundle node built-in types
   // (node:fs, node:path, etc.), which causes a silent worker crash,
-  external: [/^node:/]
+  external: [/^node:/, /^@santi020k\//]
 })
