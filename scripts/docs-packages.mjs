@@ -27,6 +27,13 @@ export const packageDocs = [
     title: 'React guide'
   },
   {
+    description: 'Preact support using shared React rules with a Preact-compatible plugin.',
+    docsPath: '/frameworks/preact.html',
+    packageName: '@santi020k/eslint-config-preact',
+    packagePath: 'packages/preact',
+    title: 'Preact guide'
+  },
+  {
     description: 'Next.js rules, App Router notes, and the React dependency contract.',
     docsPath: '/frameworks/next.html',
     packageName: '@santi020k/eslint-config-next',

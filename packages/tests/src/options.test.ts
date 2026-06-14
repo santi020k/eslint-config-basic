@@ -7,7 +7,7 @@ import vue from '@santi020k/eslint-config-vue'
 
 import { describe, expect, test } from 'vitest'
 
-import { extractConfigNames, extractRuleNames } from './test-utils.js'
+import { extractConfigNames, extractRuleNames, getEffectiveRuleValue } from './test-utils.js'
 
 describe('Deep Rule Assertions (#5)', () => {
   test('should include React-specific rules when React is enabled', async () => {
@@ -338,10 +338,12 @@ describe('Integration Rule Assertions — Libraries', () => {
     })
 
     const names = extractConfigNames(config)
-    const rules = extractRuleNames(config)
+    const ruleValue = getEffectiveRuleValue(config, 'no-restricted-imports') as [string, { paths?: { name: string }[] }] | undefined
 
     expect(names).toContain('eslint-config-integrations/openai-agents')
-    expect(rules).toContain('no-restricted-imports')
+    expect(ruleValue).toBeDefined()
+    const paths = ruleValue?.[1]?.paths?.map((p) => p.name) ?? []
+    expect(paths).toContain('openai/agents')
   })
 
   test('should include Mastra import safety rules when Mastra library is enabled', async () => {
@@ -350,10 +352,12 @@ describe('Integration Rule Assertions — Libraries', () => {
     })
 
     const names = extractConfigNames(config)
-    const rules = extractRuleNames(config)
+    const ruleValue = getEffectiveRuleValue(config, 'no-restricted-imports') as [string, { patterns?: { group: string[] }[] }] | undefined
 
     expect(names).toContain('eslint-config-integrations/mastra')
-    expect(rules).toContain('no-restricted-imports')
+    expect(ruleValue).toBeDefined()
+    const patternGroups = ruleValue?.[1]?.patterns?.flatMap((p) => p.group) ?? []
+    expect(patternGroups).toContain('@mastra/*/dist/*')
   })
 
   test('should include LangChain import safety rules when LangChain library is enabled', async () => {
@@ -362,10 +366,12 @@ describe('Integration Rule Assertions — Libraries', () => {
     })
 
     const names = extractConfigNames(config)
-    const rules = extractRuleNames(config)
+    const ruleValue = getEffectiveRuleValue(config, 'no-restricted-imports') as [string, { patterns?: { group: string[] }[] }] | undefined
 
     expect(names).toContain('eslint-config-integrations/langchain')
-    expect(rules).toContain('no-restricted-imports')
+    expect(ruleValue).toBeDefined()
+    const patternGroups = ruleValue?.[1]?.patterns?.flatMap((p) => p.group) ?? []
+    expect(patternGroups).toContain('langchain/dist/*')
   })
 
   test('should include LlamaIndex import safety rules when LlamaIndex library is enabled', async () => {
@@ -374,10 +380,12 @@ describe('Integration Rule Assertions — Libraries', () => {
     })
 
     const names = extractConfigNames(config)
-    const rules = extractRuleNames(config)
+    const ruleValue = getEffectiveRuleValue(config, 'no-restricted-imports') as [string, { patterns?: { group: string[] }[] }] | undefined
 
     expect(names).toContain('eslint-config-integrations/llamaindex')
-    expect(rules).toContain('no-restricted-imports')
+    expect(ruleValue).toBeDefined()
+    const patternGroups = ruleValue?.[1]?.patterns?.flatMap((p) => p.group) ?? []
+    expect(patternGroups).toContain('llamaindex/dist/*')
   })
 
   test('should include Google GenAI import safety rules when GoogleGenAi library is enabled', async () => {
@@ -435,7 +443,7 @@ describe('Integration Rule Assertions — Libraries', () => {
 
     const names = extractConfigNames(config)
 
-    expect(names.some(n => n.toLowerCase().includes('tanstack'))).toBe(true)
+    expect(names).toContain('eslint-config-integrations/tanstack-router')
   })
 
   test('should include Storybook config when Storybook library is enabled', async () => {
@@ -445,7 +453,7 @@ describe('Integration Rule Assertions — Libraries', () => {
 
     const names = extractConfigNames(config)
 
-    expect(names.some(n => n.toLowerCase().includes('storybook'))).toBe(true)
+    expect(names).toContain('storybook:recommended:setup')
   })
 
   test('should include Stencil rules when Stencil library is enabled', async () => {
@@ -496,10 +504,12 @@ describe('Integration Rule Assertions — Libraries', () => {
     })
 
     const names = extractConfigNames(config)
-    const rules = extractRuleNames(config)
+    const ruleValue = getEffectiveRuleValue(config, 'no-restricted-imports') as [string, { paths?: { name: string }[] }] | undefined
 
     expect(names).toContain('eslint-config-integrations/mcp')
-    expect(rules).toContain('no-restricted-imports')
+    expect(ruleValue).toBeDefined()
+    const paths = ruleValue?.[1]?.paths?.map((p) => p.name) ?? []
+    expect(paths).toContain('@modelcontextprotocol/sdk')
   })
 })
 
@@ -533,7 +543,7 @@ describe('Integration Rule Assertions — Tools', () => {
 
     const names = extractConfigNames(config)
 
-    expect(names.some(n => n.toLowerCase().includes('swagger'))).toBe(true)
+    expect(names).toContain('integrations/swagger')
   })
 })
 
@@ -577,7 +587,7 @@ describe('Integration Rule Assertions — Formats', () => {
 
     const names = extractConfigNames(config)
 
-    expect(names.some(n => n.toLowerCase().includes('mdx'))).toBe(true)
+    expect(names).toContain('mdx/flat')
   })
 
   test('should include TOML config when Toml format is enabled', async () => {

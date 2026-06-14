@@ -124,7 +124,7 @@ export const getIntegrationConfigs = async (
 
   if (libraries.includes(Library.Zod)) configs.push(...await zod())
 
-  if (libraries.includes(Library.Turbo)) configs.push(...turbo())
+  if (libraries.includes(Library.Turbo)) configs.push(...await turbo())
 
   // Testing
   if (testing.includes(Testing.Vitest)) configs.push(...await vitest())
@@ -159,9 +159,9 @@ export const getIntegrationConfigs = async (
   if (formats.includes(Format.Graphql)) configs.push(...await graphql())
 
   // Extensions
-  if (extensions.includes(Extension.A11y)) configs.push(...a11y)
+  if (extensions.includes(Extension.A11y)) configs.push(...await a11y())
 
-  if (extensions.includes(Extension.Biome)) configs.push(...biome)
+  if (extensions.includes(Extension.Biome)) configs.push(...await biome())
 
   if (extensions.includes(Extension.BestPractices)) configs.push(...bestPractices)
 

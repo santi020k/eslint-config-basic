@@ -73,6 +73,9 @@
       "@santi020k/eslint-config-qwik": [
         "./packages/qwik/src/index.ts"
       ],
+      "@santi020k/eslint-config-preact": [
+        "./packages/preact/src/index.ts"
+      ],
       "@santi020k/eslint-config-remix": [
         "./packages/remix/src/index.ts"
       ],

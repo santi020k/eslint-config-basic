@@ -26,7 +26,7 @@ export const resolveFramework = async (
 ): Promise<FlatConfigArray> => {
   if (!framework) return []
 
-  if ((framework as unknown) === true) {
+  if (framework === true) {
     return getBundledFrameworkConfig(frameworkName, options)
   }
 

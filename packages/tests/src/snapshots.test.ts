@@ -3,15 +3,20 @@ import { astroConfig } from '@santi020k/eslint-config-astro'
 import { coreConfig } from '@santi020k/eslint-config-core'
 import { expoConfig } from '@santi020k/eslint-config-expo'
 import { hono as honoConfig } from '@santi020k/eslint-config-hono'
+import { lit as litConfig } from '@santi020k/eslint-config-lit'
 import { nestConfig } from '@santi020k/eslint-config-nest'
 import { nextConfig } from '@santi020k/eslint-config-next'
+import { nuxt as nuxtConfig } from '@santi020k/eslint-config-nuxt'
 import { preactConfig } from '@santi020k/eslint-config-preact'
 import { qwik as qwikConfig } from '@santi020k/eslint-config-qwik'
 import { reactConfig } from '@santi020k/eslint-config-react'
 import { reactRouter as reactRouterConfig } from '@santi020k/eslint-config-react-router'
+import { slidev as slidevConfig } from '@santi020k/eslint-config-slidev'
 import { solidConfig } from '@santi020k/eslint-config-solid'
 import { svelteConfig } from '@santi020k/eslint-config-svelte'
+import { tanstackStart as tanstackStartConfig } from '@santi020k/eslint-config-tanstack-start'
 import { typescriptConfig } from '@santi020k/eslint-config-typescript'
+import { vite as viteConfig } from '@santi020k/eslint-config-vite'
 import { vueConfig } from '@santi020k/eslint-config-vue'
 
 import { describe, expect, test } from 'vitest'
@@ -158,6 +163,36 @@ describe('Config Snapshots — Rule Names', () => {
 
     expect(rules).toMatchSnapshot()
   })
+
+  test('lit config rules should match snapshot', () => {
+    const rules = extractRuleNames(litConfig as Record<string, unknown>[])
+
+    expect(rules).toMatchSnapshot()
+  })
+
+  test('nuxt config rules should match snapshot', () => {
+    const rules = extractRuleNames(nuxtConfig as Record<string, unknown>[])
+
+    expect(rules).toMatchSnapshot()
+  })
+
+  test('tanstack-start config rules should match snapshot', () => {
+    const rules = extractRuleNames(tanstackStartConfig as Record<string, unknown>[])
+
+    expect(rules).toMatchSnapshot()
+  })
+
+  test('vite config rules should match snapshot', () => {
+    const rules = extractRuleNames(viteConfig() as Record<string, unknown>[])
+
+    expect(rules).toMatchSnapshot()
+  })
+
+  test('slidev config rules should match snapshot', () => {
+    const rules = extractRuleNames(slidevConfig() as Record<string, unknown>[])
+
+    expect(rules).toMatchSnapshot()
+  })
 })
 
 describe('Config Snapshots — Entry Names', () => {
@@ -247,6 +282,36 @@ describe('Config Snapshots — Entry Names', () => {
 
   test('react-router config entries should match snapshot', () => {
     const names = extractConfigNames(reactRouterConfig as Record<string, unknown>[])
+
+    expect(names).toMatchSnapshot()
+  })
+
+  test('lit config entries should match snapshot', () => {
+    const names = extractConfigNames(litConfig as Record<string, unknown>[])
+
+    expect(names).toMatchSnapshot()
+  })
+
+  test('nuxt config entries should match snapshot', () => {
+    const names = extractConfigNames(nuxtConfig as Record<string, unknown>[])
+
+    expect(names).toMatchSnapshot()
+  })
+
+  test('tanstack-start config entries should match snapshot', () => {
+    const names = extractConfigNames(tanstackStartConfig as Record<string, unknown>[])
+
+    expect(names).toMatchSnapshot()
+  })
+
+  test('vite config entries should match snapshot', () => {
+    const names = extractConfigNames(viteConfig() as Record<string, unknown>[])
+
+    expect(names).toMatchSnapshot()
+  })
+
+  test('slidev config entries should match snapshot', () => {
+    const names = extractConfigNames(slidevConfig() as Record<string, unknown>[])
 
     expect(names).toMatchSnapshot()
   })

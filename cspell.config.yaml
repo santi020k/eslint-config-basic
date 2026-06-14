@@ -155,5 +155,6 @@ ignorePaths:
   - packages/playground/**
   - packages/tests/src/__snapshots__/**
   - .vscode
-  - solid-config.json
+  - llms.txt
+  - llms-full.txt
 

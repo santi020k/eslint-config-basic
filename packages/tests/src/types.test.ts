@@ -1,4 +1,4 @@
-import { Extension, Format, Library, Setting, Testing, Tool } from '@santi020k/eslint-config-basic'
+import { Extension, Format, Library, Runtime, Setting, Testing, Tool } from '@santi020k/eslint-config-basic'
 
 import { describe, expect, test } from 'vitest'
 
@@ -37,6 +37,16 @@ describe('Type Exports', () => {
     expect(options).toContain('tanstack-router')
 
     expect(options).toContain('storybook')
+
+    expect(options).toContain('ai-sdk')
+
+    expect(options).toContain('autogen')
+
+    expect(options).toContain('google-genai')
+
+    expect(options).toContain('turbo')
+
+    expect(options).toContain('zod')
   })
 
   test('should have all Tool values', () => {
@@ -57,6 +67,8 @@ describe('Type Exports', () => {
     expect(options).toContain('github-actions')
 
     expect(options).toContain('nx')
+
+    expect(options).toContain('pnpm')
   })
 
   test('should have all Testing values', () => {
@@ -67,6 +79,12 @@ describe('Type Exports', () => {
     expect(options).toContain('playwright')
 
     expect(options).toContain('jest-dom')
+
+    expect(options).toContain('cypress')
+
+    expect(options).toContain('jest')
+
+    expect(options).toContain('testing-library')
   })
 
   test('should have all Format values', () => {
@@ -83,6 +101,12 @@ describe('Type Exports', () => {
     expect(options).toContain('toml')
 
     expect(options).toContain('package-json')
+
+    expect(options).toContain('css')
+
+    expect(options).toContain('graphql')
+
+    expect(options).toContain('html')
   })
 
   test('should have all Extension values', () => {
@@ -99,6 +123,22 @@ describe('Type Exports', () => {
     expect(options).toContain('perfectionist')
 
     expect(options).toContain('boundaries')
+
+    expect(options).toContain('a11y')
+
+    expect(options).toContain('best-practices')
+
+    expect(options).toContain('biome')
+
+    expect(options).toContain('compat')
+
+    expect(options).toContain('de-morgan')
+
+    expect(options).toContain('depend')
+
+    expect(options).toContain('node')
+
+    expect(options).toContain('oxlint')
   })
 
   test('should have all Setting values', () => {
@@ -111,5 +151,27 @@ describe('Type Exports', () => {
     expect(options).toContain('generated-code-ignores')
 
     expect(options).toContain('no-generated-code-ignores')
+
+    expect(options).toContain('default-ignores')
+
+    expect(options).toContain('no-default-ignores')
+  })
+
+  test('should have all Runtime values', () => {
+    const options = Object.values(Runtime)
+
+    expect(options).toContain('browser')
+
+    expect(options).toContain('bun')
+
+    expect(options).toContain('cloudflare')
+
+    expect(options).toContain('deno')
+
+    expect(options).toContain('node')
+
+    expect(options).toContain('universal')
+
+    expect(options).toContain('worker')
   })
 })

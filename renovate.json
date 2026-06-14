@@ -18,6 +18,7 @@
       "matchPackageNames": [
         "eslint",
         "@eslint/*",
+        "@eslint-react/*",
         "eslint-*",
         "@typescript-eslint/*",
         "typescript-eslint",

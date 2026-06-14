@@ -121,7 +121,7 @@ const detectFrameworks = (
     setRuntime(Runtime.Browser)
   }
 
-  if (allDeps.react && !allDeps.next && !allDeps.expo && !allDeps['react-native']) {
+  if (allDeps.react && !allDeps.next && !allDeps.expo && !allDeps['react-native'] && !allDeps['@react-router/dev'] && !allDeps['@remix-run/react'] && !allDeps['@tanstack/react-start']) {
     detected.push('react')
 
     setRuntime(Runtime.Browser)
@@ -507,6 +507,11 @@ const detectTools = (allDeps: DependencyMap, detectRootDir: string): Tool[] => {
   ) tools.push(Tool.Docker)
 
   if (pathExists(join(detectRootDir, '.github/workflows'))) tools.push(Tool.GithubActions)
+
+  if (
+    hasAnyDependency(allDeps, ['eslint-plugin-pnpm']) ||
+    pathExists(join(detectRootDir, 'pnpm-workspace.yaml'))
+  ) tools.push(Tool.Pnpm)
 
   return dedupe(tools)
 }
