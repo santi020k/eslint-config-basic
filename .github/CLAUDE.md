@@ -1,6 +1,14 @@
-# CLAUDE.md — AI Agent Guide for @santi020k/eslint-config-basic
+# CLAUDE.md — AI Orchestration Guide for @santi020k/eslint-config-basic
 
-This file provides Claude-specific guidance for working in this monorepo. Read this alongside `llms.txt` and `.agent/rules/` before making any changes.
+Claude is the **primary AI** for this project. Claude plans, decides, and orchestrates. Other AIs are tools Claude directs:
+
+| AI | Role | How Claude invokes it |
+| :--- | :--- | :--- |
+| **Claude** | Orchestrator — plans, reviews, validates | (you) |
+| **Gemini** | Large-context analysis — reads entire monorepo at once | `mcp__gemini-cli__ask-gemini` / `mcp__gemini-cli__brainstorm` |
+| **Codex** | Code generation — writes implementation from a spec | `Agent` tool with `subagent_type: "codex:codex-rescue"` |
+
+For complex tasks, use the specialized subagents in `.claude/agents/` — they know when to call Gemini or Codex and why.
 
 ## Priority Reading Order
 
@@ -8,7 +16,8 @@ This file provides Claude-specific guidance for working in this monorepo. Read t
 2. **`llms-full.txt`** — Deep technical context and architecture decisions
 3. **`.agent/rules/context.md`** — Package structure, gotchas, file modification patterns
 4. **`.agent/rules/guidelines.md`** — Code conventions, naming, ESLint config patterns
-5. **`.agent/skills/`** — Task-specific workflows (add framework, add optional, testing, release)
+5. **`.claude/skills/`** — Task-specific workflows (add framework, add integration, testing, release)
+6. **`.claude/agents/`** — Subagents for complex tasks (integration-adder, codebase-analyst, test-writer, release-validator)
 
 ## Quick Project Summary
  
@@ -83,15 +92,17 @@ npx @santi020k/eslint-config-basic generate-skill # (Beta) Sync agent standards 
 
 ## Specialized Skills
 
-Use these for specific tasks — read the relevant SKILL.md before starting:
+For detailed step-by-step procedures:
 
-| Task | Skill File |
+| Task | Skill |
 | :--- | :--- |
-| Add a new framework package | `.agent/skills/add-framework-config/SKILL.md` |
-| Add a new optional integration | `.agent/skills/add-optional-config/SKILL.md` |
-| Write or update tests | `.agent/skills/testing/SKILL.md` |
-| Release & versioning | `.agent/skills/release-process/SKILL.md` |
-| General improvements | `.agent/skills/improve-project/SKILL.md` |
+| Add a new framework package | `.claude/skills/add-framework.md` |
+| Add a new optional integration | `.claude/skills/add-integration.md` |
+| Write or update tests | `.claude/skills/testing.md` |
+| Release & versioning | `.claude/skills/release.md` |
+| Add ambient type declarations | `.claude/workflows/add-ambient-decl.md` |
+
+For tasks that involve cross-cutting changes, large context reads, or code generation, use the subagents in `.claude/agents/` — they orchestrate Gemini and Codex as needed.
 
 ## Documentation and changelog
 

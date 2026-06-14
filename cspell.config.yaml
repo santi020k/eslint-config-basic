@@ -60,7 +60,9 @@ words:
   - monorepo
   - multilines
   - modelcontextprotocol
+  - myext
   - myframework
+  - mylib
   - myoptional
   - nestjs
   - networkidle
@@ -97,6 +99,7 @@ words:
   - slidev
   - solidjs
   - sonarjs
+  - spacebar
   - st
   - stnl
   - stringly

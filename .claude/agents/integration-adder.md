@@ -58,7 +58,9 @@ Output a spec (not code) describing every file I need to create or modify."
 
 ### Step 3 — Write the failing tests first (Red)
 
-This project uses TDD. Before any factory code is written, register the contract:
+This project uses TDD. Full TDD workflow: `.claude/skills/testing.md` § TDD Workflow.
+
+Before any factory code is written, register the contract:
 
 1. Add the enum value to `packages/core/src/types.ts`
 2. Add it to the coverage arrays in `packages/tests/src/contracts.test.ts` and `packages/tests/src/types.test.ts`
