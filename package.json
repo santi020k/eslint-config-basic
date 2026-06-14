@@ -24,7 +24,7 @@
     "check:exports": "turbo run check:exports",
     "inspector": "eslint-config-inspector",
     "clean": "turbo run clean && rm -rf node_modules",
-    "prepare": "husky config/.husky",
+    "prepare": "husky",
     "ok": "pnpm install --reporter=silent && TURBO_LOG_ORDER=grouped pnpm run build && pnpm run test --silent && TURBO_LOG_ORDER=grouped pnpm run lint && TURBO_LOG_ORDER=grouped pnpm run typecheck",
     "pre-commit": "lint-staged",
     "pre-push": "pnpm run lint && pnpm run lint:spell && pnpm run typecheck && pnpm run test",

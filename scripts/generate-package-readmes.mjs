@@ -1,7 +1,7 @@
 import { writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 
-import { docsOrigin, packageDocs } from '../config/docs-packages.mjs'
+import { docsOrigin, packageDocs } from './docs-packages.mjs'
 
 /**
  * Generate a standard README.md content for a package.
