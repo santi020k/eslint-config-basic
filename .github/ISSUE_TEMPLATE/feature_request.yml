@@ -19,12 +19,28 @@ body:
       description: Select the packages relevant to this feature.
       options:
         - label: "@santi020k/eslint-config-basic"
+        - label: "@santi020k/eslint-config-lite"
         - label: "@santi020k/eslint-config-core"
         - label: "@santi020k/eslint-config-typescript"
+        - label: "@santi020k/eslint-config-integrations"
         - label: "@santi020k/eslint-config-react"
         - label: "@santi020k/eslint-config-next"
+        - label: "@santi020k/eslint-config-nuxt"
         - label: "@santi020k/eslint-config-astro"
+        - label: "@santi020k/eslint-config-vue"
+        - label: "@santi020k/eslint-config-svelte"
+        - label: "@santi020k/eslint-config-solid"
+        - label: "@santi020k/eslint-config-angular"
+        - label: "@santi020k/eslint-config-nest"
+        - label: "@santi020k/eslint-config-hono"
         - label: "@santi020k/eslint-config-expo"
+        - label: "@santi020k/eslint-config-preact"
+        - label: "@santi020k/eslint-config-qwik"
+        - label: "@santi020k/eslint-config-react-router"
+        - label: "@santi020k/eslint-config-tanstack-start"
+        - label: "@santi020k/eslint-config-lit"
+        - label: "@santi020k/eslint-config-vite"
+        - label: "@santi020k/eslint-config-slidev"
 
   - type: textarea
     id: solution

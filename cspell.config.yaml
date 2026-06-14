@@ -6,6 +6,7 @@ words:
   - app-router
   - astro
   - astrojs
+  - autobuild
   - asyncgenerator
   - attw
   - arethetypeswrong
@@ -30,6 +31,7 @@ words:
   - esac
   - esbuild
   - esmodule
+  - envinfo
   - expo
   - fetchcontent
   - flat-config
@@ -84,6 +86,8 @@ words:
   - peerdep
   - polyfillio
   - postpack
+  - pozil
+  - preact
   - project-type
   - proptypes
   - publint

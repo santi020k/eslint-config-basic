@@ -32,118 +32,80 @@ This project uses **Turborepo** with **pnpm Workspaces**. Each ESLint config liv
 
 | Package | Path | Description |
 | :--- | :--- | :--- |
-| `@santi020k/eslint-config-basic` | `packages/basic` | Main entry point, composes all configs |
-| `@santi020k/eslint-config-core` | `packages/core` | Core JS rules, types, utilities |
+| `@santi020k/eslint-config-basic` | `packages/basic` | Main entry point — `eslintConfig()` / `defineConfig()` |
+| `@santi020k/eslint-config-lite` | `packages/lite` | Lighter variant (no CLI/agent features) |
+| `@santi020k/eslint-config-core` | `packages/core` | Core JS rules, types, utilities, detection |
 | `@santi020k/eslint-config-typescript` | `packages/typescript` | TypeScript rules |
+| `@santi020k/eslint-config-integrations` | `packages/integrations` | Optional configs (Tailwind, Vitest, Drizzle, etc.) |
 | `@santi020k/eslint-config-react` | `packages/react` | React + Hooks rules |
 | `@santi020k/eslint-config-next` | `packages/next` | Next.js rules |
+| `@santi020k/eslint-config-nuxt` | `packages/nuxt` | Nuxt rules |
 | `@santi020k/eslint-config-astro` | `packages/astro` | Astro rules |
-| `@santi020k/eslint-config-expo` | `packages/expo` | Expo/React Native rules |
 | `@santi020k/eslint-config-vue` | `packages/vue` | Vue.js rules |
 | `@santi020k/eslint-config-svelte` | `packages/svelte` | Svelte rules |
 | `@santi020k/eslint-config-solid` | `packages/solid` | Solid.js rules |
 | `@santi020k/eslint-config-angular` | `packages/angular` | Angular rules |
+| `@santi020k/eslint-config-nest` | `packages/nest` | NestJS rules |
+| `@santi020k/eslint-config-hono` | `packages/hono` | Hono rules |
+| `@santi020k/eslint-config-expo` | `packages/expo` | Expo / React Native rules |
+| `@santi020k/eslint-config-preact` | `packages/preact` | Preact rules |
 | `@santi020k/eslint-config-qwik` | `packages/qwik` | Qwik rules |
-| `@santi020k/eslint-config-remix` | `packages/remix` | Remix rules |
-| `@santi020k/eslint-config-integrations` | `packages/integrations` | Optional configs (Tailwind, Vitest, etc.) |
+| `@santi020k/eslint-config-react-router` | `packages/react-router` | React Router v7 rules |
+| `@santi020k/eslint-config-tanstack-start` | `packages/tanstack-start` | TanStack Start rules |
+| `@santi020k/eslint-config-lit` | `packages/lit` | Lit / Web Components rules |
+| `@santi020k/eslint-config-vite` | `packages/vite` | Vite rules |
+| `@santi020k/eslint-config-slidev` | `packages/slidev` | Slidev rules |
+
+## TDD Workflow
+
+This project uses **Test-Driven Development**. Write tests before implementation.
+
+For integrations: adding the enum value to `packages/core/src/types.ts` is enough to get a failing `contracts.test.ts` (it auto-iterates `Object.values()`). For frameworks: add test entries in `configs.test.ts` and `composition.test.ts` before the package exists.
+
+See `.claude/skills/testing/SKILL.md` for the full Red → Green → Refactor cycle.
 
 ## Adding a New Framework Config
 
-1. **Create the package directory:**
+For the full step-by-step guide see `.claude/skills/add-framework/SKILL.md`. Summary:
 
-   ```bash
-   mkdir -p packages/myframework/src
+1. Add `'myframework'` to `DetectedFrameworkName` union and `EslintConfigOptions.frameworks` in `packages/core/src/types.ts`
+2. Write tests in `configs.test.ts` and `composition.test.ts` first — run `pnpm run test` to confirm Red
+3. Create `packages/myframework/` with `package.json`, `tsconfig.json`, `tsup.config.ts`, `src/index.ts`
+4. Register in `frameworkLoaders` Map in `packages/basic/src/frameworks.ts`:
+   ```typescript
+   ['myframework', async () =>
+     (await loadModule<{ myframework: FlatConfigArray }>('@santi020k/eslint-config-myframework')).myframework
+   ]
    ```
+5. Add to `packages/basic/package.json` as `"@santi020k/eslint-config-myframework": "workspace:^"`
+6. Add a playground at `packages/playground/myframework/`
+7. Run `pnpm run test` → must be Green
+8. Update documentation in `apps/docs/src/content/docs/frameworks/`
 
-2. **Create `packages/myframework/package.json`:**
+## Adding a New Optional Integration
 
-   ```json
-   {
-     "name": "@santi020k/eslint-config-myframework",
-     "version": "0.0.0",
-     "type": "module",
-     "main": "./dist/index.js",
-     "module": "./dist/index.js",
-     "types": "./dist/index.d.ts",
-     "exports": {
-       ".": {
-         "import": "./dist/index.js",
-         "types": "./dist/index.d.ts"
-       }
-     },
-     "files": ["dist"],
-     "scripts": {
-       "build": "tsup",
-       "dev": "tsup --watch",
-       "clean": "rm -rf dist"
-     },
-     "dependencies": {
-       "@santi020k/eslint-config-core": "*"
-     },
-     "devDependencies": {
-       "tsup": "^8.5.1",
-       "typescript": "^5.9.3",
-       "@typescript-eslint/utils": "^8.54.0"
-     }
-   }
-   ```
+For the full step-by-step guide see `.claude/skills/add-integration/SKILL.md`. Summary:
 
-3. **Create `packages/myframework/tsconfig.json`:**
-
-   ```json
-   {
-     "extends": "../../tsconfig.base.json",
-     "compilerOptions": {
-       "outDir": "./dist",
-       "rootDir": "./src"
-     },
-     "include": ["src/**/*.ts"],
-     "exclude": ["node_modules", "dist"]
-   }
-   ```
-
-4. **Create `packages/myframework/tsup.config.ts`** (copy from an existing package).
-
-5. **Create `packages/myframework/src/index.ts`:**
-
-    ```typescript
-    import type { TSESLint } from '@typescript-eslint/utils'
-
-    export const myframeworkConfig: TSESLint.FlatConfig.ConfigArray = [
-      {
-        name: 'eslint-config/myframework',
-        rules: {
-          // Add your rules here
-        }
-      }
-    ]
-    ```
-
-6. **Compose in `packages/basic/src/index.ts`.**
-
-7. **Add tests** in `packages/tests/src/`.
-
-### Specific Framework Guides
-
-#### React, Next.js, Astro, Expo, NestJS, Vue, Svelte, Solid, Angular, Qwik, Remix
-
-These are already implemented. See their respective `packages/` for reference.
-
-## Adding a New Optional
-
-1. Create `packages/integrations/src/<category>/myoptional.ts` with your config.
-2. Export from the category barrel (`packages/integrations/src/<category>/index.ts`) and the root barrel (`packages/integrations/src/index.ts`).
-3. Compose in `packages/basic/src/integrations.ts` (delegates to `@santi020k/eslint-config-integrations`).
+1. Add the enum value to the appropriate enum in `packages/core/src/types.ts` — this alone makes `contracts.test.ts` fail (Red)
+2. Create `packages/integrations/src/{category}/{name}.ts` using `defineLazyConfig` from `../lazy.js`
+3. Import and add an `if` block in `packages/integrations/src/compose.ts` inside `getIntegrationConfigs()`
+4. Export from `packages/integrations/src/index.ts`
+5. Run `pnpm run test` → must be Green
+6. Add `.toContain('value')` to `types.test.ts`, rule assertions to `options.test.ts`
+7. Update documentation in `apps/docs/src/content/docs/tooling/`
 
 ## Available Commands
 
 ```bash
-pnpm run build      # Build all packages (Turborepo)
-pnpm run lint       # Lint entire monorepo
-pnpm run lint:fix   # Fix lint issues
-pnpm run test       # Run tests (Vitest)
-pnpm run dev        # Watch mode
-pnpm run inspector  # Visual ESLint config inspector
+pnpm run ok           # All-in-one: install + build + test + lint + typecheck
+pnpm run build        # Build all packages (Turborepo)
+pnpm run typecheck    # TypeScript check across all packages
+pnpm run test         # Run Vitest suite (packages/tests)
+pnpm run lint         # ESLint + CSpell + Knip across monorepo
+pnpm run lint:fix     # Fix lint issues
+pnpm run dev          # Watch mode
+pnpm run inspector    # Visual ESLint config inspector
+pnpm run changeset    # Create a changeset for your changes
 ```
 
 ## Documentation
@@ -180,13 +142,14 @@ npx cz
 2. Make sure all checks pass:
 
     ```bash
-      pnpm run build && pnpm run lint && pnpm run test
+    pnpm run ok
     ```
 
 3. Write clear, descriptive commit messages following conventional commits.
-4. Update documentation whenever you add or change public framework packages, optional integrations, or user-facing setup flows. This includes the relevant VitePress pages in `apps/docs/`, the root `README.md`, and package-level `README.md` files when applicable.
-5. Follow `apps/docs/DOCS_GOVERNANCE.md` for current docs vs `v1` archive policy when docs are touched.
-6. Add tests for new functionality.
+4. **Create a changeset** if your change affects published packages: `pnpm run changeset`. The changeset bot will flag missing changesets on your PR.
+5. Update documentation whenever you add or change public framework packages, optional integrations, or user-facing setup flows. This includes the relevant pages in `apps/docs/`, the root `README.md`, and package-level `README.md` files when applicable.
+6. Follow `apps/docs/DOCS_GOVERNANCE.md` for current docs vs `v1` archive policy when docs are touched.
+7. Follow the **TDD workflow**: write tests before implementation. See `.claude/skills/testing/SKILL.md`.
 
 ## Questions?
 

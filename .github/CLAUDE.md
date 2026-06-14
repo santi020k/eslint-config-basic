@@ -44,27 +44,32 @@ export default await eslintConfig() // auto-detects your stack
 
 ```text
 packages/
-  basic/       ← main entry point — eslintConfig() function
-  core/        ← base JS rules, shared types/enums, utilities
-  typescript/  ← TypeScript rules
-  integrations/← all integrations (tools/libraries/testing/formats/extensions)
-  react/       ← React + Hooks
-  next/        ← Next.js
-  astro/       ← Astro
-  vue/         ← Vue
-  svelte/      ← Svelte
-  solid/       ← SolidJS
-  angular/     ← Angular
-  nest/        ← NestJS
-  hono/        ← Hono
-  expo/        ← Expo / React Native
-  qwik/        ← Qwik
-  remix/       ← Remix
-  vite/        ← Vite
-  slidev/      ← Slidev
-  tests/       ← Vitest integration tests
-  docs/        ← Astro Starlight documentation site
-  playground/  ← 20+ real ESLint environments for manual validation
+  basic/          ← main entry point — eslintConfig() / defineConfig()
+  lite/           ← lighter variant (same factory, no CLI/agent features)
+  core/           ← base JS rules, shared types/enums, utilities
+  typescript/     ← TypeScript rules
+  integrations/   ← all optional integrations (tools/libraries/testing/formats/extensions)
+  react/          ← React + Hooks
+  next/           ← Next.js
+  nuxt/           ← Nuxt
+  astro/          ← Astro
+  vue/            ← Vue
+  svelte/         ← Svelte
+  solid/          ← SolidJS
+  angular/        ← Angular
+  nest/           ← NestJS
+  hono/           ← Hono
+  expo/           ← Expo / React Native
+  preact/         ← Preact
+  qwik/           ← Qwik
+  react-router/   ← React Router v7
+  remix/          ← Remix (deprecated, use react-router)
+  tanstack-start/ ← TanStack Start
+  lit/            ← Lit / Web Components
+  vite/           ← Vite
+  slidev/         ← Slidev
+  tests/          ← Vitest integration tests (21 test files)
+  playground/     ← real ESLint environments for manual validation
 ```
 
 ## Key Files
@@ -72,22 +77,27 @@ packages/
 | File | Purpose |
 | :--- | :--- |
 | `packages/core/src/types.ts` | **Single source of truth** for all enums: `Library`, `Testing`, `Format`, `Tool`, `Extension`, `Setting`, `Runtime`, `Preset` |
-| `packages/basic/src/index.ts` | Composes everything into `eslintConfig()` |
-| `packages/basic/src/integrations.ts` | Maps enum values → config arrays |
+| `packages/basic/src/index.ts` | Composes everything into `eslintConfig()` / `defineConfig()` |
+| `packages/integrations/src/compose.ts` | **Maps enum values → config arrays** via `getIntegrationConfigs()` |
+| `packages/basic/src/integrations.ts` | Re-export wrapper only (`export { getIntegrationConfigs } from '@santi020k/eslint-config-integrations'`) |
+| `packages/basic/src/frameworks.ts` | Framework lazy registry — `Map<FrameworkName, FrameworkLoader>` |
+| `packages/integrations/src/lazy.ts` | `defineLazyConfig()` utility — wraps peer-dep imports with helpful errors |
 | `packages/basic/src/resolvers.ts` | Framework and preset resolution logic |
-| `packages/basic/src/compose.ts` | Strict mode helper |
-| `packages/core/src/utils/detection.ts` | Auto-detection logic (reads package.json + tsconfigs) |
-| `packages/basic/src/agent-skill-generator.ts` | Logic for generating agent-specific standards files |
+| `packages/core/src/utils/detection.ts` | Auto-detection logic (reads package.json deps + file system signals) |
+| `packages/basic/src/agent-skill-generator.ts` | Generates AI agent standards files from the active config |
 
 ## Validation Commands
 
 Always run these from the **repo root** before considering any task done:
 
 ```bash
-pnpm run build   # Build all packages via Turborepo
-pnpm run lint    # ESLint + CSpell + Knip across monorepo
-pnpm run test    # Vitest integration suite (packages/tests)
-npx @santi020k/eslint-config-basic generate-skill # (Beta) Sync agent standards with your config
+pnpm run ok           # All-in-one: install + build + test + lint + typecheck
+# Or step by step:
+pnpm run build        # Build all packages via Turborepo
+pnpm run typecheck    # TypeScript check (100 packages including playgrounds)
+pnpm run test         # Vitest integration suite (packages/tests)
+pnpm run lint         # ESLint + CSpell + Knip across monorepo
+pnpm -w run release:check  # Full pre-release gate
 ```
 
 ## Specialized Skills
@@ -109,7 +119,7 @@ For tasks that involve cross-cutting changes, large context reads, or code gener
 
 ### Changelog
 
-Do **not** edit `packages/*/CHANGELOG.md` by hand for routine work. This repo uses [Changesets](https://github.com/changesets/changesets): run `pnpm run changeset`, choose affected packages and semver level, write the summary, and commit the generated file under `.changeset/`. Release automation updates package changelogs when the Version Packages PR merges. See `.agent/skills/release-process/SKILL.md`.
+Do **not** edit `packages/*/CHANGELOG.md` by hand for routine work. This repo uses [Changesets](https://github.com/changesets/changesets): run `pnpm run changeset`, choose affected packages and semver level, write the summary, and commit the generated file under `.changeset/`. Release automation updates package changelogs when the Version Packages PR merges. See `.claude/skills/release/SKILL.md`.
 
 Meaningful docs-site updates belong in the same release notes when `@santi020k/eslint-config-docs` is included in that changeset (packages share fixed versioning—see `.changeset/config.json`).
 
@@ -131,22 +141,22 @@ This project follows **Test-Driven Development**. Tests are written before imple
 
 **Red** — define the contract first:
 1. Add the enum value to `packages/core/src/types.ts`
-2. Add it to the coverage array in `packages/tests/src/contracts.test.ts`
-3. Run `pnpm run test` → it must **fail** here (no factory yet)
+2. Run `pnpm run test` → it must **fail** here — `contracts.test.ts` auto-iterates `Object.values(Library)` (and other enums), so just adding the enum is enough to get Red. No manual test update needed.
 
 **Green** — implement until the test passes:
-4. Create the factory file in `packages/integrations/src/` (or new framework package)
-5. Register it in the lazy loader (`integrations/src/lazy.ts` or `basic/src/frameworks.ts`)
-6. Re-export from `integrations/src/index.ts` and `basic/src/index.ts`
-7. Run `pnpm run test` → must **pass** now
+3. Create the factory file in `packages/integrations/src/{category}/`
+4. Import it in `packages/integrations/src/compose.ts` and add an `if` block in `getIntegrationConfigs()`
+5. Export from `packages/integrations/src/index.ts`
+6. Run `pnpm run test` → must **pass** now
 
 **Refactor** — add coverage depth:
+7. Add `.toContain('value')` to `types.test.ts`
 8. Add rule-specific assertions in `options.test.ts`
 9. Add detection test in `detection.test.ts` if auto-detectable
 10. Add snapshot test in `snapshots.test.ts`
-11. `pnpm run build && pnpm run test` → still green
+11. `pnpm run ok` → still green
 
-**Never skip Red.** If tests pass before you implement the factory, the test isn't testing anything real.
+**Never skip Red.** If tests pass before you implement the factory, the test isn't covering anything real.
 
 ## Critical Conventions
 
