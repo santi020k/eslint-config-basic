@@ -1,7 +1,7 @@
 {
   "name": "@santi020k/eslint-config-basic-root",
   "version": "1.0.0",
-  "private": true,
+  "private": false,
   "publishConfig": {
     "access": "public"
   },
@@ -9,7 +9,14 @@
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
+    "build:schema": "ts-json-schema-generator -p packages/core/src/types.ts -t EslintConfigOptions -o eslint-config-schema.json",
     "typecheck": "turbo run typecheck",
+    "clean": "turbo run clean && rm -rf node_modules",
+
+    "test": "pnpm run build && pnpm run test:run",
+    "test:run": "pnpm --filter @santi020k/eslint-config-tests run test",
+    "test:coverage": "pnpm run build && pnpm --filter @santi020k/eslint-config-tests run test:coverage",
+
     "lint": "pnpm run build && pnpm run lint:repo && turbo run lint",
     "lint:repo": "eslint . --no-warn-ignored",
     "lint:fix": "pnpm run build && pnpm run lint:repo:fix && turbo run lint:fix",
@@ -18,35 +25,33 @@
     "lint:changed:fix": "node scripts/lint-changed-files.mjs --fix",
     "lint:spell": "cspell \"**\" --gitignore --cache --show-suggestions --show-context",
     "lint:knip": "knip",
-    "test": "pnpm run build && pnpm run test:run",
-    "test:run": "pnpm --filter @santi020k/eslint-config-tests run test",
-    "test:coverage": "pnpm run build && pnpm --filter @santi020k/eslint-config-tests run test:coverage",
-    "check:exports": "turbo run check:exports",
+
+    "ok": "pnpm install --reporter=silent && TURBO_LOG_ORDER=grouped pnpm run build && pnpm run test:run && pnpm run lint:repo && TURBO_LOG_ORDER=grouped turbo run lint && TURBO_LOG_ORDER=grouped pnpm run typecheck",
     "inspector": "eslint-config-inspector",
-    "clean": "turbo run clean && rm -rf node_modules",
-    "prepare": "husky",
-    "ok": "pnpm install --reporter=silent && TURBO_LOG_ORDER=grouped pnpm run build && pnpm run test --silent && TURBO_LOG_ORDER=grouped pnpm run lint && TURBO_LOG_ORDER=grouped pnpm run typecheck",
-    "pre-commit": "lint-staged",
-    "pre-push": "pnpm run lint && pnpm run lint:spell && pnpm run typecheck && pnpm run test",
+
     "docs": "pnpm run docs:build",
-    "docs:api": "node scripts/generate-api-docs.mjs && pnpm run docs:sync-changelog",
     "docs:build": "pnpm run docs:api && pnpm --filter @santi020k/eslint-config-docs run docs:build",
-    "build:schema": "ts-json-schema-generator -p packages/core/src/types.ts -t EslintConfigOptions -o eslint-config-schema.json",
     "docs:dev": "pnpm run docs:api && pnpm --filter @santi020k/eslint-config-docs run docs:dev",
     "docs:preview": "pnpm --filter @santi020k/eslint-config-docs run docs:preview",
-    "docs:test:a11y": "pnpm --filter @santi020k/eslint-config-docs run test:a11y",
-    "docs:test": "pnpm run docs:test:a11y && pnpm --filter @santi020k/eslint-config-docs run lighthouse",
-    "docs:md": "pnpm run docs:api",
+    "docs:api": "node scripts/generate-api-docs.mjs && pnpm run docs:sync-changelog",
     "docs:sync-readmes": "node scripts/generate-package-readmes.mjs",
     "docs:sync-changelog": "node scripts/sync-docs-changelog.mjs",
+    "docs:test": "pnpm run docs:test:a11y && pnpm --filter @santi020k/eslint-config-docs run lighthouse",
+    "docs:test:a11y": "pnpm --filter @santi020k/eslint-config-docs run test:a11y",
     "docs:clean": "pnpm --filter @santi020k/eslint-config-docs run docs:clean",
+
     "changeset": "changeset",
     "version-packages": "changeset version",
+    "check:exports": "turbo run check:exports",
     "check:package-metrics": "node scripts/package-metrics.mjs",
     "check:publish-dry-run": "node scripts/check-publish-dry-run.mjs",
     "check:attw": "node scripts/check-attw.mjs",
     "release:check": "TURBO_LOG_ORDER=grouped pnpm run build && pnpm run check:exports && pnpm run check:package-metrics && pnpm run check:publish-dry-run && pnpm run check:attw && pnpm run typecheck && pnpm run test:run",
-    "release": "pnpm run release:check && changeset publish"
+    "release": "pnpm run release:check && changeset publish",
+
+    "prepare": "husky",
+    "pre-commit": "lint-staged",
+    "pre-push": "pnpm run lint && pnpm run lint:spell && pnpm run typecheck && pnpm run test"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "catalog:",
@@ -67,6 +72,14 @@
     "typedoc-plugin-markdown": "catalog:",
     "typescript": "catalog:"
   },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,md,mdx,json,yaml,yml,toml,vue,svelte,astro}": [
+      "cspell --no-must-find-files"
+    ],
+    "*.{js,jsx,ts,tsx,md,mdx,vue,svelte,astro}": [
+      "eslint --fix --no-warn-ignored"
+    ]
+  },
   "engines": {
     "node": ">=22.18.0"
   },
@@ -76,14 +89,6 @@
     "url": "git+https://github.com/santi020k/eslint-config-basic.git"
   },
   "homepage": "https://eslint.santi020k.com/",
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx,md,mdx,json,yaml,yml,toml,vue,svelte,astro}": [
-      "cspell --no-must-find-files"
-    ],
-    "*.{js,jsx,ts,tsx,md,mdx,vue,svelte,astro}": [
-      "eslint --fix --no-warn-ignored"
-    ]
-  },
   "author": "santi020k",
   "license": "MIT"
 }
