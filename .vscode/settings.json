@@ -1,8 +1,11 @@
 {
-  // This matches the value configured on the autoformatter
+  // Matches the print width configured in Prettier
   "editor.rulers": [80],
 
-  // An array of language ids which should be validated by ESLint
+  // ESLint flat config opt-in
+  "eslint.useFlatConfig": true,
+
+  // Languages ESLint should validate — mirrors the Format integrations this project ships
   "eslint.validate": [
     "javascript",
     "javascriptreact",
@@ -21,39 +24,67 @@
     "yaml",
     "toml",
     "html",
-    "css",
-    "scss",
-    "less"
+    "css"
   ],
-  // required to make the extension pickup the flat config
-  "eslint.useFlatConfig": true,
 
-  // When enabled, will trim trailing whitespace when saving a file.
-  "files.trimTrailingWhitespace": true,
+  // Format on save/paste via ESLint (Prettier runs last through the ESLint integration)
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
 
-  // typescript auto-format settings
+  // Language-specific default formatters
+  "[javascript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[svelte]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[astro]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // TypeScript SDK — use the workspace-root TypeScript for consistency across all packages
   "typescript.tsdk": "node_modules/typescript/lib",
   "javascript.preferences.importModuleSpecifier": "project-relative",
   "typescript.preferences.importModuleSpecifier": "project-relative",
   "javascript.preferences.quoteStyle": "single",
   "typescript.preferences.quoteStyle": "single",
 
-  // make the .shot files from jest-specific-snapshot act like normal snapshots
+  // pnpm monorepo
+  "npm.packageManager": "pnpm",
+
+  // Trim trailing whitespace on save
+  "files.trimTrailingWhitespace": true,
+
+  // Vitest snapshot files
   "files.associations": {
     "*.shot": "jest-snapshot"
   },
 
-  "editor.formatOnSave": true,
-  "editor.formatOnPaste": true,
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-  },
-  "[scss]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-  },
+  // Keep node_modules visible — useful when debugging peer dependency issues in this package
   "files.exclude": {
     "**/.git": true,
     "**/.svn": true,
@@ -63,7 +94,21 @@
     "**/Thumbs.db": true,
     "**/node_modules": false
   },
-  "[typescript]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+
+  // Exclude generated/cache folders from search — improves speed significantly in a 26-package monorepo
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/.turbo": true,
+    "**/coverage": true
   },
+
+  // Exclude heavy folders from the file watcher to reduce CPU usage
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/node_modules/**": true,
+    "**/dist/**": true,
+    "**/.turbo/**": true,
+    "**/coverage/**": true
+  }
 }
