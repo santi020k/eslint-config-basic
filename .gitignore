@@ -12,8 +12,5 @@ package-lock.json
 # Turborepo
 .turbo
 
-# Local AI agent session data
-.claude/
-
 # CSpell cache
 .cspellcache
