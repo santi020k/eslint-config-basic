@@ -14,9 +14,9 @@ For complex tasks, use the specialized subagents in `.claude/agents/` — they k
 
 1. **`llms.txt`** — Quick project overview and commands
 2. **`llms-full.txt`** — Deep technical context and architecture decisions
-3. **`.agent/rules/context.md`** — Package structure, gotchas, file modification patterns
-4. **`.agent/rules/guidelines.md`** — Code conventions, naming, ESLint config patterns
-5. **`.claude/skills/`** — Task-specific workflows (add framework, add integration, testing, release)
+3. **`.claude/context/architecture.md`** — Package structure, dependency graph, gotchas, file modification patterns
+4. **`.claude/context/conventions.md`** — Code conventions, naming, ESLint config patterns
+5. **`.claude/skills/`** — Task-specific workflows (add-framework, add-integration, detection, testing, release)
 6. **`.claude/agents/`** — Subagents for complex tasks (integration-adder, codebase-analyst, test-writer, release-validator)
 
 ## Quick Project Summary
@@ -96,11 +96,11 @@ For detailed step-by-step procedures:
 
 | Task | Skill |
 | :--- | :--- |
-| Add a new framework package | `.claude/skills/add-framework.md` |
-| Add a new optional integration | `.claude/skills/add-integration.md` |
-| Add auto-detection for a framework/library | `.claude/skills/detection.md` |
-| Write or update tests | `.claude/skills/testing.md` |
-| Release & versioning | `.claude/skills/release.md` |
+| Add a new framework package | `.claude/skills/add-framework/SKILL.md` |
+| Add a new optional integration | `.claude/skills/add-integration/SKILL.md` |
+| Add auto-detection for a framework/library | `.claude/skills/detection/SKILL.md` |
+| Write or update tests | `.claude/skills/testing/SKILL.md` |
+| Release & versioning | `.claude/skills/release/SKILL.md` |
 | Add ambient type declarations | `.claude/workflows/add-ambient-decl.md` |
 
 For tasks that involve cross-cutting changes, large context reads, or code generation, use the subagents in `.claude/agents/` — they orchestrate Gemini and Codex as needed.
