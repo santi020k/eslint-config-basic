@@ -32,7 +32,7 @@ Use `mcp__gemini-cli__brainstorm` when exploring approaches to a problem (multip
 
 **Enums:** Extension, Format, Library, Testing, Tool, Setting, Runtime, DetectedFrameworkName — all in `packages/core/src/types.ts`.
 
-**Lazy loading invariant:** No integration may be eagerly imported. Framework loaders live in `packages/basic/src/frameworks.ts`. Integration loaders live in `packages/integrations/src/lazy.ts`.
+**Lazy loading invariant:** No integration may be eagerly imported. Framework loaders live in `packages/basic/src/frameworks.ts`. Integration enum→factory wiring lives in `packages/integrations/src/compose.ts` (`getIntegrationConfigs()`). `packages/integrations/src/lazy.ts` is a shared utility module (`defineLazyConfig`, `loadDefault`, `loadModule`) — nothing is registered there.
 
 **Public API surface:** `packages/basic/src/index.ts` re-exports everything. Changes here are breaking changes.
 

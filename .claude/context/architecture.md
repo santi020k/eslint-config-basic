@@ -9,7 +9,7 @@ trigger: always_on
 1. **`llms.txt`** - Project overview and architecture
 2. **`packages/basic/src/index.ts`** - Main entry point composing all configs
 3. **`packages/core/src/types.ts`** - All enums (Library, Testing, Format, Tool, Extension, Runtime, Preset, etc.)
-4. **`./guidelines.md`** - Detailed coding guidelines
+4. **`.claude/context/conventions.md`** - Naming conventions, import style, virtual script file pattern, common pitfalls
 
 ## Project Summary
 

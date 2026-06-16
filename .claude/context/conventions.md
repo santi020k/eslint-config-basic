@@ -20,7 +20,7 @@ The project is a **monorepo** using Turborepo and pnpm Workspaces.
 ### Packages
 
 - `packages/basic/src/index.ts` - Main entry point; exports `eslintConfig()` and re-exports all enums/configs
-- `packages/basic/src/integrations.ts` - Maps integration enums to config arrays; this is where integrations are wired
+- `packages/basic/src/integrations.ts` - Re-export barrel: `export { getIntegrationConfigs, getPrettierConfig } from '@santi020k/eslint-config-integrations'`; the actual enum→factory wiring is in `packages/integrations/src/compose.ts`
 - `packages/basic/src/frameworks.ts` - Bundled framework configs and detected-framework flags
 - `packages/basic/src/resolvers.ts` - Framework and preset resolution logic
 - `packages/basic/src/compose.ts` - Strict mode and typed-rules override helpers

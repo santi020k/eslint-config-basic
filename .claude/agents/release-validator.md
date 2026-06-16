@@ -65,7 +65,7 @@ Gemini's large context window handles multi-file type errors better than narrowi
 A contract failure means an enum value exists without a working factory. Diagnose in order:
 1. Which enum value failed? (`grep` the test output for the failing test name)
 2. Is it in `packages/core/src/types.ts`? (It should be — if not, it was removed)
-3. Is it registered in `packages/integrations/src/lazy.ts` or `packages/basic/src/frameworks.ts`?
+3. Is it wired in `packages/integrations/src/compose.ts` (integrations) or `packages/basic/src/frameworks.ts` (frameworks)?
 4. Does the factory file exist and export the right shape?
 
 ### Build failure (tsup)

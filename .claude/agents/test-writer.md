@@ -13,7 +13,7 @@ tools:
 
 # Test Writer
 
-You write and update tests for `@santi020k/eslint-config-basic`. The test suite has ~508 tests across 8 files in `packages/tests/src/`. You must follow existing patterns exactly — consistency matters more than cleverness here. Full pattern reference: `.claude/skills/testing.md`.
+You write and update tests for `@santi020k/eslint-config-basic`. The test suite has ~508 tests across 21 files in `packages/tests/src/`. You must follow existing patterns exactly — consistency matters more than cleverness here. Full pattern reference: `.claude/skills/testing/SKILL.md`.
 
 ## TDD Mode vs Coverage Mode
 

@@ -22,7 +22,8 @@ packages/
   core/src/types.ts              ← ALL enums (single source of truth)
   basic/src/index.ts             ← eslintConfig() factory + all re-exports
   basic/src/frameworks.ts        ← framework lazy registry (DetectedFrameworkName)
-  integrations/src/lazy.ts       ← integration lazy loaders (libs, tools, formats, extensions)
+  integrations/src/compose.ts    ← enum→factory wiring: getIntegrationConfigs() if-blocks
+  integrations/src/lazy.ts       ← utility helpers: defineLazyConfig, loadDefault, loadModule
   integrations/src/index.ts      ← integration re-exports
   tests/src/contracts.test.ts    ← MUST PASS: every enum value → config verified
   [framework]/                   ← standalone framework packages (react, vue, next, etc.)
@@ -58,7 +59,7 @@ Output a spec (not code) describing every file I need to create or modify."
 
 ### Step 3 — Write the failing tests first (Red)
 
-This project uses TDD. Full TDD workflow: `.claude/skills/testing.md` § TDD Workflow.
+This project uses TDD. Full TDD workflow: `.claude/skills/testing/SKILL.md` § TDD Workflow.
 
 Before any factory code is written, register the contract:
 
@@ -85,8 +86,8 @@ Files that need to change:
 
 | File | Change |
 |------|--------|
-| `packages/integrations/src/[category]/[name].ts` | New factory file (or new framework package) |
-| `packages/integrations/src/lazy.ts` | Register lazy loader |
+| `packages/integrations/src/[category]/[name].ts` | New factory file — uses `defineLazyConfig`/`loadDefault` from `lazy.ts` |
+| `packages/integrations/src/compose.ts` | Add import + `if` block inside `getIntegrationConfigs()` |
 | `packages/integrations/src/index.ts` | Re-export |
 | `packages/basic/src/index.ts` | Re-export from main package |
 | New `packages/[name]/package.json` | Only for new framework packages |
