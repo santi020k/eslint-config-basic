@@ -1,6 +1,6 @@
 ---
 name: test-writer
-description: Write or update tests for this project — new integration coverage, snapshot updates, composition tests, or when CI test failures need new coverage. Understands all 8 test file patterns.
+description: Write or update tests for this project — new integration coverage, snapshot updates, composition tests, or when CI test failures need new coverage. Understands all 21 test file patterns.
 model: claude-sonnet-4-6
 tools:
   - Read
@@ -27,16 +27,31 @@ Always confirm with the user which mode you're in before writing tests. If uncle
 
 ## Test File Map
 
+Full pattern reference: `.claude/skills/testing/SKILL.md` § Test File Map (21 files).
+
 | File | Purpose | When to touch |
 |------|---------|---------------|
-| `contracts.test.ts` | Every enum value → config; every DetectedFrameworkName resolves | Adding any new enum value or framework |
+| `contracts.test.ts` | Every enum value → config; every DetectedFrameworkName resolves. **Auto-iterates `Object.values()` — adding an enum is enough to get Red** | Adding any new enum value or framework |
+| `types.test.ts` | Enum string values present (`.toContain('value')`). Needs a new line per new enum | Adding any new enum value |
 | `configs.test.ts` | Individual package exports + enum export coverage | Adding new packages or integration exports |
 | `public-api.test.ts` | Integration factories re-exported from basic | Adding new factories to the public API |
 | `detection.test.ts` | Auto-detection from package.json deps | Adding new auto-detectable frameworks/libs |
+| `detection-fixtures.test.ts` | Detection with real `package.json` fixture combos | Complex detection combos |
+| `detection-internals.test.ts` | Unit tests for internal detection helpers | Rarely |
 | `snapshots.test.ts` | Rule snapshot regression | Adding rules or when rules change intentionally |
+| `composed-snapshots.test.ts` | Snapshots for multi-option composed configs | Rarely |
 | `composition.test.ts` | `eslintConfig()` composition behavior | New config options or composition logic changes |
+| `options.test.ts` | Deep rule assertions — specific rules present when right options passed | New integrations |
 | `integration.test.ts` | Real linting of fixture files | New file formats or language support |
+| `edge-cases.test.ts` | Framework conflicts and edge cases | Rarely |
+| `invariants.test.ts` | Config ordering invariants | Rarely |
+| `strict-lazy.test.ts` | Strict mode lazy loading and merging | Rarely |
+| `rules.test.ts` | Core/React/TypeScript rule exports | Rarely |
 | `cli.test.ts` | CLI command behavior | CLI commands added or changed |
+| `consumer-e2e.test.ts` | E2E linting against built package from external context | Rarely |
+| `package-artifacts.test.ts` | All public packages have `dist/` artifacts | Rarely |
+| `roadmap.test.ts` | Planned feature expectations | Rarely |
+| `playground-frameworks.test.ts` | Framework playground environment linting | New playgrounds |
 
 ## Workflow
 

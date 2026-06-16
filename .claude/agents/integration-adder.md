@@ -63,8 +63,10 @@ This project uses TDD. Full TDD workflow: `.claude/skills/testing.md` § TDD Wor
 Before any factory code is written, register the contract:
 
 1. Add the enum value to `packages/core/src/types.ts`
-2. Add it to the coverage arrays in `packages/tests/src/contracts.test.ts` and `packages/tests/src/types.test.ts`
+2. Add a `.toContain('value')` line to `packages/tests/src/types.test.ts` in the right describe block
 3. Run tests — **it must fail here.** A passing test before implementation means the test isn't verifying anything real.
+
+Note: `contracts.test.ts` auto-iterates `Object.values()` — no manual update needed there. Adding the enum to `types.ts` is enough to make contracts go red.
 
 ```bash
 pnpm run test  # Expected: RED — contracts test fails because no factory exists yet

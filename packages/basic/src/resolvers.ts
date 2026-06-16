@@ -41,7 +41,7 @@ export const resolveFramework = async (
       return (framework.default)(options)
     }
 
-    return framework.default
+    if (Array.isArray(framework.default)) return framework.default
   }
 
   // Handle config arrays directly

@@ -33,6 +33,7 @@ import {
   mdx,
   mikroOrm,
   node,
+  noOnlyTests,
   nx,
   openAiAgents,
   oxlint,
@@ -219,6 +220,7 @@ describe('Public API Re-exports', () => {
     expect(typeof compat).toBe('function')
     expect(typeof deMorgan).toBe('function')
     expect(typeof depend).toBe('function')
+    expect(typeof noOnlyTests).toBe('function')
     expect(typeof node).toBe('function')
     expect(typeof oxlint).toBe('function')
     expect(typeof perfectionist).toBe('function')
@@ -249,6 +251,7 @@ describe('Integrations subpath exports', () => {
       'compat',
       'deMorgan',
       'depend',
+      'noOnlyTests',
       'node',
       'oxlint',
       'perfectionist',

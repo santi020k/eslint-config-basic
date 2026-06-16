@@ -126,5 +126,5 @@ All commands must pass before considering work complete.
 1. Create `packages/integrations/src/{category}/{name}.ts` (category = `tools`, `libraries`, `testing`, `formats`, or `extensions`)
 2. Export from `packages/integrations/src/index.ts`
 3. Add to the appropriate enum in `packages/core/src/types.ts` (`Tool`, `Library`, `Testing`, `Format`, or `Extension`)
-4. Wire into `packages/basic/src/integrations.ts` using the matching enum check (e.g. `libraries.includes(Library.X)`)
+4. Wire into `packages/integrations/src/compose.ts` — add `import` at top and `if` block inside `getIntegrationConfigs()` (e.g. `if (libraries.includes(Library.X)) configs.push(...await myLib())`)
 5. Update tests in `packages/tests/src/options.test.ts` and `packages/tests/src/detection.test.ts`

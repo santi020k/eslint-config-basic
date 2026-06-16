@@ -49,10 +49,10 @@ Use `mcp__gemini-cli__brainstorm` when exploring approaches to a problem (multip
 # Extract all enum values
 grep -E "^\s+\w+ = '" packages/core/src/types.ts
 
-# Check which have lazy loader registrations
-grep -E "case '|'\s*:" packages/integrations/src/lazy.ts packages/basic/src/frameworks.ts
+# Check which have wiring in compose.ts (integrations) and frameworks.ts (frameworks)
+grep -E "includes\(|loadModule" packages/integrations/src/compose.ts packages/basic/src/frameworks.ts
 ```
-Feed both outputs to Gemini: "Find any enum values with no corresponding case in the lazy loaders."
+Feed both outputs to Gemini: "Find any enum values with no corresponding wiring in compose.ts or frameworks.ts."
 
 ### Pattern consistency check
 ```bash

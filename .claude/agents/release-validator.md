@@ -15,6 +15,10 @@ You run the full validation pipeline for `@santi020k/eslint-config-basic` and pr
 ## Pipeline (run in this exact order — stop on first failure)
 
 ```bash
+# Option A: all-in-one (install + build + typecheck + test + lint)
+pnpm run ok
+
+# Option B: step by step (use when diagnosing a specific failure stage)
 # 1. Build all packages (tsup)
 pnpm run build
 
@@ -31,7 +35,7 @@ pnpm -w run lint:repo
 pnpm -w run release:check
 ```
 
-Stop on first failure and diagnose it before continuing — running later steps on a broken build wastes time and produces misleading errors.
+Prefer `pnpm run ok` for a clean validation run. Use the step-by-step form only when you need to isolate a specific failure stage. Stop on first failure and diagnose it before continuing — running later steps on a broken build wastes time and produces misleading errors.
 
 ## Known-Acceptable Warnings — Do NOT Flag These
 

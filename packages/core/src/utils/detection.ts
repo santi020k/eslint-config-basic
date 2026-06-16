@@ -8,7 +8,9 @@ type DependencyMap = Record<string, string | undefined>
 interface PackageJson {
   dependencies?: Record<string, string | undefined>
   devDependencies?: Record<string, string | undefined>
+  optionalDependencies?: Record<string, string | undefined>
   packageManager?: string
+  peerDependencies?: Record<string, string | undefined>
   scripts?: Record<string, string | undefined>
   workspaces?: string[] | { packages?: string[] }
 }
@@ -53,7 +55,9 @@ const hasFileMatching = (
 
 const collectAllDependencies = (pkg: PackageJson): DependencyMap => ({
   ...(pkg.dependencies ?? {}),
-  ...(pkg.devDependencies ?? {})
+  ...(pkg.devDependencies ?? {}),
+  ...(pkg.peerDependencies ?? {}),
+  ...(pkg.optionalDependencies ?? {})
 })
 
 const hasAnyDependency = (allDeps: DependencyMap, names: string[]): boolean => names.some(
@@ -268,7 +272,13 @@ const detectNextMode = (allDeps: DependencyMap, detectRootDir: string): NextMode
   return NextMode.Pages
 }
 
-const detectTypescript = (detectRootDir: string): boolean => pathExists(join(detectRootDir, 'tsconfig.json')) || pathExists(join(detectRootDir, 'tsconfig.base.json'))
+const detectTypescript = (detectRootDir: string): boolean => [
+  'tsconfig.json',
+  'tsconfig.base.json',
+  'tsconfig.app.json',
+  'tsconfig.node.json',
+  'tsconfig.eslint.json'
+].some(fileName => pathExists(join(detectRootDir, fileName)))
 
 const detectLibraries = (allDeps: DependencyMap): Library[] => {
   const libraries: Library[] = []
@@ -384,6 +394,14 @@ const detectTesting = (allDeps: DependencyMap): Testing[] => {
   }
 
   return dedupe(testing)
+}
+
+const detectExtensions = (allDeps: DependencyMap): Extension[] => {
+  const extensions: Extension[] = []
+
+  if (allDeps['eslint-plugin-no-only-tests']) extensions.push(Extension.NoOnlyTests)
+
+  return extensions
 }
 
 const detectFormats = (allDeps: DependencyMap, detectRootDir: string): Format[] => {
@@ -595,6 +613,7 @@ export const __detectionInternals = {
   createDefaultOptions,
   createRuntimeSetter,
   dedupe,
+  detectExtensions,
   detectFormats,
   detectFrameworks,
   detectLibraries,
@@ -644,7 +663,7 @@ export const detectProjectOptions = (detectRootDir: string = process.cwd()): Esl
 
     options.projects = detectProjects(pkg, detectRootDir)
 
-    options.extensions = dedupe(options.extensions)
+    options.extensions = dedupe([...(options.extensions ?? []), ...detectExtensions(allDeps)])
 
     options.preset = resolvePreset(options)
 

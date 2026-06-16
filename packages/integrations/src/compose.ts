@@ -13,6 +13,7 @@ import { biome } from './extensions/biome.js'
 import { compat } from './extensions/compat.js'
 import { deMorgan } from './extensions/de-morgan.js'
 import { depend } from './extensions/depend.js'
+import { noOnlyTests } from './extensions/no-only-tests.js'
 import { node } from './extensions/node.js'
 import { oxlint } from './extensions/oxlint.js'
 import { perfectionist } from './extensions/perfectionist.js'
@@ -182,6 +183,8 @@ export const getIntegrationConfigs = async (
   if (extensions.includes(Extension.DeMorgan)) configs.push(...await deMorgan())
 
   if (extensions.includes(Extension.Depend)) configs.push(...await depend())
+
+  if (extensions.includes(Extension.NoOnlyTests)) configs.push(...await noOnlyTests())
 
   // Oxlint goes after other extensions so its rule disables win
   if (extensions.includes(Extension.Oxlint)) configs.push(...await oxlint())

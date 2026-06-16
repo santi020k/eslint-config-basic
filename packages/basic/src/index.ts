@@ -159,6 +159,7 @@ export {
   mdx,
   mikroOrm,
   node,
+  noOnlyTests,
   nx,
   openAiAgents,
   oxlint,
@@ -426,7 +427,9 @@ const applyStrictProfileDefaults = (
 const hasTsconfig = (rootDir: string): boolean => [
   'tsconfig.eslint.json',
   'tsconfig.json',
-  'tsconfig.base.json'
+  'tsconfig.base.json',
+  'tsconfig.app.json',
+  'tsconfig.node.json'
 ].some(fileName => existsSync(join(rootDir, fileName)))
 
 const resolveTypescriptOptions = (
@@ -506,7 +509,9 @@ const createBoundaryConfig = (): TSESLint.FlatConfig.Config => ({
             '**/__generated__/**',
             '**/generated/**',
             '**/*.generated',
-            '**/*.gen'
+            '**/*.generated.*',
+            '**/*.gen',
+            '**/*.gen.*'
           ],
           message: 'Generated modules should stay behind stable source exports.'
         },

@@ -39,6 +39,9 @@ const getFrameworkKeys = (detectedFrameworks?: string[]): string[] => {
   return [...frameworkKeys].sort()
 }
 
+const toPropertyKey = (key: string): string =>
+  /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(key) ? key : `'${key}'`
+
 const FRAMEWORK_PACKAGE_TO_KEY: Record<string, string> = {
   '@santi020k/eslint-config-angular': 'angular',
   '@santi020k/eslint-config-astro': 'astro',
@@ -259,13 +262,14 @@ const createConfigContent = (cwd: string): { configContent: string, configPath: 
   const options = detectProjectOptions(cwd)
   const frameworkKeys = getFrameworkKeys(options.detectedFrameworks)
   const imports: string[] = ['import { eslintConfig } from \'@santi020k/eslint-config-basic\'']
+  const presetLine = options.preset && options.preset !== 'basic' ? `  preset: ${JSON.stringify(options.preset)},\n` : ''
 
   const configContent = `${imports.join('\n')}
 
 export default await eslintConfig({
-  typescript: ${JSON.stringify(options.typescript ?? false)},
+${presetLine}  typescript: ${JSON.stringify(options.typescript ?? false)},
   frameworks: {
-    ${frameworkKeys.map(key => `${key}: true`).join(',\n    ')}
+    ${frameworkKeys.map(key => `${toPropertyKey(key)}: true`).join(',\n    ')}
   },
   libraries: ${JSON.stringify(options.libraries ?? [], null, 2)},
   testing: ${JSON.stringify(options.testing ?? [], null, 2)},
@@ -418,6 +422,15 @@ export const handleUpdate = (cwd: string = process.cwd()) => {
   console.log('🔍 Detecting project settings...')
 
   const { configContent, configPath } = createConfigContent(cwd)
+
+  if (existsSync(configPath)) {
+    const backupPath = `${configPath}.bak`
+    const existing = readFileSync(configPath, 'utf8')
+
+    writeFileSync(backupPath, existing)
+
+    console.log(`📦 Backed up existing config to ${basename(backupPath)}`)
+  }
 
   writeFileSync(configPath, configContent)
 
@@ -675,7 +688,7 @@ const migrateConfigContent = (content: string): { changed: boolean, content: str
     '',
     'export default await eslintConfig({',
     '  frameworks: {',
-    `    ${frameworks.map(key => `${key}: true`).join(',\n    ')}`,
+    `    ${frameworks.map(key => `${toPropertyKey(key)}: true`).join(',\n    ')}`,
     '  }',
     '})',
     ''

@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # Guidelines
 
 This is an ESLint configuration package using **ESLint 9 Flat Config** format. It exports a composable `eslintConfig()` function.
@@ -162,8 +166,8 @@ export { myintegration } from './{category}/{name}.js'
 // Add enum value to the appropriate enum in `packages/core/src/types.ts`
 // e.g., for a library: Library.MyLib = 'mylib'
 
-// Wire in `packages/basic/src/integrations.ts`
-// e.g.: if (libraries.includes(Library.MyLib)) configs.push(...myoptional)
+// Wire in `packages/integrations/src/compose.ts` inside getIntegrationConfigs()
+// e.g.: if (libraries.includes(Library.MyLib)) configs.push(...await myLib())
 
 // Update tests: options.test.ts (rule assertion) + detection.test.ts (if auto-detectable)
 ```

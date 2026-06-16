@@ -145,9 +145,12 @@ pnpm run ok  # must still pass after refactor additions
 
 ## Step 8 — Update Documentation
 
-- `apps/docs/src/content/docs/tooling/{category}.md` — add the new integration
-- `apps/docs/src/content/docs/tooling/overview.md` — keep overview accurate
-- `apps/docs/src/content/docs/index.md` — update counts if integration totals change
+Follow the full checklist in `.claude/skills/docs-updater/SKILL.md` § After Adding a New Integration.
+
+Key files:
+- `apps/docs/src/content/docs/tooling/{category}.md` — add a row to the integration table (`{category}` = `libraries`, `tools`, `formats`, `extensions`, or `testing`)
+- `apps/docs/src/content/docs/tooling/overview.md` — update category totals if listed
+- `apps/docs/src/content/docs/index.mdx` — update counts if integration totals are shown
 - `README.md` — update if a major new capability is introduced
 
 ## Step 9 — Validate and changeset

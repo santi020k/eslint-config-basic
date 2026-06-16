@@ -76,6 +76,11 @@ export enum Extension {
   Node = 'node',
 
   /**
+   * Prevents `test.only` / `describe.only` from being committed
+   */
+  NoOnlyTests = 'no-only-tests',
+
+  /**
    * Disables rules already covered by Oxlint for hybrid linting setups
    */
   Oxlint = 'oxlint',

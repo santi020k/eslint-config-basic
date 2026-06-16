@@ -177,6 +177,9 @@ catalogs:
     eslint-plugin-n:
       specifier: ^18.1.0
       version: 18.1.0
+    eslint-plugin-no-only-tests:
+      specifier: ^3.4.0
+      version: 3.4.0
     eslint-plugin-oxlint:
       specifier: ^1.69.0
       version: 1.69.0
@@ -732,6 +735,9 @@ importers:
       eslint-plugin-n:
         specifier: 'catalog:'
         version: 18.1.0(eslint@10.5.0(jiti@2.7.0))(typescript@6.0.3)
+      eslint-plugin-no-only-tests:
+        specifier: 'catalog:'
+        version: 3.4.0
       eslint-plugin-oxlint:
         specifier: 'catalog:'
         version: 1.69.0(oxlint@1.69.0)
@@ -2090,12 +2096,12 @@ importers:
       '@santi020k/eslint-config-integrations':
         specifier: workspace:^
         version: link:../integrations
-      '@santi020k/eslint-config-lite':
-        specifier: workspace:^
-        version: link:../lite
       '@santi020k/eslint-config-lit':
         specifier: workspace:^
         version: link:../lit
+      '@santi020k/eslint-config-lite':
+        specifier: workspace:^
+        version: link:../lite
       '@santi020k/eslint-config-nest':
         specifier: workspace:^
         version: link:../nest
@@ -8869,6 +8875,10 @@ packages:
         optional: true
       typescript:
         optional: true
+
+  eslint-plugin-no-only-tests@3.4.0:
+    resolution: {integrity: sha512-4S3/9Nb7A2tiMcpzEQE9bQSlpeOz6WJkgryBuou/SA8W2x2c8Zf4j0NvTKBjv6qNhF9T79tmkecm/0CHqV0UGg==}
+    engines: {node: '>=5.0.0'}
 
   eslint-plugin-oxlint@1.69.0:
     resolution: {integrity: sha512-ryJT8Pqb3jgWhmQcKA/D98K6UckthAR70wPTBI4rOjcaKJ9nmQkysTLbTVVEcdzfT9mznV/2MKspBsCCpXm36w==}
@@ -21918,6 +21928,8 @@ snapshots:
       semver: 7.8.4
     optionalDependencies:
       typescript: 6.0.3
+
+  eslint-plugin-no-only-tests@3.4.0: {}
 
   eslint-plugin-oxlint@1.69.0(oxlint@1.69.0):
     dependencies:

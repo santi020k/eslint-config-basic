@@ -159,14 +159,15 @@ pnpm run test  # → GREEN
 
 ## Step 9 — Update Documentation
 
-Required for every new published framework package:
-- `apps/docs/src/content/docs/frameworks/{name}.md` — framework guide; register in sidebar (`astro.config.mjs`)
+Follow the full checklist in `.claude/skills/docs-updater/SKILL.md` § After Adding a New Framework.
+
+Key files:
+- `apps/docs/src/content/docs/frameworks/{name}.md` — new framework guide; register in sidebar (`astro.config.mjs`)
 - `apps/docs/src/content/docs/guide/installation.md` — add to framework matrix
-- `apps/docs/src/content/docs/guide/configuration.md` — add examples
-- `apps/docs/src/content/docs/api/index.md` — update package coverage
-- `apps/docs/src/content/docs/index.md` — update counts/copy
-- `packages/{name}/README.md` — aligned with docs
-- `README.md` — update public package lists
+- `apps/docs/src/content/docs/guide/configuration.md` — add usage examples
+- `apps/docs/src/content/docs/index.mdx` — update counts/copy
+- `README.md` — update public package list
+- Run `pnpm run docs:sync-readmes` to regenerate package READMEs
 
 ## Step 10 — Validate and changeset
 

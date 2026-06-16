@@ -79,6 +79,7 @@
     "eslint-plugin-jsx-a11y": "catalog:",
     "eslint-plugin-mdx": "catalog:",
     "eslint-plugin-n": "catalog:",
+    "eslint-plugin-no-only-tests": "catalog:",
     "eslint-plugin-oxlint": "catalog:",
     "eslint-plugin-package-json": "catalog:",
     "eslint-plugin-perfectionist": "catalog:",
