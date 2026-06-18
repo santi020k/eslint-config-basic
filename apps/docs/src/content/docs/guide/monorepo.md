@@ -91,11 +91,11 @@ export default await defineConfig({
   detectRootDir: process.cwd(),
   preset: Preset.Monorepo,
   projects: {
-    'apps/dashboard':     { frameworks: { next: true }, preset: Preset.App },
-    'apps/marketing':     { frameworks: { astro: true }, preset: Preset.App },
-    'packages/api':       { preset: Preset.Node, runtime: Runtime.Node },
-    'packages/core':      { preset: Preset.Library, runtime: Runtime.Universal },
-    'workers/auth':       { preset: Preset.Library, runtime: Runtime.Worker }
+    'apps/dashboard': { frameworks: { next: true }, preset: Preset.App },
+    'apps/marketing': { frameworks: { astro: true }, preset: Preset.App },
+    'packages/api': { preset: Preset.Node, runtime: Runtime.Node },
+    'packages/core': { preset: Preset.Library, runtime: Runtime.Universal },
+    'workers/auth': { preset: Preset.Library, runtime: Runtime.Worker }
   },
   tsconfigRootDir: import.meta.dirname
 })

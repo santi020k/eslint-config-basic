@@ -28,7 +28,9 @@ The `extensions` option enables specialized rule packs that are useful across ma
 import { defineConfig, Extension } from '@santi020k/eslint-config-basic'
 
 export default await defineConfig({
-  extensions: [Extension.Unicorn, Extension.Security, Extension.Perfectionist, Extension.BestPractices, Extension.Boundaries]
+  extensions: [
+    Extension.Unicorn, Extension.Security, Extension.Perfectionist, Extension.BestPractices, Extension.Boundaries
+  ]
 })
 ```
 

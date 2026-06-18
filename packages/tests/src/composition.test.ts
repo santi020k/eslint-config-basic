@@ -389,9 +389,10 @@ describe('eslintConfig Function', () => {
   })
 
   test('should union explicit values with detected values when optionMergeStrategy is merge', async () => {
-    // Detection defaults always include Tool.Prettier; explicit Jsdoc must be added, not replace it
+    // Preset.Basic includes Tool.Prettier; explicit Jsdoc must be added, not replace it
     const config = await defineConfig({
       autoFrameworks: false,
+      preset: Preset.Basic,
       tools: [Tool.Jsdoc]
     })
 
@@ -430,13 +431,14 @@ describe('eslintConfig Function', () => {
   test('should disable only extensions via granular detection control', async () => {
     const config = await defineConfig({
       autoFrameworks: false,
-      detection: { extensions: false }
+      detection: { extensions: false },
+      tools: [Tool.Prettier]
     })
 
     const names = extractConfigNames(config)
 
     expect(names.some(name => name.includes('unicorn'))).toBe(false)
-    // Tools detection stays active (Prettier is a detected default)
+    // Explicit tools are unaffected when only extension detection is disabled
     expect(names).toContain('eslint-config/prettier')
   })
 

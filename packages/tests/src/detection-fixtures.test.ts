@@ -95,21 +95,14 @@ describe('detectProjectOptions fixture matrix', () => {
   })
 
   test('detects Vite fixtures with Tailwind adapter packages and config files', () => {
-    const dir = createFixtureProject(
-      {
-        devDependencies: {
-          '@tailwindcss/vite': 'latest',
-          vite: 'latest'
-        }
-      },
-      [],
-      {
-        '.prettierrc': '{}',
-        'cspell.config.yml': 'version: "0.2"\n',
-        'tsconfig.json': '{}',
-        'vite.config.ts': 'export default {}'
-      }
-    )
+    const pkgJson = { devDependencies: { '@tailwindcss/vite': 'latest', vite: 'latest' } }
+    const extraFiles = {
+      '.prettierrc': '{}',
+      'cspell.config.yml': 'version: "0.2"\n',
+      'tsconfig.json': '{}',
+      'vite.config.ts': 'export default {}'
+    }
+    const dir = createFixtureProject(pkgJson, [], extraFiles)
 
     const options = detectProjectOptions(dir)
 
@@ -123,20 +116,9 @@ describe('detectProjectOptions fixture matrix', () => {
   })
 
   test('detects Slidev fixtures as Slidev + Vue without adding Vite separately', () => {
-    const dir = createFixtureProject(
-      {
-        dependencies: {
-          '@slidev/cli': 'latest',
-          vite: 'latest',
-          vue: 'latest'
-        }
-      },
-      [],
-      {
-        'slides.md': '# Deck\n\n{{ 1 + 1 }}',
-        'tsconfig.json': '{}'
-      }
-    )
+    const pkgJson = { dependencies: { '@slidev/cli': 'latest', vite: 'latest', vue: 'latest' } }
+    const extraFiles = { 'slides.md': '# Deck\n\n{{ 1 + 1 }}', 'tsconfig.json': '{}' }
+    const dir = createFixtureProject(pkgJson, [], extraFiles)
 
     const options = detectProjectOptions(dir)
 

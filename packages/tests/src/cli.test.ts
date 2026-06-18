@@ -229,10 +229,8 @@ describe('CLI command UX', () => {
     const cwd = createTempProject({ name: 'tmp-project', type: 'module' })
     const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
-    writeFileSync(
-      join(cwd, 'eslint.config.js'),
-      'import react from \'@santi020k/eslint-config-react\'\nexport default []'
-    )
+    const fileContent = 'import react from \'@santi020k/eslint-config-react\'\nexport default []'
+    writeFileSync(join(cwd, 'eslint.config.js'), fileContent)
 
     handleMigrate(cwd, false, true)
 
@@ -250,10 +248,10 @@ describe('CLI command UX', () => {
     const cwd = createTempProject({ name: 'tmp-project', type: 'module' })
     const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
-    writeFileSync(
-      join(cwd, 'eslint.config.js'),
-      'import next from \'@santi020k/eslint-config-next\'\nimport react from \'@santi020k/eslint-config-react\'\nexport default [...next, ...react]\n'
-    )
+    const fileContent = 'import next from \'@santi020k/eslint-config-next\'\n' +
+      'import react from \'@santi020k/eslint-config-react\'\n' +
+      'export default [...next, ...react]\n'
+    writeFileSync(join(cwd, 'eslint.config.js'), fileContent)
 
     handleMigrate(cwd, true)
 
@@ -323,10 +321,8 @@ describe('CLI command UX', () => {
 
     mkdirSync(join(cwd, 'packages', 'app'), { recursive: true })
     writeFileSync(join(cwd, 'packages', 'app', 'package.json'), JSON.stringify({ name: 'app' }))
-    writeFileSync(
-      join(cwd, 'eslint.config.js'),
-      'import react from \'@santi020k/eslint-config-react\'\nexport default []'
-    )
+    const fileContent = 'import react from \'@santi020k/eslint-config-react\'\nexport default []'
+    writeFileSync(join(cwd, 'eslint.config.js'), fileContent)
 
     await handleDoctor(cwd)
 
@@ -376,10 +372,8 @@ describe('CLI command UX', () => {
     })
     const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
-    writeFileSync(
-      join(cwd, 'eslint.config.js'),
-      'import { defineConfig } from \'@santi020k/eslint-config-lite\'\nexport default await defineConfig()'
-    )
+    const fileContent = 'import { defineConfig } from \'@santi020k/eslint-config-lite\'\nexport default await defineConfig()'
+    writeFileSync(join(cwd, 'eslint.config.js'), fileContent)
 
     await handleDoctor(cwd)
 
@@ -429,10 +423,9 @@ describe('CLI command UX', () => {
     })
     const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
-    writeFileSync(
-      join(cwd, 'eslint.config.js'),
-      'import { defineConfig, Preset } from \'@santi020k/eslint-config-lite\'\nexport default await defineConfig({ preset: Preset.All })'
-    )
+    const fileContent = 'import { defineConfig, Preset } from \'@santi020k/eslint-config-lite\'\n' +
+      'export default await defineConfig({ preset: Preset.All })'
+    writeFileSync(join(cwd, 'eslint.config.js'), fileContent)
 
     await handleDoctor(cwd)
 
@@ -453,10 +446,8 @@ describe('CLI command UX', () => {
     })
     const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
-    writeFileSync(
-      join(cwd, 'eslint.config.js'),
-      'import missingConfig from \'missing-eslint-config-package\'\nexport default [missingConfig]'
-    )
+    const fileContent = 'import missingConfig from \'missing-eslint-config-package\'\nexport default [missingConfig]'
+    writeFileSync(join(cwd, 'eslint.config.js'), fileContent)
 
     await handleDoctor(cwd)
 

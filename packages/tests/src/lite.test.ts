@@ -44,7 +44,7 @@ describe('resolvePreset', () => {
     Preset.Monorepo,
     Preset.Node,
     Preset.Worker
-  ])('resolves %s preset without error', async (preset) => {
+  ])('resolves %s preset without error', async preset => {
     const config = await defineConfig({ ...baseOptions, preset })
     expect(Array.isArray(config)).toBe(true)
     expect(config.length).toBeGreaterThan(0)

@@ -45,7 +45,8 @@ const writeConsumerConfig = (cwd: string, options: string): void => {
   ].join('\n'))
 }
 
-const runExternalLint = (cwd: string, files: string[]): { errorCount: number, ruleIds: string[], warningCount: number } => {
+interface LintResult { errorCount: number, ruleIds: string[], warningCount: number }
+const runExternalLint = (cwd: string, files: string[]): LintResult => {
   const script = `
     import { ESLint } from 'eslint'
 

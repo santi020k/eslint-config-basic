@@ -47,7 +47,7 @@ const createLiteBaseOptions = (): LiteEslintConfigOptions => ({
   typescript: false
 })
 
-const countLiteConfigs = async (options: LiteEslintConfigOptions): Promise<number> => (await defineLiteConfig(options)).length
+const countLiteConfigs = async (options: LiteEslintConfigOptions) => (await defineLiteConfig(options)).length
 
 describe('eslintConfig enum contracts', () => {
   test('maps all library enums to optional configs', async () => {

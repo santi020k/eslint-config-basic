@@ -342,7 +342,7 @@ describe('Integration Rule Assertions — Libraries', () => {
 
     expect(names).toContain('eslint-config-integrations/openai-agents')
     expect(ruleValue).toBeDefined()
-    const paths = ruleValue?.[1]?.paths?.map((p) => p.name) ?? []
+    const paths = ruleValue?.[1]?.paths?.map(p => p.name) ?? []
     expect(paths).toContain('openai/agents')
   })
 
@@ -356,7 +356,7 @@ describe('Integration Rule Assertions — Libraries', () => {
 
     expect(names).toContain('eslint-config-integrations/mastra')
     expect(ruleValue).toBeDefined()
-    const patternGroups = ruleValue?.[1]?.patterns?.flatMap((p) => p.group) ?? []
+    const patternGroups = ruleValue?.[1]?.patterns?.flatMap(p => p.group) ?? []
     expect(patternGroups).toContain('@mastra/*/dist/*')
   })
 
@@ -370,7 +370,7 @@ describe('Integration Rule Assertions — Libraries', () => {
 
     expect(names).toContain('eslint-config-integrations/langchain')
     expect(ruleValue).toBeDefined()
-    const patternGroups = ruleValue?.[1]?.patterns?.flatMap((p) => p.group) ?? []
+    const patternGroups = ruleValue?.[1]?.patterns?.flatMap(p => p.group) ?? []
     expect(patternGroups).toContain('langchain/dist/*')
   })
 
@@ -384,7 +384,7 @@ describe('Integration Rule Assertions — Libraries', () => {
 
     expect(names).toContain('eslint-config-integrations/llamaindex')
     expect(ruleValue).toBeDefined()
-    const patternGroups = ruleValue?.[1]?.patterns?.flatMap((p) => p.group) ?? []
+    const patternGroups = ruleValue?.[1]?.patterns?.flatMap(p => p.group) ?? []
     expect(patternGroups).toContain('llamaindex/dist/*')
   })
 
@@ -508,7 +508,7 @@ describe('Integration Rule Assertions — Libraries', () => {
 
     expect(names).toContain('eslint-config-integrations/mcp')
     expect(ruleValue).toBeDefined()
-    const paths = ruleValue?.[1]?.paths?.map((p) => p.name) ?? []
+    const paths = ruleValue?.[1]?.paths?.map(p => p.name) ?? []
     expect(paths).toContain('@modelcontextprotocol/sdk')
   })
 })

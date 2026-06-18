@@ -190,7 +190,6 @@ In v2, the primary export is `defineConfig`. Both names are exported for compati
 // v1 style (still works in v2)
 
 // v2 preferred
-
 ```
 
 ### A rule I disabled keeps coming back

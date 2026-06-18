@@ -62,9 +62,9 @@ describe('package artifacts', () => {
       return
     }
 
-    const bins = typeof manifest.bin === 'string'
-      ? { [manifest.name]: manifest.bin }
-      : manifest.bin
+    const bins = typeof manifest.bin === 'string' ?
+      { [manifest.name]: manifest.bin } :
+      manifest.bin
 
     for (const [binName, binPath] of Object.entries(bins)) {
       expect(existsSync(join(dir, binPath)), `${manifest.name} bin "${binName}" is missing`).toBe(true)

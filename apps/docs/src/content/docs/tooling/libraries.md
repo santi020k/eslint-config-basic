@@ -35,7 +35,16 @@ The `libraries` option enables integrations that usually correspond to major pro
 import { defineConfig, Library } from '@santi020k/eslint-config-basic'
 
 export default await defineConfig({
-  libraries: [Library.AiSdk, Library.OpenAiAgents, Library.Mastra, Library.Mcp, Library.Typeorm, Library.Prisma, Library.Tailwind, Library.Storybook]
+  libraries: [
+    Library.AiSdk,
+    Library.OpenAiAgents,
+    Library.Mastra,
+    Library.Mcp,
+    Library.Typeorm,
+    Library.Prisma,
+    Library.Tailwind,
+    Library.Storybook
+  ]
 })
 ```
 

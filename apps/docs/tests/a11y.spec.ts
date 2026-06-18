@@ -9,8 +9,6 @@ import { expectNoUnexpectedAccessibilityViolations } from './helpers/accessibili
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-/* eslint-disable security/detect-non-literal-fs-filename */
-
 const getDocUrls = (dir: string, baseDir = dir): string[] => {
   const urls: string[] = []
 
@@ -31,7 +29,7 @@ const getDocUrls = (dir: string, baseDir = dir): string[] => {
       const withoutExt = relativePath.replace(/\.(md|mdx)$/, '')
       // Convert to URL path format (using forward slashes, lowercase)
       let urlPath = '/' + withoutExt.split(path.sep).join('/').toLowerCase()
-      
+
       // If it ends with /index, map to the directory itself
       if (urlPath === '/index') {
         urlPath = '/'
@@ -40,7 +38,7 @@ const getDocUrls = (dir: string, baseDir = dir): string[] => {
       } else {
         urlPath = urlPath + '/'
       }
-      
+
       urls.push(urlPath)
     }
   }

@@ -56,7 +56,7 @@ export default defineConfig({
         functions: 90,
         lines: 85,
         statements: 85
-      },
+      }
     },
     environment: 'node',
     globals: true,
