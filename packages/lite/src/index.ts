@@ -491,6 +491,24 @@ const resolveLiteBucketDefaults = (detected: EslintConfigOptions) => ({
   detectedTools: detected.tools ?? []
 })
 
+const resolveLiteNextMode = (
+  optNextMode: EslintConfigOptions['nextMode'],
+  presetNextMode: EslintConfigOptions['nextMode'],
+  detectedNextMode: EslintConfigOptions['nextMode']
+): NextMode => (optNextMode ?? presetNextMode ?? detectedNextMode ?? NextMode.Pages) as NextMode
+
+const resolveLiteRuntime = (
+  optRuntime: EslintConfigOptions['runtime'],
+  presetRuntime: EslintConfigOptions['runtime'],
+  detectedRuntime: EslintConfigOptions['runtime']
+): Runtime => (optRuntime ?? presetRuntime ?? detectedRuntime ?? Runtime.Universal) as Runtime
+
+const resolveLiteTypescript = (
+  optTypescript: EslintConfigOptions['typescript'],
+  presetTypescript: EslintConfigOptions['typescript'],
+  detectedTypescript: EslintConfigOptions['typescript']
+): EslintConfigOptions['typescript'] => optTypescript ?? presetTypescript ?? detectedTypescript ?? false
+
 const resolveLiteScalars = (
   opts: {
     nextMode?: EslintConfigOptions['nextMode']
@@ -502,29 +520,29 @@ const resolveLiteScalars = (
   presetDefaults: Partial<EslintConfigOptions>,
   detected: EslintConfigOptions
 ) => ({
-  nextMode: (opts.nextMode ?? presetDefaults.nextMode ?? detected.nextMode ?? NextMode.Pages) as NextMode,
-  runtime: (opts.runtime ?? presetDefaults.runtime ?? detected.runtime ?? Runtime.Universal) as Runtime,
+  nextMode: resolveLiteNextMode(opts.nextMode, presetDefaults.nextMode, detected.nextMode),
+  runtime: resolveLiteRuntime(opts.runtime, presetDefaults.runtime, detected.runtime),
   settings: (opts.settings ?? detected.settings ?? []) as EslintConfigOptions['settings'],
   strict: getStrictMode(opts.strict, presetDefaults.strict),
-  typescript: opts.typescript ?? presetDefaults.typescript ?? detected.typescript ?? false
+  typescript: resolveLiteTypescript(opts.typescript, presetDefaults.typescript, detected.typescript)
 })
+
+const hasReactImplyingFramework = (
+  result: NonNullable<EslintConfigOptions['frameworks']>
+): boolean => Boolean(
+  result.next ??
+  result.expo ??
+  (result as Record<string, unknown>).remix ??
+  result['react-router'] ??
+  result['tanstack-start']
+)
 
 const applyLiteFrameworkImpliedDeps = (
   frameworks: NonNullable<EslintConfigOptions['frameworks']>
 ): NonNullable<EslintConfigOptions['frameworks']> => {
   const result = { ...frameworks }
 
-  if (
-    Boolean(
-      result.next ??
-      result.expo ??
-      (result as Record<string, unknown>).remix ??
-      result['react-router'] ??
-      result['tanstack-start']
-    ) && !result.react
-  ) {
-    result.react = true
-  }
+  if (hasReactImplyingFramework(result) && !result.react) result.react = true
 
   if (result.slidev && !result.vue) result.vue = true
 
