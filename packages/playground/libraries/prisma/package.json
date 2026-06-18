@@ -14,7 +14,7 @@
   "dependencies": {
     "@prisma/client": "^7.8.0",
     "@santi020k/eslint-config-basic": "workspace:^",
-    "eslint": "^10.0.0",
+    "eslint": "^10.5.0",
     "prisma": "^7.8.0"
   },
   "devDependencies": {

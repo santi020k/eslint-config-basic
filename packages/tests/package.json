@@ -25,8 +25,8 @@
     "@santi020k/eslint-config-expo": "workspace:^",
     "@santi020k/eslint-config-hono": "workspace:^",
     "@santi020k/eslint-config-integrations": "workspace:^",
-    "@santi020k/eslint-config-lite": "workspace:^",
     "@santi020k/eslint-config-lit": "workspace:^",
+    "@santi020k/eslint-config-lite": "workspace:^",
     "@santi020k/eslint-config-nest": "workspace:^",
     "@santi020k/eslint-config-next": "workspace:^",
     "@santi020k/eslint-config-nuxt": "workspace:^",
@@ -45,7 +45,7 @@
     "@types/node": "catalog:",
     "@typescript-eslint/utils": "catalog:",
     "@vitest/coverage-v8": "catalog:",
-    "eslint": "catalog:",
+    "eslint": "^10.5.0",
     "react": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"

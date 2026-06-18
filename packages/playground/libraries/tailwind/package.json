@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
-    "eslint": "^10.0.0",
+    "eslint": "^10.5.0",
     "react": "19.2.7",
     "tailwindcss": "^4.3.1"
   },

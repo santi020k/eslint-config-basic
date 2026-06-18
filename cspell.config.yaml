@@ -139,6 +139,7 @@ words:
   - weakref
   - workspace
   - workspaces
+  - undici
   - unrs
   - workerd
 ignorePaths:

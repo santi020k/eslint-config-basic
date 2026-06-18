@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
-    "astro": "^6.4.6",
-    "eslint": "^10.0.0"
+    "astro": "^6.4.8",
+    "eslint": "^10.5.0"
   },
   "engines": {
     "node": ">=22.18.0"
