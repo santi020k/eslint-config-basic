@@ -1,6 +1,6 @@
 import * as fs from 'node:fs'
 
-import { detectProjectOptions, Extension, Format, Library, NextMode, Preset, Runtime, Testing, Tool } from '@santi020k/eslint-config-basic'
+import { detectProjectOptions, Format, Library, NextMode, Preset, Runtime, Testing, Tool } from '@santi020k/eslint-config-basic'
 
 import { describe, expect, test, vi } from 'vitest'
 
@@ -338,9 +338,9 @@ describe('detectProjectOptions', () => {
     expect(options.detectedFrameworks).toEqual([])
     expect(options.libraries).toEqual([])
     expect(options.testing).toEqual([])
-    expect(options.formats).toEqual([Format.Mdx, Format.Markdown, Format.Jsonc, Format.Yaml, Format.Toml])
-    expect(options.tools).toEqual([Tool.Prettier])
-    expect(options.extensions).toEqual([Extension.Unicorn, Extension.Perfectionist, Extension.Security])
+    expect(options.formats).toEqual([])
+    expect(options.tools).toEqual([])
+    expect(options.extensions).toEqual([])
     expect(options.runtime).toBe(Runtime.Universal)
   })
 
@@ -860,9 +860,9 @@ describe('detectProjectOptions', () => {
 
     const options = detectProjectOptions()
 
-    expect(options.formats).toEqual([Format.Mdx, Format.Markdown, Format.Jsonc, Format.Yaml, Format.Toml])
-    expect(options.tools).toEqual([Tool.Prettier])
-    expect(options.extensions).toEqual([Extension.Unicorn, Extension.Perfectionist, Extension.Security])
+    expect(options.formats).toEqual([])
+    expect(options.tools).toEqual([])
+    expect(options.extensions).toEqual([])
   })
 
   test('should detect tsconfig.base.json as TypeScript project', () => {

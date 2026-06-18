@@ -27,13 +27,13 @@ const runtimePriority = new Map<Runtime, number>([
 
 const createDefaultOptions = (): EslintConfigOptions => ({
   detectedFrameworks: [],
-  extensions: [Extension.Unicorn, Extension.Perfectionist, Extension.Security],
-  formats: [Format.Mdx, Format.Markdown, Format.Jsonc, Format.Yaml, Format.Toml],
+  extensions: [],
+  formats: [],
   frameworks: {},
   libraries: [],
   runtime: Runtime.Universal,
   testing: [],
-  tools: [Tool.Prettier],
+  tools: [],
   typescript: false
 })
 

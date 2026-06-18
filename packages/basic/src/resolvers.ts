@@ -78,7 +78,12 @@ export const resolvePreset = (preset: Preset): Partial<EslintConfigOptions> => {
       }
 
     case Preset.Basic:
-      return { runtime: Runtime.Universal }
+      return {
+        extensions: [Extension.Unicorn, Extension.Perfectionist, Extension.Security],
+        formats: [Format.Mdx, Format.Markdown, Format.Jsonc, Format.Yaml, Format.Toml],
+        runtime: Runtime.Universal,
+        tools: [Tool.Prettier]
+      }
 
     case Preset.Browser:
       return {
