@@ -138,6 +138,12 @@ const DEFAULT_IGNORES = [
   '**/test-results/**',
   '**/node_modules/**',
   '**/tsconfig.tsbuildinfo',
+  // Package manager lock files (machine-generated, slow to lint)
+  '**/pnpm-lock.yaml',
+  '**/yarn.lock',
+  '**/package-lock.json',
+  '**/bun.lock',
+  '**/bun.lockb',
   // AI coding-assistant artifacts (rule/skill folders managed by tools, not source code)
   '**/.agent/**',
   '**/.agents/**',
@@ -364,7 +370,9 @@ const applyStrictProfileDefaults = (
 const hasTsconfig = (rootDir: string): boolean => [
   'tsconfig.eslint.json',
   'tsconfig.json',
-  'tsconfig.base.json'
+  'tsconfig.base.json',
+  'tsconfig.app.json',
+  'tsconfig.node.json'
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- config root is user-selected project context
 ].some(fileName => existsSync(join(rootDir, fileName)))
 
@@ -420,6 +428,7 @@ const scopeConfigToProject = (
 ): TSESLint.FlatConfig.Config => {
   if ('ignores' in config && !config.files) {
     return {
+      ...config,
       ignores: config.ignores?.map(pattern => scopeFilePattern(projectPath, pattern)) as TSESLint.FlatConfig.Config['ignores']
     }
   }
@@ -536,7 +545,7 @@ const hasReactImplyingFramework = (
   result.expo ??
   (result as Record<string, unknown>).remix ??
   result['react-router'] ??
-  result['tanstack-start']
+  (result['tanstack-start'] && !result.solid)
 )
 
 const applyLiteFrameworkImpliedDeps = (

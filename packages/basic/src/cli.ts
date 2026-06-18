@@ -32,7 +32,13 @@ const resolveConfigPath = (cwd: string): string => {
 const getFrameworkKeys = (detectedFrameworks?: string[]): string[] => {
   const frameworkKeys = new Set(detectedFrameworks ?? [])
 
-  if (frameworkKeys.has('next') || frameworkKeys.has('expo') || frameworkKeys.has('remix') || frameworkKeys.has('react-router')) {
+  if (
+    frameworkKeys.has('next') ||
+    frameworkKeys.has('expo') ||
+    frameworkKeys.has('remix') ||
+    frameworkKeys.has('react-router') ||
+    (frameworkKeys.has('tanstack-start') && !frameworkKeys.has('solid'))
+  ) {
     frameworkKeys.add('react')
   }
 
