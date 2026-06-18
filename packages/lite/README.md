@@ -1,6 +1,6 @@
 # @santi020k/eslint-config-lite
 
-Lite entry point for projects that want the same composer as `@santi020k/eslint-config-basic`, but prefer to install framework and integration config packages manually.
+Lite composer for projects that install framework and integration config packages manually.
 
 This package is part of the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.
 

@@ -1,6 +1,6 @@
 # @santi020k/eslint-config-preact
 
-Preact and Hooks rules for modern flat-config projects.
+Preact support using shared React rules with a Preact-compatible plugin.
 
 This package is part of the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.
 
