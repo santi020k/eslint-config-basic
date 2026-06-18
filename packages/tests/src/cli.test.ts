@@ -256,13 +256,16 @@ describe('CLI command UX', () => {
     handleMigrate(cwd, true)
 
     const config = readFileSync(join(cwd, 'eslint.config.js'), 'utf8')
+    const backup = readFileSync(join(cwd, 'eslint.config.js.bak'), 'utf8')
     const output = logSpy.mock.calls.flat().join('\n')
 
     expect(config).toContain('eslintConfig')
     expect(config).toContain('next: true')
     expect(config).toContain('react: true')
     expect(config).not.toContain('@santi020k/eslint-config-next')
+    expect(backup).toBe(fileContent)
     expect(output).toContain('Rewrote eslint.config.js')
+    expect(output).toContain('eslint.config.js.bak')
     logSpy.mockRestore()
   })
 

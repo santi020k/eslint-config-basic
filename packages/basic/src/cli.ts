@@ -770,9 +770,13 @@ const processConfigMigration = (configPath: string, write: boolean, suggestions:
   const result = migrateConfigContent(configContent)
 
   if (result.changed) {
+    const backupPath = `${configPath}.bak`
+
+    writeFileSync(backupPath, configContent)
+
     writeFileSync(configPath, result.content)
 
-    const message = `Rewrote ${basename(configPath)} with v2 framework booleans: ${result.frameworks.join(', ')}.`
+    const message = `Rewrote ${basename(configPath)} with v2 framework booleans: ${result.frameworks.join(', ')}. Original backed up to ${basename(backupPath)}.`
 
     applied.push(message)
 
