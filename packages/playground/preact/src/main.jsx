@@ -9,7 +9,6 @@ if (container) {
   render(
     <ThemeProvider>
       <App />
-    </ThemeProvider>,
-    container
+    </ThemeProvider>, container
   )
 }

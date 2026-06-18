@@ -1,5 +1,5 @@
 import { createContext } from 'preact'
-import { useContext,useMemo, useState } from 'preact/hooks'
+import { use, useMemo, useState } from 'preact/hooks'
 
 const ThemeContext = createContext(undefined)
 
@@ -23,7 +23,7 @@ export const ThemeProvider = ({ children }) => {
 }
 
 export const useTheme = () => {
-  const context = useContext(ThemeContext)
+  const context = use(ThemeContext)
 
   if (context === undefined) {
     throw new Error('useTheme must be used within a ThemeProvider')
