@@ -45,7 +45,7 @@
     "@types/node": "catalog:",
     "@typescript-eslint/utils": "catalog:",
     "@vitest/coverage-v8": "catalog:",
-    "eslint": "^10.5.0",
+    "eslint": "catalog:",
     "react": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"

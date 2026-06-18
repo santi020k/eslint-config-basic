@@ -52,7 +52,7 @@
     "@santi020k/eslint-config-basic": "workspace:^",
     "@types/node": "catalog:",
     "cspell": "catalog:",
-    "eslint": "^10.5.0",
+    "eslint": "catalog:",
     "husky": "catalog:",
     "knip": "catalog:",
     "lint-staged": "catalog:",
