@@ -371,7 +371,7 @@ const getCliVersion = (): string => {
 }
 
 const printUsage = () => {
-  process.stdout.write([
+  console.log([
     'Usage: basic-eslint <command> [options]',
     '',
     'Commands:',
@@ -393,7 +393,7 @@ const printUsage = () => {
     '  --write         Apply safe migrations for commands that support it',
     '  --help, -h      Show this help message',
     '  --version, -v   Show CLI version'
-  ].join('\n') + '\n')
+  ].join('\n'))
 }
 
 export const handleInit = (cwd: string = process.cwd(), check = false) => {
@@ -402,11 +402,11 @@ export const handleInit = (cwd: string = process.cwd(), check = false) => {
   if (check) {
     const exists = existsSync(configPath)
 
-    process.stdout.write(`${JSON.stringify({
+    console.log(JSON.stringify({
       configFile: exists ? basename(configPath) : null,
       exists,
       ok: exists
-    }, null, 2)}\n`)
+    }, null, 2))
 
     if (!exists) process.exitCode = 1
 
@@ -414,24 +414,24 @@ export const handleInit = (cwd: string = process.cwd(), check = false) => {
   }
 
   if (existsSync(configPath)) {
-    process.stderr.write(`⚠️  ${basename(configPath)} already exists. Skipping...\n`)
+    console.error(`⚠️  ${basename(configPath)} already exists. Skipping...`)
 
     return
   }
 
-  process.stdout.write('🔍 Detecting project settings...\n')
+  console.log('🔍 Detecting project settings...')
 
   const { configContent } = createConfigContent(cwd)
 
   writeFileSync(configPath, configContent)
 
-  process.stdout.write(`✅ Created ${basename(configPath)} with auto-detected settings!\n`)
+  console.log(`✅ Created ${basename(configPath)} with auto-detected settings!`)
 
-  process.stdout.write('🚀 Ready to lint!\n')
+  console.log('🚀 Ready to lint!')
 }
 
 export const handleUpdate = (cwd: string = process.cwd()) => {
-  process.stdout.write('🔍 Detecting project settings...\n')
+  console.log('🔍 Detecting project settings...')
 
   const { configContent, configPath } = createConfigContent(cwd)
 
@@ -441,26 +441,26 @@ export const handleUpdate = (cwd: string = process.cwd()) => {
 
     writeFileSync(backupPath, existing)
 
-    process.stdout.write(`📦 Backed up existing config to ${basename(backupPath)}\n`)
+    console.log(`📦 Backed up existing config to ${basename(backupPath)}`)
   }
 
   writeFileSync(configPath, configContent)
 
-  process.stdout.write(`✅ Updated ${basename(configPath)} with auto-detected settings!\n`)
+  console.log(`✅ Updated ${basename(configPath)} with auto-detected settings!`)
 
-  process.stdout.write('🚀 Ready to lint!\n')
+  console.log('🚀 Ready to lint!')
 }
 
 export const handleExplain = (cwd: string = process.cwd(), json = false) => {
   const summary = getProjectSummary(cwd)
 
   if (json) {
-    process.stdout.write(`${JSON.stringify(summary, null, 2)}\n`)
+    console.log(JSON.stringify(summary, null, 2))
 
     return
   }
 
-  process.stdout.write([
+  console.log([
     'ESLint Basic detected configuration:',
     `- TypeScript: ${summary.typescript ? 'enabled' : 'disabled'}`,
     `- Preset: ${summary.preset}`,
@@ -472,7 +472,7 @@ export const handleExplain = (cwd: string = process.cwd(), json = false) => {
     `- Formats: ${formatList(summary.formats)}`,
     `- Tools: ${formatList(summary.tools)}`,
     `- Extensions: ${formatList(summary.extensions)}`
-  ].join('\n') + '\n')
+  ].join('\n'))
 }
 
 export const handleInspect = async (cwd: string = process.cwd(), json = false) => {
@@ -486,12 +486,12 @@ export const handleInspect = async (cwd: string = process.cwd(), json = false) =
   }
 
   if (json) {
-    process.stdout.write(`${JSON.stringify(payload, null, 2)}\n`)
+    console.log(JSON.stringify(payload, null, 2))
 
     return
   }
 
-  process.stdout.write([
+  console.log([
     'ESLint Basic inspection:',
     `- Package manager: ${payload.packageManager}`,
     `- Config source: ${activeConfig?.source ?? 'not found'}`,
@@ -506,7 +506,7 @@ export const handleInspect = async (cwd: string = process.cwd(), json = false) =
     `- Tools: ${formatList(summary.tools)}`,
     `- Extensions: ${formatList(summary.extensions)}`,
     `- Workspace projects: ${formatList(summary.workspaceProjects)}`
-  ].join('\n') + '\n')
+  ].join('\n'))
 }
 
 interface DuplicateEslintInfo {
@@ -661,21 +661,21 @@ const outputDoctorResult = (
   }
 
   if (json) {
-    process.stdout.write(`${JSON.stringify(payload, null, 2)}\n`)
+    console.log(JSON.stringify(payload, null, 2))
 
     if (issues.length > 0) process.exitCode = 1
 
     return
   }
 
-  process.stdout.write([
+  console.log([
     `ESLint Basic doctor: ${status}`,
     `- Package manager: ${payload.packageManager}`,
     `- Config file: ${payload.configFile ?? 'none'}`,
     `- Workspace projects: ${formatList(summary.workspaceProjects)}`,
     ...(issues.length > 0 ? ['', 'Issues:', ...issues.map(issue => `- ${issue}`)] : []),
     ...(warnings.length > 0 ? ['', 'Warnings:', ...warnings.map(warning => `- ${warning}`)] : [])
-  ].join('\n') + '\n')
+  ].join('\n'))
 
   if (issues.length > 0) process.exitCode = 1
 }
@@ -697,9 +697,9 @@ export const handleDoctor = async (cwd: string = process.cwd(), json = false, li
 
   if (liteInstall) {
     if (json) {
-      process.stdout.write(`${JSON.stringify({ command: liteInstallCommand, packageManager, packages: liteInstallPackages }, null, 2)}\n`)
+      console.log(JSON.stringify({ command: liteInstallCommand, packageManager, packages: liteInstallPackages }, null, 2))
     } else {
-      process.stdout.write(`${liteInstallCommand}\n`)
+      console.log(liteInstallCommand)
     }
 
     return
@@ -715,7 +715,7 @@ export const handleDocs = (cwd: string = process.cwd()) => {
 
   writeFileSync(outputPath, createStandardsContent(cwd))
 
-  process.stdout.write('✅ Generated ESLINT_STANDARDS.md\n')
+  console.log('✅ Generated ESLINT_STANDARDS.md')
 }
 
 const migrateConfigContent = (content: string): { changed: boolean, content: string, frameworks: string[] } => {
@@ -792,18 +792,18 @@ export const handleMigrate = (cwd: string = process.cwd(), write = false, json =
   const applied = processConfigMigration(configPath, write, suggestions)
 
   if (json) {
-    process.stdout.write(`${JSON.stringify({
+    console.log(JSON.stringify({
       applied,
       configFile: existsSync(configPath) ? basename(configPath) : null,
       suggestions: suggestions.slice(1),
       title: suggestions[0],
       write
-    }, null, 2)}\n`)
+    }, null, 2))
 
     return
   }
 
-  process.stdout.write(`${suggestions.join('\n')}\n`)
+  console.log(suggestions.join('\n'))
 }
 
 const dispatchCommand = (
@@ -827,7 +827,7 @@ const dispatchCommand = (
 
     case 'doctor': {
       handleDoctor(cwd, flags.hasJson, flags.hasLiteInstall).catch((error: unknown) => {
-        process.stderr.write(`❌ Failed to run doctor: ${String(error)}\n`)
+        console.error(`❌ Failed to run doctor: ${String(error)}`)
 
         process.exitCode = 1
       })
@@ -843,7 +843,7 @@ const dispatchCommand = (
 
     case 'generate-skill': {
       handleGenerateSkill(cwd, flags.hasForce, { check: flags.hasCheck, createAgentsMd: flags.hasCreate }).catch((error: unknown) => {
-        process.stderr.write(`❌ Failed to generate skill files: ${String(error)}\n`)
+        console.error(`❌ Failed to generate skill files: ${String(error)}`)
 
         process.exitCode = 1
       })
@@ -859,7 +859,7 @@ const dispatchCommand = (
 
     case 'inspect': {
       handleInspect(cwd, flags.hasJson).catch((error: unknown) => {
-        process.stderr.write(`❌ Failed to inspect project: ${String(error)}\n`)
+        console.error(`❌ Failed to inspect project: ${String(error)}`)
 
         process.exitCode = 1
       })
@@ -880,7 +880,7 @@ const dispatchCommand = (
     }
 
     default: {
-      process.stderr.write(`Unknown command: ${command}\n`)
+      console.error(`Unknown command: ${command}`)
 
       printUsage()
 
@@ -901,7 +901,7 @@ export const runCli = (argv: string[] = process.argv, cwd: string = process.cwd(
   }
 
   if (isVersion) {
-    process.stdout.write(`${getCliVersion()}\n`)
+    console.log(getCliVersion())
 
     return
   }

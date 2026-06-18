@@ -93,33 +93,33 @@ describe('CLI scaffolding', () => {
 
 describe('CLI command UX', () => {
   test('should print help text for --help', () => {
-    const logSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     runCli(['node', 'basic-eslint', '--help'])
 
     expect(logSpy).toHaveBeenCalled()
-    expect(logSpy.mock.calls.map(call => String(call[0])).join('')).toContain('Usage: basic-eslint <command> [options]')
+    expect(logSpy.mock.calls.flat().join('\n')).toContain('Usage: basic-eslint <command> [options]')
     logSpy.mockRestore()
   })
 
   test('should print version for --version', () => {
-    const logSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     runCli(['node', 'basic-eslint', '--version'])
 
     expect(logSpy).toHaveBeenCalled()
-    expect(String(logSpy.mock.calls[0]?.[0])).toMatch(/\d+\.\d+\.\d+|unknown/)
+    expect(logSpy.mock.calls[0]?.[0]).toMatch(/\d+\.\d+\.\d+|unknown/)
     logSpy.mockRestore()
   })
 
   test('should set non-zero exit code for unknown command', () => {
     process.exitCode = undefined
-    const errorSpy = vi.spyOn(process.stderr, 'write').mockImplementation(() => true)
-    const logSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true)
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     runCli(['node', 'basic-eslint', 'unknown-command'])
 
-    expect(errorSpy).toHaveBeenCalledWith('Unknown command: unknown-command\n')
+    expect(errorSpy).toHaveBeenCalledWith('Unknown command: unknown-command')
     expect(process.exitCode).toBe(1)
     errorSpy.mockRestore()
     logSpy.mockRestore()
@@ -136,11 +136,11 @@ describe('CLI command UX', () => {
       },
       name: 'tmp-project'
     })
-    const logSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     handleExplain(cwd)
 
-    const output = logSpy.mock.calls.map(call => String(call[0])).join('')
+    const output = logSpy.mock.calls.flat().join('\n')
 
     expect(output).toContain('ESLint Basic detected configuration:')
     expect(output).toContain('Frameworks: react')
@@ -155,7 +155,7 @@ describe('CLI command UX', () => {
       },
       name: 'tmp-project'
     })
-    const logSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     handleExplain(cwd, true)
 
@@ -172,7 +172,7 @@ describe('CLI command UX', () => {
   test('should check whether init has an existing config without writing', () => {
     process.exitCode = undefined
     const cwd = createTempProject({ name: 'tmp-project' })
-    const logSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     handleInit(cwd, true)
 
@@ -196,7 +196,7 @@ describe('CLI command UX', () => {
       },
       name: 'tmp-project'
     })
-    const logSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     handleDocs(cwd)
 
@@ -204,13 +204,13 @@ describe('CLI command UX', () => {
 
     expect(content).toContain('# ESLint Standards')
     expect(content).toContain('Frameworks: next, react')
-    expect(logSpy).toHaveBeenCalledWith('✅ Generated ESLINT_STANDARDS.md\n')
+    expect(logSpy).toHaveBeenCalledWith('✅ Generated ESLINT_STANDARDS.md')
     logSpy.mockRestore()
   })
 
   test('should report migration suggestions', () => {
     const cwd = createTempProject({ name: 'tmp-project', type: 'module' })
-    const logSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     writeFileSync(
       join(cwd, 'eslint.config.js'), 'import react from \'@santi020k/eslint-config-react\'\nexport default []'
@@ -218,7 +218,7 @@ describe('CLI command UX', () => {
 
     handleMigrate(cwd)
 
-    const output = logSpy.mock.calls.map(call => String(call[0])).join('')
+    const output = logSpy.mock.calls.flat().join('\n')
 
     expect(output).toContain('v1 to v2 migration suggestions:')
     expect(output).toContain('framework booleans')
@@ -227,7 +227,7 @@ describe('CLI command UX', () => {
 
   test('should print migration suggestions as JSON', () => {
     const cwd = createTempProject({ name: 'tmp-project', type: 'module' })
-    const logSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     writeFileSync(
       join(cwd, 'eslint.config.js'),
@@ -248,7 +248,7 @@ describe('CLI command UX', () => {
 
   test('should rewrite simple v1 framework imports when migrate --write is used', () => {
     const cwd = createTempProject({ name: 'tmp-project', type: 'module' })
-    const logSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     writeFileSync(
       join(cwd, 'eslint.config.js'),
@@ -258,7 +258,7 @@ describe('CLI command UX', () => {
     handleMigrate(cwd, true)
 
     const config = readFileSync(join(cwd, 'eslint.config.js'), 'utf8')
-    const output = logSpy.mock.calls.map(call => String(call[0])).join('')
+    const output = logSpy.mock.calls.flat().join('\n')
 
     expect(config).toContain('eslintConfig')
     expect(config).toContain('next: true')
@@ -276,7 +276,7 @@ describe('CLI command UX', () => {
       name: 'tmp-project',
       type: 'module'
     })
-    const logSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     writeFileSync(
       join(cwd, 'eslint.config.js'), `export default [
@@ -286,7 +286,7 @@ describe('CLI command UX', () => {
 
     await handleInspect(cwd)
 
-    const output = logSpy.mock.calls.map(call => String(call[0])).join('')
+    const output = logSpy.mock.calls.flat().join('\n')
 
     expect(output).toContain('ESLint Basic inspection:')
     expect(output).toContain('Config source: config-file')
@@ -296,7 +296,7 @@ describe('CLI command UX', () => {
 
   test('should print inspect data as JSON', async () => {
     const cwd = createTempProject({ name: 'tmp-project' })
-    const logSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     await handleInspect(cwd, true)
 
@@ -319,7 +319,7 @@ describe('CLI command UX', () => {
       type: 'module',
       workspaces: ['packages/*']
     })
-    const logSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     mkdirSync(join(cwd, 'packages', 'app'), { recursive: true })
     writeFileSync(join(cwd, 'packages', 'app', 'package.json'), JSON.stringify({ name: 'app' }))
@@ -330,7 +330,7 @@ describe('CLI command UX', () => {
 
     await handleDoctor(cwd)
 
-    const output = logSpy.mock.calls.map(call => String(call[0])).join('')
+    const output = logSpy.mock.calls.flat().join('\n')
 
     expect(output).toContain('ESLint Basic doctor: passed with warnings')
     expect(output).toContain('Config still imports v1 framework packages')
@@ -344,7 +344,7 @@ describe('CLI command UX', () => {
       name: 'tmp-project',
       type: 'module'
     })
-    const logSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     await handleDoctor(cwd, true)
 
@@ -374,7 +374,7 @@ describe('CLI command UX', () => {
       },
       type: 'module'
     })
-    const logSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     writeFileSync(
       join(cwd, 'eslint.config.js'),
@@ -383,7 +383,7 @@ describe('CLI command UX', () => {
 
     await handleDoctor(cwd)
 
-    const output = logSpy.mock.calls.map(call => String(call[0])).join('')
+    const output = logSpy.mock.calls.flat().join('\n')
 
     expect(output).toContain('@santi020k/eslint-config-react')
     expect(output).toContain('@santi020k/eslint-config-integrations')
@@ -402,7 +402,7 @@ describe('CLI command UX', () => {
       name: 'tmp-project',
       type: 'module'
     })
-    const logSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     await handleDoctor(cwd, false, true)
 
@@ -427,7 +427,7 @@ describe('CLI command UX', () => {
       },
       type: 'module'
     })
-    const logSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     writeFileSync(
       join(cwd, 'eslint.config.js'),
@@ -436,7 +436,7 @@ describe('CLI command UX', () => {
 
     await handleDoctor(cwd)
 
-    const output = logSpy.mock.calls.map(call => String(call[0])).join('')
+    const output = logSpy.mock.calls.flat().join('\n')
 
     expect(output).toContain('Lite config uses Preset.All')
     logSpy.mockRestore()
@@ -451,7 +451,7 @@ describe('CLI command UX', () => {
       },
       type: 'module'
     })
-    const logSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     writeFileSync(
       join(cwd, 'eslint.config.js'),
@@ -460,7 +460,7 @@ describe('CLI command UX', () => {
 
     await handleDoctor(cwd)
 
-    const output = logSpy.mock.calls.map(call => String(call[0])).join('')
+    const output = logSpy.mock.calls.flat().join('\n')
 
     expect(output).toContain('ESLint Basic doctor: failed')
     expect(output).toContain('could not be loaded')
@@ -829,11 +829,11 @@ describe('generateAgentSkills', () => {
     mkdirSync(join(cwd, '.cursor'))
     writeFileSync(join(cwd, 'AGENTS.md'), '# My agents\n')
 
-    const logSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     await handleGenerateSkill(cwd)
 
-    const output = logSpy.mock.calls.map(call => String(call[0])).join('')
+    const output = logSpy.mock.calls.flat().join('\n')
 
     expect(output).toContain('Generated 2 skill file(s)!')
 
@@ -848,11 +848,11 @@ describe('generateAgentSkills', () => {
   test('should warn via the CLI handler when no agent folders or AGENTS.md exist', async () => {
     const cwd = createTempProject({ name: 'tmp-project' })
 
-    const logSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     await handleGenerateSkill(cwd)
 
-    const output = logSpy.mock.calls.map(call => String(call[0])).join('')
+    const output = logSpy.mock.calls.flat().join('\n')
 
     expect(output).toContain('No agent folders found')
 
@@ -922,12 +922,12 @@ describe('generateAgentSkills', () => {
 
     mkdirSync(join(cwd, '.cursor'))
 
-    const logSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
     const previousExitCode = process.exitCode
 
     await handleGenerateSkill(cwd, false, { check: true })
 
-    const output = logSpy.mock.calls.map(call => String(call[0])).join('')
+    const output = logSpy.mock.calls.flat().join('\n')
 
     expect(output).toContain('Stale or missing')
     expect(process.exitCode).toBe(1)
@@ -995,11 +995,11 @@ describe('findDuplicateEslint', () => {
     writeFakePackage(cwd, '@santi020k/eslint-config-core', '2.0.0')
     writeFakePackage(join(cwd, 'node_modules', '@santi020k', 'eslint-config-core'), 'eslint', '10.2.1')
 
-    const logSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
     await handleDoctor(cwd)
 
-    const output = logSpy.mock.calls.map(call => String(call[0])).join('')
+    const output = logSpy.mock.calls.flat().join('\n')
 
     expect(output).toContain('Two ESLint copies are installed')
     expect(output).toContain('9.39.0')

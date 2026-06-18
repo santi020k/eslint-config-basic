@@ -973,40 +973,40 @@ const outputGenerateSkillResults = (
 ): void => {
   if (check) {
     for (const file of result.skipped) {
-      process.stdout.write(`✅ Up to date: ${file.replace(cwd + '/', '')}\n`)
+      console.log(`✅ Up to date: ${file.replace(cwd + '/', '')}`)
     }
 
     for (const file of result.stale) {
-      process.stdout.write(`❌ Stale or missing: ${file.replace(cwd + '/', '')}\n`)
+      console.log(`❌ Stale or missing: ${file.replace(cwd + '/', '')}`)
     }
 
     if (result.stale.length > 0) {
-      process.stdout.write(`\n⚠️  ${result.stale.length} skill file(s) are out of date. Run \`generate-skill --force\` to regenerate them.\n`)
+      console.log(`\n⚠️  ${result.stale.length} skill file(s) are out of date. Run \`generate-skill --force\` to regenerate them.`)
 
       process.exitCode = 1
     } else {
-      process.stdout.write('\n🎉 All agent skill files are up to date!\n')
+      console.log('\n🎉 All agent skill files are up to date!')
     }
 
     return
   }
 
   for (const file of result.written) {
-    process.stdout.write(`✅ Written: ${file.replace(cwd + '/', '')}\n`)
+    console.log(`✅ Written: ${file.replace(cwd + '/', '')}`)
   }
 
   for (const file of result.skipped) {
-    process.stdout.write(`⏭️  Skipped (already exists): ${file.replace(cwd + '/', '')}\n`)
+    console.log(`⏭️  Skipped (already exists): ${file.replace(cwd + '/', '')}`)
   }
 
   if (result.written.length > 0) {
-    process.stdout.write(`\n🎉 Generated ${result.written.length} skill file(s)!\n`)
+    console.log(`\n🎉 Generated ${result.written.length} skill file(s)!`)
 
-    process.stdout.write('   Agents will now follow your project\'s ESLint standards automatically.\n')
+    console.log('   Agents will now follow your project\'s ESLint standards automatically.')
   }
 
   if (result.skipped.length > 0) {
-    process.stdout.write('\n💡 Tip: run with --force to overwrite existing skill files.\n')
+    console.log('\n💡 Tip: run with --force to overwrite existing skill files.')
   }
 }
 
@@ -1017,22 +1017,22 @@ export const handleGenerateSkill = async (
 ): Promise<void> => {
   const { check, createAgentsMd } = resolveGenerateSkillFlags(flags)
 
-  process.stdout.write(`${check ? '🔍 Checking AI agent skill files...' : '🔍 Scanning for AI agent folders...'}\n`)
+  console.log(check ? '🔍 Checking AI agent skill files...' : '🔍 Scanning for AI agent folders...')
 
   const configFile = findEslintConfig(cwd)
 
   if (configFile) {
-    process.stdout.write(`📄 Reading config from: ${configFile.replace(cwd + '/', '')}\n`)
+    console.log(`📄 Reading config from: ${configFile.replace(cwd + '/', '')}`)
   } else {
-    process.stdout.write('⚠️  No eslint.config.js found — falling back to package.json detection.\n')
+    console.log('⚠️  No eslint.config.js found — falling back to package.json detection.')
   }
 
   const result = await generateAgentSkills({ check, createAgentsMd, cwd, force })
 
   if (result.written.length === 0 && result.skipped.length === 0 && result.stale.length === 0) {
-    process.stdout.write('\n⚠️  No agent folders found (.agent, .agents, .claude, .cursor, .windsurf, .copilot, .aider, .gemini, .clinerules, .roo, .kiro) and no AGENTS.md.\n')
+    console.log('\n⚠️  No agent folders found (.agent, .agents, .claude, .cursor, .windsurf, .copilot, .aider, .gemini, .clinerules, .roo, .kiro) and no AGENTS.md.')
 
-    process.stdout.write('   Create one of those folders first (or re-run with --create to scaffold AGENTS.md).\n')
+    console.log('   Create one of those folders first (or re-run with --create to scaffold AGENTS.md).')
 
     return
   }

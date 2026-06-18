@@ -36,6 +36,13 @@ export default [
     name: 'local-tests-no-type-checking'
   },
   {
+    files: ['packages/basic/src/cli.ts', 'packages/basic/src/agent-skill-generator.ts'],
+    name: 'local-cli-console',
+    rules: {
+      'no-console': 'off'
+    }
+  },
+  {
     files: [
       'scripts/**/*',
       'packages/tests/**/*',

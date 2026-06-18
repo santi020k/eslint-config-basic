@@ -5,8 +5,6 @@
     "packages/playground/**"
   ],
   "ignoreDependencies": [
-    "@arethetypeswrong/cli",
-    "@santi020k/eslint-config-basic",
     "typedoc-plugin-markdown",
     "tailwindcss"
   ],
@@ -35,22 +33,82 @@
       "project": ["src/**/*.ts"]
     },
     "packages/basic": {
-      "ignoreDependencies": []
+      "ignoreDependencies": [
+        "@santi020k/eslint-config-angular",
+        "@santi020k/eslint-config-astro",
+        "@santi020k/eslint-config-expo",
+        "@santi020k/eslint-config-hono",
+        "@santi020k/eslint-config-lit",
+        "@santi020k/eslint-config-nest",
+        "@santi020k/eslint-config-next",
+        "@santi020k/eslint-config-nuxt",
+        "@santi020k/eslint-config-preact",
+        "@santi020k/eslint-config-qwik",
+        "@santi020k/eslint-config-react",
+        "@santi020k/eslint-config-react-router",
+        "@santi020k/eslint-config-remix",
+        "@santi020k/eslint-config-slidev",
+        "@santi020k/eslint-config-solid",
+        "@santi020k/eslint-config-svelte",
+        "@santi020k/eslint-config-tanstack-start",
+        "@santi020k/eslint-config-vite",
+        "@santi020k/eslint-config-vue"
+      ]
     },
     "packages/integrations": {
       "ignoreDependencies": [
+        "@eslint/css",
         "@eslint/markdown",
         "@graphql-eslint/eslint-plugin",
+        "@html-eslint/eslint-plugin",
+        "@html-eslint/parser",
         "@tanstack/eslint-plugin-query",
         "@tanstack/eslint-plugin-router",
         "@vitest/eslint-plugin",
+        "eslint-config-biome",
         "eslint-plugin-better-tailwindcss",
+        "eslint-plugin-compat",
+        "eslint-plugin-de-morgan",
+        "eslint-plugin-depend",
         "eslint-plugin-jsdoc",
+        "eslint-plugin-n",
+        "eslint-plugin-no-only-tests",
+        "eslint-plugin-oxlint",
         "eslint-plugin-playwright",
+        "eslint-plugin-pnpm",
         "eslint-plugin-security",
         "eslint-plugin-sonarjs",
+        "eslint-plugin-tsdoc",
+        "eslint-plugin-zod",
         "eslint-plugin-vercel-ai-security"
       ]
+    },
+    "packages/lite": {
+      "ignoreDependencies": [
+        "@santi020k/eslint-config-angular",
+        "@santi020k/eslint-config-astro",
+        "@santi020k/eslint-config-expo",
+        "@santi020k/eslint-config-hono",
+        "@santi020k/eslint-config-integrations",
+        "@santi020k/eslint-config-lit",
+        "@santi020k/eslint-config-nest",
+        "@santi020k/eslint-config-next",
+        "@santi020k/eslint-config-nuxt",
+        "@santi020k/eslint-config-preact",
+        "@santi020k/eslint-config-qwik",
+        "@santi020k/eslint-config-react",
+        "@santi020k/eslint-config-react-router",
+        "@santi020k/eslint-config-remix",
+        "@santi020k/eslint-config-slidev",
+        "@santi020k/eslint-config-solid",
+        "@santi020k/eslint-config-svelte",
+        "@santi020k/eslint-config-tanstack-start",
+        "@santi020k/eslint-config-vite",
+        "@santi020k/eslint-config-vue"
+      ]
+    },
+    "packages/react-router": {
+      "ignoreDependencies": ["@santi020k/eslint-config-core"]
     },
     "packages/expo": {
       "ignoreDependencies": ["eslint-config-expo"]
