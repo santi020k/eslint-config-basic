@@ -28,34 +28,34 @@ export interface AstroOptions {
   tsconfigRootDir?: string
 }
 
+const buildFrameworkGroups = (
+  hasReact: boolean,
+  hasSolid: boolean,
+  hasVue: boolean,
+  hasSvelte: boolean
+): string[][] => {
+  const groups: string[][] = []
+
+  if (hasReact) groups.push(['^react', '^react-dom'])
+
+  if (hasSolid) groups.push(['^solid-js'])
+
+  if (hasVue) groups.push(['^vue'])
+
+  if (hasSvelte) groups.push(['^svelte'])
+
+  return groups
+}
+
 /**
  * Generates Astro-specific rules based on enabled frameworks
  */
-export const getRules = (options: AstroOptions = {}): TSESLint.Linter.RulesRecord => {
-  const {
-    hasReact = false,
-    hasSolid = false,
-    hasSvelte = false,
-    hasVue = false
-  } = options
-
-  const frameworkGroups: string[][] = []
-
-  if (hasReact) {
-    frameworkGroups.push(['^react', '^react-dom'])
-  }
-
-  if (hasSolid) {
-    frameworkGroups.push(['^solid-js'])
-  }
-
-  if (hasVue) {
-    frameworkGroups.push(['^vue'])
-  }
-
-  if (hasSvelte) {
-    frameworkGroups.push(['^svelte'])
-  }
+export const getRules = (options?: AstroOptions): TSESLint.Linter.RulesRecord => {
+  const hasReact = options?.hasReact === true
+  const hasSolid = options?.hasSolid === true
+  const hasSvelte = options?.hasSvelte === true
+  const hasVue = options?.hasVue === true
+  const frameworkGroups = buildFrameworkGroups(hasReact, hasSolid, hasVue, hasSvelte)
 
   const baseRules: TSESLint.Linter.RulesRecord = {
     '@stylistic/comma-dangle': ['warn', 'never'],

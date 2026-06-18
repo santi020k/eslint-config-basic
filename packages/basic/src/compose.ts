@@ -37,9 +37,11 @@ export const applyStrictMode = (
 
   if (strictMode === 'recommended') return configs
 
-  const recurse = (item: TSESLint.FlatConfig.Config | TSESLint.FlatConfig.ConfigArray): any => {
+  type ConfigEntry = TSESLint.FlatConfig.Config | TSESLint.FlatConfig.ConfigArray
+
+  const recurse = (item: ConfigEntry): ConfigEntry => {
     if (Array.isArray(item)) {
-      return item.map(recurse)
+      return item.map(config => recurse(config) as TSESLint.FlatConfig.Config)
     }
 
     if (item.rules) {
@@ -53,5 +55,5 @@ export const applyStrictMode = (
     return item
   }
 
-  return recurse(configs)
+  return recurse(configs) as FlatConfigArray
 }

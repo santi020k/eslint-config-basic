@@ -38,10 +38,10 @@ for (const pkg of packageDocs) {
   try {
     writeFileSync(readmePath, content, 'utf8')
 
-    console.log(`✅ Generated README for ${pkg.packageName} at ${pkg.packagePath}`)
+    process.stdout.write(`✅ Generated README for ${pkg.packageName} at ${pkg.packagePath}\n`)
   } catch (error) {
-    console.error(`❌ Failed to generate README for ${pkg.packageName}:`, error.message)
+    process.stderr.write(`❌ Failed to generate README for ${pkg.packageName}: ${String(error.message)}\n`)
   }
 }
 
-console.log('🚀 Documentation sync complete!')
+process.stdout.write('🚀 Documentation sync complete!\n')

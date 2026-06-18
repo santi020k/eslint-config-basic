@@ -42,7 +42,7 @@ const baseRef = resolveBaseRef()
 const changedFiles = listChangedFiles(baseRef)
 
 if (changedFiles.length === 0) {
-  console.info('[lint:changed] No changed JS/TS files detected.')
+  process.stdout.write('[lint:changed] No changed JS/TS files detected.\n')
 
   process.exitCode = 0
 } else {

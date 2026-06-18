@@ -106,154 +106,77 @@ const detectRuntime = (
   }
 }
 
+type DetectedFrameworkName = NonNullable<EslintConfigOptions['detectedFrameworks']>[number]
+
+interface FrameworkEntry {
+  deps: string[]
+  frameworks: DetectedFrameworkName[]
+  runtime?: Runtime
+}
+
+const FRAMEWORK_ENTRIES: FrameworkEntry[] = [
+  { deps: ['next'], frameworks: ['next', 'react'], runtime: Runtime.Universal },
+  { deps: ['astro'], frameworks: ['astro'], runtime: Runtime.Browser },
+  { deps: ['preact'], frameworks: ['preact'], runtime: Runtime.Browser },
+  { deps: ['@nestjs/core'], frameworks: ['nest'], runtime: Runtime.Node },
+  { deps: ['hono'], frameworks: ['hono'] },
+  { deps: ['vue'], frameworks: ['vue'], runtime: Runtime.Browser },
+  { deps: ['nuxt'], frameworks: ['nuxt', 'vue'], runtime: Runtime.Universal },
+  { deps: ['lit', 'lit-element'], frameworks: ['lit'], runtime: Runtime.Browser },
+  { deps: ['expo', 'react-native'], frameworks: ['expo', 'react'] },
+  { deps: ['svelte'], frameworks: ['svelte'], runtime: Runtime.Browser },
+  { deps: ['solid-js'], frameworks: ['solid'], runtime: Runtime.Browser },
+  { deps: ['@angular/core'], frameworks: ['angular'], runtime: Runtime.Browser },
+  { deps: ['@builder.io/qwik'], frameworks: ['qwik'], runtime: Runtime.Browser },
+  { deps: ['@slidev/cli'], frameworks: ['slidev', 'vue'], runtime: Runtime.Browser },
+  { deps: ['@remix-run/react', '@remix-run/node'], frameworks: ['remix'], runtime: Runtime.Browser },
+  { deps: ['@react-router/dev'], frameworks: ['react-router', 'react'], runtime: Runtime.Browser },
+  { deps: ['@tanstack/react-start'], frameworks: ['tanstack-start', 'react'], runtime: Runtime.Universal },
+  { deps: ['@tanstack/solid-start'], frameworks: ['tanstack-start', 'solid'], runtime: Runtime.Universal },
+]
+
+const CLOUDFLARE_DEPS = ['wrangler', '@cloudflare/workers-types', '@cloudflare/vitest-pool-workers']
+const REACT_EXCLUSIONS = ['next', 'expo', 'react-native', '@react-router/dev', '@remix-run/react', '@tanstack/react-start']
+const VITE_EXCLUSION_FRAMEWORKS = ['astro', 'next', 'nuxt', 'qwik', 'react-router', 'remix', 'slidev', 'tanstack-start']
+
+const isReactStandalone = (allDeps: DependencyMap): boolean =>
+  Boolean(allDeps.react) && !hasAnyDependency(allDeps, REACT_EXCLUSIONS)
+
+const isViteStandalone = (allDeps: DependencyMap, detected: DetectedFrameworkName[]): boolean =>
+  Boolean(allDeps.vite) && !detected.some(fw => VITE_EXCLUSION_FRAMEWORKS.includes(fw))
+
 const detectFrameworks = (
   allDeps: DependencyMap,
   detectRootDir: string,
   setRuntime: (runtime: Runtime) => void
 ): EslintConfigOptions['detectedFrameworks'] => {
-  const detected: NonNullable<EslintConfigOptions['detectedFrameworks']> = []
+  const detected: DetectedFrameworkName[] = []
 
-  if (allDeps.next) {
-    detected.push('next', 'react')
+  for (const { deps, frameworks, runtime } of FRAMEWORK_ENTRIES) {
+    if (hasAnyDependency(allDeps, deps)) {
+      detected.push(...frameworks)
 
-    setRuntime(Runtime.Universal)
+      if (runtime !== undefined) setRuntime(runtime)
+    }
   }
 
-  if (allDeps.astro) {
-    detected.push('astro')
-
-    setRuntime(Runtime.Browser)
-  }
-
-  if (allDeps.react && !allDeps.next && !allDeps.expo && !allDeps['react-native'] && !allDeps['@react-router/dev'] && !allDeps['@remix-run/react'] && !allDeps['@tanstack/react-start']) {
+  if (isReactStandalone(allDeps)) {
     detected.push('react')
 
     setRuntime(Runtime.Browser)
   }
 
-  if (allDeps.preact) {
-    detected.push('preact')
-
-    setRuntime(Runtime.Browser)
+  if (allDeps.hono && hasAnyDependency(allDeps, CLOUDFLARE_DEPS)) {
+    setRuntime(Runtime.Cloudflare)
   }
 
-  if (allDeps['@nestjs/core']) {
-    detected.push('nest')
-
-    setRuntime(Runtime.Node)
-  }
-
-  if (allDeps.hono) {
-    detected.push('hono')
-
-    if (hasAnyDependency(allDeps, ['wrangler', '@cloudflare/workers-types', '@cloudflare/vitest-pool-workers'])) {
-      setRuntime(Runtime.Cloudflare)
-    }
-  }
-
-  if (allDeps.vue) {
-    detected.push('vue')
-
-    setRuntime(Runtime.Browser)
-  }
-
-  if (allDeps.nuxt) {
-    detected.push('nuxt', 'vue')
-
-    setRuntime(Runtime.Universal)
-  }
-
-  if (allDeps.lit || allDeps['lit-element']) {
-    detected.push('lit')
-
-    setRuntime(Runtime.Browser)
-  }
-
-  if (allDeps.expo || allDeps['react-native']) {
-    detected.push('expo', 'react')
-  }
-
-  if (allDeps.svelte) {
-    detected.push('svelte')
-
-    setRuntime(Runtime.Browser)
-  }
-
-  if (allDeps['solid-js']) {
-    detected.push('solid')
-
-    setRuntime(Runtime.Browser)
-  }
-
-  if (allDeps['@angular/core']) {
-    detected.push('angular')
-
-    setRuntime(Runtime.Browser)
-  }
-
-  if (allDeps['@builder.io/qwik']) {
-    detected.push('qwik')
-
-    setRuntime(Runtime.Browser)
-  }
-
-  if (allDeps['@slidev/cli']) {
-    detected.push('slidev', 'vue')
-
-    setRuntime(Runtime.Browser)
-  }
-
-  if (allDeps['@remix-run/react'] || allDeps['@remix-run/node']) {
-    detected.push('remix')
-
-    setRuntime(Runtime.Browser)
-  }
-
-  if (allDeps['@react-router/dev']) {
-    detected.push('react-router', 'react')
-
-    setRuntime(Runtime.Browser)
-  }
-
-  if (allDeps['@tanstack/react-start']) {
-    detected.push('tanstack-start', 'react')
-
-    setRuntime(Runtime.Universal)
-  }
-
-  if (allDeps['@tanstack/solid-start']) {
-    detected.push('tanstack-start', 'solid')
-
-    setRuntime(Runtime.Universal)
-  }
-
-  if (
-    allDeps.vite &&
-    !detected.some(framework => [
-      'astro',
-      'next',
-      'nuxt',
-      'qwik',
-      'react-router',
-      'remix',
-      'slidev',
-      'tanstack-start'
-    ].includes(framework))
-  ) {
+  if (isViteStandalone(allDeps, detected)) {
     detected.push('vite')
 
     setRuntime(Runtime.Browser)
   }
 
-  if (
-    (
-      allDeps.wrangler ||
-      allDeps['@cloudflare/workers-types'] ||
-      allDeps['@cloudflare/vitest-pool-workers'] ||
-      hasCloudflareSignal(allDeps, detectRootDir)
-    ) &&
-    detected.length === 0
-  ) {
+  if (detected.length === 0 && hasCloudflareSignal(allDeps, detectRootDir)) {
     setRuntime(Runtime.Cloudflare)
   }
 
@@ -280,121 +203,50 @@ const detectTypescript = (detectRootDir: string): boolean => [
   'tsconfig.eslint.json'
 ].some(fileName => pathExists(join(detectRootDir, fileName)))
 
-const detectLibraries = (allDeps: DependencyMap): Library[] => {
-  const libraries: Library[] = []
+const LIBRARY_DEP_MAPPINGS: [string[], Library][] = [
+  [['ai', '@ai-sdk/anthropic', '@ai-sdk/azure', '@ai-sdk/google', '@ai-sdk/openai', '@ai-sdk/react', '@ai-sdk/vue', '@ai-sdk/svelte'], Library.AiSdk],
+  [['@modelcontextprotocol/sdk'], Library.Mcp],
+  [['@mastra/core'], Library.Mastra],
+  [['@openai/agents'], Library.OpenAiAgents],
+  [['@google/genai'], Library.GoogleGenAi],
+  [['@microsoft/autogen', '@microsoft/autogen-core'], Library.Autogen],
+  [['langchain', '@langchain/core'], Library.Langchain],
+  [['llamaindex', '@llamaindex/core'], Library.LlamaIndex],
+  [['typeorm'], Library.Typeorm],
+  [['prisma', '@prisma/client'], Library.Prisma],
+  [['drizzle-orm'], Library.Drizzle],
+  [['@mikro-orm/core'], Library.MikroOrm],
+  [['sequelize', '@sequelize/core'], Library.Sequelize],
+  [['tailwindcss', '@tailwindcss/postcss', '@tailwindcss/vite', '@tailwindcss/typography', '@iconify/tailwind4'], Library.Tailwind],
+  [['i18next'], Library.I18next],
+  [['@stencil/core'], Library.Stencil],
+  [['storybook', '@storybook/react', '@storybook/core', '@storybook/nextjs', '@storybook/vue3', '@storybook/svelte', '@storybook/angular', '@storybook/experimental-nextjs-vite'], Library.Storybook],
+  [['@tanstack/react-query', '@tanstack/vue-query', '@tanstack/svelte-query', '@tanstack/angular-query', '@tanstack/eslint-plugin-query'], Library.TanstackQuery],
+  [['@tanstack/react-router', '@tanstack/vue-router', '@tanstack/eslint-plugin-router'], Library.TanstackRouter],
+  [['turbo', 'eslint-plugin-turbo'], Library.Turbo],
+  [['zod', 'eslint-plugin-zod'], Library.Zod],
+]
 
-  if (
-    allDeps.ai ||
-    allDeps['@ai-sdk/anthropic'] ||
-    allDeps['@ai-sdk/azure'] ||
-    allDeps['@ai-sdk/google'] ||
-    allDeps['@ai-sdk/openai'] ||
-    allDeps['@ai-sdk/react'] ||
-    allDeps['@ai-sdk/vue'] ||
-    allDeps['@ai-sdk/svelte']
-  ) libraries.push(Library.AiSdk)
+const detectLibraries = (allDeps: DependencyMap): Library[] => dedupe(
+  LIBRARY_DEP_MAPPINGS
+    .filter(([deps]) => hasAnyDependency(allDeps, deps))
+    .map(([, library]) => library)
+)
 
-  if (allDeps['@modelcontextprotocol/sdk']) libraries.push(Library.Mcp)
+const TESTING_DEP_MAPPINGS: [string[], Testing][] = [
+  [['vitest'], Testing.Vitest],
+  [['playwright', '@playwright/test'], Testing.Playwright],
+  [['jest', '@jest/core', 'jest-circus'], Testing.Jest],
+  [['@testing-library/jest-dom', 'eslint-plugin-jest-dom'], Testing.JestDom],
+  [['cypress'], Testing.Cypress],
+  [['@testing-library/react', '@testing-library/vue', '@testing-library/angular', '@testing-library/svelte', '@testing-library/user-event', '@testing-library/jest-dom', '@testing-library/dom'], Testing.TestingLibrary],
+]
 
-  if (allDeps['@mastra/core']) libraries.push(Library.Mastra)
-
-  if (allDeps['@openai/agents']) libraries.push(Library.OpenAiAgents)
-
-  if (allDeps['@google/genai']) libraries.push(Library.GoogleGenAi)
-
-  if (allDeps['@microsoft/autogen'] || allDeps['@microsoft/autogen-core']) libraries.push(Library.Autogen)
-
-  if (allDeps.langchain || allDeps['@langchain/core']) libraries.push(Library.Langchain)
-
-  if (allDeps.llamaindex || allDeps['@llamaindex/core']) libraries.push(Library.LlamaIndex)
-
-  if (allDeps.typeorm) libraries.push(Library.Typeorm)
-
-  if (allDeps.prisma || allDeps['@prisma/client']) libraries.push(Library.Prisma)
-
-  if (allDeps['drizzle-orm']) libraries.push(Library.Drizzle)
-
-  if (allDeps['@mikro-orm/core']) libraries.push(Library.MikroOrm)
-
-  if (allDeps.sequelize || allDeps['@sequelize/core']) libraries.push(Library.Sequelize)
-
-  if (
-    allDeps.tailwindcss ||
-    allDeps['@tailwindcss/postcss'] ||
-    allDeps['@tailwindcss/vite'] ||
-    allDeps['@tailwindcss/typography'] ||
-    allDeps['@iconify/tailwind4']
-  ) libraries.push(Library.Tailwind)
-
-  if (allDeps.i18next) libraries.push(Library.I18next)
-
-  if (allDeps['@stencil/core']) libraries.push(Library.Stencil)
-
-  if (
-    allDeps.storybook ||
-    allDeps['@storybook/react'] ||
-    allDeps['@storybook/core'] ||
-    allDeps['@storybook/nextjs'] ||
-    allDeps['@storybook/vue3'] ||
-    allDeps['@storybook/svelte'] ||
-    allDeps['@storybook/angular'] ||
-    allDeps['@storybook/experimental-nextjs-vite']
-  ) {
-    libraries.push(Library.Storybook)
-  }
-
-  if (
-    allDeps['@tanstack/react-query'] ||
-    allDeps['@tanstack/vue-query'] ||
-    allDeps['@tanstack/svelte-query'] ||
-    allDeps['@tanstack/angular-query'] ||
-    allDeps['@tanstack/eslint-plugin-query']
-  ) {
-    libraries.push(Library.TanstackQuery)
-  }
-
-  if (
-    allDeps['@tanstack/react-router'] ||
-    allDeps['@tanstack/vue-router'] ||
-    allDeps['@tanstack/eslint-plugin-router']
-  ) {
-    libraries.push(Library.TanstackRouter)
-  }
-
-  if (allDeps.turbo || allDeps['eslint-plugin-turbo']) libraries.push(Library.Turbo)
-
-  if (allDeps.zod || allDeps['eslint-plugin-zod']) libraries.push(Library.Zod)
-
-  return dedupe(libraries)
-}
-
-const detectTesting = (allDeps: DependencyMap): Testing[] => {
-  const testing: Testing[] = []
-
-  if (allDeps.vitest) testing.push(Testing.Vitest)
-
-  if (allDeps.playwright || allDeps['@playwright/test']) testing.push(Testing.Playwright)
-
-  if (allDeps.jest || allDeps['@jest/core'] || allDeps['jest-circus']) testing.push(Testing.Jest)
-
-  if (allDeps['@testing-library/jest-dom'] || allDeps['eslint-plugin-jest-dom']) testing.push(Testing.JestDom)
-
-  if (allDeps.cypress) testing.push(Testing.Cypress)
-
-  if (
-    allDeps['@testing-library/react'] ||
-    allDeps['@testing-library/vue'] ||
-    allDeps['@testing-library/angular'] ||
-    allDeps['@testing-library/svelte'] ||
-    allDeps['@testing-library/user-event'] ||
-    allDeps['@testing-library/jest-dom'] ||
-    allDeps['@testing-library/dom']
-  ) {
-    testing.push(Testing.TestingLibrary)
-  }
-
-  return dedupe(testing)
-}
+const detectTesting = (allDeps: DependencyMap): Testing[] => dedupe(
+  TESTING_DEP_MAPPINGS
+    .filter(([deps]) => hasAnyDependency(allDeps, deps))
+    .map(([, testing]) => testing)
+)
 
 const detectExtensions = (allDeps: DependencyMap): Extension[] => {
   const extensions: Extension[] = []
@@ -404,72 +256,84 @@ const detectExtensions = (allDeps: DependencyMap): Extension[] => {
   return extensions
 }
 
+const GRAPHQL_DEPS = ['graphql', '@apollo/client', 'relay-runtime', 'urql', 'graphql-tag', '@graphql-typed-document-node/core']
+const MDX_DEPS = ['@mdx-js/react', '@mdx-js/mdx', '@astrojs/mdx']
+const MARKDOWN_DEPS = ['markdown', 'react-markdown', 'remark-gfm', 'markdownlint-cli2']
+const YAML_SIGNALS = ['pnpm-workspace.yaml', 'cspell.config.yaml', 'cspell.config.yml', '.github/workflows']
+
+const hasGraphqlSignal = (allDeps: DependencyMap, detectRootDir: string): boolean =>
+  hasAnyDependency(allDeps, GRAPHQL_DEPS) ||
+  ['schema.graphql', 'schema.gql'].some(f => pathExists(join(detectRootDir, f)))
+
+const hasMdxSignal = (allDeps: DependencyMap, detectRootDir: string): boolean =>
+  hasAnyDependency(allDeps, MDX_DEPS) ||
+  hasFileMatching(detectRootDir, f => f.endsWith('.mdx'))
+
+const hasMarkdownSignal = (allDeps: DependencyMap, detectRootDir: string): boolean =>
+  hasAnyDependency(allDeps, MARKDOWN_DEPS) ||
+  ['.markdownlint.json', '.markdownlint.yaml'].some(f => pathExists(join(detectRootDir, f))) ||
+  hasFileMatching(detectRootDir, f => f.endsWith('.md'))
+
+const hasJsoncSignal = (allDeps: DependencyMap, detectRootDir: string): boolean =>
+  hasAnyDependency(allDeps, ['eslint-plugin-jsonc']) ||
+  hasFileMatching(detectRootDir, f => f.endsWith('.jsonc'))
+
+const hasYamlSignal = (detectRootDir: string): boolean =>
+  YAML_SIGNALS.some(f => pathExists(join(detectRootDir, f)))
+
+const hasTomlSignal = (allDeps: DependencyMap, detectRootDir: string): boolean =>
+  hasAnyDependency(allDeps, ['eslint-plugin-toml']) ||
+  hasFileMatching(detectRootDir, f => f.endsWith('.toml'))
+
 const detectFormats = (allDeps: DependencyMap, detectRootDir: string): Format[] => {
   const formats: Format[] = []
 
-  if (
-    allDeps.graphql ||
-    allDeps['@apollo/client'] ||
-    allDeps['relay-runtime'] ||
-    allDeps.urql ||
-    allDeps['graphql-tag'] ||
-    allDeps['@graphql-typed-document-node/core'] ||
-    pathExists(join(detectRootDir, 'schema.graphql')) ||
-    pathExists(join(detectRootDir, 'schema.gql'))
-  ) {
-    formats.push(Format.Graphql)
-  }
+  if (hasGraphqlSignal(allDeps, detectRootDir)) formats.push(Format.Graphql)
 
-  if (
-    allDeps['@mdx-js/react'] ||
-    allDeps['@mdx-js/mdx'] ||
-    allDeps['@astrojs/mdx'] ||
-    hasFileMatching(detectRootDir, fileName => fileName.endsWith('.mdx'))
-  ) {
-    formats.push(Format.Mdx)
-  }
+  if (hasMdxSignal(allDeps, detectRootDir)) formats.push(Format.Mdx)
 
-  if (
-    allDeps.markdown ||
-    allDeps['react-markdown'] ||
-    allDeps['remark-gfm'] ||
-    allDeps['markdownlint-cli2'] ||
-    pathExists(join(detectRootDir, '.markdownlint.json')) ||
-    pathExists(join(detectRootDir, '.markdownlint.yaml')) ||
-    hasFileMatching(detectRootDir, fileName => fileName.endsWith('.md'))
-  ) {
-    formats.push(Format.Markdown)
-  }
+  if (hasMarkdownSignal(allDeps, detectRootDir)) formats.push(Format.Markdown)
 
-  if (
-    allDeps['eslint-plugin-jsonc'] ||
-    hasFileMatching(detectRootDir, fileName => fileName.endsWith('.jsonc'))
-  ) {
-    formats.push(Format.Jsonc)
-  }
+  if (hasJsoncSignal(allDeps, detectRootDir)) formats.push(Format.Jsonc)
 
-  if (allDeps['eslint-plugin-package-json']) {
-    formats.push(Format.PackageJson)
-  }
+  if (allDeps['eslint-plugin-package-json']) formats.push(Format.PackageJson)
 
-  if (
-    pathExists(join(detectRootDir, 'pnpm-workspace.yaml')) ||
-    pathExists(join(detectRootDir, 'cspell.config.yaml')) ||
-    pathExists(join(detectRootDir, 'cspell.config.yml')) ||
-    pathExists(join(detectRootDir, '.github/workflows'))
-  ) {
-    formats.push(Format.Yaml)
-  }
+  if (hasYamlSignal(detectRootDir)) formats.push(Format.Yaml)
 
-  if (
-    allDeps['eslint-plugin-toml'] ||
-    hasFileMatching(detectRootDir, fileName => fileName.endsWith('.toml'))
-  ) {
-    formats.push(Format.Toml)
-  }
+  if (hasTomlSignal(allDeps, detectRootDir)) formats.push(Format.Toml)
 
   return dedupe(formats)
 }
+
+const PRETTIER_CONFIGS = ['.prettierrc', '.prettierrc.json', '.prettierrc.yaml', '.prettierrc.yml', '.prettierrc.js', '.prettierrc.cjs', 'prettier.config.js', 'prettier.config.cjs', 'prettier.config.mjs']
+const CSPELL_CONFIGS = ['cspell.config.yaml', 'cspell.config.yml', 'cspell.config.json']
+const JSDOC_CONFIGS = ['jsdoc.json', 'jsdoc.config.js', 'jsdoc.config.cjs', 'jsdoc.config.mjs']
+
+const hasPrettierConfig = (allDeps: DependencyMap, detectRootDir: string): boolean =>
+  hasAnyDependency(allDeps, ['prettier', 'prettier-plugin-astro', 'prettier-plugin-tailwindcss']) ||
+  PRETTIER_CONFIGS.some(f => pathExists(join(detectRootDir, f)))
+
+const hasCspellConfig = (allDeps: DependencyMap, detectRootDir: string): boolean =>
+  hasAnyDependency(allDeps, ['@cspell/eslint-plugin']) ||
+  CSPELL_CONFIGS.some(f => pathExists(join(detectRootDir, f)))
+
+const hasJsdocConfig = (allDeps: DependencyMap, detectRootDir: string): boolean =>
+  hasAnyDependency(allDeps, ['jsdoc', 'eslint-plugin-jsdoc']) ||
+  JSDOC_CONFIGS.some(f => pathExists(join(detectRootDir, f)))
+
+const hasNxConfig = (allDeps: DependencyMap, detectRootDir: string): boolean =>
+  hasAnyDependency(allDeps, ['nx', '@nx/js', '@nx/eslint', '@nrwl/workspace']) ||
+  pathExists(join(detectRootDir, 'nx.json'))
+
+const hasDockerConfig = (detectRootDir: string): boolean =>
+  pathExists(join(detectRootDir, 'Dockerfile')) ||
+  pathExists(join(detectRootDir, 'docker-compose.yml')) ||
+  pathExists(join(detectRootDir, 'docker-compose.yaml')) ||
+  hasFileMatching(detectRootDir, f => f === 'Dockerfile' || f.startsWith('Dockerfile.'))
+
+const hasPnpmConfig = (allDeps: DependencyMap, detectRootDir: string): boolean =>
+  hasAnyDependency(allDeps, ['eslint-plugin-pnpm']) ||
+  pathExists(join(detectRootDir, 'pnpm-workspace.yaml'))
 
 const detectTools = (allDeps: DependencyMap, detectRootDir: string): Tool[] => {
   const tools: Tool[] = []
@@ -478,58 +342,19 @@ const detectTools = (allDeps: DependencyMap, detectRootDir: string): Tool[] => {
 
   if (allDeps['eslint-plugin-command']) tools.push(Tool.Command)
 
-  if (
-    allDeps.prettier ||
-    allDeps['prettier-plugin-astro'] ||
-    allDeps['prettier-plugin-tailwindcss'] ||
-    pathExists(join(detectRootDir, '.prettierrc')) ||
-    pathExists(join(detectRootDir, '.prettierrc.json')) ||
-    pathExists(join(detectRootDir, '.prettierrc.yaml')) ||
-    pathExists(join(detectRootDir, '.prettierrc.yml')) ||
-    pathExists(join(detectRootDir, '.prettierrc.js')) ||
-    pathExists(join(detectRootDir, '.prettierrc.cjs')) ||
-    pathExists(join(detectRootDir, 'prettier.config.js')) ||
-    pathExists(join(detectRootDir, 'prettier.config.cjs')) ||
-    pathExists(join(detectRootDir, 'prettier.config.mjs'))
-  ) tools.push(Tool.Prettier)
+  if (hasPrettierConfig(allDeps, detectRootDir)) tools.push(Tool.Prettier)
 
-  if (
-    allDeps['@cspell/eslint-plugin'] ||
-    pathExists(join(detectRootDir, 'cspell.config.yaml')) ||
-    pathExists(join(detectRootDir, 'cspell.config.yml')) ||
-    pathExists(join(detectRootDir, 'cspell.config.json'))
-  ) tools.push(Tool.Cspell)
+  if (hasCspellConfig(allDeps, detectRootDir)) tools.push(Tool.Cspell)
 
-  if (
-    allDeps.jsdoc ||
-    allDeps['eslint-plugin-jsdoc'] ||
-    pathExists(join(detectRootDir, 'jsdoc.json')) ||
-    pathExists(join(detectRootDir, 'jsdoc.config.js')) ||
-    pathExists(join(detectRootDir, 'jsdoc.config.cjs')) ||
-    pathExists(join(detectRootDir, 'jsdoc.config.mjs'))
-  ) tools.push(Tool.Jsdoc)
+  if (hasJsdocConfig(allDeps, detectRootDir)) tools.push(Tool.Jsdoc)
 
-  if (
-    allDeps.nx ||
-    allDeps['@nx/js'] ||
-    allDeps['@nx/eslint'] ||
-    allDeps['@nrwl/workspace'] ||
-    pathExists(join(detectRootDir, 'nx.json'))
-  ) tools.push(Tool.Nx)
+  if (hasNxConfig(allDeps, detectRootDir)) tools.push(Tool.Nx)
 
-  if (
-    pathExists(join(detectRootDir, 'Dockerfile')) ||
-    pathExists(join(detectRootDir, 'docker-compose.yml')) ||
-    pathExists(join(detectRootDir, 'docker-compose.yaml')) ||
-    hasFileMatching(detectRootDir, fileName => fileName === 'Dockerfile' || fileName.startsWith('Dockerfile.'))
-  ) tools.push(Tool.Docker)
+  if (hasDockerConfig(detectRootDir)) tools.push(Tool.Docker)
 
   if (pathExists(join(detectRootDir, '.github/workflows'))) tools.push(Tool.GithubActions)
 
-  if (
-    hasAnyDependency(allDeps, ['eslint-plugin-pnpm']) ||
-    pathExists(join(detectRootDir, 'pnpm-workspace.yaml'))
-  ) tools.push(Tool.Pnpm)
+  if (hasPnpmConfig(allDeps, detectRootDir)) tools.push(Tool.Pnpm)
 
   return dedupe(tools)
 }
@@ -670,7 +495,7 @@ export const detectProjectOptions = (detectRootDir: string = process.cwd()): Esl
     return options
   } catch (error) {
     if (process.env.ESLINT_BASIC_DEBUG) {
-      console.warn('[ESLint Basic] Failed to detect project options from package.json:', error)
+      process.stderr.write(`[ESLint Basic] Failed to detect project options from package.json: ${String(error)}\n`)
     }
 
     return options

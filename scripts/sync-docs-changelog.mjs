@@ -14,7 +14,7 @@ try {
 
   writeFileSync(targetPath, modifiedContent, 'utf8')
 
-  console.log('✅ Synchronized basic changelog to docs')
+  process.stdout.write('✅ Synchronized basic changelog to docs\n')
 } catch (error) {
   throw new Error('❌ Failed to sync changelog', { cause: error })
 }

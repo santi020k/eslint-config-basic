@@ -530,6 +530,47 @@ const createBoundaryConfig = (): TSESLint.FlatConfig.Config => ({
   }
 })
 
+const patchImportGroupsConfig = (
+  config: TSESLint.FlatConfig.Config,
+  workspacePatterns: string[]
+): TSESLint.FlatConfig.Config => {
+  const rule = config.rules?.['simple-import-sort/imports']
+
+  if (!Array.isArray(rule) || !rule[1]) return config
+
+  const ruleOpts = rule[1] as { groups?: string[][] }
+  const existingGroups = ruleOpts.groups ?? []
+
+  if (existingGroups.length === 0) return config
+
+  const externalIdx = existingGroups.findIndex(g => g.some(p => p.includes('^@?\\w')))
+  const insertAt = externalIdx >= 0 ? externalIdx : existingGroups.length
+
+  return {
+    ...config,
+    rules: {
+      ...config.rules,
+      'simple-import-sort/imports': [
+        rule[0],
+        { ...ruleOpts, groups: [...existingGroups.slice(0, insertAt), workspacePatterns, ...existingGroups.slice(insertAt)] }
+      ] as TSESLint.FlatConfig.RuleEntry
+    }
+  }
+}
+
+const patchImportGroups = (
+  allConfigs: TSESLint.FlatConfig.ConfigArray,
+  workspacePrefixes: string[]
+): TSESLint.FlatConfig.ConfigArray => {
+  const workspacePatterns = workspacePrefixes.map(
+    p => `^${p.replaceAll(/[.*+?^${}()|[\]\\]/g, '\\$&')}(/.*|$)`
+  )
+
+  return allConfigs.map(item =>
+    Array.isArray(item) ? item : patchImportGroupsConfig(item, workspacePatterns)
+  )
+}
+
 /**
  * Generates the ESLint configuration array, applying configurations
  * and integration settings based on the input configuration.
@@ -840,7 +881,7 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
   ]
 
   if (process.env.ESLINT_BASIC_DEBUG) {
-    console.info('[ESLint Basic] Resolved options:', {
+    const debugInfo = {
       autoFrameworks,
       detectRootDir: detectRootDir ?? process.cwd(),
       extensions: uniqueExtensions,
@@ -857,7 +898,9 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
       tools: uniqueTools,
       tsconfigRootDir,
       typescript: resolvedTypescript ? resolvedTypescript.mode : false
-    })
+    }
+
+    process.stdout.write(`[ESLint Basic] Resolved options: ${JSON.stringify(debugInfo, null, 2)}\n`)
   }
 
   const projectConfigs = await Promise.all(
@@ -880,44 +923,11 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
   const workspacePrefixes = options?.workspacePrefixes
   const allConfigs = [...configs, ...projectConfigs.flat()]
 
-  if (workspacePrefixes?.length) {
-    const workspacePatterns = workspacePrefixes.map(
-      p => `^${p.replaceAll(/[.*+?^${}()|[\]\\]/g, '\\$&')}(/.*|$)`
-    )
+  const patchedConfigs = workspacePrefixes?.length
+    ? patchImportGroups(allConfigs, workspacePrefixes)
+    : allConfigs
 
-    for (let i = 0; i < allConfigs.length; i++) {
-      const item = allConfigs[i]
-
-      if (Array.isArray(item)) continue
-
-      const rule = item.rules?.['simple-import-sort/imports']
-
-      // Only patch array-form rules that carry an explicit groups list — skip
-      // string-severity rules and option-less arrays to avoid overwriting defaults.
-      if (!Array.isArray(rule) || !rule[1]) continue
-
-      const ruleOpts = rule[1] as { groups?: string[][] }
-      const existingGroups = ruleOpts.groups ?? []
-
-      if (existingGroups.length === 0) continue
-
-      const externalIdx = existingGroups.findIndex(g => g.some(p => p.includes('^@?\\w')))
-      const insertAt = externalIdx >= 0 ? externalIdx : existingGroups.length
-
-      allConfigs[i] = {
-        ...item,
-        rules: {
-          ...item.rules,
-          'simple-import-sort/imports': [
-            rule[0],
-            { ...ruleOpts, groups: [...existingGroups.slice(0, insertAt), workspacePatterns, ...existingGroups.slice(insertAt)] }
-          ] as TSESLint.FlatConfig.RuleEntry
-        }
-      }
-    }
-  }
-
-  return applyStrictMode(allConfigs, strict)
+  return applyStrictMode(patchedConfigs, strict)
 }
 
 /**

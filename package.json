@@ -67,7 +67,8 @@
     "turbo": "catalog:",
     "typedoc": "catalog:",
     "typedoc-plugin-markdown": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "typescript-eslint": "catalog:"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,md,mdx,json,yaml,yml,toml,vue,svelte,astro}": [

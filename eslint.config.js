@@ -1,5 +1,7 @@
 import { defineConfig, Extension, Format, Preset, Testing, Tool } from "@santi020k/eslint-config-basic"
 
+import tseslint from "typescript-eslint"
+
 export default [
   ...await defineConfig({
     // Root lists tailwindcss for tooling; do not enable Tailwind ESLint for the whole monorepo.
@@ -18,19 +20,21 @@ export default [
       'typedoc.markdown.mjs'
     ],
     preset: Preset.Monorepo,
-    // The tsconfig paths map all workspace packages to their TypeScript source.
-    // Using syntax mode for the test package prevents @typescript-eslint from
-    // loading the full monorepo graph and hanging the ESLint language server.
-    // Type correctness is still enforced by `pnpm typecheck`.
-    projects: {
-      'packages/tests': { detection: false, typescript: 'syntax' }
-    },
     testing: [Testing.Vitest],
     tools: [Tool.Pnpm],
     tsconfigRootDir: import.meta.dirname,
     typescript: true,
     workspacePrefixes: ['@santi020k']
   }),
+  // tsconfig paths map all 26 workspace packages to their TS source. When the
+  // project service resolves test imports, it loads the entire monorepo graph
+  // and hangs the ESLint language server. Disabling type-aware linting for test
+  // files avoids the hang; type correctness is still enforced by `pnpm typecheck`.
+  {
+    ...tseslint.configs.disableTypeChecked,
+    files: ['packages/tests/**/*.ts'],
+    name: 'local-tests-no-type-checking'
+  },
   {
     files: [
       'scripts/**/*',

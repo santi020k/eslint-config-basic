@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 
-import { afterEach, describe, expect, test,vi } from 'vitest'
+import { afterEach, describe, expect, test, vi } from 'vitest'
 
 import type { EslintConfigFeatures } from '../../basic/src/agent-skill-generator.js'
 import {

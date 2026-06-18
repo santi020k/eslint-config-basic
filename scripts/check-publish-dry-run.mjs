@@ -26,7 +26,7 @@ if (publishablePackages.length === 0) {
 let failed = false
 
 for (const packageDir of publishablePackages) {
-  console.info(`\npnpm publish --dry-run ${packageDir}`)
+  process.stdout.write(`\npnpm publish --dry-run ${packageDir}\n`)
 
   try {
     execFileSync('pnpm', ['publish', '--dry-run', '--no-git-checks'], {

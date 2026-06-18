@@ -30,7 +30,7 @@ if (publishablePackages.length === 0) {
 let failed = false
 
 for (const packageDir of publishablePackages) {
-  console.info(`\nattw --pack ${packageDir}`)
+  process.stdout.write(`\nattw --pack ${packageDir}\n`)
 
   try {
     execFileSync('pnpm', ['exec', 'attw', '--pack', packageDir, '--profile', 'esm-only'], {

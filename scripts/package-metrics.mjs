@@ -61,13 +61,22 @@ if (rows.length === 0) {
   throw new Error('No publishable packages found.')
 }
 
-console.info('Package metrics are informational; this script does not enforce size budgets.')
+process.stdout.write('Package metrics are informational; this script does not enforce size budgets.\n')
 
-console.table(rows.map(row => ({
+const tableRows = rows.map(row => ({
   dependencies: row.dependencies,
   dist: formatBytes(row.dist),
   files: row.files,
   package: row.name,
   path: row.path,
   peers: row.peers
-})))
+}))
+
+const headers = Object.keys(tableRows.at(0) ?? {})
+const rowValues = tableRows.map(row => Object.values(row).map(v => String(v ?? '')))
+const allValues = [headers, ...rowValues]
+const colWidths = headers.map((h, col) => Math.max(...allValues.map(r => (r.at(col) ?? '').length)))
+const fmtRow = (vals) => vals.map((v, col) => v.padEnd(colWidths.at(col) ?? 0)).join('  ')
+const separator = colWidths.map(w => '-'.repeat(w)).join('  ')
+
+process.stdout.write([fmtRow(headers), separator, ...rowValues.map(fmtRow)].join('\n') + '\n')

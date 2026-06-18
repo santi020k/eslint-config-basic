@@ -2,7 +2,7 @@ import * as fs from 'node:fs'
 
 import { detectProjectOptions, Extension, Format, Library, NextMode, Preset, Runtime, Testing, Tool } from '@santi020k/eslint-config-basic'
 
-import { describe, expect, test,vi } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 
 vi.mock('node:fs')
 
