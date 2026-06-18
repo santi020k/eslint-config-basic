@@ -123,6 +123,7 @@ export const resolvePreset = (preset: Preset): Partial<EslintConfigOptions> => {
         typescript: true
       }
 
+    // v8 ignore next 2 -- TypeScript exhausts all Preset values; default is unreachable
     default:
       return {}
   }

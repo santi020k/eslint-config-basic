@@ -97,4 +97,18 @@ describe('v1.0.0 Roadmap Features', () => {
     expect(rules).toContain('no-console')
     expect(getEffectiveRuleValue(config, '@stylistic/quotes')).toEqual(['error', 'single'])
   })
+
+  test('Preset.Node sets Node runtime', async () => {
+    const config = await defineConfig({ detection: false, preset: Preset.Node })
+    const names = extractConfigNames(config)
+
+    expect(names.some(n => n.toLowerCase().includes('node'))).toBe(true)
+  })
+
+  test('Preset.Worker sets Worker runtime', async () => {
+    const config = await defineConfig({ detection: false, preset: Preset.Worker })
+
+    expect(Array.isArray(config)).toBe(true)
+    expect(config.length).toBeGreaterThan(0)
+  })
 })

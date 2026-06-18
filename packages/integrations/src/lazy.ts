@@ -34,6 +34,7 @@ const hasDefaultExport = (module: unknown): module is { default?: unknown } => (
 
 const isVitest = typeof process !== 'undefined' && process.env.VITEST
 
+// v8 ignore next 3 -- Reflect.construct branch only runs outside Vitest; not reachable in test suite
 const dynamicImport: (specifier: string) => Promise<unknown> = isVitest
   ? (specifier: string) => import(/* @vite-ignore */ specifier)
   : Reflect.construct(Function, ['specifier', 'return import(specifier)']) as (specifier: string) => Promise<unknown>

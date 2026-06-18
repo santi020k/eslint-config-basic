@@ -47,6 +47,7 @@ export const resolveFramework = async (
   // Handle config arrays directly
   if (Array.isArray(framework)) return framework
 
+  // v8 ignore next 4 -- TypeScript exhausts all ImportedFramework variants; throw is unreachable
   throw new TypeError(
     `[ESLint Config Lite] Invalid framework config for "${frameworkName}". ` +
     'Use true to enable the bundled config, or pass a config array/factory/default export.'
@@ -123,6 +124,7 @@ export const resolvePreset = (preset: Preset): Partial<EslintConfigOptions> => {
         typescript: true
       }
 
+    // v8 ignore next 2 -- TypeScript exhausts all Preset values; default is unreachable
     default:
       return {}
   }
