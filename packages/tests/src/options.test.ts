@@ -123,7 +123,7 @@ describe('Deep Rule Assertions (#5)', () => {
     const names = extractConfigNames(config)
     const rules = extractRuleNames(config)
 
-    expect(names).toContain('eslint-config-basic/import-boundaries')
+    expect(names).toContain('eslint-config-integrations/import-boundaries')
     expect(rules).toContain('import/no-relative-packages')
   })
 

@@ -68,6 +68,7 @@ words:
   - myintegration
   - mylib
   - myoptional
+  - myorg
   - nestjs
   - networkidle
   - nextjs

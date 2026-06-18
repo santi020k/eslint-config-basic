@@ -248,6 +248,7 @@ describe('Integrations subpath exports', () => {
       'a11y',
       'bestPractices',
       'biome',
+      'boundaries',
       'compat',
       'deMorgan',
       'depend',

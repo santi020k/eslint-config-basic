@@ -1,11 +1,10 @@
 import {
-  Extension,
+  type Extension,
   type FlatConfigArray,
   type Format,
   type Library,
   type Testing,
-  Tool
-} from '@santi020k/eslint-config-core'
+  Tool} from '@santi020k/eslint-config-core'
 
 import { loadModule } from './lazy.js'
 
@@ -31,7 +30,7 @@ const hasRequestedIntegrations = (
   tools.length > 0 ||
   testing.length > 0 ||
   formats.length > 0 ||
-  extensions.some(extension => extension !== Extension.Boundaries)
+  extensions.length > 0
 )
 
 let integrationsModule: Promise<IntegrationModule> | undefined

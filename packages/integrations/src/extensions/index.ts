@@ -1,6 +1,7 @@
 export { a11y } from './a11y.js'
 export { bestPractices } from './best-practices.js'
 export { biome } from './biome.js'
+export { boundaries } from './boundaries.js'
 export { compat } from './compat.js'
 export { deMorgan } from './de-morgan.js'
 export { depend } from './depend.js'

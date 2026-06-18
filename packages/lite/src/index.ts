@@ -482,37 +482,6 @@ const patchImportGroups = (
   )
 }
 
-const createBoundaryConfig = (): TSESLint.FlatConfig.Config => ({
-  files: ['**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx}'],
-    name: 'eslint-config-lite/import-boundaries',
-  rules: {
-    'import/no-relative-packages': 'warn',
-    'import/no-self-import': 'error',
-    'no-restricted-imports': ['error', {
-      patterns: [
-        {
-          group: [
-            '**/__generated__/**',
-            '**/generated/**',
-            '**/*.generated',
-            '**/*.gen'
-          ],
-          message: 'Generated modules should stay behind stable source exports.'
-        },
-        {
-          group: [
-            '**/*.test',
-            '**/*.spec',
-            '**/__tests__/**',
-            '**/test/**',
-            '**/tests/**'
-          ],
-          message: 'Test modules should not be imported by production source.'
-        }
-      ]
-    }]
-  }
-})
 
 const resolveLiteSetup = (options: EslintConfigOptions | undefined) => ({
   autoFrameworks: options?.autoFrameworks ?? true,
@@ -803,8 +772,6 @@ const buildLiteEslintConfigs = async (params: BuildLiteConfigsParams): Promise<F
         } as TSESLint.FlatConfig.Config
       ] :
       []),
-
-    ...(uniqueExtensions.includes(Extension.Boundaries) ? [createBoundaryConfig()] : []),
 
     // Integrations
     ...(await getIntegrationConfigs(

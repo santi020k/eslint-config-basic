@@ -325,8 +325,7 @@ export const ReactConfigKeys = [
   'next',
   'expo',
   'react-router',
-  'remix',
-  'tanstack-start'
+  'remix'
 ] as const
 
 /**

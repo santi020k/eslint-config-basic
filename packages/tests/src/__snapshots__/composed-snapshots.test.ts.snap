@@ -128,12 +128,12 @@ exports[`composed config snapshots > snapshots React app integrations 1`] = `
     "eslint-config-typescript/standard-rules",
     "eslint-config-typescript/disable-type-checked",
     "eslint-config-typescript/disable-type-checked/rules-only",
-    "eslint-config-basic/import-boundaries",
     "santi020k/tailwind/recommended",
     "integrations/vitest",
     "mdx/flat",
     "mdx/flat-code-blocks",
     "eslint-config-mdx/disable-type-checked",
+    "eslint-config-integrations/import-boundaries",
     "eslint-config/prettier",
   ],
   "rules": {

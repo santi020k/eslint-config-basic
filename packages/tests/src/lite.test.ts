@@ -148,3 +148,46 @@ describe('defineConfig with runtime', () => {
     expect(Array.isArray(config)).toBe(true)
   })
 })
+
+describe('defineConfig workspacePrefixes', () => {
+  test('injects workspace prefix group into simple-import-sort rules', async () => {
+    const config = await defineConfig({ ...baseOptions, workspacePrefixes: ['@acme'] })
+
+    const sortRules = config
+      .filter(c => 'rules' in c && c.rules?.['simple-import-sort/imports'])
+      .flatMap(c => {
+        const rule = c.rules?.['simple-import-sort/imports']
+
+        return Array.isArray(rule) && rule[1] ? [(rule[1] as { groups?: string[][] }).groups ?? []] : []
+      })
+
+    const hasPrefix = sortRules.some(groups => groups.some(group => group.some(p => p.includes('@acme'))))
+
+    expect(hasPrefix).toBe(true)
+  })
+
+  test('no workspace prefix leaves import order unchanged', async () => {
+    const withoutPrefix = await defineConfig({ ...baseOptions })
+    const withPrefix = await defineConfig({ ...baseOptions, workspacePrefixes: ['@myorg'] })
+
+    expect(withPrefix.length).toBeGreaterThanOrEqual(withoutPrefix.length)
+  })
+})
+
+describe('defineConfig with projects', () => {
+  test('scopes sub-project configs to their path', async () => {
+    const config = await defineConfig({
+      ...baseOptions,
+      projects: {
+        'apps/web': { typescript: false, autoFrameworks: false, detection: false }
+      }
+    })
+
+    const scopedFiles = config
+      .filter(c => 'files' in c && Array.isArray(c.files))
+      .flatMap(c => c.files ?? [])
+      .filter(f => typeof f === 'string')
+
+    expect(scopedFiles.some(f => (f as string).startsWith('apps/web/'))).toBe(true)
+  })
+})

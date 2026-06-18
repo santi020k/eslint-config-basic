@@ -500,39 +500,6 @@ const scopeConfigToProject = (
   }
 }
 
-const createBoundaryConfig = (): TSESLint.FlatConfig.Config => ({
-  files: ['**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx}'],
-  name: 'eslint-config-basic/import-boundaries',
-  rules: {
-    'import/no-relative-packages': 'warn',
-    'import/no-self-import': 'error',
-    'no-restricted-imports': ['error', {
-      patterns: [
-        {
-          group: [
-            '**/__generated__/**',
-            '**/generated/**',
-            '**/*.generated',
-            '**/*.generated.*',
-            '**/*.gen',
-            '**/*.gen.*'
-          ],
-          message: 'Generated modules should stay behind stable source exports.'
-        },
-        {
-          group: [
-            '**/*.test',
-            '**/*.spec',
-            '**/__tests__/**',
-            '**/test/**',
-            '**/tests/**'
-          ],
-          message: 'Test modules should not be imported by production source.'
-        }
-      ]
-    }]
-  }
-})
 
 const patchImportGroupsConfig = (
   config: TSESLint.FlatConfig.Config,
@@ -804,7 +771,6 @@ const buildEslintConfigs = async (params: BuildConfigsParams): Promise<FlatConfi
         rules: { '@next/next/no-html-link-for-pages': 'off' }
       } as TSESLint.FlatConfig.Config] :
       []),
-    ...(uniqueExtensions.includes(Extension.Boundaries) ? [createBoundaryConfig()] : []),
     ...(await getIntegrationConfigs(uniqueLibraries, uniqueTools, uniqueTesting, uniqueFormats, uniqueExtensions)),
     ...(tailwindEntryPoint ?
       [{

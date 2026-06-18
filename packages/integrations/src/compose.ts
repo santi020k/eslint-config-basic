@@ -10,6 +10,7 @@ import {
 import { a11y } from './extensions/a11y.js'
 import { bestPractices } from './extensions/best-practices.js'
 import { biome } from './extensions/biome.js'
+import { boundaries } from './extensions/boundaries.js'
 import { compat } from './extensions/compat.js'
 import { deMorgan } from './extensions/de-morgan.js'
 import { depend } from './extensions/depend.js'
@@ -128,6 +129,7 @@ export const getIntegrationConfigs = async (
   // Extensions
   addIf(extensions.includes(Extension.A11y), a11y),
   addIf(extensions.includes(Extension.Biome), biome),
+  addIf(extensions.includes(Extension.Boundaries), () => boundaries),
   addIf(extensions.includes(Extension.BestPractices), () => bestPractices),
   addIf(extensions.includes(Extension.Regexp), regexp),
   addIf(extensions.includes(Extension.Unicorn), unicorn),

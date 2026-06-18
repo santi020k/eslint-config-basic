@@ -482,6 +482,7 @@ export const __detectionInternals = {
   detectTesting,
   detectTools,
   detectTypescript,
+  parsePnpmWorkspacePatterns,
   pathExists,
   resolvePreset
 }
