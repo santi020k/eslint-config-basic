@@ -365,6 +365,37 @@ const getWorkspacePatterns = (pkg: PackageJson): string[] => {
   return pkg.workspaces?.packages ?? []
 }
 
+const parsePnpmWorkspacePatterns = (detectRootDir: string): string[] => {
+  const yamlPath = join(detectRootDir, 'pnpm-workspace.yaml')
+
+  if (!pathExists(yamlPath)) return []
+
+  try {
+     
+    const content = readFileSync(yamlPath, 'utf-8')
+    const patterns: string[] = []
+    let inPackages = false
+
+    for (const line of content.split('\n')) {
+      if (/^packages\s*:/.test(line)) { inPackages = true;
+
+ continue }
+
+      if (inPackages) {
+        if (/^[a-zA-Z]/.test(line)) break
+
+        const match = /^\s*-\s+['"]?([^'"#\s]+)['"]?/.exec(line)
+
+        if (match?.[1]) patterns.push(match[1])
+      }
+    }
+
+    return patterns
+  } catch {
+    return []
+  }
+}
+
 const hasWorkspaceSignal = (pkg: PackageJson, detectRootDir: string): boolean => (
   getWorkspacePatterns(pkg).length > 0 ||
   pathExists(join(detectRootDir, 'pnpm-workspace.yaml')) ||
@@ -373,7 +404,10 @@ const hasWorkspaceSignal = (pkg: PackageJson, detectRootDir: string): boolean =>
 )
 
 const getWorkspaceBaseDirs = (pkg: PackageJson, detectRootDir: string): string[] => {
-  const bases = getWorkspacePatterns(pkg)
+  const bases = [
+    ...getWorkspacePatterns(pkg),
+    ...parsePnpmWorkspacePatterns(detectRootDir)
+  ]
     .map(pattern => pattern.replace(/^\.\//, '').split('*')[0]?.replace(/\/$/, ''))
     .filter((pattern): pattern is string => Boolean(pattern) && !pattern.startsWith('!'))
 
