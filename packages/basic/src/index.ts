@@ -641,7 +641,7 @@ const needsReactAutoAdd = (
     frameworks.expo ??
     (frameworks as Record<string, unknown>).remix ??
     frameworks['react-router'] ??
-    frameworks['tanstack-start']
+    (frameworks['tanstack-start'] && !frameworks.solid)
   ) && !frameworks.react
 
 const applyFrameworkImpliedDeps = (

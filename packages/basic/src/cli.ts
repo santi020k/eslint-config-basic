@@ -32,7 +32,7 @@ const resolveConfigPath = (cwd: string): string => {
 const getFrameworkKeys = (detectedFrameworks?: string[]): string[] => {
   const frameworkKeys = new Set(detectedFrameworks ?? [])
 
-  if (frameworkKeys.has('next') || frameworkKeys.has('expo')) {
+  if (frameworkKeys.has('next') || frameworkKeys.has('expo') || frameworkKeys.has('remix') || frameworkKeys.has('react-router')) {
     frameworkKeys.add('react')
   }
 
@@ -51,6 +51,7 @@ const FRAMEWORK_PACKAGE_TO_KEY: Record<string, string> = {
   '@santi020k/eslint-config-nest': 'nest',
   '@santi020k/eslint-config-next': 'next',
   '@santi020k/eslint-config-nuxt': 'nuxt',
+  '@santi020k/eslint-config-preact': 'preact',
   '@santi020k/eslint-config-qwik': 'qwik',
   '@santi020k/eslint-config-react': 'react',
   '@santi020k/eslint-config-react-router': 'react-router',
