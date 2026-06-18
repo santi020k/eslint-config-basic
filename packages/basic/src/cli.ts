@@ -532,8 +532,8 @@ export const findDuplicateEslint = (cwd: string = process.cwd()): DuplicateEslin
   try {
     const projectRequire = createRequire(join(cwd, 'package.json'))
     const projectEslintPkgPath = projectRequire.resolve('eslint/package.json')
-    const corePkgPath = projectRequire.resolve('@santi020k/eslint-config-core/package.json')
-    const coreRequire = createRequire(corePkgPath)
+    const coreMainPath = projectRequire.resolve('@santi020k/eslint-config-core')
+    const coreRequire = createRequire(coreMainPath)
     const coreEslintPkgPath = coreRequire.resolve('eslint/package.json')
 
     if (projectEslintPkgPath === coreEslintPkgPath) return null
