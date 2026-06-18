@@ -126,6 +126,8 @@ exports[`composed config snapshots > snapshots React app integrations 1`] = `
     "typescript-eslint/stylistic/rules-only",
     "eslint-config-typescript/parser-setup",
     "eslint-config-typescript/standard-rules",
+    "eslint-config-typescript/disable-type-checked",
+    "eslint-config-typescript/disable-type-checked/rules-only",
     "eslint-config-basic/import-boundaries",
     "santi020k/tailwind/recommended",
     "integrations/vitest",
@@ -230,6 +232,8 @@ exports[`composed config snapshots > snapshots TypeScript syntax mode with Prett
     "typescript-eslint/stylistic/rules-only",
     "eslint-config-typescript/parser-setup",
     "eslint-config-typescript/standard-rules",
+    "eslint-config-typescript/disable-type-checked",
+    "eslint-config-typescript/disable-type-checked/rules-only",
     "eslint-config/prettier",
   ],
   "rules": {

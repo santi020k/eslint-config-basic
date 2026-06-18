@@ -114,11 +114,19 @@ export const createTypescriptConfig = (
       name: 'eslint-config-typescript/standard-rules',
       rules: standardRules
     },
-    ...(mode === 'syntax' ? [] : [{
-      files: typeCheckedFiles,
-      name: 'eslint-config-typescript/type-checked-rules',
-      rules: typeCheckedRules
-    }]),
+    ...(mode === 'syntax' ?
+      // Explicitly disable all type-aware rules so that syntax mode properly overrides
+      // a parent type-aware config when used inside `projects: { 'pkg': { typescript: 'syntax' } }`.
+      mapRulesToSlots(
+        { ...tsEslint.configs.disableTypeChecked as TSESLint.FlatConfig.Config, name: 'eslint-config-typescript/disable-type-checked' },
+        'ts-syntax-disable-type-checked'
+      ) :
+      [{
+        files: typeCheckedFiles,
+        name: 'eslint-config-typescript/type-checked-rules',
+        rules: typeCheckedRules
+      }]
+    ),
     ...(mode === 'strict' ?
       [{
         files: typedFiles,

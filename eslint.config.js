@@ -18,6 +18,13 @@ export default [
       'typedoc.markdown.mjs'
     ],
     preset: Preset.Monorepo,
+    // The tsconfig paths map all workspace packages to their TypeScript source.
+    // Using syntax mode for the test package prevents @typescript-eslint from
+    // loading the full monorepo graph and hanging the ESLint language server.
+    // Type correctness is still enforced by `pnpm typecheck`.
+    projects: {
+      'packages/tests': { detection: false, typescript: 'syntax' }
+    },
     testing: [Testing.Vitest],
     tools: [Tool.Pnpm],
     tsconfigRootDir: import.meta.dirname,
