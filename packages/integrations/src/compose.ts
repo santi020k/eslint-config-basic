@@ -62,6 +62,11 @@ import { pnpm } from './tools/pnpm.js'
 import { prettier } from './tools/prettier.js'
 import { swagger } from './tools/swagger.js'
 
+const addIf = async (
+  flag: boolean,
+  loader: () => FlatConfigArray | Promise<FlatConfigArray>
+): Promise<FlatConfigArray> => flag ? loader() : []
+
 /**
  * Gets integration configs based on selected options.
  * This function maintains the recommended ordering (e.g. Prettier last).
@@ -78,134 +83,73 @@ export const getIntegrationConfigs = async (
   testing: Testing[],
   formats: Format[],
   extensions: Extension[]
-): Promise<FlatConfigArray> => {
-  const configs: FlatConfigArray = []
-
+): Promise<FlatConfigArray> => (await Promise.all([
   // Tools (Except Prettier which goes last)
-  if (tools.includes(Tool.Cspell)) configs.push(...await cspell())
-
+  addIf(tools.includes(Tool.Cspell), cspell),
   // Libraries
-  if (libraries.includes(Library.AiSdk)) configs.push(...await aiSdk())
-
-  if (libraries.includes(Library.Mcp)) configs.push(...mcp())
-
-  if (libraries.includes(Library.Mastra)) configs.push(...mastra())
-
-  if (libraries.includes(Library.OpenAiAgents)) configs.push(...openAiAgents())
-
-  if (libraries.includes(Library.GoogleGenAi)) configs.push(...googleGenAi())
-
-  if (libraries.includes(Library.Autogen)) configs.push(...autogen())
-
-  if (libraries.includes(Library.Langchain)) configs.push(...langchain())
-
-  if (libraries.includes(Library.LlamaIndex)) configs.push(...llamaIndex())
-
-  if (libraries.includes(Library.Typeorm)) configs.push(...typeorm())
-
-  if (libraries.includes(Library.Prisma)) configs.push(...prisma())
-
-  if (libraries.includes(Library.Drizzle)) configs.push(...drizzle())
-
-  if (libraries.includes(Library.MikroOrm)) configs.push(...mikroOrm())
-
-  if (libraries.includes(Library.Sequelize)) configs.push(...sequelize())
-
-  if (libraries.includes(Library.Tailwind)) configs.push(...await tailwind())
-
-  if (libraries.includes(Library.I18next)) configs.push(...await i18next())
-
-  if (libraries.includes(Library.Stencil)) configs.push(...await stencil())
-
-  if (libraries.includes(Library.TanstackQuery)) configs.push(...await tanstackQuery())
-
-  if (libraries.includes(Library.TanstackRouter)) configs.push(...await tanstackRouter())
-
-  if (libraries.includes(Library.Storybook)) configs.push(...await storybook())
-
-  if (libraries.includes(Library.Zod)) configs.push(...await zod())
-
-  if (libraries.includes(Library.Turbo)) configs.push(...await turbo())
-
+  addIf(libraries.includes(Library.AiSdk), aiSdk),
+  addIf(libraries.includes(Library.Mcp), () => mcp()),
+  addIf(libraries.includes(Library.Mastra), () => mastra()),
+  addIf(libraries.includes(Library.OpenAiAgents), () => openAiAgents()),
+  addIf(libraries.includes(Library.GoogleGenAi), () => googleGenAi()),
+  addIf(libraries.includes(Library.Autogen), () => autogen()),
+  addIf(libraries.includes(Library.Langchain), () => langchain()),
+  addIf(libraries.includes(Library.LlamaIndex), () => llamaIndex()),
+  addIf(libraries.includes(Library.Typeorm), () => typeorm()),
+  addIf(libraries.includes(Library.Prisma), () => prisma()),
+  addIf(libraries.includes(Library.Drizzle), () => drizzle()),
+  addIf(libraries.includes(Library.MikroOrm), () => mikroOrm()),
+  addIf(libraries.includes(Library.Sequelize), () => sequelize()),
+  addIf(libraries.includes(Library.Tailwind), tailwind),
+  addIf(libraries.includes(Library.I18next), i18next),
+  addIf(libraries.includes(Library.Stencil), stencil),
+  addIf(libraries.includes(Library.TanstackQuery), tanstackQuery),
+  addIf(libraries.includes(Library.TanstackRouter), tanstackRouter),
+  addIf(libraries.includes(Library.Storybook), storybook),
+  addIf(libraries.includes(Library.Zod), zod),
+  addIf(libraries.includes(Library.Turbo), turbo),
   // Testing
-  if (testing.includes(Testing.Vitest)) configs.push(...await vitest())
-
-  if (testing.includes(Testing.Playwright)) configs.push(...await playwright())
-
-  if (testing.includes(Testing.Jest)) configs.push(...await jest())
-
-  if (testing.includes(Testing.JestDom)) configs.push(...await jestDom())
-
-  if (testing.includes(Testing.Cypress)) configs.push(...await cypress())
-
-  if (testing.includes(Testing.TestingLibrary)) configs.push(...await testingLibrary())
-
+  addIf(testing.includes(Testing.Vitest), vitest),
+  addIf(testing.includes(Testing.Playwright), playwright),
+  addIf(testing.includes(Testing.Jest), jest),
+  addIf(testing.includes(Testing.JestDom), jestDom),
+  addIf(testing.includes(Testing.Cypress), cypress),
+  addIf(testing.includes(Testing.TestingLibrary), testingLibrary),
   // Formats
-  if (formats.includes(Format.Css)) configs.push(...await css())
-
-  if (formats.includes(Format.Html)) configs.push(...await html())
-
-  if (formats.includes(Format.Mdx)) configs.push(...await mdx())
-
-  if (formats.includes(Format.Markdown)) configs.push(...await markdown())
-
-  if (formats.includes(Format.PackageJson)) configs.push(...await packageJson())
-
-  if (formats.includes(Format.Jsonc)) configs.push(...await jsonc())
-
-  if (formats.includes(Format.Yaml)) configs.push(...await yaml())
-
-  if (formats.includes(Format.Toml)) configs.push(...await toml())
-
-  if (formats.includes(Format.Graphql)) configs.push(...await graphql())
-
+  addIf(formats.includes(Format.Css), css),
+  addIf(formats.includes(Format.Html), html),
+  addIf(formats.includes(Format.Mdx), mdx),
+  addIf(formats.includes(Format.Markdown), markdown),
+  addIf(formats.includes(Format.PackageJson), packageJson),
+  addIf(formats.includes(Format.Jsonc), jsonc),
+  addIf(formats.includes(Format.Yaml), yaml),
+  addIf(formats.includes(Format.Toml), toml),
+  addIf(formats.includes(Format.Graphql), graphql),
   // Extensions
-  if (extensions.includes(Extension.A11y)) configs.push(...await a11y())
-
-  if (extensions.includes(Extension.Biome)) configs.push(...await biome())
-
-  if (extensions.includes(Extension.BestPractices)) configs.push(...bestPractices)
-
-  if (extensions.includes(Extension.Regexp)) configs.push(...await regexp())
-
-  if (extensions.includes(Extension.Unicorn)) configs.push(...await unicorn())
-
-  if (extensions.includes(Extension.Sonarjs)) configs.push(...await sonarjs())
-
-  if (extensions.includes(Extension.Security)) configs.push(...await security())
-
-  if (extensions.includes(Extension.Perfectionist)) configs.push(...await perfectionist())
-
-  if (extensions.includes(Extension.Node)) configs.push(...await node())
-
-  if (extensions.includes(Extension.Compat)) configs.push(...await compat())
-
-  if (extensions.includes(Extension.DeMorgan)) configs.push(...await deMorgan())
-
-  if (extensions.includes(Extension.Depend)) configs.push(...await depend())
-
-  if (extensions.includes(Extension.NoOnlyTests)) configs.push(...await noOnlyTests())
-
+  addIf(extensions.includes(Extension.A11y), a11y),
+  addIf(extensions.includes(Extension.Biome), biome),
+  addIf(extensions.includes(Extension.BestPractices), () => bestPractices),
+  addIf(extensions.includes(Extension.Regexp), regexp),
+  addIf(extensions.includes(Extension.Unicorn), unicorn),
+  addIf(extensions.includes(Extension.Sonarjs), sonarjs),
+  addIf(extensions.includes(Extension.Security), security),
+  addIf(extensions.includes(Extension.Perfectionist), perfectionist),
+  addIf(extensions.includes(Extension.Node), node),
+  addIf(extensions.includes(Extension.Compat), compat),
+  addIf(extensions.includes(Extension.DeMorgan), deMorgan),
+  addIf(extensions.includes(Extension.Depend), depend),
+  addIf(extensions.includes(Extension.NoOnlyTests), noOnlyTests),
   // Oxlint goes after other extensions so its rule disables win
-  if (extensions.includes(Extension.Oxlint)) configs.push(...await oxlint())
-
+  addIf(extensions.includes(Extension.Oxlint), oxlint),
   // Standalone tools
-  if (tools.includes(Tool.Command)) configs.push(...await command())
-
-  if (tools.includes(Tool.GithubActions)) configs.push(...await githubActions())
-
-  if (tools.includes(Tool.Docker)) configs.push(...await docker())
-
-  if (tools.includes(Tool.Nx)) configs.push(...await nx())
-
-  if (tools.includes(Tool.Pnpm)) configs.push(...await pnpm())
-
-  if (tools.includes(Tool.Jsdoc)) configs.push(...await jsdoc())
-
-  if (tools.includes(Tool.Swagger)) configs.push(...await swagger())
-
-  return configs
-}
+  addIf(tools.includes(Tool.Command), command),
+  addIf(tools.includes(Tool.GithubActions), githubActions),
+  addIf(tools.includes(Tool.Docker), docker),
+  addIf(tools.includes(Tool.Nx), nx),
+  addIf(tools.includes(Tool.Pnpm), pnpm),
+  addIf(tools.includes(Tool.Jsdoc), jsdoc),
+  addIf(tools.includes(Tool.Swagger), swagger)
+])).flat()
 
 /**
  * Returns the Prettier configuration if selected.
