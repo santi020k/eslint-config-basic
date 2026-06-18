@@ -1,0 +1,35 @@
+name: Claude PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  issue_comment:
+    types: [created]
+
+jobs:
+  claude-review:
+    name: Claude Code Review
+    if: |
+      (github.event_name == 'pull_request') ||
+      (github.event_name == 'issue_comment' &&
+       github.event.issue.pull_request &&
+       contains(github.event.comment.body, '@claude'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: anthropics/claude-code-action@beta
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Trigger a review automatically on every PR open/push,
+          # or on-demand when someone comments "@claude review this"
+          direct_prompt: |
+            Review this pull request. Focus on:
+            - Correctness bugs and edge cases
+            - ESLint flat config conventions (this is an ESLint 10 monorepo)
+            - Enum coverage gaps in packages/core/src/types.ts vs packages/integrations/src/compose.ts
+            - TDD contract violations (new enum values must have factories)
+            - Breaking changes to the public API
+            Post findings as inline PR comments where possible. Be concise.
+          allowed_tools: "mcp__github__create_pull_request_review,mcp__github__create_review_comment,mcp__github__get_pull_request,mcp__github__get_pull_request_diff"

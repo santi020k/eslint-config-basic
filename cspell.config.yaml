@@ -3,6 +3,7 @@ language: en
 words:
   - activedescendant
   - agentchat
+  - anthropics
   - app-router
   - astro
   - astrojs
