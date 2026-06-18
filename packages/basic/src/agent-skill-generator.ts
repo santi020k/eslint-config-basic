@@ -319,6 +319,11 @@ const FEATURE_LABELS = new Map<string, string>([
 
 const toFeatureLabel = (value: string): string => FEATURE_LABELS.get(value) ?? value
 
+const extractRuleNamespaces = (rules: object): string[] =>
+  Object.keys(rules)
+    .filter(key => key.includes('/'))
+    .map(key => key.slice(0, key.indexOf('/')))
+
 /**
  * Extracts all searchable tokens from a flat-config array:
  * config entry names, plugin keys, and rule namespace prefixes.
@@ -343,15 +348,51 @@ const collectTokens = (configs: unknown[]): string[] => {
 
     // Rule namespace prefixes (e.g. '@typescript-eslint/no-…' → '@typescript-eslint')
     if (cfg.rules && typeof cfg.rules === 'object') {
-      for (const key of Object.keys(cfg.rules)) {
-        const slash = key.indexOf('/')
-
-        if (slash > -1) tokens.push(key.slice(0, slash))
-      }
+      tokens.push(...extractRuleNamespaces(cfg.rules))
     }
   }
 
   return tokens
+}
+
+const recordFeature = (features: EslintConfigFeatures, category: string, label: string): void => {
+  if (category === 'typescript') {
+    features.typescript = true
+
+    return
+  }
+
+  switch (category) {
+    case 'extensions':
+      features.extensions.push(label)
+
+      break
+
+    case 'formats':
+      features.formats.push(label)
+
+      break
+
+    case 'frameworks':
+      features.frameworks.push(label)
+
+      break
+
+    case 'libraries':
+      features.libraries.push(label)
+
+      break
+
+    case 'testing':
+      features.testing.push(label)
+
+      break
+
+    case 'tools':
+      features.tools.push(label)
+
+      break
+  }
 }
 
 /**
@@ -389,41 +430,7 @@ const extractFeatures = (
 
     seen.add(label)
 
-    if (category === 'typescript') {
-      features.typescript = true
-    } else {
-      switch (category) {
-        case 'extensions':
-          features.extensions.push(label)
-
-          break
-
-        case 'formats':
-          features.formats.push(label)
-
-          break
-
-        case 'frameworks':
-          features.frameworks.push(label)
-
-          break
-
-        case 'libraries':
-          features.libraries.push(label)
-
-          break
-
-        case 'testing':
-          features.testing.push(label)
-
-          break
-
-        case 'tools':
-          features.tools.push(label)
-
-          break
-      }
-    }
+    recordFeature(features, category, label)
   }
 
   return features
@@ -538,6 +545,132 @@ const featuresFromDetection = (cwd: string): EslintConfigFeatures => {
 
 // ─── Skill content generation ─────────────────────────────────────────────────
 
+const buildSummaryLines = (features: EslintConfigFeatures): string[] => {
+  const { extensions, formats, frameworks, libraries, testing, tools, typescript } = features
+  const lines: string[] = []
+
+  lines.push(`- **TypeScript**: ${typescript ? 'enabled' : 'disabled'}`)
+
+  if (frameworks.length > 0) lines.push(`- **Frameworks**: ${frameworks.join(', ')}`)
+
+  if (testing.length > 0) lines.push(`- **Testing**: ${testing.join(', ')}`)
+
+  if (tools.length > 0) lines.push(`- **Tools**: ${tools.join(', ')}`)
+
+  if (libraries.length > 0) lines.push(`- **Libraries**: ${libraries.join(', ')}`)
+
+  if (formats.length > 0) lines.push(`- **Formats**: ${formats.join(', ')}`)
+
+  if (extensions.length > 0) lines.push(`- **Extensions**: ${extensions.join(', ')}`)
+
+  return lines
+}
+
+const buildFrameworkSections = (frameworks: string[]): string[] => {
+  const sections: string[] = []
+
+  if (frameworks.some(f => f === 'React' || f === 'Next.js')) {
+    sections.push(`
+### React / JSX
+
+- Prefer function components over class components
+- Hooks must follow the Rules of Hooks (no conditional calls, no loops)
+- Avoid inline arrow functions in JSX props where it hurts readability
+- Use \`key\` props when rendering lists
+`)
+  }
+
+  if (frameworks.includes('Next.js')) {
+    sections.push(`
+### Next.js
+
+- Follow App Router conventions (Server Components by default, \`"use client"\` when needed)
+- Avoid \`<img>\` — use \`next/image\`
+- Avoid \`<a>\` for internal navigation — use \`next/link\`
+`)
+  }
+
+  if (frameworks.includes('Vue')) {
+    sections.push(`
+### Vue
+
+- Prefer Composition API (\`<script setup>\`) over Options API
+- Use single-word or multi-word component names consistently
+`)
+  }
+
+  if (frameworks.includes('Svelte')) {
+    sections.push(`
+### Svelte
+
+- Virtual \`*.svelte/*.ts\` files are handled by the ESLint config — do not manually adjust \`allowDefaultProject\`
+`)
+  }
+
+  if (frameworks.includes('Astro')) {
+    sections.push(`
+### Astro
+
+- Virtual \`*.astro/*.ts\` files are handled by the ESLint config
+- Prefer Astro components over framework components when no interactivity is needed
+`)
+  }
+
+  if (frameworks.includes('Angular')) {
+    sections.push(`
+### Angular
+
+- Follow the Angular style guide component, directive, and service naming conventions
+- Use standalone components by default; avoid NgModule unless required
+`)
+  }
+
+  return sections
+}
+
+const wrapWithFormat = (body: string, format: AgentTarget['format']): string => {
+  if (format === 'frontmatter') {
+    return `---
+name: eslint-standards
+description: >
+  Code quality standards enforced by @santi020k/eslint-config-basic. Follow these
+  conventions whenever writing or editing code in this project.
+trigger: always_on
+---
+
+${body}`
+  }
+
+  if (format === 'cursor') {
+    return `---
+description: >
+  ESLint code standards for this project. Apply these conventions when writing
+  or editing any source file.
+globs:
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.js"
+  - "**/*.jsx"
+  - "**/*.vue"
+  - "**/*.svelte"
+  - "**/*.astro"
+alwaysApply: true
+---
+
+${body}`
+  }
+
+  if (format === 'kiro') {
+    return `---
+inclusion: always
+---
+
+${body}`
+  }
+
+  return body
+}
+
 /**
  * Builds the skill document body from the project's {@link EslintConfigFeatures}.
  * Four format variants are produced:
@@ -551,23 +684,9 @@ export const generateSkillContent = (
   features: EslintConfigFeatures,
   format: AgentTarget['format']
 ): string => {
-  const { extensions, formats, frameworks, libraries, lintCommand, testing, tools, typescript } = features
+  const { frameworks, libraries, lintCommand, testing, tools, typescript } = features
   // ── Summary ────────────────────────────────────────────────────────────────
-  const summaryLines: string[] = []
-
-  summaryLines.push(`- **TypeScript**: ${typescript ? 'enabled' : 'disabled'}`)
-
-  if (frameworks.length > 0) summaryLines.push(`- **Frameworks**: ${frameworks.join(', ')}`)
-
-  if (testing.length > 0)    summaryLines.push(`- **Testing**: ${testing.join(', ')}`)
-
-  if (tools.length > 0)      summaryLines.push(`- **Tools**: ${tools.join(', ')}`)
-
-  if (libraries.length > 0)  summaryLines.push(`- **Libraries**: ${libraries.join(', ')}`)
-
-  if (formats.length > 0)    summaryLines.push(`- **Formats**: ${formats.join(', ')}`)
-
-  if (extensions.length > 0) summaryLines.push(`- **Extensions**: ${extensions.join(', ')}`)
+  const summaryLines = buildSummaryLines(features)
 
   // ── TypeScript conventions ─────────────────────────────────────────────────
   const tsSection = typescript ?
@@ -583,64 +702,7 @@ export const generateSkillContent = (
     ''
 
   // ── Framework hints ────────────────────────────────────────────────────────
-  const frameworkSections: string[] = []
-
-  if (frameworks.some(f => f === 'React' || f === 'Next.js')) {
-    frameworkSections.push(`
-### React / JSX
-
-- Prefer function components over class components
-- Hooks must follow the Rules of Hooks (no conditional calls, no loops)
-- Avoid inline arrow functions in JSX props where it hurts readability
-- Use \`key\` props when rendering lists
-`)
-  }
-
-  if (frameworks.includes('Next.js')) {
-    frameworkSections.push(`
-### Next.js
-
-- Follow App Router conventions (Server Components by default, \`"use client"\` when needed)
-- Avoid \`<img>\` — use \`next/image\`
-- Avoid \`<a>\` for internal navigation — use \`next/link\`
-`)
-  }
-
-  if (frameworks.includes('Vue')) {
-    frameworkSections.push(`
-### Vue
-
-- Prefer Composition API (\`<script setup>\`) over Options API
-- Use single-word or multi-word component names consistently
-`)
-  }
-
-  if (frameworks.includes('Svelte')) {
-    frameworkSections.push(`
-### Svelte
-
-- Virtual \`*.svelte/*.ts\` files are handled by the ESLint config — do not manually adjust \`allowDefaultProject\`
-`)
-  }
-
-  if (frameworks.includes('Astro')) {
-    frameworkSections.push(`
-### Astro
-
-- Virtual \`*.astro/*.ts\` files are handled by the ESLint config
-- Prefer Astro components over framework components when no interactivity is needed
-`)
-  }
-
-  if (frameworks.includes('Angular')) {
-    frameworkSections.push(`
-### Angular
-
-- Follow the Angular style guide component, directive, and service naming conventions
-- Use standalone components by default; avoid NgModule unless required
-`)
-  }
-
+  const frameworkSections = buildFrameworkSections(frameworks)
   // ── Testing hints ──────────────────────────────────────────────────────────
   const testingSections: string[] = []
 
@@ -718,47 +780,7 @@ npx eslint .
 `
 
   // ── Format-specific wrappers ───────────────────────────────────────────────
-  if (format === 'frontmatter') {
-    return `---
-name: eslint-standards
-description: >
-  Code quality standards enforced by @santi020k/eslint-config-basic. Follow these
-  conventions whenever writing or editing code in this project.
-trigger: always_on
----
-
-${body}`
-  }
-
-  if (format === 'cursor') {
-    return `---
-description: >
-  ESLint code standards for this project. Apply these conventions when writing
-  or editing any source file.
-globs:
-  - "**/*.ts"
-  - "**/*.tsx"
-  - "**/*.js"
-  - "**/*.jsx"
-  - "**/*.vue"
-  - "**/*.svelte"
-  - "**/*.astro"
-alwaysApply: true
----
-
-${body}`
-  }
-
-  if (format === 'kiro') {
-    return `---
-inclusion: always
----
-
-${body}`
-  }
-
-  // plain — no front-matter
-  return body
+  return wrapWithFormat(body, format)
 }
 
 // ─── File writer ──────────────────────────────────────────────────────────────
@@ -837,6 +859,13 @@ const handleGuardedSectionFile = (
 
 // ─── Public API ───────────────────────────────────────────────────────────────
 
+const resolveSkillOptions = (opts: GenerateSkillOptions) => ({
+  check: opts.check ?? false,
+  createAgentsMd: opts.createAgentsMd ?? false,
+  cwd: opts.cwd ?? process.cwd(),
+  force: opts.force ?? false
+})
+
 /**
  * Detects which AI agent folders exist in the project, reads the actual
  * `eslint.config.js` to understand what is configured, and writes a tailored
@@ -850,16 +879,13 @@ const handleGuardedSectionFile = (
  * import { generateAgentSkills } from '@santi020k/eslint-config-basic'
  *
  * const result = await generateAgentSkills({ cwd: process.cwd() })
- * console.log('Written to:', result.written)
+ * process.stdout.write(`Written to: ${result.written}\n`)
  * ```
  */
 export const generateAgentSkills = async (
   opts: GenerateSkillOptions = {}
 ): Promise<GenerateSkillResult> => {
-  const cwd = opts.cwd ?? process.cwd()
-  const force = opts.force ?? false
-  const check = opts.check ?? false
-  const createAgentsMd = opts.createAgentsMd ?? false
+  const { check, createAgentsMd, cwd, force } = resolveSkillOptions(opts)
   const written: string[] = []
   const skipped: string[] = []
   const stale: string[] = []
@@ -935,75 +961,81 @@ export interface HandleGenerateSkillFlags {
   createAgentsMd?: boolean
 }
 
-export const handleGenerateSkill = async (
-  cwd: string = process.cwd(),
-  force = false,
-  flags: HandleGenerateSkillFlags = {}
-): Promise<void> => {
-  const check = flags.check ?? false
+const resolveGenerateSkillFlags = (flags: HandleGenerateSkillFlags) => ({
+  check: flags.check ?? false,
+  createAgentsMd: flags.createAgentsMd ?? false
+})
 
-  console.log(check ? '🔍 Checking AI agent skill files...' : '🔍 Scanning for AI agent folders...')
-
-  const configFile = findEslintConfig(cwd)
-
-  if (configFile) {
-    console.log(`📄 Reading config from: ${configFile.replace(cwd + '/', '')}`)
-  } else {
-    console.log('⚠️  No eslint.config.js found — falling back to package.json detection.')
-  }
-
-  const result = await generateAgentSkills({
-    check,
-    createAgentsMd: flags.createAgentsMd ?? false,
-    cwd,
-    force
-  })
-
-  if (result.written.length === 0 && result.skipped.length === 0 && result.stale.length === 0) {
-    console.log(
-      '\n⚠️  No agent folders found (.agent, .agents, .claude, .cursor, .windsurf, .copilot, .aider, .gemini, .clinerules, .roo, .kiro) and no AGENTS.md.'
-    )
-
-    console.log('   Create one of those folders first (or re-run with --create to scaffold AGENTS.md).')
-
-    return
-  }
-
+const outputGenerateSkillResults = (
+  check: boolean,
+  result: Awaited<ReturnType<typeof generateAgentSkills>>,
+  cwd: string
+): void => {
   if (check) {
     for (const file of result.skipped) {
-      console.log(`✅ Up to date: ${file.replace(cwd + '/', '')}`)
+      process.stdout.write(`✅ Up to date: ${file.replace(cwd + '/', '')}\n`)
     }
 
     for (const file of result.stale) {
-      console.log(`❌ Stale or missing: ${file.replace(cwd + '/', '')}`)
+      process.stdout.write(`❌ Stale or missing: ${file.replace(cwd + '/', '')}\n`)
     }
 
     if (result.stale.length > 0) {
-      console.log(`\n⚠️  ${result.stale.length} skill file(s) are out of date. Run \`generate-skill --force\` to regenerate them.`)
+      process.stdout.write(`\n⚠️  ${result.stale.length} skill file(s) are out of date. Run \`generate-skill --force\` to regenerate them.\n`)
 
       process.exitCode = 1
     } else {
-      console.log('\n🎉 All agent skill files are up to date!')
+      process.stdout.write('\n🎉 All agent skill files are up to date!\n')
     }
 
     return
   }
 
   for (const file of result.written) {
-    console.log(`✅ Written: ${file.replace(cwd + '/', '')}`)
+    process.stdout.write(`✅ Written: ${file.replace(cwd + '/', '')}\n`)
   }
 
   for (const file of result.skipped) {
-    console.log(`⏭️  Skipped (already exists): ${file.replace(cwd + '/', '')}`)
+    process.stdout.write(`⏭️  Skipped (already exists): ${file.replace(cwd + '/', '')}\n`)
   }
 
   if (result.written.length > 0) {
-    console.log(`\n🎉 Generated ${result.written.length} skill file(s)!`)
+    process.stdout.write(`\n🎉 Generated ${result.written.length} skill file(s)!\n`)
 
-    console.log('   Agents will now follow your project\'s ESLint standards automatically.')
+    process.stdout.write('   Agents will now follow your project\'s ESLint standards automatically.\n')
   }
 
   if (result.skipped.length > 0) {
-    console.log('\n💡 Tip: run with --force to overwrite existing skill files.')
+    process.stdout.write('\n💡 Tip: run with --force to overwrite existing skill files.\n')
   }
+}
+
+export const handleGenerateSkill = async (
+  cwd: string = process.cwd(),
+  force = false,
+  flags: HandleGenerateSkillFlags = {}
+): Promise<void> => {
+  const { check, createAgentsMd } = resolveGenerateSkillFlags(flags)
+
+  process.stdout.write(`${check ? '🔍 Checking AI agent skill files...' : '🔍 Scanning for AI agent folders...'}\n`)
+
+  const configFile = findEslintConfig(cwd)
+
+  if (configFile) {
+    process.stdout.write(`📄 Reading config from: ${configFile.replace(cwd + '/', '')}\n`)
+  } else {
+    process.stdout.write('⚠️  No eslint.config.js found — falling back to package.json detection.\n')
+  }
+
+  const result = await generateAgentSkills({ check, createAgentsMd, cwd, force })
+
+  if (result.written.length === 0 && result.skipped.length === 0 && result.stale.length === 0) {
+    process.stdout.write('\n⚠️  No agent folders found (.agent, .agents, .claude, .cursor, .windsurf, .copilot, .aider, .gemini, .clinerules, .roo, .kiro) and no AGENTS.md.\n')
+
+    process.stdout.write('   Create one of those folders first (or re-run with --create to scaffold AGENTS.md).\n')
+
+    return
+  }
+
+  outputGenerateSkillResults(check, result, cwd)
 }
