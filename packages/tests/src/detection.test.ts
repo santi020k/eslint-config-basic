@@ -576,6 +576,7 @@ describe('detectProjectOptions', () => {
 
     expect(options.detectedFrameworks).toContain('tanstack-start')
     expect(options.detectedFrameworks).toContain('solid') // solid-start implies solid
+    expect(options.detectedFrameworks).not.toContain('react') // solid-start must NOT imply react
     expect(options.runtime).toBe(Runtime.Universal)
   })
 
