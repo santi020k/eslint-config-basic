@@ -59,6 +59,7 @@
   },
   "devDependencies": {
     "@types/eslint-plugin-jsx-a11y": "catalog:",
+    "@types/node": "catalog:",
     "publint": "catalog:",
     "tsup": "catalog:",
     "typescript": "catalog:"
