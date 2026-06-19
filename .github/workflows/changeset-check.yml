@@ -17,11 +17,12 @@ jobs:
     name: Require changeset
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    # Skip for version-packages PRs (changesets are consumed) and skip-changelog label
+    # Skip for version-packages PRs, release/* branches, and skip-changelog label
     if: >-
       ${{
         !contains(github.event.pull_request.labels.*.name, 'skip-changelog') &&
-        !startsWith(github.event.pull_request.title, 'chore(release): version packages')
+        !startsWith(github.event.pull_request.title, 'chore(release): version packages') &&
+        !startsWith(github.head_ref, 'release/')
       }}
 
     steps:
