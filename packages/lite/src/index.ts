@@ -383,9 +383,11 @@ const resolveTypescriptOptions = (
 
   if (typeof typescript === 'string') return { mode: typescript }
 
+  if (typescript.mode === 'off') return false
+
   return {
     ...typescript,
-    mode: typescript.mode === 'off' || !typescript.mode ? 'type-aware' : typescript.mode
+    mode: typescript.mode ?? 'type-aware'
   }
 }
 
