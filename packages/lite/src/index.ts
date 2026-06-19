@@ -646,31 +646,31 @@ const logLiteDebug = ({
   }, null, 2)}\n`)
 }
 
-const LITE_FRAMEWORK_EXTRA_OPTS: Partial<Record<string, (ctx: { hasReact: boolean, hasSolid: boolean, hasSvelte: boolean, hasVue: boolean, runtime: Runtime }) => FrameworkOptions>> = {
-  astro: ctx => ({ hasReact: ctx.hasReact, hasSolid: ctx.hasSolid, hasSvelte: ctx.hasSvelte, hasVue: ctx.hasVue }),
-  hono: ctx => ({ runtime: ctx.runtime }),
-  slidev: ctx => ({ runtime: ctx.runtime }),
-  vite: ctx => ({ runtime: ctx.runtime })
-}
+const LITE_FRAMEWORK_EXTRA_OPTS = new Map<string, (ctx: { hasReact: boolean, hasSolid: boolean, hasSvelte: boolean, hasVue: boolean, runtime: Runtime }) => FrameworkOptions>([
+  ['astro', ctx => ({ hasReact: ctx.hasReact, hasSolid: ctx.hasSolid, hasSvelte: ctx.hasSvelte, hasVue: ctx.hasVue })],
+  ['hono', ctx => ({ runtime: ctx.runtime })],
+  ['slidev', ctx => ({ runtime: ctx.runtime })],
+  ['vite', ctx => ({ runtime: ctx.runtime })]
+])
 
 const resolveEnabledFrameworks = async (
   frameworks: NonNullable<EslintConfigOptions['frameworks']>,
   ctx: { hasReact: boolean, hasSolid: boolean, hasSvelte: boolean, hasVue: boolean, runtime: Runtime }
-): Promise<Record<string, FlatConfigArray>> => {
+): Promise<Map<string, FlatConfigArray>> => {
   const entries = await Promise.all(
     (Object.entries(frameworks) as [DetectedFrameworkName, ImportedFramework][])
       .filter((entry): entry is [DetectedFrameworkName, ImportedFramework] => Boolean(entry[1]))
       .map(([name, value]) =>
-        resolveFramework(name, value, LITE_FRAMEWORK_EXTRA_OPTS[name]?.(ctx)).then(config => [name, config] as const)
+        resolveFramework(name, value, LITE_FRAMEWORK_EXTRA_OPTS.get(name)?.(ctx)).then(config => [name, config] as const)
       )
   )
 
-  return Object.fromEntries(entries)
+  return new Map(entries)
 }
 
 interface BuildLiteConfigsParams {
   defaultIgnores: TSESLint.FlatConfig.Config[]
-  frameworkConfigs: Record<string, FlatConfigArray>
+  frameworkConfigs: Map<string, FlatConfigArray>
   gitignoreConfig: FlatConfigArray
   hasReact: boolean
   nextMode: NextMode
@@ -707,17 +707,17 @@ const buildLiteEslintConfigs = async (params: BuildLiteConfigsParams): Promise<F
     userIgnores
   } = params
 
-  const get = (name: string): FlatConfigArray => frameworkConfigs[name] ?? []
+  const get = (name: string): FlatConfigArray => frameworkConfigs.get(name) ?? []
 
   const tailwindSettingsConfig = ((): TSESLint.FlatConfig.Config | undefined => {
     if (!tailwindOptions) return undefined
 
     const { noUnknownClasses, ...settingsOptions } = tailwindOptions
+    const unknownClassOptions: { entryPoint?: string, ignore?: string[] } = {}
 
-    const unknownClassOptions = {
-      ...(tailwindOptions.entryPoint ? { entryPoint: tailwindOptions.entryPoint } : {}),
-      ...(tailwindOptions.ignore?.length ? { ignore: tailwindOptions.ignore } : {})
-    }
+    if (tailwindOptions.entryPoint) unknownClassOptions.entryPoint = tailwindOptions.entryPoint
+
+    if (tailwindOptions.ignore?.length) unknownClassOptions.ignore = tailwindOptions.ignore
 
     const hasUnknownClassOptions = Object.keys(unknownClassOptions).length > 0
     let noUnknownClassesRule: TSESLint.FlatConfig.RuleEntry | undefined
@@ -725,14 +725,25 @@ const buildLiteEslintConfigs = async (params: BuildLiteConfigsParams): Promise<F
     if (hasUnknownClassOptions || noUnknownClasses !== undefined) {
       const severity = noUnknownClasses ?? 'error'
 
-      noUnknownClassesRule = severity === false ? 'off' : hasUnknownClassOptions ? [severity, unknownClassOptions] : severity
+      if (severity === false) {
+        noUnknownClassesRule = 'off'
+      } else if (hasUnknownClassOptions) {
+        noUnknownClassesRule = [severity, unknownClassOptions]
+      } else {
+        noUnknownClassesRule = severity
+      }
     }
 
-    return {
+    const config: TSESLint.FlatConfig.Config = {
       name: 'eslint-config-lite/tailwind-settings',
-      ...(noUnknownClassesRule === undefined ? {} : { rules: { 'better-tailwindcss/no-unknown-classes': noUnknownClassesRule } }),
       settings: { 'better-tailwindcss': settingsOptions }
     }
+
+    if (noUnknownClassesRule !== undefined) {
+      config.rules = { 'better-tailwindcss/no-unknown-classes': noUnknownClassesRule }
+    }
+
+    return config
   })()
 
   return [
@@ -828,11 +839,11 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
   } = options ?? {}
 
   if (options?.frameworks && 'remix' in options.frameworks) {
-    console.warn('[eslint-config-lite] Warning: `frameworks.remix` is deprecated and will be removed in the next major. Please use `frameworks["react-router"]` instead.')
+    process.emitWarning('[eslint-config-lite] Warning: `frameworks.remix` is deprecated and will be removed in the next major. Please use `frameworks["react-router"]` instead.')
   }
 
   if (options?.typescript && typeof options.typescript === 'object' && 'project' in options.typescript) {
-    console.warn('[eslint-config-lite] Warning: `typescript.project` is ignored in v2. Type-aware linting now relies on typescript-eslint projectService.')
+    process.emitWarning('[eslint-config-lite] Warning: `typescript.project` is ignored in v2. Type-aware linting now relies on typescript-eslint projectService.')
   }
 
   const { autoFrameworks, detectRootDir, optionMergeStrategy, requestedPreset } = resolveLiteSetup(options)
@@ -871,7 +882,17 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
   const tsconfigRootDir = resolveTsconfigRootDir(rootDir, typescript, optTsconfigRootDir)
   const extensions = applyStrictProfileDefaults(configuredExtensions, strict)
   const resolvedFrameworks = applyLiteFrameworkImpliedDeps({ ...frameworks })
-  const uniqueLibraries = [...new Set(libraries)]
+
+  const uniqueLibraries = ((): Library[] => {
+    const libs = [...new Set(libraries)]
+
+    if (optTailwind === false) return libs.filter(l => l !== Library.Tailwind)
+
+    if (!optTailwind) return libs
+
+    return [...new Set([...libs, Library.Tailwind])]
+  })()
+
   const uniqueTesting = [...new Set(testing)]
   const uniqueFormats = [...new Set(formats)]
   const uniqueTools = [...new Set(tools)]
