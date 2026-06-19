@@ -209,19 +209,22 @@ const FEATURE_MAP: readonly [pattern: string, category: FeatureCategory, label: 
   ['eslint-config-nuxt/',   'frameworks', 'Nuxt'],
   ['eslint-config-lit/',    'frameworks', 'Lit'],
   ['eslint-config-tanstack-start/', 'frameworks', 'TanStack Start'],
+  ['eslint-config-preact/', 'frameworks', 'Preact'],
+  ['eslint-config-slidev/', 'frameworks', 'Slidev'],
+  ['eslint-config-vite/',   'frameworks', 'Vite'],
 
   // Testing
-  ['optionals/vitest',         'testing', 'Vitest'],
-  ['optionals/jest',           'testing', 'Jest'],
-  ['optionals/playwright',     'testing', 'Playwright'],
-  ['optionals/cypress',        'testing', 'Cypress'],
-  ['optionals/testing-library', 'testing', 'Testing Library'],
+  ['integrations/vitest',         'testing', 'Vitest'],
+  ['integrations/jest',           'testing', 'Jest'],
+  ['integrations/playwright',     'testing', 'Playwright'],
+  ['integrations/cypress',        'testing', 'Cypress'],
+  ['integrations/testing-library', 'testing', 'Testing Library'],
 
   // Tools
   ['eslint-config/prettier',     'tools', 'Prettier'],
-  ['optionals/cspell',           'tools', 'CSpell'],
+  ['integrations/cspell',        'tools', 'CSpell'],
   ['eslint-config-integrations/jsdoc', 'tools', 'JSDoc'],
-  ['optionals/swagger',          'tools', 'Swagger'],
+  ['integrations/swagger',       'tools', 'Swagger'],
 
   // Libraries
   ['eslint-config-integrations/ai-sdk',    'libraries', 'AI SDK'],
@@ -231,27 +234,27 @@ const FEATURE_MAP: readonly [pattern: string, category: FeatureCategory, label: 
   ['eslint-config-integrations/langchain', 'libraries', 'LangChain'],
   ['eslint-config-integrations/llamaindex', 'libraries', 'LlamaIndex'],
   ['santi020k/tailwind/',                  'libraries', 'Tailwind CSS'],
-  ['optionals/i18next',                    'libraries', 'i18next'],
-  ['optionals/stencil',                    'libraries', 'Stencil'],
-  ['optionals/storybook',                  'libraries', 'Storybook'],
+  ['integrations/i18next',                 'libraries', 'i18next'],
+  ['integrations/stencil',                 'libraries', 'Stencil'],
+  ['storybook:recommended',                'libraries', 'Storybook'],
   ['eslint-config-integrations/tanstack-query', 'libraries', 'TanStack Query'],
   ['eslint-config-integrations/tanstack-router', 'libraries', 'TanStack Router'],
 
   // Formats
-  ['optionals/graphql/',  'formats', 'GraphQL'],
-  ['optionals/yaml/',     'formats', 'YAML'],
-  ['optionals/jsonc/',    'formats', 'JSONC'],
-  ['optionals/markdown',  'formats', 'Markdown'],
-  ['eslint-config-mdx/',  'formats', 'MDX'],
-  ['optionals/toml/',     'formats', 'TOML'],
+  ['integrations/graphql/',  'formats', 'GraphQL'],
+  ['integrations/yaml/',     'formats', 'YAML'],
+  ['integrations/jsonc/',    'formats', 'JSONC'],
+  ['integrations/markdown',  'formats', 'Markdown'],
+  ['eslint-config-mdx/',     'formats', 'MDX'],
+  ['optionals/toml/',        'formats', 'TOML'],
 
   // Extensions
   ['eslint-config/unicorn',                'extensions', 'Unicorn'],
   ['eslint-config/sonarjs',               'extensions', 'SonarJS'],
   ['eslint-config-integrations/security',    'extensions', 'Security'],
   ['eslint-config-integrations/perfectionist', 'extensions', 'Perfectionist'],
-  ['optionals/regexp',                    'extensions', 'Regexp'],
-  ['eslint-config/best-practices',        'extensions', 'Best Practices']
+  ['integrations/regexp',                  'extensions', 'Regexp'],
+  ['eslint-config/best-practices',         'extensions', 'Best Practices']
 ]
 
 interface RawFlatConfigEntry {
@@ -269,13 +272,16 @@ const DETECTED_FRAMEWORK_LABELS = new Map<string, string>([
   ['nest', 'NestJS'],
   ['next', 'Next.js'],
   ['nuxt', 'Nuxt'],
+  ['preact', 'Preact'],
   ['qwik', 'Qwik'],
   ['react', 'React'],
   ['react-router', 'React Router'],
   ['remix', 'Remix'],
+  ['slidev', 'Slidev'],
   ['solid', 'SolidJS'],
   ['svelte', 'Svelte'],
   ['tanstack-start', 'TanStack Start'],
+  ['vite', 'Vite'],
   ['vue', 'Vue']
 ])
 
