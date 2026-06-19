@@ -1,5 +1,12 @@
 # @santi020k/eslint-config-remix
 
+## 2.0.0-beta.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @santi020k/eslint-config-react-router@2.0.0-beta.1
+
 ## 2.0.0-beta.0
 
 ### Major Changes

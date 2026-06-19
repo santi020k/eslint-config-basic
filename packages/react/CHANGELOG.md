@@ -1,5 +1,12 @@
 # @santi020k/eslint-config-react
 
+## 2.0.0-beta.1
+
+### Patch Changes
+
+- Updated dependencies [[`dfba51d`](https://github.com/santi020k/eslint-config-basic/commit/dfba51dca7387a71a263af206eb86fd8df15f387)]:
+  - @santi020k/eslint-config-core@2.0.0-beta.1
+
 ## 2.0.0-beta.0
 
 ### Major Changes
@@ -71,18 +78,18 @@
 
   ```ts
   // Before (would throw)
-  const opts = detectProjectOptions();
-
-  eslintConfig(opts); // ❌
-
+  const opts = detectProjectOptions()
+  
+  eslintConfig(opts) // ❌
+  
   // opts.frameworks.next === true → TypeError inside eslintConfig()
-
+  
   // After (safe)
-  const opts = detectProjectOptions();
-
+  const opts = detectProjectOptions()
+  
   // opts.detectedFrameworks → ['next', 'react']  (informational)
   // opts.frameworks → {}                          (safe to spread)
-  eslintConfig(opts); // ✅
+  eslintConfig(opts) // ✅
   ```
 
   ## New features
@@ -94,7 +101,7 @@
   - `max-depth` (warn, max 4) — flags deeply nested blocks
 
   ```ts
-  eslintConfig({ extensions: [Extension.BestPractices] });
+  eslintConfig({ extensions: [Extension.BestPractices] })
   ```
 
   **Category barrel exports for `@santi020k/eslint-config-optionals`** — five new sub-path exports let you import a whole category at once:
