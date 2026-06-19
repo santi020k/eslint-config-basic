@@ -161,15 +161,9 @@ describe('Type Exports', () => {
   test('should have all Setting values', () => {
     const options = Object.values(Setting)
 
-    expect(options).toContain('gitignore')
-
     expect(options).toContain('no-gitignore')
 
-    expect(options).toContain('generated-code-ignores')
-
     expect(options).toContain('no-generated-code-ignores')
-
-    expect(options).toContain('default-ignores')
 
     expect(options).toContain('no-default-ignores')
   })

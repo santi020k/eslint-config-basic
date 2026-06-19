@@ -511,7 +511,7 @@ const createNoUnknownClassesRule = (
 
   const severity = tailwindOptions.noUnknownClasses ?? 'error'
 
-  if (severity === false || severity === 'off') return 'off'
+  if (severity === false) return 'off'
 
   return hasUnknownClassOptions ? [severity, unknownClassOptions] : severity
 }

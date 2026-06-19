@@ -207,15 +207,6 @@ export enum Runtime {
  */
 export enum Setting {
 
-  /** Default behavior — accepted for symmetry with `NoDefaultIgnores`; passing it changes nothing. */
-  DefaultIgnores = 'default-ignores',
-
-  /** Default behavior — accepted for symmetry with `NoGeneratedCodeIgnores`; passing it changes nothing. */
-  GeneratedCodeIgnores = 'generated-code-ignores',
-
-  /** Default behavior — accepted for symmetry with `NoGitignore`; passing it changes nothing. */
-  Gitignore = 'gitignore',
-
   /** Disable the built-in default ignore globs (dist, build, coverage, etc.). */
   NoDefaultIgnores = 'no-default-ignores',
 
@@ -304,7 +295,7 @@ export interface TailwindOptions {
   detectComponentClasses?: boolean
   entryPoint?: string
   ignore?: string[]
-  noUnknownClasses?: 'error' | 'off' | 'warn' | false
+  noUnknownClasses?: 'error' | 'warn' | false
 }
 
 export type TestingName = `${Testing}`

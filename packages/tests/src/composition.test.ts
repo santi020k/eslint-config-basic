@@ -283,7 +283,7 @@ describe('eslintConfig Function', () => {
         next: [{ name: 'mock-next', rules: {} }],
         react: [{ name: 'mock-react', rules: {} }]
       },
-      settings: [Setting.Gitignore],
+
       testing: [Testing.Vitest],
       tools: [Tool.Cspell],
       typescript: true
