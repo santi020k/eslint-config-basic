@@ -104,6 +104,7 @@ jobs:
           node-version: 22.x
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
-      - run: pnpm run build
+      - name: Build (serialised to avoid native-binary contention on Windows)
+        run: pnpm run build -- --concurrency=1 --log-output=new-only
       - name: Run CLI and detection tests on Windows
         run: pnpm --filter @santi020k/eslint-config-tests exec vitest run src/cli.test.ts src/detection.test.ts src/detection-fixtures.test.ts src/detection-internals.test.ts --maxWorkers=1
