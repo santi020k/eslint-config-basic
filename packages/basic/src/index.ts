@@ -296,7 +296,7 @@ const mergeArrayOption = <T>(
 const isOptionalBucketValue = (
   bucket: OptionalBucket,
   value: string
-// eslint-disable-next-line security/detect-object-injection
+// eslint-disable-next-line security/detect-object-injection -- bucket is constrained to OptionalBucket union; all keys are statically known
 ): boolean => (OPTIONAL_BUCKETS[bucket] as readonly string[]).includes(value)
 
 const getFeatureEntries = (
