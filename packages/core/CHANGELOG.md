@@ -1,5 +1,11 @@
 # @santi020k/eslint-config-core
 
+## 2.0.0-beta.1
+
+### Minor Changes
+
+- [`dfba51d`](https://github.com/santi020k/eslint-config-basic/commit/dfba51dca7387a71a263af206eb86fd8df15f387) Thanks [@santi020k](https://github.com/santi020k)! - Improve config migration handling and enhance TypeScript options detection
+
 ## 2.0.0-beta.0
 
 ### Major Changes

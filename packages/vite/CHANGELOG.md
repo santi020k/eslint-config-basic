@@ -1,5 +1,12 @@
 # @santi020k/eslint-config-vite
 
+## 2.0.0-beta.1
+
+### Patch Changes
+
+- Updated dependencies [[`dfba51d`](https://github.com/santi020k/eslint-config-basic/commit/dfba51dca7387a71a263af206eb86fd8df15f387)]:
+  - @santi020k/eslint-config-core@2.0.0-beta.1
+
 ## 2.0.0-beta.0
 
 ### Major Changes

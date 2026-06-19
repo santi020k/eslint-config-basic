@@ -35,6 +35,7 @@
     "add-preact",
     "ai-tooling-workflow",
     "ai-tools-support",
+    "config-migration-ts-detection",
     "cool-docs-align",
     "dependency-refresh",
     "eslint-10-only",
