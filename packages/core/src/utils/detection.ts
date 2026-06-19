@@ -61,8 +61,7 @@ const collectAllDependencies = (pkg: PackageJson): DependencyMap => ({
 })
 
 const hasAnyDependency = (allDeps: DependencyMap, names: string[]): boolean => names.some(
-  // eslint-disable-next-line security/detect-object-injection
-  name => Boolean(allDeps[name])
+  name => Object.hasOwn(allDeps, name)
 )
 
 const createRuntimeSetter = (options: EslintConfigOptions) => (runtime: Runtime): void => {
@@ -432,7 +431,7 @@ const detectProjects = (pkg: PackageJson, detectRootDir: string): NonNullable<Es
         const projectPath = `${baseDir}/${entry.name}`
 
         if (pathExists(join(detectRootDir, projectPath, 'package.json'))) {
-          // eslint-disable-next-line security/detect-object-injection
+          // eslint-disable-next-line security/detect-object-injection -- projectPath is formed from readdirSync entries; directory names cannot be __proto__ on real filesystems
           projects[projectPath] = {}
         }
       }

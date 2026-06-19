@@ -64,6 +64,7 @@
     "@typescript-eslint/utils": "catalog:"
   },
   "devDependencies": {
+    "@types/node": "catalog:",
     "publint": "catalog:",
     "tsup": "catalog:",
     "typescript": "catalog:"

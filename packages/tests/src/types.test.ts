@@ -1,8 +1,25 @@
-import { Extension, Format, Library, Runtime, Setting, Testing, Tool } from '@santi020k/eslint-config-basic'
+import { type EslintConfigFeatures, Extension, Format, Library, Runtime, Setting, Testing, Tool } from '@santi020k/eslint-config-basic'
 
 import { describe, expect, test } from 'vitest'
 
 describe('Type Exports', () => {
+  test('should export EslintConfigFeatures type', () => {
+    const features = {
+      configFile: null,
+      extensions: [],
+      formats: [],
+      frameworks: [],
+      libraries: [],
+      lintCommand: 'eslint .',
+      source: 'detection-fallback',
+      testing: [],
+      tools: [],
+      typescript: false
+    } satisfies EslintConfigFeatures
+
+    expect(features.source).toBe('detection-fallback')
+  })
+
   test('should have all Library values', () => {
     const options = Object.values(Library)
 

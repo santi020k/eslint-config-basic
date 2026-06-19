@@ -22,8 +22,7 @@ export const regexp: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazy
       },
       rules: {
         // Use recommended rules as base
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        ...pluginRegexp.configs?.['flat/recommended']?.rules,
+        ...pluginRegexp.configs['flat/recommended'].rules,
 
         'regexp/no-super-linear-backtracking': 'error',
         // Downgrade some rules to warnings for a smoother adoption
