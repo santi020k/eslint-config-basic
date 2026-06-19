@@ -83,21 +83,22 @@ const hasCloudflareSignal = (allDeps: DependencyMap, detectRootDir: string): boo
 const detectRuntime = (
   allDeps: DependencyMap,
   detectRootDir: string,
-  detectedFrameworks: EslintConfigOptions['detectedFrameworks'],
-  setRuntime: (runtime: Runtime) => void
+  _detectedFrameworks: EslintConfigOptions['detectedFrameworks'],
+  setRuntime: (runtime: Runtime) => void,
+  frameworkHasSetRuntime = false
 ): void => {
-  const hasDetectedFramework = (detectedFrameworks?.length ?? 0) > 0
+  const allowFileProbes = !frameworkHasSetRuntime
 
   if (
     hasAnyDependency(allDeps, ['bun-types']) ||
-    (!hasDetectedFramework && pathExists(join(detectRootDir, 'bunfig.toml')))
+    (allowFileProbes && pathExists(join(detectRootDir, 'bunfig.toml')))
   ) {
     setRuntime(Runtime.Bun)
   }
 
   if (
     hasAnyDependency(allDeps, ['@deno/eslint-plugin']) ||
-    (!hasDetectedFramework && (
+    (allowFileProbes && (
       pathExists(join(detectRootDir, 'deno.json')) ||
       pathExists(join(detectRootDir, 'deno.jsonc'))
     ))
@@ -504,10 +505,17 @@ export const detectProjectOptions = (detectRootDir: string = process.cwd()): Esl
     const pkg = JSON.parse(readFileSync(packageJsonPath, 'utf-8')) as PackageJson
     const allDeps = collectAllDependencies(pkg)
     const setRuntime = createRuntimeSetter(options)
+    let frameworkHasSetRuntime = false
 
-    options.detectedFrameworks = detectFrameworks(allDeps, detectRootDir, setRuntime)
+    const trackingSetRuntime = (runtime: Runtime): void => {
+      frameworkHasSetRuntime = true
 
-    detectRuntime(allDeps, detectRootDir, options.detectedFrameworks, setRuntime)
+      setRuntime(runtime)
+    }
+
+    options.detectedFrameworks = detectFrameworks(allDeps, detectRootDir, trackingSetRuntime)
+
+    detectRuntime(allDeps, detectRootDir, options.detectedFrameworks, setRuntime, frameworkHasSetRuntime)
 
     options.nextMode = detectNextMode(allDeps, detectRootDir)
 

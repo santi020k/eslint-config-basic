@@ -636,7 +636,7 @@ describe('detectProjectOptions', () => {
   })
 
   test('should detect Hono without forcing a runtime adapter', () => {
-    vi.mocked(fs.existsSync).mockReturnValue(true)
+    vi.mocked(fs.existsSync).mockImplementation(path => path.toString().includes('package.json'))
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
       dependencies: { hono: 'latest' }

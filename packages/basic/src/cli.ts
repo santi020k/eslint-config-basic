@@ -789,7 +789,7 @@ const processConfigMigration = (configPath: string, write: boolean, suggestions:
 }
 
 export const handleMigrate = (cwd: string = process.cwd(), write = false, json = false) => {
-  const configPath = resolveConfigPath(cwd)
+  const configPath = getConfigPathIfPresent(cwd) ?? join(cwd, getDefaultConfigFilename(cwd))
 
   const suggestions = [
     'v1 to v2 migration suggestions:',
