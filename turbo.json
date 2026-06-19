@@ -23,6 +23,20 @@
       "dependsOn": ["build"],
       "outputLogs": "errors-only"
     },
+    "test": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"],
+      "outputLogs": "errors-only"
+    },
+    "test:coverage": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"],
+      "outputLogs": "errors-only"
+    },
+    "//#build:schema": {
+      "inputs": ["packages/core/src/types.ts"],
+      "outputs": ["eslint-config-schema.json"]
+    },
     "dev": {
       "cache": false,
       "persistent": true

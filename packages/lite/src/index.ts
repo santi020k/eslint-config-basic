@@ -806,6 +806,14 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
     workspacePrefixes
   } = options ?? {}
 
+  if (options?.frameworks && 'remix' in options.frameworks) {
+    console.warn('[eslint-config-lite] Warning: `frameworks.remix` is deprecated and will be removed in the next major. Please use `frameworks["react-router"]` instead.')
+  }
+
+  if (options?.typescript && typeof options.typescript === 'object' && 'project' in options.typescript) {
+    console.warn('[eslint-config-lite] Warning: `typescript.project` is ignored in v2. Type-aware linting now relies on typescript-eslint projectService.')
+  }
+
   const { autoFrameworks, detectRootDir, optionMergeStrategy, requestedPreset } = resolveLiteSetup(options)
   const shouldDefaultProjectDetection = requestedPreset === Preset.Monorepo
 

@@ -976,6 +976,14 @@ export const eslintConfig = async (
     workspacePrefixes
   } = options ?? {}
 
+  if (options?.frameworks && 'remix' in options.frameworks) {
+    console.warn('[eslint-config-basic] Warning: `frameworks.remix` is deprecated and will be removed in the next major. Please use `frameworks["react-router"]` instead.')
+  }
+
+  if (options?.typescript && typeof options.typescript === 'object' && 'project' in options.typescript) {
+    console.warn('[eslint-config-basic] Warning: `typescript.project` is ignored in v2. Type-aware linting now relies on typescript-eslint projectService.')
+  }
+
   const { autoFrameworks, detectRootDir, optionMergeStrategy, requestedPreset } = resolveConfigSetup(options)
   const shouldDefaultProjectDetection = requestedPreset === Preset.Monorepo
 
