@@ -1,5 +1,16 @@
 # @santi020k/eslint-config-react
 
+## 2.0.0-beta.0
+
+### Major Changes
+
+- [#87](https://github.com/santi020k/eslint-config-basic/pull/87) [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc) Thanks [@santi020k](https://github.com/santi020k)! - Add first-class support for Preact.
+
+### Patch Changes
+
+- Updated dependencies [[`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc), [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc), [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc), [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc), [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc), [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc), [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc), [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc), [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc)]:
+  - @santi020k/eslint-config-core@2.0.0-beta.0
+
 ## 1.6.0
 
 ### Patch Changes
@@ -38,18 +49,18 @@
 
   ```ts
   // Before (would throw)
-  const opts = detectProjectOptions()
+  const opts = detectProjectOptions();
 
-  eslintConfig(opts) // ❌
+  eslintConfig(opts); // ❌
 
   // opts.frameworks.next === true → TypeError inside eslintConfig()
 
   // After (safe)
-  const opts = detectProjectOptions()
+  const opts = detectProjectOptions();
 
   // opts.detectedFrameworks → ['next', 'react']  (informational)
   // opts.frameworks → {}                          (safe to spread)
-  eslintConfig(opts) // ✅
+  eslintConfig(opts); // ✅
   ```
 
   ## New features
@@ -61,7 +72,7 @@
   - `max-depth` (warn, max 4) — flags deeply nested blocks
 
   ```ts
-  eslintConfig({ extensions: [Extension.BestPractices] })
+  eslintConfig({ extensions: [Extension.BestPractices] });
   ```
 
   **Category barrel exports for `@santi020k/eslint-config-optionals`** — five new sub-path exports let you import a whole category at once:
