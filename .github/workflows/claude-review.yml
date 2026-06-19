@@ -18,24 +18,61 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+      issues: read
       id-token: write
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: anthropics/claude-code-action@beta
+      - uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          model: claude-sonnet-4-6
-          # Trigger a review automatically on every PR open/push,
-          # or on-demand when someone comments "@claude review this"
-          direct_prompt: |
-            Review this pull request. Focus on:
-            - Correctness bugs and edge cases
-            - ESLint flat config conventions (this is an ESLint 10 monorepo)
-            - Enum coverage gaps in packages/core/src/types.ts vs packages/integrations/src/compose.ts
-            - TDD contract violations (new enum values must have factories)
-            - Breaking changes to the public API
-            Post findings as inline PR comments where possible. Be concise.
-          allowed_tools: "mcp__github__create_pull_request_review,mcp__github__create_review_comment,mcp__github__get_pull_request,mcp__github__get_pull_request_diff"
+          claude_args: |
+            --model claude-sonnet-4-6
+            --allowedTools mcp__github__create_pull_request_review,mcp__github__create_review_comment,mcp__github__get_pull_request,mcp__github__get_pull_request_diff,mcp__github__list_pull_request_files
+          prompt: |
+            REPO: ${{ github.repository }}
+            PR NUMBER: ${{ github.event.pull_request.number }}
+
+            Review this pull request for the @santi020k/eslint-config-basic monorepo.
+
+            ## Project context
+            - ESLint 10+ Flat Config composable config package
+            - All configs return `TSESLint.FlatConfig.ConfigArray`
+            - Single source of truth for enums: `packages/core/src/types.ts`
+            - Enum → config mapping lives in `packages/integrations/src/compose.ts`
+            - TDD workflow: enum value added → `contracts.test.ts` auto-fails → factory created → tests green
+
+            ## Check for these issues
+
+            **TDD contract violations**
+            - New enum values in `packages/core/src/types.ts` (Library, Testing, Format, Tool, Extension) MUST have a matching factory in `packages/integrations/src/{category}/` and an `addIf` block in `compose.ts`
+            - If an enum value exists but no factory/compose entry, flag it as a contract violation
+
+            **FEATURE_MAP coverage in `packages/basic/src/agent-skill-generator.ts`**
+            - Every Library, Tool, Format, and Extension enum value must have an entry in `FEATURE_MAP`
+            - Silently missing values cause active integrations to be dropped from generated AI skill files
+
+            **ESLint flat config conventions**
+            - No `.eslintrc` patterns — flat config only
+            - `.js` extensions on all relative ESM imports
+            - `type` imports for type-only usage
+            - Prettier config via `getPrettierConfig()` only, never inside `getIntegrationConfigs()`
+            - Framework lazy factories must use `defineLazyConfig()` from `packages/integrations/src/lazy.ts`
+
+            **Breaking changes**
+            - Public API changes in `packages/basic/src/index.ts` or `packages/core/src/types.ts`
+            - Removed or renamed exports that consumers depend on
+            - Peer dependency changes that could break existing installs
+
+            **Documentation requirements**
+            - New published framework package or integration → docs required in `apps/docs/src/content/docs/`
+            - API surface changes → update `apps/docs/src/content/docs/api/index.md`
+            - Setup path changes → update installation.md / configuration.md
+
+            **Changesets**
+            - Public-facing changes need a `.changeset/*.md` file
+            - Internal-only changes (test, docs, CI) do not need one
+
+            Post findings as inline PR comments on the relevant lines. Group findings by severity (Bug / Warning / Suggestion). Be concise — one sentence per finding is enough.
