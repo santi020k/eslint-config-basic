@@ -31,5 +31,23 @@
     "@santi020k/eslint-config-vue": "1.6.0",
     "@santi020k/eslint-config-preact": "1.6.0"
   },
-  "changesets": []
+  "changesets": [
+    "add-preact",
+    "ai-tooling-workflow",
+    "ai-tools-support",
+    "cool-docs-align",
+    "dependency-refresh",
+    "eslint-10-only",
+    "eslint-config-ignores-option",
+    "fuzzy-pears-define",
+    "lazy-frameworks-bare-naming",
+    "lite-config-package",
+    "merge-strategy-and-detection-fixes",
+    "modern-boats-learn",
+    "new-framework-docs",
+    "quiet-nest-next-rules",
+    "svelte-runtime-dependency",
+    "v2-new-frameworks-and-integrations",
+    "v2-react-modernization"
+  ]
 }
