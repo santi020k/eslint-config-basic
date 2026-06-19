@@ -214,11 +214,12 @@ const FEATURE_MAP: readonly [pattern: string, category: FeatureCategory, label: 
   ['eslint-config-vite/',   'frameworks', 'Vite'],
 
   // Testing
-  ['integrations/vitest',         'testing', 'Vitest'],
-  ['integrations/jest',           'testing', 'Jest'],
-  ['integrations/playwright',     'testing', 'Playwright'],
-  ['integrations/cypress',        'testing', 'Cypress'],
-  ['integrations/testing-library', 'testing', 'Testing Library'],
+  ['integrations/vitest',              'testing', 'Vitest'],
+  ['integrations/jest',               'testing', 'Jest'],
+  ['eslint-config-integrations/jest-dom', 'testing', 'Jest DOM'],
+  ['integrations/playwright',          'testing', 'Playwright'],
+  ['integrations/cypress',             'testing', 'Cypress'],
+  ['integrations/testing-library',     'testing', 'Testing Library'],
 
   // Tools
   ['eslint-config/prettier',                  'tools', 'Prettier'],
@@ -255,12 +256,15 @@ const FEATURE_MAP: readonly [pattern: string, category: FeatureCategory, label: 
   ['eslint-config-turbo/',                     'libraries', 'Turbo'],
 
   // Formats
-  ['integrations/graphql/',  'formats', 'GraphQL'],
-  ['integrations/yaml/',     'formats', 'YAML'],
-  ['integrations/jsonc/',    'formats', 'JSONC'],
-  ['integrations/markdown',  'formats', 'Markdown'],
-  ['eslint-config-mdx/',     'formats', 'MDX'],
-  ['integrations/toml/',     'formats', 'TOML'],
+  ['integrations/css/',                        'formats', 'CSS'],
+  ['integrations/html/',                       'formats', 'HTML'],
+  ['eslint-config-integrations/package-json',  'formats', 'Package JSON'],
+  ['integrations/graphql/',                    'formats', 'GraphQL'],
+  ['integrations/yaml/',                       'formats', 'YAML'],
+  ['integrations/jsonc/',                      'formats', 'JSONC'],
+  ['integrations/markdown',                    'formats', 'Markdown'],
+  ['eslint-config-mdx/',                       'formats', 'MDX'],
+  ['integrations/toml/',                       'formats', 'TOML'],
 
   // Extensions
   ['eslint-config/unicorn',                      'extensions', 'Unicorn'],

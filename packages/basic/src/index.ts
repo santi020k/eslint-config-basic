@@ -318,19 +318,19 @@ const mergeOptionalBucket = <T extends string>(
   explicitValues: T[] | undefined,
   options: EslintConfigOptions | undefined,
   strategy: 'merge' | 'replace'
-): T[] => applyFeatureDisables(
-  mergeArrayOption(
-    detectedValues,
-    presetValues,
-    [
-      ...(explicitValues ?? []),
-      ...getFeatureEntries(options, bucket, true) as T[]
-    ],
-    strategy
-  ),
-  options,
-  bucket
-)
+): T[] => {
+  const featureEntries = getFeatureEntries(options, bucket, true) as T[]
+
+  const combined = (explicitValues !== undefined || featureEntries.length > 0)
+    ? [...(explicitValues ?? []), ...featureEntries]
+    : undefined
+
+  return applyFeatureDisables(
+    mergeArrayOption(detectedValues, presetValues, combined, strategy),
+    options,
+    bucket
+  )
+}
 
 const mergeFrameworkOption = (
   detectedFrameworks: Record<string, ImportedFramework>,
