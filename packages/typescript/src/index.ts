@@ -28,6 +28,7 @@ const strictModeRules: TSESLint.Linter.RulesRecord = {
 
 interface CreateTypescriptConfigOptions {
   mode?: Exclude<TypeScriptMode, 'off'>
+  project?: boolean | string | string[]
   projectService?: boolean
   tsconfigRootDir?: string
 }
@@ -69,11 +70,13 @@ export const createTypescriptConfig = (
   }
 
   const mode = options.mode ?? 'type-aware'
-  const projectService = options.projectService ?? mode !== 'syntax'
+  const projectService = options.projectService ?? (mode !== 'syntax' && options.project === undefined)
+  const project = options.project ?? (mode !== 'syntax' && !projectService ? true : undefined)
 
   const parserOptions = {
     extraFileExtensions: ['.astro', '.svelte', '.vue'],
     parser: tsParser,
+    ...(project !== undefined ? { project } : {}),
     ...(projectService ? { projectService: true } : {}),
     tsconfigRootDir: options.tsconfigRootDir
   }

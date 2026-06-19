@@ -223,6 +223,62 @@ describe('Deep Rule Assertions (#5)', () => {
 
     expect(names).toContain('integrations/playwright')
   })
+
+  test('should append local flat-config overrides from defineConfig rest args', async () => {
+    const config = await defineConfig(
+      { detection: false, tools: [] },
+      {
+        name: 'local/override',
+        rules: {
+          'no-console': 'off'
+        }
+      }
+    )
+
+    const names = extractConfigNames(config)
+
+    expect(names).toContain('local/override')
+    expect(getEffectiveRuleValue(config, 'no-console')).toBe('off')
+  })
+
+  test('should allow Playwright file globs to be customized', async () => {
+    const config = await defineConfig({
+      testing: [Testing.Playwright],
+      testingFiles: {
+        playwright: ['tests/**/*.ts']
+      }
+    })
+
+    const playwrightConfig = config.find(entry => entry.name === 'integrations/playwright')
+
+    expect(playwrightConfig?.files).toEqual(['tests/**/*.ts'])
+  })
+
+  test('should configure Tailwind entry points and class ignores in one option', async () => {
+    const config = await defineConfig({
+      tailwind: {
+        entryPoint: 'src/styles/global.css',
+        ignore: ['^prose-custom$']
+      }
+    })
+
+    const tailwindSettings = config.find(entry => entry.name === 'eslint-config-basic/tailwind-settings')
+
+    expect(tailwindSettings?.settings).toEqual({
+      'better-tailwindcss': {
+        detectComponentClasses: true,
+        entryPoint: 'src/styles/global.css',
+        ignore: ['^prose-custom$']
+      }
+    })
+    expect(tailwindSettings?.rules?.['better-tailwindcss/no-unknown-classes']).toEqual([
+      'error',
+      {
+        entryPoint: 'src/styles/global.css',
+        ignore: ['^prose-custom$']
+      }
+    ])
+  })
 })
 
 describe('Framework Rule Assertions — Svelte, Angular, Qwik', () => {

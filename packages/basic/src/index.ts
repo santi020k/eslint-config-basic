@@ -17,6 +17,7 @@ import {
   Preset,
   Runtime,
   Setting,
+  type TailwindOptions,
   Testing,
   Tool,
   type TypeScriptMode,
@@ -31,7 +32,7 @@ import { createDetectedFrameworkFlags } from './frameworks.js'
 import { getIntegrationConfigs, getPrettierConfig } from './integrations.js'
 import { resolveFramework, resolvePreset } from './resolvers.js'
 
-export type { AgentTarget, GenerateSkillOptions, GenerateSkillResult } from './agent-skill-generator.js'
+export type { AgentTarget, EslintConfigFeatures, GenerateSkillOptions, GenerateSkillResult } from './agent-skill-generator.js'
 export {
   AGENT_TARGETS,
   generateAgentSkills,
@@ -254,6 +255,7 @@ const TAILWIND_ENTRYPOINT_CANDIDATES = [
 ]
 
 type OptionalBucket = 'extensions' | 'formats' | 'libraries' | 'testing' | 'tools'
+type ConfigInput = false | null | TSESLint.FlatConfig.Config | TSESLint.FlatConfig.ConfigArray | undefined
 
 const OPTIONAL_BUCKETS = {
   extensions: Object.values(Extension),
@@ -262,6 +264,12 @@ const OPTIONAL_BUCKETS = {
   testing: Object.values(Testing),
   tools: Object.values(Tool)
 } as const
+
+const flattenConfigInputs = (configs: ConfigInput[]): TSESLint.FlatConfig.ConfigArray => configs.flatMap(config => {
+  if (!config) return []
+
+  return Array.isArray(config) ? config : [config]
+})
 
 const mergeArrayOption = <T>(
   detectedValues: T[],
@@ -467,6 +475,44 @@ const findTailwindEntryPoint = (rootDir: string): string | undefined => TAILWIND
   candidate => existsSync(join(rootDir, candidate))
 )
 
+const resolveTailwindOptions = (
+  rootDir: string,
+  tailwind: EslintConfigOptions['tailwind']
+): TailwindOptions | undefined => {
+  if (tailwind === false) return undefined
+
+  const options = tailwind ?? {}
+  const entryPoint = options.entryPoint ?? findTailwindEntryPoint(rootDir)
+
+  if (!entryPoint && options.detectComponentClasses === undefined && !options.ignore?.length) return undefined
+
+  return {
+    detectComponentClasses: options.detectComponentClasses ?? true,
+    ...(entryPoint ? { entryPoint } : {}),
+    ...(options.ignore?.length ? { ignore: options.ignore } : {})
+  }
+}
+
+const createTailwindSettingsConfig = (
+  tailwindOptions: TailwindOptions
+): TSESLint.FlatConfig.Config => {
+  const unknownClassOptions = {
+    ...(tailwindOptions.entryPoint ? { entryPoint: tailwindOptions.entryPoint } : {}),
+    ...(tailwindOptions.ignore?.length ? { ignore: tailwindOptions.ignore } : {})
+  }
+  const hasUnknownClassOptions = Object.keys(unknownClassOptions).length > 0
+
+  return {
+    name: 'eslint-config-basic/tailwind-settings',
+    ...(hasUnknownClassOptions ?
+      { rules: { 'better-tailwindcss/no-unknown-classes': ['error', unknownClassOptions] } } :
+      {}),
+    settings: {
+      'better-tailwindcss': tailwindOptions
+    }
+  }
+}
+
 const scopeFilePattern = (projectPath: string, pattern: unknown): unknown => {
   if (typeof pattern === 'string') {
     const isNegated = pattern.startsWith('!')
@@ -542,6 +588,36 @@ const patchImportGroups = (
   return allConfigs.map(item =>
     Array.isArray(item) ? item : patchImportGroupsConfig(item, workspacePatterns)
   )
+}
+
+const TESTING_CONFIG_NAMES: Partial<Record<Testing, string[]>> = {
+  [Testing.Playwright]: ['integrations/playwright']
+}
+
+const applyTestingFileOverrides = (
+  configs: FlatConfigArray,
+  testingFiles: EslintConfigOptions['testingFiles']
+): FlatConfigArray => {
+  if (!testingFiles) return configs
+
+  const entries = Object.entries(testingFiles).filter(([, files]) => files?.length)
+
+  if (entries.length === 0) return configs
+
+  return configs.map(config => {
+    const match = entries.find(([testingName]) =>
+      (TESTING_CONFIG_NAMES[testingName as Testing] ?? []).includes(config.name ?? '')
+    )
+
+    if (!match) return config
+
+    const [, files] = match
+
+    return {
+      ...config,
+      files
+    }
+  })
 }
 
 const resolveConfigSetup = (options: EslintConfigOptions | undefined) => ({
@@ -654,7 +730,8 @@ interface BuildConfigsParams {
   rootDir: string
   runtime: Runtime
   runtimeCoreConfig: FlatConfigArray
-  tailwindEntryPoint: string | undefined
+  tailwindOptions: TailwindOptions | undefined
+  testingFiles: EslintConfigOptions['testingFiles']
   tsconfigRootDir: string | undefined
   uniqueExtensions: Extension[]
   uniqueFormats: Format[]
@@ -667,8 +744,8 @@ interface BuildConfigsParams {
 const buildEslintConfigs = async (params: BuildConfigsParams): Promise<FlatConfigArray> => {
   const {
     astroOptions, defaultIgnores, gitignoreConfig, nextMode, resolvedFrameworks,
-    resolvedTypescript, rootDir: _rootDir, runtime, runtimeCoreConfig, tailwindEntryPoint,
-    tsconfigRootDir, uniqueExtensions, uniqueFormats, uniqueLibraries,
+    resolvedTypescript, rootDir: _rootDir, runtime, runtimeCoreConfig, tailwindOptions,
+    testingFiles, tsconfigRootDir, uniqueExtensions, uniqueFormats, uniqueLibraries,
     uniqueTesting, uniqueTools, userIgnores
   } = params
 
@@ -773,18 +850,11 @@ const buildEslintConfigs = async (params: BuildConfigsParams): Promise<FlatConfi
         rules: { '@next/next/no-html-link-for-pages': 'off' }
       } as TSESLint.FlatConfig.Config] :
       []),
-    ...(await getIntegrationConfigs(uniqueLibraries, uniqueTools, uniqueTesting, uniqueFormats, uniqueExtensions)),
-    ...(tailwindEntryPoint ?
-      [{
-        name: 'eslint-config-basic/tailwind-settings',
-        settings: {
-          'better-tailwindcss': {
-            detectComponentClasses: true,
-            entryPoint: tailwindEntryPoint
-          }
-        }
-      } as TSESLint.FlatConfig.Config] :
-      []),
+    ...applyTestingFileOverrides(
+      await getIntegrationConfigs(uniqueLibraries, uniqueTools, uniqueTesting, uniqueFormats, uniqueExtensions),
+      testingFiles
+    ),
+    ...(tailwindOptions ? [createTailwindSettingsConfig(tailwindOptions)] : []),
     ...(await getPrettierConfig(uniqueTools))
   ]
 }
@@ -832,9 +902,13 @@ const logEslintDebug = (
  * and integration settings based on the input configuration.
  *
  * @param {EslintConfigOptions} options - Configuration and integration settings
+ * @param {ConfigInput[]} extraConfigs - Local flat-config overrides appended after generated config
  * @returns {FlatConfigArray} The final ESLint configuration array
  */
-export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatConfigArray> => {
+export const eslintConfig = async (
+  options?: EslintConfigOptions,
+  ...extraConfigs: ConfigInput[]
+): Promise<FlatConfigArray> => {
   const {
     detection,
     extensions: optExtensions,
@@ -898,7 +972,9 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
   const tsconfigRootDir = resolveTsconfigRootDir(rootDir, typescript, optTsconfigRootDir)
   const extensions = applyStrictProfileDefaults(configuredExtensions, strict)
   const resolvedFrameworks = applyFrameworkImpliedDeps({ ...frameworks })
-  const uniqueLibraries = [...new Set(libraries)]
+  const uniqueLibraries = options?.tailwind === false ?
+    [...new Set(libraries)].filter(library => library !== Library.Tailwind) :
+    [...new Set([...(libraries), ...(options?.tailwind ? [Library.Tailwind] : [])])]
   const uniqueTesting = [...new Set(testing)]
   const uniqueFormats = [...new Set(formats)]
   const uniqueTools = [...new Set(tools)]
@@ -911,7 +987,9 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
   const useGitignore = !uniqueSettings.includes(Setting.NoGitignore)
   const useDefaultIgnores = !uniqueSettings.includes(Setting.NoDefaultIgnores)
   const useGeneratedCodeIgnores = !uniqueSettings.includes(Setting.NoGeneratedCodeIgnores)
-  const tailwindEntryPoint = uniqueLibraries.includes(Library.Tailwind) ? findTailwindEntryPoint(rootDir) : undefined
+  const tailwindOptions = uniqueLibraries.includes(Library.Tailwind) ?
+    resolveTailwindOptions(rootDir, options?.tailwind) :
+    undefined
   const runtimeCoreConfig = runtime === Runtime.Universal ? coreConfig : createCoreConfig(runtime)
   const { defaultIgnores, gitignoreConfig, userIgnores } = buildIgnoresConfig(useDefaultIgnores, useGeneratedCodeIgnores, useGitignore, options)
 
@@ -925,7 +1003,8 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
     rootDir,
     runtime,
     runtimeCoreConfig,
-    tailwindEntryPoint,
+    tailwindOptions,
+    testingFiles: options?.testingFiles,
     tsconfigRootDir,
     uniqueExtensions,
     uniqueFormats,
@@ -958,7 +1037,7 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
 
   // Merge workspace import group into any existing simple-import-sort/imports rules
   // so framework-specific group ordering (e.g. React-first) is preserved.
-  const allConfigs = [...configs, ...projectConfigs.flat()]
+  const allConfigs = [...configs, ...projectConfigs.flat(), ...flattenConfigInputs(extraConfigs)]
 
   const patchedConfigs = workspacePrefixes?.length
     ? patchImportGroups(allConfigs, workspacePrefixes)

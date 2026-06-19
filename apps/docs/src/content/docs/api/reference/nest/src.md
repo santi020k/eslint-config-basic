@@ -9,7 +9,7 @@ description: "@santi020k/eslint-config-basic"
 
 > `const` **nestConfig**: `TSESLint.FlatConfig.ConfigArray`
 
-Defined in: [nest/src/index.ts:10](https://github.com/santi020k/eslint-config-basic/blob/ccd35692460ff34a38f0b9e7f7fa9e7c8ece3d76/packages/nest/src/index.ts#L10)
+Defined in: [nest/src/index.ts:10](https://github.com/santi020k/eslint-config-basic/blob/275413dc9da6dd9298c21d677050a788ab1ff310/packages/nest/src/index.ts#L10)
 
 NestJS ESLint configuration
 Includes NestJS plugin with recommended rules
@@ -20,7 +20,7 @@ Includes NestJS plugin with recommended rules
 
 > `const` **rules**: `TSESLint.Linter.RulesRecord`
 
-Defined in: [nest/src/rules.ts:5](https://github.com/santi020k/eslint-config-basic/blob/ccd35692460ff34a38f0b9e7f7fa9e7c8ece3d76/packages/nest/src/rules.ts#L5)
+Defined in: [nest/src/rules.ts:5](https://github.com/santi020k/eslint-config-basic/blob/275413dc9da6dd9298c21d677050a788ab1ff310/packages/nest/src/rules.ts#L5)
 
 ## References
 
