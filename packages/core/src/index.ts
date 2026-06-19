@@ -146,7 +146,16 @@ export const createCoreConfig = (runtime: Runtime = Runtime.Universal): TSESLint
         'unused-imports': pluginUnusedImport
       }
     },
-    ...mappedConfigs
+    ...mappedConfigs,
+    // eslint.config.* files always import devDependencies (the config package itself);
+    // n/no-unpublished-import false-positives on every consumer's config file.
+    {
+      files: ['**/eslint.config.{js,mjs,cjs,ts,mts,cts}'],
+      name: 'eslint-config/eslint-config-file-overrides',
+      rules: {
+        'n/no-unpublished-import': 'off'
+      }
+    }
   ]
 }
 

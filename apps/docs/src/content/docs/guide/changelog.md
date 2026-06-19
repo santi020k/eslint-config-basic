@@ -3,8 +3,6 @@ title: "Changelog"
 description: "Release history for @santi020k/eslint-config-basic."
 ---
 
-# Changelog
-
 ## 2.0.0-beta.0
 
 ### Major Changes
