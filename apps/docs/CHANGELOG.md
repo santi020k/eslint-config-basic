@@ -1,5 +1,48 @@
 # @santi020k/eslint-config-docs
 
+## 2.0.0-beta.0
+
+### Major Changes
+
+- [#87](https://github.com/santi020k/eslint-config-basic/pull/87) [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc) Thanks [@santi020k](https://github.com/santi020k)! - Release v2 with a single public application install through `@santi020k/eslint-config-basic`.
+
+  Application projects no longer need to install or import separate framework config packages. Framework integrations are bundled behind the main package and can be enabled with booleans such as `frameworks.react: true`, `frameworks.next: true`, or by relying on auto-detection from `eslintConfig()`.
+
+  Detected framework configs are now enabled by default, while an explicit `frameworks: {}` remains the opt-out path. Next.js, Expo, and Remix automatically include React rules when enabled.
+
+  The documentation site now keeps the previous v1 docs under `/v1/`, updates the root docs for v2, and includes a v1 to v2 migration guide.
+
+### Minor Changes
+
+- [#87](https://github.com/santi020k/eslint-config-basic/pull/87) [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc) Thanks [@santi020k](https://github.com/santi020k)! - AI tooling workflow improvements:
+
+  - **Default ignores for AI artifacts**: the composed config now ignores AI coding-assistant folders (`.agent`, `.agents`, `.aider*`, `.claude`, `.clinerules`, `.codex`, `.copilot`, `.cursor`, `.gemini`, `.kiro`, `.opencode`, `.roo`, `.windsurf`) so generated agent rules are never linted as source code. Disable via `settings: [Setting.NoDefaultIgnores]`.
+  - **`generate-skill --check`**: CI mode that compares existing agent skill files (and guarded `AGENTS.md` / copilot-instructions sections) against freshly generated content without writing, and exits with code 1 when anything is stale or missing.
+  - **`generate-skill --create`**: scaffolds a root `AGENTS.md` with the guarded ESLint-standards section when the project has none.
+  - **`doctor` duplicate-ESLint detection**: warns when the project and the config packages resolve two different ESLint versions (e.g. an ESLint 9 project pulling in the config's ESLint 10 dependency). Both majors remain supported; the warning helps avoid editor/CLI rule-behavior drift.
+
+- [#87](https://github.com/santi020k/eslint-config-basic/pull/87) [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc) Thanks [@santi020k](https://github.com/santi020k)! - Add broader AI tooling support:
+
+  - **New agent skill targets** in `generate-skill`: Gemini (`.gemini/styleguide.md`), Cline (`.clinerules/`), Roo Code (`.roo/rules/`), and Kiro (`.kiro/steering/` with `inclusion: always` front-matter). The generator also maintains a guarded ESLint-standards section in an existing root `AGENTS.md` (the open standard read by Codex CLI, OpenCode, Jules, Amp, and others), mirroring the `.github/copilot-instructions.md` behavior.
+  - **New library integrations**: `Library.Langchain` and `Library.LlamaIndex` add import safety rules for LangChain.js (`langchain`, `@langchain/*`) and LlamaIndex.TS (`llamaindex`, `@llamaindex/*`) projects, with auto-detection from `package.json` dependencies.
+  - Generated agent skills now report AI SDK, MCP, Mastra, OpenAI Agents, LangChain, and LlamaIndex integrations in the feature summary.
+
+- [#87](https://github.com/santi020k/eslint-config-basic/pull/87) [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc) Thanks [@santi020k](https://github.com/santi020k)! - Add optional `ignores` to `eslintConfig()` / `EslintConfigOptions` for extra global ignore globs, documented in the configuration guide.
+
+- [#87](https://github.com/santi020k/eslint-config-basic/pull/87) [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc) Thanks [@santi020k](https://github.com/santi020k)! - Fix `optionMergeStrategy: 'merge'` so explicitly passed options (`tools`, `testing`, `formats`, `libraries`, `extensions`, `frameworks`) are actually unioned with detected and preset values, as documented. Previously, providing any of these options silently replaced detected/preset values regardless of strategy. To fully opt out of detected frameworks, use `autoFrameworks: false` or `optionMergeStrategy: 'replace'` (an explicit `frameworks: {}` no longer opts out under the default merge strategy).
+
+  Other fixes:
+
+  - `detection: false` now also disables the default detected extensions (Unicorn, Perfectionist, Security); a new granular `detection: { extensions: false }` control is available.
+  - Negated glob patterns (`!pattern`) in `projects` sub-configs are now scoped correctly instead of producing invalid `path/!glob` patterns.
+  - Deprecate the unused `TsOptions` interface (`typescript: { project }` was ignored since v2) and correct stale doc comments on `ImportedFramework` and the no-op `Setting.Gitignore` / `Setting.DefaultIgnores` values.
+
+### Patch Changes
+
+- [#87](https://github.com/santi020k/eslint-config-basic/pull/87) [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc) Thanks [@santi020k](https://github.com/santi020k)! - Align documentation with the published surface area: add Vite and Slidev to the root README, llms context files, installation/configuration framework matrices, and homepage framework-guide count; refresh agent guides (CLAUDE.md, .agent rules and skills) to reflect the v2 architecture (bundled frameworks, `packages/integrations`, Astro Starlight docs).
+
+- [#87](https://github.com/santi020k/eslint-config-basic/pull/87) [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc) Thanks [@santi020k](https://github.com/santi020k)! - Document and test the Lit, Nuxt, React Router, and TanStack Start packages: add package READMEs (previously blank on npm), add framework guide pages to the docs site sidebar, and list the four frameworks in the root README, llms.txt, llms-full.txt, and docs site metadata. Add detection, config export, and composition tests plus lint playgrounds for all four frameworks. Also add the six missing packages (lit, nuxt, react-router, slidev, tanstack-start, vite) to the Changesets `fixed` group so all publishable packages stay version-locked.
+
 ## 1.6.0
 
 ## 1.5.0
