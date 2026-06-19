@@ -1,11 +1,11 @@
 // @ts-check
-import astro from '@santi020k/eslint-config-astro'
-import { eslintConfig } from '@santi020k/eslint-config-basic'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
-  typescript: true,
-  tsconfigRootDir: import.meta.dirname,
+export default await defineConfig({
+  detectRootDir: import.meta.dirname,
   frameworks: {
-    astro
-  }
+    astro: true
+  },
+  tsconfigRootDir: import.meta.dirname,
+  typescript: true
 })

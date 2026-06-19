@@ -1,21 +1,24 @@
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { describe, expect, it } from 'vitest'
-
-import { lintFile, lintText } from './test-utils.js'
 
 import { angularConfig } from '@santi020k/eslint-config-angular'
 import astro, { astroConfig } from '@santi020k/eslint-config-astro'
-import { eslintConfig } from '@santi020k/eslint-config-basic'
+import { defineConfig, Format } from '@santi020k/eslint-config-basic'
 import { expoConfig } from '@santi020k/eslint-config-expo'
 import { honoConfig } from '@santi020k/eslint-config-hono'
 import { nestConfig } from '@santi020k/eslint-config-nest'
 import { nextConfig } from '@santi020k/eslint-config-next'
 import { qwik as qwikConfig } from '@santi020k/eslint-config-qwik'
 import { reactConfig } from '@santi020k/eslint-config-react'
-import { remix as remixConfig } from '@santi020k/eslint-config-remix'
+import { reactRouter as reactRouterConfig } from '@santi020k/eslint-config-react-router'
+import { slidev as slidevConfig } from '@santi020k/eslint-config-slidev'
 import { svelteConfig } from '@santi020k/eslint-config-svelte'
+import { vite as viteConfig } from '@santi020k/eslint-config-vite'
 import { vueConfig } from '@santi020k/eslint-config-vue'
+
+import { describe, expect, test } from 'vitest'
+
+import { lintFile, lintText } from './test-utils.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -23,8 +26,8 @@ const FIXTURES_DIR = join(__dirname, '../fixtures')
 
 describe('Integration Tests', () => {
   describe('JavaScript', () => {
-    it('should report warnings for stylistic issues in javascript.js', async () => {
-      const config = eslintConfig()
+    test('should report warnings for stylistic issues in javascript.js', async () => {
+      const config = await defineConfig({ detection: false, tools: [] })
       const filePath = join(FIXTURES_DIR, 'javascript.js')
       const results = await lintFile(filePath, config)
 
@@ -36,8 +39,8 @@ describe('Integration Tests', () => {
       expect(ruleIds).toContain('no-empty')
     })
 
-    it('should pass for clean javascript code', async () => {
-      const config = eslintConfig()
+    test('should pass for clean javascript code', async () => {
+      const config = await defineConfig({ detection: false, tools: [] })
       const code = 'const x = \'clean\'\n\nconsole.log(x)\n'
       const results = await lintText(code, config, 'clean.js')
 
@@ -47,10 +50,12 @@ describe('Integration Tests', () => {
   })
 
   describe('TypeScript', () => {
-    it('should report TypeScript-specific issues', async () => {
-      const config = eslintConfig({
-        typescript: true,
-        tsconfigRootDir: FIXTURES_DIR
+    test('should report TypeScript-specific issues', async () => {
+      const config = await defineConfig({
+        detection: false,
+        tools: [],
+        tsconfigRootDir: FIXTURES_DIR,
+        typescript: true
       })
       const filePath = join(FIXTURES_DIR, 'typescript.ts')
       const results = await lintFile(filePath, config)
@@ -62,10 +67,12 @@ describe('Integration Tests', () => {
       expect(ruleIds).toContain('@stylistic/quotes')
     })
 
-    it('should report issues in nest.ts', async () => {
-      const config = eslintConfig({
-        typescript: true,
-        tsconfigRootDir: FIXTURES_DIR
+    test('should report issues in nest.ts', async () => {
+      const config = await defineConfig({
+        detection: false,
+        tools: [],
+        tsconfigRootDir: FIXTURES_DIR,
+        typescript: true
       })
       const filePath = join(FIXTURES_DIR, 'nest.ts')
       const results = await lintFile(filePath, config)
@@ -77,9 +84,9 @@ describe('Integration Tests', () => {
       expect(ruleIds).toContain('@stylistic/quotes')
     })
 
-    it('should not report TypeScript-unrelated issues on typed code', async () => {
+    test('should not report TypeScript-unrelated issues on typed code', async () => {
       // Use typescript: false to avoid projectService rejecting virtual file paths
-      const config = eslintConfig({ typescript: false })
+      const config = await defineConfig({ typescript: false })
       const code = [
         'const greet = (name: string): string => `Hello, ${name}`',
         '',
@@ -97,8 +104,8 @@ describe('Integration Tests', () => {
   })
 
   describe('React', () => {
-    it('should report React hooks issues', async () => {
-      const config = eslintConfig({
+    test('should report React hooks issues', async () => {
+      const config = await defineConfig({
         frameworks: { react: reactConfig }
       })
       const filePath = join(FIXTURES_DIR, 'react.tsx')
@@ -107,19 +114,18 @@ describe('Integration Tests', () => {
       const messages = results[0].messages
       const ruleIds = messages.map(m => m.ruleId)
 
-      expect(ruleIds).toContain('react-hooks/exhaustive-deps')
+      expect(ruleIds).toContain('@eslint-react/exhaustive-deps')
     })
 
-    it('should pass for clean React JSX code', async () => {
-      const config = eslintConfig({
-        typescript: false,
-        frameworks: { react: reactConfig }
+    test('should pass for clean React JSX code', async () => {
+      const config = await defineConfig({
+        frameworks: { react: reactConfig },
+        typescript: false
       })
       // Use plain JSX without TS type annotations since typescript: false
       // Use double quotes for JSX attributes to satisfy @stylistic/jsx-quotes
       const code = [
-        'import React from \'react\'',
-        '',
+
         'export const Button = ({ label }) => (',
         '  <button type="button">{label}</button>',
         ')',
@@ -132,8 +138,8 @@ describe('Integration Tests', () => {
   })
 
   describe('Vue', () => {
-    it('should detect Vue-specific issues in vue.vue', async () => {
-      const config = eslintConfig({
+    test('should detect Vue-specific issues in vue.vue', async () => {
+      const config = await defineConfig({
         frameworks: { vue: vueConfig }
       })
       const filePath = join(FIXTURES_DIR, 'vue.vue')
@@ -148,9 +154,11 @@ describe('Integration Tests', () => {
   })
 
   describe('Svelte', () => {
-    it('should detect stylistic issues in svelte.svelte', async () => {
-      const config = eslintConfig({
-        frameworks: { svelte: svelteConfig }
+    test('should detect stylistic issues in svelte.svelte', async () => {
+      const config = await defineConfig({
+        detection: false,
+        frameworks: { svelte: svelteConfig },
+        tools: []
       })
       const filePath = join(FIXTURES_DIR, 'svelte.svelte')
       const results = await lintFile(filePath, config)
@@ -164,10 +172,10 @@ describe('Integration Tests', () => {
   })
 
   describe('Angular', () => {
-    it('should include Angular-specific rules in config', () => {
-      const config = eslintConfig({
-        typescript: false,
-        frameworks: { angular: angularConfig }
+    test('should include Angular-specific rules in config', async () => {
+      const config = await defineConfig({
+        frameworks: { angular: angularConfig },
+        typescript: false
       })
       const names = config.flatMap(c => (c.name ? [c.name] : []))
 
@@ -176,21 +184,21 @@ describe('Integration Tests', () => {
   })
 
   describe('Astro', () => {
-    it('should include Astro-specific rules in config', () => {
-      const config = eslintConfig({
-        typescript: false,
-        frameworks: { astro: astroConfig }
+    test('should include Astro-specific rules in config', async () => {
+      const config = await defineConfig({
+        frameworks: { astro: astroConfig },
+        typescript: false
       })
       const names = config.flatMap(c => (typeof c.name === 'string' ? [c.name] : []))
 
       expect(names.some(n => n.includes('astro'))).toBe(true)
     })
 
-    it('should avoid Astro template false positives when TypeScript is enabled', async () => {
-      const config = eslintConfig({
-        typescript: true,
+    test('should avoid Astro template false positives when TypeScript is enabled', async () => {
+      const config = await defineConfig({
+        frameworks: { astro },
         tsconfigRootDir: FIXTURES_DIR,
-        frameworks: { astro }
+        typescript: true
       })
       const filePath = join(FIXTURES_DIR, 'astro.astro')
       const results = await lintFile(filePath, config)
@@ -202,14 +210,14 @@ describe('Integration Tests', () => {
   })
 
   describe('Expo', () => {
-    it('should include Expo-specific rules in config', () => {
+    test('should include Expo-specific rules in config', async () => {
       // Expo requires react to be passed alongside
-      const config = eslintConfig({
-        typescript: false,
+      const config = await defineConfig({
         frameworks: {
-          react: reactConfig,
-          expo: expoConfig
-        }
+          expo: expoConfig,
+          react: reactConfig
+        },
+        typescript: false
       })
 
       expect(Array.isArray(config)).toBe(true)
@@ -219,10 +227,10 @@ describe('Integration Tests', () => {
   })
 
   describe('NestJS', () => {
-    it('should include NestJS-specific rules in config', () => {
-      const config = eslintConfig({
-        typescript: false,
-        frameworks: { nest: nestConfig }
+    test('should include NestJS-specific rules in config', async () => {
+      const config = await defineConfig({
+        frameworks: { nest: nestConfig },
+        typescript: false
       })
       const names = config.flatMap(c => (c.name ? [c.name] : []))
 
@@ -231,10 +239,10 @@ describe('Integration Tests', () => {
   })
 
   describe('Hono', () => {
-    it('should include Hono-specific rules in config', () => {
-      const config = eslintConfig({
-        typescript: false,
-        frameworks: { hono: honoConfig }
+    test('should include Hono-specific rules in config', async () => {
+      const config = await defineConfig({
+        frameworks: { hono: honoConfig },
+        typescript: false
       })
       const names = config.flatMap(c => (c.name ? [c.name] : []))
 
@@ -243,13 +251,13 @@ describe('Integration Tests', () => {
   })
 
   describe('Next.js', () => {
-    it('should include Next.js-specific rules in config', () => {
-      const config = eslintConfig({
-        typescript: false,
+    test('should include Next.js-specific rules in config', async () => {
+      const config = await defineConfig({
         frameworks: {
-          react: reactConfig,
-          next: nextConfig
-        }
+          next: nextConfig,
+          react: reactConfig
+        },
+        typescript: false
       })
       const names = config.flatMap(c => (c.name ? [c.name] : []))
 
@@ -258,10 +266,10 @@ describe('Integration Tests', () => {
   })
 
   describe('Qwik', () => {
-    it('should include Qwik-specific rules in config', () => {
-      const config = eslintConfig({
-        typescript: false,
-        frameworks: { qwik: qwikConfig }
+    test('should include Qwik-specific rules in config', async () => {
+      const config = await defineConfig({
+        frameworks: { qwik: qwikConfig },
+        typescript: false
       })
       const names = config.flatMap(c => (c.name ? [c.name] : []))
 
@@ -269,15 +277,114 @@ describe('Integration Tests', () => {
     })
   })
 
-  describe('Remix', () => {
-    it('should include Remix-specific rules in config', () => {
-      const config = eslintConfig({
-        typescript: false,
-        frameworks: { remix: remixConfig }
+  describe('React Router', () => {
+    test('should include React Router-specific rules in config', async () => {
+      const config = await defineConfig({
+
+        frameworks: { 'react-router': reactRouterConfig },
+        typescript: false
       })
       const names = config.flatMap(c => (c.name ? [c.name] : []))
 
-      expect(names).toContain('eslint-config-remix/jsx-a11y')
+      expect(names).toContain('eslint-config-react-router/jsx-a11y')
+    })
+  })
+
+  describe('Vite', () => {
+    test('should include Vite-specific config entries', async () => {
+      const config = await defineConfig({
+        frameworks: { vite: viteConfig },
+        typescript: false
+      })
+      const names = config.flatMap(c => (c.name ? [c.name] : []))
+
+      expect(names).toContain('eslint-config-vite/runtime')
+      expect(names).toContain('eslint-config-vite/config-files')
+    })
+
+    test('should report errors in the intentionally bad Vite fixture', async () => {
+      const config = await defineConfig({
+        detection: false,
+        frameworks: { vite: viteConfig },
+        tools: [],
+        typescript: false
+      })
+      const filePath = join(FIXTURES_DIR, 'vite-bad.ts')
+      const results = await lintFile(filePath, config)
+      const ruleIds = results[0].messages.map(m => m.ruleId)
+
+      expect(ruleIds).toContain('@stylistic/quotes')
+      expect(ruleIds).toContain('@stylistic/semi')
+      expect(ruleIds).not.toContain('no-undef')
+    })
+
+    test('should pass for the corrected Vite fixture', async () => {
+      const config = await defineConfig({
+        detection: false,
+        frameworks: { vite: viteConfig },
+        tools: [],
+        typescript: false
+      })
+      const filePath = join(FIXTURES_DIR, 'vite.ts')
+      const results = await lintFile(filePath, config)
+
+      expect(results[0].errorCount).toBe(0)
+      expect(results[0].warningCount).toBe(0)
+    })
+  })
+
+  describe('Slidev', () => {
+    test('should include Slidev-specific config entries', async () => {
+      const config = await defineConfig({
+        detection: false,
+        formats: [Format.Markdown],
+        frameworks: {
+          slidev: slidevConfig,
+          vue: vueConfig
+        },
+        typescript: false
+      })
+      const names = config.flatMap(c => (c.name ? [c.name] : []))
+
+      expect(names).toContain('eslint-config-slidev/runtime')
+      expect(names).toContain('eslint-config-slidev/deck-markdown')
+    })
+
+    test('should report errors in the intentionally bad Slidev fixture', async () => {
+      const config = await defineConfig({
+        detection: false,
+        formats: [Format.Markdown],
+        frameworks: {
+          slidev: slidevConfig,
+          vue: vueConfig
+        },
+        tools: [],
+        typescript: false
+      })
+      const filePath = join(FIXTURES_DIR, 'slidev-bad.md')
+      const results = await lintFile(filePath, config)
+      const ruleIds = results[0].messages.map(m => m.ruleId)
+
+      expect(ruleIds).toContain('markdown/fenced-code-language')
+      expect(ruleIds).not.toContain('vue/multi-word-component-names')
+    })
+
+    test('should pass for the corrected Slidev fixture', async () => {
+      const config = await defineConfig({
+        detection: false,
+        formats: [Format.Markdown],
+        frameworks: {
+          slidev: slidevConfig,
+          vue: vueConfig
+        },
+        tools: [],
+        typescript: false
+      })
+      const filePath = join(FIXTURES_DIR, 'slidev.md')
+      const results = await lintFile(filePath, config)
+
+      expect(results[0].errorCount).toBe(0)
+      expect(results[0].warningCount).toBe(0)
     })
   })
 }, 30000)

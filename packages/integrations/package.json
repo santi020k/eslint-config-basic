@@ -1,0 +1,136 @@
+{
+  "name": "@santi020k/eslint-config-integrations",
+  "version": "1.6.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "ESLint integrations for libraries, tools, testing, formats, and extensions",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./extensions": {
+      "types": "./dist/extensions/index.d.ts",
+      "import": "./dist/extensions/index.js"
+    },
+    "./formats": {
+      "types": "./dist/formats/index.d.ts",
+      "import": "./dist/formats/index.js"
+    },
+    "./libraries": {
+      "types": "./dist/libraries/index.d.ts",
+      "import": "./dist/libraries/index.js"
+    },
+    "./testing": {
+      "types": "./dist/testing/index.d.ts",
+      "import": "./dist/testing/index.js"
+    },
+    "./tools": {
+      "types": "./dist/tools/index.d.ts",
+      "import": "./dist/tools/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "check:exports": "publint",
+    "clean": "rm -rf dist",
+    "dev": "tsup --watch",
+    "lint": "eslint . --no-warn-ignored --pass-on-no-patterns",
+    "lint:fix": "eslint . --fix --no-warn-ignored --pass-on-no-patterns",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@cspell/eslint-plugin": "catalog:",
+    "@darraghor/eslint-plugin-nestjs-typed": "catalog:",
+    "@eslint/compat": "catalog:",
+    "@eslint/css": "catalog:",
+    "@eslint/markdown": "catalog:",
+    "@graphql-eslint/eslint-plugin": "catalog:",
+    "@html-eslint/eslint-plugin": "catalog:",
+    "@html-eslint/parser": "catalog:",
+    "@santi020k/eslint-config-core": "workspace:*",
+    "@stencil-community/eslint-plugin": "catalog:",
+    "@tanstack/eslint-plugin-query": "catalog:",
+    "@tanstack/eslint-plugin-router": "catalog:",
+    "@typescript-eslint/utils": "catalog:",
+    "@vitest/eslint-plugin": "catalog:",
+    "eslint-config-biome": "catalog:",
+    "eslint-config-prettier": "catalog:",
+    "eslint-plugin-better-tailwindcss": "catalog:",
+    "eslint-plugin-command": "catalog:",
+    "eslint-plugin-compat": "catalog:",
+    "eslint-plugin-cypress": "catalog:",
+    "eslint-plugin-de-morgan": "catalog:",
+    "eslint-plugin-depend": "catalog:",
+    "eslint-plugin-i18next": "catalog:",
+    "eslint-plugin-jest": "catalog:",
+    "eslint-plugin-jest-dom": "catalog:",
+    "eslint-plugin-jsdoc": "catalog:",
+    "eslint-plugin-jsonc": "catalog:",
+    "eslint-plugin-jsx-a11y": "catalog:",
+    "eslint-plugin-mdx": "catalog:",
+    "eslint-plugin-n": "catalog:",
+    "eslint-plugin-no-only-tests": "catalog:",
+    "eslint-plugin-oxlint": "catalog:",
+    "eslint-plugin-package-json": "catalog:",
+    "eslint-plugin-perfectionist": "catalog:",
+    "eslint-plugin-playwright": "catalog:",
+    "eslint-plugin-pnpm": "catalog:",
+    "eslint-plugin-regexp": "catalog:",
+    "eslint-plugin-security": "catalog:",
+    "eslint-plugin-sonarjs": "catalog:",
+    "eslint-plugin-storybook": "catalog:",
+    "eslint-plugin-testing-library": "catalog:",
+    "eslint-plugin-toml": "catalog:",
+    "eslint-plugin-tsdoc": "catalog:",
+    "eslint-plugin-turbo": "catalog:",
+    "eslint-plugin-unicorn": "catalog:",
+    "eslint-plugin-vercel-ai-security": "catalog:",
+    "eslint-plugin-vuejs-accessibility": "catalog:",
+    "eslint-plugin-yml": "catalog:",
+    "eslint-plugin-zod": "catalog:",
+    "globals": "catalog:",
+    "storybook": "catalog:",
+    "typescript-eslint": "catalog:"
+  },
+  "devDependencies": {
+    "@types/eslint-plugin-jsx-a11y": "catalog:",
+    "eslint": "catalog:",
+    "publint": "catalog:",
+    "tailwindcss": "catalog:",
+    "tsup": "catalog:",
+    "typescript": "catalog:"
+  },
+  "peerDependencies": {
+    "eslint": "^10.0.0",
+    "typescript": ">=5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/santi020k/eslint-config-basic.git",
+    "directory": "packages/integrations"
+  },
+  "homepage": "https://eslint.santi020k.com/packages/integrations.html",
+  "bugs": {
+    "url": "https://github.com/santi020k/eslint-config-basic/issues"
+  },
+  "author": "santi020k",
+  "license": "MIT"
+}

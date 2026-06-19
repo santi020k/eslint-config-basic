@@ -1,12 +1,11 @@
 // @ts-check
-import angular from '@santi020k/eslint-config-angular'
-import { eslintConfig } from '@santi020k/eslint-config-basic'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
-  tsconfigRootDir: import.meta.dirname,
-  typescript: true,
+export default await defineConfig({
   frameworks: {
-    angular
-  }
+    angular: true
+  },
+  tsconfigRootDir: import.meta.dirname,
+  typescript: true
 
 })

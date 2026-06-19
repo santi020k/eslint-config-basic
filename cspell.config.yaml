@@ -2,17 +2,26 @@ version: "0.2"
 language: en
 words:
   - activedescendant
+  - agentchat
+  - anthropics
   - app-router
   - astro
+  - astrojs
+  - autobuild
   - asyncgenerator
+  - attw
+  - arethetypeswrong
   - asynciterable
   - behaviour
   - better-tailwindcss
+  - bunfig
   - canonicalurl
   - changeset
   - changesets
   - codecov
+  - codegen
   - commitizen
+  - clinerules
   - commonmark
   - cspell
   - darraghor
@@ -20,63 +29,96 @@ words:
   - dev-dependency
   - dts
   - eslint-config
+  - esac
+  - esbuild
   - esmodule
+  - envinfo
   - expo
   - fetchcontent
   - flat-config
+  - genai
   - getentrybyslug
   - gitignore
   - hono
+  - iconify
   - importscripts
   - isnan
   - istanbul
   - jsonc
   - jsx
+  - kiro
   - knip
+  - langchain
+  - lhci
   - lint-staged
   - linted
   - linter
+  - llamaindex
   - llm
   - llms
   - lockfiles
+  - mastra
   - mdx
+  - mikro
   - monorepo
   - multilines
+  - modelcontextprotocol
+  - myext
   - myframework
+  - myintegration
+  - mylib
   - myoptional
+  - myorg
   - nestjs
+  - networkidle
   - nextjs
   - nodejs
   - nogitignore
   - nonconstructor
   - nonoctal
   - nonwords
+  - nuxt
+  - openai
+  - opencode
   - opengraph
   - orchestrates
+  - oxlint
   - packagemanager
   - peer-dependency
   - peerdep
   - polyfillio
   - postpack
+  - pozil
+  - preact
   - project-type
   - proptypes
+  - publint
   - qwik
+  - rimraf
   - root-dir
+  - ACMR
   - santi
   - santi020k
   - scopedslots
+  - sequelize
   - serviceworker
+  - Slidev
+  - slidev
   - solidjs
   - sonarjs
+  - spacebar
   - st
   - stnl
   - stringly
+  - styleguide
   - stylistic
+  - styl
   - svelte
   - Tanstack
   - textnodes
   - toml
   - tsconfig
+  - tsdoc
   - TSES
   - TSESLint
   - tsup
@@ -84,15 +126,23 @@ words:
   - turborepo
   - typedarrays
   - typedoc
+  - typeorm
   - urql
   - v8
   - vdom
+  - vercel
+  - virtuals
+  - vite
   - vitepress
   - vitest
   - vue
+  - vuejs
   - weakref
   - workspace
   - workspaces
+  - undici
+  - unrs
+  - workerd
 ignorePaths:
   - node_modules
   - dist
@@ -103,9 +153,11 @@ ignorePaths:
   - pnpm-lock.yaml
   - "*.log"
   - docs
-  - docs-md
   - .agent
   - "**/*.test.ts.snap"
   - packages/playground/**
   - packages/tests/src/__snapshots__/**
   - .vscode
+  - llms.txt
+  - llms-full.txt
+

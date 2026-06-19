@@ -1,0 +1,41 @@
+---
+title: "Vite"
+description: "Use Vite support from the main v2 package for browser apps and Vite config files."
+---
+
+Use Vite support from the main v2 package.
+
+## Install
+
+```sh title="pnpm"
+pnpm add -D @santi020k/eslint-config-basic
+```
+
+## Using Lite
+
+The default install above remains recommended. If you use the manual-dependency lite package, install this framework config package too:
+
+```sh title="pnpm"
+pnpm add -D @santi020k/eslint-config-lite @santi020k/eslint-config-vite eslint
+```
+
+## Configure
+
+```js
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig({
+  frameworks: {
+    vite: true
+  },
+  typescript: true
+})
+```
+
+Most projects can also rely on auto-detection and use `eslintConfig()` with no framework object.
+
+## What It Adds
+
+- Browser runtime globals for Vite app code.
+- Node runtime handling for `vite.config.*` and `vitest.config.*`.
+- Config-file relaxations for Vite plugins installed as dev dependencies.

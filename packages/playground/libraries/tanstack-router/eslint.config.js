@@ -1,12 +1,11 @@
 // @ts-check
-import { eslintConfig, Library } from '@santi020k/eslint-config-basic'
-import react from '@santi020k/eslint-config-react'
+import { defineConfig, Library } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
-  tsconfigRootDir: import.meta.dirname,
-  typescript: true,
+export default await defineConfig({
   frameworks: {
-    react
+    react: true
   },
-  libraries: [Library.TanstackRouter]
+  libraries: [Library.TanstackRouter],
+  tsconfigRootDir: import.meta.dirname,
+  typescript: true
 })

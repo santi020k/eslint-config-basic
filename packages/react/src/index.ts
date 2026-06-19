@@ -1,48 +1,63 @@
-// @ts-check
-import pluginReactConfig from 'eslint-plugin-react/configs/recommended.js'
-import pluginReactHooks from 'eslint-plugin-react-hooks'
+import { GLOB_JS_TS } from '@santi020k/eslint-config-core'
+
+import pluginReact from '@eslint-react/eslint-plugin'
+import type { TSESLint } from '@typescript-eslint/utils'
+import pluginReactCompiler from 'eslint-plugin-react-compiler'
+import pluginReactRefresh from 'eslint-plugin-react-refresh'
 import globals from 'globals'
 
 import { rules } from './rules.js'
 
-import { fixupConfigRules } from '@eslint/compat'
-import type { TSESLint } from '@typescript-eslint/utils'
+const recommended = pluginReact.configs.recommended as TSESLint.FlatConfig.Config & {
+  rules: TSESLint.FlatConfig.Rules
+  settings: TSESLint.FlatConfig.Config['settings']
+}
 
 const languageOptions: TSESLint.FlatConfig.LanguageOptions = {
   ecmaVersion: 'latest',
-  sourceType: 'module',
-  ...(pluginReactConfig.languageOptions ?? {}),
   globals: {
     ...globals.browser,
     ...globals.node
-  }
+  },
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true
+    }
+  },
+  sourceType: 'module'
 }
 
 /**
  * React ESLint configuration
- * Includes React plugin recommended rules and React Hooks
+ * Uses `@eslint-react/eslint-plugin` for React and hooks rules, plus React
+ * Compiler and React Refresh.
  */
 export const reactConfig: TSESLint.FlatConfig.ConfigArray = [
-  // Use type assertion to handle @eslint/compat type mismatch
-  ...(fixupConfigRules(pluginReactConfig as unknown as Parameters<typeof fixupConfigRules>[0]).map(react => ({
-    ...react,
-    name: 'eslint-config-react/recommended',
-    languageOptions,
-    settings: {
-      react: {
-        version: 'detect'
-      }
-    }
-  })) as unknown as TSESLint.FlatConfig.ConfigArray),
   {
+    files: GLOB_JS_TS,
+    languageOptions,
+    name: 'eslint-config-react/recommended',
+    plugins: {
+      ...(recommended.plugins ?? {})
+    },
+    rules: {
+      ...recommended.rules
+    },
+    settings: {
+      ...recommended.settings
+    }
+  },
+  {
+    files: GLOB_JS_TS,
+    languageOptions,
     name: 'eslint-config-react/custom',
     plugins: {
-      'react-hooks': pluginReactHooks
+      'react-compiler': pluginReactCompiler,
+      'react-refresh': pluginReactRefresh
     },
-    languageOptions,
-    files: ['**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}'],
     rules: {
-      ...pluginReactHooks.configs.recommended.rules,
+      'react-compiler/react-compiler': 'warn',
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       ...rules
     }
   }

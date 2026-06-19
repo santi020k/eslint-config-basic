@@ -1,4 +1,4 @@
-import React, {
+import {
   useCallback,
   useEffect,
   useMemo,
@@ -12,9 +12,9 @@ import { useTheme } from './ThemeContext.jsx'
 const fetchTodos = () => new Promise(resolve => {
   setTimeout(() => {
     resolve([
-      { id: 1, text: 'Learn React', completed: true },
-      { id: 2, text: 'Build a Todo App', completed: false },
-      { id: 3, text: 'Profit!', completed: false }
+      { completed: true, id: 1, text: 'Learn React' },
+      { completed: false, id: 2, text: 'Build a Todo App' },
+      { completed: false, id: 3, text: 'Profit!' }
     ])
   }, 1000)
 })
@@ -65,7 +65,7 @@ const TodoApp = () => {
     if (text) {
       setTodos(prevTodos => [
         ...prevTodos,
-        { id: Date.now(), text, completed: false }
+        { completed: false, id: Date.now(), text }
       ])
 
       inputRef.current.value = ''
@@ -109,8 +109,8 @@ const TodoApp = () => {
       style={{
         backgroundColor: theme === 'light' ? '#fff' : '#333',
         color: theme === 'light' ? '#000' : '#fff',
-        padding: '20px',
-        minHeight: '100vh'
+        minHeight: '100vh',
+        padding: '20px'
       }}
     >
       <header>
@@ -118,8 +118,8 @@ const TodoApp = () => {
           Todo List
         </h1>
         <button
-          type="button"
           onClick={toggleTheme}
+          type="button"
         >
           Switch to
           {' '}
@@ -144,13 +144,13 @@ const TodoApp = () => {
             <>
               <div>
                 <input
+                  placeholder="New todo"
                   ref={inputRef}
                   type="text"
-                  placeholder="New todo"
                 />
                 <button
-                  type="button"
                   onClick={addTodo}
+                  type="button"
                 >
                   Add Todo
                 </button>
@@ -159,8 +159,8 @@ const TodoApp = () => {
                 <label>
                   Filter:
                   <select
-                    value={filter}
                     onChange={handleFilterChange}
+                    value={filter}
                   >
                     <option value="all">
                       All
@@ -176,8 +176,8 @@ const TodoApp = () => {
                 <label style={{ marginLeft: '10px' }}>
                   Sort:
                   <select
-                    value={sortOrder}
                     onChange={handleSortChange}
+                    value={sortOrder}
                   >
                     <option value="asc">
                       Ascending
@@ -201,9 +201,9 @@ const TodoApp = () => {
                     >
                       {todo.text}
                       <button
-                        type="button"
                         onClick={() => toggleTodo(todo.id)}
                         style={{ marginLeft: '10px' }}
+                        type="button"
                       >
                         {
                           todo.completed ?

@@ -1,10 +1,29 @@
 {
   "recommendations": [
-      "davidanson.vscode-markdownlint",
-      "dbaeumer.vscode-eslint",
-      "editorconfig.editorconfig",
-      "streetsidesoftware.code-spell-checker",
-      "mrmlnc.vscode-json5"
+    // Core dev experience
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "editorconfig.editorconfig",
+    "streetsidesoftware.code-spell-checker",
+
+    // Markdown / documentation
+    "davidanson.vscode-markdownlint",
+
+    // Framework language support (for editing playground files)
+    "astro-build.astro-vscode",
+    "svelte.svelte-vscode",
+    "vue.volar",
+
+    // Format / syntax support
+    "mrmlnc.vscode-json5",
+    "tamasfe.even-better-toml",
+    "redhat.vscode-yaml",
+
+    // Biome (project ships a Biome integration)
+    "biomejs.biome"
   ],
-  "unwantedRecommendations": ["hookyqr.beautify", "dbaeumer.jshint"]
+  "unwantedRecommendations": [
+    "hookyqr.beautify",
+    "dbaeumer.jshint"
+  ]
 }

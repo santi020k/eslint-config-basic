@@ -1,0 +1,32 @@
+{
+  "name": "@playground/mikro-orm",
+  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "clean": "rm -rf dist node_modules",
+    "check:exports": "echo \"No exports to check\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@mikro-orm/core": "^7.1.4",
+    "@santi020k/eslint-config-basic": "workspace:^",
+    "eslint": "^10.5.0"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/santi020k/eslint-config-basic.git",
+    "directory": "packages/playground/libraries/mikro-orm"
+  },
+  "author": "santi020k",
+  "license": "MIT"
+}

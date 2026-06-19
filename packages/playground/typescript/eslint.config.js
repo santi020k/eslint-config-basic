@@ -1,7 +1,7 @@
 // @ts-check
-import { eslintConfig } from '@santi020k/eslint-config-basic'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
+export default await defineConfig({
   tsconfigRootDir: import.meta.dirname,
   typescript: true
 

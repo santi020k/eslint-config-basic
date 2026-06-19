@@ -1,0 +1,68 @@
+---
+title: "TanStack Start"
+description: "Use TanStack Start support from the main v2 package, bundling TanStack Router and TanStack Query rules."
+---
+
+Use TanStack Start support from the main v2 package. It bundles TanStack Router and TanStack Query rules for TanStack Start apps built with React or Solid.
+
+## Install
+
+
+```sh title="pnpm"
+pnpm add -D @santi020k/eslint-config-basic
+```
+
+```sh title="npm"
+npm install -D @santi020k/eslint-config-basic
+```
+
+```sh title="yarn"
+yarn add -D @santi020k/eslint-config-basic
+```
+
+```sh title="bun"
+bun add -d @santi020k/eslint-config-basic
+```
+
+
+## Using Lite
+
+The default install above remains recommended. If you use the manual-dependency lite package, install this framework config package too:
+
+```sh title="pnpm"
+pnpm add -D @santi020k/eslint-config-lite @santi020k/eslint-config-tanstack-start eslint
+```
+
+## Configure
+
+```js
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig({
+  frameworks: {
+    react: true,
+    'tanstack-start': true
+  },
+  typescript: true
+})
+```
+
+Most projects can also rely on auto-detection and use `eslintConfig()` with no framework object — pair it with the React or Solid config, and auto-detection enables the right one for you.
+
+## What It Adds
+
+- Recommended rules from `@tanstack/eslint-plugin-router` for route definitions and navigation.
+- Recommended rules from `@tanstack/eslint-plugin-query` for query keys, mutations, and cache usage.
+- Composition through the same `@santi020k/eslint-config-basic` entry point as every other framework.
+- Compatibility with advanced overrides if you pass a custom config array or factory instead of `true`.
+
+## Notes
+
+- Using TanStack Query or Router outside of Start? Enable them individually via the `libraries` option (`'tanstack-query'`, `'tanstack-router'`) instead.
+- The internal package still exists in the monorepo for modular development and generated API docs.
+
+## Related Pages
+
+- [React](/frameworks/react)
+- [Solid](/frameworks/solid)
+- [Libraries](/tooling/libraries)

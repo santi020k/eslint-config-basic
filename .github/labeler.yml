@@ -14,36 +14,102 @@ next:
   - changed-files:
       - any-glob-to-any-file: 'packages/next/**'
 
+nuxt:
+  - changed-files:
+      - any-glob-to-any-file: 'packages/nuxt/**'
+
 astro:
   - changed-files:
       - any-glob-to-any-file: 'packages/astro/**'
+
+vue:
+  - changed-files:
+      - any-glob-to-any-file: 'packages/vue/**'
+
+svelte:
+  - changed-files:
+      - any-glob-to-any-file: 'packages/svelte/**'
+
+solid:
+  - changed-files:
+      - any-glob-to-any-file: 'packages/solid/**'
+
+angular:
+  - changed-files:
+      - any-glob-to-any-file: 'packages/angular/**'
+
+nest:
+  - changed-files:
+      - any-glob-to-any-file: 'packages/nest/**'
+
+hono:
+  - changed-files:
+      - any-glob-to-any-file: 'packages/hono/**'
 
 expo:
   - changed-files:
       - any-glob-to-any-file: 'packages/expo/**'
 
-optionals:
+preact:
   - changed-files:
-      - any-glob-to-any-file: 'packages/optionals/**'
+      - any-glob-to-any-file: 'packages/preact/**'
+
+qwik:
+  - changed-files:
+      - any-glob-to-any-file: 'packages/qwik/**'
+
+react-router:
+  - changed-files:
+      - any-glob-to-any-file: 'packages/react-router/**'
+
+remix:
+  - changed-files:
+      - any-glob-to-any-file: 'packages/remix/**'
+
+tanstack-start:
+  - changed-files:
+      - any-glob-to-any-file: 'packages/tanstack-start/**'
+
+lit:
+  - changed-files:
+      - any-glob-to-any-file: 'packages/lit/**'
+
+vite:
+  - changed-files:
+      - any-glob-to-any-file: 'packages/vite/**'
+
+slidev:
+  - changed-files:
+      - any-glob-to-any-file: 'packages/slidev/**'
+
+integrations:
+  - changed-files:
+      - any-glob-to-any-file: 'packages/integrations/**'
 
 basic:
   - changed-files:
       - any-glob-to-any-file: 'packages/basic/**'
 
+lite:
+  - changed-files:
+      - any-glob-to-any-file: 'packages/lite/**'
+
 tests:
   - changed-files:
       - any-glob-to-any-file: 'packages/tests/**'
-
-ci:
-  - changed-files:
-      - any-glob-to-any-file: '.github/**'
 
 docs:
   - changed-files:
       - any-glob-to-any-file:
           - '*.md'
           - 'packages/*/README.md'
+          - 'apps/docs/**'
           - 'llms.txt'
+          - 'llms-full.txt'
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file: '.github/**'
 
 # Apply this label manually to PRs that don't need a changeset (chores, CI, docs-only)
 skip-changelog:

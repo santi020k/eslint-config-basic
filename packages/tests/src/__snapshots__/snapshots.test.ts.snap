@@ -1,5 +1,116 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`Config Snapshots — Critical Rule Entries > core critical rule entries should match snapshot 1`] = `
+{
+  "eqeqeq": "warn",
+  "no-undef": "warn",
+  "no-unused-vars": [
+    "error",
+    {
+      "args": "after-used",
+      "argsIgnorePattern": "^_",
+      "ignoreRestSiblings": true,
+      "vars": "all",
+      "varsIgnorePattern": "^_",
+    },
+  ],
+  "simple-import-sort/imports": [
+    "warn",
+    {
+      "groups": [
+        [
+          "^\\u0000",
+        ],
+        [
+          "^node:",
+          "^(assert|async_hooks|buffer|child_process|cluster|console|crypto|dgram|diagnostics_channel|dns|domain|events|fs|http|http2|https|inspector|module|net|os|path|perf_hooks|process|punycode|querystring|readline|repl|stream|string_decoder|sys|timers|tls|tty|url|util|v8|vm|wasi|worker_threads|zlib)(/.*|$)",
+        ],
+        [
+          "^virtual:",
+          "^astro:",
+          "^\\$app/",
+          "^\\$env/",
+          "^\\$lib/",
+          "^#imports",
+          "^#build/",
+          "^#app/",
+        ],
+        [
+          "^(layouts?|pages?|templates?|organisms?|molecules?|atoms?|components?|ui|views?|screens?)/",
+          "^(@/|~/)(layouts?|pages?|templates?|organisms?|molecules?|atoms?|components?|ui|views?|screens?)(/.*|$)",
+        ],
+        [
+          "^(stores?|api|contexts?|hooks?|composables?|services?|lib|models?|utils?|helpers?|configs?|constants?|types?|plugins?|middlewares?|ws|assets?)/",
+          "^(@/|~/)(stores?|api|contexts?|hooks?|composables?|services?|lib|models?|utils?|helpers?|configs?|constants?|types?|plugins?|middlewares?|ws|assets?)(/.*|$)",
+        ],
+        [
+          "^.+\\.(css|scss|sass|less|styl|stylus|postcss)$",
+        ],
+        [
+          "^@?\\w",
+        ],
+        [
+          "^@/",
+          "^~/",
+          "^#",
+        ],
+        [
+          "^\\.\\.(?!/?$)",
+          "^\\.\\./?$",
+        ],
+        [
+          "^\\./(?=.*/)(?!/?$)",
+          "^\\.(?!/?$)",
+          "^\\./?$",
+        ],
+      ],
+    },
+  ],
+}
+`;
+
+exports[`Config Snapshots — Critical Rule Entries > preact critical rule entries should match snapshot 1`] = `
+{
+  "@eslint-react/exhaustive-deps": "warn",
+  "@eslint-react/no-missing-key": "error",
+  "@eslint-react/rules-of-hooks": "error",
+}
+`;
+
+exports[`Config Snapshots — Critical Rule Entries > react critical rule entries should match snapshot 1`] = `
+{
+  "@eslint-react/exhaustive-deps": "warn",
+  "@eslint-react/no-missing-key": "error",
+  "@eslint-react/rules-of-hooks": "error",
+  "react-compiler/react-compiler": "warn",
+}
+`;
+
+exports[`Config Snapshots — Critical Rule Entries > typescript critical rule entries should match snapshot 1`] = `
+{
+  "@typescript-eslint/consistent-type-imports": [
+    "warn",
+    {
+      "fixStyle": "inline-type-imports",
+      "prefer": "type-imports",
+    },
+  ],
+  "@typescript-eslint/no-explicit-any": "warn",
+  "@typescript-eslint/no-unsafe-assignment": "warn",
+  "@typescript-eslint/no-unused-vars": [
+    "warn",
+    {
+      "args": "after-used",
+      "argsIgnorePattern": "^_",
+      "destructuredArrayIgnorePattern": "^_",
+      "ignoreRestSiblings": true,
+      "vars": "all",
+      "varsIgnorePattern": "^_",
+    },
+  ],
+}
+`;
+
 exports[`Config Snapshots — Entry Names > angular config entries should match snapshot 1`] = `
 [
   "eslint-config-angular/rules",
@@ -42,6 +153,20 @@ exports[`Config Snapshots — Entry Names > expo config entries should match sna
 ]
 `;
 
+exports[`Config Snapshots — Entry Names > hono config entries should match snapshot 1`] = `
+[
+  "eslint-config-hono/runtime",
+  "eslint-config-hono/server-handlers",
+]
+`;
+
+exports[`Config Snapshots — Entry Names > lit config entries should match snapshot 1`] = `
+[
+  "eslint-config-lit/lit-recommended",
+  "eslint-config-lit/wc-recommended",
+]
+`;
+
 exports[`Config Snapshots — Entry Names > nest config entries should match snapshot 1`] = `
 [
   "@darraghor/nestjs-typed/base",
@@ -55,6 +180,20 @@ exports[`Config Snapshots — Entry Names > next config entries should match sna
   "eslint-config-next/custom",
   "eslint-config-next/ignores",
   "eslint-config-next/plugin",
+]
+`;
+
+exports[`Config Snapshots — Entry Names > nuxt config entries should match snapshot 1`] = `
+[
+  "eslint-config-nuxt/rules",
+  "eslint-config-nuxt/server-runtime",
+]
+`;
+
+exports[`Config Snapshots — Entry Names > preact config entries should match snapshot 1`] = `
+[
+  "eslint-config-preact/custom",
+  "eslint-config-preact/recommended",
 ]
 `;
 
@@ -72,10 +211,18 @@ exports[`Config Snapshots — Entry Names > react config entries should match sn
 ]
 `;
 
-exports[`Config Snapshots — Entry Names > remix config entries should match snapshot 1`] = `
+exports[`Config Snapshots — Entry Names > react-router config entries should match snapshot 1`] = `
 [
-  "eslint-config-remix/jsx-a11y",
-  "eslint-config-remix/virtual-script-rules",
+  "eslint-config-react-router/jsx-a11y",
+  "eslint-config-react-router/virtual-script-rules",
+]
+`;
+
+exports[`Config Snapshots — Entry Names > slidev config entries should match snapshot 1`] = `
+[
+  "eslint-config-slidev/deck-markdown",
+  "eslint-config-slidev/runtime",
+  "eslint-config-slidev/setup-files",
 ]
 `;
 
@@ -96,6 +243,13 @@ exports[`Config Snapshots — Entry Names > svelte config entries should match s
 ]
 `;
 
+exports[`Config Snapshots — Entry Names > tanstack-start config entries should match snapshot 1`] = `
+[
+  "eslint-config-tanstack-start/query",
+  "eslint-config-tanstack-start/router",
+]
+`;
+
 exports[`Config Snapshots — Entry Names > typescript config entries should match snapshot 1`] = `
 [
   "eslint-config-typescript/parser-setup",
@@ -112,6 +266,13 @@ exports[`Config Snapshots — Entry Names > typescript config entries should mat
   "typescript-eslint/strict-type-checked/rules-only",
   "typescript-eslint/stylistic-type-checked",
   "typescript-eslint/stylistic-type-checked/rules-only",
+]
+`;
+
+exports[`Config Snapshots — Entry Names > vite config entries should match snapshot 1`] = `
+[
+  "eslint-config-vite/config-files",
+  "eslint-config-vite/runtime",
 ]
 `;
 
@@ -263,7 +424,6 @@ exports[`Config Snapshots — Rule Names > core config rules should match snapsh
   "n/no-missing-import",
   "n/no-missing-require",
   "n/no-process-exit",
-  "n/no-unpublished-bin",
   "n/no-unpublished-import",
   "n/no-unpublished-require",
   "n/no-unsupported-features/es-builtins",
@@ -364,27 +524,10 @@ exports[`Config Snapshots — Rule Names > core config rules should match snapsh
 
 exports[`Config Snapshots — Rule Names > expo config rules should match snapshot 1`] = `
 [
-  "@typescript-eslint/array-type",
-  "@typescript-eslint/consistent-type-assertions",
-  "@typescript-eslint/no-dupe-class-members",
-  "@typescript-eslint/no-empty-object-type",
-  "@typescript-eslint/no-extra-non-null-assertion",
-  "@typescript-eslint/no-redeclare",
-  "@typescript-eslint/no-require-imports",
-  "@typescript-eslint/no-unused-vars",
-  "@typescript-eslint/no-useless-constructor",
-  "@typescript-eslint/no-wrapper-object-types",
   "eqeqeq",
   "expo/no-dynamic-env-var",
   "expo/no-env-var-destructuring",
   "expo/use-dom-exports",
-  "import/default",
-  "import/export",
-  "import/first",
-  "import/named",
-  "import/namespace",
-  "import/no-unresolved",
-  "import/order",
   "no-dupe-args",
   "no-dupe-class-members",
   "no-dupe-keys",
@@ -400,42 +543,33 @@ exports[`Config Snapshots — Rule Names > expo config rules should match snapsh
   "no-unused-expressions",
   "no-unused-labels",
   "no-unused-vars",
-  "no-use-before-define",
   "no-useless-constructor",
+  "no-useless-return",
   "no-var",
   "no-with",
-  "react-hooks/config",
-  "react-hooks/error-boundaries",
-  "react-hooks/exhaustive-deps",
-  "react-hooks/gating",
-  "react-hooks/globals",
-  "react-hooks/immutability",
-  "react-hooks/incompatible-library",
-  "react-hooks/preserve-manual-memoization",
-  "react-hooks/purity",
-  "react-hooks/refs",
-  "react-hooks/rules-of-hooks",
-  "react-hooks/set-state-in-effect",
-  "react-hooks/set-state-in-render",
-  "react-hooks/static-components",
-  "react-hooks/unsupported-syntax",
-  "react-hooks/use-memo",
-  "react/display-name",
-  "react/jsx-no-duplicate-props",
-  "react/jsx-no-undef",
-  "react/jsx-uses-react",
-  "react/jsx-uses-vars",
-  "react/no-danger-with-children",
-  "react/no-deprecated",
-  "react/no-direct-mutation-state",
-  "react/no-string-refs",
-  "react/no-this-in-sfc",
-  "react/no-unknown-property",
-  "react/require-render-return",
-  "simple-import-sort/imports",
   "unicode-bom",
   "use-isnan",
   "valid-typeof",
+]
+`;
+
+exports[`Config Snapshots — Rule Names > hono config rules should match snapshot 1`] = `
+[
+  "n/no-process-env",
+]
+`;
+
+exports[`Config Snapshots — Rule Names > lit config rules should match snapshot 1`] = `
+[
+  "lit/attribute-value-entities",
+  "lit/binding-positions",
+  "lit/no-duplicate-template-bindings",
+  "lit/no-invalid-html",
+  "lit/no-legacy-template-syntax",
+  "lit/no-property-change-update",
+  "wc/no-constructor-attributes",
+  "wc/no-invalid-element-name",
+  "wc/no-self-class",
 ]
 `;
 
@@ -494,6 +628,86 @@ exports[`Config Snapshots — Rule Names > next config rules should match snapsh
 ]
 `;
 
+exports[`Config Snapshots — Rule Names > nuxt config rules should match snapshot 1`] = `
+[
+  "nuxt/prefer-import-meta",
+]
+`;
+
+exports[`Config Snapshots — Rule Names > preact config rules should match snapshot 1`] = `
+[
+  "@eslint-react/dom-no-dangerously-set-innerhtml",
+  "@eslint-react/dom-no-dangerously-set-innerhtml-with-children",
+  "@eslint-react/dom-no-find-dom-node",
+  "@eslint-react/dom-no-flush-sync",
+  "@eslint-react/dom-no-hydrate",
+  "@eslint-react/dom-no-missing-button-type",
+  "@eslint-react/dom-no-render",
+  "@eslint-react/dom-no-render-return-value",
+  "@eslint-react/dom-no-script-url",
+  "@eslint-react/dom-no-unsafe-iframe-sandbox",
+  "@eslint-react/dom-no-unsafe-target-blank",
+  "@eslint-react/dom-no-use-form-state",
+  "@eslint-react/dom-no-void-elements-with-children",
+  "@eslint-react/error-boundaries",
+  "@eslint-react/exhaustive-deps",
+  "@eslint-react/jsx-no-children-prop",
+  "@eslint-react/jsx-no-children-prop-with-children",
+  "@eslint-react/jsx-no-comment-textnodes",
+  "@eslint-react/jsx-no-key-after-spread",
+  "@eslint-react/jsx-no-leaked-dollar",
+  "@eslint-react/jsx-no-leaked-semicolon",
+  "@eslint-react/jsx-no-namespace",
+  "@eslint-react/naming-convention-context-name",
+  "@eslint-react/naming-convention-id-name",
+  "@eslint-react/naming-convention-ref-name",
+  "@eslint-react/no-access-state-in-setstate",
+  "@eslint-react/no-array-index-key",
+  "@eslint-react/no-children-count",
+  "@eslint-react/no-children-for-each",
+  "@eslint-react/no-children-map",
+  "@eslint-react/no-children-only",
+  "@eslint-react/no-children-to-array",
+  "@eslint-react/no-clone-element",
+  "@eslint-react/no-component-will-mount",
+  "@eslint-react/no-component-will-receive-props",
+  "@eslint-react/no-component-will-update",
+  "@eslint-react/no-context-provider",
+  "@eslint-react/no-create-ref",
+  "@eslint-react/no-direct-mutation-state",
+  "@eslint-react/no-forward-ref",
+  "@eslint-react/no-missing-key",
+  "@eslint-react/no-nested-component-definitions",
+  "@eslint-react/no-nested-lazy-component-declarations",
+  "@eslint-react/no-set-state-in-component-did-mount",
+  "@eslint-react/no-set-state-in-component-did-update",
+  "@eslint-react/no-set-state-in-component-will-update",
+  "@eslint-react/no-unnecessary-use-prefix",
+  "@eslint-react/no-unsafe-component-will-mount",
+  "@eslint-react/no-unsafe-component-will-receive-props",
+  "@eslint-react/no-unsafe-component-will-update",
+  "@eslint-react/no-unstable-default-props",
+  "@eslint-react/no-unused-class-component-members",
+  "@eslint-react/no-use-context",
+  "@eslint-react/purity",
+  "@eslint-react/rsc-function-definition",
+  "@eslint-react/rules-of-hooks",
+  "@eslint-react/set-state-in-effect",
+  "@eslint-react/set-state-in-render",
+  "@eslint-react/static-components",
+  "@eslint-react/unsupported-syntax",
+  "@eslint-react/use-memo",
+  "@eslint-react/use-state",
+  "@eslint-react/web-api-no-leaked-event-listener",
+  "@eslint-react/web-api-no-leaked-fetch",
+  "@eslint-react/web-api-no-leaked-intersection-observer",
+  "@eslint-react/web-api-no-leaked-interval",
+  "@eslint-react/web-api-no-leaked-resize-observer",
+  "@eslint-react/web-api-no-leaked-timeout",
+  "simple-import-sort/imports",
+]
+`;
+
 exports[`Config Snapshots — Rule Names > qwik config rules should match snapshot 1`] = `
 [
   "@typescript-eslint/no-unused-expressions",
@@ -515,67 +729,81 @@ exports[`Config Snapshots — Rule Names > qwik config rules should match snapsh
 
 exports[`Config Snapshots — Rule Names > react config rules should match snapshot 1`] = `
 [
-  "react-hooks/config",
-  "react-hooks/error-boundaries",
-  "react-hooks/exhaustive-deps",
-  "react-hooks/gating",
-  "react-hooks/globals",
-  "react-hooks/immutability",
-  "react-hooks/incompatible-library",
-  "react-hooks/preserve-manual-memoization",
-  "react-hooks/purity",
-  "react-hooks/refs",
-  "react-hooks/rules-of-hooks",
-  "react-hooks/set-state-in-effect",
-  "react-hooks/set-state-in-render",
-  "react-hooks/static-components",
-  "react-hooks/unsupported-syntax",
-  "react-hooks/use-memo",
-  "react/boolean-prop-naming",
-  "react/button-has-type",
-  "react/destructuring-assignment",
-  "react/display-name",
-  "react/hook-use-state",
-  "react/jsx-boolean-value",
-  "react/jsx-closing-bracket-location",
-  "react/jsx-closing-tag-location",
-  "react/jsx-curly-brace-presence",
-  "react/jsx-curly-newline",
-  "react/jsx-fragments",
-  "react/jsx-handler-names",
-  "react/jsx-key",
-  "react/jsx-max-depth",
-  "react/jsx-no-comment-textnodes",
-  "react/jsx-no-duplicate-props",
-  "react/jsx-no-leaked-render",
-  "react/jsx-no-target-blank",
-  "react/jsx-no-undef",
-  "react/jsx-pascal-case",
-  "react/jsx-uses-react",
-  "react/jsx-uses-vars",
-  "react/jsx-wrap-multilines",
-  "react/no-children-prop",
-  "react/no-danger-with-children",
-  "react/no-deprecated",
-  "react/no-direct-mutation-state",
-  "react/no-find-dom-node",
-  "react/no-is-mounted",
-  "react/no-multi-comp",
-  "react/no-render-return-value",
-  "react/no-string-refs",
-  "react/no-unescaped-entities",
-  "react/no-unknown-property",
-  "react/no-unsafe",
-  "react/no-unstable-nested-components",
-  "react/prop-types",
-  "react/react-in-jsx-scope",
-  "react/require-render-return",
-  "react/self-closing-comp",
+  "@eslint-react/dom-no-dangerously-set-innerhtml",
+  "@eslint-react/dom-no-dangerously-set-innerhtml-with-children",
+  "@eslint-react/dom-no-find-dom-node",
+  "@eslint-react/dom-no-flush-sync",
+  "@eslint-react/dom-no-hydrate",
+  "@eslint-react/dom-no-missing-button-type",
+  "@eslint-react/dom-no-render",
+  "@eslint-react/dom-no-render-return-value",
+  "@eslint-react/dom-no-script-url",
+  "@eslint-react/dom-no-unsafe-iframe-sandbox",
+  "@eslint-react/dom-no-unsafe-target-blank",
+  "@eslint-react/dom-no-use-form-state",
+  "@eslint-react/dom-no-void-elements-with-children",
+  "@eslint-react/error-boundaries",
+  "@eslint-react/exhaustive-deps",
+  "@eslint-react/jsx-no-children-prop",
+  "@eslint-react/jsx-no-children-prop-with-children",
+  "@eslint-react/jsx-no-comment-textnodes",
+  "@eslint-react/jsx-no-key-after-spread",
+  "@eslint-react/jsx-no-leaked-dollar",
+  "@eslint-react/jsx-no-leaked-semicolon",
+  "@eslint-react/jsx-no-namespace",
+  "@eslint-react/naming-convention-context-name",
+  "@eslint-react/naming-convention-id-name",
+  "@eslint-react/naming-convention-ref-name",
+  "@eslint-react/no-access-state-in-setstate",
+  "@eslint-react/no-array-index-key",
+  "@eslint-react/no-children-count",
+  "@eslint-react/no-children-for-each",
+  "@eslint-react/no-children-map",
+  "@eslint-react/no-children-only",
+  "@eslint-react/no-children-to-array",
+  "@eslint-react/no-clone-element",
+  "@eslint-react/no-component-will-mount",
+  "@eslint-react/no-component-will-receive-props",
+  "@eslint-react/no-component-will-update",
+  "@eslint-react/no-context-provider",
+  "@eslint-react/no-create-ref",
+  "@eslint-react/no-direct-mutation-state",
+  "@eslint-react/no-forward-ref",
+  "@eslint-react/no-missing-key",
+  "@eslint-react/no-nested-component-definitions",
+  "@eslint-react/no-nested-lazy-component-declarations",
+  "@eslint-react/no-set-state-in-component-did-mount",
+  "@eslint-react/no-set-state-in-component-did-update",
+  "@eslint-react/no-set-state-in-component-will-update",
+  "@eslint-react/no-unnecessary-use-prefix",
+  "@eslint-react/no-unsafe-component-will-mount",
+  "@eslint-react/no-unsafe-component-will-receive-props",
+  "@eslint-react/no-unsafe-component-will-update",
+  "@eslint-react/no-unstable-default-props",
+  "@eslint-react/no-unused-class-component-members",
+  "@eslint-react/no-use-context",
+  "@eslint-react/purity",
+  "@eslint-react/rsc-function-definition",
+  "@eslint-react/rules-of-hooks",
+  "@eslint-react/set-state-in-effect",
+  "@eslint-react/set-state-in-render",
+  "@eslint-react/static-components",
+  "@eslint-react/unsupported-syntax",
+  "@eslint-react/use-memo",
+  "@eslint-react/use-state",
+  "@eslint-react/web-api-no-leaked-event-listener",
+  "@eslint-react/web-api-no-leaked-fetch",
+  "@eslint-react/web-api-no-leaked-intersection-observer",
+  "@eslint-react/web-api-no-leaked-interval",
+  "@eslint-react/web-api-no-leaked-resize-observer",
+  "@eslint-react/web-api-no-leaked-timeout",
+  "react-compiler/react-compiler",
+  "react-refresh/only-export-components",
   "simple-import-sort/imports",
 ]
 `;
 
-exports[`Config Snapshots — Rule Names > remix config rules should match snapshot 1`] = `
+exports[`Config Snapshots — Rule Names > react-router config rules should match snapshot 1`] = `
 [
   "@typescript-eslint/no-unused-expressions",
   "jsx-a11y/alt-text",
@@ -613,6 +841,268 @@ exports[`Config Snapshots — Rule Names > remix config rules should match snaps
   "jsx-a11y/scope",
   "jsx-a11y/tabindex-no-positive",
   "no-unused-expressions",
+]
+`;
+
+exports[`Config Snapshots — Rule Names > slidev config rules should match snapshot 1`] = `
+[
+  "@stylistic/max-len",
+  "n/no-extraneous-import",
+  "n/no-unpublished-import",
+  "no-undef",
+  "no-unused-expressions",
+  "vue/array-bracket-newline",
+  "vue/array-bracket-spacing",
+  "vue/array-element-newline",
+  "vue/arrow-spacing",
+  "vue/attribute-hyphenation",
+  "vue/attributes-order",
+  "vue/block-lang",
+  "vue/block-order",
+  "vue/block-spacing",
+  "vue/block-tag-newline",
+  "vue/brace-style",
+  "vue/camelcase",
+  "vue/comma-dangle",
+  "vue/comma-spacing",
+  "vue/comma-style",
+  "vue/comment-directive",
+  "vue/component-api-style",
+  "vue/component-definition-name-casing",
+  "vue/component-name-in-template-casing",
+  "vue/component-options-name-casing",
+  "vue/custom-event-name-casing",
+  "vue/define-emits-declaration",
+  "vue/define-macros-order",
+  "vue/define-props-declaration",
+  "vue/define-props-destructuring",
+  "vue/dot-location",
+  "vue/dot-notation",
+  "vue/enforce-style-attribute",
+  "vue/eqeqeq",
+  "vue/first-attribute-linebreak",
+  "vue/func-call-spacing",
+  "vue/html-button-has-type",
+  "vue/html-closing-bracket-newline",
+  "vue/html-closing-bracket-spacing",
+  "vue/html-comment-content-newline",
+  "vue/html-comment-content-spacing",
+  "vue/html-comment-indent",
+  "vue/html-end-tags",
+  "vue/html-indent",
+  "vue/html-quotes",
+  "vue/html-self-closing",
+  "vue/jsx-uses-vars",
+  "vue/key-spacing",
+  "vue/keyword-spacing",
+  "vue/match-component-file-name",
+  "vue/match-component-import-name",
+  "vue/max-attributes-per-line",
+  "vue/max-len",
+  "vue/max-lines-per-block",
+  "vue/max-props",
+  "vue/max-template-depth",
+  "vue/multi-word-component-names",
+  "vue/multiline-html-element-content-newline",
+  "vue/multiline-ternary",
+  "vue/mustache-interpolation-spacing",
+  "vue/new-line-between-multi-line-property",
+  "vue/next-tick-style",
+  "vue/no-arrow-functions-in-watch",
+  "vue/no-async-in-computed-properties",
+  "vue/no-bare-strings-in-template",
+  "vue/no-boolean-default",
+  "vue/no-child-content",
+  "vue/no-computed-properties-in-data",
+  "vue/no-console",
+  "vue/no-constant-condition",
+  "vue/no-custom-modifiers-on-v-model",
+  "vue/no-deprecated-data-object-declaration",
+  "vue/no-deprecated-delete-set",
+  "vue/no-deprecated-destroyed-lifecycle",
+  "vue/no-deprecated-dollar-listeners-api",
+  "vue/no-deprecated-dollar-scopedslots-api",
+  "vue/no-deprecated-events-api",
+  "vue/no-deprecated-filter",
+  "vue/no-deprecated-functional-template",
+  "vue/no-deprecated-html-element-is",
+  "vue/no-deprecated-inline-template",
+  "vue/no-deprecated-model-definition",
+  "vue/no-deprecated-props-default-this",
+  "vue/no-deprecated-router-link-tag-prop",
+  "vue/no-deprecated-scope-attribute",
+  "vue/no-deprecated-slot-attribute",
+  "vue/no-deprecated-slot-scope-attribute",
+  "vue/no-deprecated-v-bind-sync",
+  "vue/no-deprecated-v-is",
+  "vue/no-deprecated-v-on-native-modifier",
+  "vue/no-deprecated-v-on-number-modifiers",
+  "vue/no-deprecated-vue-config-keycodes",
+  "vue/no-dupe-keys",
+  "vue/no-dupe-v-else-if",
+  "vue/no-duplicate-attr-inheritance",
+  "vue/no-duplicate-attributes",
+  "vue/no-duplicate-class-names",
+  "vue/no-empty-component-block",
+  "vue/no-empty-pattern",
+  "vue/no-export-in-script-setup",
+  "vue/no-expose-after-await",
+  "vue/no-extra-parens",
+  "vue/no-implicit-coercion",
+  "vue/no-import-compiler-macros",
+  "vue/no-irregular-whitespace",
+  "vue/no-lifecycle-after-await",
+  "vue/no-literals-in-template",
+  "vue/no-lone-template",
+  "vue/no-loss-of-precision",
+  "vue/no-multi-spaces",
+  "vue/no-multiple-objects-in-class",
+  "vue/no-multiple-slot-args",
+  "vue/no-multiple-template-root",
+  "vue/no-mutating-props",
+  "vue/no-negated-condition",
+  "vue/no-negated-v-if-condition",
+  "vue/no-parsing-error",
+  "vue/no-potential-component-option-typo",
+  "vue/no-ref-as-operand",
+  "vue/no-ref-object-reactivity-loss",
+  "vue/no-required-prop-with-default",
+  "vue/no-reserved-component-names",
+  "vue/no-reserved-keys",
+  "vue/no-reserved-props",
+  "vue/no-restricted-block",
+  "vue/no-restricted-call-after-await",
+  "vue/no-restricted-class",
+  "vue/no-restricted-component-names",
+  "vue/no-restricted-component-options",
+  "vue/no-restricted-custom-event",
+  "vue/no-restricted-html-elements",
+  "vue/no-restricted-props",
+  "vue/no-restricted-static-attribute",
+  "vue/no-restricted-syntax",
+  "vue/no-restricted-v-bind",
+  "vue/no-restricted-v-on",
+  "vue/no-root-v-if",
+  "vue/no-setup-props-reactivity-loss",
+  "vue/no-shared-component-data",
+  "vue/no-side-effects-in-computed-properties",
+  "vue/no-spaces-around-equal-signs-in-attribute",
+  "vue/no-sparse-arrays",
+  "vue/no-static-inline-styles",
+  "vue/no-template-key",
+  "vue/no-template-shadow",
+  "vue/no-template-target-blank",
+  "vue/no-textarea-mustache",
+  "vue/no-this-in-before-route-enter",
+  "vue/no-undef-components",
+  "vue/no-undef-directives",
+  "vue/no-undef-properties",
+  "vue/no-unsupported-features",
+  "vue/no-unused-components",
+  "vue/no-unused-emit-declarations",
+  "vue/no-unused-properties",
+  "vue/no-unused-refs",
+  "vue/no-unused-vars",
+  "vue/no-use-computed-property-like-method",
+  "vue/no-use-v-else-with-v-for",
+  "vue/no-use-v-if-with-v-for",
+  "vue/no-useless-concat",
+  "vue/no-useless-mustaches",
+  "vue/no-useless-template-attributes",
+  "vue/no-useless-v-bind",
+  "vue/no-v-for-template-key",
+  "vue/no-v-for-template-key-on-child",
+  "vue/no-v-html",
+  "vue/no-v-model-argument",
+  "vue/no-v-text",
+  "vue/no-v-text-v-html-on-component",
+  "vue/no-watch-after-await",
+  "vue/object-curly-newline",
+  "vue/object-curly-spacing",
+  "vue/object-property-newline",
+  "vue/object-shorthand",
+  "vue/one-component-per-file",
+  "vue/operator-linebreak",
+  "vue/order-in-components",
+  "vue/padding-line-between-blocks",
+  "vue/padding-line-between-tags",
+  "vue/padding-lines-in-component-definition",
+  "vue/prefer-define-options",
+  "vue/prefer-import-from-vue",
+  "vue/prefer-prop-type-boolean-first",
+  "vue/prefer-separate-static-class",
+  "vue/prefer-single-event-payload",
+  "vue/prefer-template",
+  "vue/prefer-true-attribute-shorthand",
+  "vue/prefer-use-template-ref",
+  "vue/prefer-v-model",
+  "vue/prop-name-casing",
+  "vue/quote-props",
+  "vue/require-component-is",
+  "vue/require-default-export",
+  "vue/require-default-prop",
+  "vue/require-direct-export",
+  "vue/require-emit-validator",
+  "vue/require-explicit-emits",
+  "vue/require-explicit-slots",
+  "vue/require-expose",
+  "vue/require-macro-variable-name",
+  "vue/require-name-property",
+  "vue/require-prop-comment",
+  "vue/require-prop-type-constructor",
+  "vue/require-prop-types",
+  "vue/require-render-return",
+  "vue/require-slots-as-functions",
+  "vue/require-toggle-inside-transition",
+  "vue/require-typed-object-prop",
+  "vue/require-typed-ref",
+  "vue/require-v-for-key",
+  "vue/require-valid-default-prop",
+  "vue/restricted-component-names",
+  "vue/return-in-computed-property",
+  "vue/return-in-emits-validator",
+  "vue/script-indent",
+  "vue/singleline-html-element-content-newline",
+  "vue/slot-name-casing",
+  "vue/sort-keys",
+  "vue/space-in-parens",
+  "vue/space-infix-ops",
+  "vue/space-unary-ops",
+  "vue/static-class-names-order",
+  "vue/template-curly-spacing",
+  "vue/this-in-template",
+  "vue/use-v-on-exact",
+  "vue/v-bind-style",
+  "vue/v-for-delimiter-style",
+  "vue/v-if-else-key",
+  "vue/v-on-event-hyphenation",
+  "vue/v-on-handler-style",
+  "vue/v-on-style",
+  "vue/v-slot-style",
+  "vue/valid-attribute-name",
+  "vue/valid-define-emits",
+  "vue/valid-define-options",
+  "vue/valid-define-props",
+  "vue/valid-model-definition",
+  "vue/valid-next-tick",
+  "vue/valid-template-root",
+  "vue/valid-v-bind",
+  "vue/valid-v-bind-sync",
+  "vue/valid-v-cloak",
+  "vue/valid-v-else",
+  "vue/valid-v-else-if",
+  "vue/valid-v-for",
+  "vue/valid-v-html",
+  "vue/valid-v-if",
+  "vue/valid-v-is",
+  "vue/valid-v-memo",
+  "vue/valid-v-model",
+  "vue/valid-v-on",
+  "vue/valid-v-once",
+  "vue/valid-v-pre",
+  "vue/valid-v-show",
+  "vue/valid-v-slot",
+  "vue/valid-v-text",
 ]
 `;
 
@@ -687,6 +1177,20 @@ exports[`Config Snapshots — Rule Names > svelte config rules should match snap
 ]
 `;
 
+exports[`Config Snapshots — Rule Names > tanstack-start config rules should match snapshot 1`] = `
+[
+  "@tanstack/query/exhaustive-deps",
+  "@tanstack/query/infinite-query-property-order",
+  "@tanstack/query/mutation-property-order",
+  "@tanstack/query/no-rest-destructuring",
+  "@tanstack/query/no-unstable-deps",
+  "@tanstack/query/no-void-query-fn",
+  "@tanstack/query/stable-query-client",
+  "@tanstack/router/create-route-property-order",
+  "@tanstack/router/route-param-names",
+]
+`;
+
 exports[`Config Snapshots — Rule Names > typescript config rules should match snapshot 1`] = `
 [
   "@typescript-eslint/adjacent-overload-signatures",
@@ -699,6 +1203,7 @@ exports[`Config Snapshots — Rule Names > typescript config rules should match 
   "@typescript-eslint/consistent-indexed-object-style",
   "@typescript-eslint/consistent-type-assertions",
   "@typescript-eslint/consistent-type-definitions",
+  "@typescript-eslint/consistent-type-exports",
   "@typescript-eslint/consistent-type-imports",
   "@typescript-eslint/dot-notation",
   "@typescript-eslint/indent",
@@ -816,6 +1321,14 @@ exports[`Config Snapshots — Rule Names > typescript config rules should match 
   "prefer-spread",
   "require-await",
   "semi",
+]
+`;
+
+exports[`Config Snapshots — Rule Names > vite config rules should match snapshot 1`] = `
+[
+  "n/no-extraneous-import",
+  "n/no-process-env",
+  "n/no-unpublished-import",
 ]
 `;
 

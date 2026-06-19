@@ -5,10 +5,12 @@ dist/
 .env
 .turbo/
 /docs/
-/docs-md/
 
 # npm lock file (project uses pnpm)
 package-lock.json
 
 # Turborepo
 .turbo
+
+# CSpell cache
+.cspellcache

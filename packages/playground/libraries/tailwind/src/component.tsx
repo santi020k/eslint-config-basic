@@ -16,22 +16,22 @@ export const TailwindComponent = () => (
       </p>
       <div className="mt-6 flex space-x-4">
         <button
-          type="button"
           className="
             rounded-lg bg-blue-600 px-6 py-2 font-semibold text-white
             transition-colors
             hover:bg-blue-700
           "
+          type="button"
         >
           Primary Action
         </button>
         <button
-          type="button"
           className="
             rounded-lg border-2 border-gray-200 px-6 py-2 font-semibold
             text-gray-600 transition-all
             hover:border-gray-300 hover:bg-gray-50
           "
+          type="button"
         >
           Secondary
         </button>

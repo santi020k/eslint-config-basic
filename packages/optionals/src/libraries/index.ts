@@ -1,5 +1,0 @@
-export { i18next } from './i18next.js'
-export { stencil } from './stencil.js'
-export { storybook } from './storybook.js'
-export { tailwind } from './tailwind.js'
-export { tanstackQuery, tanstackRouter } from './tanstack.js'

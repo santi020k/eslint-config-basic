@@ -8,10 +8,10 @@ export default {
     'packages/astro/src/index.ts',
     'packages/expo/src/index.ts',
     'packages/nest/src/index.ts',
-    'packages/optionals/src/index.ts',
+    'packages/integrations/src/index.ts',
     'packages/basic/src/index.ts'
   ],
-  out: 'packages/docs/api/reference',
+  out: 'packages/docs/src/content/docs/api/reference',
   tsconfig: './tsconfig.docs.json',
   name: '@santi020k/eslint-config-basic',
   readme: 'none',

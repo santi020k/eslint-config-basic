@@ -1,11 +1,15 @@
 {
   "name": "@santi020k/eslint-config-typescript",
   "version": "1.6.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "TypeScript ESLint configuration",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -20,10 +24,23 @@
     "dev": "tsup --watch",
     "clean": "rm -rf dist",
     "check:exports": "publint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --no-warn-ignored --pass-on-no-patterns",
+    "lint:fix": "eslint . --fix --no-warn-ignored --pass-on-no-patterns"
+  },
+  "dependencies": {
+    "@santi020k/eslint-config-core": "workspace:*",
+    "@typescript-eslint/parser": "catalog:",
+    "typescript-eslint": "catalog:",
+    "@typescript-eslint/utils": "catalog:"
+  },
+  "devDependencies": {
+    "publint": "catalog:",
+    "tsup": "catalog:",
+    "typescript": "catalog:"
   },
   "peerDependencies": {
-    "eslint": "^9.0.0 || ^10.0.0",
+    "eslint": "^10.0.0",
     "typescript": ">=5.0.0"
   },
   "peerDependenciesMeta": {
@@ -31,25 +48,9 @@
       "optional": true
     }
   },
-  "dependencies": {
-    "@santi020k/eslint-config-core": "workspace:*",
-    "@typescript-eslint/parser": "^8.59.0",
-    "typescript-eslint": "^8.59.0"
-  },
-  "devDependencies": {
-    "@typescript-eslint/utils": "^8.59.0",
-    "publint": "^0.3.18",
-    "tsup": "^8.5.1",
-    "typescript": "^5.9.3"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
   "engines": {
     "node": ">=22.18.0"
   },
-  "license": "MIT",
-  "author": "santi020k",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/santi020k/eslint-config-basic.git",
@@ -58,5 +59,7 @@
   "homepage": "https://eslint.santi020k.com/frameworks/typescript.html",
   "bugs": {
     "url": "https://github.com/santi020k/eslint-config-basic/issues"
-  }
+  },
+  "author": "santi020k",
+  "license": "MIT"
 }

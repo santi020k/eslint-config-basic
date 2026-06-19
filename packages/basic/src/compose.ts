@@ -1,5 +1,16 @@
 import type { FlatConfigArray } from '@santi020k/eslint-config-core'
+
 import type { TSESLint } from '@typescript-eslint/utils'
+
+export type NormalizedStrictMode = 'ci' | 'pedantic' | 'recommended'
+
+export const normalizeStrictMode = (strict: boolean | NormalizedStrictMode | undefined): NormalizedStrictMode => {
+  if (strict === true) return 'ci'
+
+  if (strict === 'ci' || strict === 'pedantic') return strict
+
+  return 'recommended'
+}
 
 const promoteRuleSeverity = (
   value: TSESLint.FlatConfig.RuleEntry | undefined
@@ -18,18 +29,31 @@ const promoteRuleSeverity = (
 /**
  * Applies strict mode by promoting all 'warn' rules to 'error'.
  */
-export const applyStrictMode = (configs: FlatConfigArray, strict: boolean): FlatConfigArray => {
-  if (!strict) return configs
+export const applyStrictMode = (
+  configs: FlatConfigArray,
+  strict: boolean | NormalizedStrictMode | undefined
+): FlatConfigArray => {
+  const strictMode = normalizeStrictMode(strict)
 
-  return configs.map((config: TSESLint.FlatConfig.Config) => {
-    if (config.rules) {
-      const strictRules = Object.fromEntries(
-        Object.entries(config.rules).map(([key, value]) => [key, promoteRuleSeverity(value)])
-      ) as TSESLint.FlatConfig.Rules
+  if (strictMode === 'recommended') return configs
 
-      return { ...config, rules: strictRules }
+  type ConfigEntry = TSESLint.FlatConfig.Config | TSESLint.FlatConfig.ConfigArray
+
+  const recurse = (item: ConfigEntry): ConfigEntry => {
+    if (Array.isArray(item)) {
+      return item.map(config => recurse(config) as TSESLint.FlatConfig.Config)
     }
 
-    return config
-  }) as FlatConfigArray
+    if (item.rules) {
+      const strictRules = Object.fromEntries(
+        Object.entries(item.rules).map(([key, value]) => [key, promoteRuleSeverity(value)])
+      )
+
+      return { ...item, rules: strictRules }
+    }
+
+    return item
+  }
+
+  return recurse(configs) as FlatConfigArray
 }

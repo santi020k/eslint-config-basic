@@ -1,0 +1,207 @@
+# CLAUDE.md — AI Orchestration Guide for @santi020k/eslint-config-basic
+
+Claude is the **primary AI** for this project. Claude plans, decides, and orchestrates. Other AIs are tools Claude directs:
+
+| AI | Role | How Claude invokes it |
+| :--- | :--- | :--- |
+| **Claude** | Orchestrator — plans, reviews, validates | (you) |
+| **Gemini** | Large-context analysis — reads entire monorepo at once | `mcp__gemini-cli__ask-gemini` / `mcp__gemini-cli__brainstorm` |
+| **Codex** | Code generation — writes implementation from a spec | `Agent` tool with `subagent_type: "codex:codex-rescue"` |
+
+For complex tasks, use the specialized subagents in `.claude/agents/` — they know when to call Gemini or Codex and why.
+
+## Priority Reading Order
+
+1. **`llms.txt`** — Quick project overview and commands
+2. **`llms-full.txt`** — Deep technical context and architecture decisions
+3. **`.claude/context/architecture.md`** — Package structure, dependency graph, gotchas, file modification patterns
+4. **`.claude/context/conventions.md`** — Code conventions, naming, ESLint config patterns
+5. **`.claude/skills/`** — Task-specific workflows (add-framework, add-integration, detection, testing, release)
+6. **`.claude/agents/`** — Subagents for complex tasks (integration-adder, codebase-analyst, test-writer, release-validator)
+
+## Quick Project Summary
+ 
+ `@santi020k/eslint-config-basic` is a composable ESLint 10+ Flat Config package for JS/TS projects. 
+ 
+## 🎯 Philosophy: DX Above All
+
+This project follows a **DX-First & Stability-First** mission. We prioritize a seamless developer experience and reliable installations. To achieve this:
+
+- **Handled Versioning**: Core packages like `eslint` and `@eslint/js` are included as hard dependencies. This ensures the config "just works" with tested versions, preventing the dreaded "peer dependency hell."
+- **Modern Baseline**: We target **ESLint 10** only, taking advantage of v10 improvements like per-file config lookup and JSX reference tracking.
+
+## ✨ Key Features
+
+Users opt-in to frameworks and integrations rather than getting everything at once.
+
+```js
+import { eslintConfig } from '@santi020k/eslint-config-basic'
+
+export default await eslintConfig() // auto-detects your stack
+```
+
+## Monorepo Layout
+
+```text
+packages/
+  basic/          ← main entry point — eslintConfig() / defineConfig()
+  lite/           ← lighter variant (same factory, no CLI/agent features)
+  core/           ← base JS rules, shared types/enums, utilities
+  typescript/     ← TypeScript rules
+  integrations/   ← all optional integrations (tools/libraries/testing/formats/extensions)
+  react/          ← React + Hooks
+  next/           ← Next.js
+  nuxt/           ← Nuxt
+  astro/          ← Astro
+  vue/            ← Vue
+  svelte/         ← Svelte
+  solid/          ← SolidJS
+  angular/        ← Angular
+  nest/           ← NestJS
+  hono/           ← Hono
+  expo/           ← Expo / React Native
+  preact/         ← Preact
+  qwik/           ← Qwik
+  react-router/   ← React Router v7
+  remix/          ← Remix (deprecated, use react-router)
+  tanstack-start/ ← TanStack Start
+  lit/            ← Lit / Web Components
+  vite/           ← Vite
+  slidev/         ← Slidev
+  tests/          ← Vitest integration tests (21 test files)
+  playground/     ← real ESLint environments for manual validation
+```
+
+## Key Files
+
+| File | Purpose |
+| :--- | :--- |
+| `packages/core/src/types.ts` | **Single source of truth** for all enums: `Library`, `Testing`, `Format`, `Tool`, `Extension`, `Setting`, `Runtime`, `Preset` |
+| `packages/basic/src/index.ts` | Composes everything into `eslintConfig()` / `defineConfig()` |
+| `packages/integrations/src/compose.ts` | **Maps enum values → config arrays** via `getIntegrationConfigs()` |
+| `packages/basic/src/integrations.ts` | Re-export wrapper only (`export { getIntegrationConfigs } from '@santi020k/eslint-config-integrations'`) |
+| `packages/basic/src/frameworks.ts` | Framework lazy registry — `Map<FrameworkName, FrameworkLoader>` |
+| `packages/integrations/src/lazy.ts` | `defineLazyConfig()` utility — wraps peer-dep imports with helpful errors |
+| `packages/basic/src/resolvers.ts` | Framework and preset resolution logic |
+| `packages/core/src/utils/detection.ts` | Auto-detection logic (reads package.json deps + file system signals) |
+| `packages/basic/src/agent-skill-generator.ts` | Generates AI agent standards files from the active config |
+
+## Validation Commands
+
+Always run these from the **repo root** before considering any task done:
+
+```bash
+pnpm run ok           # All-in-one: install + build + test + lint + typecheck
+# Or step by step:
+pnpm run build        # Build all packages via Turborepo
+pnpm run typecheck    # TypeScript check (100 packages including playgrounds)
+pnpm run test         # Vitest integration suite (packages/tests)
+pnpm run lint         # ESLint + CSpell + Knip across monorepo
+pnpm -w run release:check  # Full pre-release gate
+```
+
+## Specialized Skills
+
+For detailed step-by-step procedures:
+
+| Task | Skill |
+| :--- | :--- |
+| Add a new framework package | `.claude/skills/add-framework/SKILL.md` |
+| Add a new optional integration | `.claude/skills/add-integration/SKILL.md` |
+| Add auto-detection for a framework/library | `.claude/skills/detection/SKILL.md` |
+| Write or update tests | `.claude/skills/testing/SKILL.md` |
+| Release & versioning | `.claude/skills/release/SKILL.md` |
+| Add ambient type declarations | `.claude/workflows/add-ambient-decl.md` |
+
+For tasks that involve cross-cutting changes, large context reads, or code generation, use the subagents in `.claude/agents/` — they orchestrate Gemini and Codex as needed.
+
+## Documentation and changelog
+
+### Changelog
+
+Do **not** edit `packages/*/CHANGELOG.md` by hand for routine work. This repo uses [Changesets](https://github.com/changesets/changesets): run `pnpm run changeset`, choose affected packages and semver level, write the summary, and commit the generated file under `.changeset/`. Release automation updates package changelogs when the Version Packages PR merges. See `.claude/skills/release/SKILL.md`.
+
+Meaningful docs-site updates belong in the same release notes when `@santi020k/eslint-config-docs` is included in that changeset (packages share fixed versioning—see `.changeset/config.json`).
+
+### Documentation
+
+If you add a new published framework package or integration, updating the documentation is required in the same task.
+
+- Add or update the dedicated guides under `apps/docs/src/content/docs/` (framework/tooling paths as appropriate)
+- Update `apps/docs/src/content/docs/guide/installation.md` and `apps/docs/src/content/docs/guide/configuration.md` when setup paths change
+- Update `apps/docs/src/content/docs/api/index.md` when package coverage changes
+- Update homepage counts or package lists in `apps/docs/src/content/docs/index.md` when totals change
+- Keep root `README.md` and package-level `README.md` files aligned with the published surface area
+
+## Development Workflow: TDD
+
+This project follows **Test-Driven Development**. Tests are written before implementation. The `contracts.test.ts` file acts as the specification — registering an enum value there makes the test fail until the factory exists, which is the intended Red→Green cycle.
+
+### Red → Green → Refactor for a new integration
+
+**Red** — define the contract first:
+1. Add the enum value to `packages/core/src/types.ts`
+2. Run `pnpm run test` → it must **fail** here — `contracts.test.ts` auto-iterates `Object.values(Library)` (and other enums), so just adding the enum is enough to get Red. No manual test update needed.
+
+**Green** — implement until the test passes:
+3. Create the factory file in `packages/integrations/src/{category}/`
+4. Import it in `packages/integrations/src/compose.ts` and add an `if` block in `getIntegrationConfigs()`
+5. Export from `packages/integrations/src/index.ts`
+6. Run `pnpm run test` → must **pass** now
+
+**Refactor** — add coverage depth:
+7. Add `.toContain('value')` to `types.test.ts`
+8. Add rule-specific assertions in `options.test.ts`
+9. Add detection test in `detection.test.ts` if auto-detectable
+10. Add snapshot test in `snapshots.test.ts`
+11. `pnpm run ok` → still green
+
+**Never skip Red.** If tests pass before you implement the factory, the test isn't covering anything real.
+
+## Critical Conventions
+
+- **ESLint 10 Flat Config only** — no legacy `.eslintrc` support (eslintrc was fully removed in ESLint 10)
+- **DX Above All** — prioritize stability and ease of use over library size
+- **Handled Versioning** — `eslint` and `@eslint/js` are hard dependencies to ensure a vetted baseline
+- **All configs return `TSESLint.FlatConfig.ConfigArray`**
+- **`.js` extensions on all relative imports** (ESM requirement)
+- **`type` imports** for type-only usage
+- **Prettier always last** — applied via `getPrettierConfig()`, never in `getIntegrationConfigs()`
+- **Lint from root only** — do not add lint scripts to individual packages
+- **Ambient `.d.ts` as last resort** — always check `@types/*` or built-in types first
+
+## Virtual Script Files Pattern
+
+Framework files like `.svelte`, `.astro`, `.vue` generate virtual TypeScript script files. These need special ESLint treatment:
+
+```ts
+export default {
+  files: ['**/*.svelte/*.ts', '**/*.svelte/*.tsx'],
+  name: 'eslint-config-svelte/virtual-script-rules',
+  rules: {
+    '@typescript-eslint/no-unused-expressions': 'off',
+    'no-unused-expressions': 'off'
+  }
+}
+```
+
+**Do NOT** add `allowDefaultProject: true` or re-apply `disableTypeChecked` in framework packages — the `typescript` package already handles this correctly.
+
+## Integration Tests — Important Gotcha
+
+When writing integration tests that call `lintText()`, **do not rely on auto-detection** for TypeScript if the test uses a virtual file path. Auto-detection will find the `packages/tests/tsconfig.json` and activate `projectService`, which rejects virtual file paths not registered in a real tsconfig.
+
+Use `typescript: false` when the test doesn't need TS-specific rule checking:
+
+```ts
+const config = eslintConfig({ frameworks: { react: true }, typescript: false })
+```
+
+## Common Pitfalls
+
+1. Framework options accept `true` (bundled config), a config array, a factory (sync or async), or a module default export — anything else throws a `TypeError` (see `resolveFramework` in `packages/basic/src/resolvers.ts`). App configs should prefer booleans like `frameworks.react: true`
+2. Framework exports from `@santi020k/eslint-config-basic` (`react`, `vue`, `next`, …) are **lazy async factories** returning `Promise<FlatConfigArray>` — the framework package is only imported on first call (see `packages/basic/src/frameworks.ts`). The old `*Config` names are deprecated aliases of the same factories, not config arrays.
+3. Plugin loading: use direct plugin object references, not string-based resolution (avoids `FlatCompat` issues)
+4. Type exports: may need explicit type annotations to avoid TS2742 errors
+5. Peer dependencies: use `$` references in pnpm `overrides` for version alignment
+6. The `better-tailwindcss` plugin does NOT include "tailwind" in its config entry names — check for rule prefix `better-tailwindcss/` instead

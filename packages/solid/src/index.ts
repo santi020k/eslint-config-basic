@@ -1,6 +1,5 @@
-import pluginSolid from 'eslint-plugin-solid'
-
 import type { TSESLint } from '@typescript-eslint/utils'
+import pluginSolid from 'eslint-plugin-solid'
 
 /**
  * SolidJS ESLint configuration

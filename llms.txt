@@ -1,6 +1,6 @@
 # @santi020k/eslint-config-basic
 
-> A comprehensive, composable ESLint 9/10+ Flat Config package for JavaScript, TypeScript, React, Next.js, Astro, Expo, Vue, Svelte, Solid, Angular, NestJS, Qwik, and Remix.
+> A comprehensive, composable ESLint 10+ Flat Config package for JavaScript, TypeScript, React, Next.js, Astro, Expo, Vue, Nuxt, Svelte, Solid, Angular, NestJS, Hono, Qwik, Remix, React Router, TanStack Start, Lit, Vite, and Slidev.
 
 
 ## AI Assistant Context
@@ -9,21 +9,22 @@
 **Goal**: Ensure code quality, type safety, and seamless Developer Experience (DX).
 **Conventions**:
 - Strictly Flat Config (no legacy `.eslintrc`).
-- Composable design via direct options (`typescript`, `frameworks`, `optionals`).
-- **Zero-Config Auto-Detection**: Automatically detects frameworks and plugins from `package.json`. Detected frameworks are reported via `detectedFrameworks` but still require explicit imports for the best DX.
-- **Agent Skill Generator (Beta)**: Automatically generates tailored ESLint standards for AI agents (Cursor, Claude, Copilot, etc.) based on your active config. This is a non-breaking, opt-in feature.
+- Composable design via direct options (`typescript`, `frameworks`, and integration enums).
+- **Zero-Config Auto-Detection**: Automatically detects frameworks and plugins from `package.json`. Detected framework configs are enabled by default (reported via `detectedFrameworks`); use `autoFrameworks: false` (or `optionMergeStrategy: 'replace'` with explicit `frameworks`) to opt out, or booleans like `frameworks.react: true` to opt in manually. Explicit options merge with detected/preset values by default.
+- **Agent Skill Generator (Beta)**: Automatically generates tailored ESLint standards for AI agents (Cursor, Claude Code, Copilot, Windsurf, Aider, Gemini, Cline, Roo Code, Kiro, and `AGENTS.md`-based tools) based on your active config. This is a non-breaking, opt-in feature.
 - **Next.js App Router**: Optimized rules for the `app/` directory.
-- **Lazy Loading**: Framework-specific configs are lazy-loaded to prevent peer dep issues.
+- **Bundled Frameworks (v2)**: Framework configs ship behind the main package — application projects install only `@santi020k/eslint-config-basic` and enable frameworks via booleans or auto-detection.
 - **Strict Mode**: `strict: true` promotes all warnings to errors.
 - Monorepo using Turborepo and pnpm Workspaces.
 - Dependency alignment via pnpm `overrides` with `$` references.
+- **Changelog**: Use Changesets (`pnpm run changeset`, commit `.changeset/*.md`); do not edit `packages/*/CHANGELOG.md` manually for releases.
 
 ## Quick Start
 
 ```js
 import { eslintConfig } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig() // Auto-detection enabled by default
+export default await eslintConfig() // Auto-detection enabled by default
 ```
 
 ## Project Architecture
@@ -31,8 +32,9 @@ export default eslintConfig() // Auto-detection enabled by default
 This is a monorepo containing multiple config packages.
 
 - [Full Architecture & Context](./llms-full.txt)
+- [Architecture Notes](./apps/docs/src/content/docs/guide/architecture.md)
 - [Project Overview](./README.md)
-- [CLAUDE.md](./CLAUDE.md) - Claude-specific AI agent guide
+- [CLAUDE.md](./.github/CLAUDE.md) - Claude-specific AI agent guide
 - [.agent/skills/](./.agent/skills/) - Specialized workflows for agents
 
 ### Core Structure
@@ -40,11 +42,12 @@ This is a monorepo containing multiple config packages.
 - `packages/core/` — Base JS config, utilities, and shared types/enums
 - `packages/typescript/` — TypeScript rules
 - `packages/react/`, `packages/next/` — React ecosystem
-- `packages/astro/`, `packages/vue/`, `packages/svelte/`, `packages/solid/` — Frontend frameworks
+- `packages/astro/`, `packages/vue/`, `packages/nuxt/`, `packages/svelte/`, `packages/solid/`, `packages/lit/` — Frontend frameworks and Web Components
 - `packages/angular/`, `packages/nest/`, `packages/hono/` — Enterprise, backend, and edge frameworks
 - `packages/expo/` — React Native / Expo
-- `packages/qwik/`, `packages/remix/` — Modern meta-frameworks
-- `packages/optionals/` — All optional integrations (tools, libraries, testing, formats, extensions)
+- `packages/qwik/`, `packages/remix/`, `packages/react-router/`, `packages/tanstack-start/` — Modern meta-frameworks
+- `packages/vite/`, `packages/slidev/` — Vite tooling and Slidev presentations
+- `packages/integrations/` — All integrations (tools, libraries, testing, formats, extensions)
 - `packages/basic/` — Main entry point composing all packages
 
 ### Supported Frameworks
@@ -55,6 +58,7 @@ This is a monorepo containing multiple config packages.
 | Next.js | `@santi020k/eslint-config-next` |
 | Astro | `@santi020k/eslint-config-astro` |
 | Vue | `@santi020k/eslint-config-vue` |
+| Nuxt | `@santi020k/eslint-config-nuxt` |
 | Svelte | `@santi020k/eslint-config-svelte` |
 | SolidJS | `@santi020k/eslint-config-solid` |
 | Angular | `@santi020k/eslint-config-angular` |
@@ -63,14 +67,19 @@ This is a monorepo containing multiple config packages.
 | Expo | `@santi020k/eslint-config-expo` |
 | Qwik | `@santi020k/eslint-config-qwik` |
 | Remix | `@santi020k/eslint-config-remix` |
+| React Router | `@santi020k/eslint-config-react-router` |
+| TanStack Start | `@santi020k/eslint-config-tanstack-start` |
+| Lit | `@santi020k/eslint-config-lit` |
+| Vite | `@santi020k/eslint-config-vite` |
+| Slidev | `@santi020k/eslint-config-slidev` |
 
-### Supported Optionals
+### Supported Integrations
 
 **Testing**: Vitest, Jest, Playwright, Cypress, TestingLibrary
-**Tools**: Prettier, CSpell, JSDoc, Swagger
-**Libraries**: Tailwind (via `better-tailwindcss`), i18next, Stencil, TanStack Query, TanStack Router, Storybook
-**Formats**: MDX, Markdown, JSONC, YAML, TOML, GraphQL
-**Extensions**: Regexp, Unicorn, SonarJS, Security, Perfectionist
+**Tools**: Prettier, CSpell, JSDoc, Swagger, pnpm, Command, Docker, GitHub Actions, Nx
+**Libraries**: AI SDK, OpenAI Agents SDK, Mastra, MCP, LangChain, LlamaIndex, Tailwind (via `better-tailwindcss`), i18next, Stencil, TanStack Query, TanStack Router, Storybook, TypeORM, Prisma, Drizzle, MikroORM, Sequelize
+**Formats**: MDX, Markdown, JSONC, YAML, TOML, GraphQL, CSS (`@eslint/css`), HTML (`@html-eslint`)
+**Extensions**: Regexp, Unicorn, SonarJS, Security, Perfectionist, Node (`eslint-plugin-n`), Compat, DeMorgan, Depend, Oxlint, Biome, A11y, BestPractices, Boundaries
 
 ## Commands
 
@@ -81,6 +90,8 @@ pnpm run test        # Run integration tests (+ coverage)
 pnpm run inspector   # Open ESLint config visualizer
 npx @santi020k/eslint-config-basic init # Initialize project configuration
 npx @santi020k/eslint-config-basic generate-skill # (Beta) Generate agent standards
+npx @santi020k/eslint-config-basic generate-skill --check # CI: fail when agent standards are stale
+npx @santi020k/eslint-config-basic generate-skill --create # Scaffold root AGENTS.md when missing
 ```
 
 ## Implementation Workflow

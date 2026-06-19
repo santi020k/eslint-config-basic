@@ -1,7 +1,7 @@
-import { rules } from './rules.js'
-
 import nestPlugin from '@darraghor/eslint-plugin-nestjs-typed'
 import type { TSESLint } from '@typescript-eslint/utils'
+
+import { rules } from './rules.js'
 
 /**
  * NestJS ESLint configuration
@@ -14,8 +14,8 @@ export const nestConfig: TSESLint.FlatConfig.ConfigArray = [
     files: ['**/*.ts', '**/*.mts', '**/*.cts', '**/*.tsx']
   })),
   {
-    name: 'eslint-config-nest/custom',
     files: ['**/*.ts', '**/*.mts', '**/*.cts', '**/*.tsx'],
+    name: 'eslint-config-nest/custom',
     rules
   }
 ]

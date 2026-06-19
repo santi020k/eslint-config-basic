@@ -2,25 +2,25 @@
  * Represents a generic response from an API.
  */
 export interface ApiResponse<T> {
-  data: T | null
-  error: string | null
+  data: null | T
+  error: null | string
   status: number
-}
-
-/**
- * A user object with basic profile information.
- */
-export interface User {
-  id: string
-  username: string
-  email: string
-  role: 'admin' | 'user' | 'guest'
 }
 
 /**
  * Utility type to make all properties of a type optional except for specified ones.
  */
 export type PartialExcept<T, K extends keyof T> = Partial<T> & Pick<T, K>
+
+/**
+ * A user object with basic profile information.
+ */
+export interface User {
+  email: string
+  id: string
+  role: 'admin' | 'guest' | 'user'
+  username: string
+}
 
 /**
  * A partial user object where only the ID is required.
@@ -50,10 +50,10 @@ export const fetchData = async <T>(url: string): Promise<ApiResponse<T>> => {
       error: null,
       status: response.status
     }
-  } catch (err) {
+  } catch (error) {
     return {
       data: null,
-      error: err instanceof Error ? err.message : 'Unknown error',
+      error: error instanceof Error ? error.message : 'Unknown error',
       status: 500
     }
   }
@@ -90,11 +90,18 @@ export class UserManager {
   }
 
   /**
+   * Returns a list of all users.
+   */
+  public getAllUsers(): User[] {
+    return [...this.users.values()]
+  }
+
+  /**
    * Retrieves a user by their ID.
    * @param id The ID of the user to retrieve.
    * @returns The user object or undefined if not found.
    */
-  public getUser(id: string): User | undefined {
+  public getUser(id: string): undefined | User {
     return this.users.get(id)
   }
 
@@ -116,21 +123,14 @@ export class UserManager {
 
     this.users.set(update.id, updatedUser)
   }
-
-  /**
-   * Returns a list of all users.
-   */
-  public getAllUsers(): User[] {
-    return Array.from(this.users.values())
-  }
 }
 
 /**
  * Constant defining the default configuration for the user manager.
  */
 export const DEFAULT_CONFIG = {
-  maxUsers: 100,
   allowGuest: true,
+  maxUsers: 100,
   theme: 'system'
 } as const
 
