@@ -13,7 +13,12 @@ on:
       - 'apps/docs/**'
       - 'packages/*/README.md'
       - '.github/workflows/docs.yml'
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Build and test only — skip the Pages deploy (useful for branch verification)'
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -116,6 +121,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    if: ${{ !inputs.dry_run }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
