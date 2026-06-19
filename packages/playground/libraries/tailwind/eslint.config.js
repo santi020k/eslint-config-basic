@@ -1,20 +1,14 @@
 // @ts-check
-import { defineConfig, Library } from '@santi020k/eslint-config-basic'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default [
-  ...(await defineConfig({
-    libraries: [Library.Tailwind],
-    tsconfigRootDir: import.meta.dirname
-  })),
-  {
-    name: 'playground/tailwind/settings',
-    rules: {
-      'better-tailwindcss/enforce-canonical-classes': 'off'
-    },
-    settings: {
-      'better-tailwindcss': {
-        entryPoint: './src/index.css'
-      }
-    }
+export default await defineConfig({
+  tailwind: {
+    entryPoint: './src/index.css'
+  },
+  tsconfigRootDir: import.meta.dirname
+}, {
+  name: 'playground/tailwind/rules',
+  rules: {
+    'better-tailwindcss/enforce-canonical-classes': 'off'
   }
-]
+})

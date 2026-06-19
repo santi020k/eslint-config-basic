@@ -9,6 +9,7 @@ import tsEslint from 'typescript-eslint'
 import { standardRules, typeCheckedRules } from './rules.js'
 
 const typedFiles = [...GLOB_TS, ...GLOB_SLOT]
+const parserSetupFiles = [...typedFiles, ...GLOB_VIRTUAL_TS]
 const typeCheckedFiles = [...GLOB_TS, ...GLOB_SLOT, ...GLOB_VIRTUAL_TS]
 const virtualTypeCheckedFiles = GLOB_VIRTUAL_TS
 
@@ -104,7 +105,7 @@ export const createTypescriptConfig = (
 
   return [
     {
-      files: typedFiles,
+      files: parserSetupFiles,
       languageOptions: {
         parserOptions
       },

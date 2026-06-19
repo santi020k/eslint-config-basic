@@ -304,6 +304,7 @@ export interface TailwindOptions {
   detectComponentClasses?: boolean
   entryPoint?: string
   ignore?: string[]
+  noUnknownClasses?: 'error' | 'off' | 'warn' | false
 }
 
 export type TestingName = `${Testing}`

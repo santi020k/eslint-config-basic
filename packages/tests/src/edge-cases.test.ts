@@ -185,6 +185,7 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
 
     const setup = config.find(entry => entry.name === 'eslint-config-typescript/setup')
 
+    expect(setup?.files).toContain('**/*.astro/*.ts')
     expect(setup?.languageOptions?.parserOptions).toMatchObject({
       project: true,
       tsconfigRootDir: tmpdir()

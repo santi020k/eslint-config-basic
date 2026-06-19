@@ -23,6 +23,7 @@ import {
   type TypeScriptMode,
   type TypeScriptOptions
 } from '@santi020k/eslint-config-core'
+import { tailwind as tailwindIntegration } from '@santi020k/eslint-config-integrations'
 import { createTypescriptConfig } from '@santi020k/eslint-config-typescript'
 
 import type { TSESLint } from '@typescript-eslint/utils'
@@ -479,7 +480,8 @@ const findTailwindEntryPoint = (rootDir: string): string | undefined => TAILWIND
 const buildTailwindResult = (options: TailwindOptions, entryPoint: string | undefined): TailwindOptions => ({
   detectComponentClasses: options.detectComponentClasses ?? true,
   ...(entryPoint ? { entryPoint } : {}),
-  ...(options.ignore?.length ? { ignore: options.ignore } : {})
+  ...(options.ignore?.length ? { ignore: options.ignore } : {}),
+  ...(options.noUnknownClasses === undefined ? {} : { noUnknownClasses: options.noUnknownClasses })
 })
 
 const resolveTailwindOptions = (
@@ -491,28 +493,56 @@ const resolveTailwindOptions = (
   const options = tailwind ?? {}
   const entryPoint = options.entryPoint ?? findTailwindEntryPoint(rootDir)
 
-  if (!entryPoint && options.detectComponentClasses === undefined && !options.ignore?.length) return undefined
+  if (!entryPoint &&
+    options.detectComponentClasses === undefined &&
+    !options.ignore?.length &&
+    options.noUnknownClasses === undefined) return undefined
 
   return buildTailwindResult(options, entryPoint)
 }
 
-const createTailwindSettingsConfig = (
+const createNoUnknownClassesRule = (
+  tailwindOptions: TailwindOptions,
+  unknownClassOptions: Record<string, string | string[]>,
+  hasUnknownClassOptions: boolean
+): TSESLint.FlatConfig.RuleEntry | undefined => {
+  if (!hasUnknownClassOptions && tailwindOptions.noUnknownClasses === undefined) return undefined
+
+  const severity = tailwindOptions.noUnknownClasses ?? 'error'
+
+  if (severity === false || severity === 'off') return 'off'
+
+  return hasUnknownClassOptions ? [severity, unknownClassOptions] : severity
+}
+
+const loadTailwindPlugins = async (): Promise<NonNullable<TSESLint.FlatConfig.Config['plugins']>> => {
+  const tailwindConfigs = await tailwindIntegration()
+  const pluginConfig = tailwindConfigs.find(config => config.plugins?.['better-tailwindcss'])
+
+  return pluginConfig?.plugins ?? {}
+}
+
+const createTailwindSettingsConfig = async (
   tailwindOptions: TailwindOptions
-): TSESLint.FlatConfig.Config => {
+): Promise<TSESLint.FlatConfig.Config> => {
+  const { noUnknownClasses: _noUnknownClasses, ...settingsOptions } = tailwindOptions
+
   const unknownClassOptions = {
     ...(tailwindOptions.entryPoint ? { entryPoint: tailwindOptions.entryPoint } : {}),
     ...(tailwindOptions.ignore?.length ? { ignore: tailwindOptions.ignore } : {})
   }
 
   const hasUnknownClassOptions = Object.keys(unknownClassOptions).length > 0
+  const noUnknownClassesRule = createNoUnknownClassesRule(tailwindOptions, unknownClassOptions, hasUnknownClassOptions)
 
   return {
     name: 'eslint-config-basic/tailwind-settings',
-    ...(hasUnknownClassOptions ?
-      { rules: { 'better-tailwindcss/no-unknown-classes': ['error', unknownClassOptions] } } :
-      {}),
+    plugins: await loadTailwindPlugins(),
+    ...(noUnknownClassesRule === undefined ?
+      {} :
+      { rules: { 'better-tailwindcss/no-unknown-classes': noUnknownClassesRule } }),
     settings: {
-      'better-tailwindcss': tailwindOptions
+      'better-tailwindcss': settingsOptions
     }
   }
 }
@@ -595,7 +625,12 @@ const patchImportGroups = (
 }
 
 const TESTING_CONFIG_NAMES: Partial<Record<Testing, string[]>> = {
-  [Testing.Playwright]: ['integrations/playwright']
+  [Testing.Cypress]: ['integrations/cypress'],
+  [Testing.Jest]: ['integrations/jest'],
+  [Testing.JestDom]: ['eslint-config-integrations/jest-dom'],
+  [Testing.Playwright]: ['integrations/playwright'],
+  [Testing.TestingLibrary]: ['integrations/testing-library'],
+  [Testing.Vitest]: ['integrations/vitest']
 }
 
 const applyTestingFileOverrides = (
@@ -871,7 +906,7 @@ const buildEslintConfigs = async (params: BuildConfigsParams): Promise<FlatConfi
       await getIntegrationConfigs(uniqueLibraries, uniqueTools, uniqueTesting, uniqueFormats, uniqueExtensions),
       testingFiles
     ),
-    ...(tailwindOptions ? [createTailwindSettingsConfig(tailwindOptions)] : []),
+    ...(tailwindOptions ? [await createTailwindSettingsConfig(tailwindOptions)] : []),
     ...(await getPrettierConfig(uniqueTools))
   ]
 }
