@@ -5,10 +5,18 @@ on:
     branches: [main]
     types: [opened, synchronize, reopened, labeled, unlabeled]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   changeset:
     name: Require changeset
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     # Skip for version-packages PRs (changesets are consumed) and skip-changelog label
     if: >-
       ${{
@@ -27,7 +35,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 22.x
           cache: 'pnpm'
 
       - run: pnpm install --frozen-lockfile
