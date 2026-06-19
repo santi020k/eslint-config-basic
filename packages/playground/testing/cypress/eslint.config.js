@@ -1,7 +1,7 @@
 // @ts-check
-import { eslintConfig, Testing } from '@santi020k/eslint-config-basic'
+import { defineConfig, Testing } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
-  tsconfigRootDir: import.meta.dirname,
-  testing: [Testing.Cypress]
+export default await defineConfig({
+  testing: [Testing.Cypress],
+  tsconfigRootDir: import.meta.dirname
 })

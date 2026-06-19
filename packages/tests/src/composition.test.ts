@@ -1,9 +1,9 @@
-import { describe, expect, it } from 'vitest'
-
-import { extractConfigNames, extractRuleNames } from './test-utils.js'
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 
 import {
-  eslintConfig,
+  defineConfig,
   Extension,
   Format,
   type ImportedFramework,
@@ -14,26 +14,30 @@ import {
   Tool
 } from '@santi020k/eslint-config-basic'
 
+import { describe, expect, test } from 'vitest'
+
+import { extractConfigNames, extractRuleNames } from './test-utils.js'
+
 describe('eslintConfig Function', () => {
-  it('should return an array when called with minimal options', () => {
-    const config = eslintConfig({})
+  test('should return an array when called with minimal options', async () => {
+    const config = await defineConfig({})
 
     expect(Array.isArray(config)).toBe(true)
   })
 
-  it('should return config with TypeScript when typescript option is true', () => {
-    const config = eslintConfig({ typescript: true })
+  test('should return config with TypeScript when typescript option is true', async () => {
+    const config = await defineConfig({ typescript: true })
 
     expect(Array.isArray(config)).toBe(true)
 
     expect(config.length).toBeGreaterThan(0)
   })
 
-  it('should return config with React when react framework is specified', () => {
-    const config = eslintConfig({
+  test('should return config with React when react framework is specified', async () => {
+    const config = await defineConfig({
       frameworks: {
-        react: [{ name: 'mock-react', rules: {} }],
-        expo: [{ name: 'mock-expo', rules: {} }]
+        expo: [{ name: 'mock-expo', rules: {} }],
+        react: [{ name: 'mock-react', rules: {} }]
       }
     })
 
@@ -44,11 +48,11 @@ describe('eslintConfig Function', () => {
     expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-react')
   })
 
-  it('should return config with Next when next and react frameworks are specified', () => {
-    const config = eslintConfig({
+  test('should return config with Next when next and react frameworks are specified', async () => {
+    const config = await defineConfig({
       frameworks: {
-        react: [{ name: 'mock-react', rules: {} }],
-        next: [{ name: 'mock-next', rules: {} }]
+        next: [{ name: 'mock-next', rules: {} }],
+        react: [{ name: 'mock-react', rules: {} }]
       }
     })
 
@@ -59,8 +63,21 @@ describe('eslintConfig Function', () => {
     expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-next')
   })
 
-  it('should return config with Nest when nest framework is specified', () => {
-    const config = eslintConfig({
+  test('does not mutate framework options while adding implicit React', async () => {
+    const frameworks = {
+      next: [{ name: 'mock-next', rules: {} }]
+    }
+
+    await defineConfig({ frameworks })
+
+    expect(frameworks).toEqual({
+      next: [{ name: 'mock-next', rules: {} }]
+    })
+    expect('react' in frameworks).toBe(false)
+  })
+
+  test('should return config with Nest when nest framework is specified', async () => {
+    const config = await defineConfig({
       frameworks: { nest: [{ name: 'mock-nest', rules: {} }] }
     })
 
@@ -71,8 +88,8 @@ describe('eslintConfig Function', () => {
     expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-nest')
   })
 
-  it('should return config with Hono when hono framework is specified', () => {
-    const config = eslintConfig({
+  test('should return config with Hono when hono framework is specified', async () => {
+    const config = await defineConfig({
       frameworks: { hono: [{ name: 'mock-hono', rules: {} }] }
     })
 
@@ -83,8 +100,8 @@ describe('eslintConfig Function', () => {
     expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-hono')
   })
 
-  it('should return config with Vue when vue framework is specified', () => {
-    const config = eslintConfig({
+  test('should return config with Vue when vue framework is specified', async () => {
+    const config = await defineConfig({
       frameworks: { vue: [{ name: 'mock-vue', rules: {} }] }
     })
 
@@ -95,15 +112,15 @@ describe('eslintConfig Function', () => {
     expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-vue')
   })
 
-  it('should include gitignore by default', () => {
-    const config = eslintConfig({})
+  test('should include gitignore by default', async () => {
+    const config = await defineConfig({})
     const names = extractConfigNames(config)
 
     expect(names.some(n => n.toLowerCase().includes('gitignore'))).toBe(true)
   })
 
-  it('should exclude gitignore when NoGitignore setting is specified', () => {
-    const config = eslintConfig({
+  test('should exclude gitignore when NoGitignore setting is specified', async () => {
+    const config = await defineConfig({
       settings: [Setting.NoGitignore]
     })
 
@@ -112,10 +129,53 @@ describe('eslintConfig Function', () => {
     expect(names.some(n => n.toLowerCase().includes('gitignore'))).toBe(false)
   })
 
-  it('should handle multiple framework configs', () => {
-    const config = eslintConfig({
-      typescript: true,
-      frameworks: { react: [{ name: 'mock-react', rules: {} }] }
+  test('should prepend a global ignores block when ignores option is non-empty', async () => {
+    const patterns = ['dist/**', 'tmp/**']
+    const config = await defineConfig({ ignores: patterns })
+    const defaultIgnoreEntry = config.find((entry): entry is { ignores?: string[], name: string } => typeof entry === 'object' &&
+      'name' in entry &&
+      entry.name === 'eslint-config-basic/default-ignores')
+    const ignoreEntry = config.find((entry): entry is { ignores?: string[], name: string } => typeof entry === 'object' &&
+      'name' in entry &&
+      entry.name === 'eslint-config-basic/ignores')
+
+    expect(defaultIgnoreEntry?.ignores).toContain('**/dist/**')
+    expect(ignoreEntry?.ignores).toEqual(patterns)
+    expect(extractConfigNames(config)).toContain('eslint-config-basic/default-ignores')
+    expect(extractConfigNames(config)).toContain('eslint-config-basic/ignores')
+
+    if (ignoreEntry === undefined) {
+      throw new Error('expected eslint-config-basic/ignores block')
+    }
+
+    expect(config.indexOf(ignoreEntry)).toBe(1)
+  })
+
+  test('should ignore AI coding-assistant artifact folders by default', async () => {
+    const config = await defineConfig({ detection: false })
+    const defaultIgnoreEntry = config.find((entry): entry is { ignores?: string[], name: string } => typeof entry === 'object' &&
+      'name' in entry &&
+      entry.name === 'eslint-config-basic/default-ignores')
+
+    expect(defaultIgnoreEntry?.ignores).toContain('**/.claude/**')
+    expect(defaultIgnoreEntry?.ignores).toContain('**/.cursor/**')
+    expect(defaultIgnoreEntry?.ignores).toContain('**/.clinerules/**')
+    expect(defaultIgnoreEntry?.ignores).toContain('**/.kiro/**')
+    expect(defaultIgnoreEntry?.ignores).toContain('**/.windsurf/**')
+  })
+
+  test('should exclude default ignores when NoDefaultIgnores setting is specified', async () => {
+    const config = await defineConfig({
+      settings: [Setting.NoDefaultIgnores]
+    })
+
+    expect(extractConfigNames(config)).not.toContain('eslint-config-basic/default-ignores')
+  })
+
+  test('should handle multiple framework configs', async () => {
+    const config = await defineConfig({
+      frameworks: { react: [{ name: 'mock-react', rules: {} }] },
+      typescript: true
     })
 
     expect(Array.isArray(config)).toBe(true)
@@ -125,38 +185,38 @@ describe('eslintConfig Function', () => {
     expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-react')
   })
 
-  it('should handle optionals', () => {
-    const config = eslintConfig({
-      typescript: true,
+  test('should handle integrations', async () => {
+    const config = await defineConfig({
+      extensions: [Extension.Unicorn],
       libraries: [Library.Tailwind],
       testing: [Testing.Vitest],
       tools: [Tool.Prettier],
-      extensions: [Extension.Unicorn]
+      typescript: true
     })
 
     expect(Array.isArray(config)).toBe(true)
   })
 
-  it('should return a valid config when called with no arguments', () => {
-    const config = eslintConfig()
+  test('should return a valid config when called with no arguments', async () => {
+    const config = await defineConfig()
 
     expect(Array.isArray(config)).toBe(true)
 
     expect(config.length).toBeGreaterThan(0)
   })
 
-  it('should handle all framework configs combined', () => {
-    const config = eslintConfig({
-      typescript: true,
+  test('should handle all framework configs combined', async () => {
+    const config = await defineConfig({
       frameworks: {
-        react: [{ name: 'mock-react', rules: {} }],
-        next: [{ name: 'mock-next', rules: {} }],
         astro: [{ name: 'mock-astro', rules: {} }],
         expo: [{ name: 'mock-expo', rules: {} }],
-        nest: [{ name: 'mock-nest', rules: {} }],
         hono: [{ name: 'mock-hono', rules: {} }],
+        nest: [{ name: 'mock-nest', rules: {} }],
+        next: [{ name: 'mock-next', rules: {} }],
+        react: [{ name: 'mock-react', rules: {} }],
         vue: [{ name: 'mock-vue', rules: {} }]
-      }
+      },
+      typescript: true
     })
 
     expect(Array.isArray(config)).toBe(true)
@@ -172,61 +232,61 @@ describe('eslintConfig Function', () => {
     expect(names).toContain('mock-astro')
   })
 
-  it('should handle all optionals combined', () => {
-    const config = eslintConfig({
-      typescript: true,
+  test('should handle all integrations combined', async () => {
+    const config = await defineConfig({
+      extensions: Object.values(Extension),
       libraries: Object.values(Library),
       tools: Object.values(Tool),
-      extensions: Object.values(Extension)
+      typescript: true
     })
 
     expect(Array.isArray(config)).toBe(true)
 
     expect(config.length).toBeGreaterThan(0)
-  })
+  }, 20000)
 
-  it('should handle roadmap options (Jest, Cypress, TestingLibrary, GraphQL)', () => {
-    const config = eslintConfig({
-      testing: [Testing.Jest, Testing.Cypress, Testing.TestingLibrary],
-      formats: [Format.Graphql]
+  test('should handle roadmap options (Jest, Cypress, TestingLibrary, GraphQL)', async () => {
+    const config = await defineConfig({
+      formats: [Format.Graphql],
+      testing: [Testing.Jest, Testing.Cypress, Testing.TestingLibrary]
     })
 
     expect(Array.isArray(config)).toBe(true)
 
     const names = extractConfigNames(config)
 
-    expect(names).toContain('optionals/jest')
+    expect(names).toContain('integrations/jest')
 
-    expect(names).toContain('optionals/cypress')
+    expect(names).toContain('integrations/cypress')
 
-    expect(names).toContain('optionals/testing-library')
+    expect(names).toContain('integrations/testing-library')
 
-    expect(names).toContain('optionals/graphql/schema')
-    expect(names).toContain('optionals/graphql/operations')
+    expect(names).toContain('integrations/graphql/schema')
+    expect(names).toContain('integrations/graphql/operations')
   })
 
-  it('should handle duplicate optional entries without doubling config blocks', () => {
-    const single = eslintConfig({
+  test('should handle duplicate integration entries without doubling config blocks', async () => {
+    const single = await defineConfig({
       testing: [Testing.Vitest]
     })
 
-    const doubled = eslintConfig({
+    const doubled = await defineConfig({
       testing: [Testing.Vitest, Testing.Vitest]
     })
 
     expect(single).toHaveLength(doubled.length)
   })
 
-  it('should handle full kitchen-sink configuration', () => {
-    const config = eslintConfig({
-      typescript: true,
+  test('should handle full kitchen-sink configuration', async () => {
+    const config = await defineConfig({
       frameworks: {
-        react: [{ name: 'mock-react', rules: {} }],
-        next: [{ name: 'mock-next', rules: {} }]
+        next: [{ name: 'mock-next', rules: {} }],
+        react: [{ name: 'mock-react', rules: {} }]
       },
+      settings: [Setting.Gitignore],
       testing: [Testing.Vitest],
       tools: [Tool.Cspell],
-      settings: [Setting.Gitignore]
+      typescript: true
     })
 
     expect(Array.isArray(config)).toBe(true)
@@ -240,10 +300,10 @@ describe('eslintConfig Function', () => {
     expect(names).toContain('mock-next')
   })
 
-  it('should handle nested frameworks objects', () => {
+  test('should handle nested frameworks objects', async () => {
     const mockConfig = [{ name: 'mock-framework/rules', rules: {} }] as Record<string, unknown>[]
 
-    const config = eslintConfig({
+    const config = await defineConfig({
       frameworks: {
         react: mockConfig as ImportedFramework
       }
@@ -254,25 +314,33 @@ describe('eslintConfig Function', () => {
     expect(names).toContain('mock-framework/rules')
   })
 
-  it('should throw when a framework boolean is passed manually', () => {
-    expect(() => eslintConfig({
+  test('should resolve bundled framework configs when a framework boolean is passed manually', async () => {
+    const config = await defineConfig({
       frameworks: {
-        // @ts-expect-error intentionally passing invalid type to test runtime guard
         react: true
       }
-    })).toThrow(/requires an imported config/)
+    })
+
+    expect(extractConfigNames(config)).toContain('eslint-config-react/recommended')
   })
 
-  it('should require the React config when Next.js is enabled', () => {
-    expect(() => eslintConfig({
+  test('should include React automatically when Next.js is enabled', async () => {
+    const config = await defineConfig({
       frameworks: {
         next: [{ name: 'mock-next', rules: {} }]
       }
-    })).toThrow(/frameworks\.react/)
+    })
+
+    const names = extractConfigNames(config)
+
+    expect(names).toContain('eslint-config-react/recommended')
+    expect(names).toContain('mock-next')
   })
 
-  it('should keep the Browser preset free of implicit React rules', () => {
-    const config = eslintConfig({
+  test('should keep the Browser preset free of implicit React rules', async () => {
+    const config = await defineConfig({
+      autoFrameworks: false,
+      frameworks: {},
       preset: Preset.Browser
     })
 
@@ -281,23 +349,205 @@ describe('eslintConfig Function', () => {
     expect(rules).not.toContain('react/jsx-pascal-case')
   })
 
-  it('should keep the All preset focused on bundled configs', () => {
-    const config = eslintConfig({
+  test('should keep the All preset focused on bundled configs', async () => {
+    const config = await defineConfig({
+      autoFrameworks: false,
+      frameworks: {},
       preset: Preset.All
     })
 
     const names = extractConfigNames(config)
 
     expect(names).toContain('eslint-config/prettier')
-    expect(names).toContain('optionals/graphql/schema')
-    expect(names).toContain('optionals/graphql/operations')
+    expect(names).toContain('integrations/graphql/schema')
+    expect(names).toContain('integrations/graphql/operations')
     expect(names).not.toContain('eslint-config-react/recommended')
+  })
+
+  test('should disable detected frameworks when autoFrameworks is false', async () => {
+    const config = await defineConfig({
+      autoFrameworks: false
+    })
+
+    const names = extractConfigNames(config)
+
+    expect(names).not.toContain('eslint-config-react/recommended')
+  })
+
+  test('should replace preset integrations when optionMergeStrategy is replace', async () => {
+    const config = await defineConfig({
+      autoFrameworks: false,
+      optionMergeStrategy: 'replace',
+      preset: Preset.All,
+      tools: [Tool.Prettier]
+    })
+
+    const names = extractConfigNames(config)
+
+    expect(names).toContain('eslint-config/prettier')
+    expect(names).not.toContain('eslint-config-integrations/jsdoc')
+  })
+
+  test('should union explicit values with detected values when optionMergeStrategy is merge', async () => {
+    // Preset.Basic includes Tool.Prettier; explicit Jsdoc must be added, not replace it
+    const config = await defineConfig({
+      autoFrameworks: false,
+      preset: Preset.Basic,
+      tools: [Tool.Jsdoc]
+    })
+
+    const names = extractConfigNames(config)
+
+    expect(names).toContain('eslint-config/prettier')
+    expect(names).toContain('eslint-config-integrations/jsdoc')
+  })
+
+  test('should replace detected values with explicit values when optionMergeStrategy is replace', async () => {
+    const config = await defineConfig({
+      autoFrameworks: false,
+      optionMergeStrategy: 'replace',
+      tools: [Tool.Jsdoc]
+    })
+
+    const names = extractConfigNames(config)
+
+    expect(names).not.toContain('eslint-config/prettier')
+    expect(names).toContain('eslint-config-integrations/jsdoc')
+  })
+
+  test('should disable default extensions when detection is false', async () => {
+    const config = await defineConfig({
+      autoFrameworks: false,
+      detection: false
+    })
+
+    const names = extractConfigNames(config)
+
+    expect(names.some(name => name.includes('unicorn'))).toBe(false)
+    expect(names.some(name => name.includes('perfectionist'))).toBe(false)
+    expect(names.some(name => name.includes('security'))).toBe(false)
+  })
+
+  test('should disable only extensions via granular detection control', async () => {
+    const config = await defineConfig({
+      autoFrameworks: false,
+      detection: { extensions: false },
+      tools: [Tool.Prettier]
+    })
+
+    const names = extractConfigNames(config)
+
+    expect(names.some(name => name.includes('unicorn'))).toBe(false)
+    // Explicit tools are unaffected when only extension detection is disabled
+    expect(names).toContain('eslint-config/prettier')
+  })
+
+  test('should preserve negated globs when scoping project configs', async () => {
+    const config = await defineConfig({
+      detection: false,
+      projects: {
+        'apps/web': {
+          frameworks: {
+            react: [{
+              files: ['**/*.tsx', '!**/legacy/**'],
+              name: 'mock-negated-files',
+              rules: {}
+            }]
+          },
+          typescript: false
+        }
+      }
+    })
+
+    const scoped = config.find(entry => entry.name === 'mock-negated-files')
+
+    expect(scoped?.files).toContain('apps/web/**/*.tsx')
+    expect(scoped?.files).toContain('!apps/web/**/legacy/**')
+  })
+
+  test('should use detectRootDir independently from tsconfigRootDir', async () => {
+    const cwd = mkdtempSync(join(tmpdir(), 'eslint-config-detect-root-'))
+    try {
+      writeFileSync(join(cwd, 'package.json'), JSON.stringify({
+        dependencies: { next: 'latest' },
+        name: 'tmp-detect-root'
+      }))
+
+      const config = await defineConfig({
+        detectRootDir: cwd,
+        tsconfigRootDir: process.cwd()
+      })
+      const names = extractConfigNames(config)
+
+      expect(names.some(name => name.startsWith('eslint-config-next/'))).toBe(true)
+      expect(names).toContain('eslint-config-react/recommended')
+    } finally {
+      rmSync(cwd, { force: true, recursive: true })
+    }
+  })
+
+  test('should throw a clear error for invalid framework shapes', async () => {
+    await expect(defineConfig({
+      frameworks: {
+        react: { invalid: true } as unknown as ImportedFramework
+      }
+    })).rejects.toThrow(/Invalid framework config/)
+  })
+
+  test('should resolve framework modules with default config arrays', async () => {
+    const config = await defineConfig({
+      frameworks: {
+        react: {
+          default: [{ name: 'default-export-react', rules: {} }]
+        }
+      }
+    })
+
+    expect(extractConfigNames(config)).toContain('default-export-react')
+  })
+
+  test('should resolve framework modules with default factory exports', async () => {
+    const config = await defineConfig({
+      frameworks: {
+        hono: {
+          default: (options?: Record<string, unknown>) => {
+            const runtime = options?.runtime
+            let runtimeKey = 'none'
+
+            if (runtime !== undefined && runtime !== null) {
+              if (typeof runtime === 'object') {
+                runtimeKey = 'object'
+              } else if (
+                typeof runtime === 'string' ||
+                typeof runtime === 'number' ||
+                typeof runtime === 'boolean' ||
+                typeof runtime === 'bigint' ||
+                typeof runtime === 'symbol'
+              ) {
+                runtimeKey = String(runtime)
+              } else {
+                runtimeKey = 'unknown'
+              }
+            }
+
+            return [
+              {
+                name: `default-factory-hono-${runtimeKey}`,
+                rules: {}
+              }
+            ]
+          }
+        }
+      }
+    })
+
+    expect(extractConfigNames(config).some(name => name.startsWith('default-factory-hono-'))).toBe(true)
   })
 })
 
 describe('Framework Composition — remaining frameworks', () => {
-  it('should return config with Astro when astro framework is specified', () => {
-    const config = eslintConfig({
+  test('should return config with Astro when astro framework is specified', async () => {
+    const config = await defineConfig({
       frameworks: { astro: [{ name: 'mock-astro', rules: {} }] }
     })
 
@@ -306,12 +556,12 @@ describe('Framework Composition — remaining frameworks', () => {
     expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-astro')
   })
 
-  it('should return config with Expo when expo framework is specified', () => {
+  test('should return config with Expo when expo framework is specified', async () => {
     // Expo requires react — pass a mock react config alongside
-    const config = eslintConfig({
+    const config = await defineConfig({
       frameworks: {
-        react: [{ name: 'mock-react', rules: {} }],
-        expo: [{ name: 'mock-expo', rules: {} }]
+        expo: [{ name: 'mock-expo', rules: {} }],
+        react: [{ name: 'mock-react', rules: {} }]
       }
     })
 
@@ -320,8 +570,8 @@ describe('Framework Composition — remaining frameworks', () => {
     expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-expo')
   })
 
-  it('should return config with Svelte when svelte framework is specified', () => {
-    const config = eslintConfig({
+  test('should return config with Svelte when svelte framework is specified', async () => {
+    const config = await defineConfig({
       frameworks: { svelte: [{ name: 'mock-svelte', rules: {} }] }
     })
 
@@ -330,8 +580,8 @@ describe('Framework Composition — remaining frameworks', () => {
     expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-svelte')
   })
 
-  it('should return config with Solid when solid framework is specified', () => {
-    const config = eslintConfig({
+  test('should return config with Solid when solid framework is specified', async () => {
+    const config = await defineConfig({
       frameworks: { solid: [{ name: 'mock-solid', rules: {} }] }
     })
 
@@ -340,8 +590,8 @@ describe('Framework Composition — remaining frameworks', () => {
     expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-solid')
   })
 
-  it('should return config with Angular when angular framework is specified', () => {
-    const config = eslintConfig({
+  test('should return config with Angular when angular framework is specified', async () => {
+    const config = await defineConfig({
       frameworks: { angular: [{ name: 'mock-angular', rules: {} }] }
     })
 
@@ -350,8 +600,8 @@ describe('Framework Composition — remaining frameworks', () => {
     expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-angular')
   })
 
-  it('should return config with Qwik when qwik framework is specified', () => {
-    const config = eslintConfig({
+  test('should return config with Qwik when qwik framework is specified', async () => {
+    const config = await defineConfig({
       frameworks: { qwik: [{ name: 'mock-qwik', rules: {} }] }
     })
 
@@ -360,9 +610,9 @@ describe('Framework Composition — remaining frameworks', () => {
     expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-qwik')
   })
 
-  it('should return config with Remix when remix framework is specified', () => {
-    const config = eslintConfig({
-      frameworks: { remix: [{ name: 'mock-remix', rules: {} }] }
+  test('should return config with React Router when react-router framework is specified', async () => {
+    const config = await defineConfig({
+      frameworks: { 'react-router': [{ name: 'mock-remix', rules: {} }] }
     })
 
     expect(Array.isArray(config)).toBe(true)
@@ -370,23 +620,56 @@ describe('Framework Composition — remaining frameworks', () => {
     expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-remix')
   })
 
-  it('should handle all twelve frameworks combined', () => {
-    const config = eslintConfig({
-      typescript: true,
+  test('should return config with Lit when lit framework is specified', async () => {
+    const config = await defineConfig({
+      frameworks: { lit: [{ name: 'mock-lit', rules: {} }] }
+    })
+
+    expect(Array.isArray(config)).toBe(true)
+
+    expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-lit')
+  })
+
+  test('should return config with Nuxt when nuxt framework is specified', async () => {
+    const config = await defineConfig({
+      frameworks: { nuxt: [{ name: 'mock-nuxt', rules: {} }] }
+    })
+
+    expect(Array.isArray(config)).toBe(true)
+
+    expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-nuxt')
+  })
+
+  test('should return config with TanStack Start when tanstack-start framework is specified', async () => {
+    const config = await defineConfig({
+      frameworks: { 'tanstack-start': [{ name: 'mock-tanstack-start', rules: {} }] }
+    })
+
+    expect(Array.isArray(config)).toBe(true)
+
+    expect(extractConfigNames(config as Record<string, unknown>[])).toContain('mock-tanstack-start')
+  })
+
+  test('should handle all bundled frameworks combined', async () => {
+    const config = await defineConfig({
       frameworks: {
-        react: [{ name: 'mock-react', rules: {} }],
-        next: [{ name: 'mock-next', rules: {} }],
+        angular: [{ name: 'mock-angular', rules: {} }],
         astro: [{ name: 'mock-astro', rules: {} }],
         expo: [{ name: 'mock-expo', rules: {} }],
-        nest: [{ name: 'mock-nest', rules: {} }],
         hono: [{ name: 'mock-hono', rules: {} }],
-        vue: [{ name: 'mock-vue', rules: {} }],
-        svelte: [{ name: 'mock-svelte', rules: {} }],
-        solid: [{ name: 'mock-solid', rules: {} }],
-        angular: [{ name: 'mock-angular', rules: {} }],
+        lit: [{ name: 'mock-lit', rules: {} }],
+        nest: [{ name: 'mock-nest', rules: {} }],
+        next: [{ name: 'mock-next', rules: {} }],
+        nuxt: [{ name: 'mock-nuxt', rules: {} }],
         qwik: [{ name: 'mock-qwik', rules: {} }],
-        remix: [{ name: 'mock-remix', rules: {} }]
-      }
+        react: [{ name: 'mock-react', rules: {} }],
+        'react-router': [{ name: 'mock-remix', rules: {} }],
+        solid: [{ name: 'mock-solid', rules: {} }],
+        svelte: [{ name: 'mock-svelte', rules: {} }],
+        'tanstack-start': [{ name: 'mock-tanstack-start', rules: {} }],
+        vue: [{ name: 'mock-vue', rules: {} }]
+      },
+      typescript: true
     })
 
     expect(Array.isArray(config)).toBe(true)
@@ -399,15 +682,73 @@ describe('Framework Composition — remaining frameworks', () => {
     expect(names).toContain('mock-angular')
     expect(names).toContain('mock-qwik')
     expect(names).toContain('mock-remix')
+    expect(names).toContain('mock-lit')
+    expect(names).toContain('mock-nuxt')
+    expect(names).toContain('mock-tanstack-start')
   })
 
-  it('should handle all formats combined', () => {
-    const config = eslintConfig({
+  test('should handle all formats combined', async () => {
+    const config = await defineConfig({
       formats: Object.values(Format)
     })
 
     expect(Array.isArray(config)).toBe(true)
 
     expect(config.length).toBeGreaterThan(0)
+  })
+})
+
+describe('Monorepo project scoping', () => {
+  test('ignore-only configs inside a project are scoped to the project path', async () => {
+    const config = await defineConfig({
+      detection: false,
+      projects: {
+        'apps/web': {
+          frameworks: {
+            react: [{ ignores: ['dist/**', 'tmp/**'], name: 'mock-ignore-only' }]
+          },
+          typescript: false
+        }
+      }
+    })
+
+    const entry = config.find((e: any) => e?.name === 'mock-ignore-only')
+    // Ignores must be prefixed with the project path — not global
+    expect(entry?.ignores).toEqual(['apps/web/dist/**', 'apps/web/tmp/**'])
+  })
+
+  test('negated ignores inside a project are also scoped correctly', async () => {
+    const config = await defineConfig({
+      detection: false,
+      projects: {
+        'packages/lib': {
+          frameworks: {
+            react: [{ ignores: ['!src/**'], name: 'mock-negated-ignore' }]
+          },
+          typescript: false
+        }
+      }
+    })
+
+    const entry = config.find((e: any) => e?.name === 'mock-negated-ignore')
+    expect(entry?.ignores).toEqual(['!packages/lib/src/**'])
+  })
+
+  test('file patterns in project configs are prefixed with the project path', async () => {
+    const config = await defineConfig({
+      detection: false,
+      projects: {
+        'apps/web': {
+          frameworks: {
+            react: [{ files: ['**/*.tsx'], name: 'mock-files', rules: {} }]
+          },
+          typescript: false
+        }
+      }
+    })
+
+    const entry = config.find((e: any) => e?.name === 'mock-files')
+    expect(entry?.files).toContain('apps/web/**/*.tsx')
+    expect(entry?.files).not.toContain('**/*.tsx')
   })
 })

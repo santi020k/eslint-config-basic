@@ -1,7 +1,7 @@
 // @ts-check
-import { eslintConfig, Library } from '@santi020k/eslint-config-basic'
+import { defineConfig, Library } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
-  tsconfigRootDir: import.meta.dirname,
-  libraries: [Library.I18next]
+export default await defineConfig({
+  libraries: [Library.I18next],
+  tsconfigRootDir: import.meta.dirname
 })

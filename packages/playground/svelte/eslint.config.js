@@ -1,12 +1,11 @@
 // @ts-check
-import { eslintConfig } from '@santi020k/eslint-config-basic'
-import svelte from '@santi020k/eslint-config-svelte'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
-  tsconfigRootDir: import.meta.dirname,
-  typescript: true,
+export default await defineConfig({
   frameworks: {
-    svelte
-  }
+    svelte: true
+  },
+  tsconfigRootDir: import.meta.dirname,
+  typescript: true
 
 })

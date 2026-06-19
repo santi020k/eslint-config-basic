@@ -1,6 +1,0 @@
-export { graphql } from './graphql.js'
-export { jsonc } from './jsonc.js'
-export { markdown } from './markdown.js'
-export { mdx } from './mdx.js'
-export { toml } from './toml.js'
-export { yaml } from './yaml.js'

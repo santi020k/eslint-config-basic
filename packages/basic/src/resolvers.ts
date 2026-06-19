@@ -1,4 +1,5 @@
 import {
+  type DetectedFrameworkName,
   type EslintConfigOptions,
   Extension,
   type FlatConfigArray,
@@ -11,24 +12,25 @@ import {
   Tool
 } from '@santi020k/eslint-config-core'
 
+import { type FrameworkOptions, getBundledFrameworkConfig } from './frameworks.js'
+
 /**
  * Resolves an imported framework (either array, object with default, or factory function) into a config array.
+ * Bundled configs (`true`) and async factories are loaded lazily, so framework
+ * packages are only imported when actually enabled.
  */
-export const resolveFramework = (
-  frameworkName: string,
+export const resolveFramework = async (
+  frameworkName: DetectedFrameworkName,
   framework?: ImportedFramework,
-  options?: Record<string, unknown>
-): FlatConfigArray => {
+  options?: FrameworkOptions
+): Promise<FlatConfigArray> => {
   if (!framework) return []
 
-  if ((framework as unknown) === true) {
-    throw new TypeError(
-      `Framework "${frameworkName}" requires an imported config. ` +
-      `Install @santi020k/eslint-config-${frameworkName} and pass it via frameworks.${frameworkName}.`
-    )
+  if (framework === true) {
+    return getBundledFrameworkConfig(frameworkName, options)
   }
 
-  // Handle factory functions directly
+  // Handle factory functions directly (sync or async)
   if (typeof framework === 'function') {
     return (framework)(options)
   }
@@ -39,11 +41,16 @@ export const resolveFramework = (
       return (framework.default)(options)
     }
 
-    return framework.default
+    if (Array.isArray(framework.default)) return framework.default
   }
 
   // Handle config arrays directly
-  return Array.isArray(framework) ? framework : []
+  if (Array.isArray(framework)) return framework
+
+  throw new TypeError(
+    `[ESLint Basic] Invalid framework config for "${frameworkName}". ` +
+    'Use true to enable the bundled config, or pass a config array/factory/default export.'
+  )
 }
 
 /**
@@ -51,38 +58,77 @@ export const resolveFramework = (
  */
 export const resolvePreset = (preset: Preset): Partial<EslintConfigOptions> => {
   switch (preset) {
-    case Preset.Basic:
-      return { runtime: Runtime.Universal }
-
-    case Preset.Node:
+    case Preset.All:
       return {
-        typescript: true,
-        runtime: Runtime.Node
+        extensions: Object.values(Extension),
+        formats: Object.values(Format),
+        libraries: Object.values(Library),
+        runtime: Runtime.Universal,
+        testing: Object.values(Testing),
+        tools: Object.values(Tool),
+        typescript: true
+      }
+
+    case Preset.App:
+      return {
+        runtime: Runtime.Browser,
+        testing: [Testing.Vitest],
+        tools: [Tool.Prettier],
+        typescript: true
+      }
+
+    case Preset.Basic:
+      return {
+        extensions: [Extension.Unicorn, Extension.Perfectionist, Extension.Security],
+        formats: [Format.Mdx, Format.Markdown, Format.Jsonc, Format.Yaml, Format.Toml],
+        runtime: Runtime.Universal,
+        tools: [Tool.Prettier]
       }
 
     case Preset.Browser:
       return {
-        typescript: true,
-        runtime: Runtime.Browser
+        runtime: Runtime.Browser,
+        typescript: true
+      }
+
+    case Preset.CI:
+      return {
+        extensions: [Extension.BestPractices],
+        runtime: Runtime.Universal,
+        strict: 'ci',
+        tools: [Tool.Prettier],
+        typescript: true
+      }
+
+    case Preset.Library:
+      return {
+        extensions: [Extension.BestPractices],
+        runtime: Runtime.Node,
+        tools: [Tool.Prettier],
+        typescript: true
+      }
+
+    case Preset.Monorepo:
+      return {
+        extensions: [Extension.BestPractices],
+        runtime: Runtime.Universal,
+        tools: [Tool.Prettier],
+        typescript: true
+      }
+
+    case Preset.Node:
+      return {
+        runtime: Runtime.Node,
+        typescript: true
       }
 
     case Preset.Worker:
       return {
-        typescript: true,
-        runtime: Runtime.Worker
+        runtime: Runtime.Worker,
+        typescript: true
       }
 
-    case Preset.All:
-      return {
-        typescript: true,
-        libraries: Object.values(Library),
-        tools: Object.values(Tool),
-        testing: Object.values(Testing),
-        formats: Object.values(Format),
-        extensions: Object.values(Extension),
-        runtime: Runtime.Universal
-      }
-
+    // v8 ignore next 2 -- TypeScript exhausts all Preset values; default is unreachable
     default:
       return {}
   }

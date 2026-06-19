@@ -1,7 +1,9 @@
-import { rules } from './rules.js'
+import { GLOB_JS_TS } from '@santi020k/eslint-config-core'
 
 import pluginNext from '@next/eslint-plugin-next'
 import type { TSESLint } from '@typescript-eslint/utils'
+
+import { rules } from './rules.js'
 
 /**
  * Next.js ESLint configuration
@@ -9,6 +11,7 @@ import type { TSESLint } from '@typescript-eslint/utils'
  */
 export const nextConfig: TSESLint.FlatConfig.ConfigArray = [
   {
+    files: GLOB_JS_TS,
     name: 'eslint-config-next/plugin',
     plugins: {
       '@next/next': pluginNext
@@ -19,12 +22,13 @@ export const nextConfig: TSESLint.FlatConfig.ConfigArray = [
     }
   },
   {
+    files: GLOB_JS_TS,
     name: 'eslint-config-next/custom',
     rules
   },
   {
-    name: 'eslint-config-next/ignores',
-    ignores: ['.next/*']
+    ignores: ['.next/*'],
+    name: 'eslint-config-next/ignores'
   }
 ]
 

@@ -31,17 +31,29 @@ Link to the issue this PR resolves, e.g. "Resolves #123"
 <!-- Check all that apply -->
 
 - [ ] `basic` (@santi020k/eslint-config-basic)
+- [ ] `lite` (@santi020k/eslint-config-lite)
 - [ ] `core` (@santi020k/eslint-config-core)
 - [ ] `typescript` (@santi020k/eslint-config-typescript)
+- [ ] `integrations` (@santi020k/eslint-config-integrations)
 - [ ] `react` (@santi020k/eslint-config-react)
 - [ ] `next` (@santi020k/eslint-config-next)
+- [ ] `nuxt` (@santi020k/eslint-config-nuxt)
 - [ ] `astro` (@santi020k/eslint-config-astro)
-- [ ] `expo` (@santi020k/eslint-config-expo)
-- [ ] `nest` (@santi020k/eslint-config-nest)
 - [ ] `vue` (@santi020k/eslint-config-vue)
+- [ ] `svelte` (@santi020k/eslint-config-svelte)
+- [ ] `solid` (@santi020k/eslint-config-solid)
+- [ ] `angular` (@santi020k/eslint-config-angular)
+- [ ] `nest` (@santi020k/eslint-config-nest)
 - [ ] `hono` (@santi020k/eslint-config-hono)
-- [ ] `optionals` (@santi020k/eslint-config-optionals)
-- [ ] `tests` (internal tests)
+- [ ] `expo` (@santi020k/eslint-config-expo)
+- [ ] `preact` (@santi020k/eslint-config-preact)
+- [ ] `qwik` (@santi020k/eslint-config-qwik)
+- [ ] `react-router` (@santi020k/eslint-config-react-router)
+- [ ] `tanstack-start` (@santi020k/eslint-config-tanstack-start)
+- [ ] `lit` (@santi020k/eslint-config-lit)
+- [ ] `vite` (@santi020k/eslint-config-vite)
+- [ ] `slidev` (@santi020k/eslint-config-slidev)
+- [ ] `tests` (internal tests only)
 
 ## Changeset
 
@@ -51,18 +63,18 @@ Run `npx changeset` to create one — it will ask which packages are affected an
 The changeset bot will also comment on this PR if a changeset is missing.
 -->
 
-- [ ] I have added a changeset (`npx changeset`) or this PR does not require one (e.g. docs, CI, tests only)
+- [ ] I have added a changeset (`pnpm run changeset`) or this PR does not require one (e.g. docs, CI, tests only)
 
 ## Checklist
 
 - [ ] I have read the [CONTRIBUTING](../CONTRIBUTING.md) guide
 - [ ] My code follows the style guidelines of this project
 - [ ] I have performed a self-review of my own code
-- [ ] I have commented my code, particularly in hard-to-understand areas
+- [ ] I followed the TDD workflow — tests were written before or alongside implementation
 - [ ] I have made corresponding changes to the documentation
-- [ ] I have added tests that prove my fix is effective or that my feature works
-- [ ] New and existing unit tests pass locally with my changes (`npm test`)
-- [ ] I have run the build script and it passes (`npm run build`)
+- [ ] If docs were changed, I followed `apps/docs/DOCS_GOVERNANCE.md` (current docs vs `v1` policy)
+- [ ] New and existing tests pass locally (`pnpm run test`)
+- [ ] Full validation passes (`pnpm run ok`)
 
 ## Screenshots (if applicable)
 

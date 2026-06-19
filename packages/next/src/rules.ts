@@ -1,7 +1,9 @@
 import { groups } from '@santi020k/eslint-config-core'
+
 import type { TSESLint } from '@typescript-eslint/utils'
 
 export const rules: TSESLint.Linter.RulesRecord = {
+  '@next/next/no-html-link-for-pages': 'off',
   'simple-import-sort/imports': [
     'warn',
     {

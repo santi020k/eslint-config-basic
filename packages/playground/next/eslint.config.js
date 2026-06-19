@@ -1,16 +1,17 @@
 // @ts-check
 
-import { eslintConfig, NextMode } from '@santi020k/eslint-config-basic'
-import next from '@santi020k/eslint-config-next'
-import react from '@santi020k/eslint-config-react'
+import { defineConfig, NextMode } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
-  tsconfigRootDir: import.meta.dirname,
-  typescript: true,
-  nextMode: NextMode.AppRouter,
+export default await defineConfig({
+  detection: { libraries: false },
   frameworks: {
-    next,
-    react
-  }
+    next: true
+  },
+  // Root package.json lists tailwindcss for docs/tooling; when ESLint runs from the monorepo
+  // root it still uses this config for these files — do not pull Tailwind ESLint in here.
+  libraries: [],
+  nextMode: NextMode.AppRouter,
+  tsconfigRootDir: import.meta.dirname,
+  typescript: true
 
 })

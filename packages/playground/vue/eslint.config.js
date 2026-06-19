@@ -1,12 +1,13 @@
 // @ts-check
-import { eslintConfig } from '@santi020k/eslint-config-basic'
-import vue from '@santi020k/eslint-config-vue'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
-  tsconfigRootDir: import.meta.dirname,
-  typescript: true,
+export default await defineConfig({
+  detection: { libraries: false },
   frameworks: {
-    vue
-  }
+    vue: true
+  },
+  libraries: [],
+  tsconfigRootDir: import.meta.dirname,
+  typescript: true
 
 })

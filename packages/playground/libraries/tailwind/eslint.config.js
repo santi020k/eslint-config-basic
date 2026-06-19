@@ -1,11 +1,11 @@
 // @ts-check
-import { eslintConfig, Library } from '@santi020k/eslint-config-basic'
+import { defineConfig, Library } from '@santi020k/eslint-config-basic'
 
 export default [
-  ...eslintConfig({
-    tsconfigRootDir: import.meta.dirname,
-    libraries: [Library.Tailwind]
-  }),
+  ...(await defineConfig({
+    libraries: [Library.Tailwind],
+    tsconfigRootDir: import.meta.dirname
+  })),
   {
     name: 'playground/tailwind/settings',
     rules: {

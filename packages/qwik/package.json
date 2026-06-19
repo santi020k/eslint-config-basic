@@ -1,11 +1,15 @@
 {
   "name": "@santi020k/eslint-config-qwik",
   "version": "1.6.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "Qwik ESLint configuration",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -20,28 +24,25 @@
     "dev": "tsup --watch",
     "clean": "rm -rf dist",
     "check:exports": "publint",
-    "typecheck": "tsc --noEmit"
-  },
-  "peerDependencies": {
-    "eslint": "^9.0.0 || ^10.0.0"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --no-warn-ignored --pass-on-no-patterns",
+    "lint:fix": "eslint . --fix --no-warn-ignored --pass-on-no-patterns"
   },
   "dependencies": {
-    "eslint-plugin-qwik": "^1.11.0"
+    "eslint-plugin-qwik": "catalog:",
+    "@typescript-eslint/utils": "catalog:"
   },
   "devDependencies": {
-    "@typescript-eslint/utils": "^8.59.0",
-    "publint": "^0.3.18",
-    "tsup": "^8.5.1",
-    "typescript": "^5.9.3"
+    "publint": "catalog:",
+    "tsup": "catalog:",
+    "typescript": "catalog:"
   },
-  "publishConfig": {
-    "access": "public"
+  "peerDependencies": {
+    "eslint": "^10.0.0"
   },
   "engines": {
     "node": ">=22.18.0"
   },
-  "license": "MIT",
-  "author": "santi020k",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/santi020k/eslint-config-basic.git",
@@ -50,5 +51,7 @@
   "homepage": "https://eslint.santi020k.com/frameworks/qwik.html",
   "bugs": {
     "url": "https://github.com/santi020k/eslint-config-basic/issues"
-  }
+  },
+  "author": "santi020k",
+  "license": "MIT"
 }

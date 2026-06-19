@@ -1,8 +1,8 @@
 // @ts-check
-import { eslintConfig, Library } from '@santi020k/eslint-config-basic'
+import { defineConfig, Library } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
+export default await defineConfig({
+  libraries: [Library.Stencil],
   tsconfigRootDir: import.meta.dirname,
-  typescript: true,
-  libraries: [Library.Stencil]
+  typescript: true
 })

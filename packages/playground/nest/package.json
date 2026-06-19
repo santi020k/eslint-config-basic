@@ -1,6 +1,9 @@
 {
   "name": "@playground/nest",
   "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "scripts": {
     "lint": "eslint .",
@@ -9,22 +12,20 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@nestjs/common": "^11.1.19",
-    "@nestjs/swagger": "^11.3.2",
+    "@nestjs/common": "^11.1.27",
+    "@nestjs/swagger": "^11.4.4",
     "@santi020k/eslint-config-basic": "workspace:^",
-    "eslint": "^10.2.1"
+    "eslint": "^10.5.0",
+    "rxjs": "^7.8.2"
   },
-  "author": "santi020k",
-  "license": "MIT",
   "engines": {
     "node": ">=22.18.0"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/santi020k/eslint-config-basic.git",
     "directory": "packages/playground/nest"
-  }
+  },
+  "author": "santi020k",
+  "license": "MIT"
 }

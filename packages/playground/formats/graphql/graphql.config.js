@@ -1,4 +1,4 @@
 export default {
-  schema: 'src/schema.graphql',
-  documents: 'src/operations.graphql'
+  documents: 'src/operations.graphql',
+  schema: 'src/schema.graphql'
 }

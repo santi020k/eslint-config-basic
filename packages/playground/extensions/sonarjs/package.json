@@ -1,6 +1,9 @@
 {
   "name": "@playground/sonarjs",
   "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "scripts": {
     "lint": "eslint .",
@@ -10,19 +13,16 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
-    "eslint": "^10.2.1"
+    "eslint": "^10.5.0"
   },
-  "author": "santi020k",
-  "license": "MIT",
   "engines": {
     "node": ">=22.18.0"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/santi020k/eslint-config-basic.git",
     "directory": "packages/playground/extensions/sonarjs"
-  }
+  },
+  "author": "santi020k",
+  "license": "MIT"
 }

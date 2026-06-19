@@ -1,12 +1,11 @@
 // @ts-check
-import { eslintConfig } from '@santi020k/eslint-config-basic'
-import nest from '@santi020k/eslint-config-nest'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
-  tsconfigRootDir: import.meta.dirname,
-  typescript: true,
+export default await defineConfig({
   frameworks: {
-    nest
-  }
+    nest: true
+  },
+  tsconfigRootDir: import.meta.dirname,
+  typescript: true
 
 })

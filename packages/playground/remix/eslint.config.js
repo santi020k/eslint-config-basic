@@ -1,13 +1,10 @@
 // @ts-check
-import { eslintConfig } from '@santi020k/eslint-config-basic'
-import react from '@santi020k/eslint-config-react'
-import remix from '@santi020k/eslint-config-remix'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
-  typescript: true,
-  tsconfigRootDir: import.meta.dirname,
+export default await defineConfig({
   frameworks: {
-    react,
-    remix
-  }
+    remix: true
+  },
+  tsconfigRootDir: import.meta.dirname,
+  typescript: true
 })

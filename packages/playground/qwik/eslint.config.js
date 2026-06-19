@@ -1,11 +1,10 @@
 // @ts-check
-import { eslintConfig } from '@santi020k/eslint-config-basic'
-import qwik from '@santi020k/eslint-config-qwik'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
-  typescript: true,
-  tsconfigRootDir: import.meta.dirname,
+export default await defineConfig({
   frameworks: {
-    qwik
-  }
+    qwik: true
+  },
+  tsconfigRootDir: import.meta.dirname,
+  typescript: true
 })

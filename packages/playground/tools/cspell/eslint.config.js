@@ -1,7 +1,7 @@
 // @ts-check
-import { eslintConfig, Tool } from '@santi020k/eslint-config-basic'
+import { defineConfig, Tool } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
-  tsconfigRootDir: import.meta.dirname,
-  tools: [Tool.Cspell]
+export default await defineConfig({
+  tools: [Tool.Cspell],
+  tsconfigRootDir: import.meta.dirname
 })

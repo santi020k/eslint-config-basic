@@ -18,6 +18,7 @@
       "matchPackageNames": [
         "eslint",
         "@eslint/*",
+        "@eslint-react/*",
         "eslint-*",
         "@typescript-eslint/*",
         "typescript-eslint",
@@ -57,8 +58,8 @@
       "groupSlug": "git-hooks"
     },
     {
-      "description": "VitePress and docs tooling",
-      "matchPackageNames": ["vitepress", "typedoc", "typedoc-*"],
+      "description": "Docs tooling (TypeDoc API reference generation)",
+      "matchPackageNames": ["typedoc", "typedoc-*"],
       "groupName": "docs tooling",
       "groupSlug": "docs"
     },
@@ -80,8 +81,7 @@
     }
   ],
   "ignorePaths": [
-    "packages/playground/**",
-    "packages/docs/**"
+    "packages/playground/**"
   ],
   "pnpm": {
     "enabled": true

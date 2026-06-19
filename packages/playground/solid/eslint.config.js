@@ -1,12 +1,11 @@
 // @ts-check
-import { eslintConfig } from '@santi020k/eslint-config-basic'
-import solid from '@santi020k/eslint-config-solid'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default eslintConfig({
-  tsconfigRootDir: import.meta.dirname,
-  typescript: true,
+export default await defineConfig({
   frameworks: {
-    solid
-  }
+    solid: true
+  },
+  tsconfigRootDir: import.meta.dirname,
+  typescript: true
 
 })

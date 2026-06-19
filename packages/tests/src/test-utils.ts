@@ -1,6 +1,6 @@
-import { ESLint } from 'eslint'
-import type { Linter } from 'eslint'
 import type { TSESLint } from '@typescript-eslint/utils'
+import type { Linter } from 'eslint'
+import { ESLint } from 'eslint'
 
 /**
  * Helper: collect all rule names from a composed config
@@ -42,7 +42,7 @@ export const getEffectiveRuleValue = (
     const rules = entry.rules as Record<string, unknown> | undefined
 
     if (rules && ruleName in rules) {
-      value = rules[ruleName]
+      value = Reflect.get(rules, ruleName)
     }
   }
 
@@ -58,8 +58,8 @@ export const lintText = async (
   fileName = 'test.ts'
 ): Promise<ESLint.LintResult[]> => {
   const eslint = new ESLint({
-    overrideConfigFile: true,
     overrideConfig: config as Linter.Config[],
+    overrideConfigFile: true
   })
 
   return await eslint.lintText(code, { filePath: fileName })
@@ -73,8 +73,8 @@ export const lintFile = async (
   config: readonly TSESLint.FlatConfig.Config[]
 ): Promise<ESLint.LintResult[]> => {
   const eslint = new ESLint({
-    overrideConfigFile: true,
     overrideConfig: config as Linter.Config[],
+    overrideConfigFile: true
   })
 
   return await eslint.lintFiles([filePath])
