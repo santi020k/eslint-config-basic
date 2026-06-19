@@ -4,6 +4,7 @@ import { join } from 'node:path'
 import {
   coreConfig,
   createCoreConfig,
+  type DetectedFrameworkName,
   type DetectionOptions,
   detectProjectOptions,
   type EslintConfigOptions,
@@ -29,7 +30,7 @@ import { createTypescriptConfig } from '@santi020k/eslint-config-typescript'
 import type { TSESLint } from '@typescript-eslint/utils'
 
 import { applyStrictMode } from './compose.js'
-import { createDetectedFrameworkFlags } from './frameworks.js'
+import { createDetectedFrameworkFlags, type FrameworkOptions } from './frameworks.js'
 import { getIntegrationConfigs, getPrettierConfig } from './integrations.js'
 import { resolveFramework, resolvePreset } from './resolvers.js'
 
@@ -772,6 +773,29 @@ const buildIgnoresConfig = (
   } as TSESLint.FlatConfig.Config] : []
 })
 
+const FRAMEWORK_EXTRA_OPTS: Partial<Record<string, (ctx: { hasReact: boolean, hasSolid: boolean, hasSvelte: boolean, hasVue: boolean, runtime: Runtime }) => FrameworkOptions>> = {
+  astro: ctx => ({ hasReact: ctx.hasReact, hasSolid: ctx.hasSolid, hasSvelte: ctx.hasSvelte, hasVue: ctx.hasVue }),
+  hono: ctx => ({ runtime: ctx.runtime }),
+  slidev: ctx => ({ runtime: ctx.runtime }),
+  vite: ctx => ({ runtime: ctx.runtime })
+}
+
+const resolveEnabledFrameworks = async (
+  frameworks: NonNullable<EslintConfigOptions['frameworks']>,
+  ctx: { hasReact: boolean, hasSolid: boolean, hasSvelte: boolean, hasVue: boolean, runtime: Runtime }
+): Promise<Record<string, FlatConfigArray>> => {
+  const entries = await Promise.all(
+    (Object.entries(frameworks) as [DetectedFrameworkName, ImportedFramework][])
+      .filter((entry): entry is [DetectedFrameworkName, ImportedFramework] => Boolean(entry[1]))
+      .map(([name, value]) =>
+        // eslint-disable-next-line security/detect-object-injection
+        resolveFramework(name, value, FRAMEWORK_EXTRA_OPTS[name]?.(ctx)).then(config => [name, config] as const)
+      )
+  )
+
+  return Object.fromEntries(entries)
+}
+
 interface BuildConfigsParams {
   astroOptions: { hasReact: boolean, hasSolid: boolean, hasSvelte: boolean, hasVue: boolean }
   defaultIgnores: TSESLint.FlatConfig.Config[]
@@ -802,48 +826,9 @@ const buildEslintConfigs = async (params: BuildConfigsParams): Promise<FlatConfi
   } = params
 
   const { hasReact, hasSolid, hasSvelte, hasVue } = astroOptions
-
-  const [
-    reactParam,
-    nextParam,
-    astroParam,
-    expoParam,
-    nestParam,
-    honoParam,
-    vueParam,
-    svelteParam,
-    solidParam,
-    angularParam,
-    qwikParam,
-    remixParam,
-    reactRouterParam,
-    tanstackStartParam,
-    nuxtParam,
-    preactParam,
-    litParam,
-    slidevParam,
-    viteParam
-  ] = await Promise.all([
-    resolveFramework('react', resolvedFrameworks.react),
-    resolveFramework('next', resolvedFrameworks.next),
-    resolveFramework('astro', resolvedFrameworks.astro, { hasReact, hasSolid, hasSvelte, hasVue }),
-    resolveFramework('expo', resolvedFrameworks.expo),
-    resolveFramework('nest', resolvedFrameworks.nest),
-    resolveFramework('hono', resolvedFrameworks.hono, { runtime }),
-    resolveFramework('vue', resolvedFrameworks.vue),
-    resolveFramework('svelte', resolvedFrameworks.svelte),
-    resolveFramework('solid', resolvedFrameworks.solid),
-    resolveFramework('angular', resolvedFrameworks.angular),
-    resolveFramework('qwik', resolvedFrameworks.qwik),
-    resolveFramework('remix', (resolvedFrameworks as Record<string, unknown>).remix as ImportedFramework | undefined),
-    resolveFramework('react-router', resolvedFrameworks['react-router']),
-    resolveFramework('tanstack-start', resolvedFrameworks['tanstack-start']),
-    resolveFramework('nuxt', resolvedFrameworks.nuxt),
-    resolveFramework('preact', resolvedFrameworks.preact),
-    resolveFramework('lit', resolvedFrameworks.lit),
-    resolveFramework('slidev', resolvedFrameworks.slidev, { runtime }),
-    resolveFramework('vite', resolvedFrameworks.vite, { runtime })
-  ])
+  const fw = await resolveEnabledFrameworks(resolvedFrameworks, { hasReact, hasSolid, hasSvelte, hasVue, runtime })
+  // eslint-disable-next-line security/detect-object-injection
+  const get = (name: string): FlatConfigArray => fw[name] ?? []
 
   return [
     ...defaultIgnores,
@@ -870,31 +855,31 @@ const buildEslintConfigs = async (params: BuildConfigsParams): Promise<FlatConfi
       name: 'eslint-config-basic/commonjs'
     },
     ...runtimeCoreConfig,
-    ...(hasReact ? reactParam : []),
-    ...nextParam,
-    ...expoParam,
-    ...nestParam,
-    ...honoParam,
-    ...vueParam,
-    ...svelteParam,
-    ...solidParam,
-    ...angularParam,
-    ...qwikParam,
-    ...remixParam,
-    ...reactRouterParam,
-    ...tanstackStartParam,
-    ...nuxtParam,
-    ...preactParam,
-    ...litParam,
-    ...slidevParam,
-    ...viteParam,
+    ...(hasReact ? get('react') : []),
+    ...get('next'),
+    ...get('expo'),
+    ...get('nest'),
+    ...get('hono'),
+    ...get('vue'),
+    ...get('svelte'),
+    ...get('solid'),
+    ...get('angular'),
+    ...get('qwik'),
+    ...get('remix'),
+    ...get('react-router'),
+    ...get('tanstack-start'),
+    ...get('nuxt'),
+    ...get('preact'),
+    ...get('lit'),
+    ...get('slidev'),
+    ...get('vite'),
     ...(resolvedTypescript ?
       createTypescriptConfig({
         ...resolvedTypescript,
         tsconfigRootDir: resolvedTypescript.tsconfigRootDir ?? tsconfigRootDir
       }) :
       []),
-    ...astroParam,
+    ...get('astro'),
     ...(resolvedFrameworks.next && nextMode === NextMode.AppRouter ?
       [{
         files: ['app/**/*.{ts,tsx}', 'src/**/*.{ts,tsx}'],
@@ -911,22 +896,39 @@ const buildEslintConfigs = async (params: BuildConfigsParams): Promise<FlatConfi
   ]
 }
 
-const logEslintDebug = (
-  autoFrameworks: boolean,
-  detectRootDir: string | undefined,
-  nextMode: NextMode,
-  optionMergeStrategy: 'merge' | 'replace',
-  preset: EslintConfigOptions['preset'],
-  resolvedFrameworks: NonNullable<EslintConfigOptions['frameworks']>,
-  resolvedTypescript: BuildConfigsParams['resolvedTypescript'],
-  runtime: Runtime,
-  tsconfigRootDir: string | undefined,
-  uniqueExtensions: Extension[],
-  uniqueFormats: Format[],
-  uniqueLibraries: Library[],
-  uniqueTesting: Testing[],
+interface EslintDebugInfo {
+  autoFrameworks: boolean
+  detectRootDir: string | undefined
+  nextMode: NextMode
+  optionMergeStrategy: 'merge' | 'replace'
+  preset: EslintConfigOptions['preset']
+  resolvedFrameworks: NonNullable<EslintConfigOptions['frameworks']>
+  resolvedTypescript: BuildConfigsParams['resolvedTypescript']
+  runtime: Runtime
+  tsconfigRootDir: string | undefined
+  uniqueExtensions: Extension[]
+  uniqueFormats: Format[]
+  uniqueLibraries: Library[]
+  uniqueTesting: Testing[]
   uniqueTools: Tool[]
-) => {
+}
+
+const logEslintDebug = ({
+  autoFrameworks,
+  detectRootDir,
+  nextMode,
+  optionMergeStrategy,
+  preset,
+  resolvedFrameworks,
+  resolvedTypescript,
+  runtime,
+  tsconfigRootDir,
+  uniqueExtensions,
+  uniqueFormats,
+  uniqueLibraries,
+  uniqueTesting,
+  uniqueTools
+}: EslintDebugInfo) => {
   if (!process.env.ESLINT_BASIC_DEBUG) return
 
   process.stdout.write(`[ESLint Basic] Resolved options: ${JSON.stringify({
@@ -1066,11 +1068,11 @@ export const eslintConfig = async (
     userIgnores
   })
 
-  logEslintDebug(
+  logEslintDebug({
     autoFrameworks, detectRootDir, nextMode, optionMergeStrategy, preset,
     resolvedFrameworks, resolvedTypescript, runtime, tsconfigRootDir,
     uniqueExtensions, uniqueFormats, uniqueLibraries, uniqueTesting, uniqueTools
-  )
+  })
 
   const projectConfigs = await Promise.all(
     Object.entries(configuredProjects).map(async ([projectPath, projectOptions]) => {

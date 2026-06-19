@@ -8,6 +8,11 @@ import { pathToFileURL } from 'node:url'
 // Reflect.construct avoids a direct `new Function()` reference (which triggers
 // no-implied-eval) while achieving the same runtime behaviour: the string body
 // is opaque to static analyzers so jiti cannot transform it to require().
+//
+// Test/prod split: in Vitest the standard import() is used directly (Vite handles
+// resolution). In production the Reflect.construct path runs instead — both paths
+// return the same module shape; the split only controls how the specifier is
+// resolved by the host bundler, not what the module exports.
 
 const isVitest = typeof process !== 'undefined' && process.env.VITEST
 

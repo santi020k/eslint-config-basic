@@ -1,12 +1,16 @@
 import * as fs from 'node:fs'
 
 import { detectProjectOptions, Format, Library, NextMode, Preset, Runtime, Testing, Tool } from '@santi020k/eslint-config-basic'
+import { __detectionInternals } from '@santi020k/eslint-config-core'
 
-import { describe, expect, test, vi } from 'vitest'
+import { beforeEach, describe, expect, test, vi } from 'vitest'
 
 vi.mock('node:fs')
 
 describe('detectProjectOptions', () => {
+  beforeEach(() => {
+    __detectionInternals.clearDetectionCache()
+  })
   test('should detect TypeScript if tsconfig.json exists', () => {
     vi.mocked(fs.existsSync).mockImplementation((path: Parameters<typeof fs.existsSync>[0]) => path.toString().includes('tsconfig.json') || path.toString().includes('package.json'))
 

@@ -4,6 +4,7 @@ import { join } from 'node:path'
 import {
   coreConfig,
   createCoreConfig,
+  type DetectedFrameworkName,
   type DetectionOptions,
   detectProjectOptions,
   type EslintConfigOptions,
@@ -27,7 +28,7 @@ import { createTypescriptConfig } from '@santi020k/eslint-config-typescript'
 import type { TSESLint } from '@typescript-eslint/utils'
 
 import { applyStrictMode } from './compose.js'
-import { createDetectedFrameworkFlags } from './frameworks.js'
+import { createDetectedFrameworkFlags, type FrameworkOptions } from './frameworks.js'
 import { getIntegrationConfigs, getPrettierConfig } from './integrations.js'
 import { resolveFramework, resolvePreset } from './resolvers.js'
 
@@ -589,22 +590,39 @@ const buildLiteIgnoresConfig = (
   } as TSESLint.FlatConfig.Config] : []
 })
 
-const logLiteDebug = (
-  autoFrameworks: boolean,
-  detectRootDir: string | undefined,
-  nextMode: NextMode,
-  optionMergeStrategy: 'merge' | 'replace',
-  preset: EslintConfigOptions['preset'],
-  resolvedFrameworks: NonNullable<EslintConfigOptions['frameworks']>,
-  resolvedTypescript: false | (TypeScriptOptions & { mode: Exclude<TypeScriptMode, 'off'> }),
-  runtime: Runtime,
-  tsconfigRootDir: string | undefined,
-  uniqueExtensions: Extension[],
-  uniqueFormats: Format[],
-  uniqueLibraries: Library[],
-  uniqueTesting: Testing[],
+interface LiteDebugInfo {
+  autoFrameworks: boolean
+  detectRootDir: string | undefined
+  nextMode: NextMode
+  optionMergeStrategy: 'merge' | 'replace'
+  preset: EslintConfigOptions['preset']
+  resolvedFrameworks: NonNullable<EslintConfigOptions['frameworks']>
+  resolvedTypescript: false | (TypeScriptOptions & { mode: Exclude<TypeScriptMode, 'off'> })
+  runtime: Runtime
+  tsconfigRootDir: string | undefined
+  uniqueExtensions: Extension[]
+  uniqueFormats: Format[]
+  uniqueLibraries: Library[]
+  uniqueTesting: Testing[]
   uniqueTools: Tool[]
-) => {
+}
+
+const logLiteDebug = ({
+  autoFrameworks,
+  detectRootDir,
+  nextMode,
+  optionMergeStrategy,
+  preset,
+  resolvedFrameworks,
+  resolvedTypescript,
+  runtime,
+  tsconfigRootDir,
+  uniqueExtensions,
+  uniqueFormats,
+  uniqueLibraries,
+  uniqueTesting,
+  uniqueTools
+}: LiteDebugInfo) => {
   if (!process.env.ESLINT_CONFIG_LITE_DEBUG && !process.env.ESLINT_BASIC_DEBUG) return
 
   process.stdout.write(`[ESLint Config Lite] Resolved options: ${JSON.stringify({
@@ -627,34 +645,38 @@ const logLiteDebug = (
   }, null, 2)}\n`)
 }
 
+const LITE_FRAMEWORK_EXTRA_OPTS: Partial<Record<string, (ctx: { hasReact: boolean, hasSolid: boolean, hasSvelte: boolean, hasVue: boolean, runtime: Runtime }) => FrameworkOptions>> = {
+  astro: ctx => ({ hasReact: ctx.hasReact, hasSolid: ctx.hasSolid, hasSvelte: ctx.hasSvelte, hasVue: ctx.hasVue }),
+  hono: ctx => ({ runtime: ctx.runtime }),
+  slidev: ctx => ({ runtime: ctx.runtime }),
+  vite: ctx => ({ runtime: ctx.runtime })
+}
+
+const resolveEnabledFrameworks = async (
+  frameworks: NonNullable<EslintConfigOptions['frameworks']>,
+  ctx: { hasReact: boolean, hasSolid: boolean, hasSvelte: boolean, hasVue: boolean, runtime: Runtime }
+): Promise<Record<string, FlatConfigArray>> => {
+  const entries = await Promise.all(
+    (Object.entries(frameworks) as [DetectedFrameworkName, ImportedFramework][])
+      .filter((entry): entry is [DetectedFrameworkName, ImportedFramework] => Boolean(entry[1]))
+      .map(([name, value]) =>
+        resolveFramework(name, value, LITE_FRAMEWORK_EXTRA_OPTS[name]?.(ctx)).then(config => [name, config] as const)
+      )
+  )
+
+  return Object.fromEntries(entries)
+}
+
 interface BuildLiteConfigsParams {
-  angularParam: FlatConfigArray
-  astroOptions: { hasReact: boolean, hasSolid: boolean, hasSvelte: boolean, hasVue: boolean }
-  astroParam: FlatConfigArray
   defaultIgnores: TSESLint.FlatConfig.Config[]
-  expoParam: FlatConfigArray
+  frameworkConfigs: Record<string, FlatConfigArray>
   gitignoreConfig: FlatConfigArray
-  honoParam: FlatConfigArray
-  litParam: FlatConfigArray
-  nestParam: FlatConfigArray
+  hasReact: boolean
   nextMode: NextMode
-  nextParam: FlatConfigArray
-  nuxtParam: FlatConfigArray
-  preactParam: FlatConfigArray
-  qwikParam: FlatConfigArray
-  reactParam: FlatConfigArray
-  reactRouterParam: FlatConfigArray
-  remixParam: FlatConfigArray
   resolvedFrameworks: NonNullable<EslintConfigOptions['frameworks']>
   resolvedTypescript: false | (TypeScriptOptions & { mode: Exclude<TypeScriptMode, 'off'> })
-  rootDir: string
-  runtime: Runtime
   runtimeCoreConfig: FlatConfigArray
-  slidevParam: FlatConfigArray
-  solidParam: FlatConfigArray
-  svelteParam: FlatConfigArray
   tailwindEntryPoint: string | undefined
-  tanstackStartParam: FlatConfigArray
   tsconfigRootDir: string | undefined
   uniqueExtensions: Extension[]
   uniqueFormats: Format[]
@@ -662,54 +684,40 @@ interface BuildLiteConfigsParams {
   uniqueTesting: Testing[]
   uniqueTools: Tool[]
   userIgnores: TSESLint.FlatConfig.Config[]
-  viteParam: FlatConfigArray
-  vueParam: FlatConfigArray
 }
 
 const buildLiteEslintConfigs = async (params: BuildLiteConfigsParams): Promise<FlatConfigArray> => {
   const {
-    angularParam,
-    astroOptions,
-    astroParam,
     defaultIgnores,
-    expoParam,
+    frameworkConfigs,
     gitignoreConfig,
-    honoParam,
-    litParam,
-    nestParam,
+    hasReact,
     nextMode,
-    nextParam,
-    nuxtParam,
-    preactParam,
-    qwikParam,
-    reactParam,
-    reactRouterParam, remixParam, resolvedFrameworks, resolvedTypescript, runtimeCoreConfig, slidevParam,
-    solidParam, svelteParam, tailwindEntryPoint, tanstackStartParam, tsconfigRootDir, uniqueExtensions,
-    uniqueFormats, uniqueLibraries, uniqueTesting, uniqueTools, userIgnores,
-    viteParam, vueParam
+    resolvedFrameworks,
+    resolvedTypescript,
+    runtimeCoreConfig,
+    tailwindEntryPoint,
+    tsconfigRootDir,
+    uniqueExtensions,
+    uniqueFormats,
+    uniqueLibraries,
+    uniqueTesting,
+    uniqueTools,
+    userIgnores
   } = params
 
-  const { hasReact } = astroOptions
+  const get = (name: string): FlatConfigArray => frameworkConfigs[name] ?? []
 
   return [
     ...defaultIgnores,
     ...userIgnores,
-
-    // Settings
     ...gitignoreConfig,
-
-    // Global TSConfig Root Dir fix
     ...(tsconfigRootDir ?
       [{
-        languageOptions: {
-          parserOptions: {
-            tsconfigRootDir
-          }
-        },
+        languageOptions: { parserOptions: { tsconfigRootDir } },
         name: 'eslint-config-lite/tsconfig-root-dir'
       }] :
       []),
-
     {
       files: ['**/*.cjs', '**/*.cts'],
       languageOptions: {
@@ -724,73 +732,49 @@ const buildLiteEslintConfigs = async (params: BuildLiteConfigsParams): Promise<F
       },
       name: 'eslint-config-lite/commonjs'
     },
-
-    // Core JS config with runtime-aware globals
     ...runtimeCoreConfig,
-
-    // React config (included if any React-based framework is used/passed)
-    ...(hasReact ? reactParam : []),
-
-    ...nextParam,
-    ...expoParam,
-    ...nestParam,
-    ...honoParam,
-    ...vueParam,
-    ...svelteParam,
-    ...solidParam,
-    ...angularParam,
-    ...qwikParam,
-    ...remixParam,
-    ...reactRouterParam,
-    ...tanstackStartParam,
-    ...nuxtParam,
-    ...preactParam,
-    ...litParam,
-    ...slidevParam,
-    ...viteParam,
-
+    ...(hasReact ? get('react') : []),
+    ...get('next'),
+    ...get('expo'),
+    ...get('nest'),
+    ...get('hono'),
+    ...get('vue'),
+    ...get('svelte'),
+    ...get('solid'),
+    ...get('angular'),
+    ...get('qwik'),
+    ...get('remix'),
+    ...get('react-router'),
+    ...get('tanstack-start'),
+    ...get('nuxt'),
+    ...get('preact'),
+    ...get('lit'),
+    ...get('slidev'),
+    ...get('vite'),
     ...(resolvedTypescript ?
       createTypescriptConfig({
         ...resolvedTypescript,
         tsconfigRootDir: resolvedTypescript.tsconfigRootDir ?? tsconfigRootDir
       }) :
       []),
-
-    // Astro needs to run after generic TypeScript so its parser and false-positive
-    // workarounds win for .astro files and embedded expressions.
-    ...astroParam,
-
-    // Next.js App Router overrides (#12)
+    // Astro runs after TypeScript so its parser wins for .astro files and embedded expressions.
+    ...get('astro'),
     ...(resolvedFrameworks.next && nextMode === NextMode.AppRouter ?
-      [
-        {
-          files: ['app/**/*.{ts,tsx}', 'src/**/*.{ts,tsx}'],
-          name: 'eslint-config-next/app-router-overrides',
-          rules: {
-            '@next/next/no-html-link-for-pages': 'off'
-          }
-        } as TSESLint.FlatConfig.Config
-      ] :
+      [{
+        files: ['app/**/*.{ts,tsx}', 'src/**/*.{ts,tsx}'],
+        name: 'eslint-config-next/app-router-overrides',
+        rules: { '@next/next/no-html-link-for-pages': 'off' }
+      } as TSESLint.FlatConfig.Config] :
       []),
-
-    // Integrations
-    ...(await getIntegrationConfigs(
-      uniqueLibraries, uniqueTools, uniqueTesting, uniqueFormats, uniqueExtensions
-    )),
-
+    ...(await getIntegrationConfigs(uniqueLibraries, uniqueTools, uniqueTesting, uniqueFormats, uniqueExtensions)),
     ...(tailwindEntryPoint ?
       [{
         name: 'eslint-config-lite/tailwind-settings',
         settings: {
-          'better-tailwindcss': {
-            detectComponentClasses: true,
-            entryPoint: tailwindEntryPoint
-          }
+          'better-tailwindcss': { detectComponentClasses: true, entryPoint: tailwindEntryPoint }
         }
       } as TSESLint.FlatConfig.Config] :
       []),
-
-    // Prettier always last
     ...(await getPrettierConfig(uniqueTools))
   ]
 }
@@ -878,49 +862,35 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
     useDefaultIgnores, useGeneratedCodeIgnores, useGitignore, optIgnores
   )
 
-  const [
-    reactParam, nextParam, astroParam, expoParam, nestParam, honoParam,
-    vueParam, svelteParam, solidParam, angularParam, qwikParam, remixParam,
-    reactRouterParam, tanstackStartParam, nuxtParam, preactParam, litParam,
-    slidevParam, viteParam
-  ] = await Promise.all([
-    resolveFramework('react', resolvedFrameworks.react),
-    resolveFramework('next', resolvedFrameworks.next),
-    resolveFramework('astro', resolvedFrameworks.astro, { hasReact, hasSolid, hasSvelte, hasVue }),
-    resolveFramework('expo', resolvedFrameworks.expo),
-    resolveFramework('nest', resolvedFrameworks.nest),
-    resolveFramework('hono', resolvedFrameworks.hono, { runtime }),
-    resolveFramework('vue', resolvedFrameworks.vue),
-    resolveFramework('svelte', resolvedFrameworks.svelte),
-    resolveFramework('solid', resolvedFrameworks.solid),
-    resolveFramework('angular', resolvedFrameworks.angular),
-    resolveFramework('qwik', resolvedFrameworks.qwik),
-    resolveFramework('remix', (resolvedFrameworks as Record<string, unknown>).remix as ImportedFramework | undefined),
-    resolveFramework('react-router', resolvedFrameworks['react-router']),
-    resolveFramework('tanstack-start', resolvedFrameworks['tanstack-start']),
-    resolveFramework('nuxt', resolvedFrameworks.nuxt),
-    resolveFramework('preact', resolvedFrameworks.preact),
-    resolveFramework('lit', resolvedFrameworks.lit),
-    resolveFramework('slidev', resolvedFrameworks.slidev, { runtime }),
-    resolveFramework('vite', resolvedFrameworks.vite, { runtime })
-  ])
+  const frameworkConfigs = await resolveEnabledFrameworks(
+    resolvedFrameworks,
+    { hasReact, hasSolid, hasSvelte, hasVue, runtime }
+  )
 
   const configs = await buildLiteEslintConfigs({
-    angularParam,
-    astroOptions: { hasReact, hasSolid, hasSvelte, hasVue }, astroParam, defaultIgnores, expoParam, gitignoreConfig,
-    honoParam, litParam, nestParam, nextMode, nextParam,
-    nuxtParam, preactParam, qwikParam, reactParam, reactRouterParam, remixParam,
-    resolvedFrameworks, resolvedTypescript, rootDir, runtime, runtimeCoreConfig, slidevParam,
-    solidParam, svelteParam, tailwindEntryPoint, tanstackStartParam, tsconfigRootDir, uniqueExtensions,
-    uniqueFormats, uniqueLibraries, uniqueTesting, uniqueTools, userIgnores,
-    viteParam, vueParam
+    defaultIgnores,
+    frameworkConfigs,
+    gitignoreConfig,
+    hasReact,
+    nextMode,
+    resolvedFrameworks,
+    resolvedTypescript,
+    runtimeCoreConfig,
+    tailwindEntryPoint,
+    tsconfigRootDir,
+    uniqueExtensions,
+    uniqueFormats,
+    uniqueLibraries,
+    uniqueTesting,
+    uniqueTools,
+    userIgnores
   })
 
-  logLiteDebug(
+  logLiteDebug({
     autoFrameworks, detectRootDir, nextMode, optionMergeStrategy, preset,
     resolvedFrameworks, resolvedTypescript, runtime, tsconfigRootDir,
     uniqueExtensions, uniqueFormats, uniqueLibraries, uniqueTesting, uniqueTools
-  )
+  })
 
   const projectConfigs = await Promise.all(
     Object.entries(configuredProjects).map(async ([projectPath, projectOptions]) => {
