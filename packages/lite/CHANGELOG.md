@@ -1,5 +1,13 @@
 # @santi020k/eslint-config-lite
 
+## 2.0.0-beta.2
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @santi020k/eslint-config-core@2.0.0-beta.2
+  - @santi020k/eslint-config-typescript@2.0.0-beta.2
+
 ## 2.0.0-beta.1
 
 ### Minor Changes

@@ -1,5 +1,12 @@
 # @santi020k/eslint-config-integrations
 
+## 2.0.0-beta.2
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @santi020k/eslint-config-core@2.0.0-beta.2
+
 ## 2.0.0-beta.1
 
 ### Patch Changes
