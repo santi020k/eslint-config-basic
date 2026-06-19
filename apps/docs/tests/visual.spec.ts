@@ -3,12 +3,13 @@ import { expect, test } from '@playwright/test'
 import { shouldRunVisualSnapshots, visualSnapshotSkipReason } from './helpers/visual-regression.js'
 
 test.describe('Visual Regression', () => {
+  // eslint-disable-next-line playwright/no-skipped-test -- Visual snapshots are opt-in in local/CI runs.
   test.skip(!shouldRunVisualSnapshots, visualSnapshotSkipReason)
 
   test('homepage should match snapshot', async ({ page }) => {
     await page.goto('/')
 
-    await page.waitForLoadState('networkidle')
+    await expect(page.locator('body')).toBeVisible()
 
     // Hide dynamic elements if necessary (e.g., date-based content)
     // await page.addStyleTag({ content: '.last-updated { display: none; }' })
@@ -27,7 +28,7 @@ test.describe('Visual Regression', () => {
 
     await page.emulateMedia({ colorScheme: 'dark' })
 
-    await page.waitForLoadState('networkidle')
+    await expect(page.locator('body')).toBeVisible()
 
     await expect(page).toHaveScreenshot('homepage-dark.png', {
       fullPage: true,

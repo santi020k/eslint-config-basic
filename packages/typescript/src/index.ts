@@ -53,6 +53,25 @@ const mapRulesToSlots = (
     [])
 ]
 
+const resolveProjectOptions = (options: CreateTypescriptConfigOptions, mode: string) => {
+  const projectService = options.projectService ?? (mode !== 'syntax' && options.project === undefined)
+  const project = options.project ?? (mode !== 'syntax' && !projectService ? true : undefined)
+
+  return { project, projectService }
+}
+
+const buildParserOptions = (
+  project: CreateTypescriptConfigOptions['project'] | true,
+  projectService: boolean,
+  tsconfigRootDir: string | undefined
+) => ({
+  extraFileExtensions: ['.astro', '.svelte', '.vue'],
+  parser: tsParser,
+  ...(project === undefined ? {} : { project }),
+  ...(projectService ? { projectService: true } : {}),
+  tsconfigRootDir
+})
+
 /**
  * TypeScript ESLint configuration factory
  * Extends typescript-eslint strict + stylistic type-checked presets with custom rules
@@ -70,16 +89,8 @@ export const createTypescriptConfig = (
   }
 
   const mode = options.mode ?? 'type-aware'
-  const projectService = options.projectService ?? (mode !== 'syntax' && options.project === undefined)
-  const project = options.project ?? (mode !== 'syntax' && !projectService ? true : undefined)
-
-  const parserOptions = {
-    extraFileExtensions: ['.astro', '.svelte', '.vue'],
-    parser: tsParser,
-    ...(project !== undefined ? { project } : {}),
-    ...(projectService ? { projectService: true } : {}),
-    tsconfigRootDir: options.tsconfigRootDir
-  }
+  const { project, projectService } = resolveProjectOptions(options, mode)
+  const parserOptions = buildParserOptions(project, projectService, options.tsconfigRootDir)
 
   const baseConfigs = mode === 'syntax' ?
     [

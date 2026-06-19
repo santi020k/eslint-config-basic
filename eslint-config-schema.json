@@ -42,6 +42,7 @@
         "nest",
         "next",
         "nuxt",
+        "preact",
         "qwik",
         "react",
         "react-router",
@@ -283,6 +284,9 @@
             "nuxt": {
               "$ref": "#/definitions/ImportedFramework"
             },
+            "preact": {
+              "$ref": "#/definitions/ImportedFramework"
+            },
             "qwik": {
               "$ref": "#/definitions/ImportedFramework"
             },
@@ -375,12 +379,67 @@
           "$ref": "#/definitions/StrictMode",
           "description": "Severity profile.\n- `false` / `recommended`: keep recommended severities\n- `true` / `ci`: promote warnings to errors\n- `pedantic`: promote warnings and enable built-in best-practice rules"
         },
+        "tailwind": {
+          "anyOf": [
+            {
+              "const": false,
+              "type": "boolean"
+            },
+            {
+              "$ref": "#/definitions/TailwindOptions"
+            }
+          ],
+          "description": "Tailwind CSS plugin options. Providing an object enables the Tailwind integration, while `false` disables auto-detected Tailwind support."
+        },
         "testing": {
           "description": "List of testing frameworks and testing environments",
           "items": {
             "$ref": "#/definitions/TestingOption"
           },
           "type": "array"
+        },
+        "testingFiles": {
+          "additionalProperties": false,
+          "description": "File globs for test integrations when the defaults do not match your project.\n\nFor example, set `testingFiles.playwright` to the folder that contains your Playwright specs when it differs from the built-in defaults.",
+          "properties": {
+            "cypress": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "jest": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "jest-dom": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "playwright": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "testing-library": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "vitest": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "type": "object"
         },
         "tools": {
           "description": "List of integrations for external standalone tools",
@@ -406,6 +465,13 @@
             }
           ],
           "description": "Enable TypeScript support with optional settings"
+        },
+        "workspacePrefixes": {
+          "description": "Monorepo / workspace package scope prefixes that should sort in their own import group, **before** external npm packages.\n\nPassed to `createImportGroups` and applied to `simple-import-sort/imports` automatically — no manual rule override needed.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -421,6 +487,7 @@
         "de-morgan",
         "depend",
         "node",
+        "no-only-tests",
         "oxlint",
         "perfectionist",
         "regexp",
@@ -440,6 +507,7 @@
         "de-morgan",
         "depend",
         "node",
+        "no-only-tests",
         "oxlint",
         "perfectionist",
         "regexp",
@@ -1138,6 +1206,9 @@
         "mikro-orm": {
           "type": "boolean"
         },
+        "no-only-tests": {
+          "type": "boolean"
+        },
         "node": {
           "type": "boolean"
         },
@@ -1804,6 +1875,24 @@
       ],
       "description": "Severity profiles for teams adopting the config progressively."
     },
+    "TailwindOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "detectComponentClasses": {
+          "type": "boolean"
+        },
+        "entryPoint": {
+          "type": "string"
+        },
+        "ignore": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "Testing": {
       "description": "Enum for testing frameworks and environments",
       "enum": [
@@ -1890,6 +1979,22 @@
       "properties": {
         "mode": {
           "$ref": "#/definitions/TypeScriptMode"
+        },
+        "project": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          ]
         },
         "projectService": {
           "type": "boolean"

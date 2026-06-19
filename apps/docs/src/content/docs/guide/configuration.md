@@ -17,6 +17,7 @@ The main package composes the final flat config array from one public install: `
 - Use `detection` for granular auto-detection control.
 - Use `projects` for package-aware monorepo configuration.
 - Use `ignores` for extra global ignore globs alongside the composed config (same as a leading flat-config object with only `ignores`).
+- Add local flat-config overrides as extra `defineConfig()` arguments instead of rebuilding the array yourself.
 
 ## Core Composition Model
 
@@ -173,6 +174,26 @@ export default await defineConfig({
 })
 ```
 
+## Local Overrides
+
+Pass flat-config entries after the options object when a project needs a small rule exception, custom globals, or a file-specific override. The generated config stays first, and local entries are appended last.
+
+```js
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig(
+  {
+    frameworks: { astro: true },
+    typescript: true
+  }, {
+    files: ['**/*.astro'],
+    rules: {
+      '@typescript-eslint/no-unsafe-return': 'off'
+    }
+  }
+)
+```
+
 ### Default ignores
 
 The composed config ships a default ignore block (`dist`, `build`, `coverage`, framework output folders, `node_modules`, and similar). It also ignores common generated-code folders and files such as `__generated__`, `generated`, `codegen`, `*.generated.*`, `*.gen.*`, GraphQL generated output, and `.prisma`. AI coding-assistant artifact folders — `.agent`, `.agents`, `.aider*`, `.claude`, `.clinerules`, `.codex`, `.copilot`, `.cursor`, `.gemini`, `.kiro`, `.opencode`, `.roo`, and `.windsurf` — are ignored too. Disable the whole block with `settings: [Setting.NoDefaultIgnores]`, or disable only generated-code ignores with `settings: [Setting.NoGeneratedCodeIgnores]`.
@@ -190,6 +211,51 @@ import { defineConfig } from '@santi020k/eslint-config-basic'
 export default await defineConfig({
   detectRootDir: process.cwd(),
   tsconfigRootDir: new URL('.', import.meta.url).pathname
+})
+```
+
+When a project cannot use TypeScript's project service, keep the setting inside `typescript` instead of adding a manual parser override block:
+
+```js
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig({
+  typescript: {
+    project: true,
+    projectService: false
+  }
+})
+```
+
+## Tailwind Options
+
+Tailwind is auto-detected when the project depends on Tailwind packages. Use `tailwind` when the entry point or project-specific class ignores need to be explicit:
+
+```js
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig({
+  tailwind: {
+    entryPoint: 'src/styles/global.css',
+    ignore: ['^prose-custom$', '^icon-wrapper$']
+  }
+})
+```
+
+Set `tailwind: false` to disable auto-detected Tailwind linting for a package.
+
+## Testing Files
+
+Testing integrations ship with default file globs. Override them only when your project stores tests somewhere unusual:
+
+```js
+import { defineConfig, Testing } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig({
+  testing: [Testing.Playwright],
+  testingFiles: {
+    playwright: ['tests/**/*.ts']
+  }
 })
 ```
 

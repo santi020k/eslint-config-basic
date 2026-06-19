@@ -225,15 +225,12 @@ describe('Deep Rule Assertions (#5)', () => {
   })
 
   test('should append local flat-config overrides from defineConfig rest args', async () => {
-    const config = await defineConfig(
-      { detection: false, tools: [] },
-      {
-        name: 'local/override',
-        rules: {
-          'no-console': 'off'
-        }
+    const config = await defineConfig({ detection: false, tools: [] }, {
+      name: 'local/override',
+      rules: {
+        'no-console': 'off'
       }
-    )
+    })
 
     const names = extractConfigNames(config)
 

@@ -300,6 +300,12 @@ export type SettingOption = Setting | SettingName
  */
 export type StrictMode = 'ci' | 'pedantic' | 'recommended' | boolean
 
+export interface TailwindOptions {
+  detectComponentClasses?: boolean
+  entryPoint?: string
+  ignore?: string[]
+}
+
 export type TestingName = `${Testing}`
 
 export type TestingOption = Testing | TestingName
@@ -315,12 +321,6 @@ export interface TypeScriptOptions {
   project?: boolean | string | string[]
   projectService?: boolean
   tsconfigRootDir?: string
-}
-
-export interface TailwindOptions {
-  detectComponentClasses?: boolean
-  entryPoint?: string
-  ignore?: string[]
 }
 
 /**
@@ -484,6 +484,12 @@ export interface EslintConfigOptions {
    */
   strict?: StrictMode
 
+  /**
+   * Tailwind CSS plugin options. Providing an object enables the Tailwind
+   * integration, while `false` disables auto-detected Tailwind support.
+   */
+  tailwind?: false | TailwindOptions
+
   /** List of testing frameworks and testing environments */
   testing?: TestingOption[]
 
@@ -494,12 +500,6 @@ export interface EslintConfigOptions {
    * your Playwright specs when it differs from the built-in defaults.
    */
   testingFiles?: Partial<Record<TestingName, string[]>>
-
-  /**
-   * Tailwind CSS plugin options. Providing an object enables the Tailwind
-   * integration, while `false` disables auto-detected Tailwind support.
-   */
-  tailwind?: TailwindOptions | false
 
   /** List of integrations for external standalone tools */
   tools?: ToolOption[]

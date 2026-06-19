@@ -254,8 +254,9 @@ const TAILWIND_ENTRYPOINT_CANDIDATES = [
   'styles/global.css'
 ]
 
-type OptionalBucket = 'extensions' | 'formats' | 'libraries' | 'testing' | 'tools'
 type ConfigInput = false | null | TSESLint.FlatConfig.Config | TSESLint.FlatConfig.ConfigArray | undefined
+
+type OptionalBucket = 'extensions' | 'formats' | 'libraries' | 'testing' | 'tools'
 
 const OPTIONAL_BUCKETS = {
   extensions: Object.values(Extension),
@@ -475,6 +476,12 @@ const findTailwindEntryPoint = (rootDir: string): string | undefined => TAILWIND
   candidate => existsSync(join(rootDir, candidate))
 )
 
+const buildTailwindResult = (options: TailwindOptions, entryPoint: string | undefined): TailwindOptions => ({
+  detectComponentClasses: options.detectComponentClasses ?? true,
+  ...(entryPoint ? { entryPoint } : {}),
+  ...(options.ignore?.length ? { ignore: options.ignore } : {})
+})
+
 const resolveTailwindOptions = (
   rootDir: string,
   tailwind: EslintConfigOptions['tailwind']
@@ -486,11 +493,7 @@ const resolveTailwindOptions = (
 
   if (!entryPoint && options.detectComponentClasses === undefined && !options.ignore?.length) return undefined
 
-  return {
-    detectComponentClasses: options.detectComponentClasses ?? true,
-    ...(entryPoint ? { entryPoint } : {}),
-    ...(options.ignore?.length ? { ignore: options.ignore } : {})
-  }
+  return buildTailwindResult(options, entryPoint)
 }
 
 const createTailwindSettingsConfig = (
@@ -500,6 +503,7 @@ const createTailwindSettingsConfig = (
     ...(tailwindOptions.entryPoint ? { entryPoint: tailwindOptions.entryPoint } : {}),
     ...(tailwindOptions.ignore?.length ? { ignore: tailwindOptions.ignore } : {})
   }
+
   const hasUnknownClassOptions = Object.keys(unknownClassOptions).length > 0
 
   return {
@@ -600,7 +604,7 @@ const applyTestingFileOverrides = (
 ): FlatConfigArray => {
   if (!testingFiles) return configs
 
-  const entries = Object.entries(testingFiles).filter(([, files]) => files?.length)
+  const entries = Object.entries(testingFiles).filter(([, files]) => files.length > 0)
 
   if (entries.length === 0) return configs
 
@@ -626,6 +630,19 @@ const resolveConfigSetup = (options: EslintConfigOptions | undefined) => ({
   optionMergeStrategy: options?.optionMergeStrategy ?? 'merge',
   requestedPreset: options?.preset
 })
+
+const resolveUniqueLibraries = (
+  libraries: Library[],
+  tailwind: EslintConfigOptions['tailwind']
+): Library[] => {
+  const uniqueLibraries = [...new Set(libraries)]
+
+  if (tailwind === false) return uniqueLibraries.filter(library => library !== Library.Tailwind)
+
+  if (!tailwind) return uniqueLibraries
+
+  return [...new Set([...uniqueLibraries, Library.Tailwind])]
+}
 
 const resolvePresetMeta = (
   requestedPreset: EslintConfigOptions['preset'],
@@ -972,9 +989,7 @@ export const eslintConfig = async (
   const tsconfigRootDir = resolveTsconfigRootDir(rootDir, typescript, optTsconfigRootDir)
   const extensions = applyStrictProfileDefaults(configuredExtensions, strict)
   const resolvedFrameworks = applyFrameworkImpliedDeps({ ...frameworks })
-  const uniqueLibraries = options?.tailwind === false ?
-    [...new Set(libraries)].filter(library => library !== Library.Tailwind) :
-    [...new Set([...(libraries), ...(options?.tailwind ? [Library.Tailwind] : [])])]
+  const uniqueLibraries = resolveUniqueLibraries(libraries, options?.tailwind)
   const uniqueTesting = [...new Set(testing)]
   const uniqueFormats = [...new Set(formats)]
   const uniqueTools = [...new Set(tools)]
@@ -987,9 +1002,11 @@ export const eslintConfig = async (
   const useGitignore = !uniqueSettings.includes(Setting.NoGitignore)
   const useDefaultIgnores = !uniqueSettings.includes(Setting.NoDefaultIgnores)
   const useGeneratedCodeIgnores = !uniqueSettings.includes(Setting.NoGeneratedCodeIgnores)
+
   const tailwindOptions = uniqueLibraries.includes(Library.Tailwind) ?
     resolveTailwindOptions(rootDir, options?.tailwind) :
     undefined
+
   const runtimeCoreConfig = runtime === Runtime.Universal ? coreConfig : createCoreConfig(runtime)
   const { defaultIgnores, gitignoreConfig, userIgnores } = buildIgnoresConfig(useDefaultIgnores, useGeneratedCodeIgnores, useGitignore, options)
 

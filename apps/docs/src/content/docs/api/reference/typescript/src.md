@@ -25,7 +25,7 @@ Defined in: [typescript/src/rules.ts:37](https://github.com/santi020k/eslint-con
 
 > `const` **typescriptConfig**: `ConfigArray`
 
-Defined in: [typescript/src/index.ts:140](https://github.com/santi020k/eslint-config-basic/blob/275413dc9da6dd9298c21d677050a788ab1ff310/packages/typescript/src/index.ts#L140)
+Defined in: [typescript/src/index.ts:143](https://github.com/santi020k/eslint-config-basic/blob/275413dc9da6dd9298c21d677050a788ab1ff310/packages/typescript/src/index.ts#L143)
 
 ## Functions
 
@@ -33,7 +33,7 @@ Defined in: [typescript/src/index.ts:140](https://github.com/santi020k/eslint-co
 
 > **createTypescriptConfig**(`options?`): `ConfigArray`
 
-Defined in: [typescript/src/index.ts:61](https://github.com/santi020k/eslint-config-basic/blob/275413dc9da6dd9298c21d677050a788ab1ff310/packages/typescript/src/index.ts#L61)
+Defined in: [typescript/src/index.ts:62](https://github.com/santi020k/eslint-config-basic/blob/275413dc9da6dd9298c21d677050a788ab1ff310/packages/typescript/src/index.ts#L62)
 
 TypeScript ESLint configuration factory
 Extends typescript-eslint strict + stylistic type-checked presets with custom rules

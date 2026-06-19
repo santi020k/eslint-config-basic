@@ -53,6 +53,83 @@ Subdirectory inside the agent folder where the skill file is placed
 
 ***
 
+### EslintConfigFeatures
+
+Defined in: [basic/src/agent-skill-generator.ts:31](https://github.com/santi020k/eslint-config-basic/blob/275413dc9da6dd9298c21d677050a788ab1ff310/packages/basic/src/agent-skill-generator.ts#L31)
+
+Features extracted from the project's actual `eslint.config.js`.
+All arrays hold display-friendly labels (e.g. `'TypeScript'`, `'React'`).
+
+#### Properties
+
+##### configFile
+
+> **configFile**: `string` \| `null`
+
+Defined in: [basic/src/agent-skill-generator.ts:34](https://github.com/santi020k/eslint-config-basic/blob/275413dc9da6dd9298c21d677050a788ab1ff310/packages/basic/src/agent-skill-generator.ts#L34)
+
+Path to the config file that was loaded, or null when falling back to detection
+
+##### extensions
+
+> **extensions**: `string`[]
+
+Defined in: [basic/src/agent-skill-generator.ts:35](https://github.com/santi020k/eslint-config-basic/blob/275413dc9da6dd9298c21d677050a788ab1ff310/packages/basic/src/agent-skill-generator.ts#L35)
+
+##### formats
+
+> **formats**: `string`[]
+
+Defined in: [basic/src/agent-skill-generator.ts:36](https://github.com/santi020k/eslint-config-basic/blob/275413dc9da6dd9298c21d677050a788ab1ff310/packages/basic/src/agent-skill-generator.ts#L36)
+
+##### frameworks
+
+> **frameworks**: `string`[]
+
+Defined in: [basic/src/agent-skill-generator.ts:37](https://github.com/santi020k/eslint-config-basic/blob/275413dc9da6dd9298c21d677050a788ab1ff310/packages/basic/src/agent-skill-generator.ts#L37)
+
+##### libraries
+
+> **libraries**: `string`[]
+
+Defined in: [basic/src/agent-skill-generator.ts:38](https://github.com/santi020k/eslint-config-basic/blob/275413dc9da6dd9298c21d677050a788ab1ff310/packages/basic/src/agent-skill-generator.ts#L38)
+
+##### lintCommand
+
+> **lintCommand**: `string`
+
+Defined in: [basic/src/agent-skill-generator.ts:41](https://github.com/santi020k/eslint-config-basic/blob/275413dc9da6dd9298c21d677050a788ab1ff310/packages/basic/src/agent-skill-generator.ts#L41)
+
+The lint command found in the project's package.json scripts, or a sensible default
+
+##### source
+
+> **source**: `"config-file"` \| `"detection-fallback"`
+
+Defined in: [basic/src/agent-skill-generator.ts:44](https://github.com/santi020k/eslint-config-basic/blob/275413dc9da6dd9298c21d677050a788ab1ff310/packages/basic/src/agent-skill-generator.ts#L44)
+
+Whether features came from the real config file or from package.json detection
+
+##### testing
+
+> **testing**: `string`[]
+
+Defined in: [basic/src/agent-skill-generator.ts:46](https://github.com/santi020k/eslint-config-basic/blob/275413dc9da6dd9298c21d677050a788ab1ff310/packages/basic/src/agent-skill-generator.ts#L46)
+
+##### tools
+
+> **tools**: `string`[]
+
+Defined in: [basic/src/agent-skill-generator.ts:48](https://github.com/santi020k/eslint-config-basic/blob/275413dc9da6dd9298c21d677050a788ab1ff310/packages/basic/src/agent-skill-generator.ts#L48)
+
+##### typescript
+
+> **typescript**: `boolean`
+
+Defined in: [basic/src/agent-skill-generator.ts:50](https://github.com/santi020k/eslint-config-basic/blob/275413dc9da6dd9298c21d677050a788ab1ff310/packages/basic/src/agent-skill-generator.ts#L50)
+
+***
+
 ### GenerateSkillOptions
 
 Defined in: [basic/src/agent-skill-generator.ts:53](https://github.com/santi020k/eslint-config-basic/blob/275413dc9da6dd9298c21d677050a788ab1ff310/packages/basic/src/agent-skill-generator.ts#L53)
@@ -214,9 +291,9 @@ Defined in: [basic/src/frameworks.ts:109](https://github.com/santi020k/eslint-co
 
 ### defineConfig
 
-> `const` **defineConfig**: (`options?`) => `Promise`\<`ConfigArray`\> = `eslintConfig`
+> `const` **defineConfig**: (`options?`, ...`extraConfigs`) => `Promise`\<`ConfigArray`\> = `eslintConfig`
 
-Defined in: [basic/src/index.ts:973](https://github.com/santi020k/eslint-config-basic/blob/275413dc9da6dd9298c21d677050a788ab1ff310/packages/basic/src/index.ts#L973)
+Defined in: [basic/src/index.ts:1052](https://github.com/santi020k/eslint-config-basic/blob/275413dc9da6dd9298c21d677050a788ab1ff310/packages/basic/src/index.ts#L1052)
 
 Alias for `eslintConfig()` that reads naturally in `eslint.config.*` files.
 
@@ -230,6 +307,12 @@ and integration settings based on the input configuration.
 [`EslintConfigOptions`](../core/src.md#eslintconfigoptions)
 
 Configuration and integration settings
+
+##### extraConfigs
+
+...`ConfigInput`[]
+
+Local flat-config overrides appended after generated config
 
 #### Returns
 
@@ -729,9 +812,9 @@ Use `vue` instead.
 
 ### eslintConfig()
 
-> **eslintConfig**(`options?`): `Promise`\<`ConfigArray`\>
+> **eslintConfig**(`options?`, ...`extraConfigs`): `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/index.ts:837](https://github.com/santi020k/eslint-config-basic/blob/275413dc9da6dd9298c21d677050a788ab1ff310/packages/basic/src/index.ts#L837)
+Defined in: [basic/src/index.ts:908](https://github.com/santi020k/eslint-config-basic/blob/275413dc9da6dd9298c21d677050a788ab1ff310/packages/basic/src/index.ts#L908)
 
 Generates the ESLint configuration array, applying configurations
 and integration settings based on the input configuration.
@@ -743,6 +826,12 @@ and integration settings based on the input configuration.
 [`EslintConfigOptions`](../core/src.md#eslintconfigoptions)
 
 Configuration and integration settings
+
+##### extraConfigs
+
+...`ConfigInput`[]
+
+Local flat-config overrides appended after generated config
 
 #### Returns
 
@@ -792,7 +881,7 @@ process.stdout.write(`Written to: ${result.written}\n`)
 
 Defined in: [basic/src/agent-skill-generator.ts:716](https://github.com/santi020k/eslint-config-basic/blob/275413dc9da6dd9298c21d677050a788ab1ff310/packages/basic/src/agent-skill-generator.ts#L716)
 
-Builds the skill document body from the project's EslintConfigFeatures.
+Builds the skill document body from the project's [EslintConfigFeatures](#eslintconfigfeatures).
 Four format variants are produced:
 
 - `frontmatter` — YAML front-matter + Markdown (`.agent`, `.agents`, `.windsurf`)
@@ -804,7 +893,7 @@ Four format variants are produced:
 
 ##### features
 
-`EslintConfigFeatures`
+[`EslintConfigFeatures`](#eslintconfigfeatures)
 
 ##### format
 
