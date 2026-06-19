@@ -20,6 +20,7 @@ jobs:
           node-version: 22.x
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
+      - run: pnpm run build
       - name: Run contract and invariant tests
         run: pnpm --filter @santi020k/eslint-config-tests exec vitest run src/contracts.test.ts src/invariants.test.ts --maxWorkers=1
 
