@@ -230,7 +230,7 @@ const FEATURE_MAP: readonly [pattern: string, category: FeatureCategory, label: 
   ['eslint-config-integrations/docker',       'tools', 'Docker'],
   ['eslint-config-integrations/github-actions', 'tools', 'GitHub Actions'],
   ['eslint-config-integrations/nx',           'tools', 'Nx'],
-  ['pnpm/',                                   'tools', 'pnpm'],
+  ['integrations/pnpm/',                      'tools', 'pnpm'],
 
   // Libraries
   ['eslint-config-integrations/ai-sdk',        'libraries', 'AI SDK'],

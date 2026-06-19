@@ -28,7 +28,8 @@
     "@santi020k/eslint-config-tests": "1.0.0",
     "@santi020k/eslint-config-typescript": "1.6.0",
     "@santi020k/eslint-config-vite": "1.6.0",
-    "@santi020k/eslint-config-vue": "1.6.0"
+    "@santi020k/eslint-config-vue": "1.6.0",
+    "@santi020k/eslint-config-preact": "1.6.0"
   },
   "changesets": []
 }

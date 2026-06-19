@@ -14,7 +14,8 @@ interface PnpmPluginModule {
 export const pnpm: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('pnpm', async () => {
   const pluginPnpm = await loadModule<PnpmPluginModule>('eslint-plugin-pnpm')
 
-  return [
-    ...pluginPnpm.configs.recommended
-  ]
+  return pluginPnpm.configs.recommended.map((config, index) => ({
+    ...config,
+    name: config.name ?? `integrations/pnpm/${index}`
+  }))
 })

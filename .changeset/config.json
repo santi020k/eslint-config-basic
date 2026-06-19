@@ -27,7 +27,8 @@
       "@santi020k/eslint-config-typescript",
       "@santi020k/eslint-config-vite",
       "@santi020k/eslint-config-vue",
-      "@santi020k/eslint-config-docs"
+      "@santi020k/eslint-config-docs",
+      "@santi020k/eslint-config-preact"
     ]
   ],
   "linked": [],
