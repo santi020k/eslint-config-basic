@@ -65,16 +65,12 @@ jobs:
             ${{ runner.os }}-turbo-${{ matrix.node-version }}-
             ${{ runner.os }}-turbo-
       - run: pnpm install --frozen-lockfile
-      - name: Spellcheck
-        run: pnpm run lint:spell
-      - name: TypeScript check
-        run: pnpm run typecheck
-      - name: Unused code check
-        run: pnpm run lint:knip
-      - run: pnpm run build
-      - run: pnpm run lint
-      - name: Run tests with coverage
-        run: pnpm run test:coverage
+      - name: Run concurrent CI checks (Node 22.x)
+        if: matrix.node-version == '22.x'
+        run: turbo run typecheck lint test:coverage //#lint:spell //#lint:knip //#lint:repo
+      - name: Run concurrent CI checks (Node 24.x)
+        if: matrix.node-version != '22.x'
+        run: turbo run typecheck lint test:coverage
       - name: Build docs (smoke check)
         if: matrix.node-version == '22.x'
         run: pnpm run docs:sync-readmes && pnpm run docs:build

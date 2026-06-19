@@ -18,6 +18,7 @@ import {
   Preset,
   Runtime,
   Setting,
+  type TailwindOptions,
   Testing,
   Tool,
   type TypeScriptMode,
@@ -676,7 +677,7 @@ interface BuildLiteConfigsParams {
   resolvedFrameworks: NonNullable<EslintConfigOptions['frameworks']>
   resolvedTypescript: false | (TypeScriptOptions & { mode: Exclude<TypeScriptMode, 'off'> })
   runtimeCoreConfig: FlatConfigArray
-  tailwindEntryPoint: string | undefined
+  tailwindOptions: TailwindOptions | undefined
   tsconfigRootDir: string | undefined
   uniqueExtensions: Extension[]
   uniqueFormats: Format[]
@@ -696,7 +697,7 @@ const buildLiteEslintConfigs = async (params: BuildLiteConfigsParams): Promise<F
     resolvedFrameworks,
     resolvedTypescript,
     runtimeCoreConfig,
-    tailwindEntryPoint,
+    tailwindOptions,
     tsconfigRootDir,
     uniqueExtensions,
     uniqueFormats,
@@ -707,6 +708,32 @@ const buildLiteEslintConfigs = async (params: BuildLiteConfigsParams): Promise<F
   } = params
 
   const get = (name: string): FlatConfigArray => frameworkConfigs[name] ?? []
+
+  const tailwindSettingsConfig = ((): TSESLint.FlatConfig.Config | undefined => {
+    if (!tailwindOptions) return undefined
+
+    const { noUnknownClasses, ...settingsOptions } = tailwindOptions
+
+    const unknownClassOptions = {
+      ...(tailwindOptions.entryPoint ? { entryPoint: tailwindOptions.entryPoint } : {}),
+      ...(tailwindOptions.ignore?.length ? { ignore: tailwindOptions.ignore } : {})
+    }
+
+    const hasUnknownClassOptions = Object.keys(unknownClassOptions).length > 0
+    let noUnknownClassesRule: TSESLint.FlatConfig.RuleEntry | undefined
+
+    if (hasUnknownClassOptions || noUnknownClasses !== undefined) {
+      const severity = noUnknownClasses ?? 'error'
+
+      noUnknownClassesRule = severity === false ? 'off' : hasUnknownClassOptions ? [severity, unknownClassOptions] : severity
+    }
+
+    return {
+      name: 'eslint-config-lite/tailwind-settings',
+      ...(noUnknownClassesRule === undefined ? {} : { rules: { 'better-tailwindcss/no-unknown-classes': noUnknownClassesRule } }),
+      settings: { 'better-tailwindcss': settingsOptions }
+    }
+  })()
 
   return [
     ...defaultIgnores,
@@ -767,14 +794,7 @@ const buildLiteEslintConfigs = async (params: BuildLiteConfigsParams): Promise<F
       } as TSESLint.FlatConfig.Config] :
       []),
     ...(await getIntegrationConfigs(uniqueLibraries, uniqueTools, uniqueTesting, uniqueFormats, uniqueExtensions)),
-    ...(tailwindEntryPoint ?
-      [{
-        name: 'eslint-config-lite/tailwind-settings',
-        settings: {
-          'better-tailwindcss': { detectComponentClasses: true, entryPoint: tailwindEntryPoint }
-        }
-      } as TSESLint.FlatConfig.Config] :
-      []),
+    ...(tailwindSettingsConfig ? [tailwindSettingsConfig] : []),
     ...(await getPrettierConfig(uniqueTools))
   ]
 }
@@ -799,6 +819,7 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
     runtime: optRuntime,
     settings: optSettings,
     strict: optStrict,
+    tailwind: optTailwind,
     testing: optTesting,
     tools: optTools,
     tsconfigRootDir: optTsconfigRootDir,
@@ -863,7 +884,23 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
   const useGitignore = !uniqueSettings.includes(Setting.NoGitignore)
   const useDefaultIgnores = !uniqueSettings.includes(Setting.NoDefaultIgnores)
   const useGeneratedCodeIgnores = !uniqueSettings.includes(Setting.NoGeneratedCodeIgnores)
-  const tailwindEntryPoint = uniqueLibraries.includes(Library.Tailwind) ? findTailwindEntryPoint(rootDir) : undefined
+
+  const tailwindOptions = ((): TailwindOptions | undefined => {
+    if (optTailwind === false || !uniqueLibraries.includes(Library.Tailwind)) return undefined
+
+    const opts = optTailwind ?? {}
+    const entryPoint = opts.entryPoint ?? findTailwindEntryPoint(rootDir)
+
+    if (!entryPoint && opts.detectComponentClasses === undefined && !opts.ignore?.length && opts.noUnknownClasses === undefined) return undefined
+
+    return {
+      detectComponentClasses: opts.detectComponentClasses ?? true,
+      ...(entryPoint ? { entryPoint } : {}),
+      ...(opts.ignore?.length ? { ignore: opts.ignore } : {}),
+      ...(opts.noUnknownClasses === undefined ? {} : { noUnknownClasses: opts.noUnknownClasses })
+    }
+  })()
+
   const runtimeCoreConfig = runtime === Runtime.Universal ? coreConfig : createCoreConfig(runtime)
 
   const { defaultIgnores, gitignoreConfig, userIgnores } = buildLiteIgnoresConfig(
@@ -884,7 +921,7 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
     resolvedFrameworks,
     resolvedTypescript,
     runtimeCoreConfig,
-    tailwindEntryPoint,
+    tailwindOptions,
     tsconfigRootDir,
     uniqueExtensions,
     uniqueFormats,

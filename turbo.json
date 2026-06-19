@@ -37,6 +37,18 @@
       "inputs": ["packages/core/src/types.ts"],
       "outputs": ["eslint-config-schema.json"]
     },
+    "//#lint:spell": {
+      "inputs": ["**/*"],
+      "outputLogs": "errors-only"
+    },
+    "//#lint:knip": {
+      "inputs": ["**/*"],
+      "outputLogs": "errors-only"
+    },
+    "//#lint:repo": {
+      "inputs": ["**/*"],
+      "outputLogs": "errors-only"
+    },
     "dev": {
       "cache": false,
       "persistent": true
