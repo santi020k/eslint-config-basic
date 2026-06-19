@@ -13,7 +13,7 @@ export const toml: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyCo
   return [
     ...(pluginToml.configs['flat/recommended'] as TSESLint.FlatConfig.ConfigArray).map((config, index) => ({
       ...config,
-      name: config.name ?? `optionals/toml/${index}`
+      name: config.name ?? `integrations/toml/${index}`
     }))
   ]
 })
