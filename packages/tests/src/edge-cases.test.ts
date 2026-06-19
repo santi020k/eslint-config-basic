@@ -174,6 +174,24 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
     })).rejects.toThrow(/tsconfigRootDir does not exist/)
   })
 
+  test('should support project-based TypeScript parser options without projectService', async () => {
+    const config = await defineConfig({
+      tsconfigRootDir: tmpdir(),
+      typescript: {
+        project: true,
+        projectService: false
+      }
+    })
+
+    const setup = config.find(entry => entry.name === 'eslint-config-typescript/setup')
+
+    expect(setup?.languageOptions?.parserOptions).toMatchObject({
+      project: true,
+      tsconfigRootDir: tmpdir()
+    })
+    expect(setup?.languageOptions?.parserOptions).not.toHaveProperty('projectService')
+  })
+
   test('should include best-practices rules when Extension.BestPractices is requested', async () => {
     const config = await defineConfig({
       extensions: [Extension.BestPractices]

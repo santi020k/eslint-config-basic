@@ -1,6 +1,22 @@
 import starlight from '@astrojs/starlight'
 import { defineConfig } from 'astro/config'
 
+const rehypeTableFocusable = () => tree => {
+  const visit = node => {
+    if (node.type === 'element' && node.tagName === 'table') {
+      node.properties = node.properties ?? {}
+
+      node.properties.tabIndex = 0
+    }
+
+    if (node.children) {
+      for (const child of node.children) visit(child)
+    }
+  }
+
+  visit(tree)
+}
+
 const base = process.env.DOCS_BASE ?? '/'
 const site = process.env.DOCS_SITE_URL ?? 'https://eslint.santi020k.com'
 const siteName = 'ESLint Config'
@@ -200,5 +216,8 @@ export default defineConfig({
       title: siteName
     })
   ],
+  markdown: {
+    rehypePlugins: [rehypeTableFocusable]
+  },
   site
 })

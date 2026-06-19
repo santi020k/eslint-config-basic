@@ -8,7 +8,7 @@ vi.mock('node:fs')
 
 describe('detectProjectOptions', () => {
   test('should detect TypeScript if tsconfig.json exists', () => {
-    vi.mocked(fs.existsSync).mockImplementation(path => path.toString().includes('tsconfig.json') || path.toString().includes('package.json'))
+    vi.mocked(fs.existsSync).mockImplementation((path: Parameters<typeof fs.existsSync>[0]) => path.toString().includes('tsconfig.json') || path.toString().includes('package.json'))
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({ dependencies: {} }))
 
@@ -221,7 +221,7 @@ describe('detectProjectOptions', () => {
   })
 
   test('should detect Prettier from plugins and config files', () => {
-    vi.mocked(fs.existsSync).mockImplementation(path => {
+    vi.mocked(fs.existsSync).mockImplementation((path: Parameters<typeof fs.existsSync>[0]) => {
       const p = path.toString()
 
       return p.includes('package.json') || p.endsWith('.prettierrc')
@@ -237,7 +237,7 @@ describe('detectProjectOptions', () => {
   })
 
   test('should detect CSpell from config files', () => {
-    vi.mocked(fs.existsSync).mockImplementation(path => {
+    vi.mocked(fs.existsSync).mockImplementation((path: Parameters<typeof fs.existsSync>[0]) => {
       const p = path.toString()
 
       return p.includes('package.json') || p.endsWith('cspell.config.yaml')
@@ -315,7 +315,7 @@ describe('detectProjectOptions', () => {
   })
 
   test('should detect GraphQL when schema.graphql exists', () => {
-    vi.mocked(fs.existsSync).mockImplementation(path => path.toString().includes('schema.graphql') || path.toString().includes('package.json'))
+    vi.mocked(fs.existsSync).mockImplementation((path: Parameters<typeof fs.existsSync>[0]) => path.toString().includes('schema.graphql') || path.toString().includes('package.json'))
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({ dependencies: {} }))
 
@@ -325,7 +325,7 @@ describe('detectProjectOptions', () => {
   })
 
   test('should handle missing package.json gracefully', () => {
-    vi.mocked(fs.existsSync).mockImplementation(path => !path.toString().includes('package.json'))
+    vi.mocked(fs.existsSync).mockImplementation((path: Parameters<typeof fs.existsSync>[0]) => !path.toString().includes('package.json'))
 
     vi.mocked(fs.readFileSync).mockImplementation(() => {
       throw new Error('File not found')
@@ -664,7 +664,7 @@ describe('detectProjectOptions', () => {
   })
 
   test('should detect Bun, Deno, and Cloudflare runtime signals', () => {
-    vi.mocked(fs.existsSync).mockImplementation(path => {
+    vi.mocked(fs.existsSync).mockImplementation((path: Parameters<typeof fs.existsSync>[0]) => {
       const p = path.toString()
 
       return p.includes('package.json') || p.endsWith('bun.lock') || p.endsWith('deno.json') || p.endsWith('wrangler.jsonc')
@@ -684,7 +684,7 @@ describe('detectProjectOptions', () => {
   })
 
   test('should detect workspace projects from package workspaces', () => {
-    vi.mocked(fs.existsSync).mockImplementation(path => {
+    vi.mocked(fs.existsSync).mockImplementation((path: Parameters<typeof fs.existsSync>[0]) => {
       const p = path.toString()
 
       return p.includes('package.json') || p.endsWith('packages') || p.endsWith('packages/core/package.json')
@@ -853,7 +853,7 @@ describe('detectProjectOptions', () => {
   })
 
   test('should use default extensions, formats, and tools when package.json is present', () => {
-    vi.mocked(fs.existsSync).mockImplementation(path => path.toString().includes('package.json'))
+    vi.mocked(fs.existsSync).mockImplementation((path: Parameters<typeof fs.existsSync>[0]) => path.toString().includes('package.json'))
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
       dependencies: {}
@@ -868,7 +868,7 @@ describe('detectProjectOptions', () => {
 
   test('should detect tsconfig.base.json as TypeScript project', () => {
     vi.mocked(fs.existsSync).mockImplementation(
-      path => path.toString().includes('tsconfig.base.json') || path.toString().includes('package.json')
+      (path: Parameters<typeof fs.existsSync>[0]) => path.toString().includes('tsconfig.base.json') || path.toString().includes('package.json')
     )
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({ dependencies: {} }))
@@ -880,7 +880,7 @@ describe('detectProjectOptions', () => {
 
   describe('NextMode detection', () => {
     test('should detect NextMode.AppRouter when app/ directory exists', () => {
-      vi.mocked(fs.existsSync).mockImplementation(path => {
+      vi.mocked(fs.existsSync).mockImplementation((path: Parameters<typeof fs.existsSync>[0]) => {
         const p = path.toString()
 
         return p.includes('package.json') || p.endsWith('/app') || p.endsWith('\\app')
@@ -896,7 +896,7 @@ describe('detectProjectOptions', () => {
     })
 
     test('should detect NextMode.Pages when only pages/ directory exists (no app/)', () => {
-      vi.mocked(fs.existsSync).mockImplementation(path => {
+      vi.mocked(fs.existsSync).mockImplementation((path: Parameters<typeof fs.existsSync>[0]) => {
         const p = path.toString()
 
         // Return true for package.json only — no app/ directory present
@@ -960,7 +960,7 @@ describe('detectProjectOptions', () => {
   })
 
   test('should not downgrade runtime when universal frameworks are combined with node frameworks', () => {
-    vi.mocked(fs.existsSync).mockImplementation(path => path.toString().includes('package.json'))
+    vi.mocked(fs.existsSync).mockImplementation((path: Parameters<typeof fs.existsSync>[0]) => path.toString().includes('package.json'))
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
       dependencies: {
@@ -976,7 +976,7 @@ describe('detectProjectOptions', () => {
   })
 
   test('should keep Expo runtime universal while still implying react', () => {
-    vi.mocked(fs.existsSync).mockImplementation(path => path.toString().includes('package.json'))
+    vi.mocked(fs.existsSync).mockImplementation((path: Parameters<typeof fs.existsSync>[0]) => path.toString().includes('package.json'))
 
     vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
       dependencies: { expo: 'latest' }

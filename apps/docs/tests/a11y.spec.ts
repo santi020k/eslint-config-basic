@@ -2,7 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { test } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 
 import { expectNoUnexpectedAccessibilityViolations } from './helpers/accessibility.js'
 
@@ -54,11 +54,13 @@ test.describe('Accessibility', () => {
     test(`page ${url} should have no accessibility violations in light mode`, async ({ page }) => {
       await page.goto(url)
 
-      await page.waitForLoadState('networkidle')
+      await expect(page.locator('body')).toBeVisible()
 
       await page.evaluate(() => {
         document.documentElement.dataset.theme = 'light'
       })
+
+      await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
 
       await expectNoUnexpectedAccessibilityViolations(page, [
         {
@@ -71,14 +73,13 @@ test.describe('Accessibility', () => {
     test(`page ${url} should have no accessibility violations in dark mode`, async ({ page }) => {
       await page.goto(url)
 
-      await page.waitForLoadState('networkidle')
+      await expect(page.locator('body')).toBeVisible()
 
       await page.evaluate(() => {
         document.documentElement.dataset.theme = 'dark'
       })
 
-      // wait for theme to apply
-      await page.waitForTimeout(100)
+      await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
 
       await expectNoUnexpectedAccessibilityViolations(page, [
         {

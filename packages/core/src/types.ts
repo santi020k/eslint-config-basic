@@ -300,6 +300,12 @@ export type SettingOption = Setting | SettingName
  */
 export type StrictMode = 'ci' | 'pedantic' | 'recommended' | boolean
 
+export interface TailwindOptions {
+  detectComponentClasses?: boolean
+  entryPoint?: string
+  ignore?: string[]
+}
+
 export type TestingName = `${Testing}`
 
 export type TestingOption = Testing | TestingName
@@ -312,6 +318,7 @@ export type TypeScriptMode = 'off' | 'strict' | 'syntax' | 'type-aware'
 
 export interface TypeScriptOptions {
   mode?: TypeScriptMode
+  project?: boolean | string | string[]
   projectService?: boolean
   tsconfigRootDir?: string
 }
@@ -477,8 +484,22 @@ export interface EslintConfigOptions {
    */
   strict?: StrictMode
 
+  /**
+   * Tailwind CSS plugin options. Providing an object enables the Tailwind
+   * integration, while `false` disables auto-detected Tailwind support.
+   */
+  tailwind?: false | TailwindOptions
+
   /** List of testing frameworks and testing environments */
   testing?: TestingOption[]
+
+  /**
+   * File globs for test integrations when the defaults do not match your project.
+   *
+   * For example, set `testingFiles.playwright` to the folder that contains
+   * your Playwright specs when it differs from the built-in defaults.
+   */
+  testingFiles?: Partial<Record<TestingName, string[]>>
 
   /** List of integrations for external standalone tools */
   tools?: ToolOption[]

@@ -49,6 +49,24 @@ export default await defineConfig({
 
 The `frameworks` object still accepts imported config arrays and factories. This keeps the internal architecture flexible for tests, experiments, and custom wrappers, while app-level configs can stay simple with booleans.
 
+`defineConfig()` also accepts local flat-config entries after the options object, so most projects do not need to wrap the generated config in an array just to add one or two overrides.
+
+```js
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig(
+  {
+    frameworks: { astro: true },
+    typescript: true
+  }, {
+    files: ['**/*.astro'],
+    rules: {
+      '@typescript-eslint/no-unsafe-return': 'off'
+    }
+  }
+)
+```
+
 ## CLI
 
 

@@ -12,11 +12,14 @@ export const playwright: () => Promise<TSESLint.FlatConfig.ConfigArray> = define
   return [
     {
       files: [
-        '**/e2e/**/*.{js,ts,jsx,tsx}',
-        '**/tests/e2e/**/*.{js,ts,jsx,tsx}',
-        '**/*.e2e.{js,ts,jsx,tsx}',
-        '**/*.e2e.spec.{js,ts,jsx,tsx}',
-        '**/playwright/**/*.{js,ts,jsx,tsx}'
+        '**/e2e/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+        '**/tests/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+        '**/tests/e2e/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+        '**/*.e2e.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+        '**/*.e2e.spec.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+        '**/*.playwright.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+        '**/*.playwright.spec.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+        '**/playwright/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'
       ],
       name: 'integrations/playwright',
       ...pluginPlaywright.configs['flat/recommended']
