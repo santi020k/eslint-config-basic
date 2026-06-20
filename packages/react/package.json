@@ -58,7 +58,7 @@
     "url": "git+https://github.com/santi020k/eslint-config-basic.git",
     "directory": "packages/react"
   },
-  "homepage": "https://eslint.santi020k.com/frameworks/react.html",
+  "homepage": "https://eslint.santi020k.com/frameworks/react",
   "bugs": {
     "url": "https://github.com/santi020k/eslint-config-basic/issues"
   },

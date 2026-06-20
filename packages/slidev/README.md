@@ -4,7 +4,7 @@ Slidev support for Vue-powered presentation decks.
 
 This package is part of the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.
 
-- Docs: [Slidev guide](https://eslint.santi020k.com/frameworks/slidev.html)
+- Docs: [Slidev guide](https://eslint.santi020k.com/frameworks/slidev)
 - Repository: [santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)
 - Author: [santi020k](https://santi020k.com)
 

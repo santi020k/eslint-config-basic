@@ -4,7 +4,7 @@ Libraries, tools, testing, formats, and extensions integrations.
 
 This package is part of the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.
 
-- Docs: [Integrations package](https://eslint.santi020k.com/packages/integrations.html)
+- Docs: [Integrations package](https://eslint.santi020k.com/packages/integrations)
 - Repository: [santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)
 - Author: [santi020k](https://santi020k.com)
 

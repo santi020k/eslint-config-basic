@@ -53,7 +53,7 @@
     "url": "git+https://github.com/santi020k/eslint-config-basic.git",
     "directory": "packages/solid"
   },
-  "homepage": "https://eslint.santi020k.com/frameworks/solid.html",
+  "homepage": "https://eslint.santi020k.com/frameworks/solid",
   "bugs": {
     "url": "https://github.com/santi020k/eslint-config-basic/issues"
   },

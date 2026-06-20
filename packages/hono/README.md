@@ -4,7 +4,7 @@ Hono support for Fetch API and edge runtime projects.
 
 This package is part of the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.
 
-- Docs: [Hono guide](https://eslint.santi020k.com/frameworks/hono.html)
+- Docs: [Hono guide](https://eslint.santi020k.com/frameworks/hono)
 - Repository: [santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)
 - Author: [santi020k](https://santi020k.com)
 

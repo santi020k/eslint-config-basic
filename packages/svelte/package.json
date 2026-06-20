@@ -49,7 +49,7 @@
     "url": "git+https://github.com/santi020k/eslint-config-basic.git",
     "directory": "packages/svelte"
   },
-  "homepage": "https://eslint.santi020k.com/frameworks/svelte.html",
+  "homepage": "https://eslint.santi020k.com/frameworks/svelte",
   "bugs": {
     "url": "https://github.com/santi020k/eslint-config-basic/issues"
   },

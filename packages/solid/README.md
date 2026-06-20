@@ -4,7 +4,7 @@ SolidJS support for projects using the shared linting baseline.
 
 This package is part of the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.
 
-- Docs: [Solid guide](https://eslint.santi020k.com/frameworks/solid.html)
+- Docs: [Solid guide](https://eslint.santi020k.com/frameworks/solid)
 - Repository: [santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)
 - Author: [santi020k](https://santi020k.com)
 

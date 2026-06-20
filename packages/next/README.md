@@ -4,7 +4,7 @@ Next.js rules, App Router notes, and the React dependency contract.
 
 This package is part of the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.
 
-- Docs: [Next.js guide](https://eslint.santi020k.com/frameworks/next.html)
+- Docs: [Next.js guide](https://eslint.santi020k.com/frameworks/next)
 - Repository: [santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)
 - Author: [santi020k](https://santi020k.com)
 
