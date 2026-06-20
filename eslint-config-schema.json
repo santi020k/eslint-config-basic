@@ -1889,6 +1889,18 @@
             "type": "string"
           },
           "type": "array"
+        },
+        "noUnknownClasses": {
+          "enum": [
+            false,
+            "error",
+            "off",
+            "warn"
+          ],
+          "type": [
+            "boolean",
+            "string"
+          ]
         }
       },
       "type": "object"

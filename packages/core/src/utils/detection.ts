@@ -37,6 +37,7 @@ const createDefaultOptions = (): EslintConfigOptions => ({
   typescript: false
 })
 
+const detectionCache = new Map<string, EslintConfigOptions>()
 const dedupe = <T>(values: T[] = []): T[] => [...new Set(values)]
 const pathExists = (path: string): boolean => existsSync(path)
 
@@ -371,23 +372,26 @@ const parsePnpmWorkspacePatterns = (detectRootDir: string): string[] => {
   if (!pathExists(yamlPath)) return []
 
   try {
-     
     const content = readFileSync(yamlPath, 'utf-8')
     const patterns: string[] = []
     let inPackages = false
 
     for (const line of content.split('\n')) {
-      if (/^packages\s*:/.test(line)) { inPackages = true;
+      if (/^packages\s*:/.test(line)) {
+        inPackages = true
 
- continue }
-
-      if (inPackages) {
-        if (/^[a-zA-Z]/.test(line)) break
-
-        const match = /^\s*-\s+['"]?([^'"#\s]+)['"]?/.exec(line)
-
-        if (match?.[1]) patterns.push(match[1])
+        continue
       }
+
+      if (!inPackages) continue
+
+      // A new root-level YAML key ends the packages block.
+      // Flow-sequence format (packages: ['...']) is not handled; it's uncommon in practice.
+      if (/^[a-zA-Z]/.test(line)) break
+
+      const match = /^\s*-\s+['"]?([^'"#\s]+)['"]?/.exec(line)
+
+      if (match?.[1]) patterns.push(match[1])
     }
 
     return patterns
@@ -468,6 +472,7 @@ const resolvePreset = (options: EslintConfigOptions): Preset => {
  * Do not use these in application code.
  */
 export const __detectionInternals = {
+  clearDetectionCache: (): void => { detectionCache.clear(); },
   collectAllDependencies,
   createDefaultOptions,
   createRuntimeSetter,
@@ -493,10 +498,16 @@ export const __detectionInternals = {
  * @returns Detected ESLint configuration options
  */
 export const detectProjectOptions = (detectRootDir: string = process.cwd()): EslintConfigOptions => {
+  const cached = detectionCache.get(detectRootDir)
+
+  if (cached) return cached
+
   const packageJsonPath = join(detectRootDir, 'package.json')
   const options = createDefaultOptions()
 
   if (!pathExists(packageJsonPath)) {
+    detectionCache.set(detectRootDir, options)
+
     return options
   }
 
@@ -533,6 +544,8 @@ export const detectProjectOptions = (detectRootDir: string = process.cwd()): Esl
     options.extensions = dedupe([...(options.extensions ?? []), ...detectExtensions(allDeps)])
 
     options.preset = resolvePreset(options)
+
+    detectionCache.set(detectRootDir, options)
 
     return options
   } catch (error) {

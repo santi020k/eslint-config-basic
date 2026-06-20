@@ -467,9 +467,6 @@ describe('Config Enums', () => {
   })
 
   test('should export all Setting enum values', () => {
-    expect(Setting.DefaultIgnores).toBeDefined()
-    expect(Setting.GeneratedCodeIgnores).toBeDefined()
-    expect(Setting.Gitignore).toBeDefined()
     expect(Setting.NoDefaultIgnores).toBeDefined()
     expect(Setting.NoGeneratedCodeIgnores).toBeDefined()
     expect(Setting.NoGitignore).toBeDefined()

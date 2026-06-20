@@ -53,6 +53,47 @@ export default [...(await react())]
 
 If you only use `frameworks: { react: true }` or auto-detection, nothing changes — `defineConfig()` handles the loading internally.
 
+## React Rule Names Changed
+
+The React config switched from `eslint-plugin-react` + `eslint-plugin-react-hooks` to `@eslint-react/eslint-plugin`. Rule prefixes changed:
+
+| v1 prefix | v2 prefix |
+| :--- | :--- |
+| `react/` | `@eslint-react/` |
+| `react-hooks/` | `@eslint-react/` |
+| `react-dom/` | `@eslint-react/dom/` |
+
+**Action required** if you have custom rule overrides or inline disable comments:
+
+```js
+// v1
+export default {
+  rules: {
+    'react-hooks/exhaustive-deps': 'off',
+    'react/no-array-index-key': 'warn'
+  }
+}
+```
+
+```js
+// v2
+export default {
+  rules: {
+    '@eslint-react/exhaustive-deps': 'off',
+    '@eslint-react/no-array-index-key': 'warn'
+  }
+}
+```
+
+Search your codebase for `eslint-disable` comments using old prefixes:
+
+```sh
+grep -r "eslint-disable.*react/" .
+grep -r "eslint-disable.*react-hooks/" .
+```
+
+The `react-compiler` and `react-refresh` plugin rules (`react-compiler/react-compiler`, `react-refresh/only-export-components`) are unchanged.
+
 ## Package Changes
 
 Remove direct framework config packages from application projects:

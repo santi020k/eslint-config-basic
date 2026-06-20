@@ -185,11 +185,24 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
 
     const setup = config.find(entry => entry.name === 'eslint-config-typescript/setup')
 
+    expect(setup?.files).toContain('**/*.astro/*.ts')
     expect(setup?.languageOptions?.parserOptions).toMatchObject({
       project: true,
       tsconfigRootDir: tmpdir()
     })
     expect(setup?.languageOptions?.parserOptions).not.toHaveProperty('projectService')
+  })
+
+  test('should disable n/no-unpublished-import for eslint.config.* files', async () => {
+    const config = await defineConfig({})
+
+    const override = (config as Record<string, unknown>[]).find(
+      (c: Record<string, unknown>) => c.name === 'eslint-config/eslint-config-file-overrides'
+    )
+
+    expect(override).toBeDefined()
+    expect((override?.rules as Record<string, unknown>)?.['n/no-unpublished-import']).toBe('off')
+    expect((override?.files as string[])?.some(f => f.includes('eslint.config'))).toBe(true)
   })
 
   test('should include best-practices rules when Extension.BestPractices is requested', async () => {

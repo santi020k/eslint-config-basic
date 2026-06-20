@@ -237,10 +237,13 @@ import { defineConfig } from '@santi020k/eslint-config-basic'
 export default await defineConfig({
   tailwind: {
     entryPoint: 'src/styles/global.css',
-    ignore: ['^prose-custom$', '^icon-wrapper$']
+    ignore: ['^prose-custom$', '^icon-wrapper$'],
+    noUnknownClasses: 'warn'
   }
 })
 ```
+
+Use `noUnknownClasses: false` when a project uses many generated or framework-provided classes but should keep the rest of the Tailwind rules.
 
 Set `tailwind: false` to disable auto-detected Tailwind linting for a package.
 

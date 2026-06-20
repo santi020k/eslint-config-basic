@@ -1,38 +1,39 @@
 version: "0.2"
 language: en
 words:
+  - ACMR
   - activedescendant
   - agentchat
   - anthropics
   - app-router
+  - arethetypeswrong
   - astro
   - astrojs
-  - autobuild
   - asyncgenerator
-  - attw
-  - arethetypeswrong
   - asynciterable
+  - attw
+  - autobuild
   - behaviour
   - better-tailwindcss
   - bunfig
   - canonicalurl
   - changeset
   - changesets
+  - clinerules
   - codecov
   - codegen
   - commitizen
-  - clinerules
   - commonmark
   - cspell
   - darraghor
   - defu
   - dev-dependency
   - dts
-  - eslint-config
+  - envinfo
   - esac
   - esbuild
+  - eslint-config
   - esmodule
-  - envinfo
   - expo
   - fetchcontent
   - flat-config
@@ -60,9 +61,9 @@ words:
   - mastra
   - mdx
   - mikro
+  - modelcontextprotocol
   - monorepo
   - multilines
-  - modelcontextprotocol
   - myext
   - myframework
   - myintegration
@@ -96,23 +97,23 @@ words:
   - qwik
   - rimraf
   - root-dir
-  - ACMR
   - santi
   - santi020k
   - scopedslots
   - sequelize
+  - serialised
   - serviceworker
-  - Slidev
   - slidev
+  - Slidev
   - solidjs
   - sonarjs
   - spacebar
   - st
   - stnl
   - stringly
+  - styl
   - styleguide
   - stylistic
-  - styl
   - svelte
   - Tanstack
   - textnodes
@@ -127,6 +128,9 @@ words:
   - typedarrays
   - typedoc
   - typeorm
+  - undici
+  - unioned
+  - unrs
   - urql
   - v8
   - vdom
@@ -138,12 +142,9 @@ words:
   - vue
   - vuejs
   - weakref
+  - workerd
   - workspace
   - workspaces
-  - undici
-  - unioned
-  - unrs
-  - workerd
 ignorePaths:
   - node_modules
   - dist
@@ -161,4 +162,3 @@ ignorePaths:
   - .vscode
   - llms.txt
   - llms-full.txt
-

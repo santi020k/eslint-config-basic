@@ -2,7 +2,7 @@ import {
   defineConfig,
   type Extension,
   type Format,
-  type Library,
+  Library,
   Preset,
   Runtime,
   type Testing,
@@ -171,6 +171,77 @@ describe('defineConfig workspacePrefixes', () => {
     const withPrefix = await defineConfig({ ...baseOptions, workspacePrefixes: ['@myorg'] })
 
     expect(withPrefix.length).toBeGreaterThanOrEqual(withoutPrefix.length)
+  })
+})
+
+describe('lite tailwind options', () => {
+  test('explicit entryPoint and ignore are reflected in the settings block', async () => {
+    const config = await defineConfig({
+      ...baseOptions,
+      tailwind: {
+        entryPoint: 'src/styles/global.css',
+        ignore: ['^prose-custom$']
+      }
+    })
+
+    const tw = config.find(c => c.name === 'eslint-config-lite/tailwind-settings')
+
+    expect(tw).toBeDefined()
+    expect(tw?.settings?.['better-tailwindcss']).toMatchObject({
+      detectComponentClasses: true,
+      entryPoint: 'src/styles/global.css',
+      ignore: ['^prose-custom$']
+    })
+    expect(tw?.rules?.['better-tailwindcss/no-unknown-classes']).toEqual([
+      'error',
+      { entryPoint: 'src/styles/global.css', ignore: ['^prose-custom$'] }
+    ])
+  })
+
+  test('noUnknownClasses: false disables the rule', async () => {
+    const config = await defineConfig({
+      ...baseOptions,
+      tailwind: {
+        entryPoint: 'src/styles/global.css',
+        noUnknownClasses: false
+      }
+    })
+
+    const tw = config.find(c => c.name === 'eslint-config-lite/tailwind-settings')
+
+    expect(tw).toBeDefined()
+    expect(tw?.rules?.['better-tailwindcss/no-unknown-classes']).toBe('off')
+  })
+
+  test('noUnknownClasses: warn without extra options produces bare severity', async () => {
+    const config = await defineConfig({
+      ...baseOptions,
+      tailwind: { noUnknownClasses: 'warn' }
+    })
+
+    const tw = config.find(c => c.name === 'eslint-config-lite/tailwind-settings')
+
+    expect(tw?.rules?.['better-tailwindcss/no-unknown-classes']).toBe('warn')
+  })
+
+  test('tailwind: false suppresses the settings block even with Library.Tailwind', async () => {
+    const config = await defineConfig({
+      ...baseOptions,
+      libraries: [Library.Tailwind],
+      tailwind: false
+    })
+
+    expect(config.find(c => c.name === 'eslint-config-lite/tailwind-settings')).toBeUndefined()
+  })
+
+  test('Library.Tailwind without explicit tailwind option auto-detects (returns no settings block when no entry point found)', async () => {
+    const config = await defineConfig({
+      ...baseOptions,
+      detectRootDir: '/__eslint-config-basic_lite_tests_no_detect__',
+      libraries: [Library.Tailwind]
+    })
+
+    expect(config.find(c => c.name === 'eslint-config-lite/tailwind-settings')).toBeUndefined()
   })
 })
 

@@ -12,5 +12,8 @@ package-lock.json
 # Turborepo
 .turbo
 
+# ESLint cache
+.eslintcache
+
 # CSpell cache
 .cspellcache

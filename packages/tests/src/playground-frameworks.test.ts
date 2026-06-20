@@ -11,8 +11,12 @@ const __dirname = dirname(__filename)
 const REPO_ROOT = join(__dirname, '../../..')
 
 const lintPlayground = async (filter: string): Promise<void> => {
+  const env = { ...process.env }
+  delete env.VITEST
+
   await execFileAsync('pnpm', ['--filter', filter, 'run', 'lint'], {
     cwd: REPO_ROOT,
+    env,
     timeout: 60_000
   })
 }

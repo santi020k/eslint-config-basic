@@ -64,9 +64,13 @@ const runExternalLint = (cwd: string, files: string[]): LintResult => {
     console.log(JSON.stringify(payload))
   `
 
+  const env = { ...process.env }
+  delete env.VITEST
+
   const output = execFileSync(process.execPath, ['--input-type=module', '--eval', script], {
     cwd: repoRoot,
-    encoding: 'utf8'
+    encoding: 'utf8',
+    env
   })
 
   return JSON.parse(output) as { errorCount: number, ruleIds: string[], warningCount: number }

@@ -1,6 +1,6 @@
-import type { FlatConfigArray } from '@santi020k/eslint-config-core'
-
 import type { TSESLint } from '@typescript-eslint/utils'
+
+import type { FlatConfigArray } from './types.js'
 
 export type NormalizedStrictMode = 'ci' | 'pedantic' | 'recommended'
 
@@ -37,15 +37,23 @@ export const applyStrictMode = (
 
   if (strictMode === 'recommended') return configs
 
-  return configs.map((config: TSESLint.FlatConfig.Config) => {
-    if (config.rules) {
-      const strictRules = Object.fromEntries(
-        Object.entries(config.rules).map(([key, value]) => [key, promoteRuleSeverity(value)])
-      )
+  type ConfigEntry = TSESLint.FlatConfig.Config | TSESLint.FlatConfig.ConfigArray
 
-      return { ...config, rules: strictRules }
+  const recurse = (item: ConfigEntry): ConfigEntry => {
+    if (Array.isArray(item)) {
+      return item.map(config => recurse(config) as TSESLint.FlatConfig.Config)
     }
 
-    return config
-  })
+    if (item.rules) {
+      const strictRules = Object.fromEntries(
+        Object.entries(item.rules).map(([key, value]) => [key, promoteRuleSeverity(value)])
+      )
+
+      return { ...item, rules: strictRules }
+    }
+
+    return item
+  }
+
+  return recurse(configs) as FlatConfigArray
 }
