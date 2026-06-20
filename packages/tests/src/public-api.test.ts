@@ -4,6 +4,7 @@ import {
   autogen,
   bestPractices,
   biome,
+  boundaries,
   command,
   compat,
   createImportGroups,
@@ -217,6 +218,7 @@ describe('Public API Re-exports', () => {
     expect(typeof a11y).toBe('function')
     expect(Array.isArray(bestPractices)).toBe(true)
     expect(typeof biome).toBe('function')
+    expect(Array.isArray(boundaries)).toBe(true)
     expect(typeof compat).toBe('function')
     expect(typeof deMorgan).toBe('function')
     expect(typeof depend).toBe('function')
