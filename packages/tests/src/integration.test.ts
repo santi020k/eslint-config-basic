@@ -84,6 +84,23 @@ describe('Integration Tests', () => {
       expect(ruleIds).toContain('@stylistic/quotes')
     })
 
+    test('should not run type-aware rules on Astro virtual TypeScript fragments', async () => {
+      const config = await defineConfig({
+        detection: false,
+        frameworks: { astro: true },
+        tools: [],
+        tsconfigRootDir: FIXTURES_DIR,
+        typescript: {
+          project: true,
+          projectService: false
+        }
+      })
+      const code = 'const label: string = "hello"\n\nlabel\n'
+      const results = await lintText(code, config, join(FIXTURES_DIR, 'astro.astro/1_1.ts'))
+
+      expect(results[0].fatalErrorCount).toBe(0)
+    })
+
     test('should not report TypeScript-unrelated issues on typed code', async () => {
       // Use typescript: false to avoid projectService rejecting virtual file paths
       const config = await defineConfig({ typescript: false })
