@@ -11,7 +11,7 @@ import {
   type DetectedFrameworkName,
   detectProjectOptions,
   type EslintConfigOptions,
-  type Extension,
+  Extension,
   findTailwindEntryPoint,
   type FlatConfigArray,
   flattenConfigInputs,
@@ -148,6 +148,7 @@ export {
   autogen,
   bestPractices,
   biome,
+  boundaries,
   command,
   compat,
   cspell,
@@ -547,6 +548,14 @@ const buildEslintConfigs = async (params: BuildConfigsParams): Promise<FlatConfi
       await getIntegrationConfigs(uniqueLibraries, uniqueTools, uniqueTesting, uniqueFormats, uniqueExtensions),
       testingFiles
     ),
+    {
+      files: ['**/scripts/**/*.{js,mjs,cjs,ts,mts,cts}'],
+      name: 'eslint-config-basic/scripts-overrides',
+      rules: {
+        'n/no-unpublished-import': 'off',
+        ...(uniqueExtensions.includes(Extension.Security) ? { 'security/detect-non-literal-fs-filename': 'off' } : {})
+      }
+    },
     ...(tailwindOptions ? [await createTailwindSettingsConfig(tailwindOptions)] : []),
     ...(await getPrettierConfig(uniqueTools))
   ]

@@ -1,5 +1,61 @@
 # @santi020k/eslint-config-integrations
 
+## 2.0.0
+
+### Major Changes
+
+- [#87](https://github.com/santi020k/eslint-config-basic/pull/87) [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc) Thanks [@santi020k](https://github.com/santi020k)! - **Breaking**: require ESLint 10. All packages now declare `"eslint": "^10.0.0"` as peer dependency (previously `^9.0.0 || ^10.0.0`), and `@santi020k/eslint-config-core` depends on `@eslint/js` v10.
+
+  ESLint v9.x reaches end-of-life on 2026-08-06; targeting v10 only lets the configs rely on v10 behavior:
+
+  - per-file config lookup (`eslint.config.*` resolved from each linted file's directory) — workspace packages can now ship their own config files alongside or instead of the root `projects` option
+  - JSX reference tracking — correct scope analysis for JSX without plugin workarounds
+  - the updated `eslint:recommended` baseline from `@eslint/js` v10
+
+  If you are still on ESLint 9, stay on the v1.x line of these packages.
+
+- [#87](https://github.com/santi020k/eslint-config-basic/pull/87) [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc) Thanks [@santi020k](https://github.com/santi020k)! - Release v2 with a single public application install through `@santi020k/eslint-config-basic`.
+
+  Application projects no longer need to install or import separate framework config packages. Framework integrations are bundled behind the main package and can be enabled with booleans such as `frameworks.react: true`, `frameworks.next: true`, or by relying on auto-detection from `eslintConfig()`.
+
+  Detected framework configs are now enabled by default, while an explicit `frameworks: {}` remains the opt-out path. Next.js, Expo, and Remix automatically include React rules when enabled.
+
+  The documentation site now keeps the previous v1 docs under `/v1/`, updates the root docs for v2, and includes a v1 to v2 migration guide.
+
+### Minor Changes
+
+- [#87](https://github.com/santi020k/eslint-config-basic/pull/87) [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc) Thanks [@santi020k](https://github.com/santi020k)! - Add broader AI tooling support:
+
+  - **New agent skill targets** in `generate-skill`: Gemini (`.gemini/styleguide.md`), Cline (`.clinerules/`), Roo Code (`.roo/rules/`), and Kiro (`.kiro/steering/` with `inclusion: always` front-matter). The generator also maintains a guarded ESLint-standards section in an existing root `AGENTS.md` (the open standard read by Codex CLI, OpenCode, Jules, Amp, and others), mirroring the `.github/copilot-instructions.md` behavior.
+  - **New library integrations**: `Library.Langchain` and `Library.LlamaIndex` add import safety rules for LangChain.js (`langchain`, `@langchain/*`) and LlamaIndex.TS (`llamaindex`, `@llamaindex/*`) projects, with auto-detection from `package.json` dependencies.
+  - Generated agent skills now report AI SDK, MCP, Mastra, OpenAI Agents, LangChain, and LlamaIndex integrations in the feature summary.
+
+- [#87](https://github.com/santi020k/eslint-config-basic/pull/87) [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc) Thanks [@santi020k](https://github.com/santi020k)! - Add `@santi020k/eslint-config-lite` as an optional composer package for projects that want to install framework and integration config packages manually. The full `@santi020k/eslint-config-basic` package remains the recommended default install.
+
+  Expose integration composition helpers from `@santi020k/eslint-config-integrations` so the lite package can lazy-load integration configs only when selected.
+
+  Teach `basic-eslint doctor` to recognize lite configs and warn when detected frameworks or integrations are missing their manually installed config packages.
+
+  Add `basic-eslint doctor --lite-install` to print the detected package-manager install command for switching a project to the lite package, including framework config packages, integrations, ESLint, and TypeScript when needed.
+
+  Document package-choice metrics, a Basic-to-Lite migration recipe, and a lite-specific `Preset.All` warning.
+
+- [#87](https://github.com/santi020k/eslint-config-basic/pull/87) [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc) Thanks [@santi020k](https://github.com/santi020k)! - Add new framework and integration support:
+
+  - **New framework packages**: Nuxt (`@nuxt/eslint-plugin` on top of the Vue config), Lit (`eslint-plugin-lit` + `eslint-plugin-wc`), React Router v7 (successor to Remix), and TanStack Start (bundles TanStack Router + Query rules). All are wired into `eslintConfig()` framework keys, bundled resolvers, auto-detection (`nuxt`, `lit`, `@react-router/dev`, `@tanstack/react-start`, `@tanstack/solid-start`), the CLI, and the agent-skill generator.
+  - **New formats**: `Format.Css` (official `@eslint/css` plugin) and `Format.Html` (`@html-eslint`).
+  - **New extensions**: `Extension.Node` (`eslint-plugin-n`, with TS-aware module-resolution overrides), `Extension.Compat` (browserslist compatibility), `Extension.DeMorgan`, `Extension.Depend`, and `Extension.Oxlint` (disables rules covered by Oxlint for hybrid setups, applied last like Biome).
+  - **New tool**: `Tool.Pnpm` (`eslint-plugin-pnpm`) enforcing pnpm catalogs and workspace settings in `package.json` and `pnpm-workspace.yaml`.
+
+### Patch Changes
+
+- [#87](https://github.com/santi020k/eslint-config-basic/pull/87) [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc) Thanks [@santi020k](https://github.com/santi020k)! - Refresh all external dependencies to their latest versions across the monorepo (58 bumps), including majors: TypeScript 6.0, Vite 8, Angular 22, MikroORM 7, and TypeORM 1.0. ESLint moves to 10.5, the `vite` and `eslint` pnpm overrides are updated to match, and the Angular and NestJS playgrounds now declare `rxjs@^7.8.2` explicitly so framework peer dependencies no longer resolve against a stale transitive rxjs 6.
+
+- [#92](https://github.com/santi020k/eslint-config-basic/pull/92) [`9524bf8`](https://github.com/santi020k/eslint-config-basic/commit/9524bf8a955ece3cb44e8bdd4114bced0f8a646d) Thanks [@santi020k](https://github.com/santi020k)! - fix: export `boundaries` from the main package barrel — it was wired internally but missing from the public API, making `import { boundaries } from '@santi020k/eslint-config-basic'` resolve to undefined
+
+- Updated dependencies [[`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc), [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc), [`dfba51d`](https://github.com/santi020k/eslint-config-basic/commit/dfba51dca7387a71a263af206eb86fd8df15f387), [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc), [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc), [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc), [`59158db`](https://github.com/santi020k/eslint-config-basic/commit/59158dbc0b48de041062f4d0c75b1f7e3a1e779c), [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc), [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc), [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc), [`59158db`](https://github.com/santi020k/eslint-config-basic/commit/59158dbc0b48de041062f4d0c75b1f7e3a1e779c), [`2ee503b`](https://github.com/santi020k/eslint-config-basic/commit/2ee503be55f5484624ee2e873fe59f348709eadc)]:
+  - @santi020k/eslint-config-core@2.0.0
+
 ## 2.0.0-beta.3
 
 ### Patch Changes

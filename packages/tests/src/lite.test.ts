@@ -1,6 +1,6 @@
 import {
   defineConfig,
-  type Extension,
+  Extension,
   type Format,
   Library,
   Preset,
@@ -242,6 +242,32 @@ describe('lite tailwind options', () => {
     })
 
     expect(config.find(c => c.name === 'eslint-config-lite/tailwind-settings')).toBeUndefined()
+  })
+})
+
+describe('scripts-overrides block', () => {
+  test('is present and disables n/no-unpublished-import for script files', async () => {
+    const config = await defineConfig({ ...baseOptions })
+    const scriptsBlock = config.find(c => c.name === 'eslint-config-lite/scripts-overrides')
+
+    expect(scriptsBlock).toBeDefined()
+    expect(scriptsBlock?.files).toEqual(['**/scripts/**/*.{js,mjs,cjs,ts,mts,cts}'])
+    expect(scriptsBlock?.rules?.['n/no-unpublished-import']).toBe('off')
+  })
+
+  test('includes security rule when Security extension is enabled', async () => {
+    const config = await defineConfig({ ...baseOptions, extensions: [Extension.Security] })
+    const scriptsBlock = config.find(c => c.name === 'eslint-config-lite/scripts-overrides')
+
+    expect(scriptsBlock?.rules?.['security/detect-non-literal-fs-filename']).toBe('off')
+  })
+
+  test('excludes security rule when Security extension is not enabled', async () => {
+    const config = await defineConfig({ ...baseOptions, extensions: [] })
+    const scriptsBlock = config.find(c => c.name === 'eslint-config-lite/scripts-overrides')
+    const ruleKeys = Object.keys(scriptsBlock?.rules ?? {})
+
+    expect(ruleKeys.some(k => k.startsWith('security/'))).toBe(false)
   })
 })
 
