@@ -51,6 +51,8 @@ jobs:
       - name: Bump versions
         if: steps.check.outputs.count > 0
         run: pnpm run version-packages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Commit version bump
         if: steps.check.outputs.count > 0
