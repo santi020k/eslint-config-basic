@@ -53,7 +53,7 @@
     "url": "git+https://github.com/santi020k/eslint-config-basic.git",
     "directory": "packages/angular"
   },
-  "homepage": "https://eslint.santi020k.com/frameworks/angular.html",
+  "homepage": "https://eslint.santi020k.com/frameworks/angular",
   "bugs": {
     "url": "https://github.com/santi020k/eslint-config-basic/issues"
   },

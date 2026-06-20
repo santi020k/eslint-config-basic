@@ -4,7 +4,7 @@ Angular support as an optional framework package.
 
 This package is part of the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.
 
-- Docs: [Angular guide](https://eslint.santi020k.com/frameworks/angular.html)
+- Docs: [Angular guide](https://eslint.santi020k.com/frameworks/angular)
 - Repository: [santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)
 - Author: [santi020k](https://santi020k.com)
 

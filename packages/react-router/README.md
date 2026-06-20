@@ -4,7 +4,7 @@ React Router v7 (framework mode) rules, successor to the Remix configuration.
 
 This package is part of the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.
 
-- Docs: [React Router guide](https://eslint.santi020k.com/frameworks/react-router.html)
+- Docs: [React Router guide](https://eslint.santi020k.com/frameworks/react-router)
 - Repository: [santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)
 - Author: [santi020k](https://santi020k.com)
 

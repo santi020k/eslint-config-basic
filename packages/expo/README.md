@@ -4,7 +4,7 @@ Expo and React Native support with explicit React configuration.
 
 This package is part of the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.
 
-- Docs: [Expo guide](https://eslint.santi020k.com/frameworks/expo.html)
+- Docs: [Expo guide](https://eslint.santi020k.com/frameworks/expo)
 - Repository: [santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)
 - Author: [santi020k](https://santi020k.com)
 

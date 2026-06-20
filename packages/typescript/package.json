@@ -57,7 +57,7 @@
     "url": "git+https://github.com/santi020k/eslint-config-basic.git",
     "directory": "packages/typescript"
   },
-  "homepage": "https://eslint.santi020k.com/frameworks/typescript.html",
+  "homepage": "https://eslint.santi020k.com/frameworks/typescript",
   "bugs": {
     "url": "https://github.com/santi020k/eslint-config-basic/issues"
   },

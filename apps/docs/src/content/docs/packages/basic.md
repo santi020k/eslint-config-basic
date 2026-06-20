@@ -90,6 +90,11 @@ bunx @santi020k/eslint-config-basic init
 bunx @santi020k/eslint-config-basic update
 ```
 
+## Repository Links
+
+- Source Package: [packages/basic](https://github.com/santi020k/eslint-config-basic/tree/main/packages/basic)
+- Project Repository: [santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)
+- Author: [santi020k](https://santi020k.com)
 
 ## Related Pages
 
