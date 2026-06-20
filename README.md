@@ -30,7 +30,7 @@ This project follows a **DX-First & Stability-First** mission. We prioritize a s
 
 | Runtime | Supported Version |
 | :--- | :--- |
-| Node.js | `>=22.18.0` |
+| Node.js | `>=22.0.0` |
 | ESLint | `^10.0.0` |
 | TypeScript | `>=5.0.0` when TypeScript linting is enabled |
 
