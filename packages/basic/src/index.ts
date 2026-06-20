@@ -148,6 +148,7 @@ export {
   autogen,
   bestPractices,
   biome,
+  boundaries,
   command,
   compat,
   cspell,
@@ -552,7 +553,7 @@ const buildEslintConfigs = async (params: BuildConfigsParams): Promise<FlatConfi
       name: 'eslint-config-basic/scripts-overrides',
       rules: {
         'n/no-unpublished-import': 'off',
-        'security/detect-non-literal-fs-filename': 'off'
+        ...(uniqueExtensions.includes('security' as Extension) ? { 'security/detect-non-literal-fs-filename': 'off' } : {})
       }
     },
     ...(tailwindOptions ? [await createTailwindSettingsConfig(tailwindOptions)] : []),
