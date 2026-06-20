@@ -46,6 +46,7 @@
       "outputLogs": "errors-only"
     },
     "//#lint:repo": {
+      "dependsOn": ["^build"],
       "inputs": ["**/*"],
       "outputLogs": "errors-only"
     },
