@@ -50,4 +50,4 @@ jobs:
         run: pnpm run build
 
       - name: Lint all playgrounds
-        run: pnpm --filter "@playground/*" --filter "@santi020k/playground-*" run lint
+        run: pnpm exec turbo run lint --filter="@playground/*" --filter="@santi020k/playground-*"

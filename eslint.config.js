@@ -2,30 +2,32 @@ import { defineConfig, Extension, Format, Preset, Testing, Tool } from "@santi02
 
 import tseslint from "typescript-eslint"
 
-export default [
-  ...await defineConfig({
-    // Root lists tailwindcss for tooling; do not enable Tailwind ESLint for the whole monorepo.
-    detection: { libraries: false },
-    detectRootDir: import.meta.dirname,
-    extensions: [Extension.Boundaries],
-    formats: [Format.Jsonc, Format.Mdx, Format.Markdown],
-    ignores: [
-      '**/tsup.config.ts',
-      'docs/*',
-      'packages/tests/fixtures/**',
-      'packages/playground/**',
-      'apps/docs/src/content/docs/api/reference/**',
-      'apps/docs/src/content/docs/v1/api/reference/**',
-      'typedoc.config.mjs',
-      'typedoc.markdown.mjs'
-    ],
-    preset: Preset.Monorepo,
-    testing: [Testing.Vitest],
-    tools: [Tool.Pnpm],
-    tsconfigRootDir: import.meta.dirname,
-    typescript: true,
-    workspacePrefixes: ['@santi020k']
-  }),
+export default await defineConfig({
+  // Root lists tailwindcss for tooling; do not enable Tailwind ESLint for the whole monorepo.
+  // Disable framework auto-detection: playground packages (e.g. astro) would trigger loading
+  // optional framework packages that aren't installed at the root.
+  autoFrameworks: false,
+  detection: { libraries: false },
+  detectRootDir: import.meta.dirname,
+  extensions: [Extension.Boundaries],
+  formats: [Format.Jsonc, Format.Mdx, Format.Markdown],
+  ignores: [
+    '**/tsup.config.ts',
+    'docs/*',
+    'packages/tests/fixtures/**',
+    'packages/playground/**',
+    'apps/docs/src/content/docs/api/reference/**',
+    'apps/docs/src/content/docs/v1/api/reference/**',
+    'typedoc.config.mjs',
+    'typedoc.markdown.mjs'
+  ],
+  preset: Preset.Monorepo,
+  testing: [Testing.Vitest],
+  tools: [Tool.Pnpm],
+  tsconfigRootDir: import.meta.dirname,
+  typescript: true,
+  workspacePrefixes: ['@santi020k']
+},
   // tsconfig paths map all 26 workspace packages to their TS source. When the
   // project service resolves test imports, it loads the entire monorepo graph
   // and hangs the ESLint language server. Disabling type-aware linting for test
@@ -59,4 +61,4 @@ export default [
       'security/detect-non-literal-fs-filename': 'off'
     }
   }
-]
+)

@@ -251,6 +251,19 @@ describe('Deep Rule Assertions (#5)', () => {
     expect(playwrightConfig?.files).toEqual(['tests/**/*.ts'])
   })
 
+  test('should allow any built-in testing file globs to be customized', async () => {
+    const config = await defineConfig({
+      testing: [Testing.Vitest],
+      testingFiles: {
+        vitest: ['src/**/*.test.ts']
+      }
+    })
+
+    const vitestConfig = config.find(entry => entry.name === 'integrations/vitest')
+
+    expect(vitestConfig?.files).toEqual(['src/**/*.test.ts'])
+  })
+
   test('should configure Tailwind entry points and class ignores in one option', async () => {
     const config = await defineConfig({
       tailwind: {
@@ -261,6 +274,7 @@ describe('Deep Rule Assertions (#5)', () => {
 
     const tailwindSettings = config.find(entry => entry.name === 'eslint-config-basic/tailwind-settings')
 
+    expect(tailwindSettings?.plugins?.['better-tailwindcss']).toBeDefined()
     expect(tailwindSettings?.settings).toEqual({
       'better-tailwindcss': {
         detectComponentClasses: true,
@@ -275,6 +289,26 @@ describe('Deep Rule Assertions (#5)', () => {
         ignore: ['^prose-custom$']
       }
     ])
+  })
+
+  test('should allow Tailwind unknown-class checks to be disabled in the Tailwind option', async () => {
+    const config = await defineConfig({
+      tailwind: {
+        entryPoint: 'src/styles/global.css',
+        noUnknownClasses: false
+      }
+    })
+
+    const tailwindSettings = config.find(entry => entry.name === 'eslint-config-basic/tailwind-settings')
+
+    expect(tailwindSettings?.plugins?.['better-tailwindcss']).toBeDefined()
+    expect(tailwindSettings?.settings).toEqual({
+      'better-tailwindcss': {
+        detectComponentClasses: true,
+        entryPoint: 'src/styles/global.css'
+      }
+    })
+    expect(tailwindSettings?.rules?.['better-tailwindcss/no-unknown-classes']).toBe('off')
   })
 })
 

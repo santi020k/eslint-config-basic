@@ -136,6 +136,7 @@ exports[`Config Snapshots — Entry Names > core config entries should match sna
   "eslint-config/core-plugins",
   "eslint-config/custom-rules",
   "eslint-config/custom-rules/slots",
+  "eslint-config/eslint-config-file-overrides",
   "eslint-config/plugins-rules",
   "eslint-config/plugins-rules/slots",
   "node/flat/recommended-module",

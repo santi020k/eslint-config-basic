@@ -1,10 +1,11 @@
 import {
+  createModuleLoader,
   type DetectedFrameworkName,
   type FlatConfigArray,
   type Runtime
 } from '@santi020k/eslint-config-core'
 
-import { loadModule } from './lazy.js'
+const loadModule = createModuleLoader((specifier) => import.meta.resolve(specifier))
 
 export type FrameworkFlags = Partial<Record<FrameworkName, true>>
 
@@ -75,6 +76,8 @@ const loadFrameworkConfigInput = (frameworkName: FrameworkName): Promise<Framewo
   if (!loader) return Promise.resolve([])
 
   const pending = loader().catch((error: unknown) => {
+    frameworkConfigCache.delete(frameworkName)
+
     throw new Error(
       `Unable to load optional framework config "${frameworkName}". ` +
       `Install "@santi020k/eslint-config-${frameworkName}" when using @santi020k/eslint-config-lite, ` +

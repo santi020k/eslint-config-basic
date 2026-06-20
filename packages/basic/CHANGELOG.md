@@ -1,5 +1,69 @@
 # @santi020k/eslint-config-basic
 
+## 2.0.0-beta.3
+
+### Patch Changes
+
+- Updated dependencies [[`af152cd`](https://github.com/santi020k/eslint-config-basic/commit/af152cda17961f9de8ca7bf069739f151fca65be)]:
+  - @santi020k/eslint-config-core@2.0.0-beta.3
+  - @santi020k/eslint-config-integrations@2.0.0-beta.3
+  - @santi020k/eslint-config-typescript@2.0.0-beta.3
+  - @santi020k/eslint-config-angular@2.0.0-beta.3
+  - @santi020k/eslint-config-astro@2.0.0-beta.3
+  - @santi020k/eslint-config-expo@2.0.0-beta.3
+  - @santi020k/eslint-config-hono@2.0.0-beta.3
+  - @santi020k/eslint-config-lit@2.0.0-beta.3
+  - @santi020k/eslint-config-nest@2.0.0-beta.3
+  - @santi020k/eslint-config-next@2.0.0-beta.3
+  - @santi020k/eslint-config-nuxt@2.0.0-beta.3
+  - @santi020k/eslint-config-qwik@2.0.0-beta.3
+  - @santi020k/eslint-config-react@2.0.0-beta.3
+  - @santi020k/eslint-config-react-router@2.0.0-beta.3
+  - @santi020k/eslint-config-remix@2.0.0-beta.3
+  - @santi020k/eslint-config-slidev@2.0.0-beta.3
+  - @santi020k/eslint-config-solid@2.0.0-beta.3
+  - @santi020k/eslint-config-svelte@2.0.0-beta.3
+  - @santi020k/eslint-config-tanstack-start@2.0.0-beta.3
+  - @santi020k/eslint-config-vite@2.0.0-beta.3
+  - @santi020k/eslint-config-vue@2.0.0-beta.3
+  - @santi020k/eslint-config-preact@2.0.0-beta.3
+
+## 2.0.0-beta.2
+
+### Minor Changes
+
+- Tailwind `noUnknownClasses` option, expanded testing config names, and virtual TS parser fix.
+
+  - **`TailwindOptions.noUnknownClasses`**: new optional field (`'error' | 'warn' | 'off' | false`) to control the `better-tailwindcss/no-unknown-classes` rule severity. Defaults to `'error'` when a Tailwind entry point is detected; set to `false` or `'off'` to disable.
+  - **Testing config overrides**: `TESTING_CONFIG_NAMES` now maps Cypress, Jest, JestDom, Playwright, TestingLibrary, and Vitest — so per-testing-tool file overrides are applied for all supported testing integrations, not just Playwright.
+  - **TypeScript virtual file parser**: the parser-setup config block now also covers virtual TS files (`parserSetupFiles` includes `GLOB_VIRTUAL_TS`), fixing missing parser options for framework-generated virtual modules.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @santi020k/eslint-config-core@2.0.0-beta.2
+  - @santi020k/eslint-config-typescript@2.0.0-beta.2
+  - @santi020k/eslint-config-integrations@2.0.0-beta.2
+  - @santi020k/eslint-config-angular@2.0.0-beta.2
+  - @santi020k/eslint-config-astro@2.0.0-beta.2
+  - @santi020k/eslint-config-expo@2.0.0-beta.2
+  - @santi020k/eslint-config-hono@2.0.0-beta.2
+  - @santi020k/eslint-config-lit@2.0.0-beta.2
+  - @santi020k/eslint-config-nest@2.0.0-beta.2
+  - @santi020k/eslint-config-next@2.0.0-beta.2
+  - @santi020k/eslint-config-nuxt@2.0.0-beta.2
+  - @santi020k/eslint-config-qwik@2.0.0-beta.2
+  - @santi020k/eslint-config-react@2.0.0-beta.2
+  - @santi020k/eslint-config-react-router@2.0.0-beta.2
+  - @santi020k/eslint-config-remix@2.0.0-beta.2
+  - @santi020k/eslint-config-slidev@2.0.0-beta.2
+  - @santi020k/eslint-config-solid@2.0.0-beta.2
+  - @santi020k/eslint-config-svelte@2.0.0-beta.2
+  - @santi020k/eslint-config-tanstack-start@2.0.0-beta.2
+  - @santi020k/eslint-config-vite@2.0.0-beta.2
+  - @santi020k/eslint-config-vue@2.0.0-beta.2
+  - @santi020k/eslint-config-preact@2.0.0-beta.2
+
 ## 2.0.0-beta.1
 
 ### Minor Changes

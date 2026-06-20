@@ -1,5 +1,23 @@
 # @santi020k/eslint-config-core
 
+## 2.0.0-beta.3
+
+### Patch Changes
+
+- [#91](https://github.com/santi020k/eslint-config-basic/pull/91) [`af152cd`](https://github.com/santi020k/eslint-config-basic/commit/af152cda17961f9de8ca7bf069739f151fca65be) Thanks [@santi020k](https://github.com/santi020k)! - Disable `n/no-unpublished-import` for `eslint.config.*` files.
+
+  `eslint.config.*` files always import from devDependencies by design (the config package itself), causing `n/no-unpublished-import` to false-positive on every consumer project. The rule is now turned off for `**/eslint.config.{js,mjs,cjs,ts,mts,cts}` in the core config so consumers no longer need a manual override.
+
+## 2.0.0-beta.2
+
+### Minor Changes
+
+- Tailwind `noUnknownClasses` option, expanded testing config names, and virtual TS parser fix.
+
+  - **`TailwindOptions.noUnknownClasses`**: new optional field (`'error' | 'warn' | 'off' | false`) to control the `better-tailwindcss/no-unknown-classes` rule severity. Defaults to `'error'` when a Tailwind entry point is detected; set to `false` or `'off'` to disable.
+  - **Testing config overrides**: `TESTING_CONFIG_NAMES` now maps Cypress, Jest, JestDom, Playwright, TestingLibrary, and Vitest — so per-testing-tool file overrides are applied for all supported testing integrations, not just Playwright.
+  - **TypeScript virtual file parser**: the parser-setup config block now also covers virtual TS files (`parserSetupFiles` includes `GLOB_VIRTUAL_TS`), fixing missing parser options for framework-generated virtual modules.
+
 ## 2.0.0-beta.1
 
 ### Minor Changes

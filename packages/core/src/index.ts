@@ -12,11 +12,9 @@ import globals from 'globals'
 import { rules } from './rules.js'
 import { GLOB_JS_TS, GLOB_JS_TS_ALL, GLOB_SLOT, Runtime } from './types.js'
 
-// Export rules, groups, and import-group factory for use by other packages
-export { createImportGroups, groups, rules } from './rules.js'
-export type { ImportGroupOptions } from './rules.js'
-// Export settings
-export { gitignore } from './settings/index.js'
+export * from './compose.js'
+export * from './config-helpers.js'
+export { createModuleLoader, loadModule } from './lazy.js'
 
 /**
  * Returns the appropriate globals for the given runtime option
@@ -146,7 +144,16 @@ export const createCoreConfig = (runtime: Runtime = Runtime.Universal): TSESLint
         'unused-imports': pluginUnusedImport
       }
     },
-    ...mappedConfigs
+    ...mappedConfigs,
+    // eslint.config.* files always import devDependencies (the config package itself);
+    // n/no-unpublished-import false-positives on every consumer's config file.
+    {
+      files: ['**/eslint.config.{js,mjs,cjs,ts,mts,cts}'],
+      name: 'eslint-config/eslint-config-file-overrides',
+      rules: {
+        'n/no-unpublished-import': 'off'
+      }
+    }
   ]
 }
 
@@ -159,6 +166,11 @@ export const coreConfig: TSESLint.FlatConfig.ConfigArray = createCoreConfig()
 // Legacy export for backwards compatibility
 export { coreConfig as jsConfig }
 
+// Export rules, groups, and import-group factory for use by other packages
+export { createImportGroups, groups, rules } from './rules.js'
+export type { ImportGroupOptions } from './rules.js'
+// Export settings
+export { gitignore } from './settings/index.js'
 // Re-export types and utilities
 export * from './types.js'
 export * from './utils/index.js'

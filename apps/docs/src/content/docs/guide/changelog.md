@@ -3,6 +3,74 @@ title: "Changelog"
 description: "Release history for @santi020k/eslint-config-basic."
 ---
 
+## 2.0.0-beta.2
+
+### Minor Changes
+
+- Tailwind `noUnknownClasses` option, expanded testing config names, and virtual TS parser fix.
+
+  - **`TailwindOptions.noUnknownClasses`**: new optional field (`'error' | 'warn' | 'off' | false`) to control the `better-tailwindcss/no-unknown-classes` rule severity. Defaults to `'error'` when a Tailwind entry point is detected; set to `false` or `'off'` to disable.
+  - **Testing config overrides**: `TESTING_CONFIG_NAMES` now maps Cypress, Jest, JestDom, Playwright, TestingLibrary, and Vitest — so per-testing-tool file overrides are applied for all supported testing integrations, not just Playwright.
+  - **TypeScript virtual file parser**: the parser-setup config block now also covers virtual TS files (`parserSetupFiles` includes `GLOB_VIRTUAL_TS`), fixing missing parser options for framework-generated virtual modules.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @santi020k/eslint-config-core@2.0.0-beta.2
+  - @santi020k/eslint-config-typescript@2.0.0-beta.2
+  - @santi020k/eslint-config-integrations@2.0.0-beta.2
+  - @santi020k/eslint-config-angular@2.0.0-beta.2
+  - @santi020k/eslint-config-astro@2.0.0-beta.2
+  - @santi020k/eslint-config-expo@2.0.0-beta.2
+  - @santi020k/eslint-config-hono@2.0.0-beta.2
+  - @santi020k/eslint-config-lit@2.0.0-beta.2
+  - @santi020k/eslint-config-nest@2.0.0-beta.2
+  - @santi020k/eslint-config-next@2.0.0-beta.2
+  - @santi020k/eslint-config-nuxt@2.0.0-beta.2
+  - @santi020k/eslint-config-qwik@2.0.0-beta.2
+  - @santi020k/eslint-config-react@2.0.0-beta.2
+  - @santi020k/eslint-config-react-router@2.0.0-beta.2
+  - @santi020k/eslint-config-remix@2.0.0-beta.2
+  - @santi020k/eslint-config-slidev@2.0.0-beta.2
+  - @santi020k/eslint-config-solid@2.0.0-beta.2
+  - @santi020k/eslint-config-svelte@2.0.0-beta.2
+  - @santi020k/eslint-config-tanstack-start@2.0.0-beta.2
+  - @santi020k/eslint-config-vite@2.0.0-beta.2
+  - @santi020k/eslint-config-vue@2.0.0-beta.2
+  - @santi020k/eslint-config-preact@2.0.0-beta.2
+
+## 2.0.0-beta.1
+
+### Minor Changes
+
+- [`dfba51d`](https://github.com/santi020k/eslint-config-basic/commit/dfba51dca7387a71a263af206eb86fd8df15f387) Thanks [@santi020k](https://github.com/santi020k)! - Improve config migration handling and enhance TypeScript options detection
+
+### Patch Changes
+
+- Updated dependencies [[`dfba51d`](https://github.com/santi020k/eslint-config-basic/commit/dfba51dca7387a71a263af206eb86fd8df15f387)]:
+  - @santi020k/eslint-config-core@2.0.0-beta.1
+  - @santi020k/eslint-config-integrations@2.0.0-beta.1
+  - @santi020k/eslint-config-typescript@2.0.0-beta.1
+  - @santi020k/eslint-config-angular@2.0.0-beta.1
+  - @santi020k/eslint-config-astro@2.0.0-beta.1
+  - @santi020k/eslint-config-expo@2.0.0-beta.1
+  - @santi020k/eslint-config-hono@2.0.0-beta.1
+  - @santi020k/eslint-config-lit@2.0.0-beta.1
+  - @santi020k/eslint-config-nest@2.0.0-beta.1
+  - @santi020k/eslint-config-next@2.0.0-beta.1
+  - @santi020k/eslint-config-nuxt@2.0.0-beta.1
+  - @santi020k/eslint-config-qwik@2.0.0-beta.1
+  - @santi020k/eslint-config-react@2.0.0-beta.1
+  - @santi020k/eslint-config-react-router@2.0.0-beta.1
+  - @santi020k/eslint-config-remix@2.0.0-beta.1
+  - @santi020k/eslint-config-slidev@2.0.0-beta.1
+  - @santi020k/eslint-config-solid@2.0.0-beta.1
+  - @santi020k/eslint-config-svelte@2.0.0-beta.1
+  - @santi020k/eslint-config-tanstack-start@2.0.0-beta.1
+  - @santi020k/eslint-config-vite@2.0.0-beta.1
+  - @santi020k/eslint-config-vue@2.0.0-beta.1
+  - @santi020k/eslint-config-preact@2.0.0-beta.1
+
 ## 2.0.0-beta.0
 
 ### Major Changes
@@ -29,16 +97,16 @@ description: "Release history for @santi020k/eslint-config-basic."
 
   ```js
   // before (v1)
-  import { reactConfig } from "@santi020k/eslint-config-basic";
-
-  export default [...reactConfig];
+  import { reactConfig } from '@santi020k/eslint-config-basic'
+  
+  export default [...reactConfig]
   ```
 
   ```js
   // after (v2)
-  import { react } from "@santi020k/eslint-config-basic";
-
-  export default [...(await react())];
+  import { react } from '@santi020k/eslint-config-basic'
+  
+  export default [...(await react())]
   ```
 
   Most users are unaffected: `frameworks: { react: true }` and auto-detection behave exactly as before.
@@ -155,12 +223,12 @@ description: "Release history for @santi020k/eslint-config-basic."
   **Programmatic API:**
 
   ```ts
-  import { generateAgentSkills } from "@santi020k/eslint-config-basic";
-
+  import { generateAgentSkills } from '@santi020k/eslint-config-basic'
+  
   const { skipped, written } = generateAgentSkills({
     cwd: process.cwd(),
-    force: true,
-  });
+    force: true
+  })
   ```
 
 ### Patch Changes
@@ -207,18 +275,18 @@ description: "Release history for @santi020k/eslint-config-basic."
 
   ```ts
   // Before (would throw)
-  const opts = detectProjectOptions();
-
-  eslintConfig(opts); // ❌
-
+  const opts = detectProjectOptions()
+  
+  eslintConfig(opts) // ❌
+  
   // opts.frameworks.next === true → TypeError inside eslintConfig()
-
+  
   // After (safe)
-  const opts = detectProjectOptions();
-
+  const opts = detectProjectOptions()
+  
   // opts.detectedFrameworks → ['next', 'react']  (informational)
   // opts.frameworks → {}                          (safe to spread)
-  eslintConfig(opts); // ✅
+  eslintConfig(opts) // ✅
   ```
 
   ## New features
@@ -230,7 +298,7 @@ description: "Release history for @santi020k/eslint-config-basic."
   - `max-depth` (warn, max 4) — flags deeply nested blocks
 
   ```ts
-  eslintConfig({ extensions: [Extension.BestPractices] });
+  eslintConfig({ extensions: [Extension.BestPractices] })
   ```
 
   **Category barrel exports for `@santi020k/eslint-config-optionals`** — five new sub-path exports let you import a whole category at once:
