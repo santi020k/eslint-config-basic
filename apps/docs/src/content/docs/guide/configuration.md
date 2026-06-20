@@ -40,6 +40,32 @@ export default await defineConfig({
 })
 ```
 
+## Recommended v2 Project Config
+
+For application packages, prefer one `defineConfig()` call with a stable detection root, bundled framework booleans, and first-class integration options. This keeps the generated config inspectable while still letting v2 auto-detection fill in TypeScript, runtime, testing, and supported libraries.
+
+```js
+import { defineConfig, NextMode, Testing } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig({
+  detectRootDir: import.meta.dirname,
+  frameworks: {
+    next: true
+  },
+  nextMode: NextMode.AppRouter,
+  tailwind: {
+    entryPoint: 'src/app/globals.css',
+    ignore: ['^prose-custom$', '^icon-wrapper$'],
+    noUnknownClasses: 'warn'
+  },
+  testing: [Testing.Vitest],
+  tsconfigRootDir: import.meta.dirname,
+  typescript: true
+})
+```
+
+Use `detectRootDir: import.meta.dirname` when a package can be linted from more than one working directory, such as from a monorepo root and from the package folder. Use `tsconfigRootDir` when TypeScript project service needs to resolve `tsconfig.json` from that same package folder.
+
 ## Optional Configs
 
 Optional configs are grouped into five categories: `extensions`, `formats`, `libraries`, `testing`, and `tools`. You can enable them with enums or with the matching string values.

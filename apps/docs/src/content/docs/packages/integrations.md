@@ -7,6 +7,8 @@ Package: [`@santi020k/eslint-config-integrations`](https://www.npmjs.com/package
 
 This package contains the integrations consumed by the main package through the `libraries`, `testing`, `formats`, `tools`, and `extensions` options.
 
+The package includes compatible runtime peers for integrations that need them at load time, such as Tailwind, Zod, and GraphQL. That keeps the full `@santi020k/eslint-config-basic` install quiet for projects that use those integrations, even when the application itself does not depend on every optional library.
+
 ## Categories
 
 - Libraries: AI SDK, OpenAI Agents SDK, Mastra, MCP, LangChain, LlamaIndex, Google Gen AI, AutoGen, Tailwind, I18next, Storybook, Stencil, TanStack Query, TanStack Router, TypeORM, Prisma, Drizzle, MikroORM, Sequelize, and Zod.

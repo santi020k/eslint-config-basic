@@ -267,6 +267,9 @@ catalogs:
     globals:
       specifier: ^17.6.0
       version: 17.6.0
+    graphql:
+      specifier: ^16.14.2
+      version: 16.14.2
     husky:
       specifier: ^9.1.7
       version: 9.1.7
@@ -318,6 +321,9 @@ catalogs:
     vue-eslint-parser:
       specifier: ^10.4.1
       version: 10.4.1
+    zod:
+      specifier: ^4.4.3
+      version: 4.4.3
 
 overrides:
   eslint: ^10.5.0
@@ -808,12 +814,21 @@ importers:
       globals:
         specifier: 'catalog:'
         version: 17.6.0
+      graphql:
+        specifier: 'catalog:'
+        version: 16.14.2
       storybook:
         specifier: 'catalog:'
         version: 10.4.6(@testing-library/dom@10.4.1)(@types/react@19.2.17)(prettier@3.8.4)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      tailwindcss:
+        specifier: 'catalog:'
+        version: 4.3.1
       typescript-eslint:
         specifier: 'catalog:'
         version: 8.61.1(eslint@10.5.0(jiti@2.7.0))(typescript@6.0.3)
+      zod:
+        specifier: 'catalog:'
+        version: 4.4.3
     devDependencies:
       '@types/eslint-plugin-jsx-a11y':
         specifier: 'catalog:'
@@ -827,9 +842,6 @@ importers:
       publint:
         specifier: 'catalog:'
         version: 0.3.21
-      tailwindcss:
-        specifier: 'catalog:'
-        version: 4.3.1
       tsup:
         specifier: 'catalog:'
         version: 8.5.1(jiti@2.7.0)(postcss@8.5.15)(supports-color@8.1.1)(typescript@6.0.3)(yaml@2.9.0)

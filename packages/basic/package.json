@@ -5,7 +5,7 @@
     "access": "public",
     "provenance": true
   },
-  "description": "A composable ESLint 10+ Flat Config package for JavaScript, TypeScript, React, Next.js, Vue, Svelte, Solid, Angular, Astro, Expo, NestJS, Hono, Qwik, and Remix.",
+  "description": "A composable ESLint 10+ Flat Config package for JavaScript, TypeScript, React, Next.js, Vue, Nuxt, Svelte, Solid, Angular, Astro, Expo, NestJS, Hono, Preact, Qwik, React Router, TanStack Start, Lit, Vite, and Slidev.",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",

@@ -100,15 +100,17 @@
     "eslint-plugin-yml": "catalog:",
     "eslint-plugin-zod": "catalog:",
     "globals": "catalog:",
+    "graphql": "catalog:",
     "storybook": "catalog:",
-    "typescript-eslint": "catalog:"
+    "tailwindcss": "catalog:",
+    "typescript-eslint": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@types/eslint-plugin-jsx-a11y": "catalog:",
     "@types/node": "catalog:",
     "eslint": "catalog:",
     "publint": "catalog:",
-    "tailwindcss": "catalog:",
     "tsup": "catalog:",
     "typescript": "catalog:"
   },
