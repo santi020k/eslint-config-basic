@@ -116,7 +116,7 @@ export const createTypescriptConfig = (
     },
     ...baseConfigs.flatMap(c => mapRulesToSlots(c, `ts-${mode}`)),
     {
-      files: GLOB_TS,
+      files: parserSetupFiles,
       languageOptions: {
         ecmaVersion: 'latest',
         parser: tsParser,
