@@ -10,7 +10,7 @@ import {
   type DetectedFrameworkName,
   detectProjectOptions,
   type EslintConfigOptions,
-  type Extension,
+  Extension,
   findTailwindEntryPoint,
   type FlatConfigArray,
   type Format,
@@ -424,6 +424,14 @@ const buildLiteEslintConfigs = async (params: BuildLiteConfigsParams): Promise<F
       } as TSESLint.FlatConfig.Config] :
       []),
     ...(await getIntegrationConfigs(uniqueLibraries, uniqueTools, uniqueTesting, uniqueFormats, uniqueExtensions)),
+    {
+      files: ['**/scripts/**/*.{js,mjs,cjs,ts,mts,cts}'],
+      name: 'eslint-config-lite/scripts-overrides',
+      rules: {
+        'n/no-unpublished-import': 'off',
+        ...(uniqueExtensions.includes(Extension.Security) ? { 'security/detect-non-literal-fs-filename': 'off' } : {})
+      }
+    },
     ...(tailwindSettingsConfig ? [tailwindSettingsConfig] : []),
     ...(await getPrettierConfig(uniqueTools))
   ]

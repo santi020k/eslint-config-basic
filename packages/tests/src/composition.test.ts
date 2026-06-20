@@ -698,6 +698,40 @@ describe('Framework Composition — remaining frameworks', () => {
   })
 })
 
+describe('scripts-overrides block', () => {
+  test('is always present in the output', async () => {
+    const config = await defineConfig({ detection: false })
+    const scriptsBlock = config.find(c => c.name === 'eslint-config-basic/scripts-overrides')
+
+    expect(scriptsBlock).toBeDefined()
+    expect(scriptsBlock?.rules?.['n/no-unpublished-import']).toBe('off')
+  })
+
+  test('includes security rule when Security extension is enabled', async () => {
+    const config = await defineConfig({
+      detection: false,
+      extensions: [Extension.Security]
+    })
+    const scriptsBlock = config.find(c => c.name === 'eslint-config-basic/scripts-overrides')
+
+    expect(scriptsBlock).toBeDefined()
+    expect(scriptsBlock?.rules?.['security/detect-non-literal-fs-filename']).toBe('off')
+  })
+
+  test('excludes security rule when Security extension is not enabled', async () => {
+    const config = await defineConfig({
+      detection: false,
+      extensions: []
+    })
+    const scriptsBlock = config.find(c => c.name === 'eslint-config-basic/scripts-overrides')
+
+    expect(scriptsBlock).toBeDefined()
+    const ruleKeys = Object.keys(scriptsBlock?.rules ?? {})
+
+    expect(ruleKeys.some(k => k.startsWith('security/'))).toBe(false)
+  })
+})
+
 describe('Monorepo project scoping', () => {
   test('ignore-only configs inside a project are scoped to the project path', async () => {
     const config = await defineConfig({

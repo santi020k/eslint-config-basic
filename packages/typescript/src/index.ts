@@ -10,7 +10,7 @@ import { standardRules, typeCheckedRules } from './rules.js'
 
 const typedFiles = [...GLOB_TS, ...GLOB_SLOT]
 const parserSetupFiles = [...typedFiles, ...GLOB_VIRTUAL_TS]
-const typeCheckedFiles = [...GLOB_TS, ...GLOB_SLOT, ...GLOB_VIRTUAL_TS]
+const typeCheckedFiles = typedFiles
 const virtualTypeCheckedFiles = GLOB_VIRTUAL_TS
 
 type TypeScriptMode = 'off' | 'strict' | 'syntax' | 'type-aware'
@@ -46,7 +46,7 @@ const mapRulesToSlots = (
   ...(config.rules ?
     [
       {
-        files: [...GLOB_SLOT, ...GLOB_VIRTUAL_TS],
+        files: GLOB_SLOT,
         name: `${config.name ?? fallbackName}/rules-only`,
         rules: config.rules
       }
@@ -146,6 +146,7 @@ export const createTypescriptConfig = (
       ) :
       [{
         files: typeCheckedFiles,
+        ignores: virtualTypeCheckedFiles,
         name: 'eslint-config-typescript/type-checked-rules',
         rules: typeCheckedRules
       }]
@@ -153,6 +154,7 @@ export const createTypescriptConfig = (
     ...(mode === 'strict' ?
       [{
         files: typedFiles,
+        ignores: virtualTypeCheckedFiles,
         name: 'eslint-config-typescript/strict-mode-rules',
         rules: strictModeRules
       }] :
