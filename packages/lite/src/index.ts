@@ -42,6 +42,7 @@ import type { TSESLint } from '@typescript-eslint/utils'
 import { createDetectedFrameworkFlags, type FrameworkOptions } from './frameworks.js'
 import { getIntegrationConfigs, getPrettierConfig } from './integrations.js'
 import { resolveFramework, resolvePreset } from './resolvers.js'
+import { buildTailwindSettingsConfig } from './tailwind.js'
 
 // Lazy framework factories (v2 naming: bare framework names) plus
 // deprecated *Config aliases for the old mixed naming.
@@ -362,31 +363,7 @@ const buildLiteEslintConfigs = async (params: BuildLiteConfigsParams): Promise<F
     return entry ? entry[1] : []
   }
 
-  const tailwindSettingsConfig = ((): TSESLint.FlatConfig.Config | undefined => {
-    if (!tailwindOptions) return undefined
-
-    const { noUnknownClasses, ...settingsOptions } = tailwindOptions
-
-    const unknownClassOptions = {
-      ...(tailwindOptions.entryPoint ? { entryPoint: tailwindOptions.entryPoint } : {}),
-      ...(tailwindOptions.ignore?.length ? { ignore: tailwindOptions.ignore } : {})
-    }
-
-    const hasUnknownClassOptions = Object.keys(unknownClassOptions).length > 0
-    let noUnknownClassesRule: TSESLint.FlatConfig.RuleEntry | undefined
-
-    if (hasUnknownClassOptions || noUnknownClasses !== undefined) {
-      const severity = noUnknownClasses ?? 'error'
-
-      noUnknownClassesRule = severity === false ? 'off' : hasUnknownClassOptions ? [severity, unknownClassOptions] : severity
-    }
-
-    return {
-      name: 'eslint-config-lite/tailwind-settings',
-      ...(noUnknownClassesRule === undefined ? {} : { rules: { 'better-tailwindcss/no-unknown-classes': noUnknownClassesRule } }),
-      settings: { 'better-tailwindcss': settingsOptions }
-    }
-  })()
+  const tailwindSettingsConfig = buildTailwindSettingsConfig(tailwindOptions)
 
   return [
     ...defaultIgnores,

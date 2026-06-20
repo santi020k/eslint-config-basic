@@ -1,12 +1,14 @@
 import {
+  createModuleLoader,
   type Extension,
   type FlatConfigArray,
   type Format,
   type Library,
-  loadModule,
   type Testing,
   Tool
 } from '@santi020k/eslint-config-core'
+
+const loadModule = createModuleLoader((specifier) => import.meta.resolve(specifier))
 
 interface IntegrationModule {
   getIntegrationConfigs?: (
