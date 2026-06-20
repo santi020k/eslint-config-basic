@@ -77,6 +77,8 @@ jobs:
             ${{ runner.os }}-turbo-${{ matrix.node-version }}-
             ${{ runner.os }}-turbo-
       - run: pnpm install --frozen-lockfile
+      - name: Build all packages
+        run: pnpm run build
       - name: Run concurrent CI checks (Node 22.x)
         if: matrix.node-version == '22.x'
         run: pnpm exec turbo run typecheck lint test:coverage //#lint:spell //#lint:knip //#lint:repo
