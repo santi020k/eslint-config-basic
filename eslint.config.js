@@ -31,10 +31,11 @@ export default await defineConfig({
   typescript: true,
   workspacePrefixes: ['@santi020k']
 },
-  // tsconfig paths map all 26 workspace packages to their TS source. When the
-  // project service resolves test imports, it loads the entire monorepo graph
-  // and hangs the ESLint language server. Disabling type-aware linting for test
-  // files avoids the hang; type correctness is still enforced by `pnpm typecheck`.
+  // packages/tests imports every workspace package. When projectService resolves
+  // those imports it loads the full monorepo graph and hangs the language server.
+  // Disabling type-aware linting here avoids the hang; type correctness is still
+  // enforced by `pnpm typecheck`. All other packages now declare only their direct
+  // workspace deps in their own tsconfig.json, so projectService stays scoped.
   {
     ...tseslint.configs.disableTypeChecked,
     files: ['packages/tests/**/*.ts'],

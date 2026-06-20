@@ -1,7 +1,33 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "paths": {
+      "@santi020k/eslint-config-core": [
+        "../core/src/index.ts"
+      ],
+      "@santi020k/eslint-config-typescript": [
+        "../typescript/src/index.ts"
+      ],
+      "@santi020k/eslint-config-integrations": [
+        "../integrations/src/index.ts"
+      ],
+      "@santi020k/eslint-config-integrations/extensions": [
+        "../integrations/src/extensions/index.ts"
+      ],
+      "@santi020k/eslint-config-integrations/formats": [
+        "../integrations/src/formats/index.ts"
+      ],
+      "@santi020k/eslint-config-integrations/libraries": [
+        "../integrations/src/libraries/index.ts"
+      ],
+      "@santi020k/eslint-config-integrations/testing": [
+        "../integrations/src/testing/index.ts"
+      ],
+      "@santi020k/eslint-config-integrations/tools": [
+        "../integrations/src/tools/index.ts"
+      ]
+    }
   },
   "include": [
     "src/**/*.ts"
