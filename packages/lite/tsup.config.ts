@@ -30,6 +30,7 @@ export default defineConfig([
       'src/frameworks.ts',
       'src/integrations.ts',
       'src/resolvers.ts',
+      'src/tailwind.ts',
     ],
   }
 ])
