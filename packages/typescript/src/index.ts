@@ -116,13 +116,21 @@ export const createTypescriptConfig = (
     },
     ...baseConfigs.flatMap(c => mapRulesToSlots(c, `ts-${mode}`)),
     {
-      files: parserSetupFiles,
+      files: [...GLOB_TS, ...GLOB_VIRTUAL_TS],
       languageOptions: {
         ecmaVersion: 'latest',
         parser: tsParser,
         parserOptions
       },
       name: 'eslint-config-typescript/parser-setup'
+    },
+    {
+      files: GLOB_SLOT,
+      languageOptions: {
+        ecmaVersion: 'latest',
+        parserOptions
+      },
+      name: 'eslint-config-typescript/parser-setup-slots'
     },
     {
       files: typedFiles,
