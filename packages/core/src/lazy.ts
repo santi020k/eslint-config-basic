@@ -23,10 +23,12 @@ const dynamicImport: (specifier: string) => Promise<unknown> = isVitest
 export const createModuleLoader = (resolveFn: (specifier: string) => string) => async <T = unknown>(specifier: string): Promise<T> => {
     let resolved = specifier
 
-    try {
-      resolved = resolveFn(specifier)
-    } catch {
-      // Ignore and let dynamicImport throw natural error
+    if (!isVitest) {
+      try {
+        resolved = resolveFn(specifier)
+      } catch {
+        // Ignore and let dynamicImport throw natural error
+      }
     }
 
     return await dynamicImport(resolved) as T
@@ -38,10 +40,12 @@ const defaultReq = createRequire(import.meta.url)
 export const loadModule = async <T = unknown>(specifier: string): Promise<T> => {
   let resolved = specifier
 
-  try {
-    resolved = pathToFileURL(defaultReq.resolve(specifier)).href
-  } catch {
-    // Ignore and let dynamicImport throw natural error
+  if (!isVitest) {
+    try {
+      resolved = pathToFileURL(defaultReq.resolve(specifier)).href
+    } catch {
+      // Ignore and let dynamicImport throw natural error
+    }
   }
 
   return await dynamicImport(resolved) as T

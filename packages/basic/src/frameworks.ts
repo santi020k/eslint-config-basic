@@ -5,7 +5,7 @@ import {
   type Runtime
 } from '@santi020k/eslint-config-core'
 
-const loadModule = createModuleLoader((specifier) => import.meta.resolve(specifier))
+const loadModule = createModuleLoader((specifier) => import.meta.resolve(specifier, import.meta.url))
 
 export type FrameworkFlags = Partial<Record<FrameworkName, true>>
 
