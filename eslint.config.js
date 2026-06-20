@@ -19,7 +19,10 @@ export default await defineConfig({
     'apps/docs/src/content/docs/api/reference/**',
     'apps/docs/src/content/docs/v1/api/reference/**',
     'typedoc.config.mjs',
-    'typedoc.markdown.mjs'
+    'typedoc.markdown.mjs',
+    '**/CHANGELOG.md',
+    'apps/docs/src/content/docs/guide/changelog.md',
+    'apps/docs/src/content/docs/v1/guide/changelog.md'
   ],
   preset: Preset.Monorepo,
   testing: [Testing.Vitest],
