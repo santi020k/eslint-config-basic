@@ -3,7 +3,8 @@
   "version": "2.0.0",
   "private": true,
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "description": "Astro Starlight documentation site for the @santi020k/eslint-config-basic monorepo",
   "type": "module",
@@ -33,7 +34,7 @@
     "typescript": "catalog:"
   },
   "engines": {
-    "node": ">=22.18.0"
+    "node": ">=22.0.0"
   },
   "repository": {
     "type": "git",

@@ -2,7 +2,8 @@
   "name": "@santi020k/eslint-config-svelte",
   "version": "2.0.0",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "description": "Svelte ESLint configuration",
   "type": "module",
@@ -42,7 +43,7 @@
     "eslint": "^10.0.0"
   },
   "engines": {
-    "node": ">=22.18.0"
+    "node": ">=22.0.0"
   },
   "repository": {
     "type": "git",

@@ -2,7 +2,8 @@
   "name": "@santi020k/eslint-config-vite",
   "version": "2.0.0",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "description": "Vite ESLint configuration for browser apps and Vite config files",
   "type": "module",
@@ -41,7 +42,7 @@
     "eslint": "^10.0.0"
   },
   "engines": {
-    "node": ">=22.18.0"
+    "node": ">=22.0.0"
   },
   "repository": {
     "type": "git",

@@ -2,7 +2,8 @@
   "name": "@playground/stencil",
   "private": true,
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "type": "module",
   "scripts": {
@@ -17,7 +18,7 @@
     "eslint": "^10.5.0"
   },
   "engines": {
-    "node": ">=22.18.0"
+    "node": ">=22.0.0"
   },
   "repository": {
     "type": "git",
