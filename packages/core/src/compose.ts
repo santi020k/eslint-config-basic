@@ -1,6 +1,6 @@
-import type { FlatConfigArray } from '@santi020k/eslint-config-core'
-
 import type { TSESLint } from '@typescript-eslint/utils'
+
+import type { FlatConfigArray } from './types.js'
 
 export type NormalizedStrictMode = 'ci' | 'pedantic' | 'recommended'
 

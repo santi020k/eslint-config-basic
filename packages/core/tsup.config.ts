@@ -1,6 +1,17 @@
 import { defineConfig } from 'tsup'
 export default defineConfig({
-  entry: ['src/index.ts', 'src/types.ts', 'src/rules.ts', 'src/utils/index.ts', 'src/utils/detection.ts', 'src/settings/index.ts', 'src/settings/gitignore.ts'],
+  entry: [
+    'src/index.ts',
+    'src/types.ts',
+    'src/rules.ts',
+    'src/utils/index.ts',
+    'src/utils/detection.ts',
+    'src/settings/index.ts',
+    'src/settings/gitignore.ts',
+    'src/compose.ts',
+    'src/lazy.ts',
+    'src/config-helpers.ts'
+  ],
   bundle: false,
   format: ['esm'],
   // TODO(tsup): remove this once tsup's DTS pipeline supports TypeScript 6

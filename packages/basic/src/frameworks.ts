@@ -1,10 +1,11 @@
 import {
+  createModuleLoader,
   type DetectedFrameworkName,
   type FlatConfigArray,
   type Runtime
 } from '@santi020k/eslint-config-core'
 
-import { loadModule } from './lazy.js'
+const loadModule = createModuleLoader((specifier) => import.meta.resolve(specifier))
 
 export type FrameworkFlags = Partial<Record<FrameworkName, true>>
 

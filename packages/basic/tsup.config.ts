@@ -28,10 +28,8 @@ export default defineConfig([
     entry: [
       'src/agent-skill-generator.ts',
       'src/index.ts',
-      'src/compose.ts',
       'src/frameworks.ts',
       'src/integrations.ts',
-      'src/lazy.ts',
       'src/resolvers.ts',
     ],
   },

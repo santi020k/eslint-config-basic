@@ -4,6 +4,9 @@ import tseslint from "typescript-eslint"
 
 export default await defineConfig({
   // Root lists tailwindcss for tooling; do not enable Tailwind ESLint for the whole monorepo.
+  // Disable framework auto-detection: playground packages (e.g. astro) would trigger loading
+  // optional framework packages that aren't installed at the root.
+  autoFrameworks: false,
   detection: { libraries: false },
   detectRootDir: import.meta.dirname,
   extensions: [Extension.Boundaries],

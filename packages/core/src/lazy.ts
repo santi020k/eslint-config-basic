@@ -1,5 +1,4 @@
-// Dynamic-import helper for lazily loading optional framework packages.
-// Mirrors the pattern in @santi020k/eslint-config-basic (src/lazy.ts).
+// Dynamic-import helper for lazily loading optional packages.
 
 import { createRequire } from 'node:module'
 import { pathToFileURL } from 'node:url'
@@ -21,13 +20,26 @@ const dynamicImport: (specifier: string) => Promise<unknown> = isVitest
   ? (specifier: string) => import(/* @vite-ignore */ specifier)
   : Reflect.construct(Function, ['specifier', 'return import(specifier)']) as (specifier: string) => Promise<unknown>
 
-const req = createRequire(import.meta.url)
+export const createModuleLoader = (resolveFn: (specifier: string) => string) => async <T = unknown>(specifier: string): Promise<T> => {
+    let resolved = specifier
+
+    try {
+      resolved = resolveFn(specifier)
+    } catch {
+      // Ignore and let dynamicImport throw natural error
+    }
+
+    return await dynamicImport(resolved) as T
+  }
+
+// Keep the default loadModule for backwards compatibility
+const defaultReq = createRequire(import.meta.url)
 
 export const loadModule = async <T = unknown>(specifier: string): Promise<T> => {
   let resolved = specifier
 
   try {
-    resolved = pathToFileURL(req.resolve(specifier)).href
+    resolved = pathToFileURL(defaultReq.resolve(specifier)).href
   } catch {
     // Ignore and let dynamicImport throw natural error
   }

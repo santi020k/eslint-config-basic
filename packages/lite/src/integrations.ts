@@ -3,10 +3,10 @@ import {
   type FlatConfigArray,
   type Format,
   type Library,
+  loadModule,
   type Testing,
-  Tool} from '@santi020k/eslint-config-core'
-
-import { loadModule } from './lazy.js'
+  Tool
+} from '@santi020k/eslint-config-core'
 
 interface IntegrationModule {
   getIntegrationConfigs?: (
