@@ -1,5 +1,33 @@
 # @santi020k/eslint-config-basic
 
+## 2.0.0-beta.3
+
+### Patch Changes
+
+- Updated dependencies [[`af152cd`](https://github.com/santi020k/eslint-config-basic/commit/af152cda17961f9de8ca7bf069739f151fca65be)]:
+  - @santi020k/eslint-config-core@2.0.0-beta.3
+  - @santi020k/eslint-config-integrations@2.0.0-beta.3
+  - @santi020k/eslint-config-typescript@2.0.0-beta.3
+  - @santi020k/eslint-config-angular@2.0.0-beta.3
+  - @santi020k/eslint-config-astro@2.0.0-beta.3
+  - @santi020k/eslint-config-expo@2.0.0-beta.3
+  - @santi020k/eslint-config-hono@2.0.0-beta.3
+  - @santi020k/eslint-config-lit@2.0.0-beta.3
+  - @santi020k/eslint-config-nest@2.0.0-beta.3
+  - @santi020k/eslint-config-next@2.0.0-beta.3
+  - @santi020k/eslint-config-nuxt@2.0.0-beta.3
+  - @santi020k/eslint-config-qwik@2.0.0-beta.3
+  - @santi020k/eslint-config-react@2.0.0-beta.3
+  - @santi020k/eslint-config-react-router@2.0.0-beta.3
+  - @santi020k/eslint-config-remix@2.0.0-beta.3
+  - @santi020k/eslint-config-slidev@2.0.0-beta.3
+  - @santi020k/eslint-config-solid@2.0.0-beta.3
+  - @santi020k/eslint-config-svelte@2.0.0-beta.3
+  - @santi020k/eslint-config-tanstack-start@2.0.0-beta.3
+  - @santi020k/eslint-config-vite@2.0.0-beta.3
+  - @santi020k/eslint-config-vue@2.0.0-beta.3
+  - @santi020k/eslint-config-preact@2.0.0-beta.3
+
 ## 2.0.0-beta.2
 
 ### Minor Changes

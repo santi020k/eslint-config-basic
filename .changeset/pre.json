@@ -40,6 +40,7 @@
     "dependency-refresh",
     "eslint-10-only",
     "eslint-config-ignores-option",
+    "fix-no-unpublished-eslint-config",
     "fuzzy-pears-define",
     "lazy-frameworks-bare-naming",
     "lite-config-package",
