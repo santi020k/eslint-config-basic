@@ -1,5 +1,12 @@
 # @santi020k/eslint-config-vite
 
+## 2.1.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @santi020k/eslint-config-core@2.1.0
+
 ## 2.0.0
 
 ### Major Changes
