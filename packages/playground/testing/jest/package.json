@@ -2,7 +2,8 @@
   "name": "@playground/jest",
   "private": true,
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "type": "module",
   "scripts": {
@@ -18,7 +19,7 @@
     "jest": "^30.4.2"
   },
   "engines": {
-    "node": ">=22.18.0"
+    "node": "^20.19.0 || >=22.18.0"
   },
   "repository": {
     "type": "git",

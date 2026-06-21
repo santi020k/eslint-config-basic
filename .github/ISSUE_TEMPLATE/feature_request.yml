@@ -4,13 +4,29 @@ title: "[Feature]: "
 labels: ["enhancement"]
 body:
   - type: textarea
-    id: description
+    id: motivation
     attributes:
-      label: Is your feature request related to a problem? Please describe.
-      description: A clear and concise description of what the problem is.
-      placeholder: I'm always frustrated when...
+      label: Motivation
+      description: What problem does this feature solve? What use case would it enable?
+      placeholder: I'm always frustrated when... / This would allow me to...
     validations:
       required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: A clear and concise description of what you'd like to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Any alternative approaches you've looked at, or workarounds you're currently using.
+    validations:
+      required: false
 
   - type: checkboxes
     id: packages
@@ -37,23 +53,16 @@ body:
         - label: "@santi020k/eslint-config-preact"
         - label: "@santi020k/eslint-config-qwik"
         - label: "@santi020k/eslint-config-react-router"
+        - label: "@santi020k/eslint-config-remix (deprecated alias of react-router)"
         - label: "@santi020k/eslint-config-tanstack-start"
         - label: "@santi020k/eslint-config-lit"
         - label: "@santi020k/eslint-config-vite"
         - label: "@santi020k/eslint-config-slidev"
 
   - type: textarea
-    id: solution
+    id: additional-context
     attributes:
-      label: Describe the solution you'd like
-      description: A clear and concise description of what you want to happen.
-    validations:
-      required: true
-
-  - type: textarea
-    id: alternatives
-    attributes:
-      label: Describe alternatives you've considered
-      description: A clear and concise description of any alternative solutions or features you've considered.
+      label: Additional Context
+      description: Links, prior art, related issues, or anything else that might help.
     validations:
       required: false

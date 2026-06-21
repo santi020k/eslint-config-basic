@@ -4,5 +4,5 @@ contact_links:
     url: https://eslint.org/docs/latest/use/configure/configuration-files
     about: Official ESLint configuration documentation
   - name: GitHub Discussions
-    url: https://github.com/santi020k/eslint-config/discussions
+    url: https://github.com/santi020k/eslint-config-basic/discussions
     about: Ask questions and discuss ideas

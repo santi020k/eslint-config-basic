@@ -1,0 +1,66 @@
+name: 🧩 Framework / Integration Request
+description: Request support for a new framework or optional integration (library, tool, testing setup, etc.)
+title: "[Framework/Integration]: "
+labels: ["enhancement", "new framework"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template to request a new **framework package** (e.g. a new UI framework like Ember) or a new **optional integration** (e.g. a library-specific rule set like Drizzle or tRPC).
+
+        - **Framework** → a bundled `@santi020k/eslint-config-<name>` package enabled via `frameworks: { name: true }`
+        - **Integration** → an optional config enabled via the `features` enum (e.g. `Library.Drizzle`)
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: Request Type
+      options:
+        - Framework package (new UI/server framework)
+        - Optional integration (library, tool, or testing setup)
+        - Not sure
+    validations:
+      required: true
+
+  - type: input
+    id: name
+    attributes:
+      label: Framework / Library Name
+      placeholder: e.g. Ember, Analog, tRPC, Hono RPC
+    validations:
+      required: true
+
+  - type: input
+    id: plugin
+    attributes:
+      label: ESLint Plugin
+      description: The ESLint plugin that would power this config (must support Flat Config).
+      placeholder: e.g. eslint-plugin-ember, @analogjs/eslint-plugin
+    validations:
+      required: false
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: Why should this be added? How many projects would benefit? Is the plugin actively maintained?
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Links to the plugin repo, npm page, or any existing usage examples.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: required-checks
+    attributes:
+      label: Before You Submit
+      options:
+        - label: I have searched for existing issues or discussions requesting this.
+          required: true
+        - label: The ESLint plugin supports Flat Config (not legacy `.eslintrc` only).
+          required: true

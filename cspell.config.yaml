@@ -4,6 +4,7 @@ words:
   - ACMR
   - activedescendant
   - agentchat
+  - analogjs
   - anthropics
   - app-router
   - arethetypeswrong
@@ -23,6 +24,7 @@ words:
   - codecov
   - codegen
   - commitizen
+  - commitlint
   - commonmark
   - cspell
   - darraghor

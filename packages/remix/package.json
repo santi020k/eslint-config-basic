@@ -2,7 +2,8 @@
   "name": "@santi020k/eslint-config-remix",
   "version": "2.0.0",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "description": "Deprecated alias of @santi020k/eslint-config-react-router — Remix merged into React Router v7",
   "type": "module",
@@ -41,7 +42,7 @@
     "eslint": "^10.0.0"
   },
   "engines": {
-    "node": ">=22.18.0"
+    "node": "^20.19.0 || >=22.18.0"
   },
   "repository": {
     "type": "git",

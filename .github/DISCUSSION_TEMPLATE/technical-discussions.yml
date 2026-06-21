@@ -1,21 +1,38 @@
+title: "[Discussion] "
 body:
-  - attributes:
-      label: Body
+  - type: markdown
+    attributes:
       value: |
-        Body of the technical discussion...
-    id: body
-    type: textarea
-  - attributes:
-      label: Additional Info
-      value: |
-        Any additional info...
-    id: additional
-    type: textarea
-  - attributes:
-      label: Before you submit your discussion, please confirm the following. If any of these required steps are not taken, we may not be able to review your RFC. Help us to help you!
+        Use this template for open-ended technical conversations — design tradeoffs, rule severity decisions, ecosystem questions, or anything that benefits from community input before becoming an issue or RFC.
+
+  - type: textarea
+    id: topic
+    attributes:
+      label: Topic
+      description: What are we discussing? Give enough context for someone unfamiliar with the background to follow along.
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context & Background
+      description: Relevant links, prior art, related issues, or code snippets that frame the discussion.
+    validations:
+      required: false
+
+  - type: textarea
+    id: questions
+    attributes:
+      label: Questions / Points for Discussion
+      description: What specific questions do you want the community to weigh in on?
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: required-checks
+    attributes:
+      label: Before You Submit
       options:
         - label: I have searched for related discussions and issues.
           required: true
-    id: required-checks
-    type: checkboxes
-title: Your Title Here

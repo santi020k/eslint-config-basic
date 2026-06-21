@@ -2,7 +2,8 @@
   "name": "@santi020k/eslint-config-lite",
   "version": "2.0.0",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "description": "Lite ESLint flat-config composer with manual framework and integration package installs.",
   "type": "module",
@@ -152,7 +153,7 @@
     }
   },
   "engines": {
-    "node": ">=22.18.0"
+    "node": "^20.19.0 || >=22.18.0"
   },
   "repository": {
     "type": "git",

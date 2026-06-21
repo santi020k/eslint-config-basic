@@ -2,30 +2,37 @@ import type { TailwindOptions } from '@santi020k/eslint-config-core'
 
 import type { TSESLint } from '@typescript-eslint/utils'
 
-export const buildTailwindSettingsConfig = (tailwindOptions: TailwindOptions | undefined): TSESLint.FlatConfig.Config | undefined => {
-  if (!tailwindOptions) return undefined
-
-  const { noUnknownClasses, ...settingsOptions } = tailwindOptions
-  const unknownClassOptions: Record<string, unknown> = {}
+const buildUnknownClassOptions = (tailwindOptions: TailwindOptions): Record<string, string | string[]> => {
+  const unknownClassOptions: Record<string, string | string[]> = {}
 
   if (tailwindOptions.entryPoint) unknownClassOptions.entryPoint = tailwindOptions.entryPoint
 
   if (tailwindOptions.ignore?.length) unknownClassOptions.ignore = tailwindOptions.ignore
 
+  return unknownClassOptions
+}
+
+const createNoUnknownClassesRule = (
+  noUnknownClasses: TailwindOptions['noUnknownClasses'],
+  unknownClassOptions: Record<string, string | string[]>
+): TSESLint.FlatConfig.RuleEntry | undefined => {
   const hasUnknownClassOptions = Object.keys(unknownClassOptions).length > 0
-  let noUnknownClassesRule: TSESLint.FlatConfig.RuleEntry | undefined
 
-  if (hasUnknownClassOptions || noUnknownClasses !== undefined) {
-    const severity = noUnknownClasses ?? 'error'
+  if (!hasUnknownClassOptions && noUnknownClasses === undefined) return undefined
 
-    if (severity === false) {
-      noUnknownClassesRule = 'off'
-    } else if (hasUnknownClassOptions) {
-      noUnknownClassesRule = [severity, unknownClassOptions]
-    } else {
-      noUnknownClassesRule = severity
-    }
-  }
+  const severity = noUnknownClasses ?? 'error'
+
+  if (severity === false) return 'off'
+
+  return hasUnknownClassOptions ? [severity, unknownClassOptions] : severity
+}
+
+export const buildTailwindSettingsConfig = (tailwindOptions: TailwindOptions | undefined): TSESLint.FlatConfig.Config | undefined => {
+  if (!tailwindOptions) return undefined
+
+  const { noUnknownClasses, ...settingsOptions } = tailwindOptions
+  const unknownClassOptions = buildUnknownClassOptions(tailwindOptions)
+  const noUnknownClassesRule = createNoUnknownClassesRule(noUnknownClasses, unknownClassOptions)
 
   return {
     name: 'eslint-config-lite/tailwind-settings',

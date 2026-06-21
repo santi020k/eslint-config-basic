@@ -349,6 +349,31 @@ describe('eslintConfig Function', () => {
     expect(rules).not.toContain('react/jsx-pascal-case')
   })
 
+  test('should preserve detected Cloudflare runtime globals over detected preset defaults', async () => {
+    const tmpDir = mkdtempSync(join(tmpdir(), 'eslint-config-cloudflare-'))
+
+    try {
+      writeFileSync(join(tmpDir, 'package.json'), JSON.stringify({
+        devDependencies: {
+          '@cloudflare/workers-types': 'latest',
+          wrangler: 'latest'
+        }
+      }))
+      writeFileSync(join(tmpDir, 'tsconfig.json'), '{}')
+
+      const config = await defineConfig({
+        autoFrameworks: false,
+        detectRootDir: tmpDir
+      })
+      const globals = config.flatMap(entry => Object.keys(entry.languageOptions?.globals ?? {}))
+
+      expect(globals).toContain('DurableObject')
+      expect(globals).toContain('WebSocketPair')
+    } finally {
+      rmSync(tmpDir, { force: true, recursive: true })
+    }
+  })
+
   test('should keep the All preset focused on bundled configs', async () => {
     const config = await defineConfig({
       autoFrameworks: false,

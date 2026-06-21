@@ -133,6 +133,20 @@ If you add a new published framework package or integration, updating the docume
 - Update homepage counts or package lists in `apps/docs/src/content/docs/index.md` when totals change
 - Keep root `README.md` and package-level `README.md` files aligned with the published surface area
 
+## Pull Request Descriptions
+
+When writing a PR title or description — whether drafting one yourself or helping a human write one — always follow the structure in `.github/pull_request_template.md`:
+
+1. **Description** — What changed, why, and any notable implementation decisions (What / Why / How).
+2. **Related Issue** — Link with `Resolves #N` if applicable.
+3. **Type of Change** — Check the relevant box(es).
+4. **Packages Affected** — Check every package the change touches.
+5. **Changeset** — Confirm one exists or explain why it isn't needed.
+6. **How to Test** — Concrete steps a reviewer can follow to verify the change.
+7. **Checklist** — All boxes must be checked before merge.
+
+PR titles should follow conventional commits: `fix:`, `feat:`, `chore:`, `refactor:`, `docs:`, `test:`, `ci:` — scoped to the package when a single package is affected (e.g. `fix(basic): remove internal dist export`).
+
 ## Development Workflow: TDD
 
 This project follows **Test-Driven Development**. Tests are written before implementation. The `contracts.test.ts` file acts as the specification — registering an enum value there makes the test fail until the factory exists, which is the intended Red→Green cycle.

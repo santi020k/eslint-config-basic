@@ -2,7 +2,8 @@
   "name": "@santi020k/eslint-config-tanstack-start",
   "version": "2.0.0",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "description": "TanStack Start ESLint configuration bundling TanStack Router and Query rules",
   "type": "module",
@@ -43,7 +44,7 @@
     "eslint": "^10.0.0"
   },
   "engines": {
-    "node": ">=22.18.0"
+    "node": "^20.19.0 || >=22.18.0"
   },
   "repository": {
     "type": "git",

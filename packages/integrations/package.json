@@ -2,7 +2,8 @@
   "name": "@santi020k/eslint-config-integrations",
   "version": "2.0.0",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "description": "ESLint integrations for libraries, tools, testing, formats, and extensions",
   "type": "module",
@@ -99,15 +100,17 @@
     "eslint-plugin-yml": "catalog:",
     "eslint-plugin-zod": "catalog:",
     "globals": "catalog:",
+    "graphql": "catalog:",
     "storybook": "catalog:",
-    "typescript-eslint": "catalog:"
+    "tailwindcss": "catalog:",
+    "typescript-eslint": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@types/eslint-plugin-jsx-a11y": "catalog:",
     "@types/node": "catalog:",
     "eslint": "catalog:",
     "publint": "catalog:",
-    "tailwindcss": "catalog:",
     "tsup": "catalog:",
     "typescript": "catalog:"
   },
@@ -121,7 +124,7 @@
     }
   },
   "engines": {
-    "node": ">=22.18.0"
+    "node": "^20.19.0 || >=22.18.0"
   },
   "repository": {
     "type": "git",
