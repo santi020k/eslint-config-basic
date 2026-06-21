@@ -1,18 +1,18 @@
 ---
 title: "Installation"
-description: "- Node.js >=22.18.0 - ESLint 10+"
+description: "- Node.js ^20.19.0 || >=22.18.0 - ESLint 10+"
 ---
 
 ## Requirements
 
-- Node.js `>=22.18.0`
+- Node.js `^20.19.0 || >=22.18.0`
 - ESLint `10+`
 
 ## Compatibility Matrix
 
 | Runtime | Supported Version | Notes |
 | :--- | :--- | :--- |
-| Node.js | `>=22.18.0` | Required by the published packages and CI matrix. |
+| Node.js | `^20.19.0 \|\| >=22.18.0` | Required by the published packages and CI matrix. |
 | ESLint | `^10.0.0` | The current release line targets ESLint 10 flat config. |
 | TypeScript | `>=5.0.0` | Optional unless `typescript` linting is enabled. |
 | Package managers | pnpm, npm, yarn, bun | CI validates package artifacts; consumer e2e tests load the built package from outside the repo. |
@@ -44,6 +44,8 @@ That package brings the framework config packages used by the composer. You no l
 ## Dependency Policy
 
 The full package intentionally installs the framework config packages and integration plugin set as regular dependencies. This keeps app installs boring: one package, one tested dependency graph, and no peer-dependency puzzle for every framework.
+
+The integration package also carries compatible runtime peers for bundled plugins that can be satisfied safely inside the package, including Tailwind, Zod, and GraphQL. Some third-party ESLint plugins may still publish peer ranges that lag behind ESLint 10 or TypeScript 6; those warnings are upstream compatibility metadata rather than missing project setup.
 
 Unused framework configs are lazy-loaded only when enabled or detected. They still affect disk usage, but not lint-time imports. For dependency-sensitive projects, use `@santi020k/eslint-config-lite` and install only the framework/integration packages you enable.
 

@@ -374,8 +374,9 @@ const resolveNextModeValue = (
 const resolveRuntimeValue = (
   options: EslintConfigOptions | undefined,
   presetDefaults: Partial<EslintConfigOptions>,
-  detected: EslintConfigOptions
-): Runtime => (options?.runtime ?? presetDefaults.runtime ?? detected.runtime ?? Runtime.Universal) as Runtime
+  detected: EslintConfigOptions,
+  usePresetRuntime: boolean
+): Runtime => (options?.runtime ?? (usePresetRuntime ? presetDefaults.runtime : undefined) ?? detected.runtime ?? Runtime.Universal) as Runtime
 
 const resolveSettingsValue = (
   options: EslintConfigOptions | undefined,
@@ -620,10 +621,6 @@ const emitBasicWarnings = (options?: EslintConfigOptions) => {
   if (options?.frameworks && 'remix' in options.frameworks) {
     process.emitWarning('[eslint-config-basic] Warning: `frameworks.remix` is deprecated and will be removed in the next major. Please use `frameworks["react-router"]` instead.')
   }
-
-  if (options?.typescript && typeof options.typescript === 'object' && 'project' in options.typescript) {
-    process.emitWarning('[eslint-config-basic] Warning: `typescript.project` is ignored in v2. Type-aware linting now relies on typescript-eslint projectService.')
-  }
 }
 
 /**
@@ -685,7 +682,7 @@ export const eslintConfig = async (
   ) as Library[]
 
   const nextMode = resolveNextModeValue(options, presetDefaults, detected)
-  const runtime = resolveRuntimeValue(options, presetDefaults, detected)
+  const runtime = resolveRuntimeValue(options, presetDefaults, detected, requestedPreset !== undefined)
   const settings = resolveSettingsValue(options, detected)
   const strict = getStrictMode(optStrict, presetDefaults.strict)
 

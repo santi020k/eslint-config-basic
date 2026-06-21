@@ -38,16 +38,13 @@
       "outputs": ["eslint-config-schema.json"]
     },
     "//#lint:spell": {
-      "inputs": ["**/*"],
       "outputLogs": "errors-only"
     },
     "//#lint:knip": {
-      "inputs": ["**/*"],
       "outputLogs": "errors-only"
     },
     "//#lint:repo": {
       "dependsOn": ["^build"],
-      "inputs": ["**/*"],
       "outputLogs": "errors-only"
     },
     "dev": {

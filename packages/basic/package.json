@@ -2,9 +2,10 @@
   "name": "@santi020k/eslint-config-basic",
   "version": "2.0.0",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
-  "description": "A composable ESLint 10+ Flat Config package for JavaScript, TypeScript, React, Next.js, Vue, Svelte, Solid, Angular, Astro, Expo, NestJS, Hono, Qwik, and Remix.",
+  "description": "A composable ESLint 10+ Flat Config package for JavaScript, TypeScript, React, Next.js, Vue, Nuxt, Svelte, Solid, Angular, Astro, Expo, NestJS, Hono, Preact, Qwik, React Router, TanStack Start, Lit, Vite, and Slidev.",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -12,10 +13,6 @@
   "sideEffects": false,
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    },
-    "./dist/index.js": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     }
@@ -79,7 +76,7 @@
     }
   },
   "engines": {
-    "node": ">=22.18.0"
+    "node": "^20.19.0 || >=22.18.0"
   },
   "repository": {
     "type": "git",

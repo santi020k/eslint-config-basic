@@ -46,7 +46,6 @@ import { buildTailwindSettingsConfig } from './tailwind.js'
 
 // Lazy framework factories (v2 naming: bare framework names) plus
 // deprecated *Config aliases for the old mixed naming.
-/* eslint-disable @typescript-eslint/no-deprecated -- deliberate re-export of deprecated v1 aliases for migration */
 export {
   angular,
   angularConfig,
@@ -77,7 +76,6 @@ export {
   vue,
   vueConfig
 } from './frameworks.js'
-/* eslint-enable @typescript-eslint/no-deprecated */
 
 // Re-export core types and utilities
 export type {
@@ -221,6 +219,45 @@ const applyLiteFrameworkImpliedDeps = (
   if (result.nuxt && !result.vue) result.vue = true
 
   return result
+}
+
+const buildLiteTailwindResult = (options: TailwindOptions, entryPoint: string | undefined): TailwindOptions => {
+  const result: TailwindOptions = {
+    detectComponentClasses: options.detectComponentClasses ?? true
+  }
+
+  if (entryPoint) result.entryPoint = entryPoint
+
+  if (options.ignore?.length) result.ignore = options.ignore
+
+  if (options.noUnknownClasses !== undefined) result.noUnknownClasses = options.noUnknownClasses
+
+  return result
+}
+
+const hasLiteTailwindSettings = (options: TailwindOptions, entryPoint: string | undefined): boolean => {
+  if (entryPoint) return true
+
+  if (options.detectComponentClasses !== undefined) return true
+
+  if (options.ignore?.length) return true
+
+  return options.noUnknownClasses !== undefined
+}
+
+const resolveLiteTailwindOptions = (
+  rootDir: string,
+  tailwind: EslintConfigOptions['tailwind'],
+  uniqueLibraries: Library[]
+): TailwindOptions | undefined => {
+  if (!uniqueLibraries.includes(Library.Tailwind)) return undefined
+
+  const options: TailwindOptions = typeof tailwind === 'object' ? tailwind : {}
+  const entryPoint = options.entryPoint ?? findTailwindEntryPoint(rootDir)
+
+  if (!hasLiteTailwindSettings(options, entryPoint)) return undefined
+
+  return buildLiteTailwindResult(options, entryPoint)
 }
 
 const buildLiteIgnoresConfig = (
@@ -536,24 +573,7 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
   const useGitignore = !uniqueSettings.includes(Setting.NoGitignore)
   const useDefaultIgnores = !uniqueSettings.includes(Setting.NoDefaultIgnores)
   const useGeneratedCodeIgnores = !uniqueSettings.includes(Setting.NoGeneratedCodeIgnores)
-
-  const tailwindOptions = ((): TailwindOptions | undefined => {
-    if (!uniqueLibraries.includes(Library.Tailwind)) return undefined
-
-    const opts: TailwindOptions = typeof optTailwind === 'object' ? optTailwind : {}
-    const entryPoint = opts.entryPoint ?? findTailwindEntryPoint(rootDir)
-    const hasCustomConfig = entryPoint || opts.detectComponentClasses !== undefined || opts.ignore?.length || opts.noUnknownClasses !== undefined
-
-    if (!hasCustomConfig) return undefined
-
-    return {
-      detectComponentClasses: opts.detectComponentClasses ?? true,
-      ...(entryPoint ? { entryPoint } : {}),
-      ...(opts.ignore?.length ? { ignore: opts.ignore } : {}),
-      ...(opts.noUnknownClasses === undefined ? {} : { noUnknownClasses: opts.noUnknownClasses })
-    }
-  })()
-
+  const tailwindOptions = resolveLiteTailwindOptions(rootDir, optTailwind, uniqueLibraries)
   const runtimeCoreConfig = runtime === Runtime.Universal ? coreConfig : createCoreConfig(runtime)
 
   const { defaultIgnores, gitignoreConfig, userIgnores } = buildLiteIgnoresConfig(

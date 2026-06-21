@@ -35,9 +35,11 @@ export default await defineConfig({
   // project service resolves test imports, it loads the entire monorepo graph
   // and hangs the ESLint language server. Disabling type-aware linting for test
   // files avoids the hang; type correctness is still enforced by `pnpm typecheck`.
+  // packages/lite/src/index.ts triggers the same issue: it re-exports from many
+  // workspace packages, causing projectService to load the full graph (~4.8 s).
   {
     ...tseslint.configs.disableTypeChecked,
-    files: ['packages/tests/**/*.ts'],
+    files: ['packages/tests/**/*.ts', 'packages/lite/src/index.ts'],
     name: 'local-tests-no-type-checking'
   },
   {

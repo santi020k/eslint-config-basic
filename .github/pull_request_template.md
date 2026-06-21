@@ -1,11 +1,12 @@
 
-# � Pull Request
+# Pull Request
 
 ## Description
 
 <!--
-Please include a summary of the change and which issue is fixed.
-Please also include relevant motivation and context.
+**What** — what changed?
+**Why** — what problem does it solve, or what value does it add?
+**How** — any notable implementation decisions reviewers should know about?
 -->
 
 ## Related Issue
@@ -49,6 +50,7 @@ Link to the issue this PR resolves, e.g. "Resolves #123"
 - [ ] `preact` (@santi020k/eslint-config-preact)
 - [ ] `qwik` (@santi020k/eslint-config-qwik)
 - [ ] `react-router` (@santi020k/eslint-config-react-router)
+- [ ] `remix` (@santi020k/eslint-config-remix — deprecated alias of react-router)
 - [ ] `tanstack-start` (@santi020k/eslint-config-tanstack-start)
 - [ ] `lit` (@santi020k/eslint-config-lit)
 - [ ] `vite` (@santi020k/eslint-config-vite)
@@ -59,11 +61,20 @@ Link to the issue this PR resolves, e.g. "Resolves #123"
 
 <!--
 If your change affects published packages, you must include a changeset.
-Run `npx changeset` to create one — it will ask which packages are affected and the bump type (patch/minor/major).
+Run `pnpm run changeset` to create one — it will ask which packages are affected and the bump type (patch/minor/major).
 The changeset bot will also comment on this PR if a changeset is missing.
 -->
 
 - [ ] I have added a changeset (`pnpm run changeset`) or this PR does not require one (e.g. docs, CI, tests only)
+
+## How to Test
+
+<!--
+Describe how a reviewer can verify this change works correctly.
+e.g. "Run `pnpm run test`, check that X rule fires on Y input"
+or "Install the packed tarball and run the CLI against the fixture in packages/tests/fixtures/basic"
+Leave blank for docs-only or CI-only changes.
+-->
 
 ## Checklist
 
