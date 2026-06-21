@@ -1,5 +1,45 @@
 # @santi020k/eslint-config-basic
 
+## 2.1.0
+
+### Minor Changes
+
+- [#93](https://github.com/santi020k/eslint-config-basic/pull/93) [`9bf89ba`](https://github.com/santi020k/eslint-config-basic/commit/9bf89badbabf46d8167b59096622b62a218d97db) Thanks [@santi020k](https://github.com/santi020k)! - Preserve detected runtime globals when detection infers a preset, including Cloudflare-specific globals, and stop warning for supported `typescript.project` parser options.
+
+### Patch Changes
+
+- [#93](https://github.com/santi020k/eslint-config-basic/pull/93) [`9bf89ba`](https://github.com/santi020k/eslint-config-basic/commit/9bf89badbabf46d8167b59096622b62a218d97db) Thanks [@santi020k](https://github.com/santi020k)! - Remove the internal `./dist/index.js` path from the package exports map. This key was leaking a dist path as a public entrypoint alongside the canonical `.` entry; only `.` should be exported.
+
+  Update the npm package description to list all v2 frameworks: Lit, Nuxt, Preact, React Router, TanStack Start, and Vite were missing from the v1-era description string.
+
+  Fix the Node.js compatibility row in the root README — it said `>=22.18.0` (the dev-workspace floor) but published packages declare `>=22.0.0`.
+
+- [#93](https://github.com/santi020k/eslint-config-basic/pull/93) [`9bf89ba`](https://github.com/santi020k/eslint-config-basic/commit/9bf89badbabf46d8167b59096622b62a218d97db) Thanks [@santi020k](https://github.com/santi020k)! - Update `engines.node` floor to `^20.19.0 || >=22.18.0` to safely support Node 20 environments while avoiding installation failures on early Node 22 versions.
+
+- Updated dependencies [[`9bf89ba`](https://github.com/santi020k/eslint-config-basic/commit/9bf89badbabf46d8167b59096622b62a218d97db)]:
+  - @santi020k/eslint-config-integrations@2.1.0
+  - @santi020k/eslint-config-angular@2.1.0
+  - @santi020k/eslint-config-astro@2.1.0
+  - @santi020k/eslint-config-core@2.1.0
+  - @santi020k/eslint-config-expo@2.1.0
+  - @santi020k/eslint-config-hono@2.1.0
+  - @santi020k/eslint-config-lit@2.1.0
+  - @santi020k/eslint-config-nest@2.1.0
+  - @santi020k/eslint-config-next@2.1.0
+  - @santi020k/eslint-config-nuxt@2.1.0
+  - @santi020k/eslint-config-qwik@2.1.0
+  - @santi020k/eslint-config-react@2.1.0
+  - @santi020k/eslint-config-react-router@2.1.0
+  - @santi020k/eslint-config-remix@2.1.0
+  - @santi020k/eslint-config-slidev@2.1.0
+  - @santi020k/eslint-config-solid@2.1.0
+  - @santi020k/eslint-config-svelte@2.1.0
+  - @santi020k/eslint-config-tanstack-start@2.1.0
+  - @santi020k/eslint-config-typescript@2.1.0
+  - @santi020k/eslint-config-vite@2.1.0
+  - @santi020k/eslint-config-vue@2.1.0
+  - @santi020k/eslint-config-preact@2.1.0
+
 ## 2.0.0
 
 ### Major Changes
