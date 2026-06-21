@@ -1,15 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "./dist",
-    "paths": {
-      "@santi020k/eslint-config-core": [
-        "../core/src/index.ts"
-      ],
-      "@santi020k/eslint-config-typescript": [
-        "../typescript/src/index.ts"
-      ]
-    }
+    "outDir": "./dist"
   },
   "include": [
     "src/**/*.ts"

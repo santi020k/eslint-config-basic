@@ -42,7 +42,8 @@
     "release": "pnpm run release:check && changeset publish",
     "prepare": "husky",
     "pre-commit": "lint-staged",
-    "pre-push": "pnpm run lint && pnpm run lint:spell && pnpm run typecheck && pnpm run test"
+    "pre-push": "pnpm run lint && pnpm run lint:spell && pnpm run typecheck && pnpm run test",
+    "commit": "cz"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "catalog:",
@@ -62,7 +63,11 @@
     "typedoc": "catalog:",
     "typedoc-plugin-markdown": "catalog:",
     "typescript": "catalog:",
-    "typescript-eslint": "catalog:"
+    "typescript-eslint": "catalog:",
+    "@commitlint/cli": "^19.3.0",
+    "@commitlint/config-conventional": "^19.2.2",
+    "commitizen": "^4.3.0",
+    "cz-conventional-changelog": "^3.3.0"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,md,mdx,json,yaml,yml,toml,vue,svelte,astro}": [
@@ -82,5 +87,10 @@
   },
   "homepage": "https://eslint.santi020k.com/",
   "author": "santi020k",
-  "license": "MIT"
+  "license": "MIT",
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
 }

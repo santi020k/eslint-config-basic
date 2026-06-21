@@ -22,6 +22,87 @@
     "noEmit": true,
     "allowImportingTsExtensions": true,
     "paths": {
+      "@santi020k/eslint-config-basic": [
+        "./packages/basic/src/index.ts"
+      ],
+      "@santi020k/eslint-config-lite": [
+        "./packages/lite/src/index.ts"
+      ],
+      "@santi020k/eslint-config-core": [
+        "./packages/core/src/index.ts"
+      ],
+      "@santi020k/eslint-config-core/types": [
+        "./packages/core/src/types.ts"
+      ],
+      "@santi020k/eslint-config-core/utils": [
+        "./packages/core/src/utils/index.ts"
+      ],
+      "@santi020k/eslint-config-typescript": [
+        "./packages/typescript/src/index.ts"
+      ],
+      "@santi020k/eslint-config-react": [
+        "./packages/react/src/index.ts"
+      ],
+      "@santi020k/eslint-config-next": [
+        "./packages/next/src/index.ts"
+      ],
+      "@santi020k/eslint-config-astro": [
+        "./packages/astro/src/index.ts"
+      ],
+      "@santi020k/eslint-config-expo": [
+        "./packages/expo/src/index.ts"
+      ],
+      "@santi020k/eslint-config-vue": [
+        "./packages/vue/src/index.ts"
+      ],
+      "@santi020k/eslint-config-svelte": [
+        "./packages/svelte/src/index.ts"
+      ],
+      "@santi020k/eslint-config-solid": [
+        "./packages/solid/src/index.ts"
+      ],
+      "@santi020k/eslint-config-angular": [
+        "./packages/angular/src/index.ts"
+      ],
+      "@santi020k/eslint-config-nest": [
+        "./packages/nest/src/index.ts"
+      ],
+      "@santi020k/eslint-config-hono": [
+        "./packages/hono/src/index.ts"
+      ],
+      "@santi020k/eslint-config-qwik": [
+        "./packages/qwik/src/index.ts"
+      ],
+      "@santi020k/eslint-config-preact": [
+        "./packages/preact/src/index.ts"
+      ],
+      "@santi020k/eslint-config-remix": [
+        "./packages/remix/src/index.ts"
+      ],
+      "@santi020k/eslint-config-slidev": [
+        "./packages/slidev/src/index.ts"
+      ],
+      "@santi020k/eslint-config-vite": [
+        "./packages/vite/src/index.ts"
+      ],
+      "@santi020k/eslint-config-integrations": [
+        "./packages/integrations/src/index.ts"
+      ],
+      "@santi020k/eslint-config-integrations/extensions": [
+        "./packages/integrations/src/extensions/index.ts"
+      ],
+      "@santi020k/eslint-config-integrations/formats": [
+        "./packages/integrations/src/formats/index.ts"
+      ],
+      "@santi020k/eslint-config-integrations/libraries": [
+        "./packages/integrations/src/libraries/index.ts"
+      ],
+      "@santi020k/eslint-config-integrations/testing": [
+        "./packages/integrations/src/testing/index.ts"
+      ],
+      "@santi020k/eslint-config-integrations/tools": [
+        "./packages/integrations/src/tools/index.ts"
+      ],
       "eslint-plugin-promise": [
         "./packages/core/src/ambient.d.ts"
       ],

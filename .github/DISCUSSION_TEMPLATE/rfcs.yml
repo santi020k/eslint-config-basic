@@ -1,21 +1,57 @@
+title: "[RFC] "
+labels: ["rfc"]
 body:
-  - attributes:
-      label: RFC
+  - type: markdown
+    attributes:
       value: |
-        Suggested changes...
-    id: rfc
-    type: textarea
-  - attributes:
-      label: Additional Info
-      value: |
-        Any additional info...
-    id: additional
-    type: textarea
-  - attributes:
-      label: Before you submit your RFC, please confirm the following. If any of these required steps are not taken, we may not be able to review your RFC. Help us to help you!
+        Use this template to propose a significant change — new API shape, breaking change, major refactor, or architectural decision. Small fixes and features don't need an RFC; open a regular issue instead.
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: What problem are you trying to solve? Why is this change needed?
+      placeholder: The current API makes it difficult to...
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed Change
+      description: Describe the change in as much detail as you can. Include API surface, config shape changes, or implementation notes if relevant.
+      placeholder: |
+        ## API
+        ```ts
+        eslintConfig({ ... })
+        ```
+        ## Behaviour
+        ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: What other approaches did you evaluate? Why did you rule them out?
+    validations:
+      required: false
+
+  - type: textarea
+    id: drawbacks
+    attributes:
+      label: Drawbacks / Open Questions
+      description: Known trade-offs, migration burden, or unresolved questions.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: required-checks
+    attributes:
+      label: Before You Submit
       options:
         - label: I have searched for related discussions and issues.
           required: true
-    id: required-checks
-    type: checkboxes
-title: Your Title Here
+        - label: This is a meaningful change that warrants an RFC (not a small fix or feature).
+          required: true
