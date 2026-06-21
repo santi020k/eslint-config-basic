@@ -1,18 +1,18 @@
 ---
 title: "Installation"
-description: "- Node.js >=22.0.0 - ESLint 10+"
+description: "- Node.js ^20.19.0 || >=22.18.0 - ESLint 10+"
 ---
 
 ## Requirements
 
-- Node.js `>=22.0.0`
+- Node.js `^20.19.0 || >=22.18.0`
 - ESLint `10+`
 
 ## Compatibility Matrix
 
 | Runtime | Supported Version | Notes |
 | :--- | :--- | :--- |
-| Node.js | `>=22.0.0` | Required by the published packages and CI matrix. |
+| Node.js | `^20.19.0 \|\| >=22.18.0` | Required by the published packages and CI matrix. |
 | ESLint | `^10.0.0` | The current release line targets ESLint 10 flat config. |
 | TypeScript | `>=5.0.0` | Optional unless `typescript` linting is enabled. |
 | Package managers | pnpm, npm, yarn, bun | CI validates package artifacts; consumer e2e tests load the built package from outside the repo. |
