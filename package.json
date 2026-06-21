@@ -64,10 +64,10 @@
     "typedoc-plugin-markdown": "catalog:",
     "typescript": "catalog:",
     "typescript-eslint": "catalog:",
-    "@commitlint/cli": "^19.3.0",
-    "@commitlint/config-conventional": "^19.2.2",
-    "commitizen": "^4.3.0",
-    "cz-conventional-changelog": "^3.3.0"
+    "@commitlint/cli": "catalog:",
+    "@commitlint/config-conventional": "catalog:",
+    "commitizen": "catalog:",
+    "cz-conventional-changelog": "catalog:"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,md,mdx,json,yaml,yml,toml,vue,svelte,astro}": [

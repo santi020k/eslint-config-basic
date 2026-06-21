@@ -24,6 +24,7 @@ words:
   - codecov
   - codegen
   - commitizen
+  - commitlint
   - commonmark
   - cspell
   - darraghor

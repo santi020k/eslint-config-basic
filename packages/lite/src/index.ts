@@ -46,7 +46,6 @@ import { buildTailwindSettingsConfig } from './tailwind.js'
 
 // Lazy framework factories (v2 naming: bare framework names) plus
 // deprecated *Config aliases for the old mixed naming.
-/* eslint-disable @typescript-eslint/no-deprecated -- deliberate re-export of deprecated v1 aliases for migration */
 export {
   angular,
   angularConfig,
@@ -77,7 +76,6 @@ export {
   vue,
   vueConfig
 } from './frameworks.js'
-/* eslint-enable @typescript-eslint/no-deprecated */
 
 // Re-export core types and utilities
 export type {
