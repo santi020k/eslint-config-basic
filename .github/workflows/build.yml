@@ -51,7 +51,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [ 20.x, 22.x, 24.x ]
+        node-version: [ 22.x, 24.x ]
 
     # Turbo remote cache — set TURBO_TOKEN and TURBO_TEAM in repo secrets for cross-run caching
     # See: https://turbo.build/repo/docs/ci/github-actions#remote-caching
@@ -83,7 +83,7 @@ jobs:
         if: matrix.node-version == '22.x'
         run: pnpm exec turbo run typecheck lint test:coverage //#lint:spell //#lint:knip //#lint:repo
       - name: Run concurrent CI checks (Node 24.x)
-        if: matrix.node-version != '22.x'
+        if: matrix.node-version == '24.x'
         run: pnpm exec turbo run typecheck lint test:coverage
       - name: Build docs (smoke check)
         if: matrix.node-version == '22.x'
