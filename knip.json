@@ -79,8 +79,10 @@
         "eslint-plugin-security",
         "eslint-plugin-sonarjs",
         "eslint-plugin-tsdoc",
+        "eslint-plugin-vercel-ai-security",
         "eslint-plugin-zod",
-        "eslint-plugin-vercel-ai-security"
+        "graphql",
+        "zod"
       ]
     },
     "packages/lite": {
