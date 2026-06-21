@@ -1,5 +1,14 @@
 # @santi020k/eslint-config-integrations
 
+## 2.1.0
+
+### Patch Changes
+
+- [#93](https://github.com/santi020k/eslint-config-basic/pull/93) [`9bf89ba`](https://github.com/santi020k/eslint-config-basic/commit/9bf89badbabf46d8167b59096622b62a218d97db) Thanks [@santi020k](https://github.com/santi020k)! - Satisfy Tailwind, Zod, and GraphQL plugin runtime peers from the integrations package to reduce peer-warning noise for full `@santi020k/eslint-config-basic` installs.
+
+- Updated dependencies []:
+  - @santi020k/eslint-config-core@2.1.0
+
 ## 2.0.0
 
 ### Major Changes
