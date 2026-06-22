@@ -10,7 +10,7 @@ export default await defineConfig({
   detection: { libraries: false },
   detectRootDir: import.meta.dirname,
   extensions: [Extension.Boundaries],
-  formats: [Format.Jsonc, Format.Mdx, Format.Markdown],
+  formats: [Format.Jsonc, Format.Markdown],
   ignores: [
     '**/tsup.config.ts',
     'docs/*',
