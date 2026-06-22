@@ -7,7 +7,7 @@ import tsParser from '@typescript-eslint/parser'
 
 type TSParserOptions = Parameters<typeof tsParser.parseForESLint>[1]
 
-const ASTRO_VIRTUAL_JS_RE = /\.astro\/[^/]+\.js$/
+const ASTRO_VIRTUAL_JS_RE = /\.astro[/\\][^/\\]+\.js$/
 
 const remapPath = (options: TSParserOptions): TSParserOptions => {
   if (options?.filePath && ASTRO_VIRTUAL_JS_RE.test(options.filePath)) {
