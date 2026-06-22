@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
+    "@santi020k/eslint-config-expo": "workspace:^",
     "eslint": "^10.5.0",
     "react": "19.2.7",
     "react-native": "^0.86.0"

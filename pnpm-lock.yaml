@@ -1111,6 +1111,9 @@ importers:
       '@santi020k/eslint-config-basic':
         specifier: workspace:^
         version: link:../../basic
+      '@santi020k/eslint-config-expo':
+        specifier: workspace:^
+        version: link:../../expo
       eslint:
         specifier: ^10.5.0
         version: 10.5.0(jiti@2.7.0)
@@ -1607,6 +1610,9 @@ importers:
       '@santi020k/eslint-config-basic':
         specifier: workspace:^
         version: link:../../basic
+      '@santi020k/eslint-config-react-router':
+        specifier: workspace:^
+        version: link:../../react-router
       eslint:
         specifier: ^10.5.0
         version: 10.5.0(jiti@2.7.0)
