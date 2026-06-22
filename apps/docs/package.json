@@ -9,8 +9,10 @@
   "description": "Astro Starlight documentation site for the @santi020k/eslint-config-basic monorepo",
   "type": "module",
   "scripts": {
-    "docs:build": "node ../../scripts/prepare-starlight-docs.mjs && rm -rf .astro && astro build",
-    "docs:dev": "node ../../scripts/prepare-starlight-docs.mjs && rm -rf .astro && astro dev",
+    "docs:build": "node ../../scripts/prepare-starlight-docs.mjs && node scripts/generate-og-images.mjs && rm -rf .astro && astro build",
+    "docs:dev": "node ../../scripts/prepare-starlight-docs.mjs && node scripts/generate-og-images.mjs && rm -rf .astro && astro dev",
+    "generate:og": "node scripts/generate-og-images.mjs",
+    "generate:og:force": "FORCE_OG=1 node scripts/generate-og-images.mjs",
     "docs:preview": "astro preview",
     "docs:clean": "rm -rf dist .astro src/content/docs/api/reference",
     "build": "echo \"No direct build step required\"",
@@ -30,7 +32,11 @@
     "@axe-core/playwright": "catalog:",
     "@lhci/cli": "catalog:",
     "@playwright/test": "catalog:",
+    "@resvg/resvg-js": "catalog:",
     "astro": "catalog:",
+    "satori": "catalog:",
+    "satori-html": "catalog:",
+    "sharp": "catalog:",
     "typescript": "catalog:"
   },
   "engines": {
