@@ -97,6 +97,7 @@ words:
   - proptypes
   - publint
   - qwik
+  - resvg
   - rimraf
   - root-dir
   - santi

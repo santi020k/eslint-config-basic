@@ -15,6 +15,7 @@ export const GLOB_SLOT = [...GLOB_VUE, ...GLOB_SVELTE, ...GLOB_ASTRO]
 export const GLOB_JS_TS_ALL = [...GLOB_JS_TS, ...GLOB_SLOT]
 
 export const GLOB_VIRTUAL_TS = [
+  '**/*.astro/*.js',
   '**/*.astro/*.ts',
   '**/*.astro/*.tsx',
   '**/*.vue/*.ts',
