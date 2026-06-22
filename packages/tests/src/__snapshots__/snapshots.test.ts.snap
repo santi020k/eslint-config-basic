@@ -253,11 +253,13 @@ exports[`Config Snapshots — Entry Names > tanstack-start config entries should
 
 exports[`Config Snapshots — Entry Names > typescript config entries should match snapshot 1`] = `
 [
+  "eslint-config-typescript/astro-virtual-js-parser",
   "eslint-config-typescript/parser-setup",
   "eslint-config-typescript/parser-setup-slots",
   "eslint-config-typescript/setup",
   "eslint-config-typescript/standard-rules",
   "eslint-config-typescript/type-checked-rules",
+  "eslint-config-typescript/virtual-parser-setup",
   "typescript-eslint/base",
   "typescript-eslint/base",
   "typescript-eslint/eslint-recommended",

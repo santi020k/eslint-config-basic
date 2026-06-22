@@ -10,19 +10,16 @@ export default await defineConfig({
   detection: { libraries: false },
   detectRootDir: import.meta.dirname,
   extensions: [Extension.Boundaries],
-  formats: [Format.Jsonc, Format.Mdx, Format.Markdown],
+  formats: [Format.Jsonc, Format.Markdown],
   ignores: [
     '**/tsup.config.ts',
     'docs/*',
     'packages/tests/fixtures/**',
     'packages/playground/**',
-    'apps/docs/src/content/docs/api/reference/**',
-    'apps/docs/src/content/docs/v1/api/reference/**',
+    'apps/docs/**',
     'typedoc.config.mjs',
     'typedoc.markdown.mjs',
-    '**/CHANGELOG.md',
-    'apps/docs/src/content/docs/guide/changelog.md',
-    'apps/docs/src/content/docs/v1/guide/changelog.md'
+    '**/CHANGELOG.md'
   ],
   preset: Preset.Monorepo,
   testing: [Testing.Vitest],

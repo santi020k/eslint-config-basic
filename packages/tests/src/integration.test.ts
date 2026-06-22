@@ -90,13 +90,29 @@ describe('Integration Tests', () => {
         frameworks: { astro: true },
         tools: [],
         tsconfigRootDir: FIXTURES_DIR,
-        typescript: {
-          project: true,
-          projectService: false
-        }
+        typescript: true
       })
       const code = 'const label: string = "hello"\n\nlabel\n'
       const results = await lintText(code, config, join(FIXTURES_DIR, 'astro.astro/1_1.ts'))
+
+      expect(results[0].fatalErrorCount).toBe(0)
+    })
+
+    test('should parse Astro virtual JavaScript fragments that contain TypeScript syntax', async () => {
+      const config = await defineConfig({
+        detection: false,
+        frameworks: { astro: true },
+        tools: [],
+        tsconfigRootDir: FIXTURES_DIR,
+        typescript: true
+      })
+      const code = [
+        'const target = document.querySelector("button") as HTMLButtonElement | null',
+        '',
+        'target?.focus()',
+        ''
+      ].join('\n')
+      const results = await lintText(code, config, join(FIXTURES_DIR, 'astro.astro/1_1.js'))
 
       expect(results[0].fatalErrorCount).toBe(0)
     })

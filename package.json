@@ -42,7 +42,7 @@
     "release": "pnpm run release:check && changeset publish",
     "prepare": "husky",
     "pre-commit": "lint-staged",
-    "pre-push": "turbo run build lint:repo lint:spell lint typecheck test",
+    "pre-push": "turbo run build && turbo run lint:repo lint:spell lint typecheck test",
     "commit": "cz"
   },
   "devDependencies": {

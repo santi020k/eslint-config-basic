@@ -1,0 +1,35 @@
+---
+import Default from '@astrojs/starlight/components/Head.astro'
+import type { Props } from '@astrojs/starlight/props'
+
+const trimOuterSlashes = (value: string) => value.replace(/^\/+|\/+$/g, '')
+
+const safeDecodeURIComponent = (value: string) => {
+  try {
+    return decodeURIComponent(value)
+  } catch {
+    return value
+  }
+}
+
+const getOgSlug = (pathname: string) => trimOuterSlashes(pathname)
+  .split('/')
+  .filter(Boolean)
+  .map(segment => encodeURIComponent(safeDecodeURIComponent(segment)).replaceAll('%', '~'))
+  .join('--')
+
+const slug = getOgSlug(Astro.url.pathname)
+const ogImagePath = `/og/${slug || 'index'}.webp`
+const site = Astro.site ?? new URL('https://eslint.santi020k.com/')
+const ogImageURL = new URL(ogImagePath, site).href
+const pageTitle = Astro.props.entry?.data?.title ?? 'ESLint Config'
+const ogImageAlt = `${pageTitle} — ESLint Config`
+---
+
+<Default {...Astro.props}><slot /></Default>
+<meta property="og:image" content={ogImageURL} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={ogImageAlt} />
+<meta name="twitter:image" content={ogImageURL} />
+<meta name="twitter:image:alt" content={ogImageAlt} />

@@ -1,7 +1,7 @@
 import { defineConfig } from 'tsup'
 
 export default defineConfig({
-  entry: ['src/index.ts', 'src/rules.ts'],
+  entry: ['src/index.ts', 'src/rules.ts', 'src/astro-virtual-js-parser.ts'],
   bundle: false,
   format: ['esm'],
   // TODO(tsup): remove this once tsup's DTS pipeline supports TypeScript 6

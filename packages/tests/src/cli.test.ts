@@ -569,7 +569,7 @@ describe('generateAgentSkills', () => {
 
     expect(result.written).toHaveLength(1)
     expect(result.written[0]).toContain('.agent')
-    expect(result.written[0]).toContain('eslint-standards.md')
+    expect(result.written[0]).toContain('SKILL.md')
 
     const content = readFileSync(result.written[0], 'utf8')
 
@@ -639,24 +639,24 @@ describe('generateAgentSkills', () => {
 
   test('should skip existing files when force is false', async () => {
     const cwd = createTempProject({ name: 'tmp-project' })
-    const skillsDir = join(cwd, '.agent', 'skills')
+    const skillsDir = join(cwd, '.agent', 'skills', 'eslint-standards')
 
     mkdirSync(skillsDir, { recursive: true })
-    writeFileSync(join(skillsDir, 'eslint-standards.md'), '# existing')
+    writeFileSync(join(skillsDir, 'SKILL.md'), '# existing')
 
     const result = await generateAgentSkills({ cwd, force: false })
 
     expect(result.written).toHaveLength(0)
     expect(result.skipped).toHaveLength(1)
-    expect(readFileSync(join(skillsDir, 'eslint-standards.md'), 'utf8')).toBe('# existing')
+    expect(readFileSync(join(skillsDir, 'SKILL.md'), 'utf8')).toBe('# existing')
   })
 
   test('should overwrite existing files when force is true', async () => {
     const cwd = createTempProject({ name: 'tmp-project' })
-    const skillsDir = join(cwd, '.agent', 'skills')
+    const skillsDir = join(cwd, '.agent', 'skills', 'eslint-standards')
 
     mkdirSync(skillsDir, { recursive: true })
-    writeFileSync(join(skillsDir, 'eslint-standards.md'), '# existing')
+    writeFileSync(join(skillsDir, 'SKILL.md'), '# existing')
 
     const result = await generateAgentSkills({ cwd, force: true })
 

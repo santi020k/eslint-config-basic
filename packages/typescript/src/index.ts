@@ -6,6 +6,7 @@ import tsParser from '@typescript-eslint/parser'
 import type { TSESLint } from '@typescript-eslint/utils'
 import tsEslint from 'typescript-eslint'
 
+import * as astroVirtualJsParser from './astro-virtual-js-parser.js'
 import { standardRules, typeCheckedRules } from './rules.js'
 
 const typedFiles = [...GLOB_TS, ...GLOB_SLOT]
@@ -131,6 +132,23 @@ export const createTypescriptConfig = (
         parserOptions
       },
       name: 'eslint-config-typescript/parser-setup-slots'
+    },
+    {
+      files: ['**/*.astro/*.js'],
+      languageOptions: {
+        parser: astroVirtualJsParser as TSESLint.FlatConfig.Parser
+      },
+      name: 'eslint-config-typescript/astro-virtual-js-parser'
+    },
+    {
+      files: GLOB_VIRTUAL_TS,
+      languageOptions: {
+        parserOptions: {
+          project: false,
+          projectService: false
+        }
+      },
+      name: 'eslint-config-typescript/virtual-parser-setup'
     },
     {
       files: typedFiles,

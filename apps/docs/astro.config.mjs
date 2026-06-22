@@ -27,8 +27,6 @@ const siteDescription =
 const siteKeywords =
   'ESLint flat config, JavaScript linting, TypeScript linting, React ESLint, Next.js ESLint, Astro ESLint, Vue ESLint, Nuxt ESLint, Svelte ESLint, Solid ESLint, Angular ESLint, NestJS ESLint, Hono ESLint, Expo ESLint, Preact ESLint, Qwik ESLint, Remix ESLint, React Router ESLint, TanStack Start ESLint, Lit ESLint, developer experience'
 
-const socialImage = new URL('/cover.webp', site).toString()
-
 const sidebar = [
   {
     items: [
@@ -172,15 +170,15 @@ export default defineConfig({
         baseUrl: 'https://github.com/santi020k/eslint-config-basic/edit/main/apps/docs/'
       },
       favicon: '/favicon.svg',
+      components: {
+        Head: './src/components/Head.astro'
+      },
       head: [
         { attrs: { content: siteName, name: 'application-name' }, tag: 'meta' },
         { attrs: { content: 'Santiago Molina', name: 'author' }, tag: 'meta' },
         { attrs: { content: siteKeywords, name: 'keywords' }, tag: 'meta' },
         { attrs: { content: '#6319BE', name: 'theme-color' }, tag: 'meta' },
-        { attrs: { content: socialImage, property: 'og:image' }, tag: 'meta' },
-        { attrs: { content: 'Santi020k ESLint cover artwork', property: 'og:image:alt' }, tag: 'meta' },
         { attrs: { content: 'summary_large_image', name: 'twitter:card' }, tag: 'meta' },
-        { attrs: { content: socialImage, name: 'twitter:image' }, tag: 'meta' },
         {
           attrs: { is: 'inline' },
           content:
