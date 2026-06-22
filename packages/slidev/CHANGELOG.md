@@ -1,5 +1,12 @@
 # @santi020k/eslint-config-slidev
 
+## 2.1.1
+
+### Patch Changes
+
+- Updated dependencies [[`2576ec6`](https://github.com/santi020k/eslint-config-basic/commit/2576ec62df6127f5b40821e46a22394bb9dec867)]:
+  - @santi020k/eslint-config-core@2.1.1
+
 ## 2.1.0
 
 ### Patch Changes
