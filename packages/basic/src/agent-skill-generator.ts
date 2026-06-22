@@ -98,15 +98,15 @@ export const AGENT_TARGETS: AgentTarget[] = [
     format: 'frontmatter',
     label: '.agent (generic skill format)',
     markerFolder: '.agent',
-    skillFile: 'eslint-standards.md',
-    skillSubdir: 'skills'
+    skillFile: 'SKILL.md',
+    skillSubdir: 'skills/eslint-standards'
   },
   {
     format: 'frontmatter',
     label: '.agents (generic skill format)',
     markerFolder: '.agents',
-    skillFile: 'eslint-standards.md',
-    skillSubdir: 'skills'
+    skillFile: 'SKILL.md',
+    skillSubdir: 'skills/eslint-standards'
   },
   {
     format: 'plain',
@@ -147,8 +147,8 @@ export const AGENT_TARGETS: AgentTarget[] = [
     format: 'plain',
     label: 'Gemini (.gemini)',
     markerFolder: '.gemini',
-    skillFile: 'styleguide.md',
-    skillSubdir: '.'
+    skillFile: 'SKILL.md',
+    skillSubdir: 'skills/eslint-standards'
   },
   {
     format: 'plain',

@@ -133,6 +133,16 @@ export const createTypescriptConfig = (
       name: 'eslint-config-typescript/parser-setup-slots'
     },
     {
+      files: GLOB_VIRTUAL_TS,
+      languageOptions: {
+        parserOptions: {
+          project: false,
+          projectService: false
+        }
+      },
+      name: 'eslint-config-typescript/virtual-parser-setup'
+    },
+    {
       files: typedFiles,
       name: 'eslint-config-typescript/standard-rules',
       rules: standardRules

@@ -142,3 +142,8 @@ allowBuilds:
   sharp: true
   unrs-resolver: false
   workerd: true
+
+peerDependencyRules:
+  allowedVersions:
+    eslint: "*"
+    typescript: "*"

@@ -61,6 +61,21 @@ The `Extension.Node` pack applies `eslint-plugin-n` recommended rules. Module-re
 
 The `Extension.Oxlint` pack disables ESLint rules already covered by [Oxlint](https://oxc.rs) so both linters can run side by side without duplicate reports — the same hybrid-linting model as the Biome extension.
 
+**Example usage:**
+
+```js
+import { defineConfig, Extension } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig({
+  extensions: [
+    // other extensions...
+    Extension.Oxlint
+  ]
+})
+```
+
+By adding this extension, ESLint will no longer report errors for rules that Oxlint can check. You are expected to run `oxlint` manually (e.g., in your CI pipeline or package.json `lint` scripts) alongside `eslint` to catch those issues much faster.
+
 ## Notes
 
 - The Security extension is enabled by default through detection.
