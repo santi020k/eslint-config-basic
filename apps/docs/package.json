@@ -49,5 +49,8 @@
     "directory": "apps/docs"
   },
   "author": "santi020k",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@santi020k/lumen-astro": "0.1.0"
+  }
 }

@@ -1,3 +1,5 @@
+@import '@santi020k/lumen-astro/styles.css';
+
 @font-face {
   font-family: 'Montserrat';
   src: url('/fonts/montserrat-variable-font-wght.ttf') format('truetype-variations');
@@ -31,6 +33,22 @@
   --s2k-glow: 268 88% 70%;
   --s2k-shadow: 268 34% 12%;
   --s2k-radius: 0.625rem;
+
+  --canvas: var(--s2k-theme-bg);
+  --surface: var(--s2k-surface);
+  --surface-muted: var(--s2k-surface-muted);
+  --surface-strong: var(--s2k-surface-strong);
+  --line: var(--s2k-line);
+  --ink: var(--s2k-ink);
+  --ink-soft: var(--s2k-ink-soft);
+  --ink-muted: var(--s2k-ink-muted);
+  --brand: var(--s2k-brand);
+  --brand-solid: var(--s2k-brand-solid);
+  --brand-soft: var(--s2k-brand-soft);
+  --accent: var(--s2k-accent);
+  --success: 142 60% 36%;
+  --warning: 38 86% 43%;
+  --danger: 3 70% 48%;
 
   --sl-font: 'Montserrat', 'Avenir Next', 'Segoe UI', sans-serif;
   --sl-font-mono: 'SFMono-Regular', 'SF Mono', 'Consolas', monospace;
