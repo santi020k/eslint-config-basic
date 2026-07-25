@@ -15,7 +15,7 @@
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
     "@types/jest": "^30.0.0",
-    "eslint": "^10.5.0",
+    "eslint": "catalog:",
     "jest": "^30.4.2"
   },
   "engines": {

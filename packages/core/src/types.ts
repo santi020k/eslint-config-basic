@@ -468,10 +468,17 @@ export interface EslintConfigOptions {
   preset?: PresetOption
 
   /**
+   * Defaults inherited by every entry in `projects`.
+   * Project-level values override scalar defaults while arrays and option maps
+   * merge unless that project uses `optionMergeStrategy: 'replace'`.
+   */
+  projectDefaults?: ProjectConfigOptions
+
+  /**
    * Package-aware subproject configuration for monorepos.
    * Each key is a workspace-relative folder and each value is scoped to that folder.
    */
-  projects?: Record<string, Omit<EslintConfigOptions, 'projects'>>
+  projects?: Record<string, ProjectConfigOptions>
 
   /** Runtime environment preset (Node, Browser, Universal) */
   runtime?: RuntimeOption
@@ -547,3 +554,5 @@ export type ImportedFramework =
   FlatConfigArray |
   true |
   { default: ((options?: Record<string, unknown>) => FlatConfigArray | Promise<FlatConfigArray>) | FlatConfigArray }
+
+export type ProjectConfigOptions = Omit<EslintConfigOptions, 'projectDefaults' | 'projects'>

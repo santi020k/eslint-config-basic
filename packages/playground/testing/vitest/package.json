@@ -13,11 +13,11 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@nestjs/swagger": "11.4.6",
+    "@nestjs/swagger": "catalog:",
     "@santi020k/eslint-config-basic": "workspace:^",
-    "eslint": "^10.5.0",
-    "eslint-plugin-unicorn": "65.0.1",
-    "vitest": "^4.1.10"
+    "eslint": "catalog:",
+    "eslint-plugin-unicorn": "catalog:unicorn65",
+    "vitest": "catalog:"
   },
   "engines": {
     "node": "^20.19.0 || >=22.18.0"

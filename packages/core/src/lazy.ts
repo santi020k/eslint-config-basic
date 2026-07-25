@@ -21,18 +21,26 @@ const dynamicImport: (specifier: string) => Promise<unknown> = isVitest
   : Reflect.construct(Function, ['specifier', 'return import(specifier)']) as (specifier: string) => Promise<unknown>
 
 export const createModuleLoader = (resolveFn: (specifier: string) => string) => async <T = unknown>(specifier: string): Promise<T> => {
-    let resolved = specifier
+  if (isVitest) {
+    try {
+      return await dynamicImport(specifier) as T
+    } catch (error) {
+      if ((error as { code?: string }).code !== 'ERR_MODULE_NOT_FOUND') throw error
 
-    if (!isVitest) {
-      try {
-        resolved = resolveFn(specifier)
-      } catch {
-        // Ignore and let dynamicImport throw natural error
-      }
+      return await dynamicImport(resolveFn(specifier)) as T
     }
-
-    return await dynamicImport(resolved) as T
   }
+
+  let resolved = specifier
+
+  try {
+    resolved = resolveFn(specifier)
+  } catch {
+    // Ignore and let dynamicImport throw natural error
+  }
+
+  return await dynamicImport(resolved) as T
+}
 
 // Keep the default loadModule for backwards compatibility
 const defaultReq = createRequire(import.meta.url)

@@ -293,7 +293,7 @@ Defined in: [basic/src/frameworks.ts:110](https://github.com/santi020k/eslint-co
 
 > `const` **defineConfig**: (`options?`, ...`extraConfigs`) => `Promise`\<`ConfigArray`\> = `eslintConfig`
 
-Defined in: [basic/src/index.ts:782](https://github.com/santi020k/eslint-config-basic/blob/266d48355c66c0ce16df1d2a77fbe409ba9545ab/packages/basic/src/index.ts#L782)
+Defined in: [basic/src/index.ts:827](https://github.com/santi020k/eslint-config-basic/blob/266d48355c66c0ce16df1d2a77fbe409ba9545ab/packages/basic/src/index.ts#L827)
 
 Alias for `eslintConfig()` that reads naturally in `eslint.config.*` files.
 
@@ -814,7 +814,7 @@ Use `vue` instead.
 
 > **eslintConfig**(`options?`, ...`extraConfigs`): `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/index.ts:635](https://github.com/santi020k/eslint-config-basic/blob/266d48355c66c0ce16df1d2a77fbe409ba9545ab/packages/basic/src/index.ts#L635)
+Defined in: [basic/src/index.ts:692](https://github.com/santi020k/eslint-config-basic/blob/266d48355c66c0ce16df1d2a77fbe409ba9545ab/packages/basic/src/index.ts#L692)
 
 Generates the ESLint configuration array, applying configurations
 and integration settings based on the input configuration.
@@ -845,7 +845,7 @@ The final ESLint configuration array
 
 > **generateAgentSkills**(`opts?`): `Promise`\<[`GenerateSkillResult`](#generateskillresult)\>
 
-Defined in: [basic/src/agent-skill-generator.ts:918](https://github.com/santi020k/eslint-config-basic/blob/266d48355c66c0ce16df1d2a77fbe409ba9545ab/packages/basic/src/agent-skill-generator.ts#L918)
+Defined in: [basic/src/agent-skill-generator.ts:922](https://github.com/santi020k/eslint-config-basic/blob/266d48355c66c0ce16df1d2a77fbe409ba9545ab/packages/basic/src/agent-skill-generator.ts#L922)
 
 Detects which AI agent folders exist in the project, reads the actual
 `eslint.config.js` to understand what is configured, and writes a tailored
@@ -879,7 +879,7 @@ process.stdout.write(`Written to: ${result.written}\n`)
 
 > **generateSkillContent**(`features`, `format`): `string`
 
-Defined in: [basic/src/agent-skill-generator.ts:716](https://github.com/santi020k/eslint-config-basic/blob/266d48355c66c0ce16df1d2a77fbe409ba9545ab/packages/basic/src/agent-skill-generator.ts#L716)
+Defined in: [basic/src/agent-skill-generator.ts:720](https://github.com/santi020k/eslint-config-basic/blob/266d48355c66c0ce16df1d2a77fbe409ba9545ab/packages/basic/src/agent-skill-generator.ts#L720)
 
 Builds the skill document body from the project's [EslintConfigFeatures](#eslintconfigfeatures).
 Four format variants are produced:

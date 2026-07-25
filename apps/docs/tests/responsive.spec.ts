@@ -153,11 +153,17 @@ test.describe('Responsive page health', () => {
     })
 
     expect(desktop.builderWidth).toBeGreaterThanOrEqual(960)
+
     expect(desktop.controlsWidth).toBeGreaterThanOrEqual(500)
+
     expect(desktop.outputWidth).toBeGreaterThanOrEqual(350)
+
     expect(desktop.rightSidebar).toBe(0)
+
     expect(desktop.callouts).toBe(1)
+
     expect(desktop.cards).toBe(4)
+
     expect(desktop.codeBlocks).toBe(2)
 
     await page.setViewportSize({ height: 844, width: 390 })
@@ -175,7 +181,9 @@ test.describe('Responsive page health', () => {
     })
 
     expect(mobile.builderColumns).toBe(1)
+
     expect(mobile.checkColumns).toBe(2)
+
     expect(mobile.documentWidth).toBeLessThanOrEqual(mobile.viewportWidth)
   })
 })

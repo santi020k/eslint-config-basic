@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:*",
-    "eslint": "^10.5.0",
-    "typescript": "^6.0.3",
-    "vite": "^8.0.16"
+    "eslint": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:"
   }
 }

@@ -396,10 +396,7 @@ describe('CLI command UX', () => {
     })
     const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
-    writeFileSync(
-      join(cwd, 'eslint.config.js'),
-      'export default [{ name: "eslint-config-integrations/astro-doctor", rules: {} }]'
-    )
+    writeFileSync(join(cwd, 'eslint.config.js'), 'export default [{ name: "eslint-config-integrations/astro-doctor", rules: {} }]')
     writeFakePackage(cwd, '@santi020k/eslint-config-integrations', '1.1.0')
 
     await handleDoctor(cwd)
@@ -439,23 +436,15 @@ describe('CLI command UX', () => {
     })
     const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
-    writeFileSync(
-      join(cwd, 'eslint.config.js'),
-      `export default [
+    writeFileSync(join(cwd, 'eslint.config.js'), `export default [
         { name: 'eslint-config-astro/recommended', rules: {} },
         { name: 'eslint-config-integrations/astro-doctor', rules: {} }
-      ]`
-    )
+      ]`)
     writeFakePackage(cwd, 'eslint', '10.8.0')
-    writeFakePackage(
-      cwd,
-      '@santi020k/eslint-plugin-astro-doctor',
-      '1.0.4',
-      {
-        engines: { node: '>=99' },
-        peerDependencies: { eslint: '10.7.0' }
-      }
-    )
+    writeFakePackage(cwd, '@santi020k/eslint-plugin-astro-doctor', '1.0.4', {
+      engines: { node: '>=99' },
+      peerDependencies: { eslint: '10.7.0' }
+    })
 
     await handleDoctor(cwd)
 

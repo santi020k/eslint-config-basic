@@ -758,6 +758,65 @@ describe('scripts-overrides block', () => {
 })
 
 describe('Monorepo project scoping', () => {
+  test('projectDefaults are inherited and merged with project overrides', async () => {
+    const config = await defineConfig({
+      detection: false,
+      projectDefaults: {
+        extensions: [Extension.Unicorn],
+        frameworks: {
+          react: [{ name: 'default-react', rules: {} }]
+        },
+        runtime: 'browser',
+        typescript: false
+      },
+      projects: {
+        'apps/web': {
+          extensions: [Extension.Security],
+          frameworks: {
+            vite: [{ name: 'project-vite', rules: {} }]
+          }
+        }
+      }
+    })
+
+    const names = extractConfigNames(config)
+    const scopedRules = config
+      .filter(entry => entry.files?.some(pattern => typeof pattern === 'string' && pattern.startsWith('apps/web/')))
+      .flatMap(entry => Object.keys(entry.rules ?? {}))
+
+    expect(names).toContain('default-react')
+    expect(names).toContain('project-vite')
+    expect(scopedRules.some(rule => rule.startsWith('unicorn/'))).toBe(true)
+    expect(scopedRules.some(rule => rule.startsWith('security/'))).toBe(true)
+  })
+
+  test('projectDefaults respect a project replace strategy', async () => {
+    const config = await defineConfig({
+      detection: false,
+      projectDefaults: {
+        extensions: [Extension.Unicorn],
+        typescript: false
+      },
+      projects: {
+        'packages/lib': {
+          extensions: [Extension.Security],
+          optionMergeStrategy: 'replace'
+        }
+      }
+    })
+
+    const scopedRules = config
+      .filter(entry => {
+        const files = Array.isArray(entry.files) ? entry.files : [entry.files]
+
+        return files.some(pattern => typeof pattern === 'string' && pattern.startsWith('packages/lib/'))
+      })
+      .flatMap(entry => Object.keys(entry.rules ?? {}))
+
+    expect(scopedRules.some(rule => rule.startsWith('security/'))).toBe(true)
+    expect(scopedRules.some(rule => rule.startsWith('unicorn/'))).toBe(false)
+  })
+
   test('ignore-only configs inside a project are scoped to the project path', async () => {
     const config = await defineConfig({
       detection: false,

@@ -295,15 +295,21 @@ export default await defineConfig({
 
 Use `projects` to scope package-specific presets and integrations to workspace folders. With `preset: Preset.Monorepo`, workspace project detection is enabled by default for common workspace folders and `package.json#workspaces`. Outside the monorepo preset, use `detection: { projects: true }` to opt in.
 
+Use `projectDefaults` for settings shared by most workspace packages. Arrays and option maps merge with each project by default; a project can set `optionMergeStrategy: 'replace'` when it needs an isolated value.
+
 ```js
-import { defineConfig, Preset, Runtime } from '@santi020k/eslint-config-basic'
+import { defineConfig, Extension, Preset, Runtime, Tool } from '@santi020k/eslint-config-basic'
 
 export default await defineConfig({
   detection: { projects: true },
   preset: Preset.Monorepo,
+  projectDefaults: {
+    extensions: [Extension.Unicorn],
+    tools: [Tool.Prettier],
+    typescript: true
+  },
   projects: {
     'apps/api': {
-      preset: Preset.Library,
       runtime: Runtime.Node
     },
     'apps/web': {
@@ -314,7 +320,7 @@ export default await defineConfig({
 })
 ```
 
-Each project key is treated as a folder relative to the repo root. The generated project entries are scoped to that folder.
+Each project key is treated as a folder relative to the repo root. The generated project entries and inherited defaults are scoped to that folder.
 
 ## Full Example
 

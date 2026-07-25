@@ -16,11 +16,11 @@
   "dependencies": {
     "@builder.io/qwik": "^1.20.0",
     "@santi020k/eslint-config-basic": "workspace:^",
-    "eslint": "^10.5.0"
+    "eslint": "catalog:"
   },
   "devDependencies": {
-    "typescript": "^6.0.3",
-    "vite": "^7.3.6"
+    "typescript": "catalog:",
+    "vite": "catalog:vite7"
   },
   "engines": {
     "node": "^20.19.0 || >=22.18.0"

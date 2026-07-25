@@ -15,12 +15,12 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
-    "eslint": "^10.5.0",
-    "vue": "^3.5.38"
+    "eslint": "catalog:",
+    "vue": "catalog:"
   },
   "devDependencies": {
-    "@types/node": "^25.9.3",
-    "typescript": "^6.0.3"
+    "@types/node": "catalog:node25",
+    "typescript": "catalog:"
   },
   "engines": {
     "node": "^20.19.0 || >=22.18.0"

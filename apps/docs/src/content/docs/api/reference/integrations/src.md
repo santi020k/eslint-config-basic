@@ -34,6 +34,18 @@ Vercel AI SDK security ESLint configuration.
 
 ***
 
+### astroDoctor
+
+> `const` **astroDoctor**: () => `Promise`\<[`FlatConfigArray`](../core/src.md#flatconfigarray)\>
+
+Defined in: [integrations/src/extensions/astro-doctor.ts:5](https://github.com/santi020k/eslint-config-basic/blob/266d48355c66c0ce16df1d2a77fbe409ba9545ab/packages/integrations/src/extensions/astro-doctor.ts#L5)
+
+#### Returns
+
+`Promise`\<[`FlatConfigArray`](../core/src.md#flatconfigarray)\>
+
+***
+
 ### bestPractices
 
 > `const` **bestPractices**: `TSESLint.FlatConfig.ConfigArray`
@@ -681,18 +693,6 @@ Provides validation rules for Zod schemas
 `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
 ## Functions
-
-### astroDoctor()
-
-> **astroDoctor**(): `Promise`\<`ConfigArray`\>
-
-Defined in: [integrations/src/extensions/astro-doctor.ts:3](https://github.com/santi020k/eslint-config-basic/blob/266d48355c66c0ce16df1d2a77fbe409ba9545ab/packages/integrations/src/extensions/astro-doctor.ts#L3)
-
-#### Returns
-
-`Promise`\<`ConfigArray`\>
-
-***
 
 ### autogen()
 

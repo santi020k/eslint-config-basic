@@ -14,8 +14,8 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
-    "eslint": "^10.5.0",
-    "typescript": "^6.0.3"
+    "eslint": "catalog:",
+    "typescript": "catalog:"
   },
   "engines": {
     "node": "^20.19.0 || >=22.18.0"

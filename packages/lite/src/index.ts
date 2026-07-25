@@ -21,6 +21,7 @@ import {
   Library,
   mergeFrameworkOption,
   mergeOptionalBucket,
+  mergeProjectOptions,
   NextMode,
   patchImportGroups,
   Preset,
@@ -96,6 +97,7 @@ export type {
   OptionalConfigName,
   PresetName,
   PresetOption,
+  ProjectConfigOptions,
   RuntimeName,
   RuntimeOption,
   SettingName,
@@ -502,6 +504,7 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
     ignores: optIgnores,
     libraries: optLibraries,
     nextMode: optNextMode,
+    projectDefaults,
     projects: optProjects,
     runtime: optRuntime,
     settings: optSettings,
@@ -613,12 +616,14 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
   const projectConfigs = await Promise.all(
     Object.entries(configuredProjects).map(async ([projectPath, projectOptions]) => {
       const projectRoot = join(detectRootDir ?? process.cwd(), projectPath)
+      const inheritedOptions = mergeProjectOptions(projectDefaults ?? {}, projectOptions)
 
       const scopedConfigs = await eslintConfig({
-        ...projectOptions,
-        detectRootDir: projectOptions.detectRootDir ?? projectRoot,
+        ...inheritedOptions,
+        detectRootDir: inheritedOptions.detectRootDir ?? projectRoot,
+        projectDefaults: undefined,
         projects: undefined,
-        tsconfigRootDir: projectOptions.tsconfigRootDir ?? projectRoot
+        tsconfigRootDir: inheritedOptions.tsconfigRootDir ?? projectRoot
       })
 
       return scopedConfigs.map(config => scopeConfigToProject(config, projectPath))

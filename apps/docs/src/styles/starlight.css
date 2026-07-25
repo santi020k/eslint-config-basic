@@ -1707,10 +1707,6 @@ main .sl-markdown-content > *:nth-child(5) {
 }
 
 @media (max-width: 32rem) {
-  .s2k-check-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
   .s2k-doctor-finding__header {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -1725,6 +1721,12 @@ main .sl-markdown-content > *:nth-child(5) {
   }
 
   .s2k-tool__intro {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 22rem) {
+  .s2k-check-grid {
     grid-template-columns: minmax(0, 1fr);
   }
 }

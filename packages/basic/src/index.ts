@@ -23,6 +23,7 @@ import {
   Library,
   mergeFrameworkOption,
   mergeOptionalBucket,
+  mergeProjectOptions,
   NextMode,
   patchImportGroups,
   Preset,
@@ -107,6 +108,7 @@ export type {
   OptionalConfigName,
   PresetName,
   PresetOption,
+  ProjectConfigOptions,
   RuntimeName,
   RuntimeOption,
   SettingName,
@@ -233,6 +235,7 @@ const resolveTailwindOptions = (
   const entryPoint = options.entryPoint ?? findTailwindEntryPoint(rootDir)
 
   if (!entryPoint &&
+    options.cwd === undefined &&
     options.detectComponentClasses === undefined &&
     !options.ignore?.length &&
     options.noUnknownClasses === undefined) return undefined
@@ -649,6 +652,74 @@ const emitBasicWarnings = (options?: EslintConfigOptions) => {
   }
 }
 
+const emitAstroDoctorWarning = (
+  extensions: Extension[],
+  frameworks: Record<string, unknown>
+): void => {
+  if (!extensions.includes(Extension.AstroDoctor) || frameworks.astro) return
+
+  process.emitWarning(
+    '[eslint-config-basic] Warning: Astro Doctor is enabled without the Astro framework config. ' +
+    'Enable `frameworks: { astro: true }` or remove the `astro-doctor` feature.'
+  )
+}
+
+const resolveProjectConfigs = async (
+  configuredProjects: Record<string, EslintConfigOptions>,
+  projectDefaults: EslintConfigOptions['projectDefaults'],
+  detectRootDir: string | undefined,
+  autoFrameworks: boolean | undefined
+) => Promise.all(
+  Object.entries(configuredProjects).map(async ([projectPath, projectOptions]) => {
+    const projectRoot = join(detectRootDir ?? process.cwd(), projectPath)
+    const inheritedOptions = mergeProjectOptions(projectDefaults ?? {}, projectOptions)
+
+    const scopedConfigs = await eslintConfig({
+      autoFrameworks,
+      ...inheritedOptions,
+      detectRootDir: inheritedOptions.detectRootDir ?? projectRoot,
+      projectDefaults: undefined,
+      projects: undefined,
+      tsconfigRootDir: inheritedOptions.tsconfigRootDir ?? projectRoot
+    })
+
+    return scopedConfigs.map(config => scopeConfigToProject(config, projectPath))
+  })
+)
+
+const getConfigsParams = (
+  options: EslintConfigOptions | undefined,
+  rootDir: string,
+  runtime: Runtime,
+  uniqueLibraries: Library[],
+  uniqueSettings: Setting[],
+  resolvedFrameworks: NonNullable<EslintConfigOptions['frameworks']>
+) => {
+  const hasReact = !!resolvedFrameworks.react
+  const hasVue = !!resolvedFrameworks.vue
+  const hasSvelte = !!resolvedFrameworks.svelte
+  const hasSolid = !!resolvedFrameworks.solid
+  const useGitignore = !uniqueSettings.includes(Setting.NoGitignore)
+  const useDefaultIgnores = !uniqueSettings.includes(Setting.NoDefaultIgnores)
+  const useGeneratedCodeIgnores = !uniqueSettings.includes(Setting.NoGeneratedCodeIgnores)
+
+  const tailwindOptions = uniqueLibraries.includes(Library.Tailwind) ?
+    resolveTailwindOptions(rootDir, options?.tailwind) :
+    undefined
+
+  const runtimeCoreConfig = runtime === Runtime.Universal ? coreConfig : createCoreConfig(runtime)
+  const { defaultIgnores, gitignoreConfig, userIgnores } = buildIgnoresConfig(useDefaultIgnores, useGeneratedCodeIgnores, useGitignore, options)
+
+  return {
+    astroOptions: { hasReact, hasSolid, hasSvelte, hasVue },
+    defaultIgnores,
+    gitignoreConfig,
+    runtimeCoreConfig,
+    tailwindOptions,
+    userIgnores
+  }
+}
+
 /**
  * Generates the ESLint configuration array, applying configurations
  * and integration settings based on the input configuration.
@@ -733,39 +804,21 @@ export const eslintConfig = async (
   const uniqueExtensions = [...new Set(extensions)]
   const uniqueSettings = [...new Set(settings)]
 
-  if (uniqueExtensions.includes(Extension.AstroDoctor) && !resolvedFrameworks.astro) {
-    process.emitWarning(
-      '[eslint-config-basic] Warning: Astro Doctor is enabled without the Astro framework config. ' +
-      'Enable `frameworks: { astro: true }` or remove the `astro-doctor` feature.'
-    )
-  }
+  emitAstroDoctorWarning(uniqueExtensions, resolvedFrameworks)
 
-  const hasReact = !!resolvedFrameworks.react
-  const hasVue = !!resolvedFrameworks.vue
-  const hasSvelte = !!resolvedFrameworks.svelte
-  const hasSolid = !!resolvedFrameworks.solid
-  const useGitignore = !uniqueSettings.includes(Setting.NoGitignore)
-  const useDefaultIgnores = !uniqueSettings.includes(Setting.NoDefaultIgnores)
-  const useGeneratedCodeIgnores = !uniqueSettings.includes(Setting.NoGeneratedCodeIgnores)
-
-  const tailwindOptions = uniqueLibraries.includes(Library.Tailwind) ?
-    resolveTailwindOptions(rootDir, options?.tailwind) :
-    undefined
-
-  const runtimeCoreConfig = runtime === Runtime.Universal ? coreConfig : createCoreConfig(runtime)
-  const { defaultIgnores, gitignoreConfig, userIgnores } = buildIgnoresConfig(useDefaultIgnores, useGeneratedCodeIgnores, useGitignore, options)
+  const params = getConfigsParams(options, rootDir, runtime, uniqueLibraries, uniqueSettings, resolvedFrameworks)
 
   const configs = await buildEslintConfigs({
-    astroOptions: { hasReact, hasSolid, hasSvelte, hasVue },
-    defaultIgnores,
-    gitignoreConfig,
+    astroOptions: params.astroOptions,
+    defaultIgnores: params.defaultIgnores,
+    gitignoreConfig: params.gitignoreConfig,
     nextMode,
     resolvedFrameworks,
     resolvedTypescript,
     rootDir,
     runtime,
-    runtimeCoreConfig,
-    tailwindOptions,
+    runtimeCoreConfig: params.runtimeCoreConfig,
+    tailwindOptions: params.tailwindOptions,
     testingFiles: options?.testingFiles,
     tsconfigRootDir,
     uniqueExtensions,
@@ -773,7 +826,7 @@ export const eslintConfig = async (
     uniqueLibraries,
     uniqueTesting,
     uniqueTools,
-    userIgnores
+    userIgnores: params.userIgnores
   })
 
   logEslintDebug({
@@ -782,20 +835,11 @@ export const eslintConfig = async (
     uniqueExtensions, uniqueFormats, uniqueLibraries, uniqueTesting, uniqueTools
   })
 
-  const projectConfigs = await Promise.all(
-    Object.entries(configuredProjects).map(async ([projectPath, projectOptions]) => {
-      const projectRoot = join(detectRootDir ?? process.cwd(), projectPath)
-
-      const scopedConfigs = await eslintConfig({
-        autoFrameworks: options?.autoFrameworks,
-        ...projectOptions,
-        detectRootDir: projectOptions.detectRootDir ?? projectRoot,
-        projects: undefined,
-        tsconfigRootDir: projectOptions.tsconfigRootDir ?? projectRoot
-      })
-
-      return scopedConfigs.map(config => scopeConfigToProject(config, projectPath))
-    })
+  const projectConfigs = await resolveProjectConfigs(
+    configuredProjects,
+    options?.projectDefaults,
+    detectRootDir,
+    options?.autoFrameworks
   )
 
   // Merge workspace import group into any existing simple-import-sort/imports rules

@@ -100,12 +100,7 @@
     "eslint-plugin-yml": "catalog:",
     "eslint-plugin-zod": "catalog:",
     "globals": "catalog:",
-    "graphql": "catalog:",
-    "oxlint": "catalog:",
-    "storybook": "catalog:",
-    "tailwindcss": "catalog:",
-    "typescript-eslint": "catalog:",
-    "zod": "catalog:"
+    "typescript-eslint": "catalog:"
   },
   "optionalDependencies": {
     "@santi020k/eslint-plugin-astro-doctor": "catalog:"
@@ -114,16 +109,41 @@
     "@types/eslint-plugin-jsx-a11y": "catalog:",
     "@types/node": "catalog:",
     "eslint": "catalog:",
+    "graphql": "catalog:",
+    "oxlint": "catalog:",
     "publint": "catalog:",
+    "storybook": "catalog:",
+    "tailwindcss": "catalog:",
     "tsup": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "zod": "catalog:"
   },
   "peerDependencies": {
     "eslint": "^10.0.0",
-    "typescript": ">=5.0.0"
+    "graphql": "^16.0.0",
+    "oxlint": "^1.0.0",
+    "storybook": "^10.0.0",
+    "tailwindcss": "^3.3.0 || ^4.1.0",
+    "typescript": ">=5.0.0",
+    "zod": "^4.0.0"
   },
   "peerDependenciesMeta": {
+    "graphql": {
+      "optional": true
+    },
+    "oxlint": {
+      "optional": true
+    },
+    "storybook": {
+      "optional": true
+    },
+    "tailwindcss": {
+      "optional": true
+    },
     "typescript": {
+      "optional": true
+    },
+    "zod": {
       "optional": true
     }
   },

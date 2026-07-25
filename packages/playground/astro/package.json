@@ -15,8 +15,8 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
-    "astro": "^7.1.3",
-    "eslint": "^10.5.0"
+    "astro": "catalog:",
+    "eslint": "catalog:"
   },
   "engines": {
     "node": "^20.19.0 || >=22.18.0"

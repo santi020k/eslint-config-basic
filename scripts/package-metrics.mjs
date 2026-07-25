@@ -3,6 +3,11 @@ import { join, relative } from 'node:path'
 
 const rootDir = process.cwd()
 const packagesDir = join(rootDir, 'packages')
+const dependencyBudgets = new Map([
+  ['@santi020k/eslint-config-basic', 24],
+  ['@santi020k/eslint-config-integrations', 51],
+  ['@santi020k/eslint-config-lite', 3]
+])
 
 const formatBytes = (bytes) => {
   if (bytes < 1024) return `${bytes} B`
@@ -46,12 +51,16 @@ const rows = packages.map(packageDir => {
   const distBytes = files.reduce((total, file) => total + statSync(file).size, 0)
   const dependencyCount = Object.keys(manifest.dependencies ?? {}).length
   const peerCount = Object.keys(manifest.peerDependencies ?? {}).length
+  const optionalPeerCount = Object.values(manifest.peerDependenciesMeta ?? {})
+    .filter(meta => meta.optional === true)
+    .length
 
   return {
     dependencies: dependencyCount,
     dist: distBytes,
     files: files.length,
     name: manifest.name,
+    optionalPeers: optionalPeerCount,
     path: relative(rootDir, packageDir),
     peers: peerCount
   }
@@ -61,12 +70,11 @@ if (rows.length === 0) {
   throw new Error('No publishable packages found.')
 }
 
-process.stdout.write('Package metrics are informational; this script does not enforce size budgets.\n')
-
 const tableRows = rows.map(row => ({
   dependencies: row.dependencies,
   dist: formatBytes(row.dist),
   files: row.files,
+  optionalPeers: row.optionalPeers,
   package: row.name,
   path: row.path,
   peers: row.peers
@@ -80,3 +88,15 @@ const fmtRow = (vals) => vals.map((v, col) => v.padEnd(colWidths.at(col) ?? 0)).
 const separator = colWidths.map(w => '-'.repeat(w)).join('  ')
 
 process.stdout.write([fmtRow(headers), separator, ...rowValues.map(fmtRow)].join('\n') + '\n')
+
+const budgetFailures = rows.flatMap(row => {
+  const budget = dependencyBudgets.get(row.name)
+
+  return budget !== undefined && row.dependencies > budget ?
+    [`${row.name} has ${row.dependencies} direct dependencies; budget is ${budget}.`] :
+    []
+})
+
+if (budgetFailures.length > 0) {
+  throw new Error(`Package dependency budgets exceeded:\n${budgetFailures.join('\n')}`)
+}

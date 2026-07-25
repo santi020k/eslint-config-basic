@@ -13,9 +13,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@nestjs/common": "^11.1.27",
+    "@nestjs/common": "catalog:",
     "@santi020k/eslint-config-basic": "workspace:^",
-    "eslint": "^10.5.0"
+    "eslint": "catalog:"
   },
   "engines": {
     "node": "^20.19.0 || >=22.18.0"

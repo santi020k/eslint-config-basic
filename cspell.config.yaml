@@ -30,6 +30,9 @@ words:
   - darraghor
   - defu
   - dev-dependency
+  - devframe
+  - devframes
+  - dompurify
   - dts
   - envinfo
   - esac
@@ -63,6 +66,7 @@ words:
   - mastra
   - mdx
   - mikro
+  - minimatch
   - modelcontextprotocol
   - monorepo
   - multilines
@@ -137,6 +141,7 @@ words:
   - unrs
   - urql
   - v8
+  - valibot
   - vdom
   - vercel
   - virtuals

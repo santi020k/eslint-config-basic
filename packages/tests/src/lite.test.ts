@@ -287,4 +287,26 @@ describe('defineConfig with projects', () => {
 
     expect(scopedFiles.some(f => (f as string).startsWith('apps/web/'))).toBe(true)
   })
+
+  test('inherits projectDefaults before scoping each project', async () => {
+    const config = await defineConfig({
+      ...baseOptions,
+      projectDefaults: {
+        extensions: [Extension.Unicorn],
+        optionMergeStrategy: 'merge'
+      },
+      projects: {
+        'packages/lib': {
+          extensions: [Extension.Security]
+        }
+      }
+    })
+
+    const scopedRules = config
+      .filter(entry => entry.files?.some(pattern => typeof pattern === 'string' && pattern.startsWith('packages/lib/')))
+      .flatMap(entry => Object.keys(entry.rules ?? {}))
+
+    expect(scopedRules.some(rule => rule.startsWith('security/'))).toBe(true)
+    expect(scopedRules.some(rule => rule.startsWith('unicorn/'))).toBe(true)
+  })
 })

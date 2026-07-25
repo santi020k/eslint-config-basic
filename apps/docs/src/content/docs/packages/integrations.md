@@ -7,7 +7,7 @@ Package: [`@santi020k/eslint-config-integrations`](https://www.npmjs.com/package
 
 This package contains the integrations consumed by the main package through the `libraries`, `testing`, `formats`, `tools`, and `extensions` options.
 
-The package includes compatible runtime peers for integrations that need them at load time, such as Tailwind, Zod, and GraphQL. That keeps the full `@santi020k/eslint-config-basic` install quiet for projects that use those integrations, even when the application itself does not depend on every optional library.
+Plugin implementations are installed with this package. Host libraries such as Tailwind, Zod, GraphQL, Storybook, and Oxlint are optional peers because integrations are only enabled when the consuming project uses them. Install the corresponding host library before enabling one of those integrations explicitly.
 
 ## Categories
 

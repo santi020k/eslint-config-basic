@@ -15,7 +15,7 @@
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
     "@stencil/core": "^4.43.5",
-    "eslint": "^10.5.0"
+    "eslint": "catalog:"
   },
   "engines": {
     "node": "^20.19.0 || >=22.18.0"

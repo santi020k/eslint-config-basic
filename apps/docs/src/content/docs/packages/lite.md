@@ -29,7 +29,7 @@ These are direct package-manifest counts, not a package-manager-specific transit
 | :--- | ---: | ---: | ---: |
 | `@santi020k/eslint-config-basic` | 22 | 2 | 1 |
 | `@santi020k/eslint-config-lite` | 3 | 21 | 20 |
-| `@santi020k/eslint-config-integrations` | 51 | 2 | 1 |
+| `@santi020k/eslint-config-integrations` | 51 | 7 | 6 |
 
 ## Minimal Install
 

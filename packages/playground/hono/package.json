@@ -12,10 +12,10 @@
     "hono": "^4.12.32"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20260617.1",
+    "@cloudflare/workers-types": "^5.20260724.1",
     "@santi020k/eslint-config-basic": "workspace:^",
-    "eslint": "^10.5.0",
-    "typescript": "^6.0.3",
+    "eslint": "catalog:",
+    "typescript": "catalog:",
     "wrangler": "^4.114.0"
   }
 }

@@ -15,11 +15,11 @@
   "dependencies": {
     "@prisma/client": "^7.9.0",
     "@santi020k/eslint-config-basic": "workspace:^",
-    "eslint": "^10.5.0",
+    "eslint": "catalog:",
     "prisma": "^7.9.0"
   },
   "devDependencies": {
-    "typescript": "^6.0.3"
+    "typescript": "catalog:"
   },
   "engines": {
     "node": "^20.19.0 || >=22.18.0"

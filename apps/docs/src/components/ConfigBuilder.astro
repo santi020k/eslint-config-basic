@@ -221,7 +221,9 @@ const featureGroups = [
           language="shell"
           variant="block"
           wrap
-        ><span data-builder-install></span></Code>
+        >
+          <span data-builder-install></span>
+        </Code>
 
         <Code
           class="not-content s2k-code-output"
@@ -229,7 +231,10 @@ const featureGroups = [
           label="eslint.config.mjs"
           language="javascript"
           variant="block"
-        ><span data-builder-config></span></Code>
+          wrap
+        >
+          <span data-builder-config></span>
+        </Code>
 
         <div class="s2k-output-actions">
           <Button type="button" data-builder-download>Download config</Button>
@@ -474,7 +479,6 @@ const featureGroups = [
 
       if (status) status.textContent = 'Config downloaded.'
     })
-
   }
 
   const initializeBuilders = () => {

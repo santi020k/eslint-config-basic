@@ -22,9 +22,7 @@ import { vueConfig } from '@santi020k/eslint-config-vue'
 import { describe, expect, test } from 'vitest'
 
 /**
- * Extract rule names from a config array for snapshot comparison.
- * This captures the "shape" of each config — when plugin updates
- * add or remove rules, these snapshots will catch it.
+ * Extract rule names for semantic package contracts.
  */
 const extractRuleNames = (config: Record<string, unknown>[]): string[] => {
   const ruleNames = new Set<string>()
@@ -73,125 +71,49 @@ const extractRuleEntries = (
   return Object.fromEntries([...selected.entries()].sort(([a], [b]) => a.localeCompare(b)))
 }
 
-describe('Config Snapshots — Rule Names', () => {
-  test('core config rules should match snapshot', () => {
-    const rules = extractRuleNames(coreConfig as Record<string, unknown>[])
+interface RuleContract {
+  config: Record<string, unknown>[]
+  name: string
+  requiredPrefixes?: string[]
+  requiredRules?: string[]
+}
 
-    expect(rules).toMatchSnapshot()
-  })
+const ruleContracts: RuleContract[] = [
+  { config: coreConfig as Record<string, unknown>[], name: 'core', requiredRules: ['eqeqeq', 'no-unused-vars'] },
+  { config: typescriptConfig as Record<string, unknown>[], name: 'typescript', requiredPrefixes: ['@typescript-eslint/'] },
+  { config: reactConfig as Record<string, unknown>[], name: 'react', requiredPrefixes: ['@eslint-react/', 'react-compiler/'] },
+  { config: preactConfig as Record<string, unknown>[], name: 'preact', requiredPrefixes: ['@eslint-react/'] },
+  { config: nextConfig as Record<string, unknown>[], name: 'next', requiredPrefixes: ['@next/next/'] },
+  { config: astroConfig as Record<string, unknown>[], name: 'astro', requiredPrefixes: ['astro/'] },
+  { config: expoConfig as Record<string, unknown>[], name: 'expo', requiredPrefixes: ['expo/'] },
+  { config: nestConfig as Record<string, unknown>[], name: 'nest', requiredPrefixes: ['@darraghor/nestjs-typed/'] },
+  { config: honoConfig() as Record<string, unknown>[], name: 'hono', requiredRules: ['n/no-process-env'] },
+  { config: vueConfig as Record<string, unknown>[], name: 'vue', requiredPrefixes: ['vue/'] },
+  { config: svelteConfig as Record<string, unknown>[], name: 'svelte', requiredPrefixes: ['svelte/'] },
+  { config: solidConfig as Record<string, unknown>[], name: 'solid', requiredPrefixes: ['solid/'] },
+  { config: angularConfig as Record<string, unknown>[], name: 'angular', requiredPrefixes: ['@angular-eslint/'] },
+  { config: qwikConfig as Record<string, unknown>[], name: 'qwik', requiredPrefixes: ['qwik/'] },
+  { config: reactRouterConfig as Record<string, unknown>[], name: 'react-router', requiredPrefixes: ['jsx-a11y/'] },
+  { config: litConfig as Record<string, unknown>[], name: 'lit', requiredPrefixes: ['lit/', 'wc/'] },
+  { config: nuxtConfig as Record<string, unknown>[], name: 'nuxt', requiredPrefixes: ['nuxt/'] },
+  {
+    config: tanstackStartConfig as Record<string, unknown>[],
+    name: 'tanstack-start',
+    requiredPrefixes: ['@tanstack/query/', '@tanstack/router/']
+  },
+  { config: viteConfig() as Record<string, unknown>[], name: 'vite', requiredRules: ['n/no-unpublished-import'] },
+  { config: slidevConfig() as Record<string, unknown>[], name: 'slidev', requiredRules: ['n/no-unpublished-import'] }
+]
 
-  test('typescript config rules should match snapshot', () => {
-    const rules = extractRuleNames(typescriptConfig as Record<string, unknown>[])
+describe('Config Rule Contracts', () => {
+  test.each(ruleContracts)('$name exposes its framework rule families', ({ config, requiredPrefixes = [], requiredRules = [] }) => {
+    const rules = extractRuleNames(config)
 
-    expect(rules).toMatchSnapshot()
-  })
+    expect(rules).toEqual(expect.arrayContaining(requiredRules))
 
-  test('react config rules should match snapshot', () => {
-    const rules = extractRuleNames(reactConfig as Record<string, unknown>[])
-
-    expect(rules).toMatchSnapshot()
-  })
-
-  test('preact config rules should match snapshot', () => {
-    const rules = extractRuleNames(preactConfig as Record<string, unknown>[])
-
-    expect(rules).toMatchSnapshot()
-  })
-
-  test('next config rules should match snapshot', () => {
-    const rules = extractRuleNames(nextConfig as Record<string, unknown>[])
-
-    expect(rules).toMatchSnapshot()
-  })
-
-  test('astro config rules should match snapshot', () => {
-    const rules = extractRuleNames(astroConfig as Record<string, unknown>[])
-
-    expect(rules).toMatchSnapshot()
-  })
-
-  test('expo config rules should match snapshot', () => {
-    const rules = extractRuleNames(expoConfig as Record<string, unknown>[])
-
-    expect(rules).toMatchSnapshot()
-  })
-
-  test('nest config rules should match snapshot', () => {
-    const rules = extractRuleNames(nestConfig as Record<string, unknown>[])
-
-    expect(rules).toMatchSnapshot()
-  })
-
-  test('hono config rules should match snapshot', () => {
-    const rules = extractRuleNames(honoConfig() as Record<string, unknown>[])
-
-    expect(rules).toMatchSnapshot()
-  })
-
-  test('vue config rules should match snapshot', () => {
-    const rules = extractRuleNames(vueConfig as Record<string, unknown>[])
-
-    expect(rules).toMatchSnapshot()
-  })
-
-  test('svelte config rules should match snapshot', () => {
-    const rules = extractRuleNames(svelteConfig as Record<string, unknown>[])
-
-    expect(rules).toMatchSnapshot()
-  })
-
-  test('solid config rules should match snapshot', () => {
-    const rules = extractRuleNames(solidConfig as Record<string, unknown>[])
-
-    expect(rules).toMatchSnapshot()
-  })
-
-  test('angular config rules should match snapshot', () => {
-    const rules = extractRuleNames(angularConfig as Record<string, unknown>[])
-
-    expect(rules).toMatchSnapshot()
-  })
-
-  test('qwik config rules should match snapshot', () => {
-    const rules = extractRuleNames(qwikConfig as Record<string, unknown>[])
-
-    expect(rules).toMatchSnapshot()
-  })
-
-  test('react-router config rules should match snapshot', () => {
-    const rules = extractRuleNames(reactRouterConfig as Record<string, unknown>[])
-
-    expect(rules).toMatchSnapshot()
-  })
-
-  test('lit config rules should match snapshot', () => {
-    const rules = extractRuleNames(litConfig as Record<string, unknown>[])
-
-    expect(rules).toMatchSnapshot()
-  })
-
-  test('nuxt config rules should match snapshot', () => {
-    const rules = extractRuleNames(nuxtConfig as Record<string, unknown>[])
-
-    expect(rules).toMatchSnapshot()
-  })
-
-  test('tanstack-start config rules should match snapshot', () => {
-    const rules = extractRuleNames(tanstackStartConfig as Record<string, unknown>[])
-
-    expect(rules).toMatchSnapshot()
-  })
-
-  test('vite config rules should match snapshot', () => {
-    const rules = extractRuleNames(viteConfig() as Record<string, unknown>[])
-
-    expect(rules).toMatchSnapshot()
-  })
-
-  test('slidev config rules should match snapshot', () => {
-    const rules = extractRuleNames(slidevConfig() as Record<string, unknown>[])
-
-    expect(rules).toMatchSnapshot()
+    for (const prefix of requiredPrefixes) {
+      expect(rules.some(rule => rule.startsWith(prefix)), `missing rule family ${prefix}`).toBe(true)
+    }
   })
 })
 

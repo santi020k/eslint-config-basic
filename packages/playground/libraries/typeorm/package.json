@@ -14,11 +14,11 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
-    "eslint": "^10.5.0",
+    "eslint": "catalog:",
     "typeorm": "^1.1.0"
   },
   "devDependencies": {
-    "typescript": "^6.0.3"
+    "typescript": "catalog:"
   },
   "engines": {
     "node": "^20.19.0 || >=22.18.0"
