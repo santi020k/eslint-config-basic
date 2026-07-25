@@ -153,6 +153,6 @@ peerDependencyRules:
     typescript: "*"
 
 minimumReleaseAgeExclude:
-  - '@santi020k/lumen-astro@0.1.0'
-  - '@santi020k/lumen-core@0.1.0'
-  - '@santi020k/lumen@0.1.0'
+  - '@santi020k/lumen-astro@0.2.0'
+  - '@santi020k/lumen-core@0.2.0'
+  - '@santi020k/lumen@0.2.0'
