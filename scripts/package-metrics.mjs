@@ -3,6 +3,7 @@ import { join, relative } from 'node:path'
 
 const rootDir = process.cwd()
 const packagesDir = join(rootDir, 'packages')
+
 const dependencyBudgets = new Map([
   ['@santi020k/eslint-config-basic', 24],
   ['@santi020k/eslint-config-integrations', 51],
@@ -51,6 +52,7 @@ const rows = packages.map(packageDir => {
   const distBytes = files.reduce((total, file) => total + statSync(file).size, 0)
   const dependencyCount = Object.keys(manifest.dependencies ?? {}).length
   const peerCount = Object.keys(manifest.peerDependencies ?? {}).length
+
   const optionalPeerCount = Object.values(manifest.peerDependenciesMeta ?? {})
     .filter(meta => meta.optional === true)
     .length

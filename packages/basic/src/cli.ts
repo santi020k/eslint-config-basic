@@ -721,7 +721,7 @@ const isAstroDoctorConfigured = (
   activeConfig?.extensions.includes('Astro Doctor') ?? false,
   configContent?.includes('astro-doctor') ?? false,
   configContent?.includes('AstroDoctor') ?? false
-].some(x => x)
+].includes(true)
 
 const isAstroConfigured = (
   activeConfig: Awaited<ReturnType<typeof analyzeEslintConfig>>,

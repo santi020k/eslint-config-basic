@@ -795,11 +795,17 @@ describe('Monorepo project scoping', () => {
       detection: false,
       projectDefaults: {
         extensions: [Extension.Unicorn],
+        frameworks: {
+          react: [{ name: 'inherited-react', rules: {} }]
+        },
         typescript: false
       },
       projects: {
         'packages/lib': {
           extensions: [Extension.Security],
+          frameworks: {
+            vite: [{ name: 'replacement-vite', rules: {} }]
+          },
           optionMergeStrategy: 'replace'
         }
       }
@@ -815,6 +821,8 @@ describe('Monorepo project scoping', () => {
 
     expect(scopedRules.some(rule => rule.startsWith('security/'))).toBe(true)
     expect(scopedRules.some(rule => rule.startsWith('unicorn/'))).toBe(false)
+    expect(extractConfigNames(config)).toContain('replacement-vite')
+    expect(extractConfigNames(config)).not.toContain('inherited-react')
   })
 
   test('ignore-only configs inside a project are scoped to the project path', async () => {

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="ESLint Config Mark">
+  <polygon points="64,18 104,41 104,87 64,110 24,87 24,41" fill="#945df4" stroke="#945df4" stroke-width="14" stroke-linejoin="round" />
+  <rect x="36" y="40" width="56" height="20" rx="10" fill="#110c1d" />
+  <circle cx="82" cy="50" r="6" fill="#945df4" />
+  <rect x="36" y="68" width="56" height="20" rx="10" fill="#2a1c3f" />
+  <circle cx="46" cy="78" r="6" fill="#c6a9fa" />
+</svg>

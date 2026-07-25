@@ -3,11 +3,19 @@ import { cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, 
 import { createRequire } from 'node:module'
 import { tmpdir } from 'node:os'
 import { dirname, join, relative } from 'node:path'
-import { pathToFileURL } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 
-const rootDir = process.cwd()
+const rootDir = dirname(dirname(fileURLToPath(import.meta.url)))
 const tempDir = mkdtempSync(join(tmpdir(), 'eslint-config-clean-install-'))
 const ignoredDirectories = new Set(['.git', '.pnpm-store', 'dist', 'node_modules'])
+
+const getExpectedBraceMajor = (minimatchMajor) => {
+  if (minimatchMajor >= 10) return 5
+
+  if (minimatchMajor >= 9) return 2
+
+  return 1
+}
 
 const copyManifestTree = (sourceDir) => {
   for (const entry of readdirSync(sourceDir, { withFileTypes: true })) {
@@ -26,6 +34,7 @@ const copyManifestTree = (sourceDir) => {
     const destinationPath = join(tempDir, relative(rootDir, sourcePath))
 
     mkdirSync(dirname(destinationPath), { recursive: true })
+
     cpSync(sourcePath, destinationPath)
   }
 }
@@ -40,6 +49,7 @@ try {
   }
 
   copyManifestTree(join(rootDir, 'apps'))
+
   copyManifestTree(join(rootDir, 'packages'))
 
   try {
@@ -49,6 +59,7 @@ try {
     })
   } catch (error) {
     if (error.stdout) process.stderr.write(error.stdout)
+
     if (error.stderr) process.stderr.write(error.stderr)
 
     throw error
@@ -59,25 +70,37 @@ try {
 
   await import(pathToFileURL(eslintEntry).href)
 
-  const eslintRequire = createRequire(eslintEntry)
-  const minimatchManifestPath = eslintRequire.resolve('minimatch/package.json')
-  const minimatchRequire = createRequire(minimatchManifestPath)
-  const braceManifestPath = minimatchRequire.resolve('brace-expansion/package.json')
-  const minimatchVersion = JSON.parse(readFileSync(minimatchManifestPath, 'utf8')).version
-  const braceVersion = JSON.parse(readFileSync(braceManifestPath, 'utf8')).version
-  const minimatchMajor = Number.parseInt(minimatchVersion, 10)
-  const braceMajor = Number.parseInt(braceVersion, 10)
-  const expectedBraceMajor = minimatchMajor >= 10 ? 5 : minimatchMajor >= 9 ? 2 : 1
+  const virtualStoreDir = join(tempDir, 'node_modules', '.pnpm')
+  const minimatchPairs = []
 
-  if (braceMajor !== expectedBraceMajor) {
-    throw new Error(
-      `Clean install linked minimatch@${minimatchVersion} to incompatible brace-expansion@${braceVersion}. ` +
-      `Expected brace-expansion major ${expectedBraceMajor}.`
-    )
+  for (const entry of readdirSync(virtualStoreDir)) {
+    if (!entry.startsWith('minimatch@')) continue
+
+    const minimatchManifestPath = join(virtualStoreDir, entry, 'node_modules', 'minimatch', 'package.json')
+
+    if (!existsSync(minimatchManifestPath)) continue
+
+    const minimatchRequire = createRequire(minimatchManifestPath)
+    const braceManifestPath = minimatchRequire.resolve('brace-expansion/package.json')
+    const minimatchVersion = JSON.parse(readFileSync(minimatchManifestPath, 'utf8')).version
+    const braceVersion = JSON.parse(readFileSync(braceManifestPath, 'utf8')).version
+    const minimatchMajor = Number.parseInt(minimatchVersion, 10)
+    const braceMajor = Number.parseInt(braceVersion, 10)
+    const expectedBraceMajor = getExpectedBraceMajor(minimatchMajor)
+
+    if (braceMajor !== expectedBraceMajor) {
+      throw new Error(
+        `Clean install linked minimatch@${minimatchVersion} to incompatible brace-expansion@${braceVersion}. ` +
+        `Expected brace-expansion major ${expectedBraceMajor}.`
+      )
+    }
+
+    minimatchPairs.push(`${minimatchVersion}→${braceVersion}`)
   }
 
   process.stdout.write(
-    `Clean install verified: ESLint imports and minimatch@${minimatchVersion} resolves brace-expansion@${braceVersion}.\n`
+    `Clean install verified: ESLint imports and minimatch/brace-expansion pairs are compatible ` +
+    `(${minimatchPairs.sort().join(', ')}).\n`
   )
 } finally {
   rmSync(tempDir, { force: true, recursive: true })

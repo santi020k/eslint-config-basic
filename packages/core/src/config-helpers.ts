@@ -198,6 +198,18 @@ const mergeInheritedArray = <T>(
   return toUniqueArray([...(defaults ?? []), ...(project ?? [])])
 }
 
+const mergeInheritedObject = <T extends object>(
+  defaults: T | undefined,
+  project: T | undefined,
+  strategy: 'merge' | 'replace'
+): T | undefined => {
+  if (strategy === 'replace' && project !== undefined) return project
+
+  if (defaults === undefined && project === undefined) return undefined
+
+  return { ...defaults, ...project } as T
+}
+
 /**
  * Applies shared monorepo defaults to one project configuration.
  * Scalar values are overridden by the project, while arrays and option maps
@@ -213,18 +225,18 @@ export const mergeProjectOptions = (
     ...defaults,
     ...project,
     detection: typeof defaults.detection === 'object' && typeof project.detection === 'object' ?
-      { ...defaults.detection, ...project.detection } :
+      mergeInheritedObject(defaults.detection, project.detection, strategy) :
       project.detection ?? defaults.detection,
     extensions: mergeInheritedArray(defaults.extensions, project.extensions, strategy),
-    features: { ...defaults.features, ...project.features },
+    features: mergeInheritedObject(defaults.features, project.features, strategy),
     formats: mergeInheritedArray(defaults.formats, project.formats, strategy),
-    frameworks: { ...defaults.frameworks, ...project.frameworks },
+    frameworks: mergeInheritedObject(defaults.frameworks, project.frameworks, strategy),
     ignores: mergeInheritedArray(defaults.ignores, project.ignores, strategy),
-    integrations: { ...defaults.integrations, ...project.integrations },
+    integrations: mergeInheritedObject(defaults.integrations, project.integrations, strategy),
     libraries: mergeInheritedArray(defaults.libraries, project.libraries, strategy),
     settings: mergeInheritedArray(defaults.settings, project.settings, strategy),
     testing: mergeInheritedArray(defaults.testing, project.testing, strategy),
-    testingFiles: { ...defaults.testingFiles, ...project.testingFiles },
+    testingFiles: mergeInheritedObject(defaults.testingFiles, project.testingFiles, strategy),
     tools: mergeInheritedArray(defaults.tools, project.tools, strategy),
     ...(typeof defaults.tailwind === 'object' && typeof project.tailwind === 'object' ?
       { tailwind: { ...defaults.tailwind, ...project.tailwind } } :

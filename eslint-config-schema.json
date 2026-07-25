@@ -356,10 +356,13 @@
           "$ref": "#/definitions/PresetOption",
           "description": "High-level configuration preset"
         },
+        "projectDefaults": {
+          "$ref": "#/definitions/ProjectConfigOptions",
+          "description": "Defaults inherited by every entry in `projects`. Project-level values override scalar defaults while arrays and option maps merge unless that project uses `optionMergeStrategy: 'replace'`."
+        },
         "projects": {
           "additionalProperties": {
-            "additionalProperties": false,
-            "type": "object"
+            "$ref": "#/definitions/ProjectConfigOptions"
           },
           "description": "Package-aware subproject configuration for monorepos. Each key is a workspace-relative folder and each value is scoped to that folder.",
           "type": "object"
@@ -480,6 +483,7 @@
       "description": "Enum for specialized ESLint extensions and strict rule sets",
       "enum": [
         "a11y",
+        "astro-doctor",
         "best-practices",
         "biome",
         "boundaries",
@@ -500,6 +504,7 @@
     "ExtensionName": {
       "enum": [
         "a11y",
+        "astro-doctor",
         "best-practices",
         "biome",
         "boundaries",
@@ -1119,6 +1124,9 @@
         "ai-sdk": {
           "type": "boolean"
         },
+        "astro-doctor": {
+          "type": "boolean"
+        },
         "autogen": {
           "type": "boolean"
         },
@@ -1473,6 +1481,15 @@
           },
           "type": "array"
         },
+        "onUnsupportedTypeScriptVersion": {
+          "description": "Controls how the parser reacts when run with a TypeScript version that is not officially supported by typescript-eslint.\n- `'warn'` (default): log a warning to the console.\n- `'error'`: throw, causing the lint run to fail. Useful in CI to prevent   unsupported TypeScript versions from being merged unnoticed.\n- `'ignore'`: do nothing.",
+          "enum": [
+            "error",
+            "ignore",
+            "warn"
+          ],
+          "type": "string"
+        },
         "programs": {
           "anyOf": [
             {
@@ -1534,6 +1551,7 @@
           "type": "string"
         },
         "warnOnUnsupportedTypeScriptVersion": {
+          "deprecated": "Use {@link onUnsupportedTypeScriptVersion } instead.\n`true` is equivalent to `'warn'` and `false` is equivalent to `'ignore'`.",
           "type": "boolean"
         }
       },
@@ -1648,6 +1666,10 @@
       },
       "type": "object"
     },
+    "ProjectConfigOptions": {
+      "additionalProperties": false,
+      "type": "object"
+    },
     "ProjectServiceOptions": {
       "additionalProperties": false,
       "description": "Granular options to configure the project service.",
@@ -1714,9 +1736,6 @@
     "Setting": {
       "description": "Enum for settings options in ESLint",
       "enum": [
-        "default-ignores",
-        "generated-code-ignores",
-        "gitignore",
         "no-default-ignores",
         "no-generated-code-ignores",
         "no-gitignore"
@@ -1725,9 +1744,6 @@
     },
     "SettingName": {
       "enum": [
-        "default-ignores",
-        "generated-code-ignores",
-        "gitignore",
         "no-default-ignores",
         "no-generated-code-ignores",
         "no-gitignore"
@@ -1878,6 +1894,10 @@
     "TailwindOptions": {
       "additionalProperties": false,
       "properties": {
+        "cwd": {
+          "description": "Working directory used to resolve Tailwind and its entry point. Defaults to `detectRootDir`, which keeps package-scoped monorepo configs stable.",
+          "type": "string"
+        },
         "detectComponentClasses": {
           "type": "boolean"
         },
@@ -1892,14 +1912,14 @@
         },
         "noUnknownClasses": {
           "enum": [
-            false,
             "error",
             "off",
-            "warn"
+            "warn",
+            false
           ],
           "type": [
-            "boolean",
-            "string"
+            "string",
+            "boolean"
           ]
         }
       },
