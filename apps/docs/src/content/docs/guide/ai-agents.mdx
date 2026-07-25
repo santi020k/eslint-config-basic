@@ -3,7 +3,8 @@ title: "AI & Agents"
 description: "How @santi020k/eslint-config-basic integrates with AI coding assistants, agent frameworks, and AI library tooling."
 ---
 
-import { Steps, TabItem, Tabs } from '@astrojs/starlight/components';
+import { Steps } from '@astrojs/starlight/components'
+import RunnerTabs from '../../../components/RunnerTabs.astro'
 
 This page covers two distinct AI-related concerns in this package:
 
@@ -117,28 +118,7 @@ The `generate-skill` CLI command reads your active ESLint configuration and writ
 <Steps>
 1. **Run the command once** to generate or update standards files for all detected AI tools:
 
-    <Tabs>
-      <TabItem label="pnpm">
-      ```sh
-      pnpm dlx @santi020k/eslint-config-basic generate-skill
-      ```
-      </TabItem>
-      <TabItem label="npm">
-      ```sh
-      npx @santi020k/eslint-config-basic generate-skill
-      ```
-      </TabItem>
-      <TabItem label="yarn">
-      ```sh
-      yarn dlx @santi020k/eslint-config-basic generate-skill
-      ```
-      </TabItem>
-      <TabItem label="bun">
-      ```sh
-      bunx @santi020k/eslint-config-basic generate-skill
-      ```
-      </TabItem>
-    </Tabs>
+    <RunnerTabs args="generate-skill" />
 
 2. **Commit the generated files** alongside your ESLint config. They are stored in tool-specific folders that each assistant already reads.
 

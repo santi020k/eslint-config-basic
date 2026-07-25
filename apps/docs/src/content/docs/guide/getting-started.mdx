@@ -3,7 +3,9 @@ title: "Getting Started"
 description: "This library is a DX-first, composable ESLint 10+ flat-config toolkit for JavaScript and TypeScript teams. In v2, application projects install @santi020k/"
 ---
 
-import { Steps, Tabs, TabItem, Card, CardGrid } from '@astrojs/starlight/components';
+import { Steps } from '@astrojs/starlight/components'
+import { Card, Icon } from '@santi020k/lumen-astro'
+import InstallTabs from '../../../components/InstallTabs.astro'
 
 This library is a DX-first, composable ESLint 10+ flat-config toolkit for JavaScript and TypeScript teams. In v2, application projects install [`@santi020k/eslint-config-basic`](https://www.npmjs.com/package/@santi020k/eslint-config-basic) and enable bundled framework configs directly from it.
 
@@ -19,28 +21,7 @@ This library is a DX-first, composable ESLint 10+ flat-config toolkit for JavaSc
 
     The smallest install is the main package itself. It brings a supported ESLint version automatically.
 
-    <Tabs>
-      <TabItem label="pnpm">
-      ```sh
-      pnpm add -D @santi020k/eslint-config-basic
-      ```
-      </TabItem>
-      <TabItem label="npm">
-      ```sh
-      npm install -D @santi020k/eslint-config-basic
-      ```
-      </TabItem>
-      <TabItem label="yarn">
-      ```sh
-      yarn add -D @santi020k/eslint-config-basic
-      ```
-      </TabItem>
-      <TabItem label="bun">
-      ```sh
-      bun add -d @santi020k/eslint-config-basic
-      ```
-      </TabItem>
-    </Tabs>
+    <InstallTabs packages="@santi020k/eslint-config-basic" />
 
 2. **Create Configuration File**
 
@@ -55,17 +36,23 @@ This library is a DX-first, composable ESLint 10+ flat-config toolkit for JavaSc
 
 ## Understand the Architecture
 
-<CardGrid>
-  <Card title="Unified Entry" icon="rocket">
-    `@santi020k/eslint-config-basic` is the main package. You no longer need to install framework configs directly.
+<div class="s2k-feature-grid">
+  <Card as="article" class="s2k-feature-card">
+    <Icon name="rocket" decorative />
+    <h3>Unified Entry</h3>
+    <p><code>@santi020k/eslint-config-basic</code> is the main package. You no longer need to install framework configs directly.</p>
   </Card>
-  <Card title="Enum Based Toggles" icon="setting">
-    Integrations can be enabled through enums, matching strings, or the simple `features` map.
+  <Card as="article" class="s2k-feature-card">
+    <Icon name="sliders-horizontal" decorative />
+    <h3>Enum-based Toggles</h3>
+    <p>Integrations can be enabled through enums, matching strings, or the simple <code>features</code> map.</p>
   </Card>
-  <Card title="Flexible Versions" icon="puzzle">
-    ESLint can still be installed manually if you want to pin it yourself, as long as you stay on `^10`.
+  <Card as="article" class="s2k-feature-card">
+    <Icon name="blocks" decorative />
+    <h3>Flexible Versions</h3>
+    <p>ESLint can still be installed manually if you want to pin it yourself, as long as you stay on <code>^10</code>.</p>
   </Card>
-</CardGrid>
+</div>
 
 ## Pick the Right Starting Point
 

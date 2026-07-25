@@ -87,6 +87,7 @@ import { defineConfig } from '@santi020k/eslint-config-basic'
 
 export default await defineConfig({
   features: {
+    'astro-doctor': true,
     boundaries: true,
     cspell: true,
     'github-actions': true,

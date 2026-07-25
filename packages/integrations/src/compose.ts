@@ -8,6 +8,7 @@ import {
 } from '@santi020k/eslint-config-core'
 
 import { a11y } from './extensions/a11y.js'
+import { astroDoctor } from './extensions/astro-doctor.js'
 import { bestPractices } from './extensions/best-practices.js'
 import { biome } from './extensions/biome.js'
 import { boundaries } from './extensions/boundaries.js'
@@ -128,6 +129,7 @@ export const getIntegrationConfigs = async (
   addIf(formats.includes(Format.Graphql), graphql),
   // Extensions
   addIf(extensions.includes(Extension.A11y), a11y),
+  addIf(extensions.includes(Extension.AstroDoctor), astroDoctor),
   addIf(extensions.includes(Extension.Biome), biome),
   addIf(extensions.includes(Extension.Boundaries), () => boundaries),
   addIf(extensions.includes(Extension.BestPractices), () => bestPractices),

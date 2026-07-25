@@ -106,6 +106,9 @@
     "typescript-eslint": "catalog:",
     "zod": "catalog:"
   },
+  "optionalDependencies": {
+    "@santi020k/eslint-plugin-astro-doctor": "catalog:"
+  },
   "devDependencies": {
     "@types/eslint-plugin-jsx-a11y": "catalog:",
     "@types/node": "catalog:",

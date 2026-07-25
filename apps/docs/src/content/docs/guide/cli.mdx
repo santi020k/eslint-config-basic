@@ -3,50 +3,11 @@ title: "CLI"
 description: "The main package ships a CLI that can scaffold or refresh the project config."
 ---
 
+import RunnerTabs from '../../../components/RunnerTabs.astro'
+
 The main package ships a CLI that can scaffold or refresh the project config.
 
-
-```sh title="pnpm"
-pnpm dlx @santi020k/eslint-config-basic init
-pnpm dlx @santi020k/eslint-config-basic update
-pnpm dlx @santi020k/eslint-config-basic explain
-pnpm dlx @santi020k/eslint-config-basic inspect
-pnpm dlx @santi020k/eslint-config-basic doctor
-pnpm dlx @santi020k/eslint-config-basic docs
-pnpm dlx @santi020k/eslint-config-basic migrate
-```
-
-```sh title="npm"
-npx @santi020k/eslint-config-basic init
-npx @santi020k/eslint-config-basic update
-npx @santi020k/eslint-config-basic explain
-npx @santi020k/eslint-config-basic inspect
-npx @santi020k/eslint-config-basic doctor
-npx @santi020k/eslint-config-basic docs
-npx @santi020k/eslint-config-basic migrate
-```
-
-```sh title="yarn"
-yarn dlx @santi020k/eslint-config-basic init
-yarn dlx @santi020k/eslint-config-basic update
-yarn dlx @santi020k/eslint-config-basic explain
-yarn dlx @santi020k/eslint-config-basic inspect
-yarn dlx @santi020k/eslint-config-basic doctor
-yarn dlx @santi020k/eslint-config-basic docs
-yarn dlx @santi020k/eslint-config-basic migrate
-```
-
-```sh title="bun"
-bunx @santi020k/eslint-config-basic init
-bunx @santi020k/eslint-config-basic update
-bunx @santi020k/eslint-config-basic explain
-bunx @santi020k/eslint-config-basic inspect
-bunx @santi020k/eslint-config-basic doctor
-bunx @santi020k/eslint-config-basic docs
-bunx @santi020k/eslint-config-basic migrate
-bunx @santi020k/eslint-config-basic generate-skill
-```
-
+<RunnerTabs args={['init', 'update', 'explain', 'inspect', 'doctor', 'docs', 'migrate', 'generate-skill']} />
 
 ## What It Does
 
@@ -64,21 +25,7 @@ bunx @santi020k/eslint-config-basic generate-skill
 ## Usage
 
 
-```sh title="pnpm"
-pnpm dlx @santi020k/eslint-config-basic init
-```
-
-```sh title="npm"
-npx @santi020k/eslint-config-basic init
-```
-
-```sh title="yarn"
-yarn dlx @santi020k/eslint-config-basic init
-```
-
-```sh title="bun"
-bunx @santi020k/eslint-config-basic init
-```
+<RunnerTabs args="init" />
 
 
 If the package is already installed locally, the `basic-eslint` bin is also available through your package manager's local binary resolution.
@@ -91,21 +38,7 @@ basic-eslint --version
 ## Update an Existing Config
 
 
-```sh title="pnpm"
-pnpm dlx @santi020k/eslint-config-basic update
-```
-
-```sh title="npm"
-npx @santi020k/eslint-config-basic update
-```
-
-```sh title="yarn"
-yarn dlx @santi020k/eslint-config-basic update
-```
-
-```sh title="bun"
-bunx @santi020k/eslint-config-basic update
-```
+<RunnerTabs args="update" />
 
 
 Use `update` when you want to regenerate the file after adding or removing dependencies.
@@ -215,21 +148,7 @@ Supported targets:
 Folder targets are only written when the folder already exists, and `AGENTS.md` / `.github/copilot-instructions.md` are only updated when those files already exist — the command never creates tool folders for tools you do not use.
 
 
-```sh title="pnpm"
-pnpm dlx @santi020k/eslint-config-basic generate-skill
-```
-
-```sh title="npm"
-npx @santi020k/eslint-config-basic generate-skill
-```
-
-```sh title="yarn"
-yarn dlx @santi020k/eslint-config-basic generate-skill
-```
-
-```sh title="bun"
-bunx @santi020k/eslint-config-basic generate-skill
-```
+<RunnerTabs args="generate-skill" />
 
 
 Use `--force` if you want to overwrite existing standards files.

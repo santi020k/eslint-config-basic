@@ -3,6 +3,7 @@ export { getIntegrationConfigs, getPrettierConfig } from './compose.js'
 
 // Extensions
 export * from './extensions/a11y.js'
+export { astroDoctor } from './extensions/astro-doctor.js'
 export * from './extensions/best-practices.js'
 export * from './extensions/biome.js'
 export { boundaries } from './extensions/boundaries.js'

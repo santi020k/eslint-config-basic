@@ -41,6 +41,11 @@ export enum Extension {
   A11y = 'a11y',
 
   /**
+   * Astro Doctor performance, accessibility, security, and best-practice rules
+   */
+  AstroDoctor = 'astro-doctor',
+
+  /**
    * Built-in best-practice rules: no-console, no-alert, cyclomatic complexity,
    * max nesting depth. No extra dependencies required.
    */

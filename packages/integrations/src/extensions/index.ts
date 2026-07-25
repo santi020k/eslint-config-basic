@@ -1,4 +1,5 @@
 export { a11y } from './a11y.js'
+export { astroDoctor } from './astro-doctor.js'
 export { bestPractices } from './best-practices.js'
 export { biome } from './biome.js'
 export { boundaries } from './boundaries.js'

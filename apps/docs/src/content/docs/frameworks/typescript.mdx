@@ -3,35 +3,21 @@ title: "TypeScript"
 description: "TypeScript support is enabled from the main v2 package. There is no separate application-level install for TypeScript config."
 ---
 
+import InstallTabs from '../../../components/InstallTabs.astro'
+
 TypeScript support is enabled from the main v2 package. There is no separate application-level install for TypeScript config.
 
 ## Install
 
 
-```sh title="pnpm"
-pnpm add -D @santi020k/eslint-config-basic
-```
-
-```sh title="npm"
-npm install -D @santi020k/eslint-config-basic
-```
-
-```sh title="yarn"
-yarn add -D @santi020k/eslint-config-basic
-```
-
-```sh title="bun"
-bun add -d @santi020k/eslint-config-basic
-```
+<InstallTabs packages="@santi020k/eslint-config-basic" />
 
 
 ## Using Lite
 
 The lite package already includes TypeScript support, so dependency-sensitive projects can start with:
 
-```sh title="pnpm"
-pnpm add -D @santi020k/eslint-config-lite eslint typescript
-```
+<InstallTabs packages={["@santi020k/eslint-config-lite", "eslint", "typescript"]} />
 
 ## Configure
 

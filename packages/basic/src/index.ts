@@ -145,6 +145,7 @@ export {
 export {
   a11y,
   aiSdk,
+  astroDoctor,
   autogen,
   bestPractices,
   biome,

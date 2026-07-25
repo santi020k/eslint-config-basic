@@ -1,0 +1,16 @@
+---
+import Default from '@astrojs/starlight/components/PageFrame.astro'
+import { UIPrimitives } from '@santi020k/lumen-astro'
+---
+
+<UIPrimitives />
+
+<Default>
+  <Fragment slot="header">
+    <slot name="header" />
+  </Fragment>
+  <Fragment slot="sidebar">
+    <slot name="sidebar" />
+  </Fragment>
+  <slot />
+</Default>

@@ -1,0 +1,494 @@
+---
+import {
+  Badge,
+  Button,
+  Card,
+  Checkbox,
+  Field,
+  Label,
+  NativeSelect
+} from '@santi020k/lumen-astro'
+
+const frameworks = [
+  ['angular', 'Angular'],
+  ['astro', 'Astro'],
+  ['expo', 'Expo'],
+  ['hono', 'Hono'],
+  ['lit', 'Lit'],
+  ['nest', 'NestJS'],
+  ['next', 'Next.js'],
+  ['nuxt', 'Nuxt'],
+  ['preact', 'Preact'],
+  ['qwik', 'Qwik'],
+  ['react', 'React'],
+  ['react-router', 'React Router'],
+  ['remix', 'Remix'],
+  ['slidev', 'Slidev'],
+  ['solid', 'Solid'],
+  ['svelte', 'Svelte'],
+  ['tanstack-start', 'TanStack Start'],
+  ['vite', 'Vite'],
+  ['vue', 'Vue']
+]
+
+const featureGroups = [
+  {
+    label: 'Testing',
+    options: [
+      ['vitest', 'Vitest'],
+      ['jest', 'Jest'],
+      ['playwright', 'Playwright'],
+      ['cypress', 'Cypress'],
+      ['testing-library', 'Testing Library']
+    ]
+  },
+  {
+    label: 'Libraries',
+    options: [
+      ['tailwind', 'Tailwind CSS'],
+      ['storybook', 'Storybook'],
+      ['zod', 'Zod'],
+      ['prisma', 'Prisma'],
+      ['drizzle', 'Drizzle'],
+      ['i18next', 'i18next']
+    ]
+  },
+  {
+    label: 'Formats and tools',
+    options: [
+      ['prettier', 'Prettier'],
+      ['markdown', 'Markdown'],
+      ['mdx', 'MDX'],
+      ['jsonc', 'JSON / JSONC'],
+      ['yaml', 'YAML'],
+      ['cspell', 'CSpell'],
+      ['github-actions', 'GitHub Actions']
+    ]
+  },
+  {
+    label: 'Rule extensions',
+    options: [
+      ['a11y', 'Accessibility'],
+      ['best-practices', 'Best practices'],
+      ['security', 'Security'],
+      ['unicorn', 'Unicorn'],
+      ['perfectionist', 'Perfectionist'],
+      ['regexp', 'Regular expressions']
+    ]
+  }
+]
+---
+
+<div class="s2k-tool" data-config-builder>
+  <div class="s2k-tool__intro">
+    <Badge variant="success">Runs in your browser</Badge>
+    <p>
+      Choose your stack, then copy a complete install command and flat config.
+      Your selections stay in the URL so the setup can be shared with a teammate.
+    </p>
+  </div>
+
+  <div class="s2k-builder-layout">
+    <form class="s2k-builder-controls" data-builder-form>
+      <Card as="section" class="s2k-tool-card">
+        <div class="s2k-tool-card__heading">
+          <span class="s2k-tool-card__step">1</span>
+          <div>
+            <h2>Project baseline</h2>
+            <p>Start with the package and defaults that match the repository.</p>
+          </div>
+        </div>
+
+        <div class="s2k-field-grid">
+          <Field controlId="builder-package-manager">
+            <Label for="builder-package-manager">Package manager</Label>
+            <NativeSelect id="builder-package-manager" name="packageManager" data-builder-option>
+              <option value="pnpm">pnpm</option>
+              <option value="npm">npm</option>
+              <option value="yarn">Yarn</option>
+              <option value="bun">Bun</option>
+            </NativeSelect>
+          </Field>
+
+          <Field controlId="builder-distribution">
+            <Label for="builder-distribution">Distribution</Label>
+            <NativeSelect id="builder-distribution" name="distribution" data-builder-option>
+              <option value="basic">Basic — complete install</option>
+              <option value="lite">Lite — smaller, explicit packages</option>
+            </NativeSelect>
+          </Field>
+
+          <Field controlId="builder-preset">
+            <Label for="builder-preset">Preset</Label>
+            <NativeSelect id="builder-preset" name="preset" data-builder-option>
+              <option value="">Auto-detect</option>
+              <option value="basic">Basic</option>
+              <option value="app">App</option>
+              <option value="library">Library</option>
+              <option value="node">Node</option>
+              <option value="browser">Browser</option>
+              <option value="worker">Worker</option>
+              <option value="ci">CI</option>
+              <option value="monorepo">Monorepo</option>
+              <option value="all">All</option>
+            </NativeSelect>
+          </Field>
+
+          <Field controlId="builder-runtime">
+            <Label for="builder-runtime">Runtime</Label>
+            <NativeSelect id="builder-runtime" name="runtime" data-builder-option>
+              <option value="">Auto-detect</option>
+              <option value="universal">Universal</option>
+              <option value="browser">Browser</option>
+              <option value="node">Node.js</option>
+              <option value="worker">Worker</option>
+              <option value="cloudflare">Cloudflare Workers</option>
+              <option value="bun">Bun</option>
+              <option value="deno">Deno</option>
+            </NativeSelect>
+          </Field>
+        </div>
+
+        <label class="s2k-check-option">
+          <Checkbox name="typescript" value="true" checked data-builder-option />
+          <span><strong>TypeScript</strong><small>Enable type-aware rules and project detection.</small></span>
+        </label>
+      </Card>
+
+      <Card as="section" class="s2k-tool-card">
+        <div class="s2k-tool-card__heading">
+          <span class="s2k-tool-card__step">2</span>
+          <div>
+            <h2>Frameworks</h2>
+            <p>Select one or more. Related React rules are composed automatically where required.</p>
+          </div>
+        </div>
+
+        <fieldset class="s2k-option-group">
+          <legend class="sr-only">Frameworks</legend>
+          <div class="s2k-check-grid">
+            {frameworks.map(([value, label]) => (
+              <label class="s2k-check-option s2k-check-option--compact">
+                <Checkbox name="framework" value={value} data-builder-option />
+                <span>{label}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+      </Card>
+
+      <Card as="section" class="s2k-tool-card">
+        <div class="s2k-tool-card__heading">
+          <span class="s2k-tool-card__step">3</span>
+          <div>
+            <h2>Optional integrations</h2>
+            <p>Pick the tools the project actually uses. Auto-detection can still fill in the rest.</p>
+          </div>
+        </div>
+
+        {featureGroups.map(group => (
+          <fieldset class="s2k-option-group">
+            <legend>{group.label}</legend>
+            <div class="s2k-check-grid">
+              {group.options.map(([value, label]) => (
+                <label class="s2k-check-option s2k-check-option--compact">
+                  <Checkbox name="feature" value={value} data-builder-option />
+                  <span>{label}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+        ))}
+      </Card>
+    </form>
+
+    <aside class="s2k-builder-output" aria-label="Generated setup">
+      <Card class="s2k-tool-card s2k-builder-output__card">
+        <div class="s2k-output-heading">
+          <div>
+            <Badge variant="secondary" data-builder-package-badge>Basic</Badge>
+            <h2>Your generated setup</h2>
+          </div>
+          <Button type="button" variant="ghost" size="sm" data-builder-share>Copy share link</Button>
+        </div>
+
+        <div class="s2k-code-output">
+          <div class="s2k-code-output__bar">
+            <span>Install</span>
+            <Button type="button" variant="ghost" size="sm" data-copy-target="install">Copy</Button>
+          </div>
+          <pre tabindex="0"><code data-builder-install></code></pre>
+        </div>
+
+        <div class="s2k-code-output">
+          <div class="s2k-code-output__bar">
+            <span>eslint.config.mjs</span>
+            <Button type="button" variant="ghost" size="sm" data-copy-target="config">Copy</Button>
+          </div>
+          <pre tabindex="0"><code data-builder-config></code></pre>
+        </div>
+
+        <div class="s2k-output-actions">
+          <Button type="button" data-builder-download>Download config</Button>
+          <Button type="reset" variant="outline" data-builder-reset>Reset</Button>
+        </div>
+        <p class="s2k-tool-status" role="status" aria-live="polite" data-builder-status></p>
+      </Card>
+    </aside>
+  </div>
+</div>
+
+<script>
+  type BuilderState = {
+    distribution: string
+    features: string[]
+    frameworks: string[]
+    packageManager: string
+    preset: string
+    runtime: string
+    typescript: boolean
+  }
+
+  const packageCommands: Record<string, (packages: string) => string> = {
+    bun: packages => `bun add -d ${packages}`,
+    npm: packages => `npm install -D ${packages}`,
+    pnpm: packages => `pnpm add -D ${packages}`,
+    yarn: packages => `yarn add -D ${packages}`
+  }
+
+  const readState = (root: HTMLElement): BuilderState => {
+    const form = root.querySelector<HTMLFormElement>('[data-builder-form]')
+    const data = new FormData(form ?? undefined)
+
+    return {
+      distribution: String(data.get('distribution') ?? 'basic'),
+      features: data.getAll('feature').map(String).sort(),
+      frameworks: data.getAll('framework').map(String).sort(),
+      packageManager: String(data.get('packageManager') ?? 'pnpm'),
+      preset: String(data.get('preset') ?? ''),
+      runtime: String(data.get('runtime') ?? ''),
+      typescript: data.get('typescript') === 'true'
+    }
+  }
+
+  const createInstallCommand = (state: BuilderState): string => {
+    const packages = new Set<string>()
+
+    if (state.distribution === 'basic') {
+      packages.add('@santi020k/eslint-config-basic')
+    } else {
+      packages.add('@santi020k/eslint-config-lite')
+
+      packages.add('eslint')
+
+      if (state.typescript) packages.add('typescript')
+
+      const frameworkPackages = new Set(state.frameworks)
+
+      const needsReact = ['next', 'expo', 'remix', 'react-router'].some(
+        framework => frameworkPackages.has(framework)
+      ) || (frameworkPackages.has('tanstack-start') && !frameworkPackages.has('solid'))
+
+      if (needsReact) frameworkPackages.add('react')
+
+      if (frameworkPackages.has('nuxt') || frameworkPackages.has('slidev')) frameworkPackages.add('vue')
+
+      for (const framework of frameworkPackages) packages.add(`@santi020k/eslint-config-${framework}`)
+
+      if (state.features.length > 0) packages.add('@santi020k/eslint-config-integrations')
+    }
+
+    const command = packageCommands[state.packageManager] ?? packageCommands.pnpm
+
+    return command([...packages].join(' '))
+  }
+
+  const createConfig = (state: BuilderState): string => {
+    const packageName = state.distribution === 'lite' ?
+      '@santi020k/eslint-config-lite' :
+      '@santi020k/eslint-config-basic'
+
+    const lines = [`import { defineConfig } from '${packageName}'`, '', 'export default await defineConfig({']
+
+    if (state.preset) lines.push(`  preset: '${state.preset}',`)
+
+    if (state.runtime) lines.push(`  runtime: '${state.runtime}',`)
+
+    lines.push(`  typescript: ${state.typescript},`)
+
+    if (state.frameworks.length > 0) {
+      lines.push('  frameworks: {')
+
+      for (const framework of state.frameworks) {
+        const key = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/u.test(framework) ? framework : `'${framework}'`
+
+        lines.push(`    ${key}: true,`)
+      }
+
+      lines.push('  },')
+    }
+
+    if (state.features.length > 0) {
+      lines.push('  features: {')
+
+      for (const feature of state.features) {
+        const key = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/u.test(feature) ? feature : `'${feature}'`
+
+        lines.push(`    ${key}: true,`)
+      }
+
+      lines.push('  },')
+    }
+
+    lines.push('})')
+
+    return lines.join('\n')
+  }
+
+  const updateURL = (state: BuilderState) => {
+    const url = new URL(window.location.href)
+    const params = new URLSearchParams()
+
+    if (state.packageManager !== 'pnpm') params.set('pm', state.packageManager)
+
+    if (state.distribution !== 'basic') params.set('pkg', state.distribution)
+
+    if (state.preset) params.set('preset', state.preset)
+
+    if (state.runtime) params.set('runtime', state.runtime)
+
+    if (!state.typescript) params.set('ts', '0')
+
+    if (state.frameworks.length > 0) params.set('fw', state.frameworks.join(','))
+
+    if (state.features.length > 0) params.set('features', state.features.join(','))
+
+    url.search = params.toString()
+
+    window.history.replaceState({}, '', url)
+  }
+
+  const applyURLState = (root: HTMLElement) => {
+    const params = new URLSearchParams(window.location.search)
+    const form = root.querySelector<HTMLFormElement>('[data-builder-form]')
+
+    if (!form) return
+
+    const setValue = (name: string, value: null | string) => {
+      const control = form.elements.namedItem(name)
+
+      if (control instanceof HTMLSelectElement && value) control.value = value
+    }
+
+    setValue('packageManager', params.get('pm'))
+
+    setValue('distribution', params.get('pkg'))
+
+    setValue('preset', params.get('preset'))
+
+    setValue('runtime', params.get('runtime'))
+
+    const typescript = form.elements.namedItem('typescript')
+
+    if (typescript instanceof HTMLInputElement) typescript.checked = params.get('ts') !== '0'
+
+    const selectedFrameworks = new Set((params.get('fw') ?? '').split(',').filter(Boolean))
+    const selectedFeatures = new Set((params.get('features') ?? '').split(',').filter(Boolean))
+
+    for (const control of form.querySelectorAll<HTMLInputElement>('input[name="framework"]')) {
+      control.checked = selectedFrameworks.has(control.value)
+    }
+
+    for (const control of form.querySelectorAll<HTMLInputElement>('input[name="feature"]')) {
+      control.checked = selectedFeatures.has(control.value)
+    }
+  }
+
+  const copyText = async (value: string) => {
+    await navigator.clipboard.writeText(value)
+  }
+
+  const initializeBuilder = (root: HTMLElement) => {
+    if (root.dataset.ready === 'true') return
+
+    root.dataset.ready = 'true'
+
+    const installOutput = root.querySelector<HTMLElement>('[data-builder-install]')
+    const configOutput = root.querySelector<HTMLElement>('[data-builder-config]')
+    const status = root.querySelector<HTMLElement>('[data-builder-status]')
+    const badge = root.querySelector<HTMLElement>('[data-builder-package-badge]')
+
+    const render = () => {
+      const state = readState(root)
+
+      if (installOutput) installOutput.textContent = createInstallCommand(state)
+
+      if (configOutput) configOutput.textContent = createConfig(state)
+
+      if (badge) badge.textContent = state.distribution === 'lite' ? 'Lite' : 'Basic'
+
+      updateURL(state)
+    }
+
+    applyURLState(root)
+
+    render()
+
+    root.addEventListener('change', render)
+
+    root.querySelector('[data-builder-reset]')?.addEventListener('click', event => {
+      event.preventDefault()
+
+      const form = root.querySelector<HTMLFormElement>('[data-builder-form]')
+
+      form?.reset()
+
+      window.history.replaceState({}, '', window.location.pathname)
+
+      render()
+
+      if (status) status.textContent = 'Selections reset.'
+    })
+
+    root.querySelector('[data-builder-share]')?.addEventListener('click', async () => {
+      await copyText(window.location.href)
+
+      if (status) status.textContent = 'Share link copied.'
+    })
+
+    root.querySelector('[data-builder-download]')?.addEventListener('click', () => {
+      const content = configOutput?.textContent ?? ''
+      const url = URL.createObjectURL(new Blob([content], { type: 'text/javascript' }))
+      const link = document.createElement('a')
+
+      link.href = url
+
+      link.download = 'eslint.config.mjs'
+
+      link.click()
+
+      URL.revokeObjectURL(url)
+
+      if (status) status.textContent = 'Config downloaded.'
+    })
+
+    for (const button of root.querySelectorAll<HTMLButtonElement>('[data-copy-target]')) {
+      button.addEventListener('click', async () => {
+        const target = button.dataset.copyTarget === 'install' ? installOutput : configOutput
+        const label = button.dataset.copyTarget === 'install' ? 'Install command' : 'Config'
+
+        await copyText(target?.textContent ?? '')
+
+        if (status) status.textContent = `${label} copied.`
+      })
+    }
+  }
+
+  const initializeBuilders = () => {
+    for (const root of document.querySelectorAll<HTMLElement>('[data-config-builder]')) initializeBuilder(root)
+  }
+
+  initializeBuilders()
+
+  document.addEventListener('astro:page-load', initializeBuilders)
+</script>

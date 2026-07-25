@@ -1,0 +1,52 @@
+---
+import { CodeTabs } from '@santi020k/lumen-astro'
+
+interface Props {
+  args: string | readonly string[]
+  packageName?: string
+}
+
+const {
+  args,
+  packageName = '@santi020k/eslint-config-basic'
+} = Astro.props
+
+const argumentList = Array.isArray(args) ? args : [args]
+
+const joinCommands = (prefix: string) => argumentList
+  .map(argument => `${prefix} ${packageName} ${argument}`)
+  .join('\n')
+
+const items = [
+  {
+    code: joinCommands('pnpm dlx'),
+    label: 'pnpm',
+    language: 'bash',
+    value: 'pnpm'
+  },
+  {
+    code: joinCommands('npx'),
+    label: 'npm',
+    language: 'bash',
+    value: 'npm'
+  },
+  {
+    code: joinCommands('yarn dlx'),
+    label: 'Yarn',
+    language: 'bash',
+    value: 'yarn'
+  },
+  {
+    code: joinCommands('bunx'),
+    label: 'Bun',
+    language: 'bash',
+    value: 'bun'
+  }
+] as const
+---
+
+<CodeTabs
+  ariaLabel="Choose a package runner"
+  items={items}
+  storageKey="s2k-preferred-package-manager"
+/>

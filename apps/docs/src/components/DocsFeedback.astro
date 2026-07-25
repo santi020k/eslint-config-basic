@@ -1,0 +1,76 @@
+---
+import { Button, Card } from '@santi020k/lumen-astro'
+---
+
+<Card as="section" class="s2k-docs-feedback" aria-labelledby="s2k-feedback-title" data-docs-feedback>
+  <div>
+    <h2 id="s2k-feedback-title">Did this page help?</h2>
+    <p>One click helps us spot documentation that needs another pass. No personal data is sent.</p>
+  </div>
+  <div class="s2k-docs-feedback__actions" data-feedback-actions>
+    <Button type="button" variant="outline" size="sm" data-feedback-value="yes">Yes, it helped</Button>
+    <Button type="button" variant="outline" size="sm" data-feedback-value="no">Not yet</Button>
+  </div>
+  <p class="s2k-tool-status" role="status" aria-live="polite" data-feedback-status></p>
+  <a class="s2k-feedback-issue" hidden data-feedback-issue>Tell us what was missing on GitHub</a>
+</Card>
+
+<script>
+  const initializeFeedback = (root: HTMLElement) => {
+    if (root.dataset.ready === 'true') return
+
+    root.dataset.ready = 'true'
+
+    const storageKey = `s2k-docs-feedback:${window.location.pathname}`
+    const status = root.querySelector<HTMLElement>('[data-feedback-status]')
+    const actions = root.querySelector<HTMLElement>('[data-feedback-actions]')
+    const issue = root.querySelector<HTMLAnchorElement>('[data-feedback-issue]')
+    const previous = window.localStorage.getItem(storageKey)
+
+    if (previous && status && actions) {
+      actions.hidden = true
+
+      status.textContent = 'Thanks — your feedback for this page is saved in this browser.'
+    }
+
+    for (const button of root.querySelectorAll<HTMLButtonElement>('[data-feedback-value]')) {
+      button.addEventListener('click', () => {
+        const value = button.dataset.feedbackValue ?? ''
+
+        window.localStorage.setItem(storageKey, value)
+
+        if (actions) actions.hidden = true
+
+        if (status) status.textContent = value === 'yes' ?
+          'Thanks — glad this page helped.' :
+          'Thanks. A little more context would help us improve it.'
+
+        if (value === 'no' && issue) {
+          const issueURL = new URL('https://github.com/santi020k/eslint-config-basic/issues/new')
+
+          issueURL.searchParams.set('title', `Docs feedback: ${document.title}`)
+
+          issueURL.searchParams.set('body', `Page: ${window.location.href}\n\nWhat was missing or unclear?\n`)
+
+          issueURL.searchParams.set('labels', 'documentation')
+
+          issue.href = issueURL.href
+
+          issue.hidden = false
+        }
+
+        window.dispatchEvent(new CustomEvent('s2k:docs-feedback', {
+          detail: { path: window.location.pathname, value }
+        }))
+      })
+    }
+  }
+
+  const initializeFeedbackControls = () => {
+    for (const root of document.querySelectorAll<HTMLElement>('[data-docs-feedback]')) initializeFeedback(root)
+  }
+
+  initializeFeedbackControls()
+
+  document.addEventListener('astro:page-load', initializeFeedbackControls)
+</script>

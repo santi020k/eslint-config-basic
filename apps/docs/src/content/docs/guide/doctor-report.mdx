@@ -1,0 +1,24 @@
+---
+title: "Doctor Report Viewer"
+description: "Analyze basic-eslint doctor JSON locally and turn setup issues into an actionable repair plan."
+sidebar:
+  badge:
+    text: New
+    variant: success
+---
+
+import DoctorReportViewer from '../../../components/DoctorReportViewer.astro';
+
+Use the report viewer when adoption, migration, or a workspace move leaves the active ESLint setup unclear. It recognizes the JSON contract emitted by `doctor --json` and links common findings to focused fixes.
+
+<DoctorReportViewer />
+
+## What the viewer understands
+
+- Missing or unloadable flat-config files.
+- Remaining v1 framework imports.
+- Missing lint scripts and incomplete workspace scoping.
+- Duplicate ESLint installations.
+- Missing packages in Lite setups.
+
+For runtime rule matching and precedence, continue with the [Inspector guide](/guide/inspector/). For problems that are not represented in the doctor report, use [Troubleshooting](/guide/troubleshooting/).

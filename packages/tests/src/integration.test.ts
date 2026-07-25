@@ -136,6 +136,25 @@ describe('Integration Tests', () => {
     })
   })
 
+  describe('Astro Doctor', () => {
+    test('should report proprietary Astro diagnostics when enabled', async () => {
+      const config = await defineConfig({
+        autoFrameworks: false,
+        detection: false,
+        features: { 'astro-doctor': true },
+        frameworks: { astro: true },
+        typescript: false
+      })
+      const code = '<html><body><img src="/hero.jpg"></body></html>'
+      const results = await lintText(code, config, join(FIXTURES_DIR, 'astro.astro'))
+      const ruleIds = results[0].messages.map(message => message.ruleId)
+
+      expect(results[0].fatalErrorCount).toBe(0)
+      expect(ruleIds).toContain('astro-doctor/no-missing-lang')
+      expect(ruleIds).toContain('astro-doctor/no-missing-alt')
+    })
+  })
+
   describe('React', () => {
     test('should report React hooks issues', async () => {
       const config = await defineConfig({

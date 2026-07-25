@@ -1,0 +1,52 @@
+---
+import { CodeTabs } from '@santi020k/lumen-astro'
+
+interface Props {
+  dev?: boolean
+  packages: string | readonly string[]
+}
+
+const {
+  dev = true,
+  packages
+} = Astro.props
+
+const packageList = Array.isArray(packages) ? packages.join(' ') : packages
+const pnpmFlag = dev ? '-D ' : ''
+const npmFlag = dev ? '-D ' : ''
+const yarnFlag = dev ? '-D ' : ''
+const bunFlag = dev ? '-d ' : ''
+
+const items = [
+  {
+    code: `pnpm add ${pnpmFlag}${packageList}`,
+    label: 'pnpm',
+    language: 'bash',
+    value: 'pnpm'
+  },
+  {
+    code: `npm install ${npmFlag}${packageList}`,
+    label: 'npm',
+    language: 'bash',
+    value: 'npm'
+  },
+  {
+    code: `yarn add ${yarnFlag}${packageList}`,
+    label: 'Yarn',
+    language: 'bash',
+    value: 'yarn'
+  },
+  {
+    code: `bun add ${bunFlag}${packageList}`,
+    label: 'Bun',
+    language: 'bash',
+    value: 'bun'
+  }
+] as const
+---
+
+<CodeTabs
+  ariaLabel="Choose a package manager"
+  items={items}
+  storageKey="s2k-preferred-package-manager"
+/>

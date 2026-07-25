@@ -1,37 +1,23 @@
 ---
-title: "Next.js"
-description: "Use Next.js support from the main v2 package. Application projects no longer install a separate @santi020k/eslint-config-next package."
+title: "Qwik"
+description: "Use Qwik support from the main v2 package. Application projects no longer install a separate @santi020k/eslint-config-qwik package."
 ---
 
-Use Next.js support from the main v2 package. Application projects no longer install a separate `@santi020k/eslint-config-next` package.
+import InstallTabs from '../../../components/InstallTabs.astro'
+
+Use Qwik support from the main v2 package. Application projects no longer install a separate `@santi020k/eslint-config-qwik` package.
 
 ## Install
 
 
-```sh title="pnpm"
-pnpm add -D @santi020k/eslint-config-basic
-```
-
-```sh title="npm"
-npm install -D @santi020k/eslint-config-basic
-```
-
-```sh title="yarn"
-yarn add -D @santi020k/eslint-config-basic
-```
-
-```sh title="bun"
-bun add -d @santi020k/eslint-config-basic
-```
+<InstallTabs packages="@santi020k/eslint-config-basic" />
 
 
 ## Using Lite
 
 The default install above remains recommended. If you use the manual-dependency lite package, install this framework config package too:
 
-```sh title="pnpm"
-pnpm add -D @santi020k/eslint-config-lite @santi020k/eslint-config-next eslint
-```
+<InstallTabs packages={["@santi020k/eslint-config-lite", "@santi020k/eslint-config-qwik", "eslint"]} />
 
 ## Configure
 
@@ -40,7 +26,7 @@ import { defineConfig } from '@santi020k/eslint-config-basic'
 
 export default await defineConfig({
   frameworks: {
-    next: true
+    qwik: true
   },
   typescript: true
 })
@@ -50,14 +36,14 @@ Most projects can also rely on auto-detection and use `eslintConfig()` with no f
 
 ## What It Adds
 
-- Next.js and React rules. React is included automatically.
+- Qwik resumability and JSX rules.
 - Composition through the same `@santi020k/eslint-config-basic` entry point as every other framework.
 - Compatibility with advanced overrides if you pass a custom config array or factory instead of `true`.
 
 ## Notes
 
 - The internal package still exists in the monorepo for modular development and generated API docs.
-- For the old multi-package installation model, see the [v1 Next.js guide](/v1/frameworks/next).
+- For the old multi-package installation model, see the [v1 Qwik guide](/v1/frameworks/qwik).
 
 ## Related Pages
 

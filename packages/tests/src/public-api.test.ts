@@ -1,6 +1,7 @@
 import {
   a11y,
   aiSdk,
+  astroDoctor,
   autogen,
   bestPractices,
   biome,
@@ -216,6 +217,7 @@ describe('Public API Re-exports', () => {
 
   test('should re-export all extension configs from the main package', () => {
     expect(typeof a11y).toBe('function')
+    expect(typeof astroDoctor).toBe('function')
     expect(Array.isArray(bestPractices)).toBe(true)
     expect(typeof biome).toBe('function')
     expect(Array.isArray(boundaries)).toBe(true)
@@ -248,6 +250,7 @@ describe('Integrations subpath exports', () => {
   test('extensions subpath exports expected configs', () => {
     expect(Object.keys(integrationExtensions).sort()).toEqual([
       'a11y',
+      'astroDoctor',
       'bestPractices',
       'biome',
       'boundaries',

@@ -69,6 +69,24 @@ describe('Deep Rule Assertions (#5)', () => {
     expect(rules).toContain('unicorn/prefer-array-flat-map')
   })
 
+  test('should include Astro Doctor rules only when the extension is enabled', async () => {
+    const baseConfig = await defineConfig({
+      autoFrameworks: false,
+      detection: false,
+      frameworks: { astro: true }
+    })
+    const astroDoctorConfig = await defineConfig({
+      autoFrameworks: false,
+      detection: false,
+      extensions: [Extension.AstroDoctor],
+      frameworks: { astro: true }
+    })
+
+    expect(extractRuleNames(baseConfig)).not.toContain('astro-doctor/no-client-load-overuse')
+    expect(extractConfigNames(astroDoctorConfig)).toContain('eslint-config-integrations/astro-doctor')
+    expect(extractRuleNames(astroDoctorConfig)).toContain('astro-doctor/no-client-load-overuse')
+  })
+
   test('should accept string optional names in existing option arrays', async () => {
     const config = await defineConfig({
       extensions: ['unicorn'],
@@ -87,6 +105,7 @@ describe('Deep Rule Assertions (#5)', () => {
   test('should enable optional configs from the features map', async () => {
     const config = await defineConfig({
       features: {
+        'astro-doctor': true,
         playwright: true,
         prettier: true,
         zod: true
@@ -96,6 +115,7 @@ describe('Deep Rule Assertions (#5)', () => {
     const names = extractConfigNames(config)
 
     expect(names).toContain('integrations/playwright')
+    expect(names).toContain('eslint-config-integrations/astro-doctor')
     expect(names).toContain('eslint-config/prettier')
     expect(names).toContain('eslint-config-integrations/zod')
   })

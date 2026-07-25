@@ -36,6 +36,7 @@ const sidebar = [
           { label: 'Quick Start', slug: 'guide/getting-started' },
           { label: 'Installation', slug: 'guide/installation' },
           { label: 'Configuration', slug: 'guide/configuration' },
+          { badge: { text: 'New', variant: 'success' }, label: 'Config Builder', slug: 'guide/config-builder' },
           { badge: { text: 'Lite', variant: 'tip' }, label: 'Switch to Lite', slug: 'guide/lite-migration' },
           { label: 'Presets', slug: 'guide/presets' },
           { label: 'Runtime', slug: 'guide/runtime' },
@@ -88,6 +89,8 @@ const sidebar = [
           { label: 'Inspector', slug: 'guide/inspector' },
           { label: 'Playgrounds', slug: 'guide/playgrounds' },
           { label: 'CLI Reference', slug: 'guide/cli' },
+          { badge: { text: 'New', variant: 'success' }, label: 'Doctor Report Viewer', slug: 'guide/doctor-report' },
+          { badge: { text: 'New', variant: 'success' }, label: 'Release Center', slug: 'guide/releases' },
           { badge: { text: 'Main', variant: 'note' }, label: 'Core Config', slug: 'packages/basic' },
           { badge: { text: 'Lite', variant: 'tip' }, label: 'Lite Config', slug: 'packages/lite' },
           { label: 'Base Rules', slug: 'packages/core' },
@@ -171,7 +174,9 @@ export default defineConfig({
       },
       favicon: '/favicon.svg',
       components: {
-        Head: './src/components/Head.astro'
+        Footer: './src/components/Footer.astro',
+        Head: './src/components/Head.astro',
+        PageFrame: './src/components/PageFrame.astro'
       },
       head: [
         { attrs: { content: siteName, name: 'application-name' }, tag: 'meta' },
