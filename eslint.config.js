@@ -19,7 +19,8 @@ export default await defineConfig({
     'apps/docs/**',
     'typedoc.config.mjs',
     'typedoc.markdown.mjs',
-    '**/CHANGELOG.md'
+    '**/CHANGELOG.md',
+    '.pnpm-store/**'
   ],
   preset: Preset.Monorepo,
   testing: [Testing.Vitest],

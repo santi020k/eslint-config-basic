@@ -286,7 +286,7 @@ body {
   text-underline-offset: 0.2em;
 }
 
-.sl-markdown-content code:not(:where(.not-content *)) {
+.sl-markdown-content code:not(:where(.not-content *, .ui-code *)) {
   border: 1px solid hsl(var(--s2k-brand) / 0.18);
   border-radius: 0.375rem;
   background: hsl(var(--s2k-brand-soft) / 0.72);
@@ -342,7 +342,7 @@ body {
   overflow-x: hidden;
 }
 
-:root[data-theme='dark'] .sl-markdown-content code:not(:where(.not-content *)) {
+:root[data-theme='dark'] .sl-markdown-content code:not(:where(.not-content *, .ui-code *)) {
   color: hsl(var(--s2k-accent));
 }
 
@@ -512,6 +512,10 @@ body {
   align-content: start;
   align-items: start;
   gap: 0.75rem;
+}
+
+.s2k-quickstart__copy .ui-badge {
+  width: fit-content;
 }
 
 .s2k-quickstart__copy :is(h2, p) {
@@ -862,6 +866,16 @@ body {
 
   .s2k-quickstart {
     padding: 1.25rem;
+  }
+
+  .sl-markdown-content table :is(th, td) {
+    min-width: 9rem;
+    padding: 0.75rem 0.9rem;
+    vertical-align: top;
+  }
+
+  .sl-markdown-content table :is(th, td):last-child {
+    min-width: 15rem;
   }
 
   .s2k-home-card,

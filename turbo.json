@@ -7,6 +7,12 @@
       "outputs": ["dist/**"],
       "outputLogs": "errors-only"
     },
+    "@santi020k/eslint-config-docs#build": {
+      "outputs": []
+    },
+    "@santi020k/eslint-config-tests#build": {
+      "outputs": []
+    },
     "lint": {
       "dependsOn": ["^build"],
       "outputLogs": "errors-only"

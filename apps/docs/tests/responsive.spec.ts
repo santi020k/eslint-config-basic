@@ -64,4 +64,70 @@ test.describe('Responsive page health', () => {
       expect(consoleErrors).toEqual([])
     })
   }
+
+  test('homepage Lumen primitives retain their intended visual roles', async ({ page }) => {
+    await page.setViewportSize({ height: 844, width: 390 })
+
+    await page.goto('/')
+
+    const badge = page.locator('.s2k-quickstart .ui-badge')
+    const badgeParent = badge.locator('..')
+    const visibleCode = page.locator('.s2k-quickstart [role="tabpanel"]:not([hidden]) code')
+
+    await expect(badge).toBeVisible()
+
+    expect((await badge.boundingBox())?.width).toBeLessThan((await badgeParent.boundingBox())?.width ?? 0)
+
+    await expect(visibleCode).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)')
+
+    await expect(visibleCode).toHaveCSS('border-top-width', '0px')
+  })
+
+  test('mobile documentation tables scroll without producing oversized rows', async ({ page }) => {
+    await page.setViewportSize({ height: 844, width: 390 })
+
+    await page.goto('/guide/installation/')
+
+    const tables = await page.locator('table').evaluateAll(elements => elements.map(element => {
+      const table = element as HTMLTableElement
+
+      return {
+        clientWidth: table.clientWidth,
+        maximumRowHeight: Math.max(...[...table.rows].map(row => row.getBoundingClientRect().height)),
+        scrollWidth: table.scrollWidth
+      }
+    }))
+
+    expect(tables.length).toBeGreaterThan(0)
+
+    for (const table of tables) {
+      expect(table.clientWidth).toBeLessThanOrEqual(358)
+
+      expect(table.maximumRowHeight).toBeLessThan(250)
+
+      expect(table.scrollWidth).toBeGreaterThanOrEqual(table.clientWidth)
+    }
+  })
+
+  test('CodeTabs keep their compact Lumen layout inside Starlight content', async ({ page }) => {
+    await page.setViewportSize({ height: 800, width: 1280 })
+
+    await page.goto('/frameworks/react/')
+
+    const codeTabs = page.locator('.ui-code-tabs').first()
+    const visiblePanel = codeTabs.locator('[role="tabpanel"]:not([hidden])')
+    const copyButton = visiblePanel.getByRole('button', { name: 'Copy code to clipboard' })
+
+    await expect(codeTabs).toHaveClass(/not-content/)
+
+    expect((await codeTabs.boundingBox())?.height).toBeLessThan(130)
+
+    await expect(visiblePanel.locator('pre')).toHaveCSS('margin-top', '0px')
+
+    expect((await copyButton.boundingBox())?.width).toBeLessThan(32)
+
+    await expect(copyButton.locator('.ui-code__copy-icon')).toBeVisible()
+
+    await expect(copyButton.locator('.ui-code__check-icon')).toBeHidden()
+  })
 })

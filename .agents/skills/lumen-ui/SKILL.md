@@ -17,8 +17,10 @@ Treat Astro as the reference surface, while following the user's existing stack.
    - React: `@santi020k/lumen-react`
    - Web Components or framework-neutral HTML: `@santi020k/lumen-elements`
 3. Retrieve current contracts before guessing:
-   - Prefer connected Lumen MCP tools: search or list first, then read the selected component,
-     tokens, and agent rules.
+   - Prefer connected Lumen MCP tools: read snapshot metadata and diagnostics, read agent rules,
+     search with the target framework, then read the selected component's usage contract and tokens.
+     Retain the catalog manifest when the client supports caching so a later catalog diff identifies
+     only the contracts that changed.
    - Otherwise inspect installed package types/source or use the Lumen CLI and online docs.
    - Never invent a component, prop, variant, event, or import path from memory.
 4. Plan the interface as product structure and states, then map each part to the smallest suitable
@@ -43,6 +45,8 @@ Treat Astro as the reference surface, while following the user's existing stack.
 - Mount `UIPrimitives` once in an Astro root layout when interactive primitives are present.
 - Use React behavior hooks for behavior-heavy React primitives; do not mount the Astro runtime.
 - Register Lumen custom elements once before using `lumen-*` elements.
+- Use `CodeTabs` for related commands, languages, or configuration examples instead of building a
+  parallel tab controller.
 - Use accessible names, native semantics, visible focus, keyboard paths, and meaningful empty,
   loading, error, success, disabled, and destructive states.
 - Use Lucide names through Lumen's `Icon`; do not substitute emoji for interface icons.
@@ -50,6 +54,19 @@ Treat Astro as the reference surface, while following the user's existing stack.
   markup.
 - Keep glass surfaces selective and legible. Decorative styling must not obscure behavior.
 - Do not replace working app architecture or add dependencies unrelated to the requested interface.
+
+## This Repository
+
+The documentation app uses `@santi020k/lumen-astro` 0.3.0 with Astro Starlight.
+
+- Load Lumen styles once from `apps/docs/src/styles/starlight.css`.
+- Mount `UIPrimitives` once through `apps/docs/src/components/PageFrame.astro`.
+- Use `InstallTabs.astro` and `RunnerTabs.astro` for package commands and keep their shared
+  `s2k-preferred-package-manager` storage key.
+- Give every `CodeTabs` root the `not-content` class. Starlight markdown selectors otherwise
+  override Lumen's preformatted code, spacing, buttons, and icon visibility.
+- Keep CodeTabs wrapping enabled for long mobile commands.
+- Verify light and dark themes at desktop and mobile widths.
 
 ## Discovery Without MCP
 

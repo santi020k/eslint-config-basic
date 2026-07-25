@@ -134,6 +134,7 @@
   ],
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
+    ".pnpm-store"
   ]
 }

@@ -24,7 +24,6 @@ export const unicorn: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLaz
         'unicorn/consistent-destructuring': 'warn',
         'unicorn/consistent-function-scoping': 'warn',
         'unicorn/no-abusive-eslint-disable': 'warn',
-        'unicorn/no-array-for-each': 'warn',
         'unicorn/no-for-loop': 'warn',
         'unicorn/no-lonely-if': 'warn',
         'unicorn/no-negated-condition': 'warn',

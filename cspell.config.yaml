@@ -102,6 +102,7 @@ words:
   - root-dir
   - santi
   - santi020k
+  - sarif
   - scopedslots
   - sequelize
   - serialised
@@ -165,3 +166,4 @@ ignorePaths:
   - .vscode
   - llms.txt
   - llms-full.txt
+  - .pnpm-store

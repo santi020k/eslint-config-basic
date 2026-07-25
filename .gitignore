@@ -17,3 +17,6 @@ package-lock.json
 
 # CSpell cache
 .cspellcache
+
+# pnpm store
+.pnpm-store

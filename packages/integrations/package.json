@@ -101,6 +101,7 @@
     "eslint-plugin-zod": "catalog:",
     "globals": "catalog:",
     "graphql": "catalog:",
+    "oxlint": "catalog:",
     "storybook": "catalog:",
     "tailwindcss": "catalog:",
     "typescript-eslint": "catalog:",
