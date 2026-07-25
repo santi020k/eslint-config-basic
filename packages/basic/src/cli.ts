@@ -76,6 +76,7 @@ const FRAMEWORK_KEY_TO_PACKAGE = Object.fromEntries(
 
 const LITE_PACKAGE_NAME = '@santi020k/eslint-config-lite'
 const INTEGRATIONS_PACKAGE_NAME = '@santi020k/eslint-config-integrations'
+const ASTRO_DOCTOR_PACKAGE_NAME = '@santi020k/eslint-plugin-astro-doctor'
 const TYPESCRIPT_PACKAGE_NAME = 'typescript'
 
 const getConfigPathIfPresent = (cwd: string): null | string => {
@@ -521,6 +522,96 @@ interface DuplicateEslintInfo {
   projectVersion: string
 }
 
+interface PackageMetadata {
+  engines?: { node?: string }
+  name?: string
+  peerDependencies?: { eslint?: string }
+  version?: string
+}
+
+interface SemverApi {
+  satisfies: (version: string, range: string) => boolean
+}
+
+const semver = createRequire(import.meta.url)('semver') as SemverApi
+
+const readPackageMetadataFromMain = (mainPath: string, packageName: string): null | PackageMetadata => {
+  let directory = dirname(mainPath)
+
+  for (let depth = 0; depth < 4; depth++) {
+    const packagePath = join(directory, 'package.json')
+
+    if (existsSync(packagePath)) {
+      const metadata = JSON.parse(readFileSync(packagePath, 'utf8')) as PackageMetadata
+
+      if (metadata.name === packageName) return metadata
+    }
+
+    directory = dirname(directory)
+  }
+
+  return null
+}
+
+const resolvePackageMetadata = (cwd: string, packageName: string): null | PackageMetadata => {
+  try {
+    const projectRequire = createRequire(join(cwd, 'package.json'))
+
+    try {
+      return readPackageMetadataFromMain(projectRequire.resolve(packageName), packageName)
+    } catch {
+      const integrationsMain = projectRequire.resolve(INTEGRATIONS_PACKAGE_NAME)
+      const integrationsRequire = createRequire(integrationsMain)
+
+      return readPackageMetadataFromMain(integrationsRequire.resolve(packageName), packageName)
+    }
+  } catch {
+    return null
+  }
+}
+
+const getAstroDoctorNodeWarning = (metadata: PackageMetadata): null | string => {
+  const nodeRange = metadata.engines?.node
+
+  if (!nodeRange || semver.satisfies(process.versions.node, nodeRange)) return null
+
+  return `Astro Doctor ${metadata.version ?? ''} requires Node ${nodeRange}, ` +
+    `but the current runtime is ${process.versions.node}.`
+}
+
+const getAstroDoctorEslintWarning = (
+  metadata: PackageMetadata,
+  eslintMetadata: null | PackageMetadata
+): null | string => {
+  const eslintRange = metadata.peerDependencies?.eslint
+  const eslintVersion = eslintMetadata?.version
+
+  if (!eslintRange || !eslintVersion || semver.satisfies(eslintVersion, eslintRange)) return null
+
+  return `Astro Doctor ${metadata.version ?? ''} requires ESLint ${eslintRange}, ` +
+    `but this project resolves ${eslintVersion}.`
+}
+
+const getAstroDoctorCompatibilityWarnings = (cwd: string, enabled: boolean): string[] => {
+  if (!enabled) return []
+
+  const pluginMetadata = resolvePackageMetadata(cwd, ASTRO_DOCTOR_PACKAGE_NAME)
+
+  if (!pluginMetadata) {
+    return [
+      `Astro Doctor is enabled, but ${ASTRO_DOCTOR_PACKAGE_NAME} could not be resolved. ` +
+      'Reinstall dependencies or disable the `astro-doctor` feature.'
+    ]
+  }
+
+  const eslintMetadata = resolvePackageMetadata(cwd, 'eslint')
+
+  return [
+    getAstroDoctorNodeWarning(pluginMetadata),
+    getAstroDoctorEslintWarning(pluginMetadata, eslintMetadata)
+  ].filter((warning): warning is string => warning !== null)
+}
+
 /**
  * Detects whether the project and the config packages resolve two different
  * physical copies of ESLint (e.g. a project pinning an older ESLint while the
@@ -597,15 +688,12 @@ const validateConfigContent = (
   return warnings
 }
 
-const buildDoctorDiagnosis = (
+const validateProjectSetup = (
   cwd: string,
   configPath: null | string,
-  configContent: null | string,
-  hasV1FrameworkImports: boolean,
   activeConfig: Awaited<ReturnType<typeof analyzeEslintConfig>>,
-  declaredDependencies: Set<string>,
-  summary: ReturnType<typeof getProjectSummary>
-): { issues: string[], warnings: string[] } => {
+  hasV1FrameworkImports: boolean
+) => {
   const issues: string[] = []
   const warnings: string[] = []
 
@@ -623,10 +711,49 @@ const buildDoctorDiagnosis = (
     warnings.push('No `lint` script found in package.json.')
   }
 
-  if (configContent) {
-    warnings.push(...validateConfigContent(configContent, hasV1FrameworkImports, declaredDependencies, summary))
+  return { issues, warnings }
+}
+
+const isAstroDoctorConfigured = (
+  activeConfig: Awaited<ReturnType<typeof analyzeEslintConfig>>,
+  configContent: null | string
+): boolean => [
+  activeConfig?.extensions.includes('Astro Doctor') ?? false,
+  configContent?.includes('astro-doctor') ?? false,
+  configContent?.includes('AstroDoctor') ?? false
+].some(x => x)
+
+const isAstroConfigured = (
+  activeConfig: Awaited<ReturnType<typeof analyzeEslintConfig>>,
+  summary: ReturnType<typeof getProjectSummary>
+): boolean => [
+  activeConfig?.frameworks.includes('Astro') ?? false,
+  summary.frameworks.includes('astro')
+].some(Boolean)
+
+const checkAstroDoctorStatus = (
+  activeConfig: Awaited<ReturnType<typeof analyzeEslintConfig>>,
+  configContent: null | string,
+  summary: ReturnType<typeof getProjectSummary>,
+  warnings: string[]
+): boolean => {
+  const astroDoctorEnabled = isAstroDoctorConfigured(activeConfig, configContent)
+  const astroEnabled = isAstroConfigured(activeConfig, summary)
+
+  if (astroDoctorEnabled && !astroEnabled) {
+    warnings.push(
+      'Astro Doctor is enabled without Astro. Enable `frameworks: { astro: true }` or remove the `astro-doctor` feature.'
+    )
+  } else if (astroEnabled && !astroDoctorEnabled) {
+    warnings.push(
+      'Astro was detected without Astro Doctor. Enable `features: { "astro-doctor": true }` for additional Astro diagnostics.'
+    )
   }
 
+  return astroDoctorEnabled
+}
+
+const checkDuplicateEslint = (cwd: string, warnings: string[]) => {
   const duplicateEslint = findDuplicateEslint(cwd)
 
   if (duplicateEslint) {
@@ -636,6 +763,28 @@ const buildDoctorDiagnosis = (
       'Align the project\'s eslint version with the config\'s (or dedupe via your package manager).'
     )
   }
+}
+
+const buildDoctorDiagnosis = (
+  cwd: string,
+  configPath: null | string,
+  configContent: null | string,
+  hasV1FrameworkImports: boolean,
+  activeConfig: Awaited<ReturnType<typeof analyzeEslintConfig>>,
+  declaredDependencies: Set<string>,
+  summary: ReturnType<typeof getProjectSummary>
+): { issues: string[], warnings: string[] } => {
+  const { issues, warnings } = validateProjectSetup(cwd, configPath, activeConfig, hasV1FrameworkImports)
+
+  if (configContent) {
+    warnings.push(...validateConfigContent(configContent, hasV1FrameworkImports, declaredDependencies, summary))
+  }
+
+  const astroDoctorEnabled = checkAstroDoctorStatus(activeConfig, configContent, summary, warnings)
+
+  warnings.push(...getAstroDoctorCompatibilityWarnings(cwd, astroDoctorEnabled))
+
+  checkDuplicateEslint(cwd, warnings)
 
   return { issues, warnings }
 }

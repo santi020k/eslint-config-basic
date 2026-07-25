@@ -211,7 +211,12 @@ export { tsConfig, typescriptConfig } from '@santi020k/eslint-config-typescript'
 
 
 
-const buildTailwindResult = (options: TailwindOptions, entryPoint: string | undefined): TailwindOptions => ({
+const buildTailwindResult = (
+  options: TailwindOptions,
+  entryPoint: string | undefined,
+  rootDir: string
+): TailwindOptions => ({
+  cwd: options.cwd ?? rootDir,
   detectComponentClasses: options.detectComponentClasses ?? true,
   ...(entryPoint ? { entryPoint } : {}),
   ...(options.ignore?.length ? { ignore: options.ignore } : {}),
@@ -232,7 +237,7 @@ const resolveTailwindOptions = (
     !options.ignore?.length &&
     options.noUnknownClasses === undefined) return undefined
 
-  return buildTailwindResult(options, entryPoint)
+  return buildTailwindResult(options, entryPoint, rootDir)
 }
 
 const createNoUnknownClassesRule = (
@@ -432,8 +437,23 @@ const buildIgnoresConfig = (
   } as TSESLint.FlatConfig.Config] : []
 })
 
-const FRAMEWORK_EXTRA_OPTS: Partial<Record<string, (ctx: { hasReact: boolean, hasSolid: boolean, hasSvelte: boolean, hasVue: boolean, runtime: Runtime }) => FrameworkOptions>> = {
-  astro: ctx => ({ hasReact: ctx.hasReact, hasSolid: ctx.hasSolid, hasSvelte: ctx.hasSvelte, hasVue: ctx.hasVue }),
+interface FrameworkResolutionContext {
+  hasReact: boolean
+  hasSolid: boolean
+  hasSvelte: boolean
+  hasVue: boolean
+  runtime: Runtime
+  tsconfigRootDir?: string
+}
+
+const FRAMEWORK_EXTRA_OPTS: Partial<Record<string, (ctx: FrameworkResolutionContext) => FrameworkOptions>> = {
+  astro: ctx => ({
+    hasReact: ctx.hasReact,
+    hasSolid: ctx.hasSolid,
+    hasSvelte: ctx.hasSvelte,
+    hasVue: ctx.hasVue,
+    tsconfigRootDir: ctx.tsconfigRootDir
+  }),
   hono: ctx => ({ runtime: ctx.runtime }),
   slidev: ctx => ({ runtime: ctx.runtime }),
   vite: ctx => ({ runtime: ctx.runtime })
@@ -441,7 +461,7 @@ const FRAMEWORK_EXTRA_OPTS: Partial<Record<string, (ctx: { hasReact: boolean, ha
 
 const resolveEnabledFrameworks = async (
   frameworks: NonNullable<EslintConfigOptions['frameworks']>,
-  ctx: { hasReact: boolean, hasSolid: boolean, hasSvelte: boolean, hasVue: boolean, runtime: Runtime }
+  ctx: FrameworkResolutionContext
 ): Promise<Record<string, FlatConfigArray>> => {
   const entries = await Promise.all(
     (Object.entries(frameworks) as [DetectedFrameworkName, ImportedFramework][])
@@ -485,7 +505,12 @@ const buildEslintConfigs = async (params: BuildConfigsParams): Promise<FlatConfi
   } = params
 
   const { hasReact, hasSolid, hasSvelte, hasVue } = astroOptions
-  const fw = await resolveEnabledFrameworks(resolvedFrameworks, { hasReact, hasSolid, hasSvelte, hasVue, runtime })
+
+  const fw = await resolveEnabledFrameworks(
+    resolvedFrameworks,
+    { hasReact, hasSolid, hasSvelte, hasVue, runtime, tsconfigRootDir }
+  )
+
   // eslint-disable-next-line security/detect-object-injection
   const get = (name: string): FlatConfigArray => fw[name] ?? []
 
@@ -707,6 +732,14 @@ export const eslintConfig = async (
   const uniqueTools = [...new Set(tools)]
   const uniqueExtensions = [...new Set(extensions)]
   const uniqueSettings = [...new Set(settings)]
+
+  if (uniqueExtensions.includes(Extension.AstroDoctor) && !resolvedFrameworks.astro) {
+    process.emitWarning(
+      '[eslint-config-basic] Warning: Astro Doctor is enabled without the Astro framework config. ' +
+      'Enable `frameworks: { astro: true }` or remove the `astro-doctor` feature.'
+    )
+  }
+
   const hasReact = !!resolvedFrameworks.react
   const hasVue = !!resolvedFrameworks.vue
   const hasSvelte = !!resolvedFrameworks.svelte

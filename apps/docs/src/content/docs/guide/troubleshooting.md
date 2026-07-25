@@ -13,7 +13,7 @@ Before diving into specific issues, run the built-in diagnostics:
 npx @santi020k/eslint-config-basic doctor
 ```
 
-`doctor` checks for missing config files, configs that cannot be loaded, lingering v1 imports, missing lint scripts, workspace packages not covered by `projects`, and parallel ESLint version copies.
+`doctor` checks for missing config files, configs that cannot be loaded, lingering v1 imports, missing lint scripts, workspace packages not covered by `projects`, and parallel ESLint version copies. It also checks whether Astro Doctor is paired with Astro and whether its installed package supports the current Node.js and ESLint versions.
 
 For automation, use structured output:
 

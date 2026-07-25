@@ -81,6 +81,8 @@ Use `doctor` while adopting v2 or after moving a project into a workspace. It re
 
 It also detects when two different ESLint copies are installed — for example a project pinning an older ESLint while the config packages resolve their own ESLint dependency. The current release line supports ESLint 10, and parallel copies can make your editor and CLI apply slightly different rule behavior, so `doctor` warns and suggests aligning or deduping.
 
+For Astro projects, `doctor` also reports mismatched Astro Doctor configuration, suggests the optional integration when Astro is detected, and checks the installed Astro Doctor package against the current Node.js and ESLint versions.
+
 ```sh
 npx @santi020k/eslint-config-basic doctor
 ```

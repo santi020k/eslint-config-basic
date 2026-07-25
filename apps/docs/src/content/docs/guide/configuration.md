@@ -272,6 +272,8 @@ export default await defineConfig({
 
 Use `noUnknownClasses: false` when a project uses many generated or framework-provided classes but should keep the rest of the Tailwind rules.
 
+Relative entry points are resolved from `detectRootDir`, so project-scoped monorepo configs work when ESLint runs from the repository root. Set `tailwind.cwd` only when Tailwind must resolve from a different directory.
+
 Set `tailwind: false` to disable auto-detected Tailwind linting for a package.
 
 ## Testing Files

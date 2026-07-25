@@ -5,7 +5,7 @@ import react from '@santi020k/eslint-config-react'
 import svelte from '@santi020k/eslint-config-svelte'
 import vue from '@santi020k/eslint-config-vue'
 
-import { describe, expect, test } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 
 import { extractConfigNames, extractRuleNames, getEffectiveRuleValue } from './test-utils.js'
 
@@ -85,6 +85,39 @@ describe('Deep Rule Assertions (#5)', () => {
     expect(extractRuleNames(baseConfig)).not.toContain('astro-doctor/no-client-load-overuse')
     expect(extractConfigNames(astroDoctorConfig)).toContain('eslint-config-integrations/astro-doctor')
     expect(extractRuleNames(astroDoctorConfig)).toContain('astro-doctor/no-client-load-overuse')
+  })
+
+  test('should warn when Astro Doctor is enabled without Astro', async () => {
+    const warningSpy = vi.spyOn(process, 'emitWarning').mockImplementation(() => {})
+
+    await defineConfig({
+      autoFrameworks: false,
+      detection: false,
+      features: { 'astro-doctor': true },
+      frameworks: {}
+    })
+
+    expect(warningSpy).toHaveBeenCalledWith(expect.stringContaining('Astro Doctor is enabled without the Astro framework config'))
+    warningSpy.mockRestore()
+  })
+
+  test('Preset.All enables Astro Doctor and an explicit feature false disables it', async () => {
+    const allConfig = await defineConfig({
+      autoFrameworks: false,
+      detection: false,
+      frameworks: { astro: true },
+      preset: 'all'
+    })
+    const disabledConfig = await defineConfig({
+      autoFrameworks: false,
+      detection: false,
+      features: { 'astro-doctor': false },
+      frameworks: { astro: true },
+      preset: 'all'
+    })
+
+    expect(extractRuleNames(allConfig)).toContain('astro-doctor/no-client-load-overuse')
+    expect(extractRuleNames(disabledConfig)).not.toContain('astro-doctor/no-client-load-overuse')
   })
 
   test('should accept string optional names in existing option arrays', async () => {
@@ -297,6 +330,7 @@ describe('Deep Rule Assertions (#5)', () => {
     expect(tailwindSettings?.plugins?.['better-tailwindcss']).toBeDefined()
     expect(tailwindSettings?.settings).toEqual({
       'better-tailwindcss': {
+        cwd: process.cwd(),
         detectComponentClasses: true,
         entryPoint: 'src/styles/global.css',
         ignore: ['^prose-custom$']
@@ -324,11 +358,39 @@ describe('Deep Rule Assertions (#5)', () => {
     expect(tailwindSettings?.plugins?.['better-tailwindcss']).toBeDefined()
     expect(tailwindSettings?.settings).toEqual({
       'better-tailwindcss': {
+        cwd: process.cwd(),
         detectComponentClasses: true,
         entryPoint: 'src/styles/global.css'
       }
     })
     expect(tailwindSettings?.rules?.['better-tailwindcss/no-unknown-classes']).toBe('off')
+  })
+
+  test('should resolve Tailwind from detectRootDir in monorepo package configs', async () => {
+    const workspaceRoot = '/repo'
+    const projectRoot = `${workspaceRoot}/apps/web`
+    const config = await defineConfig({
+      detectRootDir: workspaceRoot,
+      detection: false,
+      projects: {
+        'apps/web': {
+          detection: false,
+          tailwind: {
+            entryPoint: 'src/styles/global.css'
+          }
+        }
+      }
+    })
+
+    const tailwindSettings = config.find(entry => entry.name === 'eslint-config-basic/tailwind-settings')
+
+    expect(tailwindSettings?.settings).toMatchObject({
+      'better-tailwindcss': {
+        cwd: projectRoot,
+        entryPoint: 'src/styles/global.css'
+      }
+    })
+    expect(tailwindSettings?.files).toEqual(['apps/web/**/*'])
   })
 })
 

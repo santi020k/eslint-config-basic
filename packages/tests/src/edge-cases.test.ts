@@ -1,4 +1,5 @@
 import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 
 import astro from '@santi020k/eslint-config-astro'
 import { defineConfig, Extension, Format, Library, NextMode, Testing, Tool } from '@santi020k/eslint-config-basic'
@@ -97,6 +98,34 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
 
     expect(getEffectiveRuleValue(config as Record<string, unknown>[], '@typescript-eslint/no-unsafe-return')).toBe('off')
     expect(getEffectiveRuleValue(config as Record<string, unknown>[], '@stylistic/jsx-indent-props')).toBe('off')
+  })
+
+  test('should forward a project-scoped tsconfigRootDir to the bundled Astro parser config', async () => {
+    const projectPath = 'packages/playground/astro'
+    const workspaceRoot = join(import.meta.dirname, '../../..')
+    const tsconfigRootDir = join(workspaceRoot, projectPath)
+    const config = await defineConfig({
+      autoFrameworks: false,
+      detectRootDir: workspaceRoot,
+      detection: false,
+      projects: {
+        [projectPath]: {
+          autoFrameworks: false,
+          detection: false,
+          frameworks: { astro: true },
+          typescript: true
+        }
+      }
+    })
+
+    const astroConfig = config.find(entry => entry.name === 'eslint-config-astro/custom')
+
+    expect(astroConfig?.files).toEqual([`${projectPath}/**/*.astro`])
+    expect(astroConfig?.languageOptions?.parserOptions).toMatchObject({
+      project: true,
+      projectService: false,
+      tsconfigRootDir
+    })
   })
 
   test('should handle duplicate optionals without doubling', async () => {

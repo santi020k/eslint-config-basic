@@ -298,6 +298,11 @@ export type SettingOption = Setting | SettingName
 export type StrictMode = 'ci' | 'pedantic' | 'recommended' | boolean
 
 export interface TailwindOptions {
+  /**
+   * Working directory used to resolve Tailwind and its entry point.
+   * Defaults to `detectRootDir`, which keeps package-scoped monorepo configs stable.
+   */
+  cwd?: string
   detectComponentClasses?: boolean
   entryPoint?: string
   ignore?: string[]

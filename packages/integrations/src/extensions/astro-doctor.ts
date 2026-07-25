@@ -1,6 +1,8 @@
 import { type FlatConfigArray, GLOB_ASTRO } from '@santi020k/eslint-config-core'
 
-export const astroDoctor = async (): Promise<FlatConfigArray> => {
+import { defineLazyConfig } from '../lazy.js'
+
+export const astroDoctor: () => Promise<FlatConfigArray> = defineLazyConfig('astro-doctor', async () => {
   const { default: astroDoctorPlugin, RECOMMENDED_RULES } = await import('@santi020k/eslint-plugin-astro-doctor')
 
   return [{
@@ -11,4 +13,4 @@ export const astroDoctor = async (): Promise<FlatConfigArray> => {
     },
     rules: RECOMMENDED_RULES
   }]
-}
+})

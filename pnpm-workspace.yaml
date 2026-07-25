@@ -114,6 +114,7 @@ catalog:
   react: 19.2.8
   satori: ^0.29.0
   'satori-html': ^0.3.2
+  semver: ^7.8.5
   sharp: ^0.35.3
   storybook: ^10.5.4
   svelte: ^5.56.8

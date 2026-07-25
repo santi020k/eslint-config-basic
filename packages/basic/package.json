@@ -58,7 +58,8 @@
     "@santi020k/eslint-config-typescript": "workspace:^",
     "@santi020k/eslint-config-vite": "workspace:^",
     "@santi020k/eslint-config-vue": "workspace:^",
-    "@typescript-eslint/utils": "catalog:"
+    "@typescript-eslint/utils": "catalog:",
+    "semver": "catalog:"
   },
   "devDependencies": {
     "@types/node": "catalog:",

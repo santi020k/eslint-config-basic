@@ -213,6 +213,10 @@ const FEATURE_MAP: readonly [pattern: string, category: FeatureCategory, label: 
   ['eslint-config-slidev/', 'frameworks', 'Slidev'],
   ['eslint-config-vite/',   'frameworks', 'Vite'],
 
+  // Extensions
+  ['eslint-config-integrations/astro-doctor', 'extensions', 'Astro Doctor'],
+  ['astro-doctor/', 'extensions', 'Astro Doctor'],
+
   // Testing
   ['integrations/vitest',              'testing', 'Vitest'],
   ['integrations/jest',               'testing', 'Jest'],

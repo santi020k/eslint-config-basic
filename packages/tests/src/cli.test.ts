@@ -388,6 +388,86 @@ describe('CLI command UX', () => {
     process.exitCode = undefined
   })
 
+  test('should diagnose Astro Doctor enabled without Astro', async () => {
+    const cwd = createTempProject({
+      name: 'tmp-project',
+      scripts: { lint: 'eslint .' },
+      type: 'module'
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    writeFileSync(
+      join(cwd, 'eslint.config.js'),
+      'export default [{ name: "eslint-config-integrations/astro-doctor", rules: {} }]'
+    )
+    writeFakePackage(cwd, '@santi020k/eslint-config-integrations', '1.1.0')
+
+    await handleDoctor(cwd)
+
+    const output = logSpy.mock.calls.flat().join('\n')
+
+    expect(output).toContain('Astro Doctor is enabled without Astro')
+    logSpy.mockRestore()
+    process.exitCode = undefined
+  })
+
+  test('should suggest Astro Doctor for detected Astro projects', async () => {
+    const cwd = createTempProject({
+      dependencies: { astro: '7.0.0' },
+      name: 'tmp-project',
+      scripts: { lint: 'eslint .' },
+      type: 'module'
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    writeFileSync(join(cwd, 'eslint.config.js'), 'export default []')
+
+    await handleDoctor(cwd)
+
+    const output = logSpy.mock.calls.flat().join('\n')
+
+    expect(output).toContain('Astro was detected without Astro Doctor')
+    logSpy.mockRestore()
+    process.exitCode = undefined
+  })
+
+  test('should report incompatible Astro Doctor Node and ESLint versions', async () => {
+    const cwd = createTempProject({
+      name: 'tmp-project',
+      scripts: { lint: 'eslint .' },
+      type: 'module'
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    writeFileSync(
+      join(cwd, 'eslint.config.js'),
+      `export default [
+        { name: 'eslint-config-astro/recommended', rules: {} },
+        { name: 'eslint-config-integrations/astro-doctor', rules: {} }
+      ]`
+    )
+    writeFakePackage(cwd, 'eslint', '10.8.0')
+    writeFakePackage(
+      cwd,
+      '@santi020k/eslint-plugin-astro-doctor',
+      '1.0.4',
+      {
+        engines: { node: '>=99' },
+        peerDependencies: { eslint: '10.7.0' }
+      }
+    )
+
+    await handleDoctor(cwd)
+
+    const output = logSpy.mock.calls.flat().join('\n')
+
+    expect(output).toContain('requires Node >=99')
+    expect(output).toContain('requires ESLint 10.7.0')
+    expect(output).toContain('resolves 10.8.0')
+    logSpy.mockRestore()
+    process.exitCode = undefined
+  })
+
   test('should print the lite install command from detected features', async () => {
     const cwd = createTempProject({
       dependencies: {
@@ -943,11 +1023,16 @@ describe('generateAgentSkills', () => {
   })
 })
 
-const writeFakePackage = (root: string, name: string, version: string): void => {
+const writeFakePackage = (
+  root: string,
+  name: string,
+  version: string,
+  metadata: Record<string, unknown> = {}
+): void => {
   const packageDir = join(root, 'node_modules', ...name.split('/'))
 
   mkdirSync(packageDir, { recursive: true })
-  writeFileSync(join(packageDir, 'package.json'), JSON.stringify({ main: 'index.js', name, version }))
+  writeFileSync(join(packageDir, 'package.json'), JSON.stringify({ main: 'index.js', name, version, ...metadata }))
   writeFileSync(join(packageDir, 'index.js'), 'module.exports = {}')
 }
 

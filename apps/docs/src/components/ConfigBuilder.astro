@@ -2,8 +2,10 @@
 import {
   Badge,
   Button,
+  Callout,
   Card,
   Checkbox,
+  Code,
   Field,
   Label,
   NativeSelect
@@ -80,19 +82,19 @@ const featureGroups = [
 ---
 
 <div class="s2k-tool" data-config-builder>
-  <div class="s2k-tool__intro">
+  <Callout class="s2k-tool__intro">
     <Badge variant="success">Runs in your browser</Badge>
     <p>
       Choose your stack, then copy a complete install command and flat config.
       Your selections stay in the URL so the setup can be shared with a teammate.
     </p>
-  </div>
+  </Callout>
 
   <div class="s2k-builder-layout">
     <form class="s2k-builder-controls" data-builder-form>
       <Card as="section" class="s2k-tool-card">
         <div class="s2k-tool-card__heading">
-          <span class="s2k-tool-card__step">1</span>
+          <Badge class="s2k-tool-card__step" variant="secondary">1</Badge>
           <div>
             <h2>Project baseline</h2>
             <p>Start with the package and defaults that match the repository.</p>
@@ -157,7 +159,7 @@ const featureGroups = [
 
       <Card as="section" class="s2k-tool-card">
         <div class="s2k-tool-card__heading">
-          <span class="s2k-tool-card__step">2</span>
+          <Badge class="s2k-tool-card__step" variant="secondary">2</Badge>
           <div>
             <h2>Frameworks</h2>
             <p>Select one or more. Related React rules are composed automatically where required.</p>
@@ -179,7 +181,7 @@ const featureGroups = [
 
       <Card as="section" class="s2k-tool-card">
         <div class="s2k-tool-card__heading">
-          <span class="s2k-tool-card__step">3</span>
+          <Badge class="s2k-tool-card__step" variant="secondary">3</Badge>
           <div>
             <h2>Optional integrations</h2>
             <p>Pick the tools the project actually uses. Auto-detection can still fill in the rest.</p>
@@ -212,21 +214,22 @@ const featureGroups = [
           <Button type="button" variant="ghost" size="sm" data-builder-share>Copy share link</Button>
         </div>
 
-        <div class="s2k-code-output">
-          <div class="s2k-code-output__bar">
-            <span>Install</span>
-            <Button type="button" variant="ghost" size="sm" data-copy-target="install">Copy</Button>
-          </div>
-          <pre tabindex="0"><code data-builder-install></code></pre>
-        </div>
+        <Code
+          class="not-content s2k-code-output"
+          copy
+          label="Install command"
+          language="shell"
+          variant="block"
+          wrap
+        ><span data-builder-install></span></Code>
 
-        <div class="s2k-code-output">
-          <div class="s2k-code-output__bar">
-            <span>eslint.config.mjs</span>
-            <Button type="button" variant="ghost" size="sm" data-copy-target="config">Copy</Button>
-          </div>
-          <pre tabindex="0"><code data-builder-config></code></pre>
-        </div>
+        <Code
+          class="not-content s2k-code-output"
+          copy
+          label="eslint.config.mjs"
+          language="javascript"
+          variant="block"
+        ><span data-builder-config></span></Code>
 
         <div class="s2k-output-actions">
           <Button type="button" data-builder-download>Download config</Button>
@@ -472,16 +475,6 @@ const featureGroups = [
       if (status) status.textContent = 'Config downloaded.'
     })
 
-    for (const button of root.querySelectorAll<HTMLButtonElement>('[data-copy-target]')) {
-      button.addEventListener('click', async () => {
-        const target = button.dataset.copyTarget === 'install' ? installOutput : configOutput
-        const label = button.dataset.copyTarget === 'install' ? 'Install command' : 'Config'
-
-        await copyText(target?.textContent ?? '')
-
-        if (status) status.textContent = `${label} copied.`
-      })
-    }
   }
 
   const initializeBuilders = () => {

@@ -87,6 +87,10 @@
   --sl-color-text-accent: hsl(var(--s2k-accent));
 }
 
+:root:has([data-config-builder]) {
+  --sl-content-width: 64rem;
+}
+
 html {
   background: hsl(var(--s2k-theme-bg));
   color: hsl(var(--s2k-ink));
@@ -1235,15 +1239,21 @@ main .sl-markdown-content > *:nth-child(5) {
 /* Interactive adoption tools */
 
 .s2k-tool {
+  container-name: s2k-builder;
+  container-type: inline-size;
   display: grid;
   gap: 1.25rem;
   margin-block: 1.5rem 2.5rem;
 }
 
 .s2k-tool__intro {
-  display: flex;
-  align-items: flex-start;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
   gap: 0.75rem;
+}
+
+.s2k-tool__intro .ui-badge {
+  justify-self: start;
 }
 
 .s2k-tool__intro p,
@@ -1254,7 +1264,7 @@ main .sl-markdown-content > *:nth-child(5) {
 
 .s2k-builder-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.3fr) minmax(20rem, 0.9fr);
+  grid-template-columns: minmax(32rem, 1.35fr) minmax(22rem, 0.9fr);
   gap: 1.25rem;
   align-items: start;
 }
@@ -1296,13 +1306,8 @@ main .sl-markdown-content > *:nth-child(5) {
   height: 2rem;
   place-items: center;
   border-radius: 999px;
-  background: hsl(var(--s2k-brand-soft));
-  color: hsl(var(--s2k-brand-solid));
+  padding: 0;
   font-weight: 800;
-}
-
-:root[data-theme='dark'] .s2k-tool-card__step {
-  color: hsl(var(--s2k-accent));
 }
 
 .s2k-field-grid {
@@ -1422,40 +1427,16 @@ main .sl-markdown-content > *:nth-child(5) {
 }
 
 .s2k-code-output {
-  overflow: hidden;
-  border: 1px solid hsl(var(--s2k-line) / 0.78);
-  border-radius: 0.65rem;
-  background: hsl(var(--s2k-theme-bg) / 0.92);
-}
-
-.s2k-code-output__bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 2.5rem;
-  padding: 0.3rem 0.45rem 0.3rem 0.85rem;
-  border-bottom: 1px solid hsl(var(--s2k-line) / 0.68);
-  color: hsl(var(--s2k-ink-soft));
-  font-size: 0.78rem;
-  font-weight: 750;
+  --ui-code-bg: hsl(var(--canvas) / 0.92);
+  --ui-code-header-bg: hsl(var(--surface-muted) / 0.72);
 }
 
 .s2k-code-output pre {
-  overflow: auto;
   max-height: 24rem;
-  margin: 0;
-  padding: 1rem;
-  background: transparent;
-  font-size: 0.78rem;
-  line-height: 1.65;
 }
 
 .s2k-code-output code {
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: hsl(var(--s2k-ink));
-  white-space: pre;
+  font-size: 0.78rem;
 }
 
 .s2k-output-actions {
@@ -1686,7 +1667,7 @@ main .sl-markdown-content > *:nth-child(5) {
   font-weight: 700;
 }
 
-@media (max-width: 72rem) {
+@container s2k-builder (max-width: 56rem) {
   .s2k-builder-layout {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -1738,9 +1719,12 @@ main .sl-markdown-content > *:nth-child(5) {
     padding-left: 0;
   }
 
-  .s2k-tool__intro,
   .s2k-output-heading {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .s2k-tool__intro {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

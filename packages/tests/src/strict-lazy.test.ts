@@ -68,3 +68,27 @@ describe('lazy framework loading', () => {
     vi.doUnmock('@santi020k/eslint-config-vite')
   })
 })
+
+describe('Astro Doctor lazy loading', () => {
+  test('does not load Astro Doctor for non-Astro configurations', async () => {
+    vi.resetModules()
+    vi.doMock('@santi020k/eslint-plugin-astro-doctor', () => {
+      throw new Error('Module should not load')
+    })
+
+    const { defineConfig: isolatedDefineConfig } = await import('@santi020k/eslint-config-basic')
+
+    await expect(isolatedDefineConfig(baseOptions)).resolves.toBeDefined()
+    vi.doUnmock('@santi020k/eslint-plugin-astro-doctor')
+  })
+
+  test('loads Astro Doctor when it is explicitly enabled', async () => {
+    const config = await defineConfig({
+      ...baseOptions,
+      extensions: ['astro-doctor'],
+      frameworks: { astro: true }
+    })
+
+    expect(config.some(entry => entry.name === 'eslint-config-integrations/astro-doctor')).toBe(true)
+  })
+})

@@ -130,4 +130,52 @@ test.describe('Responsive page health', () => {
 
     await expect(copyButton.locator('.ui-code__check-icon')).toBeHidden()
   })
+
+  test('config builder uses Lumen primitives and responds to its article width', async ({ page }) => {
+    await page.setViewportSize({ height: 900, width: 1440 })
+
+    await page.goto('/guide/config-builder/')
+
+    const desktop = await page.evaluate(() => {
+      const builder = document.querySelector<HTMLElement>('[data-config-builder]')
+      const controls = document.querySelector<HTMLElement>('.s2k-builder-controls')
+      const output = document.querySelector<HTMLElement>('.s2k-builder-output')
+
+      return {
+        builderWidth: builder?.getBoundingClientRect().width ?? 0,
+        callouts: builder?.querySelectorAll('.ui-callout').length ?? 0,
+        cards: builder?.querySelectorAll('.ui-card').length ?? 0,
+        codeBlocks: builder?.querySelectorAll('.ui-code--block').length ?? 0,
+        controlsWidth: controls?.getBoundingClientRect().width ?? 0,
+        outputWidth: output?.getBoundingClientRect().width ?? 0,
+        rightSidebar: document.querySelectorAll('.right-sidebar').length
+      }
+    })
+
+    expect(desktop.builderWidth).toBeGreaterThanOrEqual(960)
+    expect(desktop.controlsWidth).toBeGreaterThanOrEqual(500)
+    expect(desktop.outputWidth).toBeGreaterThanOrEqual(350)
+    expect(desktop.rightSidebar).toBe(0)
+    expect(desktop.callouts).toBe(1)
+    expect(desktop.cards).toBe(4)
+    expect(desktop.codeBlocks).toBe(2)
+
+    await page.setViewportSize({ height: 844, width: 390 })
+
+    const mobile = await page.evaluate(() => {
+      const builder = document.querySelector<HTMLElement>('.s2k-builder-layout')
+      const checkGrid = document.querySelector<HTMLElement>('.s2k-check-grid')
+
+      return {
+        builderColumns: builder ? getComputedStyle(builder).gridTemplateColumns.split(' ').length : 0,
+        checkColumns: checkGrid ? getComputedStyle(checkGrid).gridTemplateColumns.split(' ').length : 0,
+        documentWidth: document.documentElement.scrollWidth,
+        viewportWidth: document.documentElement.clientWidth
+      }
+    })
+
+    expect(mobile.builderColumns).toBe(1)
+    expect(mobile.checkColumns).toBe(2)
+    expect(mobile.documentWidth).toBeLessThanOrEqual(mobile.viewportWidth)
+  })
 })

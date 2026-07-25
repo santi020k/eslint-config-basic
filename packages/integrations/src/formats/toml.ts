@@ -10,10 +10,8 @@ import { defineLazyConfig, loadDefault } from '../lazy.js'
 export const toml: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('toml', async () => {
   const pluginToml = await loadDefault<typeof PluginToml>('eslint-plugin-toml')
 
-  return [
-    ...(pluginToml.configs['flat/recommended'] as TSESLint.FlatConfig.ConfigArray).map((config, index) => ({
-      ...config,
-      name: config.name ?? `integrations/toml/${index}`
-    }))
-  ]
+  return (pluginToml.configs['flat/recommended'] as TSESLint.FlatConfig.ConfigArray).map((config, index) => ({
+    ...config,
+    name: config.name ?? `integrations/toml/${index}`
+  }))
 })
