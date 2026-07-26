@@ -1,8 +1,76 @@
 ---
 import Default from '@astrojs/starlight/components/Footer.astro'
+import { Badge, Icon, Link } from '@santi020k/lumen-astro'
 
 import DocsFeedback from './DocsFeedback.astro'
+
+const projectLinks = [
+  {
+    href: '/',
+    icon: 'book-open',
+    label: 'Documentation',
+    newTab: false
+  },
+  {
+    href: 'https://github.com/santi020k/eslint-config-basic',
+    icon: 'github',
+    label: 'GitHub',
+    newTab: true
+  },
+  {
+    href: 'https://www.npmjs.com/package/@santi020k/eslint-config-basic',
+    icon: 'package',
+    label: 'npm',
+    newTab: true
+  }
+] as const
 ---
 
 <DocsFeedback />
 <Default />
+
+<footer class="s2k-project-footer" aria-label="Project information">
+  <div class="s2k-project-footer__intro">
+    <a class="s2k-project-footer__mark" href="/" aria-label="ESLint Config documentation home">
+      <img src="/logo-square.svg" alt="" width="128" height="128" loading="lazy" />
+    </a>
+
+    <div>
+      <div class="s2k-project-footer__heading">
+        <strong>ESLint Config</strong>
+        <Badge variant="outline">Open source</Badge>
+      </div>
+      <p>Thoughtful linting defaults for modern JavaScript and TypeScript projects.</p>
+    </div>
+  </div>
+
+  <nav class="s2k-project-footer__links" aria-label="Project links">
+    {
+      projectLinks.map(({ href, icon, label, newTab }) => (
+        <Link href={href} newTab={newTab} variant="inherit">
+          <Icon name={icon} decorative />
+          <span>{label}</span>
+          {newTab && <Icon class="s2k-project-footer__external" name="external-link" decorative />}
+        </Link>
+      ))
+    }
+  </nav>
+
+  <div class="s2k-project-footer__credits">
+    <p>
+      Built by <Link href="https://santi020k.com" newTab variant="inherit">santi020k</Link>
+      <span aria-hidden="true">·</span>
+      Built with <Link href="https://lumen.santi020k.com" newTab variant="inherit">Lumen UI</Link>
+    </p>
+    <p class="s2k-project-footer__license">
+      Released under the
+      <Link
+        href="https://github.com/santi020k/eslint-config-basic/blob/main/LICENSE"
+        newTab
+        variant="inherit"
+      >
+        MIT License
+      </Link>
+    </p>
+  </div>
+</footer>

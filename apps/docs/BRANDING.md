@@ -30,55 +30,19 @@ This library uses a dedicated product logo that merges the classic ESLint hexago
 
 ## Color System
 
-The color system extends the Santi020k purple system, applying it to linting interfaces, code blocks, and UI elements.
+The canonical light and dark palettes come from `@santi020k/theme/tokens.css`. The documentation
+stylesheet imports those tokens after Lumen, maps them into Lumen and Starlight, and keeps the
+`--s2k-*` names only as compatibility aliases for existing product styles.
 
-### Light Mode
+The product applies two deliberate accessibility adaptations:
 
-```css
-:root,
-:root[data-theme='light'] {
-  --s2k-theme-bg: 268 20% 98%;
-  --s2k-surface: 268 20% 100%;
-  --s2k-surface-muted: 268 20% 96%;
-  --s2k-surface-strong: 268 15% 90%;
-  --s2k-line: 268 15% 84%;
-  --s2k-ink: 268 10% 20%;
-  --s2k-ink-soft: 268 8% 36%;
-  --s2k-ink-muted: 268 6% 28%;
-  --s2k-brand: 267 77% 42%;
-  --s2k-brand-solid: 267 77% 37%;
-  --s2k-brand-soft: 267 52% 94%;
-  --s2k-accent: 267 82% 52%;
-  --s2k-glow: 268 88% 70%;
-}
-```
+- Light `--ink-muted` uses `268 6% 44%` so small supporting copy remains above WCAG AA contrast on
+  tinted surfaces while staying visually quieter than `--ink-soft`.
+- Dark `--accent` uses `264 90% 76%` because Lumen consumes it as foreground text on selected
+  `brand-soft` surfaces.
 
-### Dark Mode
-
-```css
-:root[data-theme='dark'] {
-  --s2k-theme-bg: 260 43% 8%;
-  --s2k-surface: 260 30% 12%;
-  --s2k-surface-muted: 260 25% 15%;
-  --s2k-surface-strong: 260 20% 21%;
-  --s2k-line: 260 15% 30%;
-  --s2k-ink: 260 10% 88%;
-  --s2k-ink-soft: 260 8% 72%;
-  --s2k-ink-muted: 260 6% 56%;
-  --s2k-brand: 262 87% 66%;
-  --s2k-brand-solid: 262 87% 46%;
-  --s2k-brand-soft: 262 50% 18%;
-  --s2k-accent: 262 87% 76%;
-  --s2k-glow: 262 87% 68%;
-}
-```
-
-### Approximate Hex Values
-
-- Light brand: `#6319be`
-- Light canvas: `#faf9fb`
-- Dark brand: `#945df4`
-- Dark canvas: `#110c1d`
+Update the shared package when changing the canonical palette. Keep site-only overrides narrow,
+documented, and backed by the light and dark accessibility suite.
 
 ## Typography
 

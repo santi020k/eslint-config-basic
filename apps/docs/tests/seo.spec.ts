@@ -40,4 +40,27 @@ test.describe('SEO', () => {
 
     await expect(canonical).toHaveAttribute('href', /https:\/\/eslint\.santi020k\.com/)
   })
+
+  test('theme assets follow the selected color scheme', async ({ page }) => {
+    await page.goto('/')
+
+    const favicon = page.locator('#s2k-theme-favicon')
+    const themeColor = page.locator('#s2k-theme-color')
+
+    await page.evaluate(() => {
+      document.documentElement.dataset.theme = 'light'
+    })
+
+    await expect(favicon).toHaveAttribute('href', '/favicon-light.svg')
+
+    await expect(themeColor).toHaveAttribute('content', '#faf9fb')
+
+    await page.evaluate(() => {
+      document.documentElement.dataset.theme = 'dark'
+    })
+
+    await expect(favicon).toHaveAttribute('href', '/favicon-dark.svg')
+
+    await expect(themeColor).toHaveAttribute('content', '#110c1d')
+  })
 })

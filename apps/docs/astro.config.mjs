@@ -1,4 +1,5 @@
 import starlight from '@astrojs/starlight'
+import { santi020kShikiThemes } from '@santi020k/theme/shiki'
 import { defineConfig } from 'astro/config'
 
 const rehypeTableFocusable = () => tree => {
@@ -27,13 +28,27 @@ const siteDescription =
 const siteKeywords =
   'ESLint flat config, JavaScript linting, TypeScript linting, React ESLint, Next.js ESLint, Astro ESLint, Vue ESLint, Nuxt ESLint, Svelte ESLint, Solid ESLint, Angular ESLint, NestJS ESLint, Hono ESLint, Expo ESLint, Preact ESLint, Qwik ESLint, Remix ESLint, React Router ESLint, TanStack Start ESLint, Lit ESLint, developer experience'
 
-const sidebar = [
+const sidebarLinks = items => items.map(item => {
+  if ('slug' in item) {
+    const { slug, ...linkItem } = item
+
+    return { ...linkItem, link: `/${slug}/` }
+  }
+
+  if ('items' in item) {
+    return { ...item, items: sidebarLinks(item.items) }
+  }
+
+  return item
+})
+
+const sidebar = sidebarLinks([
   {
     items: [
       {
         items: [
           { label: 'Introduction', link: '/' },
-          { label: 'Quick Start', slug: 'guide/getting-started' },
+          { label: 'Quick Start', link: '/guide/getting-started/' },
           { label: 'Installation', slug: 'guide/installation' },
           { label: 'Configuration', slug: 'guide/configuration' },
           { badge: { text: 'New', variant: 'success' }, label: 'Config Builder', slug: 'guide/config-builder' },
@@ -160,7 +175,7 @@ const sidebar = [
     ],
     label: 'Frozen Docs (v1)'
   }
-]
+])
 
 export default defineConfig({
   base,
@@ -172,6 +187,9 @@ export default defineConfig({
       editLink: {
         baseUrl: 'https://github.com/santi020k/eslint-config-basic/edit/main/apps/docs/'
       },
+      expressiveCode: {
+        themes: [santi020kShikiThemes.dark, santi020kShikiThemes.light]
+      },
       favicon: '/favicon.svg',
       components: {
         Footer: './src/components/Footer.astro',
@@ -182,7 +200,6 @@ export default defineConfig({
         { attrs: { content: siteName, name: 'application-name' }, tag: 'meta' },
         { attrs: { content: 'Santiago Molina', name: 'author' }, tag: 'meta' },
         { attrs: { content: siteKeywords, name: 'keywords' }, tag: 'meta' },
-        { attrs: { content: '#6319BE', name: 'theme-color' }, tag: 'meta' },
         { attrs: { content: 'summary_large_image', name: 'twitter:card' }, tag: 'meta' },
         {
           attrs: { is: 'inline' },

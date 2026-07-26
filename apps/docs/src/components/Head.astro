@@ -27,8 +27,42 @@ const ogImageAlt = `${pageTitle} — ESLint Config`
 ---
 
 <Default {...Astro.props}><slot /></Default>
-<link rel="icon" type="image/svg+xml" href="/favicon-light.svg" media="(prefers-color-scheme: light)" />
-<link rel="icon" type="image/svg+xml" href="/favicon-dark.svg" media="(prefers-color-scheme: dark)" />
+<link id="s2k-theme-favicon" rel="icon" type="image/svg+xml" href="/favicon-light.svg" />
+<meta id="s2k-theme-color" name="theme-color" content="#faf9fb" />
+<script is:inline>
+  (() => {
+    const favicon = document.querySelector('#s2k-theme-favicon')
+    const themeColor = document.querySelector('#s2k-theme-color')
+    const colorScheme = window.matchMedia('(prefers-color-scheme: dark)')
+
+    if (!(favicon instanceof HTMLLinkElement) || !(themeColor instanceof HTMLMetaElement))
+      return
+
+    const updateThemeAssets = () => {
+      const selectedTheme = document.documentElement.dataset.theme
+      const isDark = selectedTheme === 'dark' || (!selectedTheme && colorScheme.matches)
+      const href = isDark ? '/favicon-dark.svg' : '/favicon-light.svg'
+      const color = isDark ? '#110c1d' : '#faf9fb'
+
+      if (favicon.getAttribute('href') !== href)
+        favicon.setAttribute('href', href)
+
+      if (themeColor.content !== color)
+        themeColor.content = color
+    }
+
+    updateThemeAssets()
+
+    new MutationObserver(updateThemeAssets).observe(document.documentElement, {
+      attributeFilter: ['data-theme'],
+      attributes: true
+    })
+
+    colorScheme.addEventListener('change', updateThemeAssets)
+
+    document.addEventListener('astro:page-load', updateThemeAssets)
+  })()
+</script>
 <meta property="og:image" content={ogImageURL} />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />

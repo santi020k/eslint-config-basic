@@ -51,6 +51,7 @@
   "author": "santi020k",
   "license": "MIT",
   "dependencies": {
-    "@santi020k/lumen-astro": "0.3.0"
+    "@santi020k/lumen-astro": "0.3.0",
+    "@santi020k/theme": "1.2.0"
   }
 }
