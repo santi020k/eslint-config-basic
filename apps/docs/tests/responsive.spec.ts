@@ -138,15 +138,22 @@ test.describe('Responsive page health', () => {
 
     const desktop = await page.evaluate(() => {
       const builder = document.querySelector<HTMLElement>('[data-config-builder]')
+      const checkGrid = document.querySelector<HTMLElement>('.s2k-check-grid')
+      const compactOption = document.querySelector<HTMLElement>('.s2k-check-option--compact')
       const controls = document.querySelector<HTMLElement>('.s2k-builder-controls')
       const output = document.querySelector<HTMLElement>('.s2k-builder-output')
+      const outputTitle = document.querySelector<HTMLElement>('.s2k-output-heading h2')
 
       return {
         builderWidth: builder?.getBoundingClientRect().width ?? 0,
         callouts: builder?.querySelectorAll('.ui-callout').length ?? 0,
         cards: builder?.querySelectorAll('.ui-card').length ?? 0,
+        checkGridGap: checkGrid ? Number.parseFloat(getComputedStyle(checkGrid).rowGap) : 0,
         codeBlocks: builder?.querySelectorAll('.ui-code--block').length ?? 0,
+        compactOptionMarginTop: compactOption ? getComputedStyle(compactOption).marginTop : '',
         controlsWidth: controls?.getBoundingClientRect().width ?? 0,
+        isNotContent: builder?.classList.contains('not-content') ?? false,
+        outputTitleHeight: outputTitle?.getBoundingClientRect().height ?? 0,
         outputWidth: output?.getBoundingClientRect().width ?? 0,
         rightSidebar: document.querySelectorAll('.right-sidebar').length
       }
@@ -156,7 +163,15 @@ test.describe('Responsive page health', () => {
 
     expect(desktop.controlsWidth).toBeGreaterThanOrEqual(500)
 
+    expect(desktop.isNotContent).toBe(true)
+
+    expect(desktop.checkGridGap).toBeLessThan(12)
+
+    expect(desktop.compactOptionMarginTop).toBe('0px')
+
     expect(desktop.outputWidth).toBeGreaterThanOrEqual(350)
+
+    expect(desktop.outputTitleHeight).toBeLessThan(30)
 
     expect(desktop.rightSidebar).toBe(0)
 

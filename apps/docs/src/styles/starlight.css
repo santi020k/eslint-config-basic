@@ -372,23 +372,22 @@ header.header > .header {
   transform: translateY(-4px);
 }
 
-.sl-markdown-content :is(h1, h2, h3, h4) {
+.sl-markdown-content :is(h1, h2, h3, h4):not(:where(.not-content *)) {
   color: hsl(var(--s2k-ink));
   letter-spacing: 0;
   text-wrap: balance;
 }
 
-.sl-markdown-content h2 {
+.sl-markdown-content h2:not(:where(.not-content *)) {
   margin-top: 2.2rem;
   padding-top: 0.35rem;
 }
 
-.sl-markdown-content p,
-.sl-markdown-content li {
+.sl-markdown-content :is(p, li):not(:where(.not-content *)) {
   color: hsl(var(--s2k-ink-soft));
 }
 
-.sl-markdown-content a:not(.anchor-link) {
+.sl-markdown-content a:not(.anchor-link, :where(.not-content *)) {
   color: hsl(var(--s2k-brand));
   text-decoration-color: hsl(var(--s2k-brand) / 0.38);
   text-decoration-thickness: 0.08em;
@@ -1514,6 +1513,14 @@ main .sl-markdown-content > *:nth-child(5) {
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
+}
+
+.s2k-output-heading > div {
+  min-width: 0;
+}
+
+.s2k-output-heading h2 {
+  text-wrap: nowrap;
 }
 
 .s2k-output-heading .ui-badge {
