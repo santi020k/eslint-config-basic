@@ -21,7 +21,15 @@ configuration verbose.
 
     <InstallTabs packages={['eslint', '@santi020k/eslint-config-basic']} />
 
-    Add the config package for each detected framework. For React:
+    Install the config packages required by every detected framework and
+    optional feature:
+
+    ```sh
+    npx @santi020k/eslint-config-basic install
+    ```
+
+    The CLI uses the project's package manager and skips dependencies that are
+    already declared. For React, the equivalent manual install is:
 
     <InstallTabs packages="@santi020k/eslint-config-react" />
 

@@ -9,7 +9,7 @@ description: "@santi020k/eslint-config-basic"
 
 > `const` **reactConfig**: `TSESLint.FlatConfig.ConfigArray`
 
-Defined in: [react/src/index.ts:47](https://github.com/santi020k/eslint-config-basic/blob/main/packages/react/src/index.ts#L47)
+Defined in: [react/src/index.ts:52](https://github.com/santi020k/eslint-config-basic/blob/main/packages/react/src/index.ts#L52)
 
 React ESLint configuration
 Uses `@eslint-react/eslint-plugin` for React and hooks rules, the official

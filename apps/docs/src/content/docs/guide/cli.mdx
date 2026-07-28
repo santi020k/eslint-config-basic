@@ -7,7 +7,7 @@ import RunnerTabs from '../../../components/RunnerTabs.astro'
 
 The main package ships a CLI that can scaffold or refresh the project config.
 
-<RunnerTabs args={['init', 'update', 'explain', 'inspect', 'doctor', 'migrate --to v3', 'baseline', 'profile', 'snapshot', 'diff', 'docs', 'generate-skill']} />
+<RunnerTabs args={['init', 'update', 'explain', 'inspect', 'install', 'doctor', 'migrate --to v3', 'baseline', 'profile', 'snapshot', 'diff', 'docs', 'generate-skill']} />
 
 ## What It Does
 
@@ -18,6 +18,7 @@ The main package ships a CLI that can scaffold or refresh the project config.
 - Leaves framework selection to runtime detection, so the file stays stable as dependencies change.
 - Prints detected config inputs with `explain`.
 - Prints detected inputs, package-manager details, workspace projects, and active config features with `inspect`.
+- Installs missing framework and feature-category packages with `install`.
 - Checks common v3 adoption issues with `doctor`.
 - Generates human-readable `ESLINT_STANDARDS.md` docs with `docs`.
 - Plans and safely applies v1-to-v2 or v2-to-v3 migrations with `migrate`.
@@ -78,6 +79,22 @@ npx @santi020k/eslint-config-basic inspect --json
 npx @santi020k/eslint-config-basic explain --json
 npx @santi020k/eslint-config-basic doctor --json
 npx @santi020k/eslint-config-basic migrate --json
+```
+
+## Install Detected Dependencies
+
+Use `install` after adding the lean Basic package. It detects frameworks,
+TypeScript, and optional feature categories, then adds any missing config
+packages with the project's package manager.
+
+```sh
+npx @santi020k/eslint-config-basic install
+```
+
+Preview the package-manager command without changing `package.json`:
+
+```sh
+npx @santi020k/eslint-config-basic install --dry-run
 ```
 
 ## Diagnose Setup Issues

@@ -18,6 +18,7 @@ import {
   handleExplain,
   handleInit,
   handleInspect,
+  handleInstall,
   handleMigrate,
   handleUpdate,
   runCli
@@ -141,6 +142,53 @@ describe('CLI command UX', () => {
     expect(output).toContain('ESLint Basic detected configuration:')
     expect(output).toContain('Frameworks: react')
     expect(output).toContain('Testing: vitest')
+    logSpy.mockRestore()
+  })
+
+  test('should print one install command for all missing detected packages', () => {
+    const cwd = createTempProject({
+      dependencies: {
+        react: '19.0.0'
+      },
+      devDependencies: {
+        '@santi020k/eslint-config-basic': '3.0.0',
+        eslint: '10.0.0',
+        typescript: '6.0.0',
+        vitest: 'latest'
+      },
+      name: 'tmp-project'
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    handleInstall(cwd, true)
+
+    const output = String(logSpy.mock.calls[0]?.[0])
+
+    expect(output).toBe(
+      'npm install -D @santi020k/eslint-config-react @santi020k/eslint-config-testing'
+    )
+    logSpy.mockRestore()
+  })
+
+  test('should report when every detected package is already declared', () => {
+    const cwd = createTempProject({
+      dependencies: {
+        react: '19.0.0'
+      },
+      devDependencies: {
+        '@santi020k/eslint-config-basic': '3.0.0',
+        '@santi020k/eslint-config-react': '3.0.0',
+        eslint: '10.0.0'
+      },
+      name: 'tmp-project'
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    handleInstall(cwd, true)
+
+    expect(logSpy).toHaveBeenCalledWith(
+      '✅ All packages required by the detected ESLint configuration are already declared.'
+    )
     logSpy.mockRestore()
   })
 

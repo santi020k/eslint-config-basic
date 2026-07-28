@@ -15,6 +15,7 @@ overrides:
   devframe: 0.7.14
   'dompurify@^3.0.0': ^3.4.12
   'esbuild@^0.27.0': ^0.28.1
+  'eslint-plugin-jest>jest': '-'
   'fast-uri@^3.0.0': ^3.1.4
   'find-my-way@^9.0.0': ^9.6.1
   'hono@^4.0.0': ^4.12.32
