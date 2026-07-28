@@ -130,7 +130,7 @@ const FRAMEWORK_ENTRIES: FrameworkEntry[] = [
   { deps: ['@angular/core'], frameworks: ['angular'], runtime: Runtime.Browser },
   { deps: ['@builder.io/qwik'], frameworks: ['qwik'], runtime: Runtime.Browser },
   { deps: ['@slidev/cli'], frameworks: ['slidev', 'vue'], runtime: Runtime.Browser },
-  { deps: ['@remix-run/react', '@remix-run/node'], frameworks: ['remix'], runtime: Runtime.Browser },
+  { deps: ['@remix-run/react', '@remix-run/node'], frameworks: ['react-router'], runtime: Runtime.Browser },
   { deps: ['@react-router/dev'], frameworks: ['react-router', 'react'], runtime: Runtime.Browser },
   { deps: ['@tanstack/react-start'], frameworks: ['tanstack-start', 'react'], runtime: Runtime.Universal },
   { deps: ['@tanstack/solid-start'], frameworks: ['tanstack-start', 'solid'], runtime: Runtime.Universal }
@@ -138,7 +138,7 @@ const FRAMEWORK_ENTRIES: FrameworkEntry[] = [
 
 const CLOUDFLARE_DEPS = ['wrangler', '@cloudflare/workers-types', '@cloudflare/vitest-pool-workers']
 const REACT_EXCLUSIONS = ['next', 'expo', 'react-native', '@react-router/dev', '@remix-run/react', '@tanstack/react-start']
-const VITE_EXCLUSION_FRAMEWORKS = ['astro', 'next', 'nuxt', 'qwik', 'react-router', 'remix', 'slidev', 'tanstack-start']
+const VITE_EXCLUSION_FRAMEWORKS = ['astro', 'next', 'nuxt', 'qwik', 'react-router', 'slidev', 'tanstack-start']
 const isReactStandalone = (allDeps: DependencyMap): boolean => Boolean(allDeps.react) && !hasAnyDependency(allDeps, REACT_EXCLUSIONS)
 const isViteStandalone = (allDeps: DependencyMap, detected: DetectedFrameworkName[]): boolean => Boolean(allDeps.vite) && !detected.some(fw => VITE_EXCLUSION_FRAMEWORKS.includes(fw))
 

@@ -1,46 +1,33 @@
 ---
-title: "Remix"
-description: "Use Remix support from the lean v3 composer. Install the @santi020k/eslint-config-remix package."
+title: "Migrate Remix to React Router"
+description: "Use the React Router v7 ESLint configuration for Remix projects in v3."
 ---
 
-import InstallTabs from '../../../components/InstallTabs.astro'
-
-Use Remix support from the lean v3 composer. Install the `@santi020k/eslint-config-remix` package.
+Remix merged into React Router v7. Version 3 removes the deprecated
+`@santi020k/eslint-config-remix` package and `frameworks.remix` option.
 
 ## Install
 
-
-<InstallTabs packages={["@santi020k/eslint-config-basic", "@santi020k/eslint-config-react", "@santi020k/eslint-config-remix", "eslint"]} />
-
+```sh
+npm remove @santi020k/eslint-config-remix
+npm install -D @santi020k/eslint-config-react-router@^3 @santi020k/eslint-config-react@^3
+```
 
 ## Configure
 
-```js
-import { defineConfig } from '@santi020k/eslint-config-basic'
+```diff
+ import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default await defineConfig({
-  frameworks: {
-    remix: true
-  },
-  typescript: true
-})
+ export default await defineConfig({
+   frameworks: {
+-    remix: true
++    'react-router': true
+   }
+ })
 ```
 
-With the required config packages installed, the one-line recommended entry auto-detects the framework; custom configs can use `defineConfig()` without a `frameworks` object.
+Projects that still declare `@remix-run/react` or `@remix-run/node` are
+auto-detected and receive the React Router configuration.
 
-## What It Adds
-
-- Remix and React accessibility rules. React is included automatically.
-- Composition through the same `@santi020k/eslint-config-basic` entry point as every other framework.
-- Compatibility with advanced overrides if you pass a custom config array or factory instead of `true`.
-
-## Notes
-
-- This framework package is a public, optional dependency in v3; the basic composer loads it only when enabled.
-- For the archived v1 setup, see the [v1 Remix guide](/v1/frameworks/remix).
-
-## Related Pages
-
-- [Installation](/guide/installation)
-- [Configuration](/guide/configuration)
-- [v2 to v3 Migration](/guide/migration-v2-to-v3)
+See the [React Router guide](/frameworks/react-router) for the current rule set,
+or the [v2 Remix guide](/v2/frameworks/remix) for the frozen legacy API.

@@ -1,5 +1,5 @@
 import { angularConfig } from '@santi020k/eslint-config-angular'
-import { astroConfig } from '@santi020k/eslint-config-astro'
+import { createAstroConfig } from '@santi020k/eslint-config-astro'
 import { coreConfig } from '@santi020k/eslint-config-core'
 import { expoConfig } from '@santi020k/eslint-config-expo'
 import { hono as honoConfig } from '@santi020k/eslint-config-hono'
@@ -20,6 +20,8 @@ import { vite as viteConfig } from '@santi020k/eslint-config-vite'
 import { vueConfig } from '@santi020k/eslint-config-vue'
 
 import { describe, expect, test } from 'vitest'
+
+const astroConfig = createAstroConfig()
 
 /**
  * Extract rule names for semantic package contracts.

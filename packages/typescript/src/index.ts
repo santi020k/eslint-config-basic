@@ -205,9 +205,6 @@ export const createTypescriptConfig = (
 
 export const typescriptConfig = createTypescriptConfig()
 
-// Legacy export for backwards compatibility
-export { typescriptConfig as tsConfig }
-
 // Re-export rules for direct access
 export { standardRules, typeCheckedRules }
 

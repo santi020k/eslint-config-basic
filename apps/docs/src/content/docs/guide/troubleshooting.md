@@ -184,7 +184,7 @@ Make sure you are on ESLint extension v3.0+ and add to `.vscode/settings.json`:
 
 ## General Issues
 
-### `eslintConfig is not a function` or import error
+### `defineConfig is not a function` or import error
 
 The named v3 factory is `defineConfig`:
 

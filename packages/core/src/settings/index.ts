@@ -1,1 +1,1 @@
-export { createGitignoreConfig, gitignore } from './gitignore.js'
+export { createGitignoreConfig } from './gitignore.js'

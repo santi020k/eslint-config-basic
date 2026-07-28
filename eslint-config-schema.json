@@ -46,7 +46,6 @@
         "qwik",
         "react",
         "react-router",
-        "remix",
         "slidev",
         "solid",
         "svelte",
@@ -295,11 +294,7 @@
             },
             "react-router": {
               "$ref": "#/definitions/ImportedFramework",
-              "description": "New name for Remix projects on React Router v7+."
-            },
-            "remix": {
-              "$ref": "#/definitions/ImportedFramework",
-              "deprecated": "Remix merged into React Router v7 — use `react-router` instead."
+              "description": "React Router v7 framework mode, including projects migrated from Remix."
             },
             "slidev": {
               "$ref": "#/definitions/ImportedFramework"

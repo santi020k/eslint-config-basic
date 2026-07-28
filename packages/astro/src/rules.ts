@@ -93,6 +93,3 @@ export const getRules = (options?: AstroOptions): TSESLint.Linter.RulesRecord =>
     ...jsxRules
   }
 }
-
-// Legacy export for backwards compatibility (defaults to no frameworks for safety)
-export const rules = getRules()

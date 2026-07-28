@@ -40,9 +40,6 @@ export const createAstroConfig = (options?: AstroOptions): TSESLint.FlatConfig.C
 // Default export as factory function
 export default createAstroConfig
 
-// Static config for backwards compatibility (no frameworks by default)
-export const astroConfig = createAstroConfig()
-
 // Re-export types and utilities
 export { getRules }
 export type { AstroOptions }

@@ -18,7 +18,7 @@ import { describe, expect, test } from 'vitest'
 
 import { extractConfigNames, extractRuleNames } from './test-utils.js'
 
-describe('eslintConfig Function', () => {
+describe('defineConfig Function', () => {
   test('should return an array when called with minimal options', async () => {
     const config = await defineConfig({})
 

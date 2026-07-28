@@ -36,7 +36,6 @@
     "@santi020k/eslint-config-qwik": "workspace:^",
     "@santi020k/eslint-config-react": "workspace:^",
     "@santi020k/eslint-config-react-router": "workspace:^",
-    "@santi020k/eslint-config-remix": "workspace:^",
     "@santi020k/eslint-config-slidev": "workspace:^",
     "@santi020k/eslint-config-solid": "workspace:^",
     "@santi020k/eslint-config-svelte": "workspace:^",

@@ -351,7 +351,6 @@ export const ReactConfigKeys = [
   'next',
   'expo',
   'react-router',
-  'remix'
 ] as const
 
 /**
@@ -372,7 +371,6 @@ export type DetectedFrameworkName =
   'qwik' |
   'react' |
   'react-router' |
-  'remix' |
   'slidev' |
   'solid' |
   'svelte' |
@@ -442,11 +440,8 @@ export interface EslintConfigOptions {
     qwik?: ImportedFramework
     react?: ImportedFramework
 
-    /** New name for Remix projects on React Router v7+. */
+    /** React Router v7 framework mode, including projects migrated from Remix. */
     'react-router'?: ImportedFramework
-
-    /** @deprecated Remix merged into React Router v7 — use `react-router` instead. */
-    remix?: ImportedFramework
     slidev?: ImportedFramework
     solid?: ImportedFramework
     svelte?: ImportedFramework

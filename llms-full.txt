@@ -15,7 +15,6 @@ core → typescript → react → next
      ↘ hono
      ↘ expo
      ↘ qwik
-     ↘ remix
      ↘ react-router
      ↘ tanstack-start
      ↘ lit
@@ -27,7 +26,7 @@ basic (composes all above)
 
 ## Bundled Frameworks (v2+)
 
-Framework-specific configurations are bundled behind the main package as workspace dependencies of `packages/basic`. Application projects install only `@santi020k/eslint-config-basic` and enable frameworks with booleans (e.g. `frameworks.react: true`) or rely on auto-detection, which enables detected framework configs by default (`autoFrameworks: false` opts out; explicit `frameworks` values merge with detected ones under the default `optionMergeStrategy: 'merge'`). Next.js, Expo, React Router, TanStack Start, and Remix automatically include React rules; Nuxt and Slidev include Vue rules. The `remix` key is a deprecated alias of `react-router` (Remix merged into React Router v7). Supported frameworks: React, Next.js, Astro, Vue, Nuxt, Svelte, SolidJS, Angular, NestJS, Hono, Expo, Qwik, Remix, React Router, TanStack Start, Lit, Vite, and Slidev.
+Framework-specific configurations are loaded as optional peers of `packages/basic`. Applications enable frameworks with booleans (for example, `frameworks.react: true`) or rely on auto-detection. Next.js, Expo, React Router, TanStack Start, and detected Remix projects automatically include React rules; Nuxt and Slidev include Vue rules. Remix dependencies map to the `react-router` framework key. Supported frameworks: React, Next.js, Astro, Vue, Nuxt, Svelte, SolidJS, Angular, NestJS, Hono, Expo, Qwik, React Router, TanStack Start, Lit, Vite, and Slidev.
 
 ## Package Management
 
@@ -52,7 +51,7 @@ Only supports the Flat Config format. All configurations must be exported as `TS
 ### 2. Composable API
 Instead of traditional `extends`, a functional composition API is used:
 ```typescript
-eslintConfig({ typescript: true, frameworks: { react: true }, strict: true })
+defineConfig({ typescript: true, frameworks: { react: true }, strict: true })
 ```
 This enables dynamic detection, strict mode enforcement, and modular framework loading.
 
@@ -101,7 +100,7 @@ When writing integration tests that call `lintText()` in `packages/tests/src/int
 
 Always pass `typescript: false` when the test doesn't need TS-specific rule checking:
 ```ts
-const config = eslintConfig({ typescript: false, frameworks: { react: true } })
+const config = defineConfig({ typescript: false, frameworks: { react: true } })
 ```
 
 ## Development Workflows

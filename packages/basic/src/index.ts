@@ -53,40 +53,27 @@ export {
   generateAgentSkills,
   generateSkillContent
 } from './agent-skill-generator.js'
-// Lazy framework factories (bare framework names) plus
-// deprecated *Config aliases for the old mixed naming.
-/* eslint-disable @typescript-eslint/no-deprecated -- deliberate re-export of deprecated v1 aliases for migration */
+// Lazy framework factories.
 export {
   angular,
-  angularConfig,
   astro,
   expo,
-  expoConfig,
   hono,
   lit,
   nest,
-  nestConfig,
   next,
-  nextConfig,
   nuxt,
   preact,
-  preactConfig,
   qwik,
   react,
-  reactConfig,
   reactRouter,
-  remix,
   slidev,
   solid,
-  solidConfig,
   svelte,
-  svelteConfig,
   tanstackStart,
   vite,
-  vue,
-  vueConfig
+  vue
 } from './frameworks.js'
-/* eslint-enable @typescript-eslint/no-deprecated */
 
 // Re-export core types and utilities
 export type {
@@ -132,7 +119,6 @@ export {
   getGlobalsForRuntime,
   groups,
   hasReactConfig,
-  jsConfig,
   Library,
   NextMode,
   Preset,
@@ -144,7 +130,7 @@ export {
 } from '@santi020k/eslint-config-core'
 
 // Re-export framework configs
-export { tsConfig, typescriptConfig } from '@santi020k/eslint-config-typescript'
+export { typescriptConfig } from '@santi020k/eslint-config-typescript'
 
 const buildTailwindResult = (
   options: TailwindOptions,
@@ -329,7 +315,6 @@ const needsReactAutoAdd = (
 ): boolean => Boolean(
   frameworks.next ??
   frameworks.expo ??
-  (frameworks as Record<string, unknown>).remix ??
   frameworks['react-router'] ??
   (frameworks['tanstack-start'] && !frameworks.solid)
 ) && !frameworks.react
@@ -480,7 +465,6 @@ const buildEslintConfigs = async (params: BuildConfigsParams): Promise<FlatConfi
     ...get('solid'),
     ...get('angular'),
     ...get('qwik'),
-    ...get('remix'),
     ...get('react-router'),
     ...get('tanstack-start'),
     ...get('nuxt'),
@@ -573,12 +557,6 @@ const logEslintDebug = ({
   }, null, 2)}\n`)
 }
 
-const emitBasicWarnings = (options?: EslintConfigOptions) => {
-  if (options?.frameworks && 'remix' in options.frameworks) {
-    process.emitWarning('[eslint-config-basic] Warning: `frameworks.remix` is deprecated and will be removed in the next major. Please use `frameworks["react-router"]` instead.')
-  }
-}
-
 const emitAstroDoctorWarning = (
   extensions: Extension[],
   frameworks: Record<string, unknown>
@@ -601,7 +579,7 @@ const resolveProjectConfigs = async (
     const projectRoot = join(detectRootDir ?? process.cwd(), projectPath)
     const inheritedOptions = mergeProjectOptions(projectDefaults ?? {}, projectOptions)
 
-    const scopedConfigs = await eslintConfig({
+    const scopedConfigs = await defineConfig({
       autoFrameworks,
       ...inheritedOptions,
       projectDefaults: undefined,
@@ -657,12 +635,10 @@ const getConfigsParams = (
  * @param {ConfigInput[]} extraConfigs - Local flat-config overrides appended after generated config
  * @returns {FlatConfigArray} The final ESLint configuration array
  */
-export const eslintConfig = async (
+export const defineConfig = async (
   options?: EslintConfigOptions,
   ...extraConfigs: ConfigInput[]
 ): Promise<FlatConfigArray> => {
-  emitBasicWarnings(options)
-
   const {
     detection,
     extensions: optExtensions,
@@ -782,10 +758,3 @@ export const eslintConfig = async (
 
   return applyStrictMode(patchedConfigs, strict)
 }
-
-/**
- * Preferred public composer for `eslint.config.*` files.
- *
- * `eslintConfig()` remains available as a compatibility alias.
- */
-export const defineConfig = eslintConfig

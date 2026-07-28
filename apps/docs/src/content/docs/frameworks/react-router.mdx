@@ -5,7 +5,8 @@ description: "Use React Router v7 (framework mode) support from the lean v3 comp
 
 import InstallTabs from '../../../components/InstallTabs.astro'
 
-Use React Router v7 (framework mode) support from the lean v3 composer. This config is the successor to the [Remix config](/frameworks/remix), since Remix merged into React Router v7.
+Use React Router v7 framework-mode support from the lean v3 composer. This is
+also the supported configuration for projects migrated from Remix.
 
 ## Install
 
@@ -38,12 +39,13 @@ With the required config packages installed, the one-line recommended entry auto
 
 ## Notes
 
-- Migrating from Remix? Enable `'react-router'` instead of `remix` — the rule coverage carries over.
+- Migrating from Remix? Enable `'react-router'`; Remix dependencies are
+  auto-detected as React Router projects.
 - Pair this config with the [React config](/frameworks/react) — auto-detection handles this for you.
 - This framework package is a public, optional dependency in v3; the basic composer loads it only when enabled.
 
 ## Related Pages
 
-- [Remix](/frameworks/remix)
+- [Remix migration](/frameworks/remix)
 - [React](/frameworks/react)
 - [Configuration](/guide/configuration)

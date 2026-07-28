@@ -139,7 +139,9 @@ export default await defineConfig({
 })
 ```
 
-Next.js, Expo, and Remix automatically include React rules. You can still pass imported config arrays or factories for advanced cases, but app configs should prefer booleans.
+Next.js, Expo, React Router, and detected Remix projects automatically include
+React rules. You can still pass imported config arrays or factories for
+advanced cases, but app configs should prefer booleans.
 
 | Framework | Option |
 | :--- | :--- |
@@ -154,7 +156,7 @@ Next.js, Expo, and Remix automatically include React rules. You can still pass i
 | Hono | `frameworks.hono` |
 | Expo | `frameworks.expo` |
 | Qwik | `frameworks.qwik` |
-| Remix | `frameworks.remix` |
+| React Router and Remix projects | `frameworks['react-router']` |
 | Vite | `frameworks.vite` |
 | Slidev | `frameworks.slidev` |
 
@@ -419,13 +421,13 @@ See the [Core Package](/packages/core#import-sorting) page for the full group or
 
 ## Common Patterns
 
-### Fullstack Remix + Tailwind
+### React Router or Remix + Tailwind
 
 ```js
 import { defineConfig, Library } from '@santi020k/eslint-config-basic'
 
 export default await defineConfig({
-  frameworks: { remix: true },
+  frameworks: { 'react-router': true },
   libraries: [Library.Tailwind]
 })
 ```

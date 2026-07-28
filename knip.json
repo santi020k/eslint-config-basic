@@ -1,5 +1,5 @@
 {
-  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "$schema": "https://unpkg.com/knip@6/schema.json",
   "ignoreWorkspaces": [
     "packages/playground",
     "packages/playground/**"
@@ -27,7 +27,7 @@
       "project": ["src/**/*.{js,jsx,ts,tsx,vue,svelte,astro}"]
     },
     "apps/docs": {
-      "project": ["src/**/*.ts", "tests/**/*.ts", "scripts/**/*.{js,mjs,ts}"]
+      "project": ["src/**/*.{ts,astro,md,mdx}", "tests/**/*.ts", "scripts/**/*.{js,mjs,ts}"]
     },
     "packages/tests": {
       "entry": ["src/**/*.test.ts"],
@@ -48,7 +48,6 @@
         "@santi020k/eslint-config-qwik",
         "@santi020k/eslint-config-react",
         "@santi020k/eslint-config-react-router",
-        "@santi020k/eslint-config-remix",
         "@santi020k/eslint-config-slidev",
         "@santi020k/eslint-config-solid",
         "@santi020k/eslint-config-svelte",
@@ -87,30 +86,6 @@
         "graphql",
         "oxlint",
         "zod"
-      ]
-    },
-    "packages/lite": {
-      "ignoreDependencies": [
-        "@santi020k/eslint-config-angular",
-        "@santi020k/eslint-config-astro",
-        "@santi020k/eslint-config-expo",
-        "@santi020k/eslint-config-hono",
-        "@santi020k/eslint-config-integrations",
-        "@santi020k/eslint-config-lit",
-        "@santi020k/eslint-config-nest",
-        "@santi020k/eslint-config-next",
-        "@santi020k/eslint-config-nuxt",
-        "@santi020k/eslint-config-preact",
-        "@santi020k/eslint-config-qwik",
-        "@santi020k/eslint-config-react",
-        "@santi020k/eslint-config-react-router",
-        "@santi020k/eslint-config-remix",
-        "@santi020k/eslint-config-slidev",
-        "@santi020k/eslint-config-solid",
-        "@santi020k/eslint-config-svelte",
-        "@santi020k/eslint-config-tanstack-start",
-        "@santi020k/eslint-config-vite",
-        "@santi020k/eslint-config-vue"
       ]
     },
     "packages/react-router": {

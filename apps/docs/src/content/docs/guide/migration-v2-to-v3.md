@@ -99,7 +99,36 @@ introduced. Replace the package name; the composer options remain the same:
 
 You can also replace a zero-config file with the one-line recommended entry.
 
-## 6. Verify
+## 6. Replace removed compatibility APIs
+
+The v1 aggregate aliases have completed their deprecation period. Import the
+v3 names instead:
+
+| Removed | Replacement |
+| :--- | :--- |
+| `eslintConfig` | `defineConfig` |
+| `angularConfig`, `expoConfig`, `nestConfig`, `nextConfig`, `preactConfig` | `angular`, `expo`, `nest`, `next`, `preact` |
+| `reactConfig`, `solidConfig`, `svelteConfig`, `vueConfig` | `react`, `solid`, `svelte`, `vue` |
+| `jsConfig` | `coreConfig` |
+| `tsConfig` | `typescriptConfig` |
+| `astroConfig` | `createAstroConfig()` |
+
+## 7. Move Remix to React Router
+
+```sh
+npm remove @santi020k/eslint-config-remix
+npm install -D @santi020k/eslint-config-react-router@^3 @santi020k/eslint-config-react@^3
+```
+
+```diff
+- frameworks: { remix: true }
++ frameworks: { 'react-router': true }
+```
+
+Existing `@remix-run/react` and `@remix-run/node` dependencies are detected as
+React Router projects automatically.
+
+## 8. Verify
 
 ```sh
 npx basic-eslint explain

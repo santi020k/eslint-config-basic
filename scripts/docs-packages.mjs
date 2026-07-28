@@ -104,13 +104,6 @@ export const packageDocs = [
     title: 'Qwik guide'
   },
   {
-    description: 'Remix-specific linting support for the shared configuration stack.',
-    docsPath: '/frameworks/remix',
-    packageName: '@santi020k/eslint-config-remix',
-    packagePath: 'packages/remix',
-    title: 'Remix guide'
-  },
-  {
     description: 'React Router v7 (framework mode) rules, successor to the Remix configuration.',
     docsPath: '/frameworks/react-router',
     packageName: '@santi020k/eslint-config-react-router',

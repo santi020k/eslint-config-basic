@@ -77,7 +77,6 @@ const sidebar = sidebarLinks([
           { label: 'Hono', slug: 'frameworks/hono' },
           { label: 'Expo', slug: 'frameworks/expo' },
           { label: 'Qwik', slug: 'frameworks/qwik' },
-          { label: 'Remix', slug: 'frameworks/remix' },
           { label: 'React Router', slug: 'frameworks/react-router' },
           { label: 'TanStack Start', slug: 'frameworks/tanstack-start' },
           { label: 'Lit', slug: 'frameworks/lit' },

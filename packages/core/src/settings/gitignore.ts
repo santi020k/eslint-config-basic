@@ -17,9 +17,3 @@ export const createGitignoreConfig = (
     [includeIgnoreFile(gitignorePath, 'eslint-config/gitignore')] :
     []
 }
-
-/**
- * `.gitignore` configuration resolved from the current working directory.
- * Prefer `createGitignoreConfig(rootDir)` when the config root is known.
- */
-export const gitignore: TSESLint.FlatConfig.ConfigArray = createGitignoreConfig()

@@ -468,7 +468,7 @@ describe('detectProjectOptions', () => {
 
     const options = detectProjectOptions()
 
-    expect(options.detectedFrameworks).toContain('remix')
+    expect(options.detectedFrameworks).toContain('react-router')
     expect(options.frameworks).not.toHaveProperty('remix')
   })
 
@@ -481,7 +481,7 @@ describe('detectProjectOptions', () => {
 
     const options = detectProjectOptions()
 
-    expect(options.detectedFrameworks).toContain('remix')
+    expect(options.detectedFrameworks).toContain('react-router')
   })
 
   test('should detect React Router if @react-router/dev is a dependency', () => {
@@ -995,8 +995,8 @@ describe('detectProjectOptions', () => {
 })
 
 describe('detectProjectOptions — does not pollute frameworks with booleans', () => {
-  test('passing detectProjectOptions() result directly to eslintConfig() should not throw', async () => {
-    const { eslintConfig } = await import('@santi020k/eslint-config-basic')
+  test('passing detectProjectOptions() result directly to defineConfig() should not throw', async () => {
+    const { defineConfig } = await import('@santi020k/eslint-config-basic')
 
     vi.mocked(fs.existsSync).mockReturnValue(true)
 
@@ -1007,6 +1007,6 @@ describe('detectProjectOptions — does not pollute frameworks with booleans', (
     const detected = detectProjectOptions()
 
     // Must not throw — previously frameworks.next = true would cause resolveFramework to throw
-    await expect(eslintConfig(detected)).resolves.toBeDefined()
+    await expect(defineConfig(detected)).resolves.toBeDefined()
   })
 })

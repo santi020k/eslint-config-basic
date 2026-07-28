@@ -49,7 +49,7 @@ const createLiteBaseOptions = (): LiteEslintConfigOptions => ({
 
 const countLiteConfigs = async (options: LiteEslintConfigOptions) => (await defineLiteConfig(options)).length
 
-describe('eslintConfig enum contracts', () => {
+describe('defineConfig enum contracts', () => {
   test('maps all library enums to optional configs', async () => {
     const baseLength = await countConfigs(createBaseOptions())
 
@@ -116,7 +116,7 @@ describe('eslintConfig enum contracts', () => {
   })
 })
 
-describe('eslintConfig framework contracts', () => {
+describe('defineConfig framework contracts', () => {
   const frameworkNames: DetectedFrameworkName[] = [
     'react',
     'next',
@@ -129,7 +129,6 @@ describe('eslintConfig framework contracts', () => {
     'nest',
     'hono',
     'qwik',
-    'remix',
     'react-router',
     'tanstack-start',
     'nuxt',
@@ -157,7 +156,7 @@ describe('eslintConfig framework contracts', () => {
   })
 })
 
-describe('lite eslintConfig enum contracts', () => {
+describe('lite defineConfig enum contracts', () => {
   test('maps all library enums to optional configs', async () => {
     const baseLength = await countLiteConfigs(createLiteBaseOptions())
 
@@ -224,7 +223,7 @@ describe('lite eslintConfig enum contracts', () => {
   })
 })
 
-describe('lite eslintConfig framework contracts', () => {
+describe('lite defineConfig framework contracts', () => {
   const frameworkNames: DetectedFrameworkName[] = [
     'react',
     'next',
@@ -237,7 +236,6 @@ describe('lite eslintConfig framework contracts', () => {
     'nest',
     'hono',
     'qwik',
-    'remix',
     'react-router',
     'tanstack-start',
     'nuxt',

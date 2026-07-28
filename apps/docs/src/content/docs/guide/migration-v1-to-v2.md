@@ -18,7 +18,7 @@ The internal architecture is still modular, but application projects no longer n
 | :--- | :--- |
 | Install `basic` plus framework config packages. | Install only `@santi020k/eslint-config-basic`. |
 | Import framework configs from `@santi020k/eslint-config-react`, `@santi020k/eslint-config-next`, etc. | Use `frameworks.<name>: true`. |
-| Detected frameworks were informational. | Detected frameworks are enabled by `eslintConfig()` by default. |
+| Detected frameworks were informational. | Detected frameworks are enabled by `defineConfig()` by default. |
 | Next.js and Expo required an explicit React config. | Next.js, Expo, and Remix automatically include React rules. |
 | Manual inspection required reading generated config. | `basic-eslint explain` prints detected v2 inputs. |
 | Migration was fully manual. | `basic-eslint migrate` reports v1-to-v2 changes to make. |
@@ -39,7 +39,7 @@ Targeting v10 only lets the configs rely on v10 behavior: per-file config lookup
 
 If you composed configs manually from named exports, two things changed:
 
-1. **Bare names**: the mixed v1 naming (`reactConfig`, `vueConfig`, `nextConfig` next to bare `astro`, `hono`, `vite`) is normalized to bare framework names: `angular`, `astro`, `expo`, `hono`, `lit`, `nest`, `next`, `nuxt`, `qwik`, `react`, `reactRouter`, `slidev`, `solid`, `svelte`, `tanstackStart`, `vite`, `vue`. The old `*Config` names still exist as deprecated aliases.
+1. **Bare names**: the mixed v1 naming (`reactConfig`, `vueConfig`, `nextConfig` next to bare `astro`, `hono`, `vite`) is normalized to bare framework names: `angular`, `astro`, `expo`, `hono`, `lit`, `nest`, `next`, `nuxt`, `qwik`, `react`, `reactRouter`, `slidev`, `solid`, `svelte`, `tanstackStart`, `vite`, `vue`. The deprecated `*Config` aliases were removed in v3.
 2. **Async factories**: every framework export is now a lazy factory returning `Promise<FlatConfigArray>` — the framework's plugins are only imported when you call it. Exports that used to be plain arrays must now be called and awaited.
 
 ```js
@@ -115,11 +115,11 @@ Keep `eslint`, `typescript`, React, Next.js, Vue, or other runtime framework pac
 Before:
 
 ```js
-import { eslintConfig } from '@santi020k/eslint-config-basic'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 import next from '@santi020k/eslint-config-next'
 import react from '@santi020k/eslint-config-react'
 
-export default await eslintConfig({
+export default await defineConfig({
   frameworks: {
     next,
     react

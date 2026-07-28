@@ -85,7 +85,7 @@ export const defineLazyConfig = (
     } catch (error) {
       throw new Error(
         `Unable to load optional ESLint config "${name}". ` +
-        'Install the peer dependencies for that integration or remove it from your eslintConfig options. ' +
+        'Install the peer dependencies for that integration or remove it from your defineConfig options. ' +
         `Original error: ${getErrorMessage(error)}`, { cause: error }
       )
     }

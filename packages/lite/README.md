@@ -1,6 +1,8 @@
 # @santi020k/eslint-config-lite
 
-Lite composer for projects that install framework and integration config packages manually.
+Compatibility wrapper for projects migrating from the v2 Lite composer.
+Version 3 re-exports the lean `@santi020k/eslint-config-basic` API; new projects
+should install and import the Basic package directly.
 
 This package is part of the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.
 

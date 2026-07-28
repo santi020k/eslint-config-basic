@@ -61,7 +61,6 @@
     "@santi020k/eslint-config-qwik": "workspace:^",
     "@santi020k/eslint-config-react": "workspace:^",
     "@santi020k/eslint-config-react-router": "workspace:^",
-    "@santi020k/eslint-config-remix": "workspace:^",
     "@santi020k/eslint-config-slidev": "workspace:^",
     "@santi020k/eslint-config-solid": "workspace:^",
     "@santi020k/eslint-config-svelte": "workspace:^",
@@ -87,7 +86,6 @@
     "@santi020k/eslint-config-qwik": "workspace:^",
     "@santi020k/eslint-config-react": "workspace:^",
     "@santi020k/eslint-config-react-router": "workspace:^",
-    "@santi020k/eslint-config-remix": "workspace:^",
     "@santi020k/eslint-config-slidev": "workspace:^",
     "@santi020k/eslint-config-solid": "workspace:^",
     "@santi020k/eslint-config-svelte": "workspace:^",
@@ -135,9 +133,6 @@
       "optional": true
     },
     "@santi020k/eslint-config-react-router": {
-      "optional": true
-    },
-    "@santi020k/eslint-config-remix": {
       "optional": true
     },
     "@santi020k/eslint-config-slidev": {

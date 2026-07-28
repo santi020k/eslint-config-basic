@@ -1,8 +1,5 @@
 // Dynamic-import helper for lazily loading optional packages.
 
-import { createRequire } from 'node:module'
-import { pathToFileURL } from 'node:url'
-
 // Bypass jiti/bundler transformation of import() to require().
 // Reflect.construct avoids a direct `new Function()` reference (which triggers
 // no-implied-eval) while achieving the same runtime behaviour: the string body
@@ -37,23 +34,6 @@ export const createModuleLoader = (resolveFn: (specifier: string) => string) => 
     resolved = resolveFn(specifier)
   } catch {
     // Ignore and let dynamicImport throw natural error
-  }
-
-  return await dynamicImport(resolved) as T
-}
-
-// Keep the default loadModule for backwards compatibility
-const defaultReq = createRequire(import.meta.url)
-
-export const loadModule = async <T = unknown>(specifier: string): Promise<T> => {
-  let resolved = specifier
-
-  if (!isVitest) {
-    try {
-      resolved = pathToFileURL(defaultReq.resolve(specifier)).href
-    } catch {
-      // Ignore and let dynamicImport throw natural error
-    }
   }
 
   return await dynamicImport(resolved) as T

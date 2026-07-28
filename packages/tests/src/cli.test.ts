@@ -255,7 +255,7 @@ describe('CLI command UX', () => {
     const backup = readFileSync(join(cwd, 'eslint.config.js.bak'), 'utf8')
     const output = logSpy.mock.calls.flat().join('\n')
 
-    expect(config).toContain('eslintConfig')
+    expect(config).toContain('defineConfig')
     expect(config).toContain('next: true')
     expect(config).toContain('react: true')
     expect(config).not.toContain('@santi020k/eslint-config-next')

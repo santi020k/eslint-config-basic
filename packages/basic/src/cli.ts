@@ -35,7 +35,6 @@ const getFrameworkKeys = (detectedFrameworks?: string[]): string[] => {
   if (
     frameworkKeys.has('next') ||
     frameworkKeys.has('expo') ||
-    frameworkKeys.has('remix') ||
     frameworkKeys.has('react-router') ||
     (frameworkKeys.has('tanstack-start') && !frameworkKeys.has('solid'))
   ) {
@@ -60,7 +59,7 @@ const FRAMEWORK_PACKAGE_TO_KEY: Record<string, string> = {
   '@santi020k/eslint-config-qwik': 'qwik',
   '@santi020k/eslint-config-react': 'react',
   '@santi020k/eslint-config-react-router': 'react-router',
-  '@santi020k/eslint-config-remix': 'remix',
+  '@santi020k/eslint-config-remix': 'react-router',
   '@santi020k/eslint-config-slidev': 'slidev',
   '@santi020k/eslint-config-solid': 'solid',
   '@santi020k/eslint-config-svelte': 'svelte',
@@ -323,9 +322,9 @@ const createStandardsContent = (cwd: string): string => {
     '## Recommended Config',
     '',
     '```js',
-    'import { eslintConfig } from \'@santi020k/eslint-config-basic\'',
+    'import { defineConfig } from \'@santi020k/eslint-config-basic\'',
     '',
-    'export default await eslintConfig()',
+    'export default await defineConfig()',
     '```',
     '',
     'Use `basic-eslint explain` when you want to inspect what the zero-config setup detects.'
@@ -853,9 +852,9 @@ const migrateConfigContent = (content: string): { changed: boolean, content: str
   const frameworks = getFrameworkKeys(importedFrameworks)
 
   const migrated = [
-    'import { eslintConfig } from \'@santi020k/eslint-config-basic\'',
+    'import { defineConfig } from \'@santi020k/eslint-config-basic\'',
     '',
-    'export default await eslintConfig({',
+    'export default await defineConfig({',
     '  frameworks: {',
     `    ${frameworks.map(key => `${toPropertyKey(key)}: true`).join(',\n    ')}`,
     '  }',
@@ -912,7 +911,7 @@ export const handleMigrate = (cwd: string = process.cwd(), write = false, json =
     '- Install only @santi020k/eslint-config-basic for the public config API.',
     '- Replace framework imports with bundled booleans such as frameworks: { react: true, next: true }.',
     '- Remove app-level @santi020k/eslint-config-react/next/vue/etc. config package imports.',
-    '- Try eslintConfig() first; v3 auto-detects supported frameworks and integrations.',
+    '- Try defineConfig() first; v3 auto-detects supported frameworks and integrations.',
     '- Use basic-eslint explain to review what v3 detects before committing the migration.'
   ]
 

@@ -26,7 +26,7 @@ This document defines contributor-facing architecture boundaries for the monorep
 
 1. `detectProjectOptions()` infers defaults.
 2. `resolvePreset()` provides preset defaults.
-3. `defineConfig()` (the preferred public name for `eslintConfig()`) merges detected + preset + explicit options.
+3. `defineConfig()` merges detected + preset + explicit options.
 4. Frameworks are resolved through `resolveFramework()`.
 5. Integrations are appended via `getIntegrationConfigs()`.
 6. Prettier is appended last via `getPrettierConfig()`.

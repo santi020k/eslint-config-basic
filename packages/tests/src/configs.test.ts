@@ -1,5 +1,5 @@
 import { angularConfig } from '@santi020k/eslint-config-angular'
-import { astroConfig } from '@santi020k/eslint-config-astro'
+import { createAstroConfig } from '@santi020k/eslint-config-astro'
 import {
   coreConfig,
   Extension,
@@ -20,7 +20,6 @@ import { preactConfig } from '@santi020k/eslint-config-preact'
 import { qwik as qwikConfig } from '@santi020k/eslint-config-qwik'
 import { reactConfig } from '@santi020k/eslint-config-react'
 import { reactRouter as reactRouterConfig } from '@santi020k/eslint-config-react-router'
-import { remix as remixConfig } from '@santi020k/eslint-config-remix'
 import { slidevConfig } from '@santi020k/eslint-config-slidev'
 import { solidConfig } from '@santi020k/eslint-config-solid'
 import { svelteConfig } from '@santi020k/eslint-config-svelte'
@@ -31,6 +30,8 @@ import { vueConfig } from '@santi020k/eslint-config-vue'
 
 import type { TSESLint } from '@typescript-eslint/utils'
 import { describe, expect, test } from 'vitest'
+
+const astroConfig = createAstroConfig()
 
 describe('Core Config', () => {
   test('should export coreConfig as an array', () => {
@@ -372,22 +373,6 @@ describe('Preact Config', () => {
 
     expect(names).toContain('eslint-config-preact/recommended')
     expect(names).toContain('eslint-config-preact/custom')
-  })
-})
-
-describe('Remix Config', () => {
-  test('should export remix as an array', () => {
-    expect(Array.isArray(remixConfig)).toBe(true)
-  })
-
-  test('should have at least one config entry', () => {
-    expect(remixConfig.length).toBeGreaterThan(0)
-  })
-
-  test('should re-export react-router config with eslint-config-remix prefix', () => {
-    const names = remixConfig.flatMap((c: TSESLint.FlatConfig.Config) => (c.name ? [c.name] : []))
-
-    expect(names.every((name: string) => name.startsWith('eslint-config-remix'))).toBe(true)
   })
 })
 
