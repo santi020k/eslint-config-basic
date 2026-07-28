@@ -252,7 +252,9 @@ describe('Config Snapshots — Critical Rule Entries', () => {
   })
 
   test('typescript critical rule entries should match snapshot', () => {
-    const entries = extractRuleEntries(typescriptConfig as Record<string, unknown>[], [
+    const typeCheckedConfig = (typescriptConfig as Record<string, unknown>[])
+      .filter(entry => entry.name !== 'eslint-config-typescript/untyped-files')
+    const entries = extractRuleEntries(typeCheckedConfig, [
       '@typescript-eslint/no-explicit-any',
       '@typescript-eslint/no-unused-vars',
       '@typescript-eslint/consistent-type-imports',

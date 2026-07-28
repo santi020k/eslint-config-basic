@@ -537,7 +537,9 @@ describe('eslintConfig Function', () => {
 
       const astroConfig = config.find(entry => entry.name === 'astro/recommended')
 
-      expect(astroConfig?.files?.every(pattern => pattern.startsWith('apps/web/'))).toBe(true)
+      expect(astroConfig?.files?.every(
+        pattern => typeof pattern === 'string' && pattern.startsWith('apps/web/')
+      )).toBe(true)
     } finally {
       rmSync(root, { force: true, recursive: true })
     }

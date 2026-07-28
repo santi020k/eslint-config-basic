@@ -257,6 +257,38 @@ const resolveBucketDefaults = (detected: EslintConfigOptions) => ({
   detectedTools: detected.tools ?? []
 })
 
+const scopeWorkspaceDetection = (
+  detected: EslintConfigOptions,
+  isWorkspace: boolean
+): EslintConfigOptions => isWorkspace ?
+  {
+    ...detected,
+    detectedFrameworks: [],
+    libraries: [],
+    nextMode: undefined,
+    runtime: Runtime.Universal
+  } :
+  detected
+
+const resolveDetectedOptions = (
+  detectRootDir: string | undefined,
+  detection: EslintConfigOptions['detection'],
+  requestedPreset: EslintConfigOptions['preset']
+): EslintConfigOptions => {
+  const rawDetected = detectProjectOptions(detectRootDir)
+  const isWorkspace = Object.keys(rawDetected.projects ?? {}).length > 0
+
+  const shouldDetectProjects = requestedPreset === Preset.Monorepo ||
+    rawDetected.preset === Preset.Monorepo
+
+  const detected = applyDetectionControls(rawDetected, detection, { projects: shouldDetectProjects })
+
+  // Root devDependencies in a workspace commonly contain frameworks and
+  // libraries used by only one package. Keep those detections package-scoped;
+  // explicit root options still apply normally.
+  return scopeWorkspaceDetection(detected, isWorkspace)
+}
+
 const resolveNextModeValue = (
   options: EslintConfigOptions | undefined,
   presetDefaults: Partial<EslintConfigOptions>,
@@ -634,27 +666,7 @@ export const eslintConfig = async (
   } = options ?? {}
 
   const { autoFrameworks, detectRootDir, optionMergeStrategy, requestedPreset } = resolveConfigSetup(options)
-  const rawDetected = detectProjectOptions(detectRootDir)
-  const isWorkspace = Object.keys(rawDetected.projects ?? {}).length > 0
-
-  const shouldDetectProjects = requestedPreset === Preset.Monorepo ||
-    rawDetected.preset === Preset.Monorepo
-
-  const detected = applyDetectionControls(rawDetected, detection, { projects: shouldDetectProjects })
-
-  // Root devDependencies in a workspace commonly contain frameworks and
-  // libraries used by only one package. Keep those detections package-scoped;
-  // explicit root options still apply normally.
-  if (isWorkspace) {
-    detected.detectedFrameworks = []
-
-    detected.libraries = []
-
-    detected.nextMode = undefined
-
-    detected.runtime = Runtime.Universal
-  }
-
+  const detected = resolveDetectedOptions(detectRootDir, detection, requestedPreset)
   const { frameworkDefaults, preset, presetDefaults } = resolvePresetMeta(requestedPreset, detected, autoFrameworks)
   const configuredProjects = resolveConfiguredProjects(detected, options)
   const { detectedExtensions, detectedFormats, detectedLibraries, detectedTesting, detectedTools } = resolveBucketDefaults(detected)
