@@ -23,6 +23,8 @@ available:
 
 ```js
 import { tailwind, vitest } from '@santi020k/eslint-config-integrations'
+
+export default [...tailwind(), ...vitest()]
 ```
 
 Prefer the owning packages for new code:
@@ -30,4 +32,6 @@ Prefer the owning packages for new code:
 ```js
 import { tailwind } from '@santi020k/eslint-config-libraries'
 import { vitest } from '@santi020k/eslint-config-testing'
+
+export default [...tailwind(), ...vitest()]
 ```

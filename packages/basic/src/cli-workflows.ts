@@ -1,3 +1,8 @@
+/* eslint-disable complexity -- workflow handlers intentionally cover CLI output and compatibility branches */
+/* eslint-disable no-console -- CLI handlers own user-facing terminal output */
+/* eslint-disable security/detect-non-literal-fs-filename -- all paths are scoped to the caller-selected project root */
+/* eslint-disable security/detect-non-literal-regexp -- strict preset names are validated against an internal allowlist */
+/* eslint-disable security/detect-object-injection -- snapshot keys come from enumerated file and rule names */
 import { spawnSync } from 'node:child_process'
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
@@ -172,6 +177,18 @@ const outputCommandFailure = (label: string, result: CommandResult): never => {
   throw new Error(`${label} failed: ${details}`)
 }
 
+const createBackupPath = (filePath: string, suffix: string): string => {
+  const preferred = `${filePath}.${suffix}.bak`
+
+  if (!existsSync(preferred)) return preferred
+
+  let index = 2
+
+  while (existsSync(`${preferred}.${index}`)) index++
+
+  return `${preferred}.${index}`
+}
+
 const updateConfigStrictPreset = (cwd: string, preset: string): null | string => {
   if (!['ci', 'pedantic'].includes(preset)) {
     throw new Error(`Unsupported baseline preset "${preset}". Use "ci" or "pedantic".`)
@@ -201,7 +218,7 @@ const updateConfigStrictPreset = (cwd: string, preset: string): null | string =>
     )
   }
 
-  const backupPath = `${configPath}.baseline.bak`
+  const backupPath = createBackupPath(configPath, 'baseline')
 
   writeFileSync(backupPath, content)
 

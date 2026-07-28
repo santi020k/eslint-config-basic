@@ -60,6 +60,7 @@ const migrationContext = (
 
 afterEach(() => {
   process.exitCode = undefined
+  vi.restoreAllMocks()
 
   for (const dir of tempDirs.splice(0)) {
     rmSync(dir, { force: true, recursive: true })
@@ -91,6 +92,8 @@ describe('v2 to v3 migration', () => {
     const cwd = createTempProject({
       devDependencies: {
         '@santi020k/eslint-config-basic': '^2.0.0',
+        '@santi020k/eslint-config-lite': '^2.0.0',
+        '@santi020k/eslint-config-remix': '^2.0.0',
         eslint: '^10.0.0',
         vitest: '^4.0.0'
       },
@@ -113,6 +116,8 @@ describe('v2 to v3 migration', () => {
     expect(packageJson.devDependencies['@santi020k/eslint-config-basic']).toBe('^3.0.0')
     expect(packageJson.devDependencies['@santi020k/eslint-config-react']).toBe('^3.0.0')
     expect(packageJson.devDependencies['@santi020k/eslint-config-testing']).toBe('^3.0.0')
+    expect(packageJson.devDependencies['@santi020k/eslint-config-lite']).toBeUndefined()
+    expect(packageJson.devDependencies['@santi020k/eslint-config-remix']).toBeUndefined()
     expect(existsSync(join(cwd, 'package.json.v2.bak'))).toBe(true)
     vi.restoreAllMocks()
   })

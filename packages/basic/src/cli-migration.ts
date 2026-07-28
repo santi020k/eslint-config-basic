@@ -1,3 +1,8 @@
+/* eslint-disable @typescript-eslint/no-dynamic-delete, security/detect-object-injection -- migration rewrites validated package.json dependency records */
+/* eslint-disable complexity -- migration planners intentionally cover dry-run, write, lean, full, and compatibility branches */
+/* eslint-disable no-console -- CLI handlers own user-facing terminal output */
+/* eslint-disable security/detect-non-literal-fs-filename -- all paths are scoped to the caller-selected project root */
+/* eslint-disable security/detect-non-literal-regexp -- replacement identifiers come from an internal constant map */
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { basename, join } from 'node:path'
 
@@ -199,6 +204,18 @@ const getConfigPath = (cwd: string): null | string => {
   return filenames.map(filename => join(cwd, filename)).find(path => existsSync(path)) ?? null
 }
 
+const createBackupPath = (filePath: string, suffix: string): string => {
+  const preferred = `${filePath}.${suffix}.bak`
+
+  if (!existsSync(preferred)) return preferred
+
+  let index = 2
+
+  while (existsSync(`${preferred}.${index}`)) index++
+
+  return `${preferred}.${index}`
+}
+
 const getDependencyRecord = (
   packageJson: Record<string, unknown>,
   field: typeof dependencyFields[number]
@@ -322,8 +339,15 @@ export const migrateConfigToV3 = (
     }
   }
 
-  if (/\bframeworks\s*:\s*\{[\s\S]*?\bremix\s*:/.test(migrated)) {
-    migrated = migrated.replaceAll(/\bremix(\s*:)/g, '\'react-router\'$1')
+  const remixMigrated = migrated.replace(
+    /(\bframeworks\s*:\s*\{)([\s\S]*?)(\})/,
+    (_match, opening: string, body: string, closing: string) => (
+      `${opening}${body.replaceAll(/\bremix(\s*:)/g, '\'react-router\'$1')}${closing}`
+    )
+  )
+
+  if (remixMigrated !== migrated) {
+    migrated = remixMigrated
 
     changes.push('Moved frameworks.remix to frameworks["react-router"].')
   }
@@ -387,11 +411,6 @@ const migratePackageJson = (
   configFeaturePackages: string[]
 ): { changed: boolean, packageJson: Record<string, unknown>, packages: string[] } => {
   const next = structuredClone(packageJson)
-
-  const devDependencies = {
-    ...getDependencyRecord(next, 'devDependencies')
-  }
-
   const previouslyDeclared = getDeclaredConfigPackages(next)
 
   for (const field of dependencyFields) {
@@ -411,6 +430,10 @@ const migratePackageJson = (
 
     if (Object.keys(dependencies).length > 0) next[field] = dependencies
     else delete next[field]
+  }
+
+  const devDependencies = {
+    ...getDependencyRecord(next, 'devDependencies')
   }
 
   devDependencies.eslint = '^10.0.0'
@@ -522,19 +545,23 @@ export const handleMigrateV3 = (
 
   if (options.write) {
     if (configPath && configMigration && configChanged) {
-      writeFileSync(`${configPath}.v2.bak`, configContent ?? '')
+      const backupPath = createBackupPath(configPath, 'v2')
+
+      writeFileSync(backupPath, configContent ?? '')
 
       writeFileSync(configPath, configMigration.content)
 
-      written.push(basename(configPath), `${basename(configPath)}.v2.bak`)
+      written.push(basename(configPath), basename(backupPath))
     }
 
     if (packageMigration.changed) {
-      writeFileSync(`${packagePath}.v2.bak`, `${JSON.stringify(packageJson, null, 2)}\n`)
+      const backupPath = createBackupPath(packagePath, 'v2')
+
+      writeFileSync(backupPath, `${JSON.stringify(packageJson, null, 2)}\n`)
 
       writeFileSync(packagePath, `${JSON.stringify(packageMigration.packageJson, null, 2)}\n`)
 
-      written.push('package.json', 'package.json.v2.bak')
+      written.push('package.json', basename(backupPath))
     }
   }
 

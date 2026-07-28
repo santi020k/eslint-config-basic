@@ -1,5 +1,6 @@
 import * as astroApi from '@santi020k/eslint-config-astro'
 import * as basicApi from '@santi020k/eslint-config-basic'
+import * as agentApi from '@santi020k/eslint-config-basic/agent'
 import * as coreApi from '@santi020k/eslint-config-core'
 import {
   a11y,
@@ -85,6 +86,11 @@ describe('Public API Re-exports', () => {
   test('basic keeps integrations out of the lean root API', () => {
     expect('vitest' in basicApi).toBe(false)
     expect('tailwind' in basicApi).toBe(false)
+  })
+
+  test('agent tooling is isolated behind the agent subpath', () => {
+    expect('generateAgentSkills' in basicApi).toBe(false)
+    expect(typeof agentApi.generateAgentSkills).toBe('function')
   })
 
   test('basic excludes APIs removed in v3', () => {

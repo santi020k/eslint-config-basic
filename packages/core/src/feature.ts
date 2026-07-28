@@ -29,9 +29,12 @@ export const resolveConfigFeatures = async (
   phase: ConfigFeaturePhase = 'config'
 ): Promise<FlatConfigArray> => {
   const selectedIds = new Set(selected)
+
   const matching = features
     .filter(feature => selectedIds.has(feature.id) && (feature.phase ?? 'config') === phase)
     .sort((left, right) => left.order - right.order)
 
-  return (await Promise.all(matching.map(feature => feature.create()))).flat()
+  return (await Promise.all(
+    matching.map(feature => Promise.resolve(feature.create()))
+  )).flat()
 }

@@ -146,6 +146,41 @@ export const packageDocs = [
     title: 'Slidev guide'
   },
   {
+    description: 'Specialized rule packs such as security, accessibility, Unicorn, and Oxlint.',
+    docsPath: '/tooling/extensions',
+    packageName: '@santi020k/eslint-config-extensions',
+    packagePath: 'packages/extensions',
+    title: 'Extensions'
+  },
+  {
+    description: 'ESLint parsers and rules for Markdown, JSONC, YAML, GraphQL, CSS, HTML, and other formats.',
+    docsPath: '/tooling/formats',
+    packageName: '@santi020k/eslint-config-formats',
+    packagePath: 'packages/formats',
+    title: 'Formats'
+  },
+  {
+    description: 'Library-specific rules for Tailwind, Storybook, AI SDKs, ORMs, and related ecosystems.',
+    docsPath: '/tooling/libraries',
+    packageName: '@santi020k/eslint-config-libraries',
+    packagePath: 'packages/libraries',
+    title: 'Libraries'
+  },
+  {
+    description: 'Testing configs for Vitest, Jest, Cypress, Playwright, and Testing Library.',
+    docsPath: '/tooling/testing',
+    packageName: '@santi020k/eslint-config-testing',
+    packagePath: 'packages/testing',
+    title: 'Testing'
+  },
+  {
+    description: 'Tool-specific configs for Prettier, CSpell, JSDoc, pnpm, Swagger, and more.',
+    docsPath: '/tooling/tools',
+    packageName: '@santi020k/eslint-config-tools',
+    packagePath: 'packages/tools',
+    title: 'Tools'
+  },
+  {
     description: 'Libraries, tools, testing, formats, and extensions integrations.',
     docsPath: '/packages/integrations',
     packageName: '@santi020k/eslint-config-integrations',
