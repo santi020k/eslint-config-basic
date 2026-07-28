@@ -6,7 +6,7 @@ import {
   useState
 } from 'react'
 
-import { useTheme } from './ThemeContext.jsx'
+import { useTheme } from './use-theme.js'
 
 // Helper function to simulate fetching data
 const fetchTodos = () => new Promise(resolve => {

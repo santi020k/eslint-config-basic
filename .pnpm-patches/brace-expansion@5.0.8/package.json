@@ -1,10 +1,11 @@
 {
   "name": "brace-expansion",
-  "description": "Brace expansion as known from sh/bash",
   "version": "5.0.8",
-  "files": [
-    "dist"
-  ],
+  "description": "Brace expansion as known from sh/bash",
+  "type": "module",
+  "main": "./dist/commonjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/commonjs/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
@@ -18,7 +19,9 @@
       }
     }
   },
-  "type": "module",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "preversion": "npm test",
     "postversion": "npm publish",
@@ -32,6 +35,9 @@
     "benchmark": "node benchmark/index.js",
     "typedoc": "typedoc --tsconfig .tshy/esm.json ./src/*.ts"
   },
+  "dependencies": {
+    "balanced-match": "^4.0.2"
+  },
   "devDependencies": {
     "@types/brace-expansion": "^1.1.2",
     "@types/node": "^25.2.1",
@@ -41,10 +47,6 @@
     "tshy": "^3.0.2",
     "typedoc": "^0.28.5"
   },
-  "dependencies": {
-    "balanced-match": "^4.0.2"
-  },
-  "license": "MIT",
   "engines": {
     "node": "20 || >=22"
   },
@@ -54,11 +56,9 @@
       ".": "./src/index.ts"
     }
   },
-  "main": "./dist/commonjs/index.js",
-  "types": "./dist/commonjs/index.d.ts",
-  "module": "./dist/esm/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/juliangruber/brace-expansion.git"
-  }
+  },
+  "license": "MIT"
 }

@@ -5,13 +5,13 @@ export const TailwindComponent = () => (
     {/* eslint-disable-next-line better-tailwindcss/enforce-consistent-line-wrapping */}
     <div className="rounded-xl bg-white p-8 shadow-2xl transition-all hover:scale-105">
       <h1 className="
-        bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-3xl
+        bg-linear-to-r from-blue-600 to-indigo-600 bg-clip-text text-3xl
         font-extrabold text-transparent
       "
       >
         Tailwind Playground
       </h1>
-      <p className="mt-4 text-lg leading-relaxed text-gray-700">
+      <p className="mt-4 text-lg/relaxed text-gray-700">
         This component demonstrates complex Tailwind CSS classes and React integration.
       </p>
       <div className="mt-6 flex space-x-4">

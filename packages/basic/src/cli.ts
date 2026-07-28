@@ -345,6 +345,14 @@ const createExplicitOptions = (cwd: string): string[] => {
   const summary = getProjectSummary(cwd)
   const options: string[] = []
 
+  const optionalCategories = [
+    ['libraries', summary.libraries],
+    ['testing', summary.testing],
+    ['formats', summary.formats],
+    ['tools', summary.tools],
+    ['extensions', summary.extensions]
+  ] as const
+
   if (summary.typescript) options.push('  typescript: true,')
 
   if (summary.frameworks.length > 0) {
@@ -355,9 +363,9 @@ const createExplicitOptions = (cwd: string): string[] => {
     )
   }
 
-  for (const category of ['libraries', 'testing', 'formats', 'tools', 'extensions'] as const) {
-    if (summary[category].length > 0) {
-      options.push(`  ${category}: ${JSON.stringify(summary[category])},`)
+  for (const [category, values] of optionalCategories) {
+    if (values.length > 0) {
+      options.push(`  ${category}: ${JSON.stringify(values)},`)
     }
   }
 
@@ -1000,9 +1008,16 @@ const applyDoctorFixes = (
     const declared = getDeclaredDependencyNames(packageJson)
     const missingPackages = getInstallPackages(summary, declared)
 
-    for (const packageName of missingPackages) {
-      updated.devDependencies[packageName] = getDoctorDependencyVersion(packageName)
+    const missingDependencies = Object.fromEntries(
+      missingPackages.map(packageName => [packageName, getDoctorDependencyVersion(packageName)])
+    )
 
+    updated.devDependencies = {
+      ...updated.devDependencies,
+      ...missingDependencies
+    }
+
+    for (const packageName of missingPackages) {
       fixes.push(`Declared ${packageName}.`)
 
       packageChanged = true

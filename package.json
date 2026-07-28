@@ -12,8 +12,8 @@
     "test": "pnpm run build && turbo run test",
     "test:run": "pnpm --filter @santi020k/eslint-config-tests run test",
     "test:coverage": "pnpm run build && turbo run test:coverage",
-    "lint": "pnpm run build && pnpm run lint:repo && turbo run lint",
-    "lint:repo": "eslint . --cache --no-warn-ignored",
+    "lint": "pnpm run build && pnpm run lint:repo && turbo run lint -- --max-warnings=0",
+    "lint:repo": "eslint . --cache --no-warn-ignored --max-warnings=0",
     "lint:fix": "pnpm run build && pnpm run lint:repo:fix && turbo run lint:fix",
     "lint:repo:fix": "eslint . --cache --fix --no-warn-ignored",
     "lint:changed": "node scripts/lint-changed-files.mjs",
@@ -45,7 +45,7 @@
     "release": "pnpm run release:check && changeset publish",
     "prepare": "husky",
     "pre-commit": "lint-staged",
-    "pre-push": "turbo run build && turbo run lint:repo lint:spell lint typecheck test",
+    "pre-push": "pnpm run lint && pnpm run lint:spell && pnpm run typecheck && turbo run test",
     "commit": "node scripts/commit.mjs"
   },
   "devDependencies": {
@@ -74,7 +74,7 @@
       "cspell --no-must-find-files"
     ],
     "*.{js,jsx,ts,tsx,md,mdx,vue,svelte,astro}": [
-      "eslint --fix --no-warn-ignored --config eslint.config.js"
+      "eslint --fix --no-warn-ignored --max-warnings=0 --config eslint.config.js"
     ]
   },
   "engines": {

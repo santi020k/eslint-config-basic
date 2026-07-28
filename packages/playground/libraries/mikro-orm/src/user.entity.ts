@@ -5,9 +5,9 @@ const UserSchema = defineEntity({
   properties: {
     active: p.boolean().default(true),
     email: p.string().unique(),
-    id: p.integer().primary(),
+    id: p.integer().primary()
   },
-  tableName: 'users',
+  tableName: 'users'
 })
 
 export class User extends UserSchema.class {}

@@ -32,6 +32,8 @@ export default await defineConfig({
     files: ['packages/basic/src/cli.ts', 'packages/basic/src/agent-skill-generator.ts'],
     name: 'local-cli-console',
     rules: {
+      // Command dispatchers intentionally coordinate many independent CLI modes.
+      complexity: 'off',
       'no-console': 'off'
     }
   },
