@@ -9,7 +9,7 @@ npm install -D eslint @santi020k/eslint-config-basic
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default await defineConfig()
+export default defineConfig()
 ```
 
 Add only the framework packages and `@santi020k/eslint-config-integrations`

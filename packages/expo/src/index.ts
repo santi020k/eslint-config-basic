@@ -1,10 +1,14 @@
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
 import { FlatCompat } from '@eslint/eslintrc'
 import type { TSESLint } from '@typescript-eslint/utils'
-import { getDirname } from 'cross-dirname'
+
+const currentDirectory = path.dirname(fileURLToPath(import.meta.url))
 
 // Initialize FlatCompat with the base directory
 const flatCompat = new FlatCompat({
-  baseDirectory: getDirname(),
+  baseDirectory: currentDirectory,
   recommendedConfig: {}
 })
 

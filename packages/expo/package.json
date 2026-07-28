@@ -31,7 +31,6 @@
   },
   "dependencies": {
     "@eslint/eslintrc": "catalog:",
-    "cross-dirname": "catalog:",
     "eslint-config-expo": "catalog:",
     "@typescript-eslint/utils": "catalog:"
   },

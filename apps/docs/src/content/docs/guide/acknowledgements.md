@@ -56,7 +56,7 @@ description: "Acknowledgements for the open source libraries that make @santi020
 | :--- | :--- | :--- |
 | `@cspell/eslint-plugin` | Spell checking. | [streetsidesoftware/cspell](https://github.com/streetsidesoftware/cspell) |
 | `@graphql-eslint/eslint-plugin` | GraphQL rules. | [dimaMachina/graphql-eslint](https://github.com/dimaMachina/graphql-eslint) |
-| `@stencil-community/eslint-plugin` | Stencil rules. | [stencil-community/stencil-eslint](https://github.com/stencil-community/stencil-eslint) |
+| `@stencil/eslint-plugin` | Stencil rules. | [stenciljs/eslint-plugin](https://github.com/stenciljs/eslint-plugin) |
 | `@tanstack/eslint-plugin-query` | TanStack Query rules. | [TanStack/query](https://github.com/TanStack/query) |
 | `@tanstack/eslint-plugin-router` | TanStack Router rules. | [TanStack/router](https://github.com/TanStack/router) |
 | `@vitest/eslint-plugin` | Vitest rules. | [vitest-dev/eslint-plugin-vitest](https://github.com/vitest-dev/eslint-plugin-vitest) |

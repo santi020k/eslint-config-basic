@@ -268,7 +268,7 @@ const createConfigContent = (cwd: string): { configContent: string, configPath: 
   const configContent = [
     'import { defineConfig } from \'@santi020k/eslint-config-basic\'',
     '',
-    'export default await defineConfig()',
+    'export default defineConfig()',
     ''
   ].join('\n')
 

@@ -23,7 +23,6 @@ words:
   - clinerules
   - codecov
   - codegen
-  - commitizen
   - commitlint
   - commonmark
   - cspell

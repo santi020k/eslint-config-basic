@@ -59,7 +59,7 @@
     "@html-eslint/eslint-plugin": "catalog:",
     "@html-eslint/parser": "catalog:",
     "@santi020k/eslint-config-core": "workspace:*",
-    "@stencil-community/eslint-plugin": "catalog:",
+    "@stencil/eslint-plugin": "catalog:",
     "@tanstack/eslint-plugin-query": "catalog:",
     "@tanstack/eslint-plugin-router": "catalog:",
     "@typescript-eslint/utils": "catalog:",

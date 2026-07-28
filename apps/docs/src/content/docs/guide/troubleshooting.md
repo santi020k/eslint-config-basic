@@ -191,7 +191,7 @@ The named v3 factory is `defineConfig`:
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default await defineConfig()
+export default defineConfig()
 ```
 
 The zero-argument call anchors detection to this config file, independently of

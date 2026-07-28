@@ -1,5 +1,4 @@
-import { fixupPluginRules } from '@eslint/compat'
-import type StencilPlugin from '@stencil-community/eslint-plugin'
+import type StencilPlugin from '@stencil/eslint-plugin'
 import type { TSESLint } from '@typescript-eslint/utils'
 
 import { defineLazyConfig, loadDefault } from '../lazy.js'
@@ -9,14 +8,14 @@ import { defineLazyConfig, loadDefault } from '../lazy.js'
  * Enforces best practices for Stencil.js components
  */
 export const stencil: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('stencil', async () => {
-  const stencilPlugin = await loadDefault<typeof StencilPlugin>('@stencil-community/eslint-plugin')
+  const stencilPlugin = await loadDefault<typeof StencilPlugin>('@stencil/eslint-plugin')
 
   return [
     {
       files: ['**/*.{tsx,ts}'],
       name: 'integrations/stencil',
       plugins: {
-        '@stencil-community': fixupPluginRules(stencilPlugin as unknown as Record<string, unknown>)
+        '@stencil-community': stencilPlugin as unknown as TSESLint.FlatConfig.Plugin
       },
       rules: {
         '@stencil-community/async-methods': 'error',

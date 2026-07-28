@@ -46,7 +46,7 @@
     "prepare": "husky",
     "pre-commit": "lint-staged",
     "pre-push": "turbo run build && turbo run lint:repo lint:spell lint typecheck test",
-    "commit": "cz"
+    "commit": "node scripts/commit.mjs"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "catalog:",
@@ -67,9 +67,7 @@
     "typedoc-plugin-markdown": "catalog:",
     "typescript": "catalog:",
     "@commitlint/cli": "catalog:",
-    "@commitlint/config-conventional": "catalog:",
-    "commitizen": "catalog:",
-    "cz-conventional-changelog": "catalog:"
+    "@commitlint/config-conventional": "catalog:"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,md,mdx,json,yaml,yml,toml,vue,svelte,astro}": [
@@ -89,10 +87,5 @@
   },
   "homepage": "https://eslint.santi020k.com/",
   "author": "santi020k",
-  "license": "MIT",
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
-  }
+  "license": "MIT"
 }

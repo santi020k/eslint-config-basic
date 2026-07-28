@@ -47,7 +47,7 @@ describe('CLI scaffolding', () => {
     handleInit(cwd)
 
     expect(readFileSync(join(cwd, 'eslint.config.mjs'), 'utf8')).toBe(
-      'import { defineConfig } from \'@santi020k/eslint-config-basic\'\n\nexport default await defineConfig()\n'
+      'import { defineConfig } from \'@santi020k/eslint-config-basic\'\n\nexport default defineConfig()\n'
     )
   })
 
@@ -64,7 +64,7 @@ describe('CLI scaffolding', () => {
 
     const config = readFileSync(join(cwd, 'eslint.config.js'), 'utf8')
 
-    expect(config).toBe('import { defineConfig } from \'@santi020k/eslint-config-basic\'\n\nexport default await defineConfig()\n')
+    expect(config).toBe('import { defineConfig } from \'@santi020k/eslint-config-basic\'\n\nexport default defineConfig()\n')
   })
 
   test('should update an existing config file in place', () => {
@@ -83,7 +83,7 @@ describe('CLI scaffolding', () => {
     const config = readFileSync(join(cwd, 'eslint.config.js'), 'utf8')
 
     expect(config).not.toContain('// old config')
-    expect(config).toBe('import { defineConfig } from \'@santi020k/eslint-config-basic\'\n\nexport default await defineConfig()\n')
+    expect(config).toBe('import { defineConfig } from \'@santi020k/eslint-config-basic\'\n\nexport default defineConfig()\n')
   })
 })
 

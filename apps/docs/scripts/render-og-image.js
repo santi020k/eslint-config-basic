@@ -10,7 +10,6 @@ import { fileURLToPath } from 'node:url'
 
 import { Resvg } from '@resvg/resvg-js'
 import satori from 'satori'
-import * as satoriHtml from 'satori-html'
 import sharp from 'sharp'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -44,13 +43,6 @@ const FONTS = [
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-const escape = s => s
-  .replaceAll('&', '&amp;')
-  .replaceAll('<', '&lt;')
-  .replaceAll('>', '&gt;')
-  .replaceAll('"', '&quot;')
-  .replaceAll('\'', '&#39;')
-
 const truncate = (s, max = 130) => s.length > max ? `${s.slice(0, max - 1).trimEnd()}…` : s
 
 const titleFontSize = title => {
@@ -66,69 +58,136 @@ const titleFontSize = title => {
 // ─── Card template ────────────────────────────────────────────────────────────
 
 const S = {
-  card: 'display:flex;width:1200px;height:630px;flex-direction:column;' +
-    'background:linear-gradient(135deg,#0d0d14 0%,#120d1e 100%);font-family:\'Montserrat\',sans-serif;',
-  accentBar: 'display:flex;width:1200px;height:3px;flex-shrink:0;' +
-    'background:linear-gradient(90deg,#6319be 0%,#945df4 100%);',
-  content: 'display:flex;flex:1;flex-direction:column;padding:52px 64px;',
-  header: 'display:flex;align-items:center;justify-content:space-between;',
-  logoGroup: 'display:flex;align-items:center;gap:16px;',
-  logoText: 'display:flex;flex-direction:column;gap:4px;',
-  logoName: 'display:flex;font-size:22px;font-weight:600;color:#a78bfa;letter-spacing:1px;',
-  logoDomain: 'display:flex;font-size:14px;color:#4b5563;letter-spacing:0.4px;',
-  badge: 'display:flex;align-items:center;padding:12px 24px;border-radius:999px;' +
-    'background:linear-gradient(135deg,#6319be,#945df4);',
-  badgeText: 'display:flex;font-size:16px;font-weight:700;color:#fff;' +
-    'letter-spacing:0.14em;text-transform:uppercase;',
-  body: 'display:flex;flex-direction:column;flex:1;justify-content:center;gap:22px;',
-  accentLine: 'display:flex;width:80px;height:3px;border-radius:999px;' +
-    'background:linear-gradient(90deg,#6319be,#945df4);',
-  desc: 'display:flex;margin:0;font-size:22px;line-height:1.55;color:#94a3b8;max-width:900px;'
+  accentBar: {
+    backgroundImage: 'linear-gradient(90deg,#6319be 0%,#945df4 100%)',
+    display: 'flex',
+    flexShrink: 0,
+    height: 3,
+    width: 1200
+  },
+  accentLine: {
+    backgroundImage: 'linear-gradient(90deg,#6319be,#945df4)',
+    borderRadius: 999,
+    display: 'flex',
+    height: 3,
+    width: 80
+  },
+  badge: {
+    alignItems: 'center',
+    backgroundImage: 'linear-gradient(135deg,#6319be,#945df4)',
+    borderRadius: 999,
+    display: 'flex',
+    padding: '12px 24px'
+  },
+  badgeText: {
+    color: '#fff',
+    display: 'flex',
+    fontSize: 16,
+    fontWeight: 700,
+    letterSpacing: '0.14em',
+    textTransform: 'uppercase'
+  },
+  body: {
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+    gap: 22,
+    justifyContent: 'center'
+  },
+  card: {
+    backgroundImage: 'linear-gradient(135deg,#0d0d14 0%,#120d1e 100%)',
+    display: 'flex',
+    flexDirection: 'column',
+    fontFamily: 'Montserrat, sans-serif',
+    height: 630,
+    width: 1200
+  },
+  content: {
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+    padding: '52px 64px'
+  },
+  description: {
+    color: '#94a3b8',
+    display: 'flex',
+    fontSize: 22,
+    lineHeight: 1.55,
+    margin: 0,
+    maxWidth: 900
+  },
+  header: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'space-between'
+  },
+  logo: {
+    display: 'flex',
+    height: 72,
+    width: 72
+  },
+  logoDomain: {
+    color: '#4b5563',
+    display: 'flex',
+    fontSize: 14,
+    letterSpacing: '0.4px'
+  },
+  logoGroup: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: 16
+  },
+  logoName: {
+    color: '#a78bfa',
+    display: 'flex',
+    fontSize: 22,
+    fontWeight: 600,
+    letterSpacing: 1
+  },
+  logoText: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 4
+  }
 }
+
+const element = (type, props, ...children) => ({
+  props: {
+    ...props,
+    children: children.length === 1 ? children[0] : children
+  },
+  type
+})
 
 const renderCard = ({ description, section, title }) => {
   const size = titleFontSize(title)
 
-  const h1Style = `display:flex;margin:0;font-size:${size}px;font-weight:900;` +
-    'line-height:1.08;letter-spacing:-0.03em;color:#fff;max-width:1050px;'
+  const titleStyle = {
+    color: '#fff',
+    display: 'flex',
+    fontSize: size,
+    fontWeight: 900,
+    letterSpacing: '-0.03em',
+    lineHeight: 1.08,
+    margin: 0,
+    maxWidth: 1050
+  }
 
-  const descHtml = description ?
-    `<p style="${S.desc}">${escape(truncate(description))}</p>` :
-    ''
-
-  return `
-    <div style="${S.card}">
-
-      <!-- Top accent bar -->
-      <div style="${S.accentBar}"></div>
-
-      <!-- Content -->
-      <div style="${S.content}">
-
-        <!-- Header: icon + name/domain left, section badge right -->
-        <div style="${S.header}">
-          <div style="${S.logoGroup}">
-            <img src="${ICON_URI}" style="display:flex;width:72px;height:72px;" />
-            <div style="${S.logoText}">
-              <span style="${S.logoName}">eslint-config-basic</span>
-              <span style="${S.logoDomain}">eslint.santi020k.com</span>
-            </div>
-          </div>
-          <div style="${S.badge}">
-            <span style="${S.badgeText}">${escape(section)}</span>
-          </div>
-        </div>
-
-        <!-- Body: accent line + title + description -->
-        <div style="${S.body}">
-          <div style="${S.accentLine}"></div>
-          <h1 style="${h1Style}">${escape(title)}</h1>
-          ${descHtml}
-        </div>
-
-      </div>
-    </div>
-  `
+  return element(
+    'div', { style: S.card }, element('div', { style: S.accentBar }), element(
+      'div', { style: S.content }, element(
+        'div', { style: S.header }, element(
+          'div', { style: S.logoGroup }, element('img', { src: ICON_URI, style: S.logo }), element(
+            'div', { style: S.logoText }, element('span', { style: S.logoName }, 'eslint-config-basic'), element('span', { style: S.logoDomain }, 'eslint.santi020k.com')
+          )
+        ), element(
+          'div', { style: S.badge }, element('span', { style: S.badgeText }, section)
+        )
+      ), element(
+        'div', { style: S.body }, element('div', { style: S.accentLine }), element('h1', { style: titleStyle }, title), ...(description ? [element('p', { style: S.description }, truncate(description))] : [])
+      )
+    )
+  )
 }
 
 // ─── Main export ──────────────────────────────────────────────────────────────
@@ -138,8 +197,7 @@ const renderCard = ({ description, section, title }) => {
  * @returns {Promise<Buffer>}
  */
 export const renderOgImage = async props => {
-  const html = renderCard(props).trim()
-  const markup = /** @type {Parameters<typeof satori>[0]} */ (satoriHtml.html(html))
+  const markup = /** @type {Parameters<typeof satori>[0]} */ (renderCard(props))
   const svg = await satori(markup, { fonts: FONTS, height: 630, width: 1200 })
   const png = new Resvg(svg, { fitTo: { mode: 'width', value: 1200 } }).render().asPng()
 

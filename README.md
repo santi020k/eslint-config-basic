@@ -20,7 +20,7 @@ Create `eslint.config.mjs`:
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default await defineConfig()
+export default defineConfig()
 ```
 
 That is the complete zero-config setup. It detects JavaScript, TypeScript,

@@ -16,7 +16,7 @@ package; the `full` package already includes it.
 ```js title="eslint.config.mjs"
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default await defineConfig()
+export default defineConfig()
 ```
 
 Workspaces are inferred from `workspaces`, `pnpm-workspace.yaml`, Turborepo,

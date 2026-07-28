@@ -36,7 +36,6 @@
     "@resvg/resvg-js": "catalog:",
     "astro": "catalog:",
     "satori": "catalog:",
-    "satori-html": "catalog:",
     "sharp": "catalog:",
     "typescript": "catalog:"
   },

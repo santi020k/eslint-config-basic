@@ -46,7 +46,7 @@ The zero-config form now needs no options.
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default await defineConfig()
+export default defineConfig()
 ```
 
 For the full bundle:
