@@ -5,6 +5,11 @@ description: "Version 2 moves the npm-level public API to a single package: @san
 
 Version 2 moves the npm-level public API to a single package: `@santi020k/eslint-config-basic`.
 
+> [!IMPORTANT]
+> This guide intentionally targets the frozen v2 release. To move a v1
+> project to the current v3 release, complete these steps and then follow the
+> [v2 to v3 migration guide](/guide/migration-v2-to-v3/).
+
 The internal architecture is still modular, but application projects no longer need to install or import separate framework config packages.
 
 ## What Changed
@@ -261,4 +266,6 @@ npx @santi020k/eslint-config-basic docs
 
 ## Keeping v1 Docs
 
-The v1 docs remain available at `/v1/`. The current root docs track v2. Future docs can be added the same way under versioned paths such as `/v2.1/` or `/v2.2.1/` when a release needs permanent documentation.
+The v1 docs remain available at `/v1/`, and the frozen v2 documentation is
+available at `/v2/`. The current root documentation tracks v3. After completing
+this migration, continue with the [v2 to v3 guide](/guide/migration-v2-to-v3/).

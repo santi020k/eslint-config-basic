@@ -1,4 +1,4 @@
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs'
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
@@ -117,6 +117,26 @@ describe('eslintConfig Function', () => {
     const names = extractConfigNames(config)
 
     expect(names.some(n => n.toLowerCase().includes('gitignore'))).toBe(true)
+  })
+
+  test('should use root for detection, TypeScript, and gitignore resolution', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'eslint-config-root-'))
+
+    try {
+      writeFileSync(join(root, '.gitignore'), 'root-only.tmp\n')
+      writeFileSync(join(root, 'package.json'), JSON.stringify({ name: 'root-fixture' }))
+      writeFileSync(join(root, 'tsconfig.json'), '{}')
+
+      const config = await defineConfig({ root })
+      const gitignoreEntry = config.find(entry => entry.name === 'eslint-config/gitignore')
+      const rootEntry = config.find(entry => entry.name === 'eslint-config-basic/tsconfig-root-dir')
+
+      expect(gitignoreEntry?.ignores).toContain('**/root-only.tmp')
+      expect(rootEntry?.languageOptions?.parserOptions?.tsconfigRootDir).toBe(root)
+      expect(extractConfigNames(config)).toContain('eslint-config-typescript/type-checked-rules')
+    } finally {
+      rmSync(root, { force: true, recursive: true })
+    }
   })
 
   test('should exclude gitignore when NoGitignore setting is specified', async () => {
@@ -488,6 +508,60 @@ describe('eslintConfig Function', () => {
 
     expect(scoped?.files).toContain('apps/web/**/*.tsx')
     expect(scoped?.files).toContain('!apps/web/**/legacy/**')
+  })
+
+  test('should auto-detect monorepo projects without leaking root framework devDependencies', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'eslint-config-monorepo-'))
+
+    try {
+      mkdirSync(join(root, 'apps/web'), { recursive: true })
+      writeFileSync(join(root, 'package.json'), JSON.stringify({
+        devDependencies: { react: 'latest' },
+        name: 'workspace-root'
+      }))
+      writeFileSync(join(root, 'pnpm-workspace.yaml'), "packages:\n  - 'apps/*'\n")
+      writeFileSync(join(root, 'apps/web/package.json'), JSON.stringify({
+        dependencies: { astro: 'latest' },
+        name: 'web'
+      }))
+
+      const config = await defineConfig({
+        root,
+        settings: [Setting.NoGitignore],
+        tools: []
+      })
+      const names = extractConfigNames(config)
+
+      expect(names).toContain('astro/recommended')
+      expect(names).not.toContain('eslint-config-react/recommended')
+
+      const astroConfig = config.find(entry => entry.name === 'astro/recommended')
+
+      expect(astroConfig?.files?.every(pattern => pattern.startsWith('apps/web/'))).toBe(true)
+    } finally {
+      rmSync(root, { force: true, recursive: true })
+    }
+  })
+
+  test('should syntax-lint config files and explicit untyped TypeScript files', async () => {
+    const config = await defineConfig({
+      detection: false,
+      typescript: {
+        projectService: {
+          allowDefaultProject: ['eslint.config.ts']
+        },
+        untypedFiles: ['templates/**/*.ts']
+      }
+    })
+    const untyped = config.find(entry => entry.name === 'eslint-config-typescript/untyped-files')
+    const setup = config.find(entry => entry.name === 'eslint-config-typescript/setup')
+
+    expect(untyped?.files).toContain('**/*.config.{ts,mts,cts}')
+    expect(untyped?.files).toContain('templates/**/*.ts')
+    expect(untyped?.languageOptions?.parserOptions?.projectService).toBe(false)
+    expect(setup?.languageOptions?.parserOptions?.projectService).toEqual({
+      allowDefaultProject: ['eslint.config.ts']
+    })
   })
 
   test('should use detectRootDir independently from tsconfigRootDir', async () => {

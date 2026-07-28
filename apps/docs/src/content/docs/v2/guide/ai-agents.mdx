@@ -1,0 +1,184 @@
+---
+title: "AI & Agents"
+description: "How @santi020k/eslint-config-basic integrates with AI coding assistants, agent frameworks, and AI library tooling."
+---
+
+import { Steps } from '@astrojs/starlight/components'
+import RunnerTabs from '../../../../components/RunnerTabs.astro'
+
+This page covers two distinct AI-related concerns in this package:
+
+1. **AI library integrations** — ESLint rules for projects that use AI SDKs and agent frameworks such as Vercel AI SDK, OpenAI Agents, Mastra, MCP, LangChain, and LlamaIndex.
+2. **AI coding assistant support** — how the package integrates with AI coding tools (Cursor, Claude Code, GitHub Copilot, Gemini, Windsurf, and others) through agent standards files and machine-readable context documents.
+
+---
+
+## AI Library Integrations
+
+Enable rules for AI and agent libraries through the `libraries` option.
+
+```js title="eslint.config.mjs"
+import { defineConfig, Library } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig({
+  libraries: [
+    Library.AiSdk,
+    Library.OpenAiAgents,
+    Library.Mastra,
+    Library.Mcp,
+    Library.Langchain,
+    Library.LlamaIndex
+  ]
+})
+```
+
+All AI library integrations are **auto-detected** from `package.json` dependencies, so no explicit option is needed when the package is already installed.
+
+### Supported AI Libraries
+
+| Integration | Enum | Package Signals | Auto-Detected |
+| :--- | :--- | :--- | :--- |
+| Vercel AI SDK | `Library.AiSdk` | `ai`, `@ai-sdk/*` | Yes |
+| OpenAI Agents SDK | `Library.OpenAiAgents` | `@openai/agents` | Yes |
+| Mastra | `Library.Mastra` | `@mastra/*`, `mastra` | Yes |
+| Model Context Protocol | `Library.Mcp` | `@modelcontextprotocol/sdk` | Yes |
+| LangChain | `Library.Langchain` | `langchain`, `@langchain/*` | Yes |
+| LlamaIndex | `Library.LlamaIndex` | `llamaindex`, `@llamaindex/*` | Yes |
+
+### What Each Integration Covers
+
+#### Vercel AI SDK (`Library.AiSdk`)
+
+Adds security-focused rules for AI SDK call patterns:
+
+- Requires abort signals on long-running `generateText` and `streamText` calls.
+- Flags unsafe prompt handling and missing output validation.
+- Warns on missing token limits to prevent runaway inference costs.
+- Enforces consistent use of typed tool definitions.
+
+#### OpenAI Agents SDK (`Library.OpenAiAgents`)
+
+Keeps `@openai/agents` imports on documented public entry points:
+
+- Blocks imports from `@openai/agents/src/*` or distribution internals.
+- Prevents direct access to unstable submodule paths.
+
+#### Mastra (`Library.Mastra`)
+
+Enforces clean import boundaries for Mastra agent, workflow, tool, and memory APIs:
+
+- Blocks internal subpath imports that may change across releases.
+- Keeps agent, workflow, and memory integrations on their documented entry points.
+
+#### Model Context Protocol (`Library.Mcp`)
+
+Guards the `@modelcontextprotocol/sdk` package surface:
+
+- Prevents imports from internal SDK modules.
+- Keeps MCP server and client code on stable documented APIs.
+
+#### LangChain (`Library.Langchain`)
+
+Enforces public API usage for `langchain` and `@langchain/*`:
+
+- Blocks imports from `langchain/src/*` or distribution internals.
+- Ensures chains, agents, and retrievers import from documented entry points.
+
+#### LlamaIndex (`Library.LlamaIndex`)
+
+Protects public API boundaries for `llamaindex` and `@llamaindex/*`:
+
+- Blocks imports from unstable internal module paths.
+- Keeps indexes, retrievers, and query engines on documented exports.
+
+---
+
+## AI Coding Assistant Support
+
+This package ships two types of AI-focused artifacts that help coding assistants understand and maintain the project:
+
+- **Machine-readable context files** (`llms.txt`, `llms-full.txt`) — static documents at the repository root that AI tools can read to understand the project architecture.
+- **Generated agent standards** — tool-specific rule files created from your active ESLint config by the `generate-skill` CLI command.
+
+### Machine-Readable Context Files
+
+The repository root ships two Markdown files targeted at AI assistants:
+
+| File | Purpose |
+| :--- | :--- |
+| [`llms.txt`](https://github.com/santi020k/eslint-config-basic/blob/main/llms.txt) | Quick project overview, architecture summary, commands, and integration list. |
+| [`llms-full.txt`](https://github.com/santi020k/eslint-config-basic/blob/main/llms-full.txt) | Deep technical context: dependency graph, technical decisions, virtual file patterns, and development workflows. |
+
+These files follow the emerging [`llms.txt` standard](https://llmstxt.org/) and are intended for use with AI assistants and code completion tools that support project-level context injection.
+
+### Generating Agent Standards
+
+The `generate-skill` CLI command reads your active ESLint configuration and writes tool-specific standards files so AI coding assistants know what rules your project enforces.
+
+<Steps>
+1. **Run the command once** to generate or update standards files for all detected AI tools:
+
+    <RunnerTabs args="generate-skill" />
+
+2. **Commit the generated files** alongside your ESLint config. They are stored in tool-specific folders that each assistant already reads.
+
+3. **Keep them fresh** — re-run after changing your ESLint config, or use `--check` in CI to catch stale files automatically.
+</Steps>
+
+> [!NOTE]
+> `generate-skill` only writes to folders that already exist. It never creates tool folders for tools you do not use. Use `--create` to scaffold a root `AGENTS.md` when the project has none.
+
+### Supported AI Tools
+
+| Tool | Standards File Location | Format |
+| :--- | :--- | :--- |
+| Claude Code | `.claude/commands/` | Markdown |
+| Cursor | `.cursor/rules/` | MDC front-matter |
+| GitHub Copilot | `.copilot/instructions/`, `.github/copilot-instructions.md` | Markdown / guarded section |
+| Gemini | `.gemini/styleguide.md` | Markdown |
+| Windsurf | `.windsurf/rules/` | Markdown + front-matter |
+| Cline | `.clinerules/` | Markdown |
+| Roo Code | `.roo/rules/` | Markdown |
+| Kiro | `.kiro/steering/` | Markdown + `inclusion: always` front-matter |
+| Aider | `.aider/` | Markdown |
+| Generic agents | `.agent/skills/`, `.agents/skills/` | Markdown + front-matter |
+| AGENTS.md standard | root `AGENTS.md` | Guarded section appended/updated |
+
+### CLI Flags
+
+| Flag | Behavior |
+| :--- | :--- |
+| _(none)_ | Write or update files for all detected tool folders. |
+| `--force` | Overwrite existing files even if they appear up to date. |
+| `--check` | CI mode — compare existing files against freshly generated content, exit 1 when any file is stale or missing. |
+| `--create` | Scaffold a root `AGENTS.md` when none exists. |
+
+### CI Integration
+
+Use `--check` as a CI step or pre-push hook to ensure agent standards never drift from the actual config:
+
+```sh title="CI example"
+npx @santi020k/eslint-config-basic generate-skill --check
+```
+
+This exits with code `1` when any standards file is missing or out of date, making stale agent rules a blocking CI failure.
+
+### Default Ignored Folders
+
+The composed ESLint config automatically ignores AI coding-assistant artifact folders so agent rule files and skill definitions are never linted as source code:
+
+```
+.agent  .agents  .aider*  .claude  .clinerules  .codex
+.copilot  .cursor  .gemini  .kiro  .opencode  .roo
+.windsurf
+```
+
+Disable this block with `settings: [Setting.NoDefaultIgnores]`.
+
+---
+
+## Related Pages
+
+- [CLI Reference](/v2/guide/cli) — full `generate-skill` flag reference and all other CLI commands.
+- [Libraries](/v2/tooling/libraries) — complete AI library integration reference with ORM and UI library integrations.
+- [Configuration](/v2/guide/configuration) — full `defineConfig()` option reference.

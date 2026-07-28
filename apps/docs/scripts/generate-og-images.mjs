@@ -57,8 +57,7 @@ const SECTION_MAP = {
   frameworks: 'Framework',
   guide: 'Guide',
   packages: 'Package',
-  tooling: 'Tooling',
-  v1: 'v1 Archive'
+  tooling: 'Tooling'
 }
 
 const getSectionFromPathname = pathname => {
@@ -66,10 +65,11 @@ const getSectionFromPathname = pathname => {
 
   if (segments.length === 0) return 'Docs'
 
-  if (segments[0] === 'v1') {
+  if (segments[0] === 'v1' || segments[0] === 'v2') {
+    const version = segments[0]
     const sub = segments[1]
 
-    return sub ? `v1 ${SECTION_MAP[sub] ?? 'Docs'}` : 'v1 Archive'
+    return sub ? `${version} ${SECTION_MAP[sub] ?? 'Docs'}` : `${version} Archive`
   }
 
   return SECTION_MAP[segments[0]] ?? 'Docs'

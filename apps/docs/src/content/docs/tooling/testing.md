@@ -5,6 +5,10 @@ description: "The testing option enables linting support for test runners, test 
 
 The `testing` option enables linting support for test runners, test environments, and testing-oriented utilities.
 
+Install `@santi020k/eslint-config-integrations` alongside the lean `basic`
+package before enabling or auto-detecting entries on this page. The `full`
+package already includes it.
+
 | Integration | Enum | Use It When | Auto-Detected |
 | :--- | :--- | :--- | :--- |
 | Vitest | `Testing.Vitest` | The project uses Vitest. | Yes |

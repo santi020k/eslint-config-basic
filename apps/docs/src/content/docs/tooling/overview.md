@@ -11,6 +11,10 @@ The main package can compose integrations from five categories:
 - Tools
 - Extensions
 
+With the lean `basic` package, install
+`@santi020k/eslint-config-integrations` before enabling or auto-detecting any
+of these options. The `full` package already includes it.
+
 ## Example
 
 ```js

@@ -1,14 +1,5 @@
 # @santi020k/eslint-config-integrations
 
-## 3.0.0
-
-### Major Changes
-
-- Become an explicit opt-in dependency for the lean package.
-- Remain part of `@santi020k/eslint-config-full` for batteries-included users.
-- Integration factories previously re-exported by `basic` are imported from
-  this package in modular v3 projects.
-
 ## 2.1.1
 
 ### Patch Changes

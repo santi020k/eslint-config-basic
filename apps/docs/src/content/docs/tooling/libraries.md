@@ -5,6 +5,10 @@ description: "The libraries option enables integrations that usually correspond 
 
 The `libraries` option enables integrations that usually correspond to major project dependencies.
 
+Install `@santi020k/eslint-config-integrations` alongside the lean `basic`
+package before enabling or auto-detecting entries on this page. The `full`
+package already includes it.
+
 | Integration | Enum | Use It When | Auto-Detected |
 | :--- | :--- | :--- | :--- |
 | AI SDK | `Library.AiSdk` | The project uses Vercel AI SDK or provider packages such as `ai` / `@ai-sdk/openai`. | Yes |
@@ -116,25 +120,18 @@ To fix this, it is highly recommended to provide an explicit `entryPoint` in you
 
 ### How to configure
 
-You can pass the `entryPoint` by appending a configuration object to the array returned by `eslintConfig`:
+Pass `entryPoint` through the built-in `tailwind` option:
 
 ```js
-import { Library } from '@santi020k/eslint-config-basic'
+import { defineConfig, Library } from '@santi020k/eslint-config-basic'
 
-export default [
-  ...eslintConfig({
-    libraries: [Library.Tailwind]
-  }),
-  {
-    name: 'project/tailwind-settings',
-    settings: {
-      'better-tailwindcss': {
-        // Point this to your main CSS file (v4) or tailwind.config.js (v3)
-        entryPoint: './src/index.css'
-      }
-    }
+export default await defineConfig({
+  libraries: [Library.Tailwind],
+  tailwind: {
+    // Point this to your main CSS file (v4) or tailwind.config.js (v3)
+    entryPoint: './src/index.css'
   }
-]
+})
 ```
 
 > [!TIP]

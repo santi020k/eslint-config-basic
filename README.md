@@ -72,6 +72,7 @@ Use the named factory when auto-detection needs an override:
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
 export default await defineConfig({
+  root: import.meta.dirname,
   frameworks: { react: true },
   strict: 'ci',
   typescript: 'strict'
@@ -102,6 +103,25 @@ export default await defineConfig({}, {
   rules: { 'no-console': 'off' }
 })
 ```
+
+`root` is the only path most projects need. It anchors dependency detection,
+TypeScript, Tailwind, workspace packages, and `.gitignore` even when an editor
+starts ESLint from another directory.
+
+Type-aware projects can keep generated, template, or other out-of-project files
+on syntax-only linting without importing `typescript-eslint`:
+
+```js
+export default await defineConfig({
+  root: import.meta.dirname,
+  typescript: {
+    untypedFiles: ['templates/**/*.ts']
+  }
+})
+```
+
+TypeScript config files (`**/*.config.{ts,mts,cts}`) use this syntax fallback
+automatically. Set `untypedFiles: false` to require type information everywhere.
 
 ## Package choice
 

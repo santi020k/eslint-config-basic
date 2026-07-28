@@ -1,21 +1,5 @@
 # @santi020k/eslint-config-basic
 
-## 3.0.0
-
-### Major Changes
-
-- Make the lean dependency model the default. Framework and integration config
-  packages are optional peers instead of hard dependencies.
-- Add `@santi020k/eslint-config-basic/recommended` for a one-line zero-config
-  `eslint.config.*` file.
-- Move integration factory exports to
-  `@santi020k/eslint-config-integrations`; the new
-  `@santi020k/eslint-config-full` package re-exports the batteries-included API.
-- Make `Preset.Basic` dependency-free beyond core and TypeScript support.
-- Make `basic-eslint init` generate the one-line recommended config.
-
-See the [v2 to v3 migration guide](https://eslint.santi020k.com/guide/migration-v2-to-v3/).
-
 ## 2.1.1
 
 ### Patch Changes

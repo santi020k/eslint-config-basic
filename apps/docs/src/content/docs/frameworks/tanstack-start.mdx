@@ -10,7 +10,11 @@ Use TanStack Start support from the lean v3 composer. It bundles TanStack Router
 ## Install
 
 
-<InstallTabs packages={["@santi020k/eslint-config-basic", "@santi020k/eslint-config-tanstack-start", "eslint"]} />
+<InstallTabs packages={["@santi020k/eslint-config-basic", "@santi020k/eslint-config-react", "@santi020k/eslint-config-tanstack-start", "eslint"]} />
+
+The command above targets TanStack React Start. For TanStack Solid Start,
+replace `@santi020k/eslint-config-react` with
+`@santi020k/eslint-config-solid`.
 
 
 ## Configure
@@ -27,7 +31,7 @@ export default await defineConfig({
 })
 ```
 
-Most projects can also rely on auto-detection and use `eslintConfig()` with no framework object — pair it with the React or Solid config, and auto-detection enables the right one for you.
+With the required config packages installed, the one-line recommended entry auto-detects the framework; custom configs can use `defineConfig()` without a `frameworks` object — pair it with the React or Solid config, and auto-detection enables the right one for you.
 
 ## What It Adds
 
@@ -39,7 +43,7 @@ Most projects can also rely on auto-detection and use `eslintConfig()` with no f
 ## Notes
 
 - Using TanStack Query or Router outside of Start? Enable them individually via the `libraries` option (`'tanstack-query'`, `'tanstack-router'`) instead.
-- The internal package still exists in the monorepo for modular development and generated API docs.
+- This framework package is a public, optional dependency in v3; the basic composer loads it only when enabled.
 
 ## Related Pages
 

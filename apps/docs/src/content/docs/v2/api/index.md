@@ -1,0 +1,30 @@
+---
+title: "API Reference"
+description: "The API reference is generated from the source packages with TypeDoc and rendered as Markdown inside this Starlight site."
+---
+
+<div class="s2k-api-intro">
+  The API reference is generated from the source packages with TypeDoc and rendered as Markdown inside this Starlight site. Use it as a companion to the guide pages when you need exact exported types, functions, and package boundaries.
+</div>
+
+## Start Here
+
+- [Generated reference index](/v2/api/reference/)
+- [Main Package Guide](/v2/packages/basic)
+- [`eslintConfig()` options](/v2/guide/configuration) — typed fields such as `ignores`, `typescript`, `frameworks`, and integrations (full detail in generated [`EslintConfigOptions`](/v2/api/reference/core/src#eslintconfigoptions))
+
+## Covered Packages
+
+- `@santi020k/eslint-config-basic`
+- `@santi020k/eslint-config-core`
+- `@santi020k/eslint-config-typescript`
+- `@santi020k/eslint-config-integrations`
+
+Framework config packages are still part of the generated internal API reference, but v2 application code should import from `@santi020k/eslint-config-basic`.
+
+The generated reference is meant to complement the guide pages, not replace them.
+
+## Repository Links
+
+- Project Repository: [santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)
+- Author: [santi020k](https://santi020k.com)

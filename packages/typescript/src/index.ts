@@ -13,6 +13,7 @@ const typedFiles = [...GLOB_TS, ...GLOB_SLOT]
 const parserSetupFiles = [...typedFiles, ...GLOB_VIRTUAL_TS]
 const typeCheckedFiles = typedFiles
 const virtualTypeCheckedFiles = GLOB_VIRTUAL_TS
+const DEFAULT_UNTYPED_FILES = ['**/*.config.{ts,mts,cts}']
 
 type TypeScriptMode = 'off' | 'strict' | 'syntax' | 'type-aware'
 
@@ -31,8 +32,14 @@ const strictModeRules: TSESLint.Linter.RulesRecord = {
 interface CreateTypescriptConfigOptions {
   mode?: Exclude<TypeScriptMode, 'off'>
   project?: boolean | string | string[]
-  projectService?: boolean
+  projectService?: boolean | {
+    allowDefaultProject?: string[]
+    defaultProject?: string
+    loadTypeScriptPlugins?: boolean
+    maximumDefaultProjectFileMatchCount_THIS_WILL_SLOW_DOWN_LINTING?: number
+  }
   tsconfigRootDir?: string
+  untypedFiles?: false | string[]
 }
 
 const mapRulesToSlots = (
@@ -64,15 +71,31 @@ const resolveProjectOptions = (options: CreateTypescriptConfigOptions, mode: str
 
 const buildParserOptions = (
   project: CreateTypescriptConfigOptions['project'] | true,
-  projectService: boolean,
+  projectService: CreateTypescriptConfigOptions['projectService'],
   tsconfigRootDir: string | undefined
 ) => ({
   extraFileExtensions: ['.astro', '.svelte', '.vue'],
   parser: tsParser,
   ...(project === undefined ? {} : { project }),
-  ...(projectService ? { projectService: true } : {}),
+  ...(projectService ? { projectService } : {}),
   tsconfigRootDir
 })
+
+const createUntypedFilesConfig = (
+  files: false | string[] | undefined
+): TSESLint.FlatConfig.ConfigArray => {
+  if (files === false) return []
+
+  const resolvedFiles = files === undefined ?
+    DEFAULT_UNTYPED_FILES :
+    [...new Set([...DEFAULT_UNTYPED_FILES, ...files])]
+
+  return [{
+    ...tsEslint.configs.disableTypeChecked as TSESLint.FlatConfig.Config,
+    files: resolvedFiles,
+    name: 'eslint-config-typescript/untyped-files'
+  }]
+}
 
 /**
  * TypeScript ESLint configuration factory
@@ -175,7 +198,8 @@ export const createTypescriptConfig = (
         name: 'eslint-config-typescript/strict-mode-rules',
         rules: strictModeRules
       }] :
-      [])
+      []),
+    ...(mode === 'syntax' ? [] : createUntypedFilesConfig(options.untypedFiles))
   ]
 }
 

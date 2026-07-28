@@ -5,6 +5,10 @@ description: "The formats option enables linting for non-code or mixed-content f
 
 The `formats` option enables linting for non-code or mixed-content file formats.
 
+Install `@santi020k/eslint-config-integrations` alongside the lean `basic`
+package before enabling entries on this page. The `full` package already
+includes it.
+
 | Format | Enum | Use It When |
 | :--- | :--- | :--- |
 | Markdown | `Format.Markdown` | The project contains Markdown content that should be linted. |

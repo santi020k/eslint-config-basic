@@ -7,6 +7,7 @@ import {
   type ConfigInput,
   coreConfig,
   createCoreConfig,
+  createGitignoreConfig,
   DEFAULT_IGNORES,
   type DetectedFrameworkName,
   detectProjectOptions,
@@ -18,7 +19,6 @@ import {
   type Format,
   GENERATED_CODE_IGNORES,
   getStrictMode,
-  gitignore,
   type ImportedFramework,
   Library,
   mergeFrameworkOption,
@@ -124,12 +124,12 @@ export type {
 export {
   coreConfig,
   createCoreConfig,
+  createGitignoreConfig,
   createImportGroups,
   detectProjectOptions,
   Extension,
   Format,
   getGlobalsForRuntime,
-  gitignore,
   groups,
   hasReactConfig,
   jsConfig,
@@ -211,7 +211,7 @@ const applyTestingFileOverrides = (
 
 const resolveConfigSetup = (options: EslintConfigOptions | undefined) => ({
   autoFrameworks: options?.autoFrameworks ?? true,
-  detectRootDir: options?.detectRootDir ?? options?.tsconfigRootDir,
+  detectRootDir: options?.root ?? options?.detectRootDir ?? options?.tsconfigRootDir,
   optionMergeStrategy: options?.optionMergeStrategy ?? 'merge',
   requestedPreset: options?.preset
 })
@@ -309,7 +309,8 @@ const buildIgnoresConfig = (
   useDefaultIgnores: boolean,
   useGeneratedCodeIgnores: boolean,
   useGitignore: boolean,
-  options: EslintConfigOptions | undefined
+  options: EslintConfigOptions | undefined,
+  rootDir: string
 ) => ({
   defaultIgnores: useDefaultIgnores ?
     [{
@@ -317,7 +318,7 @@ const buildIgnoresConfig = (
       name: 'eslint-config-basic/default-ignores'
     } as TSESLint.FlatConfig.Config] :
     [],
-  gitignoreConfig: useGitignore ? gitignore : [] as FlatConfigArray,
+  gitignoreConfig: useGitignore ? createGitignoreConfig(rootDir) : [] as FlatConfigArray,
   userIgnores: options?.ignores?.length ?
     [{
       ignores: options.ignores,
@@ -560,10 +561,9 @@ const resolveProjectConfigs = async (
     const scopedConfigs = await eslintConfig({
       autoFrameworks,
       ...inheritedOptions,
-      detectRootDir: inheritedOptions.detectRootDir ?? projectRoot,
       projectDefaults: undefined,
       projects: undefined,
-      tsconfigRootDir: inheritedOptions.tsconfigRootDir ?? projectRoot
+      root: inheritedOptions.root ?? inheritedOptions.detectRootDir ?? projectRoot
     })
 
     return scopedConfigs.map(config => scopeConfigToProject(config, projectPath))
@@ -591,7 +591,10 @@ const getConfigsParams = (
     undefined
 
   const runtimeCoreConfig = runtime === Runtime.Universal ? coreConfig : createCoreConfig(runtime)
-  const { defaultIgnores, gitignoreConfig, userIgnores } = buildIgnoresConfig(useDefaultIgnores, useGeneratedCodeIgnores, useGitignore, options)
+
+  const { defaultIgnores, gitignoreConfig, userIgnores } = buildIgnoresConfig(
+    useDefaultIgnores, useGeneratedCodeIgnores, useGitignore, options, rootDir
+  )
 
   return {
     astroOptions: { hasReact, hasSolid, hasSvelte, hasVue },
@@ -631,11 +634,26 @@ export const eslintConfig = async (
   } = options ?? {}
 
   const { autoFrameworks, detectRootDir, optionMergeStrategy, requestedPreset } = resolveConfigSetup(options)
-  const shouldDefaultProjectDetection = requestedPreset === Preset.Monorepo
+  const rawDetected = detectProjectOptions(detectRootDir)
+  const isWorkspace = Object.keys(rawDetected.projects ?? {}).length > 0
 
-  const detected = applyDetectionControls(
-    detectProjectOptions(detectRootDir), detection, { projects: shouldDefaultProjectDetection }
-  )
+  const shouldDetectProjects = requestedPreset === Preset.Monorepo ||
+    rawDetected.preset === Preset.Monorepo
+
+  const detected = applyDetectionControls(rawDetected, detection, { projects: shouldDetectProjects })
+
+  // Root devDependencies in a workspace commonly contain frameworks and
+  // libraries used by only one package. Keep those detections package-scoped;
+  // explicit root options still apply normally.
+  if (isWorkspace) {
+    detected.detectedFrameworks = []
+
+    detected.libraries = []
+
+    detected.nextMode = undefined
+
+    detected.runtime = Runtime.Universal
+  }
 
   const { frameworkDefaults, preset, presetDefaults } = resolvePresetMeta(requestedPreset, detected, autoFrameworks)
   const configuredProjects = resolveConfiguredProjects(detected, options)
@@ -743,6 +761,8 @@ export const eslintConfig = async (
 }
 
 /**
- * Alias for `eslintConfig()` that reads naturally in `eslint.config.*` files.
+ * Preferred public composer for `eslint.config.*` files.
+ *
+ * `eslintConfig()` remains available as a compatibility alias.
  */
 export const defineConfig = eslintConfig

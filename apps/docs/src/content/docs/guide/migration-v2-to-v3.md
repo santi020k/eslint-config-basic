@@ -19,6 +19,10 @@ npm install -D eslint@^10 @santi020k/eslint-config-basic@^3
 npm install -D @santi020k/eslint-config-react@^3
 ```
 
+Install implied configs too: Next.js, Expo, React Router, and Remix need the
+React config; Nuxt and Slidev need Vue; TanStack Start needs React or Solid.
+The framework guides show exact commands.
+
 If the project enables `libraries`, `testing`, `formats`, `tools`,
 `extensions`, or the `features` map, add:
 
@@ -113,6 +117,7 @@ bundle.
 | :--- | :--- |
 | `basic` with no framework | `basic` |
 | `basic` with React | `basic` + `eslint-config-react` |
+| `basic` with Next.js | `basic` + `eslint-config-next` + `eslint-config-react` |
 | `basic` with integrations | `basic` + `eslint-config-integrations` |
 | `basic` and every bundled feature | `full` |
 | `lite` | `basic` |

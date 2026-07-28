@@ -2,7 +2,7 @@
 title: "expo/src"
 description: "@santi020k/eslint-config-basic"
 banner:
-  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v3 docs</a>; the v2 release is preserved at <a href=\"/v2/\">/v2/</a>."
 ---
 
 [**@santi020k/eslint-config-basic**](/v1/api/reference/)

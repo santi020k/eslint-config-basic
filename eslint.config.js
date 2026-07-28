@@ -1,16 +1,11 @@
-import { defineConfig, Extension, Format, Preset, Testing, Tool } from "@santi020k/eslint-config-basic"
-
-import tseslint from "typescript-eslint"
+import { defineConfig } from "@santi020k/eslint-config-basic"
 
 export default await defineConfig({
   // Root lists tailwindcss for tooling; do not enable Tailwind ESLint for the whole monorepo.
-  // Disable framework auto-detection: playground packages (e.g. astro) would trigger loading
-  // optional framework packages that aren't installed at the root.
-  autoFrameworks: false,
-  detection: { libraries: false },
-  detectRootDir: import.meta.dirname,
-  extensions: [Extension.Boundaries, Extension.Security],
-  formats: [Format.Jsonc, Format.Markdown],
+  // Package detection is unnecessary because playgrounds and docs are ignored here.
+  detection: { projects: false },
+  extensions: ['boundaries', 'security'],
+  formats: ['jsonc', 'markdown'],
   ignores: [
     '**/tsup.config.ts',
     'docs/*',
@@ -22,24 +17,17 @@ export default await defineConfig({
     '**/CHANGELOG.md',
     '.pnpm-store/**'
   ],
-  preset: Preset.Monorepo,
-  testing: [Testing.Vitest],
-  tools: [Tool.Pnpm],
-  tsconfigRootDir: import.meta.dirname,
-  typescript: true,
+  preset: 'monorepo',
+  root: import.meta.dirname,
+  testing: ['vitest'],
+  tools: ['pnpm'],
+  typescript: {
+    // tsconfig paths map all workspace packages to source. Type-aware linting
+    // these fan-out files makes the language server load the whole graph.
+    untypedFiles: ['packages/tests/**/*.ts', 'packages/lite/src/index.ts']
+  },
   workspacePrefixes: ['@santi020k']
 },
-  // tsconfig paths map all 26 workspace packages to their TS source. When the
-  // project service resolves test imports, it loads the entire monorepo graph
-  // and hangs the ESLint language server. Disabling type-aware linting for test
-  // files avoids the hang; type correctness is still enforced by `pnpm typecheck`.
-  // packages/lite/src/index.ts triggers the same issue: it re-exports from many
-  // workspace packages, causing projectService to load the full graph (~4.8 s).
-  {
-    ...tseslint.configs.disableTypeChecked,
-    files: ['packages/tests/**/*.ts', 'packages/lite/src/index.ts'],
-    name: 'local-tests-no-type-checking'
-  },
   {
     files: ['packages/basic/src/cli.ts', 'packages/basic/src/agent-skill-generator.ts'],
     name: 'local-cli-console',

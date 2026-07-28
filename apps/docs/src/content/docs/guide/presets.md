@@ -25,7 +25,13 @@ export default await defineConfig({
 | App | `Preset.App` | Browser applications — TypeScript + Prettier + Vitest by default. |
 | CI | `Preset.CI` | Stricter severities for CI environments (warnings become errors). |
 | Monorepo | `Preset.Monorepo` | Root config for workspace repositories with mixed project types. |
-| All | `Preset.All` | TypeScript + all bundled integrations. Useful for audits and evaluation. |
+| All | `Preset.All` | TypeScript + every optional integration. Useful for audits and evaluation. |
+
+With the lean `basic` package, `App`, `Library`, `CI`, `Monorepo`, and `All`
+require `@santi020k/eslint-config-integrations` because their defaults select
+Vitest, Prettier, or best-practice integration configs. `Node`, `Browser`, and
+`Worker` stay within the core + TypeScript dependency boundary. The `full`
+package already includes all preset dependencies.
 
 ## What Each Preset Enables
 
@@ -125,7 +131,7 @@ See the [Monorepo guide](/guide/monorepo) for a full walk-through.
 
 ### `Preset.All`
 
-Enables TypeScript and every bundled optional integration (all tools, libraries, testing frameworks, formats, and extensions). Intended for exploration and auditing — not recommended as a long-term production config because it includes integrations your project may not actually use.
+Enables TypeScript and every optional integration (all tools, libraries, testing frameworks, formats, and extensions). Intended for exploration and auditing — not recommended as a long-term production config because it includes integrations your project may not actually use.
 
 With the lean `basic` package (or the compatibility `lite` package),
 `Preset.All` requires `@santi020k/eslint-config-integrations` because the preset

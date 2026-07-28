@@ -10,7 +10,7 @@ Use React Router v7 (framework mode) support from the lean v3 composer. This con
 ## Install
 
 
-<InstallTabs packages={["@santi020k/eslint-config-basic", "@santi020k/eslint-config-react-router", "eslint"]} />
+<InstallTabs packages={["@santi020k/eslint-config-basic", "@santi020k/eslint-config-react", "@santi020k/eslint-config-react-router", "eslint"]} />
 
 
 ## Configure
@@ -27,7 +27,7 @@ export default await defineConfig({
 })
 ```
 
-Most projects can also rely on auto-detection and use `eslintConfig()` with no framework object.
+With the required config packages installed, the one-line recommended entry auto-detects the framework; custom configs can use `defineConfig()` without a `frameworks` object.
 
 ## What It Adds
 
@@ -40,7 +40,7 @@ Most projects can also rely on auto-detection and use `eslintConfig()` with no f
 
 - Migrating from Remix? Enable `'react-router'` instead of `remix` — the rule coverage carries over.
 - Pair this config with the [React config](/frameworks/react) — auto-detection handles this for you.
-- The internal package still exists in the monorepo for modular development and generated API docs.
+- This framework package is a public, optional dependency in v3; the basic composer loads it only when enabled.
 
 ## Related Pages
 

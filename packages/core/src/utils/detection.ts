@@ -432,6 +432,10 @@ const detectProjects = (pkg: PackageJson, detectRootDir: string): NonNullable<Es
 }
 
 const resolvePreset = (options: EslintConfigOptions): Preset => {
+  if (Object.keys(options.projects ?? {}).length > 0) {
+    return Preset.Monorepo
+  }
+
   if (!options.typescript) {
     return Preset.Basic
   }

@@ -68,7 +68,7 @@ catalog:
   '@nuxt/eslint-plugin': ^1.16.0
   '@playwright/test': ^1.62.0
   '@resvg/resvg-js': ^2.6.2
-  '@santi020k/eslint-plugin-astro-doctor': ^1.0.4
+  '@santi020k/eslint-plugin-astro-doctor': ^1.2.2
   '@stencil-community/eslint-plugin': ^0.10.0
   '@stylistic/eslint-plugin': ^5.10.0
   '@tanstack/eslint-plugin-query': ^5.101.4

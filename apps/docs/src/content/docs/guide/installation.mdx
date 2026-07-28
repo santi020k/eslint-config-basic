@@ -23,8 +23,12 @@ Add only the framework packages your project uses:
 
 ```sh
 npm install -D @santi020k/eslint-config-react
-npm install -D @santi020k/eslint-config-next
+npm install -D @santi020k/eslint-config-next @santi020k/eslint-config-react
 ```
+
+Meta-frameworks also need the config they imply: Next.js, Expo, React Router,
+and Remix need React; Nuxt and Slidev need Vue; TanStack Start needs React or
+Solid. Each framework guide has the exact install command.
 
 Add the integrations package when enabling testing, formats, libraries, tools,
 or extension features:

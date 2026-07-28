@@ -1,0 +1,24 @@
+---
+title: "Config Builder"
+description: "Generate a shareable ESLint flat config and install command for your framework, runtime, preset, and integrations."
+tableOfContents: false
+sidebar:
+  badge:
+    text: New
+    variant: success
+---
+
+import ConfigBuilder from '../../../../components/v2/ConfigBuilder.astro';
+
+The builder produces a reviewable starting point for `@santi020k/eslint-config-basic` or the smaller Lite distribution. It does not inspect your repository, install packages, or upload project information.
+
+<ConfigBuilder />
+
+## What happens next
+
+1. Run the generated install command in the repository root.
+2. Save the generated file as `eslint.config.mjs`.
+3. Run `npx @santi020k/eslint-config-basic doctor` to check the installation.
+4. Commit the config and lockfile together so CI and local development resolve the same versions.
+
+The generated setup is intentionally explicit. You can remove options later and let [project detection](/v2/guide/configuration/#detection-controls) infer them, or continue with the full [configuration reference](/v2/guide/configuration/).

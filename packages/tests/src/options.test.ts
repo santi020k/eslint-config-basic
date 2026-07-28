@@ -85,6 +85,7 @@ describe('Deep Rule Assertions (#5)', () => {
     expect(extractRuleNames(baseConfig)).not.toContain('astro-doctor/no-client-load-overuse')
     expect(extractConfigNames(astroDoctorConfig)).toContain('eslint-config-integrations/astro-doctor')
     expect(extractRuleNames(astroDoctorConfig)).toContain('astro-doctor/no-client-load-overuse')
+    expect(extractRuleNames(astroDoctorConfig)).toContain('astro/missing-client-only-directive-value')
   })
 
   test('should warn when Astro Doctor is enabled without Astro', async () => {

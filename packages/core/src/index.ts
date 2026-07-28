@@ -168,7 +168,7 @@ export { coreConfig as jsConfig }
 export type { ImportGroupOptions } from './rules.js'
 export { createImportGroups, groups, rules } from './rules.js'
 // Export settings
-export { gitignore } from './settings/index.js'
+export { createGitignoreConfig, gitignore } from './settings/index.js'
 // Re-export types and utilities
 export * from './types.js'
 export * from './utils/index.js'

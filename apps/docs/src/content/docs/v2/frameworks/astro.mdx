@@ -1,0 +1,71 @@
+---
+title: "Astro"
+description: "Use Astro support from the main v2 package. Application projects no longer install a separate @santi020k/eslint-config-astro package."
+---
+
+import InstallTabs from '../../../../components/InstallTabs.astro'
+
+Use Astro support from the main v2 package. Application projects no longer install a separate `@santi020k/eslint-config-astro` package.
+
+## Install
+
+
+<InstallTabs packages="@santi020k/eslint-config-basic" />
+
+
+## Using Lite
+
+The default install above remains recommended. If you use the manual-dependency lite package, install this framework config package too:
+
+<InstallTabs packages={["@santi020k/eslint-config-lite", "@santi020k/eslint-config-astro", "eslint"]} />
+
+## Configure
+
+```js
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig({
+  frameworks: {
+    astro: true
+  },
+  typescript: true
+})
+```
+
+Most projects can also rely on auto-detection and use `eslintConfig()` with no framework object.
+
+## What It Adds
+
+- Astro files and embedded script/template linting.
+- Composition through the same `@santi020k/eslint-config-basic` entry point as every other framework.
+- Compatibility with advanced overrides if you pass a custom config array or factory instead of `true`.
+
+## Astro Doctor
+
+Enable the optional Astro Doctor ESLint rules for additional performance, accessibility, security, and best-practice diagnostics:
+
+```js
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig({
+  features: {
+    'astro-doctor': true
+  },
+  frameworks: {
+    astro: true
+  }
+})
+```
+
+This integration adds Astro Doctor's proprietary ESLint rules without applying the official Astro preset a second time. Health scoring, project audits, baselines, and changed-file scanning remain available through the separate `@santi020k/astro-doctor` CLI.
+
+## Notes
+
+- The internal package still exists in the monorepo for modular development and generated API docs.
+- For the old multi-package installation model, see the [v1 Astro guide](/v1/frameworks/astro).
+
+## Related Pages
+
+- [Installation](/v2/guide/installation)
+- [Configuration](/v2/guide/configuration)
+- [v1 to v2 Migration](/v2/guide/migration-v1-to-v2)

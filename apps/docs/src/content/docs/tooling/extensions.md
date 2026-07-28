@@ -5,6 +5,10 @@ description: "The extensions option enables specialized rule packs that are usef
 
 The `extensions` option enables specialized rule packs that are useful across many project types.
 
+Install `@santi020k/eslint-config-integrations` alongside the lean `basic`
+package before enabling or auto-detecting entries on this page. The `full`
+package already includes it.
+
 | Extension | Enum | Use It When | Auto-Detected |
 | :--- | :--- | :--- | :--- |
 | RegExp | `Extension.Regexp` | The project wants stronger regular-expression linting. | No |

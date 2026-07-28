@@ -94,8 +94,8 @@ catalogs:
       specifier: ^2.6.2
       version: 2.6.2
     '@santi020k/eslint-plugin-astro-doctor':
-      specifier: ^1.0.4
-      version: 1.0.4
+      specifier: ^1.2.2
+      version: 1.2.2
     '@stencil-community/eslint-plugin':
       specifier: ^0.10.0
       version: 0.10.0
@@ -578,7 +578,7 @@ importers:
         version: 10.8.0(jiti@2.7.0)
       eslint-plugin-astro:
         specifier: 'catalog:'
-        version: 3.0.1(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)(@typescript-eslint/parser@8.65.0(eslint@10.8.0(jiti@2.7.0))(typescript@6.0.3))(eslint-plugin-jsx-a11y@6.10.2(eslint@10.8.0(jiti@2.7.0)))(eslint@10.8.0(jiti@2.7.0))(supports-color@8.1.1)
+        version: 3.0.1(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)(@typescript-eslint/parser@8.65.0(eslint@10.8.0(jiti@2.7.0))(typescript@6.0.3))(eslint-plugin-jsx-a11y@6.10.2(eslint@10.8.0(jiti@2.7.0)))(eslint@10.8.0(jiti@2.7.0))
     devDependencies:
       publint:
         specifier: 'catalog:'
@@ -1051,7 +1051,7 @@ importers:
     optionalDependencies:
       '@santi020k/eslint-plugin-astro-doctor':
         specifier: 'catalog:'
-        version: 1.0.4(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(eslint@10.8.0(jiti@2.7.0))
+        version: 1.2.2(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@typescript-eslint/parser@8.65.0(eslint@10.8.0(jiti@2.7.0))(typescript@6.0.3))(eslint-plugin-jsx-a11y@6.10.2(eslint@10.8.0(jiti@2.7.0)))(eslint@10.8.0(jiti@2.7.0))
 
   packages/lit:
     dependencies:
@@ -6205,11 +6205,11 @@ packages:
   '@rviscomi/capo.js@2.1.0':
     resolution: {integrity: sha512-y6J+KJqsrY8AcDswLKkvd8KdpFindjS4Q9rSuK8CIpsQOepEjgRaMR4S8OtuLOQoVYLCROT3ffMQqRWrUMQdQA==}
 
-  '@santi020k/eslint-plugin-astro-doctor@1.0.4':
-    resolution: {integrity: sha512-ijPXGniyldtvlgsROUEJhQ9uDYusD5pRd1huzIT7LbyvceUZ0OiIKQgmqwd1s7kC8L/KZ2I4jPuyyDtWcHoLaA==}
+  '@santi020k/eslint-plugin-astro-doctor@1.2.2':
+    resolution: {integrity: sha512-560JGJTFtUS0CQkAph60cmQ3VCqCao5G2gOTIu7IC/rd0jrLBDJ5PEIbgPIPLKP9SF156XOitGiuMF17DfkQJQ==}
     engines: {node: ^22.22.3 || ^24.16.0 || >=26.3.0}
     peerDependencies:
-      eslint: 10.7.0
+      eslint: ^10.0.0
 
   '@santi020k/lumen-astro@0.3.0':
     resolution: {integrity: sha512-ub3MVM7zzg6B9afSQe1iaMpUHCm2a0TSnG9MXpxynSevpc+BQGAxBM84//Zpt32QGswEHHwLUyLQFEPabYhHfw==}
@@ -19732,13 +19732,16 @@ snapshots:
 
   '@rviscomi/capo.js@2.1.0': {}
 
-  '@santi020k/eslint-plugin-astro-doctor@1.0.4(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(eslint@10.8.0(jiti@2.7.0))':
+  '@santi020k/eslint-plugin-astro-doctor@1.2.2(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@typescript-eslint/parser@8.65.0(eslint@10.8.0(jiti@2.7.0))(typescript@6.0.3))(eslint-plugin-jsx-a11y@6.10.2(eslint@10.8.0(jiti@2.7.0)))(eslint@10.8.0(jiti@2.7.0))':
     dependencies:
       astro-eslint-parser: 3.0.0(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)
       eslint: 10.8.0(jiti@2.7.0)
+      eslint-plugin-astro: 3.0.1(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@typescript-eslint/parser@8.65.0(eslint@10.8.0(jiti@2.7.0))(typescript@6.0.3))(eslint-plugin-jsx-a11y@6.10.2(eslint@10.8.0(jiti@2.7.0)))(eslint@10.8.0(jiti@2.7.0))
     transitivePeerDependencies:
       - '@emnapi/core'
       - '@emnapi/runtime'
+      - '@typescript-eslint/parser'
+      - eslint-plugin-jsx-a11y
       - supports-color
     optional: true
 
@@ -20786,7 +20789,7 @@ snapshots:
   '@typescript-eslint/project-service@8.56.1(supports-color@8.1.1)(typescript@6.0.3)':
     dependencies:
       '@typescript-eslint/tsconfig-utils': 8.61.1(typescript@6.0.3)
-      '@typescript-eslint/types': 8.61.1
+      '@typescript-eslint/types': 8.65.0
       debug: 4.4.3(supports-color@8.1.1)
       typescript: 6.0.3
     transitivePeerDependencies:
@@ -20795,7 +20798,7 @@ snapshots:
   '@typescript-eslint/project-service@8.61.1(typescript@6.0.3)':
     dependencies:
       '@typescript-eslint/tsconfig-utils': 8.61.1(typescript@6.0.3)
-      '@typescript-eslint/types': 8.61.1
+      '@typescript-eslint/types': 8.65.0
       debug: 4.4.3(supports-color@8.1.1)
       typescript: 6.0.3
     transitivePeerDependencies:
@@ -21935,11 +21938,11 @@ snapshots:
 
   astring@1.9.0: {}
 
-  astro-eslint-parser@3.0.0(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)(supports-color@8.1.1):
+  astro-eslint-parser@3.0.0(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2):
     dependencies:
       '@astrojs/compiler-rs': 0.3.1(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)
-      '@typescript-eslint/scope-manager': 8.61.1
-      '@typescript-eslint/types': 8.61.1
+      '@typescript-eslint/scope-manager': 8.65.0
+      '@typescript-eslint/types': 8.65.0
       debug: 4.4.3(supports-color@8.1.1)
       eslint-scope: 9.1.2
       eslint-visitor-keys: 5.0.1
@@ -21954,8 +21957,8 @@ snapshots:
   astro-eslint-parser@3.0.0(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2):
     dependencies:
       '@astrojs/compiler-rs': 0.3.1(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)
-      '@typescript-eslint/scope-manager': 8.61.1
-      '@typescript-eslint/types': 8.61.1
+      '@typescript-eslint/scope-manager': 8.65.0
+      '@typescript-eslint/types': 8.65.0
       debug: 4.4.3(supports-color@8.1.1)
       eslint-scope: 9.1.2
       eslint-visitor-keys: 5.0.1
@@ -23900,12 +23903,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-astro@3.0.1(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)(@typescript-eslint/parser@8.65.0(eslint@10.8.0(jiti@2.7.0))(typescript@6.0.3))(eslint-plugin-jsx-a11y@6.10.2(eslint@10.8.0(jiti@2.7.0)))(eslint@10.8.0(jiti@2.7.0))(supports-color@8.1.1):
+  eslint-plugin-astro@3.0.1(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)(@typescript-eslint/parser@8.65.0(eslint@10.8.0(jiti@2.7.0))(typescript@6.0.3))(eslint-plugin-jsx-a11y@6.10.2(eslint@10.8.0(jiti@2.7.0)))(eslint@10.8.0(jiti@2.7.0)):
     dependencies:
       '@eslint-community/eslint-utils': 4.9.1(eslint@10.8.0(jiti@2.7.0))
       '@jridgewell/sourcemap-codec': 1.5.5
       '@typescript-eslint/types': 8.61.1
-      astro-eslint-parser: 3.0.0(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)(supports-color@8.1.1)
+      astro-eslint-parser: 3.0.0(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)
       eslint: 10.8.0(jiti@2.7.0)
       espree: 11.2.0
       globals: 17.6.0
@@ -23918,6 +23921,26 @@ snapshots:
       - '@emnapi/core'
       - '@emnapi/runtime'
       - supports-color
+
+  eslint-plugin-astro@3.0.1(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@typescript-eslint/parser@8.65.0(eslint@10.8.0(jiti@2.7.0))(typescript@6.0.3))(eslint-plugin-jsx-a11y@6.10.2(eslint@10.8.0(jiti@2.7.0)))(eslint@10.8.0(jiti@2.7.0)):
+    dependencies:
+      '@eslint-community/eslint-utils': 4.9.1(eslint@10.8.0(jiti@2.7.0))
+      '@jridgewell/sourcemap-codec': 1.5.5
+      '@typescript-eslint/types': 8.61.1
+      astro-eslint-parser: 3.0.0(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)
+      eslint: 10.8.0(jiti@2.7.0)
+      espree: 11.2.0
+      globals: 17.6.0
+      postcss: 8.5.22
+      postcss-selector-parser: 7.1.4
+    optionalDependencies:
+      '@typescript-eslint/parser': 8.65.0(eslint@10.8.0(jiti@2.7.0))(typescript@6.0.3)
+      eslint-plugin-jsx-a11y: 6.10.2(eslint@10.8.0(jiti@2.7.0))
+    transitivePeerDependencies:
+      - '@emnapi/core'
+      - '@emnapi/runtime'
+      - supports-color
+    optional: true
 
   eslint-plugin-better-tailwindcss@4.7.0(@eslint/css@1.4.0)(eslint@10.8.0(jiti@2.7.0))(oxlint@1.75.0)(tailwindcss@4.3.3)(typescript@6.0.3):
     dependencies:

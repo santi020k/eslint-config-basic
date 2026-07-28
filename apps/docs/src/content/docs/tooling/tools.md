@@ -5,6 +5,10 @@ description: "The tools option enables integrations for standalone developer too
 
 The `tools` option enables integrations for standalone developer tooling that commonly interacts with source code or documentation.
 
+Install `@santi020k/eslint-config-integrations` alongside the lean `basic`
+package before enabling or auto-detecting entries on this page. The `full`
+package already includes it.
+
 | Tool | Enum | Use It When | Auto-Detected |
 | :--- | :--- | :--- | :--- |
 | Prettier | `Tool.Prettier` | The project uses Prettier and needs ESLint compatibility. | No |
