@@ -19,6 +19,11 @@ description: "The API reference is generated from the source packages with TypeD
 - `@santi020k/eslint-config-core`
 - `@santi020k/eslint-config-typescript`
 - `@santi020k/eslint-config-integrations`
+- `@santi020k/eslint-config-extensions`
+- `@santi020k/eslint-config-formats`
+- `@santi020k/eslint-config-libraries`
+- `@santi020k/eslint-config-testing`
+- `@santi020k/eslint-config-tools`
 
 Framework config packages remain part of the generated API reference. In v3,
 application code imports the composer from `@santi020k/eslint-config-basic` and

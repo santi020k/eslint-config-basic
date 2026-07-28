@@ -33,10 +33,11 @@ For a framework, add its config package to the same install:
 npm install -D eslint @santi020k/eslint-config-basic @santi020k/eslint-config-react
 ```
 
-For testing, formatting, Tailwind, or other optional tooling, add integrations:
+For optional behavior, add only the corresponding feature packs:
 
 ```sh
-npm install -D eslint @santi020k/eslint-config-basic @santi020k/eslint-config-integrations
+npm install -D @santi020k/eslint-config-testing @santi020k/eslint-config-tools
+npm install -D @santi020k/eslint-config-libraries
 ```
 
 If install size is not a concern, the batteries-included package keeps the same
@@ -82,7 +83,7 @@ export default await defineConfig({
 })
 ```
 
-Optional integrations require `@santi020k/eslint-config-integrations`:
+Optional features require their granular category package:
 
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
@@ -141,10 +142,17 @@ automatically. Set `untypedFiles: false` to require type information everywhere.
 npx @santi020k/eslint-config-basic init
 npx @santi020k/eslint-config-basic explain
 npx @santi020k/eslint-config-basic doctor
+npx @santi020k/eslint-config-basic migrate --to v3
+npx @santi020k/eslint-config-basic baseline --preset pedantic
+npx @santi020k/eslint-config-basic profile
+npx @santi020k/eslint-config-basic snapshot
+npx @santi020k/eslint-config-basic diff
 ```
 
 `init` creates the zero-argument config. `explain` shows detection, and
-`doctor` reports missing optional packages and peer/version problems.
+`doctor` reports setup problems. The remaining commands automate v3 migration,
+incremental strict-mode adoption, performance profiling, and effective-rule
+change review.
 
 ## Compatibility
 

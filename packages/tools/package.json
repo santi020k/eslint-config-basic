@@ -1,0 +1,65 @@
+{
+  "name": "@santi020k/eslint-config-tools",
+  "version": "2.1.1",
+  "description": "Tooling ESLint configs for eslint-config-basic",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./registry": {
+      "types": "./dist/registry.d.ts",
+      "import": "./dist/registry.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "check:exports": "publint",
+    "clean": "rm -rf dist",
+    "dev": "tsup --watch",
+    "lint": "eslint . --no-warn-ignored --pass-on-no-patterns",
+    "lint:fix": "eslint . --fix --no-warn-ignored --pass-on-no-patterns",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@cspell/eslint-plugin": "catalog:",
+    "@darraghor/eslint-plugin-nestjs-typed": "catalog:",
+    "@santi020k/eslint-config-core": "workspace:^",
+    "@santi020k/eslint-config-formats": "workspace:^",
+    "@typescript-eslint/utils": "catalog:",
+    "eslint-config-prettier": "catalog:",
+    "eslint-plugin-command": "catalog:",
+    "eslint-plugin-jsdoc": "catalog:",
+    "eslint-plugin-pnpm": "catalog:",
+    "eslint-plugin-tsdoc": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "publint": "catalog:",
+    "tsup": "catalog:",
+    "typescript": "catalog:"
+  },
+  "peerDependencies": {
+    "eslint": "^10.0.0",
+    "typescript": ">=5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "typescript": { "optional": true }
+  },
+  "engines": { "node": "^20.19.0 || >=22.18.0" },
+  "publishConfig": { "access": "public", "provenance": true },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/santi020k/eslint-config-basic.git",
+    "directory": "packages/tools"
+  },
+  "homepage": "https://eslint.santi020k.com/packages/tools",
+  "license": "MIT"
+}

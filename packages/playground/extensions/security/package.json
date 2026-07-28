@@ -14,7 +14,8 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
-    "eslint": "catalog:"
+    "eslint": "catalog:",
+    "eslint-plugin-security": "catalog:"
   },
   "devDependencies": {
     "@types/node": "catalog:node25",

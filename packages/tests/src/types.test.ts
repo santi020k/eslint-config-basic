@@ -1,4 +1,5 @@
-import { type EslintConfigFeatures, Extension, Format, Library, Runtime, Setting, Testing, Tool } from '@santi020k/eslint-config-basic'
+import { Extension, Format, Library, Runtime, Setting, Testing, Tool } from '@santi020k/eslint-config-basic'
+import type { EslintConfigFeatures } from '@santi020k/eslint-config-basic/agent'
 
 import { describe, expect, test } from 'vitest'
 

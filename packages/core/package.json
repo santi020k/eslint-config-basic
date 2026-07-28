@@ -28,6 +28,10 @@
       "types": "./dist/rules.d.ts",
       "import": "./dist/rules.js"
     },
+    "./feature": {
+      "types": "./dist/feature.d.ts",
+      "import": "./dist/feature.js"
+    },
     "./settings": {
       "types": "./dist/settings/index.d.ts",
       "import": "./dist/settings/index.js"

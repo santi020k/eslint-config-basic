@@ -245,13 +245,20 @@ const detectTesting = (allDeps: DependencyMap): Testing[] => dedupe(
     .map(([, testing]) => testing)
 )
 
-const detectExtensions = (allDeps: DependencyMap): Extension[] => {
-  const extensions: Extension[] = []
+const EXTENSION_DEP_MAPPINGS: [string[], Extension][] = [
+  [['eslint-plugin-no-only-tests'], Extension.NoOnlyTests],
+  [['eslint-plugin-perfectionist'], Extension.Perfectionist],
+  [['eslint-plugin-regexp'], Extension.Regexp],
+  [['eslint-plugin-security'], Extension.Security],
+  [['eslint-plugin-sonarjs'], Extension.Sonarjs],
+  [['eslint-plugin-unicorn'], Extension.Unicorn]
+]
 
-  if (allDeps['eslint-plugin-no-only-tests']) extensions.push(Extension.NoOnlyTests)
-
-  return extensions
-}
+const detectExtensions = (allDeps: DependencyMap): Extension[] => dedupe(
+  EXTENSION_DEP_MAPPINGS
+    .filter(([deps]) => hasAnyDependency(allDeps, deps))
+    .map(([, extension]) => extension)
+)
 
 const GRAPHQL_DEPS = ['graphql', '@apollo/client', 'relay-runtime', 'urql', 'graphql-tag', '@graphql-typed-document-node/core']
 const MDX_DEPS = ['@mdx-js/react', '@mdx-js/mdx', '@astrojs/mdx']

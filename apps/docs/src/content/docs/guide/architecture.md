@@ -19,8 +19,18 @@ This document defines contributor-facing architecture boundaries for the monorep
   - Applies merge strategy, framework dependencies, integrations, and strict mode.
   - Keeps final ordering contract: core -> frameworks -> TypeScript -> integrations -> Prettier.
 - [`integrations.ts`](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/integrations.ts)
-  - Maps enum selections from `packages/core/src/types.ts` to integration config arrays.
-  - Every enum value must map to at least one config array branch.
+  - Loads only the installed feature-pack registries required by the selected categories.
+  - Resolves the shared `ConfigFeature` contract without importing plugin implementations into the composer.
+- [`feature.ts`](https://github.com/santi020k/eslint-config-basic/blob/main/packages/core/src/feature.ts)
+  - Defines the ecosystem-neutral feature adapter contract.
+  - Sorts selected features and separates normal configs from finalizers such as Prettier.
+- Feature packs (`packages/extensions`, `packages/formats`, `packages/libraries`,
+  `packages/testing`, and `packages/tools`)
+  - Own their plugin dependencies, public factories, and feature registries.
+  - Keep adding one category from installing unrelated categories.
+- [`packages/integrations`](https://github.com/santi020k/eslint-config-basic/tree/main/packages/integrations)
+  - Is a compatibility aggregate over the five feature packs.
+  - Does not own plugin implementations.
 
 ## Data Flow
 
@@ -28,7 +38,7 @@ This document defines contributor-facing architecture boundaries for the monorep
 2. `resolvePreset()` provides preset defaults.
 3. `defineConfig()` merges detected + preset + explicit options.
 4. Frameworks are resolved through `resolveFramework()`.
-5. Integrations are appended via `getIntegrationConfigs()`.
+5. Selected feature-pack registries are resolved through `getIntegrationConfigs()`.
 6. Prettier is appended last via `getPrettierConfig()`.
 7. Strict mode is applied at the end with `applyStrictMode()`.
 
@@ -36,9 +46,11 @@ This document defines contributor-facing architecture boundaries for the monorep
 
 - [`types.ts`](https://github.com/santi020k/eslint-config-basic/blob/main/packages/core/src/types.ts) is the single source of truth for enums and option types.
 - New enum values require mapping updates in:
-  - [`integrations.ts`](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/integrations.ts) (integrations),
+  - the matching feature pack registry,
   - [`resolvers.ts`](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/resolvers.ts) (presets when applicable),
   - integration tests under `packages/tests/src/`.
+- Feature adapters must use globally stable `order` values. Prettier and other
+  final overrides use the `finalizer` phase.
 - Detection precedence must remain deterministic:
   - `Worker > Node > Browser > Universal`.
 - Framework implication rules (for example, `next` and `expo` imply `react`) must stay covered by tests.

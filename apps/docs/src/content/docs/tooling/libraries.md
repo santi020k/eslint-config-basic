@@ -5,7 +5,7 @@ description: "The libraries option enables integrations that usually correspond 
 
 The `libraries` option enables integrations that usually correspond to major project dependencies.
 
-Install `@santi020k/eslint-config-integrations` alongside the lean `basic`
+Install `@santi020k/eslint-config-libraries` alongside the lean `basic`
 package before enabling or auto-detecting entries on this page. The `full`
 package already includes it.
 
@@ -140,4 +140,4 @@ export default await defineConfig({
 ## Repository Examples
 
 - Library Playgrounds: [packages/playground/libraries](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/libraries)
-- Integrations Package Source: [packages/integrations](https://github.com/santi020k/eslint-config-basic/tree/main/packages/integrations)
+- Libraries Package Source: [packages/libraries](https://github.com/santi020k/eslint-config-basic/tree/main/packages/libraries)

@@ -7,7 +7,7 @@ import RunnerTabs from '../../../components/RunnerTabs.astro'
 
 The main package ships a CLI that can scaffold or refresh the project config.
 
-<RunnerTabs args={['init', 'update', 'explain', 'inspect', 'doctor', 'docs', 'migrate', 'generate-skill']} />
+<RunnerTabs args={['init', 'update', 'explain', 'inspect', 'doctor', 'migrate --to v3', 'baseline', 'profile', 'snapshot', 'diff', 'docs', 'generate-skill']} />
 
 ## What It Does
 
@@ -20,7 +20,10 @@ The main package ships a CLI that can scaffold or refresh the project config.
 - Prints detected inputs, package-manager details, workspace projects, and active config features with `inspect`.
 - Checks common v3 adoption issues with `doctor`.
 - Generates human-readable `ESLINT_STANDARDS.md` docs with `docs`.
-- Reports v1-to-v2 migration suggestions with `migrate`.
+- Plans and safely applies v1-to-v2 or v2-to-v3 migrations with `migrate`.
+- Creates an incremental-adoption suppression baseline with `baseline`.
+- Compares single-threaded and multithreaded rule performance with `profile`.
+- Saves and diffs effective-rule snapshots for representative files.
 
 ## Usage
 
@@ -68,7 +71,8 @@ For automation, use JSON output:
 npx @santi020k/eslint-config-basic inspect --json
 ```
 
-`explain`, `doctor`, and `migrate` also support `--json` for CI and migration tooling:
+`explain`, `doctor`, `migrate`, `profile`, `snapshot`, and `diff` support
+`--json` for CI and migration tooling:
 
 ```sh
 npx @santi020k/eslint-config-basic explain --json
@@ -114,25 +118,101 @@ npx @santi020k/eslint-config-basic docs
 
 This is separate from `generate-skill`: `docs` writes a general standards document, while `generate-skill` targets AI coding assistant rule folders.
 
-## Migration Report
+## Migrate Between Major Versions
 
-The `migrate` command remains for moving legacy v1 configs to the v2 composer
-shape. For v2 projects, follow the [v2 to v3 migration guide](/guide/migration-v2-to-v3/).
+Without a target, `migrate` retains its v1-to-v2 compatibility behavior:
 
 ```sh
 npx @santi020k/eslint-config-basic migrate
 ```
 
-The command reports the main migration steps and calls out configs that still appear to import old framework config packages.
+For v2 projects, preview the complete v3 dependency and config migration:
 
-For straightforward v1 configs that only import framework packages, `--write`
-can replace those imports with the historical v2 bundled-framework boolean
-form. It does not finish the v3 dependency migration; after it runs, follow
-the [v2 to v3 migration guide](/guide/migration-v2-to-v3/).
+```sh
+npx @santi020k/eslint-config-basic migrate --to v3
+```
+
+The command selects lean mode by default, detects required framework and
+feature-pack packages, moves direct factory imports to their granular packages,
+replaces removed aliases, and migrates Remix to React Router. Config and
+`package.json` changes are dry-run only until `--write` is passed:
+
+```sh
+npx @santi020k/eslint-config-basic migrate --to v3 --write
+```
+
+Both modified files receive `.v2.bak` backups. Use `--full` to select the
+batteries-included bundle, `--check` in CI to fail when a migration remains,
+and `--json` for machine-readable plans.
+
+For straightforward v1 configs, the historical migration remains available:
 
 ```sh
 npx @santi020k/eslint-config-basic migrate --write
 ```
+
+## Adopt Stricter Rules Incrementally
+
+`baseline` uses ESLint bulk suppressions to record existing errors while still
+rejecting new violations:
+
+```sh
+npx @santi020k/eslint-config-basic baseline
+```
+
+Enable a strict profile at the same time when the config is still the generated
+zero-argument form:
+
+```sh
+npx @santi020k/eslint-config-basic baseline --preset pedantic
+```
+
+The config is backed up before it is changed. As violations are fixed, remove
+obsolete entries with:
+
+```sh
+npx @santi020k/eslint-config-basic baseline --prune
+```
+
+Commit `eslint-suppressions.json` so local and CI behavior stays aligned.
+
+## Profile Lint Performance
+
+`profile` runs ESLint with rule timing enabled and compares concurrency
+`off` with `auto`:
+
+```sh
+npx @santi020k/eslint-config-basic profile
+```
+
+The report includes total duration, file and diagnostic counts, parsing and
+rule time, the slowest rules, and the faster concurrency mode. Pin a mode or
+limit the lint targets when investigating:
+
+```sh
+npx @santi020k/eslint-config-basic profile --concurrency 4 --file src
+npx @santi020k/eslint-config-basic profile --json
+```
+
+## Snapshot Effective Rules
+
+Save the effective rule configuration for representative source, test,
+framework, and config files:
+
+```sh
+npx @santi020k/eslint-config-basic snapshot
+```
+
+Commit `.eslint-config-snapshot.json`, then review dependency-update behavior:
+
+```sh
+npx @santi020k/eslint-config-basic diff
+```
+
+`diff` exits with code 1 when rules are added, removed, or changed. Use
+repeatable `--file` options to select explicit representatives,
+`--snapshot-path` to choose another file, or `snapshot --check` for the same
+comparison in CI.
 
 ## Generate Agent Standards (Beta)
 
@@ -169,9 +249,15 @@ Use `--force` if you want to overwrite existing standards files.
 - `--force` — overwrite existing skill files and guarded sections.
 - `--check` — CI mode: compares existing skill files against freshly generated content without writing anything, and exits with code 1 when any file is stale or missing. Useful as a CI step or pre-push hook so agent rules never drift from the actual config.
 - `--create` — scaffold a root `AGENTS.md` (with the guarded ESLint-standards section) when the project has none. Without this flag, `AGENTS.md` is only updated when it already exists.
+- `--with-eslint-mcp` — add the official `eslint --mcp` server to the root
+  `.mcp.json` while preserving other registered servers.
 
 ```sh title="CI example"
 npx @santi020k/eslint-config-basic generate-skill --check
+```
+
+```sh title="Agent standards and ESLint MCP"
+npx @santi020k/eslint-config-basic generate-skill --with-eslint-mcp
 ```
 
 ## When to Use Each Command
@@ -182,7 +268,10 @@ npx @santi020k/eslint-config-basic generate-skill --check
 - Use `inspect` when you need machine-readable details or active config feature extraction.
 - Use `doctor` when a v3 setup is not behaving as expected.
 - Use `docs` when you want a committed standards summary.
-- Use `migrate` when moving a v1 config to v2.
+- Use `migrate --to v3` when upgrading a v2 consumer.
+- Use `baseline` when enabling strict rules in an established codebase.
+- Use `profile` when lint execution becomes expensive.
+- Use `snapshot` and `diff` to review rule changes during dependency upgrades.
 - Use manual editing when the config already has custom organization that you do not want regenerated.
 
 ## Why the Generated Config Needs No Options

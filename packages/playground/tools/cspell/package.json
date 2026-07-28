@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@cspell/eslint-plugin": "catalog:",
     "@santi020k/eslint-config-basic": "workspace:^",
     "eslint": "catalog:"
   },

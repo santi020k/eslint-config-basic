@@ -1,24 +1,14 @@
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
-
-import { FlatCompat } from '@eslint/eslintrc'
 import type { TSESLint } from '@typescript-eslint/utils'
-
-const currentDirectory = path.dirname(fileURLToPath(import.meta.url))
-
-// Initialize FlatCompat with the base directory
-const flatCompat = new FlatCompat({
-  baseDirectory: currentDirectory,
-  recommendedConfig: {}
-})
+import expoFlatConfig from 'eslint-config-expo/flat.js'
 
 /**
  * Expo ESLint configuration
- * Extends the expo config with custom import sorting
+ * Uses Expo's native flat config while removing rule families owned by the
+ * shared TypeScript, import, and React presets.
  */
-const compatConfigs = flatCompat.extends('expo') as unknown as TSESLint.FlatConfig.ConfigArray
+const sanitizedConfigs = expoFlatConfig.map(config => {
+  const { name: _upstreamName, ...configWithoutName } = config
 
-const sanitizedConfigs = compatConfigs.map(config => {
   const rulesWithoutLegacyPlugins = config.rules ?
     Object.fromEntries(
       Object.entries(config.rules).filter(([ruleName]) => ![
@@ -39,10 +29,12 @@ const sanitizedConfigs = compatConfigs.map(config => {
       ...restPlugins
     } = config.plugins
 
-    return { ...config, plugins: restPlugins, rules: rulesWithoutLegacyPlugins }
+    return { ...configWithoutName, plugins: restPlugins, rules: rulesWithoutLegacyPlugins }
   }
 
-  return rulesWithoutLegacyPlugins ? { ...config, rules: rulesWithoutLegacyPlugins } : config
+  return rulesWithoutLegacyPlugins ?
+    { ...configWithoutName, rules: rulesWithoutLegacyPlugins } :
+    configWithoutName
 })
 
 /**

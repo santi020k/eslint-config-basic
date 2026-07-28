@@ -119,6 +119,16 @@ describe('Expo Config', () => {
   test('should have at least one config entry', () => {
     expect(expoConfig.length).toBeGreaterThan(0)
   })
+
+  test('should retain Expo rules without legacy plugin families', () => {
+    const plugins = expoConfig.flatMap(config => Object.keys(config.plugins ?? {}))
+    const rules = expoConfig.flatMap(config => Object.keys(config.rules ?? {}))
+
+    expect(plugins).toContain('expo')
+    expect(plugins).not.toEqual(expect.arrayContaining(['@typescript-eslint', 'import', 'react', 'react-hooks']))
+    expect(rules.some(rule => ['@typescript-eslint/', 'import/', 'react/', 'react-hooks/']
+      .some(prefix => rule.startsWith(prefix)))).toBe(false)
+  })
 })
 
 describe('NestJS Config', () => {

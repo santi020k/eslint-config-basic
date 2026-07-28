@@ -25,11 +25,17 @@
       "@santi020k/eslint-config-basic": [
         "./packages/basic/src/index.ts"
       ],
+      "@santi020k/eslint-config-basic/agent": [
+        "./packages/basic/src/agent-skill-generator.ts"
+      ],
       "@santi020k/eslint-config-lite": [
         "./packages/lite/src/index.ts"
       ],
       "@santi020k/eslint-config-core": [
         "./packages/core/src/index.ts"
+      ],
+      "@santi020k/eslint-config-core/feature": [
+        "./packages/core/src/feature.ts"
       ],
       "@santi020k/eslint-config-core/types": [
         "./packages/core/src/types.ts"
@@ -89,28 +95,58 @@
         "./packages/integrations/src/index.ts"
       ],
       "@santi020k/eslint-config-integrations/extensions": [
-        "./packages/integrations/src/extensions/index.ts"
+        "./packages/integrations/src/extensions.ts"
       ],
       "@santi020k/eslint-config-integrations/formats": [
-        "./packages/integrations/src/formats/index.ts"
+        "./packages/integrations/src/formats.ts"
       ],
       "@santi020k/eslint-config-integrations/libraries": [
-        "./packages/integrations/src/libraries/index.ts"
+        "./packages/integrations/src/libraries.ts"
       ],
       "@santi020k/eslint-config-integrations/testing": [
-        "./packages/integrations/src/testing/index.ts"
+        "./packages/integrations/src/testing.ts"
       ],
       "@santi020k/eslint-config-integrations/tools": [
-        "./packages/integrations/src/tools/index.ts"
+        "./packages/integrations/src/tools.ts"
+      ],
+      "@santi020k/eslint-config-extensions": [
+        "./packages/extensions/src/index.ts"
+      ],
+      "@santi020k/eslint-config-extensions/registry": [
+        "./packages/extensions/src/registry.ts"
+      ],
+      "@santi020k/eslint-config-formats": [
+        "./packages/formats/src/index.ts"
+      ],
+      "@santi020k/eslint-config-formats/registry": [
+        "./packages/formats/src/registry.ts"
+      ],
+      "@santi020k/eslint-config-libraries": [
+        "./packages/libraries/src/index.ts"
+      ],
+      "@santi020k/eslint-config-libraries/registry": [
+        "./packages/libraries/src/registry.ts"
+      ],
+      "@santi020k/eslint-config-testing": [
+        "./packages/testing/src/index.ts"
+      ],
+      "@santi020k/eslint-config-testing/registry": [
+        "./packages/testing/src/registry.ts"
+      ],
+      "@santi020k/eslint-config-tools": [
+        "./packages/tools/src/index.ts"
+      ],
+      "@santi020k/eslint-config-tools/registry": [
+        "./packages/tools/src/registry.ts"
       ],
       "eslint-plugin-promise": [
         "./packages/core/src/ambient.d.ts"
       ],
       "eslint-plugin-better-tailwindcss": [
-        "./packages/integrations/src/ambient.d.ts"
+        "./packages/libraries/src/ambient.d.ts"
       ],
       "eslint-plugin-security": [
-        "./packages/integrations/src/ambient.d.ts"
+        "./packages/extensions/src/ambient.d.ts"
       ],
       "eslint-plugin-qwik": [
         "./packages/qwik/src/ambient.d.ts"
@@ -122,8 +158,11 @@
   },
   "files": [
     "packages/core/src/ambient.d.ts",
+    "packages/expo/src/ambient.d.ts",
     "packages/react/src/ambient.d.ts",
-    "packages/integrations/src/ambient.d.ts"
+    "packages/extensions/src/ambient.d.ts",
+    "packages/libraries/src/ambient.d.ts",
+    "packages/tools/src/ambient.d.ts"
   ],
   "exclude": [
     "node_modules",

@@ -7,6 +7,25 @@ Version 3 changes dependency ownership and removes integration factories from
 the lean root export. Rule options and the `defineConfig()` composer remain
 familiar, but this is intentionally a breaking release.
 
+## Automated migration
+
+Preview the dependency and config changes before choosing a manual path:
+
+```sh
+npx @santi020k/eslint-config-basic@^3 migrate --to v3
+```
+
+The migration detects framework and feature-pack packages, replaces removed
+aliases, moves direct factory imports, and maps Remix to React Router. Apply
+safe changes with backups:
+
+```sh
+npx @santi020k/eslint-config-basic@^3 migrate --to v3 --write
+```
+
+Pass `--full` for the batteries-included package, `--check` to enforce a clean
+migration in CI, or `--json` for a machine-readable plan.
+
 ## 1. Choose a migration path
 
 ### Easy way (recommended): full
@@ -37,12 +56,19 @@ Install implied configs too: Next.js, Expo, React Router, and Remix need the
 React config; Nuxt and Slidev need Vue; TanStack Start needs React or Solid.
 The framework guides show exact commands.
 
-If the project enables `libraries`, `testing`, `formats`, `tools`,
-`extensions`, or the `features` map, add:
+Install the granular feature packs selected by the project:
 
 ```sh
-npm install -D @santi020k/eslint-config-integrations@^3
+npm install -D @santi020k/eslint-config-extensions@^3
+npm install -D @santi020k/eslint-config-formats@^3
+npm install -D @santi020k/eslint-config-libraries@^3
+npm install -D @santi020k/eslint-config-testing@^3
+npm install -D @santi020k/eslint-config-tools@^3
 ```
+
+Only install categories the project uses. The
+`@santi020k/eslint-config-integrations` aggregate remains available as a
+compatibility package.
 
 ## 2. Simplify the config
 
@@ -77,7 +103,8 @@ Integration factories no longer come from the lean root package.
 
 ```diff
 - import { tailwind, vitest } from '@santi020k/eslint-config-basic'
-+ import { tailwind, vitest } from '@santi020k/eslint-config-integrations'
++ import { tailwind } from '@santi020k/eslint-config-libraries'
++ import { vitest } from '@santi020k/eslint-config-testing'
 ```
 
 Projects that switch to `@santi020k/eslint-config-full` may continue importing
@@ -155,7 +182,7 @@ bundle.
 | `basic` with no framework | `basic` |
 | `basic` with React | `basic` + `eslint-config-react` |
 | `basic` with Next.js | `basic` + `eslint-config-next` + `eslint-config-react` |
-| `basic` with integrations | `basic` + `eslint-config-integrations` |
+| `basic` with optional features | `basic` + the selected granular feature packs |
 | `basic` and every bundled feature | `full` |
 | `lite` | `basic` |
-| Integration factory imported from `basic` | Import from `integrations` or `full` |
+| Feature factory imported from `basic` | Import from its feature pack or `full` |

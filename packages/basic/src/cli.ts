@@ -4,6 +4,13 @@ import { basename, dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import { analyzeEslintConfig, handleGenerateSkill } from './agent-skill-generator.js'
+import { handleMigrateV3 } from './cli-migration.js'
+import {
+  handleBaseline,
+  handleProfile,
+  handleSnapshot,
+  handleSnapshotDiff
+} from './cli-workflows.js'
 import { detectProjectOptions } from './index.js'
 
 const getDefaultConfigFilename = (cwd: string): string => {
@@ -23,7 +30,11 @@ const getDefaultConfigFilename = (cwd: string): string => {
 const resolveConfigPath = (cwd: string): string => {
   const existingConfigPath = [
     'eslint.config.js',
-    'eslint.config.mjs'
+    'eslint.config.mjs',
+    'eslint.config.cjs',
+    'eslint.config.ts',
+    'eslint.config.mts',
+    'eslint.config.cts'
   ].map(filename => join(cwd, filename)).find(p => existsSync(p))
 
   return existingConfigPath ?? join(cwd, getDefaultConfigFilename(cwd))
@@ -81,7 +92,10 @@ const getConfigPathIfPresent = (cwd: string): null | string => {
   const configPath = [
     'eslint.config.js',
     'eslint.config.mjs',
-    'eslint.config.cjs'
+    'eslint.config.cjs',
+    'eslint.config.ts',
+    'eslint.config.mts',
+    'eslint.config.cts'
   ].map(filename => join(cwd, filename)).find(p => existsSync(p))
 
   return configPath ?? null
@@ -360,15 +374,27 @@ const printUsage = () => {
     '  inspect         Print detected inputs and active config features',
     '  doctor          Check project setup for common v3 adoption issues',
     '  docs            Generate ESLINT_STANDARDS.md from detection',
-    '  migrate         Report v1-to-v2 migration suggestions',
+    '  migrate         Plan or apply v1-to-v2 and v2-to-v3 migrations',
+    '  baseline        Suppress existing violations for incremental adoption',
+    '  profile         Compare ESLint performance and report slow rules',
+    '  snapshot        Save the effective rules for representative files',
+    '  diff            Compare effective rules with the saved snapshot',
     '  generate-skill  Generate AI agent standards files',
     '',
     'Options:',
     '  --force         Overwrite existing generated skill sections/files',
-    '  --check         init: verify config exists; generate-skill: verify files are up to date',
+    '  --check         Verify generated files, migrations, or snapshots without writing',
+    '  --concurrency   profile: off, auto, or a worker count',
     '  --create        generate-skill: scaffold a root AGENTS.md when missing',
+    '  --file          profile/snapshot/diff: representative file or lint target (repeatable)',
+    '  --full          migrate --to v3: choose the batteries-included package',
     '  --json          Print JSON for commands that support it',
     '  --lite-install  doctor: print the detected lite install command',
+    '  --preset        baseline: enable ci or pedantic strict mode before suppressing',
+    '  --prune         baseline: remove suppressions for resolved violations',
+    '  --snapshot-path snapshot/diff: override .eslint-config-snapshot.json',
+    '  --to            migrate: target version (v2 or v3)',
+    '  --with-eslint-mcp generate-skill: scaffold the official ESLint MCP server',
     '  --write         Apply safe migrations for commands that support it',
     '  --help, -h      Show this help message',
     '  --version, -v   Show CLI version'
@@ -908,7 +934,35 @@ const processConfigMigration = (configPath: string, write: boolean, suggestions:
   return applied
 }
 
-export const handleMigrate = (cwd: string = process.cwd(), write = false, json = false) => {
+export const handleMigrate = (
+  cwd: string = process.cwd(),
+  write = false,
+  json = false,
+  target = 'v2',
+  check = false,
+  full = false
+) => {
+  if (target === 'v3' || target === '3') {
+    const summary = getProjectSummary(cwd)
+
+    handleMigrateV3(cwd, {
+      extensions: summary.extensions,
+      formats: summary.formats,
+      frameworks: summary.frameworks,
+      libraries: summary.libraries,
+      packageManager: detectPackageManager(cwd),
+      testing: summary.testing,
+      tools: summary.tools,
+      typescript: summary.typescript
+    }, { check, full, json, write })
+
+    return
+  }
+
+  if (target !== 'v2' && target !== '2') {
+    throw new Error(`Unsupported migration target "${target}". Use --to v2 or --to v3.`)
+  }
+
   const configPath = getConfigPathIfPresent(cwd) ?? join(cwd, getDefaultConfigFilename(cwd))
 
   const suggestions = [
@@ -941,15 +995,53 @@ const dispatchCommand = (
   command: string,
   cwd: string,
   flags: {
+    concurrency?: string
+    files: string[]
     hasCheck: boolean
     hasCreate: boolean
     hasForce: boolean
+    hasFull: boolean
     hasJson: boolean
     hasLiteInstall: boolean
+    hasPrune: boolean
     hasWrite: boolean
+    hasWithEslintMcp: boolean
+    preset?: string
+    snapshotPath?: string
+    target?: string
   }
 ) => {
   switch (command) {
+    case 'baseline': {
+      try {
+        handleBaseline(cwd, {
+          json: flags.hasJson,
+          preset: flags.preset,
+          prune: flags.hasPrune
+        })
+      } catch (error) {
+        console.error(`❌ Failed to create ESLint baseline: ${String(error)}`)
+
+        process.exitCode = 1
+      }
+
+      break
+    }
+
+    case 'diff': {
+      handleSnapshotDiff(cwd, {
+        files: flags.files,
+        json: flags.hasJson,
+        snapshotPath: flags.snapshotPath
+      }).catch((error: unknown) => {
+        console.error(`❌ Failed to diff ESLint configuration: ${String(error)}`)
+
+        process.exitCode = 1
+      })
+
+      break
+    }
+
     case 'docs': {
       handleDocs(cwd)
 
@@ -973,7 +1065,11 @@ const dispatchCommand = (
     }
 
     case 'generate-skill': {
-      handleGenerateSkill(cwd, flags.hasForce, { check: flags.hasCheck, createAgentsMd: flags.hasCreate }).catch((error: unknown) => {
+      handleGenerateSkill(cwd, flags.hasForce, {
+        check: flags.hasCheck,
+        createAgentsMd: flags.hasCreate,
+        withEslintMcp: flags.hasWithEslintMcp
+      }).catch((error: unknown) => {
         console.error(`❌ Failed to generate skill files: ${String(error)}`)
 
         process.exitCode = 1
@@ -999,7 +1095,51 @@ const dispatchCommand = (
     }
 
     case 'migrate': {
-      handleMigrate(cwd, flags.hasWrite, flags.hasJson)
+      try {
+        handleMigrate(
+          cwd,
+          flags.hasWrite,
+          flags.hasJson,
+          flags.target ?? 'v2',
+          flags.hasCheck,
+          flags.hasFull
+        )
+      } catch (error) {
+        console.error(`❌ Failed to migrate ESLint configuration: ${String(error)}`)
+
+        process.exitCode = 1
+      }
+
+      break
+    }
+
+    case 'profile': {
+      try {
+        handleProfile(cwd, {
+          concurrency: flags.concurrency,
+          files: flags.files,
+          json: flags.hasJson
+        })
+      } catch (error) {
+        console.error(`❌ Failed to profile ESLint: ${String(error)}`)
+
+        process.exitCode = 1
+      }
+
+      break
+    }
+
+    case 'snapshot': {
+      handleSnapshot(cwd, {
+        check: flags.hasCheck,
+        files: flags.files,
+        json: flags.hasJson,
+        snapshotPath: flags.snapshotPath
+      }).catch((error: unknown) => {
+        console.error(`❌ Failed to snapshot ESLint configuration: ${String(error)}`)
+
+        process.exitCode = 1
+      })
 
       break
     }
@@ -1020,6 +1160,24 @@ const dispatchCommand = (
   }
 }
 
+const getFlagValue = (argv: string[], flag: string): string | undefined => {
+  const inline = argv.find(argument => argument.startsWith(`${flag}=`))
+
+  if (inline) return inline.slice(flag.length + 1)
+
+  const index = argv.indexOf(flag)
+
+  return index >= 0 ? argv[index + 1] : undefined
+}
+
+const getFlagValues = (argv: string[], flag: string): string[] => argv.flatMap((argument, index) => {
+  if (argument.startsWith(`${flag}=`)) return [argument.slice(flag.length + 1)]
+
+  if (argument === flag && argv[index + 1]) return [argv[index + 1]]
+
+  return []
+})
+
 export const runCli = (argv: string[] = process.argv, cwd: string = process.cwd()) => {
   const command = argv[2]
   const isHelp = command === '--help' || command === '-h'
@@ -1038,12 +1196,20 @@ export const runCli = (argv: string[] = process.argv, cwd: string = process.cwd(
   }
 
   dispatchCommand(command, cwd, {
+    concurrency: getFlagValue(argv, '--concurrency'),
+    files: getFlagValues(argv, '--file'),
     hasCheck: argv.includes('--check'),
     hasCreate: argv.includes('--create'),
     hasForce: argv.includes('--force'),
+    hasFull: argv.includes('--full'),
     hasJson: argv.includes('--json'),
     hasLiteInstall: argv.includes('--lite-install'),
-    hasWrite: argv.includes('--write')
+    hasPrune: argv.includes('--prune'),
+    hasWithEslintMcp: argv.includes('--with-eslint-mcp'),
+    hasWrite: argv.includes('--write'),
+    preset: getFlagValue(argv, '--preset'),
+    snapshotPath: getFlagValue(argv, '--snapshot-path'),
+    target: getFlagValue(argv, '--to')
   })
 }
 

@@ -5,7 +5,7 @@ description: "The extensions option enables specialized rule packs that are usef
 
 The `extensions` option enables specialized rule packs that are useful across many project types.
 
-Install `@santi020k/eslint-config-integrations` alongside the lean `basic`
+Install `@santi020k/eslint-config-extensions` alongside the lean `basic`
 package before enabling or auto-detecting entries on this page. The `full`
 package already includes it.
 
@@ -89,4 +89,4 @@ By adding this extension, ESLint will no longer report errors for rules that Oxl
 ## Repository Examples
 
 - Extension Playgrounds: [packages/playground/extensions](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/extensions)
-- Integrations Package Source: [packages/integrations](https://github.com/santi020k/eslint-config-basic/tree/main/packages/integrations)
+- Extensions Package Source: [packages/extensions](https://github.com/santi020k/eslint-config-basic/tree/main/packages/extensions)

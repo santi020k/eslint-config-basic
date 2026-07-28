@@ -70,7 +70,6 @@
         "@tanstack/eslint-plugin-query",
         "@tanstack/eslint-plugin-router",
         "@vitest/eslint-plugin",
-        "eslint-config-biome",
         "eslint-plugin-better-tailwindcss",
         "eslint-plugin-compat",
         "eslint-plugin-de-morgan",

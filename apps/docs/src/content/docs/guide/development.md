@@ -46,7 +46,8 @@ This is a **monorepo** using Turborepo + pnpm Workspaces. Each config lives unde
 - `packages/expo` — Expo/React Native rules
 - `packages/nest` — NestJS rules
 - `packages/vue` — Vue rules
-- `packages/integrations` — Optional configs (Tailwind, Vitest, Prettier, Unicorn, etc.)
+- `packages/{extensions,formats,libraries,testing,tools}` — dependency-owning feature packs.
+- `packages/integrations` — compatibility aggregate over the feature packs.
 - `packages/tests` — Integration tests
 - `packages/playground` — Local testing playground
 

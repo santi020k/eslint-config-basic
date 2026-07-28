@@ -48,7 +48,7 @@ For application packages, prefer `defineConfig()` with no arguments when no
 options are needed. A direct call automatically uses the directory containing
 `eslint.config.*` as its stable detection root. Add explicit options when the
 project needs specific framework, TypeScript, or integration choices. Install
-`@santi020k/eslint-config-integrations` for the integration options below.
+the matching category packs for the optional choices below.
 
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
@@ -125,9 +125,8 @@ export default await defineConfig({
 
 Presets do not force a framework. Frameworks come from project detection or the `frameworks` option.
 
-With the lean `basic` package, `App`, `Library`, `CI`, `Monorepo`, and `All`
-also require `@santi020k/eslint-config-integrations`. The `full` package
-already includes it.
+With the lean `basic` package, presets that select optional features require
+their category packs. The `full` package already includes all five.
 
 ## Frameworks
 

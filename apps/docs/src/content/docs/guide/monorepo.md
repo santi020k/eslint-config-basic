@@ -10,8 +10,9 @@ ESLint 10 also resolves `eslint.config.*` starting from each linted file's direc
 ## Minimal Setup
 
 `Preset.Monorepo` enables Prettier and best-practice integrations. Install
-`@santi020k/eslint-config-integrations` when using it with the lean `basic`
-package; the `full` package already includes it.
+`@santi020k/eslint-config-tools` and
+`@santi020k/eslint-config-extensions` with the lean `basic` package; the `full`
+package already includes them.
 
 ```js title="eslint.config.mjs"
 import { defineConfig } from '@santi020k/eslint-config-basic'

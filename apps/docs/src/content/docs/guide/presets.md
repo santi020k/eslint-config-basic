@@ -27,11 +27,11 @@ export default await defineConfig({
 | Monorepo | `Preset.Monorepo` | Root config for workspace repositories with mixed project types. |
 | All | `Preset.All` | TypeScript + every optional integration. Useful for audits and evaluation. |
 
-With the lean `basic` package, `App`, `Library`, `CI`, `Monorepo`, and `All`
-require `@santi020k/eslint-config-integrations` because their defaults select
-Vitest, Prettier, or best-practice integration configs. `Node`, `Browser`, and
-`Worker` stay within the core + TypeScript dependency boundary. The `full`
-package already includes all preset dependencies.
+With the lean `basic` package, install the category packs selected by a preset.
+`App` uses Testing and Tools; `Library`, `CI`, and `Monorepo` use Extensions
+and/or Tools; `All` uses all five packs. `Node`, `Browser`, and `Worker` stay
+within the core + TypeScript boundary. The `full` package includes every preset
+dependency.
 
 ## What Each Preset Enables
 
@@ -134,9 +134,8 @@ See the [Monorepo guide](/guide/monorepo) for a full walk-through.
 Enables TypeScript and every optional integration (all tools, libraries, testing frameworks, formats, and extensions). Intended for exploration and auditing — not recommended as a long-term production config because it includes integrations your project may not actually use.
 
 With the lean `basic` package (or the compatibility `lite` package),
-`Preset.All` requires `@santi020k/eslint-config-integrations` because the preset
-selects integration configs. Modular projects usually get better dependency
-control by enabling only the specific integrations they need.
+`Preset.All` requires all five category feature packs. Modular projects usually
+get better dependency control by enabling only the specific features they need.
 
 ```js
 import { defineConfig, Preset } from '@santi020k/eslint-config-basic'

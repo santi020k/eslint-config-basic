@@ -34,12 +34,12 @@ npx @santi020k/eslint-config-basic explain
 ### Why is an optional package missing?
 
 Version 3 keeps `@santi020k/eslint-config-basic` lean. A detected framework must
-have its config package installed, and integration options require
-`@santi020k/eslint-config-integrations`.
+have its config package installed, and optional features require their category
+packs.
 
 ```sh
 pnpm add -D @santi020k/eslint-config-react
-pnpm add -D @santi020k/eslint-config-integrations
+pnpm add -D @santi020k/eslint-config-libraries
 ```
 
 The thrown error names the missing config package. Run `basic-eslint explain`
@@ -195,9 +195,10 @@ export default defineConfig()
 ```
 
 The zero-argument call anchors detection to this config file, independently of
-the ESLint process's working directory. Integration factories must be imported
-from `@santi020k/eslint-config-integrations` or
-`@santi020k/eslint-config-full`, not from the lean `basic` root.
+the ESLint process's working directory. Feature factories must be imported from
+their category package, the compatibility
+`@santi020k/eslint-config-integrations` aggregate, or
+`@santi020k/eslint-config-full`—not from the lean `basic` root.
 
 ### A rule I disabled keeps coming back
 

@@ -820,7 +820,12 @@ describe('Integration Rule Assertions — Extensions', () => {
     })
 
     const names = extractConfigNames(config)
+    const rules = extractRuleNames(config)
+
     expect(names).toContain('eslint-config-integrations/biome')
+    expect(getEffectiveRuleValue(config, 'eqeqeq')).toBe('off')
+    expect(getEffectiveRuleValue(config, '@typescript-eslint/no-unused-vars')).toBe('off')
+    expect(rules).not.toContain('react-hooks/exhaustive-deps')
   })
 })
 

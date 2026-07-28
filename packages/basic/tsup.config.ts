@@ -27,6 +27,8 @@ export default defineConfig([
     ...shared,
     entry: [
       'src/agent-skill-generator.ts',
+      'src/cli-migration.ts',
+      'src/cli-workflows.ts',
       'src/index.ts',
       'src/frameworks.ts',
       'src/integrations.ts',

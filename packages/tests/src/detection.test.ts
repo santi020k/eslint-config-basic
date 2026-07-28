@@ -1,6 +1,6 @@
 import * as fs from 'node:fs'
 
-import { detectProjectOptions, Format, Library, NextMode, Preset, Runtime, Testing, Tool } from '@santi020k/eslint-config-basic'
+import { detectProjectOptions, Extension, Format, Library, NextMode, Preset, Runtime, Testing, Tool } from '@santi020k/eslint-config-basic'
 import { __detectionInternals } from '@santi020k/eslint-config-core'
 
 import { beforeEach, describe, expect, test, vi } from 'vitest'
@@ -198,6 +198,30 @@ describe('detectProjectOptions', () => {
     const options = detectProjectOptions()
 
     expect(options.testing).toContain(Testing.Cypress)
+  })
+
+  test('should detect extensions from their ESLint plugin dependencies', () => {
+    vi.mocked(fs.existsSync).mockReturnValue(true)
+
+    vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify({
+      devDependencies: {
+        'eslint-plugin-perfectionist': 'latest',
+        'eslint-plugin-regexp': 'latest',
+        'eslint-plugin-security': 'latest',
+        'eslint-plugin-sonarjs': 'latest',
+        'eslint-plugin-unicorn': 'latest'
+      }
+    }))
+
+    const options = detectProjectOptions()
+
+    expect(options.extensions).toEqual([
+      Extension.Perfectionist,
+      Extension.Regexp,
+      Extension.Security,
+      Extension.Sonarjs,
+      Extension.Unicorn
+    ])
   })
 
   test('should detect Testing Library if @testing-library/react is a dependency', () => {

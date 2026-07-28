@@ -12,8 +12,6 @@ description: "Acknowledgements for the open source libraries that make @santi020
 | `eslint` | The linter itself — everything in this project builds on it. | [eslint/eslint](https://github.com/eslint/eslint) |
 | `@eslint/js` | Official JavaScript rules and recommended presets. | [eslint/eslint](https://github.com/eslint/eslint) |
 | `@eslint/config-helpers` | Helpers for composing flat configs (`defineConfig`). | [eslint/rewrite](https://github.com/eslint/rewrite) |
-| `@eslint/compat` | Compatibility utilities for legacy plugins in flat config. | [eslint/rewrite](https://github.com/eslint/rewrite) |
-| `@eslint/eslintrc` | Bridge for legacy ESLintRC-style shareable configs. | [eslint/eslintrc](https://github.com/eslint/eslintrc) |
 | `@eslint/markdown` | Official Markdown language plugin. | [eslint/markdown](https://github.com/eslint/markdown) |
 | `typescript` | The TypeScript language and compiler. | [microsoft/TypeScript](https://github.com/microsoft/TypeScript) |
 | `typescript-eslint` | TypeScript parser, utilities, and type-aware rules. | [typescript-eslint/typescript-eslint](https://github.com/typescript-eslint/typescript-eslint) |
@@ -60,7 +58,6 @@ description: "Acknowledgements for the open source libraries that make @santi020
 | `@tanstack/eslint-plugin-query` | TanStack Query rules. | [TanStack/query](https://github.com/TanStack/query) |
 | `@tanstack/eslint-plugin-router` | TanStack Router rules. | [TanStack/router](https://github.com/TanStack/router) |
 | `@vitest/eslint-plugin` | Vitest rules. | [vitest-dev/eslint-plugin-vitest](https://github.com/vitest-dev/eslint-plugin-vitest) |
-| `eslint-config-biome` | Disables rules covered by Biome. | [ftzi/eslint-config-biome](https://github.com/ftzi/eslint-config-biome) |
 | `eslint-config-prettier` | Disables rules that conflict with Prettier. | [prettier/eslint-config-prettier](https://github.com/prettier/eslint-config-prettier) |
 | `eslint-plugin-better-tailwindcss` | Tailwind CSS class rules. | [schoero/eslint-plugin-better-tailwindcss](https://github.com/schoero/eslint-plugin-better-tailwindcss) |
 | `eslint-plugin-command` | Comment-as-command codemods. | [antfu/eslint-plugin-command](https://github.com/antfu/eslint-plugin-command) |

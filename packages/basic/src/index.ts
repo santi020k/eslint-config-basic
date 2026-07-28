@@ -48,12 +48,6 @@ import { getIntegrationConfigs, getPrettierConfig } from './integrations.js'
 import { resolveFramework, resolvePreset } from './resolvers.js'
 import { buildTailwindSettingsConfig } from './tailwind.js'
 
-export type { AgentTarget, EslintConfigFeatures, GenerateSkillOptions, GenerateSkillResult } from './agent-skill-generator.js'
-export {
-  AGENT_TARGETS,
-  generateAgentSkills,
-  generateSkillContent
-} from './agent-skill-generator.js'
 // Lazy framework factories.
 export {
   angular,

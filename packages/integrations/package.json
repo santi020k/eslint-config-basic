@@ -1,11 +1,7 @@
 {
   "name": "@santi020k/eslint-config-integrations",
   "version": "2.1.1",
-  "publishConfig": {
-    "access": "public",
-    "provenance": true
-  },
-  "description": "ESLint integrations for libraries, tools, testing, formats, and extensions",
+  "description": "Compatibility aggregate for eslint-config-basic feature packs",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -17,29 +13,27 @@
       "import": "./dist/index.js"
     },
     "./extensions": {
-      "types": "./dist/extensions/index.d.ts",
-      "import": "./dist/extensions/index.js"
+      "types": "./dist/extensions.d.ts",
+      "import": "./dist/extensions.js"
     },
     "./formats": {
-      "types": "./dist/formats/index.d.ts",
-      "import": "./dist/formats/index.js"
+      "types": "./dist/formats.d.ts",
+      "import": "./dist/formats.js"
     },
     "./libraries": {
-      "types": "./dist/libraries/index.d.ts",
-      "import": "./dist/libraries/index.js"
+      "types": "./dist/libraries.d.ts",
+      "import": "./dist/libraries.js"
     },
     "./testing": {
-      "types": "./dist/testing/index.d.ts",
-      "import": "./dist/testing/index.js"
+      "types": "./dist/testing.d.ts",
+      "import": "./dist/testing.js"
     },
     "./tools": {
-      "types": "./dist/tools/index.d.ts",
-      "import": "./dist/tools/index.js"
+      "types": "./dist/tools.d.ts",
+      "import": "./dist/tools.js"
     }
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist", "README.md", "CHANGELOG.md"],
   "scripts": {
     "build": "tsup",
     "check:exports": "publint",
@@ -50,116 +44,34 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@cspell/eslint-plugin": "catalog:",
-    "@darraghor/eslint-plugin-nestjs-typed": "catalog:",
-    "@eslint/compat": "catalog:",
-    "@eslint/css": "catalog:",
-    "@eslint/markdown": "catalog:",
-    "@graphql-eslint/eslint-plugin": "catalog:",
-    "@html-eslint/eslint-plugin": "catalog:",
-    "@html-eslint/parser": "catalog:",
-    "@santi020k/eslint-config-core": "workspace:*",
-    "@stencil/eslint-plugin": "catalog:",
-    "@tanstack/eslint-plugin-query": "catalog:",
-    "@tanstack/eslint-plugin-router": "catalog:",
-    "@typescript-eslint/utils": "catalog:",
-    "@vitest/eslint-plugin": "catalog:",
-    "eslint-config-biome": "catalog:",
-    "eslint-config-prettier": "catalog:",
-    "eslint-plugin-better-tailwindcss": "catalog:",
-    "eslint-plugin-command": "catalog:",
-    "eslint-plugin-compat": "catalog:",
-    "eslint-plugin-cypress": "catalog:",
-    "eslint-plugin-de-morgan": "catalog:",
-    "eslint-plugin-depend": "catalog:",
-    "eslint-plugin-i18next": "catalog:",
-    "eslint-plugin-jest": "catalog:",
-    "eslint-plugin-jest-dom": "catalog:",
-    "eslint-plugin-jsdoc": "catalog:",
-    "eslint-plugin-jsonc": "catalog:",
-    "eslint-plugin-jsx-a11y": "catalog:",
-    "eslint-plugin-mdx": "catalog:",
-    "eslint-plugin-n": "catalog:",
-    "eslint-plugin-no-only-tests": "catalog:",
-    "eslint-plugin-oxlint": "catalog:",
-    "eslint-plugin-package-json": "catalog:",
-    "eslint-plugin-perfectionist": "catalog:",
-    "eslint-plugin-playwright": "catalog:",
-    "eslint-plugin-pnpm": "catalog:",
-    "eslint-plugin-regexp": "catalog:",
-    "eslint-plugin-security": "catalog:",
-    "eslint-plugin-sonarjs": "catalog:",
-    "eslint-plugin-storybook": "catalog:",
-    "eslint-plugin-testing-library": "catalog:",
-    "eslint-plugin-toml": "catalog:",
-    "eslint-plugin-tsdoc": "catalog:",
-    "eslint-plugin-turbo": "catalog:",
-    "eslint-plugin-unicorn": "catalog:",
-    "eslint-plugin-vercel-ai-security": "catalog:",
-    "eslint-plugin-vuejs-accessibility": "catalog:",
-    "eslint-plugin-yml": "catalog:",
-    "eslint-plugin-zod": "catalog:",
-    "globals": "catalog:",
-    "typescript-eslint": "catalog:"
-  },
-  "optionalDependencies": {
-    "@santi020k/eslint-plugin-astro-doctor": "catalog:"
+    "@santi020k/eslint-config-core": "workspace:^",
+    "@santi020k/eslint-config-extensions": "workspace:^",
+    "@santi020k/eslint-config-formats": "workspace:^",
+    "@santi020k/eslint-config-libraries": "workspace:^",
+    "@santi020k/eslint-config-testing": "workspace:^",
+    "@santi020k/eslint-config-tools": "workspace:^"
   },
   "devDependencies": {
-    "@types/eslint-plugin-jsx-a11y": "catalog:",
     "@types/node": "catalog:",
     "eslint": "catalog:",
-    "graphql": "catalog:",
-    "oxlint": "catalog:",
     "publint": "catalog:",
-    "storybook": "catalog:",
-    "tailwindcss": "catalog:",
     "tsup": "catalog:",
-    "typescript": "catalog:",
-    "zod": "catalog:"
+    "typescript": "catalog:"
   },
   "peerDependencies": {
     "eslint": "^10.0.0",
-    "graphql": "^16.0.0",
-    "oxlint": "^1.0.0",
-    "storybook": "^10.0.0",
-    "tailwindcss": "^3.3.0 || ^4.1.0",
-    "typescript": ">=5.0.0",
-    "zod": "^4.0.0"
+    "typescript": ">=5.0.0"
   },
   "peerDependenciesMeta": {
-    "graphql": {
-      "optional": true
-    },
-    "oxlint": {
-      "optional": true
-    },
-    "storybook": {
-      "optional": true
-    },
-    "tailwindcss": {
-      "optional": true
-    },
-    "typescript": {
-      "optional": true
-    },
-    "zod": {
-      "optional": true
-    }
+    "typescript": { "optional": true }
   },
-  "engines": {
-    "node": "^20.19.0 || >=22.18.0"
-  },
-  "packageManager": "pnpm@11.6.0+sha512.9a36518224080c6fe5165afdcfe79bfa118c29be703f3f462b1e32efe1e98e47e8750b148e08286250aad4113cc7993ca413c4e2cd447752708c2ee5751bc95f",
+  "engines": { "node": "^20.19.0 || >=22.18.0" },
+  "publishConfig": { "access": "public", "provenance": true },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/santi020k/eslint-config-basic.git",
     "directory": "packages/integrations"
   },
   "homepage": "https://eslint.santi020k.com/packages/integrations",
-  "bugs": {
-    "url": "https://github.com/santi020k/eslint-config-basic/issues"
-  },
-  "author": "santi020k",
   "license": "MIT"
 }

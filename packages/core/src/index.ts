@@ -13,6 +13,7 @@ import { GLOB_JS_TS, GLOB_JS_TS_ALL, GLOB_SLOT, Runtime } from './types.js'
 
 export * from './compose.js'
 export * from './config-helpers.js'
+export * from './feature.js'
 export { createModuleLoader } from './lazy.js'
 
 /**

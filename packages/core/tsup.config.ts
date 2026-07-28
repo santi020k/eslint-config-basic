@@ -9,6 +9,7 @@ export default defineConfig({
     'src/settings/index.ts',
     'src/settings/gitignore.ts',
     'src/compose.ts',
+    'src/feature.ts',
     'src/lazy.ts',
     'src/config-helpers.ts'
   ],

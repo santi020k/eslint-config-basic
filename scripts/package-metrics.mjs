@@ -7,9 +7,14 @@ const packagesDir = join(rootDir, 'packages')
 const dependencyBudgets = new Map([
   ['@santi020k/eslint-config-basic', 4],
   ['@santi020k/eslint-config-core', 10],
-  ['@santi020k/eslint-config-full', 21],
-  ['@santi020k/eslint-config-integrations', 51],
-  ['@santi020k/eslint-config-lite', 3]
+  ['@santi020k/eslint-config-extensions', 15],
+  ['@santi020k/eslint-config-formats', 13],
+  ['@santi020k/eslint-config-full', 24],
+  ['@santi020k/eslint-config-integrations', 6],
+  ['@santi020k/eslint-config-libraries', 11],
+  ['@santi020k/eslint-config-lite', 3],
+  ['@santi020k/eslint-config-testing', 9],
+  ['@santi020k/eslint-config-tools', 10]
 ])
 
 const formatBytes = (bytes) => {
