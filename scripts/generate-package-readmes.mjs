@@ -11,6 +11,7 @@ const generateReadmeContent = pkg => {
 
   const monorepoLine =
     'This package is part of the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.'
+
   const notice = readmeNotice?.length ?
     `> [!WARNING]\n${readmeNotice.map(line => `> ${line}`).join('\n')}\n\n` :
     ''
