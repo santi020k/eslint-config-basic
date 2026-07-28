@@ -1,3 +1,8 @@
+/**
+ * @deprecated Import these factories from
+ * `@santi020k/eslint-config-libraries` instead. This compatibility subpath is
+ * scheduled for removal in v4.
+ */
 export {
   aiSdk,
   autogen,

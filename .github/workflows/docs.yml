@@ -88,7 +88,7 @@ jobs:
       - name: Run A11y and SEO Tests
         run: pnpm run docs:test:a11y
 
-      - name: Run Lighthouse CI
+      - name: Run Lighthouse budgets
         run: pnpm --filter @santi020k/eslint-config-docs run lighthouse
 
       - name: Upload Pages artifact

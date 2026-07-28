@@ -4,9 +4,9 @@ description: "Compatibility aggregate: @santi020k/eslint-config-integrations"
 ---
 
 `@santi020k/eslint-config-integrations` is the v3 compatibility aggregate for
-the five category feature packs. It preserves the direct factory imports and
-category subpaths from earlier versions, but no longer owns plugin
-implementations.
+the five category feature packs. It is deprecated in v3 and scheduled for
+removal in v4. It preserves the direct factory imports and category subpaths
+from earlier versions, but no longer owns plugin implementations.
 
 New lean installations should install only the categories they use:
 

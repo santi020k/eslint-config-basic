@@ -389,7 +389,7 @@ const printUsage = () => {
     '  --file          profile/snapshot/diff: representative file or lint target (repeatable)',
     '  --full          migrate --to v3: choose the batteries-included package',
     '  --json          Print JSON for commands that support it',
-    '  --lite-install  doctor: print the detected lite install command',
+    '  --lite-install  doctor: print the deprecated v2 Lite install command (removed in v4)',
     '  --preset        baseline: enable ci or pedantic strict mode before suppressing',
     '  --prune         baseline: remove suppressions for resolved violations',
     '  --snapshot-path snapshot/diff: override .eslint-config-snapshot.json',

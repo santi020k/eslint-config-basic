@@ -20,6 +20,8 @@ export default {
   modulesFileName: 'modules',
   router: 'module',
   hideBreadcrumbs: true,
+  // Keep generated source links stable across unrelated commits.
+  gitRevision: 'main',
   excludePrivate: true,
   excludeInternal: true,
   categorizeByGroup: true,

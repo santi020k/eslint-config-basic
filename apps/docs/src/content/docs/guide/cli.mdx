@@ -95,8 +95,9 @@ For Astro projects, `doctor` also reports mismatched Astro Doctor configuration,
 npx @santi020k/eslint-config-basic doctor
 ```
 
-`doctor --lite-install` remains available for existing v2 lite migrations. New
-v3 projects should install `basic` plus their detected framework packages.
+`doctor --lite-install` is deprecated and remains available only for existing
+v2 lite migrations. It is scheduled for removal in v4. New v3 projects should
+install `basic` plus their detected framework and category packages.
 
 ```sh
 npx @santi020k/eslint-config-basic doctor --lite-install

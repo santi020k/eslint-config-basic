@@ -86,7 +86,7 @@ describe('React Config', () => {
   test('should include react-related plugins', () => {
     const plugins = reactConfig.flatMap(c => Object.keys(c.plugins ?? {}))
     expect(plugins).toContain('@eslint-react')
-    expect(plugins).toContain('react-compiler')
+    expect(plugins).toContain('react-hooks')
     expect(plugins).toContain('react-refresh')
   })
 })

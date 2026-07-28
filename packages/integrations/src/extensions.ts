@@ -1,3 +1,8 @@
+/**
+ * @deprecated Import these factories from
+ * `@santi020k/eslint-config-extensions` instead. This compatibility subpath is
+ * scheduled for removal in v4.
+ */
 export {
   a11y,
   astroDoctor,

@@ -33,7 +33,7 @@
     "@eslint-react/eslint-plugin": "catalog:",
     "@santi020k/eslint-config-core": "workspace:^",
     "@typescript-eslint/utils": "catalog:",
-    "eslint-plugin-react-compiler": "catalog:",
+    "eslint-plugin-react-hooks": "catalog:",
     "eslint-plugin-react-refresh": "catalog:",
     "globals": "catalog:"
   },

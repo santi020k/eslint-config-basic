@@ -22,7 +22,7 @@
     "typecheck": "node ../../scripts/prepare-starlight-docs.mjs && rm -rf .astro && astro check",
     "test:a11y": "playwright test",
     "test:a11y:ui": "playwright test --ui",
-    "lighthouse": "lhci autorun",
+    "lighthouse": "node scripts/run-lighthouse.mjs",
     "lint": "eslint . --no-warn-ignored --pass-on-no-patterns",
     "lint:fix": "eslint . --fix --no-warn-ignored --pass-on-no-patterns"
   },
@@ -31,10 +31,11 @@
     "@astrojs/markdown-remark": "catalog:",
     "@astrojs/starlight": "catalog:",
     "@axe-core/playwright": "catalog:",
-    "@lhci/cli": "catalog:",
     "@playwright/test": "catalog:",
     "@resvg/resvg-js": "catalog:",
     "astro": "catalog:",
+    "chrome-launcher": "catalog:",
+    "lighthouse": "catalog:",
     "satori": "catalog:",
     "sharp": "catalog:",
     "typescript": "catalog:"

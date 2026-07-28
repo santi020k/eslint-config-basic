@@ -41,7 +41,6 @@ description: "Acknowledgements for the open source libraries that make @santi020
 | `eslint-plugin-qwik` | Qwik rules. | [QwikDev/qwik](https://github.com/QwikDev/qwik) |
 | `eslint-plugin-react` | React rules. | [jsx-eslint/eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) |
 | `eslint-plugin-react-hooks` | Rules of Hooks. | [facebook/react](https://github.com/facebook/react) |
-| `eslint-plugin-react-compiler` | React Compiler diagnostics. | [facebook/react](https://github.com/facebook/react) |
 | `eslint-plugin-react-refresh` | Fast Refresh safety rules. | [ArnaudBarre/eslint-plugin-react-refresh](https://github.com/ArnaudBarre/eslint-plugin-react-refresh) |
 | `eslint-plugin-solid` | Solid rules. | [solidjs-community/eslint-plugin-solid](https://github.com/solidjs-community/eslint-plugin-solid) |
 | `eslint-plugin-svelte` | Svelte rules. | [sveltejs/eslint-plugin-svelte](https://github.com/sveltejs/eslint-plugin-svelte) |

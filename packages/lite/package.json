@@ -5,7 +5,7 @@
     "access": "public",
     "provenance": true
   },
-  "description": "Compatibility wrapper for @santi020k/eslint-config-basic.",
+  "description": "Deprecated v3 compatibility wrapper; use @santi020k/eslint-config-basic.",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",

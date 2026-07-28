@@ -54,6 +54,7 @@ const sidebar = sidebarLinks([
           { label: 'Configuration', slug: 'guide/configuration' },
           { badge: { text: 'New', variant: 'success' }, label: 'Config Builder', slug: 'guide/config-builder' },
           { badge: { text: 'v3', variant: 'tip' }, label: 'Migrate from v2', slug: 'guide/migration-v2-to-v3' },
+          { badge: { text: 'v4', variant: 'caution' }, label: 'Planned Removals', slug: 'guide/v4-removals' },
           { label: 'Presets', slug: 'guide/presets' },
           { label: 'Runtime', slug: 'guide/runtime' },
           { label: 'Monorepo', slug: 'guide/monorepo' },

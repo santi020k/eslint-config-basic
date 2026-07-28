@@ -60,3 +60,19 @@ jobs:
           git push origin "v${VERSION}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # These packages remain installable throughout v3 so existing consumers
+      # receive a migration message instead of a broken dependency. Do not
+      # deprecate v2, where Lite and Integrations are still supported entry points.
+      - name: Mark v3 compatibility packages as deprecated
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          VERSION=$(node -p "require('./packages/basic/package.json').version")
+          if [[ "$VERSION" == 3.* ]]; then
+            npm deprecate '@santi020k/eslint-config-lite@3.x' \
+              'Deprecated in v3; migrate to @santi020k/eslint-config-basic. This package will be removed in v4.'
+            npm deprecate '@santi020k/eslint-config-integrations@3.x' \
+              'Deprecated in v3; install the extensions, formats, libraries, testing, or tools package directly. This package will be removed in v4.'
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

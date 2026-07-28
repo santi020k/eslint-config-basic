@@ -2,7 +2,7 @@
   "name": "@santi020k/eslint-config-integrations",
   "version": "2.1.1",
   "publishConfig": { "access": "public", "provenance": true },
-  "description": "Compatibility aggregate for eslint-config-basic feature packs",
+  "description": "Deprecated v3 compatibility aggregate; use the category feature packs directly",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",

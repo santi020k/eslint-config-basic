@@ -83,7 +83,7 @@ interface RuleContract {
 const ruleContracts: RuleContract[] = [
   { config: coreConfig as Record<string, unknown>[], name: 'core', requiredRules: ['eqeqeq', 'no-unused-vars'] },
   { config: typescriptConfig as Record<string, unknown>[], name: 'typescript', requiredPrefixes: ['@typescript-eslint/'] },
-  { config: reactConfig as Record<string, unknown>[], name: 'react', requiredPrefixes: ['@eslint-react/', 'react-compiler/'] },
+  { config: reactConfig as Record<string, unknown>[], name: 'react', requiredPrefixes: ['@eslint-react/', 'react-hooks/'] },
   { config: preactConfig as Record<string, unknown>[], name: 'preact', requiredPrefixes: ['@eslint-react/'] },
   { config: nextConfig as Record<string, unknown>[], name: 'next', requiredPrefixes: ['@next/next/'] },
   { config: astroConfig as Record<string, unknown>[], name: 'astro', requiredPrefixes: ['astro/'] },
@@ -271,7 +271,8 @@ describe('Config Snapshots — Critical Rule Entries', () => {
       '@eslint-react/no-missing-key',
       '@eslint-react/rules-of-hooks',
       '@eslint-react/exhaustive-deps',
-      'react-compiler/react-compiler'
+      'react-hooks/config',
+      'react-hooks/immutability'
     ])
 
     expect(entries).toMatchSnapshot()

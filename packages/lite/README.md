@@ -1,5 +1,9 @@
 # @santi020k/eslint-config-lite
 
+> [!WARNING]
+> Deprecated in v3 and scheduled for removal in v4. Replace this package with
+> `@santi020k/eslint-config-basic`.
+
 Compatibility wrapper for projects migrating from the v2 Lite composer.
 Version 3 re-exports the lean `@santi020k/eslint-config-basic` API; new projects
 should install and import the Basic package directly.

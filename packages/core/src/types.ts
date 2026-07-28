@@ -460,7 +460,9 @@ export interface EslintConfigOptions {
    */
   ignores?: string[]
 
-  /** List of application-level dependencies configurations */
+  /**
+   * @deprecated Use `features` instead. This alias is scheduled for removal in v4.
+   */
   integrations?: OptionalConfigMap
 
   libraries?: LibraryOption[]

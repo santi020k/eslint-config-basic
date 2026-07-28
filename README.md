@@ -133,7 +133,8 @@ automatically. Set `untypedFiles: false` to require type information everywhere.
 | --- | --- | --- |
 | `@santi020k/eslint-config-basic` | Default for applications and libraries | Lean core; frameworks and integrations are optional |
 | `@santi020k/eslint-config-full` | Install simplicity matters more than footprint | Every supported framework and integration |
-| `@santi020k/eslint-config-lite` | Existing v2 lite users | Compatibility path; migrate to `basic` in v3 |
+| `@santi020k/eslint-config-lite` | Existing v2 lite users | Deprecated v3 compatibility path; removed in v4 |
+| `@santi020k/eslint-config-integrations` | Existing aggregate-package users | Deprecated v3 compatibility path; removed in v4 |
 | Individual framework packages | Custom composition | One framework and its plugin set |
 
 ## CLI
@@ -162,6 +163,8 @@ change review.
 - Package managers: npm, pnpm, Yarn, and Bun
 
 See the [v2 → v3 migration guide](https://eslint.santi020k.com/guide/migration-v2-to-v3/)
-for package moves and copy-paste commands.
+for package moves and copy-paste commands. The
+[planned v4 removals](https://eslint.santi020k.com/guide/v4-removals/) page
+tracks compatibility APIs that are deprecated during v3.
 
 MIT © [santi020k](https://santi020k.com)

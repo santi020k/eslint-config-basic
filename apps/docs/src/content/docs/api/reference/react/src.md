@@ -9,11 +9,11 @@ description: "@santi020k/eslint-config-basic"
 
 > `const` **reactConfig**: `TSESLint.FlatConfig.ConfigArray`
 
-Defined in: [react/src/index.ts:35](https://github.com/santi020k/eslint-config-basic/blob/3b8ba4d23ba7114d9e2d1fca98d4c4b3989f224d/packages/react/src/index.ts#L35)
+Defined in: [react/src/index.ts:47](https://github.com/santi020k/eslint-config-basic/blob/main/packages/react/src/index.ts#L47)
 
 React ESLint configuration
-Uses `@eslint-react/eslint-plugin` for React and hooks rules, plus React
-Compiler and React Refresh.
+Uses `@eslint-react/eslint-plugin` for React and hooks rules, the official
+React Hooks plugin for non-duplicated Compiler diagnostics, and React Refresh.
 
 ***
 
@@ -21,7 +21,7 @@ Compiler and React Refresh.
 
 > `const` **rules**: `TSESLint.Linter.RulesRecord`
 
-Defined in: [react/src/rules.ts:5](https://github.com/santi020k/eslint-config-basic/blob/3b8ba4d23ba7114d9e2d1fca98d4c4b3989f224d/packages/react/src/rules.ts#L5)
+Defined in: [react/src/rules.ts:5](https://github.com/santi020k/eslint-config-basic/blob/main/packages/react/src/rules.ts#L5)
 
 ## References
 
