@@ -1,6 +1,6 @@
 {
   "name": "@santi020k/eslint-config-core",
-  "version": "2.1.1",
+  "version": "3.0.0",
   "publishConfig": {
     "access": "public",
     "provenance": true
@@ -50,7 +50,6 @@
     "@eslint/js": "catalog:",
     "@stylistic/eslint-plugin": "catalog:",
     "eslint-plugin-import-x": "catalog:",
-    "eslint-plugin-jsx-a11y": "catalog:",
     "eslint-plugin-n": "catalog:",
     "eslint-plugin-promise": "catalog:",
     "eslint-plugin-simple-import-sort": "catalog:",
@@ -59,7 +58,6 @@
     "@typescript-eslint/utils": "catalog:"
   },
   "devDependencies": {
-    "@types/eslint-plugin-jsx-a11y": "catalog:",
     "@types/node": "catalog:",
     "publint": "catalog:",
     "tsup": "catalog:",

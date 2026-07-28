@@ -7,7 +7,7 @@ description: "@santi020k/eslint-config-basic"
 
 ### AgentTarget
 
-Defined in: [basic/src/agent-skill-generator.ts:9](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L9)
+Defined in: [basic/src/agent-skill-generator.ts:9](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/agent-skill-generator.ts#L9)
 
 #### Properties
 
@@ -15,7 +15,7 @@ Defined in: [basic/src/agent-skill-generator.ts:9](https://github.com/santi020k/
 
 > **format**: `"cursor"` \| `"frontmatter"` \| `"kiro"` \| `"plain"`
 
-Defined in: [basic/src/agent-skill-generator.ts:12](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L12)
+Defined in: [basic/src/agent-skill-generator.ts:12](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/agent-skill-generator.ts#L12)
 
 Format variant used when generating content
 
@@ -23,7 +23,7 @@ Format variant used when generating content
 
 > **label**: `string`
 
-Defined in: [basic/src/agent-skill-generator.ts:15](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L15)
+Defined in: [basic/src/agent-skill-generator.ts:15](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/agent-skill-generator.ts#L15)
 
 Human-readable label for logging
 
@@ -31,7 +31,7 @@ Human-readable label for logging
 
 > **markerFolder**: `string`
 
-Defined in: [basic/src/agent-skill-generator.ts:18](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L18)
+Defined in: [basic/src/agent-skill-generator.ts:18](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/agent-skill-generator.ts#L18)
 
 Folder that must exist in cwd to be considered "present"
 
@@ -39,7 +39,7 @@ Folder that must exist in cwd to be considered "present"
 
 > **skillFile**: `string`
 
-Defined in: [basic/src/agent-skill-generator.ts:21](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L21)
+Defined in: [basic/src/agent-skill-generator.ts:21](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/agent-skill-generator.ts#L21)
 
 File name for the generated skill
 
@@ -47,7 +47,7 @@ File name for the generated skill
 
 > **skillSubdir**: `string`
 
-Defined in: [basic/src/agent-skill-generator.ts:24](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L24)
+Defined in: [basic/src/agent-skill-generator.ts:24](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/agent-skill-generator.ts#L24)
 
 Subdirectory inside the agent folder where the skill file is placed
 
@@ -55,7 +55,7 @@ Subdirectory inside the agent folder where the skill file is placed
 
 ### EslintConfigFeatures
 
-Defined in: [basic/src/agent-skill-generator.ts:31](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L31)
+Defined in: [basic/src/agent-skill-generator.ts:31](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/agent-skill-generator.ts#L31)
 
 Features extracted from the project's actual `eslint.config.js`.
 All arrays hold display-friendly labels (e.g. `'TypeScript'`, `'React'`).
@@ -66,7 +66,7 @@ All arrays hold display-friendly labels (e.g. `'TypeScript'`, `'React'`).
 
 > **configFile**: `string` \| `null`
 
-Defined in: [basic/src/agent-skill-generator.ts:34](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L34)
+Defined in: [basic/src/agent-skill-generator.ts:34](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/agent-skill-generator.ts#L34)
 
 Path to the config file that was loaded, or null when falling back to detection
 
@@ -74,31 +74,31 @@ Path to the config file that was loaded, or null when falling back to detection
 
 > **extensions**: `string`[]
 
-Defined in: [basic/src/agent-skill-generator.ts:35](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L35)
+Defined in: [basic/src/agent-skill-generator.ts:35](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/agent-skill-generator.ts#L35)
 
 ##### formats
 
 > **formats**: `string`[]
 
-Defined in: [basic/src/agent-skill-generator.ts:36](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L36)
+Defined in: [basic/src/agent-skill-generator.ts:36](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/agent-skill-generator.ts#L36)
 
 ##### frameworks
 
 > **frameworks**: `string`[]
 
-Defined in: [basic/src/agent-skill-generator.ts:37](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L37)
+Defined in: [basic/src/agent-skill-generator.ts:37](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/agent-skill-generator.ts#L37)
 
 ##### libraries
 
 > **libraries**: `string`[]
 
-Defined in: [basic/src/agent-skill-generator.ts:38](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L38)
+Defined in: [basic/src/agent-skill-generator.ts:38](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/agent-skill-generator.ts#L38)
 
 ##### lintCommand
 
 > **lintCommand**: `string`
 
-Defined in: [basic/src/agent-skill-generator.ts:41](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L41)
+Defined in: [basic/src/agent-skill-generator.ts:41](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/agent-skill-generator.ts#L41)
 
 The lint command found in the project's package.json scripts, or a sensible default
 
@@ -106,7 +106,7 @@ The lint command found in the project's package.json scripts, or a sensible defa
 
 > **source**: `"config-file"` \| `"detection-fallback"`
 
-Defined in: [basic/src/agent-skill-generator.ts:44](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L44)
+Defined in: [basic/src/agent-skill-generator.ts:44](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/agent-skill-generator.ts#L44)
 
 Whether features came from the real config file or from package.json detection
 
@@ -114,25 +114,25 @@ Whether features came from the real config file or from package.json detection
 
 > **testing**: `string`[]
 
-Defined in: [basic/src/agent-skill-generator.ts:46](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L46)
+Defined in: [basic/src/agent-skill-generator.ts:46](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/agent-skill-generator.ts#L46)
 
 ##### tools
 
 > **tools**: `string`[]
 
-Defined in: [basic/src/agent-skill-generator.ts:48](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L48)
+Defined in: [basic/src/agent-skill-generator.ts:48](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/agent-skill-generator.ts#L48)
 
 ##### typescript
 
 > **typescript**: `boolean`
 
-Defined in: [basic/src/agent-skill-generator.ts:50](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L50)
+Defined in: [basic/src/agent-skill-generator.ts:50](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/agent-skill-generator.ts#L50)
 
 ***
 
 ### GenerateSkillOptions
 
-Defined in: [basic/src/agent-skill-generator.ts:53](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L53)
+Defined in: [basic/src/agent-skill-generator.ts:53](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/agent-skill-generator.ts#L53)
 
 #### Properties
 
@@ -140,7 +140,7 @@ Defined in: [basic/src/agent-skill-generator.ts:53](https://github.com/santi020k
 
 > `optional` **check?**: `boolean`
 
-Defined in: [basic/src/agent-skill-generator.ts:61](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L61)
+Defined in: [basic/src/agent-skill-generator.ts:61](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/agent-skill-generator.ts#L61)
 
 Check mode — compare existing skill files against freshly generated
 content without writing anything. Stale or missing files are reported
@@ -156,7 +156,7 @@ false
 
 > `optional` **createAgentsMd?**: `boolean`
 
-Defined in: [basic/src/agent-skill-generator.ts:68](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L68)
+Defined in: [basic/src/agent-skill-generator.ts:68](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/agent-skill-generator.ts#L68)
 
 Create a root `AGENTS.md` when it does not exist yet, instead of only
 updating an existing one.
@@ -171,7 +171,7 @@ false
 
 > `optional` **cwd?**: `string`
 
-Defined in: [basic/src/agent-skill-generator.ts:71](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L71)
+Defined in: [basic/src/agent-skill-generator.ts:71](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/agent-skill-generator.ts#L71)
 
 Working directory — defaults to process.cwd()
 
@@ -179,7 +179,7 @@ Working directory — defaults to process.cwd()
 
 > `optional` **force?**: `boolean`
 
-Defined in: [basic/src/agent-skill-generator.ts:77](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L77)
+Defined in: [basic/src/agent-skill-generator.ts:77](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/agent-skill-generator.ts#L77)
 
 Overwrite files that already exist.
 
@@ -193,7 +193,7 @@ false
 
 ### GenerateSkillResult
 
-Defined in: [basic/src/agent-skill-generator.ts:80](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L80)
+Defined in: [basic/src/agent-skill-generator.ts:80](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/agent-skill-generator.ts#L80)
 
 #### Properties
 
@@ -201,13 +201,13 @@ Defined in: [basic/src/agent-skill-generator.ts:80](https://github.com/santi020k
 
 > **skipped**: `string`[]
 
-Defined in: [basic/src/agent-skill-generator.ts:81](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L81)
+Defined in: [basic/src/agent-skill-generator.ts:81](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/agent-skill-generator.ts#L81)
 
 ##### stale
 
 > **stale**: `string`[]
 
-Defined in: [basic/src/agent-skill-generator.ts:84](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L84)
+Defined in: [basic/src/agent-skill-generator.ts:84](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/agent-skill-generator.ts#L84)
 
 Files that are out of date (or missing) — only populated in check mode
 
@@ -215,7 +215,7 @@ Files that are out of date (or missing) — only populated in check mode
 
 > **written**: `string`[]
 
-Defined in: [basic/src/agent-skill-generator.ts:86](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L86)
+Defined in: [basic/src/agent-skill-generator.ts:86](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/agent-skill-generator.ts#L86)
 
 ## Variables
 
@@ -223,7 +223,7 @@ Defined in: [basic/src/agent-skill-generator.ts:86](https://github.com/santi020k
 
 > `const` **AGENT\_TARGETS**: [`AgentTarget`](#agenttarget)[]
 
-Defined in: [basic/src/agent-skill-generator.ts:96](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L96)
+Defined in: [basic/src/agent-skill-generator.ts:96](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/agent-skill-generator.ts#L96)
 
 All AI coding-assistant agent folders that are probed for.
 Add new entries here as new agents emerge — the generator picks them up
@@ -235,7 +235,7 @@ automatically on the next run.
 
 > `const` **angular**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:109](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/frameworks.ts#L109)
+Defined in: [basic/src/frameworks.ts:107](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/frameworks.ts#L107)
 
 #### Parameters
 
@@ -253,7 +253,7 @@ Defined in: [basic/src/frameworks.ts:109](https://github.com/santi020k/eslint-co
 
 > `const` **angularConfig**: (`options?`) => `Promise`\<`ConfigArray`\> = `angular`
 
-Defined in: [basic/src/frameworks.ts:136](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/frameworks.ts#L136)
+Defined in: [basic/src/frameworks.ts:134](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/frameworks.ts#L134)
 
 #### Parameters
 
@@ -275,7 +275,7 @@ Use `angular` instead.
 
 > `const` **astro**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:110](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/frameworks.ts#L110)
+Defined in: [basic/src/frameworks.ts:108](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/frameworks.ts#L108)
 
 #### Parameters
 
@@ -293,7 +293,7 @@ Defined in: [basic/src/frameworks.ts:110](https://github.com/santi020k/eslint-co
 
 > `const` **defineConfig**: (`options?`, ...`extraConfigs`) => `Promise`\<`ConfigArray`\> = `eslintConfig`
 
-Defined in: [basic/src/index.ts:859](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/index.ts#L859)
+Defined in: [basic/src/index.ts:748](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/index.ts#L748)
 
 Alias for `eslintConfig()` that reads naturally in `eslint.config.*` files.
 
@@ -326,7 +326,7 @@ The final ESLint configuration array
 
 > `const` **expo**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:111](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/frameworks.ts#L111)
+Defined in: [basic/src/frameworks.ts:109](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/frameworks.ts#L109)
 
 #### Parameters
 
@@ -344,7 +344,7 @@ Defined in: [basic/src/frameworks.ts:111](https://github.com/santi020k/eslint-co
 
 > `const` **expoConfig**: (`options?`) => `Promise`\<`ConfigArray`\> = `expo`
 
-Defined in: [basic/src/frameworks.ts:139](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/frameworks.ts#L139)
+Defined in: [basic/src/frameworks.ts:137](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/frameworks.ts#L137)
 
 #### Parameters
 
@@ -366,7 +366,7 @@ Use `expo` instead.
 
 > `const` **hono**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:112](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/frameworks.ts#L112)
+Defined in: [basic/src/frameworks.ts:110](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/frameworks.ts#L110)
 
 #### Parameters
 
@@ -384,7 +384,7 @@ Defined in: [basic/src/frameworks.ts:112](https://github.com/santi020k/eslint-co
 
 > `const` **lit**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:113](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/frameworks.ts#L113)
+Defined in: [basic/src/frameworks.ts:111](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/frameworks.ts#L111)
 
 #### Parameters
 
@@ -402,7 +402,7 @@ Defined in: [basic/src/frameworks.ts:113](https://github.com/santi020k/eslint-co
 
 > `const` **nest**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:114](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/frameworks.ts#L114)
+Defined in: [basic/src/frameworks.ts:112](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/frameworks.ts#L112)
 
 #### Parameters
 
@@ -420,7 +420,7 @@ Defined in: [basic/src/frameworks.ts:114](https://github.com/santi020k/eslint-co
 
 > `const` **nestConfig**: (`options?`) => `Promise`\<`ConfigArray`\> = `nest`
 
-Defined in: [basic/src/frameworks.ts:142](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/frameworks.ts#L142)
+Defined in: [basic/src/frameworks.ts:140](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/frameworks.ts#L140)
 
 #### Parameters
 
@@ -442,7 +442,7 @@ Use `nest` instead.
 
 > `const` **next**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:115](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/frameworks.ts#L115)
+Defined in: [basic/src/frameworks.ts:113](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/frameworks.ts#L113)
 
 #### Parameters
 
@@ -460,7 +460,7 @@ Defined in: [basic/src/frameworks.ts:115](https://github.com/santi020k/eslint-co
 
 > `const` **nextConfig**: (`options?`) => `Promise`\<`ConfigArray`\> = `next`
 
-Defined in: [basic/src/frameworks.ts:145](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/frameworks.ts#L145)
+Defined in: [basic/src/frameworks.ts:143](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/frameworks.ts#L143)
 
 #### Parameters
 
@@ -482,7 +482,7 @@ Use `next` instead.
 
 > `const` **nuxt**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:116](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/frameworks.ts#L116)
+Defined in: [basic/src/frameworks.ts:114](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/frameworks.ts#L114)
 
 #### Parameters
 
@@ -500,7 +500,7 @@ Defined in: [basic/src/frameworks.ts:116](https://github.com/santi020k/eslint-co
 
 > `const` **preact**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:117](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/frameworks.ts#L117)
+Defined in: [basic/src/frameworks.ts:115](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/frameworks.ts#L115)
 
 #### Parameters
 
@@ -518,7 +518,7 @@ Defined in: [basic/src/frameworks.ts:117](https://github.com/santi020k/eslint-co
 
 > `const` **preactConfig**: (`options?`) => `Promise`\<`ConfigArray`\> = `preact`
 
-Defined in: [basic/src/frameworks.ts:148](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/frameworks.ts#L148)
+Defined in: [basic/src/frameworks.ts:146](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/frameworks.ts#L146)
 
 #### Parameters
 
@@ -540,7 +540,7 @@ Use `preact` instead.
 
 > `const` **qwik**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:118](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/frameworks.ts#L118)
+Defined in: [basic/src/frameworks.ts:116](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/frameworks.ts#L116)
 
 #### Parameters
 
@@ -558,7 +558,7 @@ Defined in: [basic/src/frameworks.ts:118](https://github.com/santi020k/eslint-co
 
 > `const` **react**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:119](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/frameworks.ts#L119)
+Defined in: [basic/src/frameworks.ts:117](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/frameworks.ts#L117)
 
 #### Parameters
 
@@ -576,7 +576,7 @@ Defined in: [basic/src/frameworks.ts:119](https://github.com/santi020k/eslint-co
 
 > `const` **reactConfig**: (`options?`) => `Promise`\<`ConfigArray`\> = `react`
 
-Defined in: [basic/src/frameworks.ts:151](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/frameworks.ts#L151)
+Defined in: [basic/src/frameworks.ts:149](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/frameworks.ts#L149)
 
 #### Parameters
 
@@ -598,7 +598,7 @@ Use `react` instead.
 
 > `const` **reactRouter**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:120](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/frameworks.ts#L120)
+Defined in: [basic/src/frameworks.ts:118](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/frameworks.ts#L118)
 
 #### Parameters
 
@@ -616,7 +616,7 @@ Defined in: [basic/src/frameworks.ts:120](https://github.com/santi020k/eslint-co
 
 > `const` **remix**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:133](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/frameworks.ts#L133)
+Defined in: [basic/src/frameworks.ts:131](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/frameworks.ts#L131)
 
 #### Parameters
 
@@ -640,7 +640,7 @@ config and will be removed in the next major version.
 
 > `const` **slidev**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:121](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/frameworks.ts#L121)
+Defined in: [basic/src/frameworks.ts:119](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/frameworks.ts#L119)
 
 #### Parameters
 
@@ -658,7 +658,7 @@ Defined in: [basic/src/frameworks.ts:121](https://github.com/santi020k/eslint-co
 
 > `const` **solid**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:122](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/frameworks.ts#L122)
+Defined in: [basic/src/frameworks.ts:120](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/frameworks.ts#L120)
 
 #### Parameters
 
@@ -676,7 +676,7 @@ Defined in: [basic/src/frameworks.ts:122](https://github.com/santi020k/eslint-co
 
 > `const` **solidConfig**: (`options?`) => `Promise`\<`ConfigArray`\> = `solid`
 
-Defined in: [basic/src/frameworks.ts:154](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/frameworks.ts#L154)
+Defined in: [basic/src/frameworks.ts:152](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/frameworks.ts#L152)
 
 #### Parameters
 
@@ -698,7 +698,7 @@ Use `solid` instead.
 
 > `const` **svelte**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:123](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/frameworks.ts#L123)
+Defined in: [basic/src/frameworks.ts:121](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/frameworks.ts#L121)
 
 #### Parameters
 
@@ -716,7 +716,7 @@ Defined in: [basic/src/frameworks.ts:123](https://github.com/santi020k/eslint-co
 
 > `const` **svelteConfig**: (`options?`) => `Promise`\<`ConfigArray`\> = `svelte`
 
-Defined in: [basic/src/frameworks.ts:157](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/frameworks.ts#L157)
+Defined in: [basic/src/frameworks.ts:155](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/frameworks.ts#L155)
 
 #### Parameters
 
@@ -738,7 +738,7 @@ Use `svelte` instead.
 
 > `const` **tanstackStart**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:124](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/frameworks.ts#L124)
+Defined in: [basic/src/frameworks.ts:122](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/frameworks.ts#L122)
 
 #### Parameters
 
@@ -756,7 +756,7 @@ Defined in: [basic/src/frameworks.ts:124](https://github.com/santi020k/eslint-co
 
 > `const` **vite**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:125](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/frameworks.ts#L125)
+Defined in: [basic/src/frameworks.ts:123](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/frameworks.ts#L123)
 
 #### Parameters
 
@@ -774,7 +774,7 @@ Defined in: [basic/src/frameworks.ts:125](https://github.com/santi020k/eslint-co
 
 > `const` **vue**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:126](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/frameworks.ts#L126)
+Defined in: [basic/src/frameworks.ts:124](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/frameworks.ts#L124)
 
 #### Parameters
 
@@ -792,7 +792,7 @@ Defined in: [basic/src/frameworks.ts:126](https://github.com/santi020k/eslint-co
 
 > `const` **vueConfig**: (`options?`) => `Promise`\<`ConfigArray`\> = `vue`
 
-Defined in: [basic/src/frameworks.ts:160](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/frameworks.ts#L160)
+Defined in: [basic/src/frameworks.ts:158](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/frameworks.ts#L158)
 
 #### Parameters
 
@@ -814,7 +814,7 @@ Use `vue` instead.
 
 > **eslintConfig**(`options?`, ...`extraConfigs`): `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/index.ts:731](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/index.ts#L731)
+Defined in: [basic/src/index.ts:614](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/index.ts#L614)
 
 Generates the ESLint configuration array, applying configurations
 and integration settings based on the input configuration.
@@ -845,7 +845,7 @@ The final ESLint configuration array
 
 > **generateAgentSkills**(`opts?`): `Promise`\<[`GenerateSkillResult`](#generateskillresult)\>
 
-Defined in: [basic/src/agent-skill-generator.ts:922](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L922)
+Defined in: [basic/src/agent-skill-generator.ts:921](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/agent-skill-generator.ts#L921)
 
 Detects which AI agent folders exist in the project, reads the actual
 `eslint.config.js` to understand what is configured, and writes a tailored
@@ -879,7 +879,7 @@ process.stdout.write(`Written to: ${result.written}\n`)
 
 > **generateSkillContent**(`features`, `format`): `string`
 
-Defined in: [basic/src/agent-skill-generator.ts:720](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L720)
+Defined in: [basic/src/agent-skill-generator.ts:719](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/basic/src/agent-skill-generator.ts#L719)
 
 Builds the skill document body from the project's [EslintConfigFeatures](#eslintconfigfeatures).
 Four format variants are produced:
@@ -905,60 +905,6 @@ Four format variants are produced:
 
 ## References
 
-### a11y
-
-Re-exports [a11y](../integrations/src.md#a11y)
-
-***
-
-### aiSdk
-
-Re-exports [aiSdk](../integrations/src.md#aisdk)
-
-***
-
-### astroDoctor
-
-Re-exports [astroDoctor](../integrations/src.md#astrodoctor)
-
-***
-
-### autogen
-
-Re-exports [autogen](../integrations/src.md#autogen)
-
-***
-
-### bestPractices
-
-Re-exports [bestPractices](../integrations/src.md#bestpractices)
-
-***
-
-### biome
-
-Re-exports [biome](../integrations/src.md#biome)
-
-***
-
-### boundaries
-
-Re-exports [boundaries](../integrations/src.md#boundaries)
-
-***
-
-### command
-
-Re-exports [command](../integrations/src.md#command)
-
-***
-
-### compat
-
-Re-exports [compat](../integrations/src.md#compat)
-
-***
-
 ### coreConfig
 
 Re-exports [coreConfig](../core/src.md#coreconfig)
@@ -977,36 +923,6 @@ Re-exports [createImportGroups](../core/src.md#createimportgroups)
 
 ***
 
-### cspell
-
-Re-exports [cspell](../integrations/src.md#cspell)
-
-***
-
-### css
-
-Re-exports [css](../integrations/src.md#css)
-
-***
-
-### cypress
-
-Re-exports [cypress](../integrations/src.md#cypress)
-
-***
-
-### deMorgan
-
-Re-exports [deMorgan](../integrations/src.md#demorgan)
-
-***
-
-### depend
-
-Re-exports [depend](../integrations/src.md#depend)
-
-***
-
 ### DetectedFrameworkName
 
 Re-exports [DetectedFrameworkName](../core/src.md#detectedframeworkname)
@@ -1022,18 +938,6 @@ Re-exports [DetectionOptions](../core/src.md#detectionoptions)
 ### detectProjectOptions
 
 Re-exports [detectProjectOptions](../core/src.md#detectprojectoptions)
-
-***
-
-### docker
-
-Re-exports [docker](../integrations/src.md#docker)
-
-***
-
-### drizzle
-
-Re-exports [drizzle](../integrations/src.md#drizzle)
 
 ***
 
@@ -1091,27 +995,9 @@ Re-exports [getGlobalsForRuntime](../core/src.md#getglobalsforruntime)
 
 ***
 
-### githubActions
-
-Re-exports [githubActions](../integrations/src.md#githubactions)
-
-***
-
 ### gitignore
 
 Re-exports [gitignore](../core/src.md#gitignore)
-
-***
-
-### googleGenAi
-
-Re-exports [googleGenAi](../integrations/src.md#googlegenai)
-
-***
-
-### graphql
-
-Re-exports [graphql](../integrations/src.md#graphql)
 
 ***
 
@@ -1127,18 +1013,6 @@ Re-exports [hasReactConfig](../core/src.md#hasreactconfig)
 
 ***
 
-### html
-
-Re-exports [html](../integrations/src.md#html)
-
-***
-
-### i18next
-
-Re-exports [i18next](../integrations/src.md#i18next)
-
-***
-
 ### ImportedFramework
 
 Re-exports [ImportedFramework](../core/src.md#importedframework)
@@ -1151,39 +1025,9 @@ Re-exports [ImportGroupOptions](../core/src.md#importgroupoptions)
 
 ***
 
-### jest
-
-Re-exports [jest](../integrations/src.md#jest)
-
-***
-
-### jestDom
-
-Re-exports [jestDom](../integrations/src.md#jestdom)
-
-***
-
 ### jsConfig
 
 Renames and re-exports [coreConfig](../core/src.md#coreconfig)
-
-***
-
-### jsdoc
-
-Re-exports [jsdoc](../integrations/src.md#jsdoc)
-
-***
-
-### jsonc
-
-Re-exports [jsonc](../integrations/src.md#jsonc)
-
-***
-
-### langchain
-
-Re-exports [langchain](../integrations/src.md#langchain)
 
 ***
 
@@ -1205,42 +1049,6 @@ Re-exports [LibraryOption](../core/src.md#libraryoption)
 
 ***
 
-### llamaIndex
-
-Re-exports [llamaIndex](../integrations/src.md#llamaindex)
-
-***
-
-### markdown
-
-Re-exports [markdown](../integrations/src.md#markdown)
-
-***
-
-### mastra
-
-Re-exports [mastra](../integrations/src.md#mastra)
-
-***
-
-### mcp
-
-Re-exports [mcp](../integrations/src.md#mcp)
-
-***
-
-### mdx
-
-Re-exports [mdx](../integrations/src.md#mdx)
-
-***
-
-### mikroOrm
-
-Re-exports [mikroOrm](../integrations/src.md#mikroorm)
-
-***
-
 ### NextMode
 
 Re-exports [NextMode](../core/src.md#nextmode)
@@ -1259,30 +1067,6 @@ Re-exports [NextModeOption](../core/src.md#nextmodeoption)
 
 ***
 
-### node
-
-Re-exports [node](../integrations/src.md#node)
-
-***
-
-### noOnlyTests
-
-Re-exports [noOnlyTests](../integrations/src.md#noonlytests)
-
-***
-
-### nx
-
-Re-exports [nx](../integrations/src.md#nx)
-
-***
-
-### openAiAgents
-
-Re-exports [openAiAgents](../integrations/src.md#openaiagents)
-
-***
-
 ### OptionalConfigMap
 
 Re-exports [OptionalConfigMap](../core/src.md#optionalconfigmap)
@@ -1292,36 +1076,6 @@ Re-exports [OptionalConfigMap](../core/src.md#optionalconfigmap)
 ### OptionalConfigName
 
 Re-exports [OptionalConfigName](../core/src.md#optionalconfigname)
-
-***
-
-### oxlint
-
-Re-exports [oxlint](../integrations/src.md#oxlint)
-
-***
-
-### packageJson
-
-Re-exports [packageJson](../integrations/src.md#packagejson)
-
-***
-
-### perfectionist
-
-Re-exports [perfectionist](../integrations/src.md#perfectionist)
-
-***
-
-### playwright
-
-Re-exports [playwright](../integrations/src.md#playwright)
-
-***
-
-### pnpm
-
-Re-exports [pnpm](../integrations/src.md#pnpm)
 
 ***
 
@@ -1343,18 +1097,6 @@ Re-exports [PresetOption](../core/src.md#presetoption)
 
 ***
 
-### prettier
-
-Re-exports [prettier](../integrations/src.md#prettier)
-
-***
-
-### prisma
-
-Re-exports [prisma](../integrations/src.md#prisma)
-
-***
-
 ### ProjectConfigOptions
 
 Re-exports [ProjectConfigOptions](../core/src.md#projectconfigoptions)
@@ -1364,12 +1106,6 @@ Re-exports [ProjectConfigOptions](../core/src.md#projectconfigoptions)
 ### ReactConfigKeys
 
 Re-exports [ReactConfigKeys](../core/src.md#reactconfigkeys)
-
-***
-
-### regexp
-
-Re-exports [regexp](../integrations/src.md#regexp)
 
 ***
 
@@ -1391,18 +1127,6 @@ Re-exports [RuntimeOption](../core/src.md#runtimeoption)
 
 ***
 
-### security
-
-Re-exports [security](../integrations/src.md#security)
-
-***
-
-### sequelize
-
-Re-exports [sequelize](../integrations/src.md#sequelize)
-
-***
-
 ### Setting
 
 Re-exports [Setting](../core/src.md#setting)
@@ -1421,63 +1145,15 @@ Re-exports [SettingOption](../core/src.md#settingoption)
 
 ***
 
-### sonarjs
-
-Re-exports [sonarjs](../integrations/src.md#sonarjs)
-
-***
-
-### stencil
-
-Re-exports [stencil](../integrations/src.md#stencil)
-
-***
-
-### storybook
-
-Re-exports [storybook](../integrations/src.md#storybook)
-
-***
-
 ### StrictMode
 
 Re-exports [StrictMode](../core/src.md#strictmode)
 
 ***
 
-### swagger
-
-Re-exports [swagger](../integrations/src.md#swagger)
-
-***
-
-### tailwind
-
-Re-exports [tailwind](../integrations/src.md#tailwind)
-
-***
-
-### tanstackQuery
-
-Re-exports [tanstackQuery](../integrations/src.md#tanstackquery)
-
-***
-
-### tanstackRouter
-
-Re-exports [tanstackRouter](../integrations/src.md#tanstackrouter)
-
-***
-
 ### Testing
 
 Re-exports [Testing](../core/src.md#testing)
-
-***
-
-### testingLibrary
-
-Re-exports [testingLibrary](../integrations/src.md#testinglibrary)
 
 ***
 
@@ -1490,12 +1166,6 @@ Re-exports [TestingName](../core/src.md#testingname)
 ### TestingOption
 
 Re-exports [TestingOption](../core/src.md#testingoption)
-
-***
-
-### toml
-
-Re-exports [toml](../integrations/src.md#toml)
 
 ***
 
@@ -1523,18 +1193,6 @@ Renames and re-exports [typescriptConfig](../typescript/src.md#typescriptconfig)
 
 ***
 
-### turbo
-
-Re-exports [turbo](../integrations/src.md#turbo)
-
-***
-
-### typeorm
-
-Re-exports [typeorm](../integrations/src.md#typeorm)
-
-***
-
 ### typescriptConfig
 
 Re-exports [typescriptConfig](../typescript/src.md#typescriptconfig)
@@ -1550,27 +1208,3 @@ Re-exports [TypeScriptMode](../core/src.md#typescriptmode)
 ### TypeScriptOptions
 
 Re-exports [TypeScriptOptions](../core/src.md#typescriptoptions)
-
-***
-
-### unicorn
-
-Re-exports [unicorn](../integrations/src.md#unicorn)
-
-***
-
-### vitest
-
-Re-exports [vitest](../integrations/src.md#vitest)
-
-***
-
-### yaml
-
-Re-exports [yaml](../integrations/src.md#yaml)
-
-***
-
-### zod
-
-Re-exports [zod](../integrations/src.md#zod)

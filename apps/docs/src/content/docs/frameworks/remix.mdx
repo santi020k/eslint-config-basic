@@ -1,23 +1,17 @@
 ---
 title: "Remix"
-description: "Use Remix support from the main v2 package. Application projects no longer install a separate @santi020k/eslint-config-remix package."
+description: "Use Remix support from the lean v3 composer. Install the @santi020k/eslint-config-remix package."
 ---
 
 import InstallTabs from '../../../components/InstallTabs.astro'
 
-Use Remix support from the main v2 package. Application projects no longer install a separate `@santi020k/eslint-config-remix` package.
+Use Remix support from the lean v3 composer. Install the `@santi020k/eslint-config-remix` package.
 
 ## Install
 
 
-<InstallTabs packages="@santi020k/eslint-config-basic" />
+<InstallTabs packages={["@santi020k/eslint-config-basic", "@santi020k/eslint-config-remix", "eslint"]} />
 
-
-## Using Lite
-
-The default install above remains recommended. If you use the manual-dependency lite package, install this framework config package too:
-
-<InstallTabs packages={["@santi020k/eslint-config-lite", "@santi020k/eslint-config-remix", "eslint"]} />
 
 ## Configure
 
@@ -43,10 +37,10 @@ Most projects can also rely on auto-detection and use `eslintConfig()` with no f
 ## Notes
 
 - The internal package still exists in the monorepo for modular development and generated API docs.
-- For the old multi-package installation model, see the [v1 Remix guide](/v1/frameworks/remix).
+- For the archived v1 setup, see the [v1 Remix guide](/v1/frameworks/remix).
 
 ## Related Pages
 
 - [Installation](/guide/installation)
 - [Configuration](/guide/configuration)
-- [v1 to v2 Migration](/guide/migration-v1-to-v2)
+- [v2 to v3 Migration](/guide/migration-v2-to-v3)

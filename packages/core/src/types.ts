@@ -292,12 +292,14 @@ export type RuntimeName = `${Runtime}`
 export type RuntimeOption = Runtime | RuntimeName
 export type SettingName = `${Setting}`
 export type SettingOption = Setting | SettingName
+
 /**
  * Severity profiles for teams adopting the config progressively.
  */
 export type StrictMode = 'ci' | 'pedantic' | 'recommended' | boolean
 
 export interface TailwindOptions {
+
   /**
    * Working directory used to resolve Tailwind and its entry point.
    * Defaults to `detectRootDir`, which keeps package-scoped monorepo configs stable.
@@ -340,8 +342,8 @@ export const ReactConfigKeys = [
 
 /**
  * Framework names that can be auto-detected by `detectProjectOptions`.
- * These are informational only — you still need to import and pass the actual
- * framework config via `frameworks.<name>` in `eslintConfig()`.
+ * The composer enables these automatically when the matching optional config
+ * package is installed.
  */
 export type DetectedFrameworkName =
   | 'angular' |
@@ -370,14 +372,14 @@ export type DetectedFrameworkName =
 export interface EslintConfigOptions {
 
   /**
-   * Enables bundled framework configs detected from dependencies.
+   * Enables installed optional framework configs detected from dependencies.
    * Disable this when you want manual framework control only.
    */
   autoFrameworks?: boolean
 
   /**
    * Frameworks detected from package.json by `detectProjectOptions()`.
-   * In v2, `eslintConfig()` enables these bundled framework configs by default.
+   * In v3, `eslintConfig()` enables detected framework configs when their optional packages are installed.
    */
   detectedFrameworks?: DetectedFrameworkName[]
 
@@ -409,9 +411,9 @@ export interface EslintConfigOptions {
   /**
    * Framework and library specific configurations.
    *
-   * Set a framework to `true` to use the bundled v2 config from
-   * `@santi020k/eslint-config-basic`, or pass a config array/factory when you
-   * need to override the bundled config.
+   * Set a framework to `true` to load its installed
+   * `@santi020k/eslint-config-*` package, or pass a config array/factory when
+   * you need to override the package config.
    */
   frameworks?: {
     angular?: ImportedFramework
@@ -531,7 +533,8 @@ export interface EslintConfigOptions {
    * automatically — no manual rule override needed.
    *
    * @example
-   * // Imports from @acme/* sort between internal app code and external npm packages
+
+  /* sort between internal app code and external npm packages
    * defineConfig({ workspacePrefixes: ['@acme'] })
    */
   workspacePrefixes?: string[]
@@ -543,7 +546,7 @@ export interface EslintConfigOptions {
 export type FlatConfigArray = TSESLint.FlatConfig.ConfigArray
 
 /**
- * Type for framework option values: `true` enables the bundled v2 config,
+ * Type for framework option values: `true` enables the optional v3 config,
  * or pass a config array, a factory function (sync or async, like the lazy
  * framework factories exported from `@santi020k/eslint-config-basic`), or an
  * imported module with a default export. Any other value throws a descriptive

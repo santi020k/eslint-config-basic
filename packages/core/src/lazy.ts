@@ -16,9 +16,9 @@ import { pathToFileURL } from 'node:url'
 const isVitest = typeof process !== 'undefined' && process.env.VITEST
 
 // v8 ignore next 3 -- Reflect.construct branch only runs outside Vitest; not reachable in test suite
-const dynamicImport: (specifier: string) => Promise<unknown> = isVitest
-  ? (specifier: string) => import(/* @vite-ignore */ specifier)
-  : Reflect.construct(Function, ['specifier', 'return import(specifier)']) as (specifier: string) => Promise<unknown>
+const dynamicImport: (specifier: string) => Promise<unknown> = isVitest ?
+  (specifier: string) => import(/* @vite-ignore */ specifier) :
+  Reflect.construct(Function, ['specifier', 'return import(specifier)']) as (specifier: string) => Promise<unknown>
 
 export const createModuleLoader = (resolveFn: (specifier: string) => string) => async <T = unknown>(specifier: string): Promise<T> => {
   if (isVitest) {

@@ -10,6 +10,7 @@
   ],
   "ignoreExportsUsedInFile": true,
   "rules": {
+    "catalog": "off",
     "duplicates": "off"
   },
   "workspaces": {
@@ -38,6 +39,7 @@
         "@santi020k/eslint-config-astro",
         "@santi020k/eslint-config-expo",
         "@santi020k/eslint-config-hono",
+        "@santi020k/eslint-config-integrations",
         "@santi020k/eslint-config-lit",
         "@santi020k/eslint-config-nest",
         "@santi020k/eslint-config-next",
@@ -52,7 +54,8 @@
         "@santi020k/eslint-config-svelte",
         "@santi020k/eslint-config-tanstack-start",
         "@santi020k/eslint-config-vite",
-        "@santi020k/eslint-config-vue"
+        "@santi020k/eslint-config-vue",
+        "semver"
       ]
     },
     "packages/integrations": {
@@ -82,6 +85,7 @@
         "eslint-plugin-vercel-ai-security",
         "eslint-plugin-zod",
         "graphql",
+        "oxlint",
         "zod"
       ]
     },

@@ -592,15 +592,28 @@ importers:
 
   packages/basic:
     dependencies:
+      '@santi020k/eslint-config-core':
+        specifier: workspace:^
+        version: link:../core
+      '@santi020k/eslint-config-typescript':
+        specifier: workspace:^
+        version: link:../typescript
+      '@typescript-eslint/utils':
+        specifier: 'catalog:'
+        version: 8.65.0(eslint@10.8.0(jiti@2.7.0))(typescript@6.0.3)
+      eslint:
+        specifier: ^10.0.0
+        version: 10.8.0(jiti@2.7.0)
+      semver:
+        specifier: 'catalog:'
+        version: 7.8.5
+    devDependencies:
       '@santi020k/eslint-config-angular':
         specifier: workspace:^
         version: link:../angular
       '@santi020k/eslint-config-astro':
         specifier: workspace:^
         version: link:../astro
-      '@santi020k/eslint-config-core':
-        specifier: workspace:^
-        version: link:../core
       '@santi020k/eslint-config-expo':
         specifier: workspace:^
         version: link:../expo
@@ -649,25 +662,12 @@ importers:
       '@santi020k/eslint-config-tanstack-start':
         specifier: workspace:^
         version: link:../tanstack-start
-      '@santi020k/eslint-config-typescript':
-        specifier: workspace:^
-        version: link:../typescript
       '@santi020k/eslint-config-vite':
         specifier: workspace:^
         version: link:../vite
       '@santi020k/eslint-config-vue':
         specifier: workspace:^
         version: link:../vue
-      '@typescript-eslint/utils':
-        specifier: 'catalog:'
-        version: 8.65.0(eslint@10.8.0(jiti@2.7.0))(typescript@6.0.3)
-      eslint:
-        specifier: ^10.0.0
-        version: 10.8.0(jiti@2.7.0)
-      semver:
-        specifier: 'catalog:'
-        version: 7.8.5
-    devDependencies:
       '@types/node':
         specifier: 'catalog:'
         version: 26.1.1
@@ -701,9 +701,6 @@ importers:
       eslint-plugin-import-x:
         specifier: 'catalog:'
         version: 4.17.1(@typescript-eslint/utils@8.65.0(eslint@10.8.0(jiti@2.7.0))(typescript@6.0.3))(eslint-import-resolver-node@0.3.10)(eslint@10.8.0(jiti@2.7.0))(supports-color@8.1.1)
-      eslint-plugin-jsx-a11y:
-        specifier: 'catalog:'
-        version: 6.10.2(eslint@10.8.0(jiti@2.7.0))
       eslint-plugin-n:
         specifier: 'catalog:'
         version: 18.2.2(eslint@10.8.0(jiti@2.7.0))(typescript@6.0.3)
@@ -720,9 +717,6 @@ importers:
         specifier: 'catalog:'
         version: 17.7.0
     devDependencies:
-      '@types/eslint-plugin-jsx-a11y':
-        specifier: 'catalog:'
-        version: 6.10.1(jiti@2.7.0)(supports-color@8.1.1)
       '@types/node':
         specifier: 'catalog:'
         version: 26.1.1
@@ -740,7 +734,7 @@ importers:
     dependencies:
       '@eslint/eslintrc':
         specifier: 'catalog:'
-        version: 3.3.6
+        version: 3.3.6(supports-color@8.1.1)
       '@typescript-eslint/utils':
         specifier: 'catalog:'
         version: 8.65.0(eslint@10.8.0(jiti@2.7.0))(typescript@6.0.3)
@@ -753,6 +747,85 @@ importers:
       eslint-config-expo:
         specifier: 'catalog:'
         version: 57.0.0(eslint-plugin-import-x@4.17.1(@typescript-eslint/utils@8.65.0(eslint@10.8.0(jiti@2.7.0))(typescript@6.0.3))(eslint-import-resolver-node@0.3.10)(eslint@10.8.0(jiti@2.7.0)))(eslint@10.8.0(jiti@2.7.0))(supports-color@8.1.1)(typescript@6.0.3)
+    devDependencies:
+      publint:
+        specifier: 'catalog:'
+        version: 0.3.22
+      tsup:
+        specifier: 'catalog:'
+        version: 8.5.1(jiti@2.7.0)(postcss@8.5.22)(supports-color@8.1.1)(typescript@6.0.3)(yaml@2.9.0)
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  packages/full:
+    dependencies:
+      '@santi020k/eslint-config-angular':
+        specifier: workspace:^
+        version: link:../angular
+      '@santi020k/eslint-config-astro':
+        specifier: workspace:^
+        version: link:../astro
+      '@santi020k/eslint-config-basic':
+        specifier: workspace:^
+        version: link:../basic
+      '@santi020k/eslint-config-expo':
+        specifier: workspace:^
+        version: link:../expo
+      '@santi020k/eslint-config-hono':
+        specifier: workspace:^
+        version: link:../hono
+      '@santi020k/eslint-config-integrations':
+        specifier: workspace:^
+        version: link:../integrations
+      '@santi020k/eslint-config-lit':
+        specifier: workspace:^
+        version: link:../lit
+      '@santi020k/eslint-config-nest':
+        specifier: workspace:^
+        version: link:../nest
+      '@santi020k/eslint-config-next':
+        specifier: workspace:^
+        version: link:../next
+      '@santi020k/eslint-config-nuxt':
+        specifier: workspace:^
+        version: link:../nuxt
+      '@santi020k/eslint-config-preact':
+        specifier: workspace:^
+        version: link:../preact
+      '@santi020k/eslint-config-qwik':
+        specifier: workspace:^
+        version: link:../qwik
+      '@santi020k/eslint-config-react':
+        specifier: workspace:^
+        version: link:../react
+      '@santi020k/eslint-config-react-router':
+        specifier: workspace:^
+        version: link:../react-router
+      '@santi020k/eslint-config-remix':
+        specifier: workspace:^
+        version: link:../remix
+      '@santi020k/eslint-config-slidev':
+        specifier: workspace:^
+        version: link:../slidev
+      '@santi020k/eslint-config-solid':
+        specifier: workspace:^
+        version: link:../solid
+      '@santi020k/eslint-config-svelte':
+        specifier: workspace:^
+        version: link:../svelte
+      '@santi020k/eslint-config-tanstack-start':
+        specifier: workspace:^
+        version: link:../tanstack-start
+      '@santi020k/eslint-config-vite':
+        specifier: workspace:^
+        version: link:../vite
+      '@santi020k/eslint-config-vue':
+        specifier: workspace:^
+        version: link:../vue
+      eslint:
+        specifier: ^10.0.0
+        version: 10.8.0(jiti@2.7.0)
     devDependencies:
       publint:
         specifier: 'catalog:'
@@ -944,7 +1017,7 @@ importers:
     devDependencies:
       '@types/eslint-plugin-jsx-a11y':
         specifier: 'catalog:'
-        version: 6.10.1(jiti@2.7.0)
+        version: 6.10.1(jiti@2.7.0)(supports-color@8.1.1)
       '@types/node':
         specifier: 'catalog:'
         version: 26.1.1
@@ -2258,6 +2331,9 @@ importers:
       '@santi020k/eslint-config-expo':
         specifier: workspace:^
         version: link:../expo
+      '@santi020k/eslint-config-full':
+        specifier: workspace:^
+        version: link:../full
       '@santi020k/eslint-config-hono':
         specifier: workspace:^
         version: link:../hono
@@ -17522,7 +17598,7 @@ snapshots:
       '@eslint/css-tree': 4.0.4
       '@eslint/plugin-kit': 0.7.2
 
-  '@eslint/eslintrc@3.3.6':
+  '@eslint/eslintrc@3.3.6(supports-color@8.1.1)':
     dependencies:
       ajv: 6.15.0
       debug: 4.4.3(supports-color@8.1.1)
@@ -20675,7 +20751,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/scope-manager': 8.61.1
       '@typescript-eslint/types': 8.61.1
-      '@typescript-eslint/typescript-estree': 8.61.1(supports-color@8.1.1)(typescript@6.0.3)
+      '@typescript-eslint/typescript-estree': 8.61.1(typescript@6.0.3)
       '@typescript-eslint/visitor-keys': 8.61.1
       debug: 4.4.3(supports-color@8.1.1)
       eslint: 10.8.0(jiti@2.7.0)
@@ -20716,7 +20792,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@typescript-eslint/project-service@8.61.1(supports-color@8.1.1)(typescript@6.0.3)':
+  '@typescript-eslint/project-service@8.61.1(typescript@6.0.3)':
     dependencies:
       '@typescript-eslint/tsconfig-utils': 8.61.1(typescript@6.0.3)
       '@typescript-eslint/types': 8.61.1
@@ -20764,7 +20840,7 @@ snapshots:
   '@typescript-eslint/type-utils@8.61.1(eslint@10.8.0(jiti@2.7.0))(supports-color@8.1.1)(typescript@6.0.3)':
     dependencies:
       '@typescript-eslint/types': 8.61.1
-      '@typescript-eslint/typescript-estree': 8.61.1(supports-color@8.1.1)(typescript@6.0.3)
+      '@typescript-eslint/typescript-estree': 8.61.1(typescript@6.0.3)
       '@typescript-eslint/utils': 8.61.1(eslint@10.8.0(jiti@2.7.0))(typescript@6.0.3)
       debug: 4.4.3(supports-color@8.1.1)
       eslint: 10.8.0(jiti@2.7.0)
@@ -20818,9 +20894,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@typescript-eslint/typescript-estree@8.61.1(supports-color@8.1.1)(typescript@6.0.3)':
+  '@typescript-eslint/typescript-estree@8.61.1(typescript@6.0.3)':
     dependencies:
-      '@typescript-eslint/project-service': 8.61.1(supports-color@8.1.1)(typescript@6.0.3)
+      '@typescript-eslint/project-service': 8.61.1(typescript@6.0.3)
       '@typescript-eslint/tsconfig-utils': 8.61.1(typescript@6.0.3)
       '@typescript-eslint/types': 8.61.1
       '@typescript-eslint/visitor-keys': 8.61.1
@@ -20864,7 +20940,7 @@ snapshots:
       '@eslint-community/eslint-utils': 4.9.1(eslint@10.8.0(jiti@2.7.0))
       '@typescript-eslint/scope-manager': 8.61.1
       '@typescript-eslint/types': 8.61.1
-      '@typescript-eslint/typescript-estree': 8.61.1(supports-color@8.1.1)(typescript@6.0.3)
+      '@typescript-eslint/typescript-estree': 8.61.1(typescript@6.0.3)
       eslint: 10.8.0(jiti@2.7.0)
       typescript: 6.0.3
     transitivePeerDependencies:
@@ -24611,7 +24687,7 @@ snapshots:
       '@eslint/config-array': 0.21.2(supports-color@8.1.1)
       '@eslint/config-helpers': 0.4.2
       '@eslint/core': 0.17.0
-      '@eslint/eslintrc': 3.3.6
+      '@eslint/eslintrc': 3.3.6(supports-color@8.1.1)
       '@eslint/js': 9.39.5
       '@eslint/plugin-kit': 0.4.1
       '@humanfs/node': 0.16.8
@@ -24652,7 +24728,7 @@ snapshots:
       '@eslint/config-array': 0.21.2(supports-color@8.1.1)
       '@eslint/config-helpers': 0.4.2
       '@eslint/core': 0.17.0
-      '@eslint/eslintrc': 3.3.6
+      '@eslint/eslintrc': 3.3.6(supports-color@8.1.1)
       '@eslint/js': 9.39.5
       '@eslint/plugin-kit': 0.4.1
       '@humanfs/node': 0.16.8

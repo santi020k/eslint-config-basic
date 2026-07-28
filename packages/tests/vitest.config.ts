@@ -27,10 +27,16 @@ const integrationSubpathAliases = {
   '@santi020k/eslint-config-integrations/tools': join(packagesDir, 'integrations/src/tools/index.ts')
 }
 
+const recommendedSubpathAliases = {
+  '@santi020k/eslint-config-basic/recommended': join(packagesDir, 'basic/src/recommended.ts'),
+  '@santi020k/eslint-config-full/recommended': join(packagesDir, 'full/src/recommended.ts')
+}
+
 export default defineConfig({
   resolve: {
     alias: {
       ...integrationSubpathAliases,
+      ...recommendedSubpathAliases,
       ...workspacePackageAliases
     }
   },

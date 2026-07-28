@@ -2,7 +2,6 @@ import eslint from '@eslint/js'
 import pluginStylistic from '@stylistic/eslint-plugin'
 import type { TSESLint } from '@typescript-eslint/utils'
 import pluginImport from 'eslint-plugin-import-x'
-import pluginJsxA11y from 'eslint-plugin-jsx-a11y'
 import pluginN from 'eslint-plugin-n'
 import pluginPromise from 'eslint-plugin-promise'
 import pluginSimpleImport from 'eslint-plugin-simple-import-sort'
@@ -136,7 +135,6 @@ export const createCoreConfig = (runtime: Runtime = Runtime.Universal): TSESLint
       plugins: {
         '@stylistic': pluginStylistic,
         import: pluginImport,
-        'jsx-a11y': pluginJsxA11y,
         n: pluginN,
         promise: pluginPromise,
         'simple-import-sort': pluginSimpleImport,
@@ -167,8 +165,8 @@ export const coreConfig: TSESLint.FlatConfig.ConfigArray = createCoreConfig()
 export { coreConfig as jsConfig }
 
 // Export rules, groups, and import-group factory for use by other packages
-export { createImportGroups, groups, rules } from './rules.js'
 export type { ImportGroupOptions } from './rules.js'
+export { createImportGroups, groups, rules } from './rules.js'
 // Export settings
 export { gitignore } from './settings/index.js'
 // Re-export types and utilities

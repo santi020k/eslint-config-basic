@@ -3,6 +3,22 @@ title: "Changelog"
 description: "Release history for @santi020k/eslint-config-basic."
 ---
 
+## 3.0.0
+
+### Major Changes
+
+- Make the lean dependency model the default. Framework and integration config
+  packages are optional peers instead of hard dependencies.
+- Add `@santi020k/eslint-config-basic/recommended` for a one-line zero-config
+  `eslint.config.*` file.
+- Move integration factory exports to
+  `@santi020k/eslint-config-integrations`; the new
+  `@santi020k/eslint-config-full` package re-exports the batteries-included API.
+- Make `Preset.Basic` dependency-free beyond core and TypeScript support.
+- Make `basic-eslint init` generate the one-line recommended config.
+
+See the [v2 to v3 migration guide](https://eslint.santi020k.com/guide/migration-v2-to-v3/).
+
 ## 2.1.1
 
 ### Patch Changes
@@ -104,16 +120,16 @@ description: "Release history for @santi020k/eslint-config-basic."
 
   ```js
   // before (v1)
-  import { reactConfig } from "@santi020k/eslint-config-basic";
-
-  export default [...reactConfig];
+  import { reactConfig } from '@santi020k/eslint-config-basic'
+  
+  export default [...reactConfig]
   ```
 
   ```js
   // after (v2)
-  import { react } from "@santi020k/eslint-config-basic";
-
-  export default [...(await react())];
+  import { react } from '@santi020k/eslint-config-basic'
+  
+  export default [...(await react())]
   ```
 
   Most users are unaffected: `frameworks: { react: true }` and auto-detection behave exactly as before.
@@ -344,16 +360,16 @@ description: "Release history for @santi020k/eslint-config-basic."
 
   ```js
   // before (v1)
-  import { reactConfig } from "@santi020k/eslint-config-basic";
-
-  export default [...reactConfig];
+  import { reactConfig } from '@santi020k/eslint-config-basic'
+  
+  export default [...reactConfig]
   ```
 
   ```js
   // after (v2)
-  import { react } from "@santi020k/eslint-config-basic";
-
-  export default [...(await react())];
+  import { react } from '@santi020k/eslint-config-basic'
+  
+  export default [...(await react())]
   ```
 
   Most users are unaffected: `frameworks: { react: true }` and auto-detection behave exactly as before.
@@ -470,12 +486,12 @@ description: "Release history for @santi020k/eslint-config-basic."
   **Programmatic API:**
 
   ```ts
-  import { generateAgentSkills } from "@santi020k/eslint-config-basic";
-
+  import { generateAgentSkills } from '@santi020k/eslint-config-basic'
+  
   const { skipped, written } = generateAgentSkills({
     cwd: process.cwd(),
-    force: true,
-  });
+    force: true
+  })
   ```
 
 ### Patch Changes
@@ -522,18 +538,18 @@ description: "Release history for @santi020k/eslint-config-basic."
 
   ```ts
   // Before (would throw)
-  const opts = detectProjectOptions();
-
-  eslintConfig(opts); // ❌
-
+  const opts = detectProjectOptions()
+  
+  eslintConfig(opts) // ❌
+  
   // opts.frameworks.next === true → TypeError inside eslintConfig()
-
+  
   // After (safe)
-  const opts = detectProjectOptions();
-
+  const opts = detectProjectOptions()
+  
   // opts.detectedFrameworks → ['next', 'react']  (informational)
   // opts.frameworks → {}                          (safe to spread)
-  eslintConfig(opts); // ✅
+  eslintConfig(opts) // ✅
   ```
 
   ## New features
@@ -545,7 +561,7 @@ description: "Release history for @santi020k/eslint-config-basic."
   - `max-depth` (warn, max 4) — flags deeply nested blocks
 
   ```ts
-  eslintConfig({ extensions: [Extension.BestPractices] });
+  eslintConfig({ extensions: [Extension.BestPractices] })
   ```
 
   **Category barrel exports for `@santi020k/eslint-config-optionals`** — five new sub-path exports let you import a whole category at once:

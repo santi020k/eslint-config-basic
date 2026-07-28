@@ -285,7 +285,7 @@ const FEATURE_MAP: readonly [pattern: string, category: FeatureCategory, label: 
   ['integrations/depend/',                       'extensions', 'Depend'],
   ['integrations/node/',                         'extensions', 'Node.js'],
   ['eslint-config-integrations/no-only-tests',   'extensions', 'No Only Tests'],
-  ['integrations/oxlint',                        'extensions', 'Oxlint'],
+  ['integrations/oxlint',                        'extensions', 'Oxlint']
 ]
 
 interface RawFlatConfigEntry {
@@ -356,10 +356,9 @@ const FEATURE_LABELS = new Map<string, string>([
 
 const toFeatureLabel = (value: string): string => FEATURE_LABELS.get(value) ?? value
 
-const extractRuleNamespaces = (rules: object): string[] =>
-  Object.keys(rules)
-    .filter(key => key.includes('/'))
-    .map(key => key.slice(0, key.indexOf('/')))
+const extractRuleNamespaces = (rules: object): string[] => Object.keys(rules)
+  .filter(key => key.includes('/'))
+  .map(key => key.slice(0, key.indexOf('/')))
 
 /**
  * Extracts all searchable tokens from a flat-config array:

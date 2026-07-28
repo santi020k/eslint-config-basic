@@ -115,8 +115,8 @@ const featureGroups = [
           <Field controlId="builder-distribution">
             <Label for="builder-distribution">Distribution</Label>
             <NativeSelect id="builder-distribution" name="distribution" data-builder-option>
-              <option value="basic">Basic — complete install</option>
-              <option value="lite">Lite — smaller, explicit packages</option>
+              <option value="basic">Basic — lean, explicit packages</option>
+              <option value="full">Full — batteries included</option>
             </NativeSelect>
           </Field>
 
@@ -282,12 +282,12 @@ const featureGroups = [
   const createInstallCommand = (state: BuilderState): string => {
     const packages = new Set<string>()
 
-    if (state.distribution === 'basic') {
-      packages.add('@santi020k/eslint-config-basic')
-    } else {
-      packages.add('@santi020k/eslint-config-lite')
+    packages.add('eslint')
 
-      packages.add('eslint')
+    if (state.distribution === 'full') {
+      packages.add('@santi020k/eslint-config-full')
+    } else {
+      packages.add('@santi020k/eslint-config-basic')
 
       if (state.typescript) packages.add('typescript')
 
@@ -312,8 +312,8 @@ const featureGroups = [
   }
 
   const createConfig = (state: BuilderState): string => {
-    const packageName = state.distribution === 'lite' ?
-      '@santi020k/eslint-config-lite' :
+    const packageName = state.distribution === 'full' ?
+      '@santi020k/eslint-config-full' :
       '@santi020k/eslint-config-basic'
 
     const lines = [`import { defineConfig } from '${packageName}'`, '', 'export default await defineConfig({']

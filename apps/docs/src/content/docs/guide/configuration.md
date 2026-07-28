@@ -1,16 +1,18 @@
 ---
 title: "Configuration"
-description: "The main package composes the final flat config array from one public install: @santi020k/eslint-config-basic."
+description: "Compose the v3 flat config from the lean package and installed optional framework packages."
 ---
 
-The main package composes the final flat config array from one public install: `@santi020k/eslint-config-basic`.
+The main package composes the final flat config array from
+`@santi020k/eslint-config-basic` and the optional framework or integration
+packages installed by the project.
 
 ## Mental Model
 
 - Start with `eslintConfig()`.
 - Let project detection enable TypeScript, frameworks, runtime, and supported tooling.
 - Make options explicit when you want stable, reviewable config.
-- Use booleans for bundled framework configs.
+- Use booleans for installed optional framework configs.
 - Use enums or matching strings for integrations.
 - Use `features` when you want one simple opt-in/opt-out map for optional configs.
 - Use `optionMergeStrategy` when you want strict replace behavior.
@@ -40,9 +42,12 @@ export default await defineConfig({
 })
 ```
 
-## Recommended v2 Project Config
+## Recommended v3 Project Config
 
-For application packages, prefer one `defineConfig()` call with a stable detection root, bundled framework booleans, and first-class integration options. This keeps the generated config inspectable while still letting v2 auto-detection fill in TypeScript, runtime, testing, and supported libraries.
+For application packages, prefer the one-line recommended entry when no options
+are needed. Use one `defineConfig()` call with a stable detection root when the
+project needs explicit framework, TypeScript, or integration choices. Install
+`@santi020k/eslint-config-integrations` for the integration options below.
 
 ```js
 import { defineConfig, NextMode, Testing } from '@santi020k/eslint-config-basic'

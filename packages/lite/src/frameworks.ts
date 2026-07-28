@@ -5,7 +5,7 @@ import {
   type Runtime
 } from '@santi020k/eslint-config-core'
 
-const loadModule = createModuleLoader((specifier) => import.meta.resolve(specifier))
+const loadModule = createModuleLoader(specifier => import.meta.resolve(specifier))
 
 export type FrameworkFlags = Partial<Record<FrameworkName, true>>
 
@@ -81,8 +81,7 @@ const loadFrameworkConfigInput = (frameworkName: FrameworkName): Promise<Framewo
     throw new Error(
       `Unable to load optional framework config "${frameworkName}". ` +
       `Install "@santi020k/eslint-config-${frameworkName}" when using @santi020k/eslint-config-lite, ` +
-      'or remove that framework from your eslintConfig options.',
-      { cause: error }
+      'or remove that framework from your eslintConfig options.', { cause: error }
     )
   })
 
@@ -102,8 +101,7 @@ export const getBundledFrameworkConfig = async (
 
 const createBundledFramework = (
   frameworkName: FrameworkName
-): ((options?: FrameworkOptions) => Promise<FlatConfigArray>) =>
-  async (options?: FrameworkOptions): Promise<FlatConfigArray> => getBundledFrameworkConfig(frameworkName, options)
+): ((options?: FrameworkOptions) => Promise<FlatConfigArray>) => async (options?: FrameworkOptions): Promise<FlatConfigArray> => getBundledFrameworkConfig(frameworkName, options)
 
 // Public framework factories (v2 naming: bare framework names).
 // Each lazily imports its framework package on first call.

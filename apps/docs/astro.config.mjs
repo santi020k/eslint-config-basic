@@ -52,7 +52,7 @@ const sidebar = sidebarLinks([
           { label: 'Installation', slug: 'guide/installation' },
           { label: 'Configuration', slug: 'guide/configuration' },
           { badge: { text: 'New', variant: 'success' }, label: 'Config Builder', slug: 'guide/config-builder' },
-          { badge: { text: 'Lite', variant: 'tip' }, label: 'Switch to Lite', slug: 'guide/lite-migration' },
+          { badge: { text: 'v3', variant: 'tip' }, label: 'Migrate from v2', slug: 'guide/migration-v2-to-v3' },
           { label: 'Presets', slug: 'guide/presets' },
           { label: 'Runtime', slug: 'guide/runtime' },
           { label: 'Monorepo', slug: 'guide/monorepo' },
@@ -107,6 +107,7 @@ const sidebar = sidebarLinks([
           { badge: { text: 'New', variant: 'success' }, label: 'Doctor Report Viewer', slug: 'guide/doctor-report' },
           { badge: { text: 'New', variant: 'success' }, label: 'Release Center', slug: 'guide/releases' },
           { badge: { text: 'Main', variant: 'note' }, label: 'Core Config', slug: 'packages/basic' },
+          { badge: { text: 'Full', variant: 'tip' }, label: 'Full Config', slug: 'packages/full' },
           { badge: { text: 'Lite', variant: 'tip' }, label: 'Lite Config', slug: 'packages/lite' },
           { label: 'Base Rules', slug: 'packages/core' },
           { label: 'Integrations', slug: 'packages/integrations' },
@@ -120,7 +121,7 @@ const sidebar = sidebarLinks([
         label: 'Architecture & API'
       }
     ],
-    label: 'Current Docs (v2)'
+    label: 'Current Docs (v3)'
   },
   {
     items: [

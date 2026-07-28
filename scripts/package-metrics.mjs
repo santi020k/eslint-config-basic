@@ -5,7 +5,9 @@ const rootDir = process.cwd()
 const packagesDir = join(rootDir, 'packages')
 
 const dependencyBudgets = new Map([
-  ['@santi020k/eslint-config-basic', 24],
+  ['@santi020k/eslint-config-basic', 4],
+  ['@santi020k/eslint-config-core', 10],
+  ['@santi020k/eslint-config-full', 21],
   ['@santi020k/eslint-config-integrations', 51],
   ['@santi020k/eslint-config-lite', 3]
 ])

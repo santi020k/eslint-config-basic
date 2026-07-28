@@ -16,8 +16,8 @@ hero:
     - text: Build your config
       link: /guide/config-builder
       variant: secondary
-    - text: Migrate from v1
-      link: /guide/migration-v1-to-v2
+    - text: Migrate from v2
+      link: /guide/migration-v2-to-v3
       variant: minimal
 ---
 
@@ -27,11 +27,11 @@ import { siteMetrics } from '../../data/site-metrics'
 
 <Card as="section" class="s2k-quickstart" glass="subtle">
   <div class="s2k-quickstart__copy">
-    <Badge variant="success">One-command setup</Badge>
-    <h2>Start with the complete, tested stack</h2>
-    <p>Install one package, let the composer detect your project, and keep every framework layer available without manual peer-dependency work.</p>
+    <Badge variant="success">One-line config</Badge>
+    <h2>Start lean and add only what you use</h2>
+    <p>Install the core composer, add the config package for each framework, and let detection keep the configuration file to one line.</p>
   </div>
-  <InstallTabs packages="@santi020k/eslint-config-basic" />
+  <InstallTabs packages={["eslint", "@santi020k/eslint-config-basic"]} />
 </Card>
 
 <section data-animate>

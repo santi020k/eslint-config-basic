@@ -9,6 +9,7 @@
       "@santi020k/eslint-config-basic",
       "@santi020k/eslint-config-core",
       "@santi020k/eslint-config-expo",
+      "@santi020k/eslint-config-full",
       "@santi020k/eslint-config-hono",
       "@santi020k/eslint-config-lite",
       "@santi020k/eslint-config-lit",

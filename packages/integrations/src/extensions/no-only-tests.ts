@@ -2,7 +2,7 @@ import { GLOB_JS_TS } from '@santi020k/eslint-config-core'
 
 import type { TSESLint } from '@typescript-eslint/utils'
 
-import { defineLazyConfig, type FlatPlugin,loadModule } from '../lazy.js'
+import { defineLazyConfig, type FlatPlugin, loadModule } from '../lazy.js'
 
 /**
  * Prevents `test.only` / `describe.only` from being committed to version

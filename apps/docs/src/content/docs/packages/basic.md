@@ -1,105 +1,41 @@
 ---
 title: "Basic Package"
-description: "Package: @santi020k/eslint-config-basic"
+description: "The lean default package for v3."
 ---
 
 Package: [`@santi020k/eslint-config-basic`](https://www.npmjs.com/package/@santi020k/eslint-config-basic)
 
-This is the public package application projects install in v2.
+This is the recommended v3 package. It owns the composer, core JavaScript
+rules, TypeScript support, public options, and the `basic-eslint` CLI.
+Framework and integration packages are optional peers.
 
-Use this package by default. If a project needs a smaller install and is willing to install framework and integration config packages manually, see the [Lite Package](/packages/lite).
+## Minimal usage
 
-## What It Owns
+```js
+export { default } from '@santi020k/eslint-config-basic/recommended'
+```
 
-- The `eslintConfig()` composer used in application `eslint.config.*` files.
-- Bundled framework composition for React, Next.js, Astro, Vue, Svelte, Solid, Angular, NestJS, Hono, Expo, Qwik, Remix, Vite, and Slidev.
-- TypeScript, runtime, settings, strict mode, and optional tooling composition.
-- Public enums and helper types re-exported from `core`.
-- The `basic-eslint` CLI.
-
-## Minimal Example
+## Custom usage
 
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default await defineConfig()
-```
-
-## Explicit Example
-
-```js
-import { defineConfig, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
-
 export default await defineConfig({
-  frameworks: {
-    react: true
-  },
-  libraries: [Library.Tailwind],
-  testing: [Testing.Vitest],
-  tools: [Tool.Prettier],
-  typescript: true
+  frameworks: { react: true },
+  strict: 'ci',
+  typescript: 'strict'
+}, {
+  files: ['scripts/**/*.js'],
+  rules: { 'no-console': 'off' }
 })
 ```
 
-## Auto-Detection
+Install `@santi020k/eslint-config-react` for that example. Install
+`@santi020k/eslint-config-integrations` when using optional libraries, testing,
+formats, tools, or extensions.
 
-`eslintConfig()` detects TypeScript, frameworks, runtime, and supported optional integrations from your project. Detected frameworks are enabled automatically in v2 because their config packages are bundled behind the main package.
+The package has a four-direct-dependency release budget. Its production tree is
+checked independently from the full bundle.
 
-## Advanced Overrides
-
-The `frameworks` object still accepts imported config arrays and factories. This keeps the internal architecture flexible for tests, experiments, and custom wrappers, while app-level configs can stay simple with booleans.
-
-`defineConfig()` also accepts local flat-config entries after the options object, so most projects do not need to wrap the generated config in an array just to add one or two overrides.
-
-```js
-import { defineConfig } from '@santi020k/eslint-config-basic'
-
-export default await defineConfig(
-  {
-    frameworks: { astro: true },
-    typescript: true
-  }, {
-    files: ['**/*.astro'],
-    rules: {
-      '@typescript-eslint/no-unsafe-return': 'off'
-    }
-  }
-)
-```
-
-## CLI
-
-
-```sh title="pnpm"
-pnpm dlx @santi020k/eslint-config-basic init
-pnpm dlx @santi020k/eslint-config-basic update
-```
-
-```sh title="npm"
-npx @santi020k/eslint-config-basic init
-npx @santi020k/eslint-config-basic update
-```
-
-```sh title="yarn"
-yarn dlx @santi020k/eslint-config-basic init
-yarn dlx @santi020k/eslint-config-basic update
-```
-
-```sh title="bun"
-bunx @santi020k/eslint-config-basic init
-bunx @santi020k/eslint-config-basic update
-```
-
-## Repository Links
-
-- Source Package: [packages/basic](https://github.com/santi020k/eslint-config-basic/tree/main/packages/basic)
-- Project Repository: [santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)
-- Author: [santi020k](https://santi020k.com)
-
-## Related Pages
-
-- [Installation](/guide/installation)
-- [Lite Package](/packages/lite)
-- [Configuration](/guide/configuration)
-- [v1 to v2 Migration](/guide/migration-v1-to-v2)
-- [API Reference](/api/)
+See [Installation](/guide/installation/), [Full Package](/packages/full/), and
+[Migrate from v2](/guide/migration-v2-to-v3/).

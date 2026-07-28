@@ -154,14 +154,12 @@ export const mergeOptionalBucket = <T extends string>(
 ): T[] => {
   const featureEntries = getFeatureEntries(options, bucket, true) as T[]
 
-  const combined = (explicitValues !== undefined || featureEntries.length > 0)
-    ? [...(explicitValues ?? []), ...featureEntries]
-    : undefined
+  const combined = (explicitValues !== undefined || featureEntries.length > 0) ?
+    [...(explicitValues ?? []), ...featureEntries] :
+    undefined
 
   return applyFeatureDisables(
-    mergeArrayOption(detectedValues, presetValues, combined, strategy),
-    options,
-    bucket
+    mergeArrayOption(detectedValues, presetValues, combined, strategy), options, bucket
   )
 }
 
@@ -434,7 +432,5 @@ export const patchImportGroups = (
     p => `^${p.replaceAll(/[.*+?^${}()|[\]\\]/g, '\\$&')}(/.*|$)`
   )
 
-  return allConfigs.map(item =>
-    Array.isArray(item) ? item : patchImportGroupsConfig(item, workspacePatterns)
-  )
+  return allConfigs.map(item => Array.isArray(item) ? item : patchImportGroupsConfig(item, workspacePatterns))
 }

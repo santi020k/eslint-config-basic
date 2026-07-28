@@ -46,12 +46,12 @@ describe('CLI scaffolding', () => {
 
     handleInit(cwd)
 
-    expect(readFileSync(join(cwd, 'eslint.config.mjs'), 'utf8')).toContain(
-      'import { eslintConfig } from \'@santi020k/eslint-config-basic\''
+    expect(readFileSync(join(cwd, 'eslint.config.mjs'), 'utf8')).toBe(
+      'export { default } from \'@santi020k/eslint-config-basic/recommended\'\n'
     )
   })
 
-  test('should keep eslint.config.js for ESM projects and include React for Next.js', () => {
+  test('should keep eslint.config.js for ESM projects and defer to runtime detection', () => {
     const cwd = createTempProject({
       dependencies: {
         next: '15.0.0'
@@ -64,10 +64,7 @@ describe('CLI scaffolding', () => {
 
     const config = readFileSync(join(cwd, 'eslint.config.js'), 'utf8')
 
-    expect(config).not.toContain('@santi020k/eslint-config-next')
-    expect(config).not.toContain('@santi020k/eslint-config-react')
-    expect(config).toContain('next: true')
-    expect(config).toContain('react: true')
+    expect(config).toBe('export { default } from \'@santi020k/eslint-config-basic/recommended\'\n')
   })
 
   test('should update an existing config file in place', () => {
@@ -86,8 +83,7 @@ describe('CLI scaffolding', () => {
     const config = readFileSync(join(cwd, 'eslint.config.js'), 'utf8')
 
     expect(config).not.toContain('// old config')
-    expect(config).not.toContain('@santi020k/eslint-config-react')
-    expect(config).toContain('react: true')
+    expect(config).toBe('export { default } from \'@santi020k/eslint-config-basic/recommended\'\n')
   })
 })
 

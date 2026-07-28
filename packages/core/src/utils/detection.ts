@@ -133,18 +133,14 @@ const FRAMEWORK_ENTRIES: FrameworkEntry[] = [
   { deps: ['@remix-run/react', '@remix-run/node'], frameworks: ['remix'], runtime: Runtime.Browser },
   { deps: ['@react-router/dev'], frameworks: ['react-router', 'react'], runtime: Runtime.Browser },
   { deps: ['@tanstack/react-start'], frameworks: ['tanstack-start', 'react'], runtime: Runtime.Universal },
-  { deps: ['@tanstack/solid-start'], frameworks: ['tanstack-start', 'solid'], runtime: Runtime.Universal },
+  { deps: ['@tanstack/solid-start'], frameworks: ['tanstack-start', 'solid'], runtime: Runtime.Universal }
 ]
 
 const CLOUDFLARE_DEPS = ['wrangler', '@cloudflare/workers-types', '@cloudflare/vitest-pool-workers']
 const REACT_EXCLUSIONS = ['next', 'expo', 'react-native', '@react-router/dev', '@remix-run/react', '@tanstack/react-start']
 const VITE_EXCLUSION_FRAMEWORKS = ['astro', 'next', 'nuxt', 'qwik', 'react-router', 'remix', 'slidev', 'tanstack-start']
-
-const isReactStandalone = (allDeps: DependencyMap): boolean =>
-  Boolean(allDeps.react) && !hasAnyDependency(allDeps, REACT_EXCLUSIONS)
-
-const isViteStandalone = (allDeps: DependencyMap, detected: DetectedFrameworkName[]): boolean =>
-  Boolean(allDeps.vite) && !detected.some(fw => VITE_EXCLUSION_FRAMEWORKS.includes(fw))
+const isReactStandalone = (allDeps: DependencyMap): boolean => Boolean(allDeps.react) && !hasAnyDependency(allDeps, REACT_EXCLUSIONS)
+const isViteStandalone = (allDeps: DependencyMap, detected: DetectedFrameworkName[]): boolean => Boolean(allDeps.vite) && !detected.some(fw => VITE_EXCLUSION_FRAMEWORKS.includes(fw))
 
 const detectFrameworks = (
   allDeps: DependencyMap,
@@ -225,7 +221,7 @@ const LIBRARY_DEP_MAPPINGS: [string[], Library][] = [
   [['@tanstack/react-query', '@tanstack/vue-query', '@tanstack/svelte-query', '@tanstack/angular-query', '@tanstack/eslint-plugin-query'], Library.TanstackQuery],
   [['@tanstack/react-router', '@tanstack/vue-router', '@tanstack/eslint-plugin-router'], Library.TanstackRouter],
   [['turbo', 'eslint-plugin-turbo'], Library.Turbo],
-  [['zod', 'eslint-plugin-zod'], Library.Zod],
+  [['zod', 'eslint-plugin-zod'], Library.Zod]
 ]
 
 const detectLibraries = (allDeps: DependencyMap): Library[] => dedupe(
@@ -240,7 +236,7 @@ const TESTING_DEP_MAPPINGS: [string[], Testing][] = [
   [['jest', '@jest/core', 'jest-circus'], Testing.Jest],
   [['@testing-library/jest-dom', 'eslint-plugin-jest-dom'], Testing.JestDom],
   [['cypress'], Testing.Cypress],
-  [['@testing-library/react', '@testing-library/vue', '@testing-library/angular', '@testing-library/svelte', '@testing-library/user-event', '@testing-library/jest-dom', '@testing-library/dom'], Testing.TestingLibrary],
+  [['@testing-library/react', '@testing-library/vue', '@testing-library/angular', '@testing-library/svelte', '@testing-library/user-event', '@testing-library/jest-dom', '@testing-library/dom'], Testing.TestingLibrary]
 ]
 
 const detectTesting = (allDeps: DependencyMap): Testing[] => dedupe(
@@ -262,28 +258,22 @@ const MDX_DEPS = ['@mdx-js/react', '@mdx-js/mdx', '@astrojs/mdx']
 const MARKDOWN_DEPS = ['markdown', 'react-markdown', 'remark-gfm', 'markdownlint-cli2']
 const YAML_SIGNALS = ['pnpm-workspace.yaml', 'cspell.config.yaml', 'cspell.config.yml', '.github/workflows']
 
-const hasGraphqlSignal = (allDeps: DependencyMap, detectRootDir: string): boolean =>
-  hasAnyDependency(allDeps, GRAPHQL_DEPS) ||
+const hasGraphqlSignal = (allDeps: DependencyMap, detectRootDir: string): boolean => hasAnyDependency(allDeps, GRAPHQL_DEPS) ||
   ['schema.graphql', 'schema.gql'].some(f => pathExists(join(detectRootDir, f)))
 
-const hasMdxSignal = (allDeps: DependencyMap, detectRootDir: string): boolean =>
-  hasAnyDependency(allDeps, MDX_DEPS) ||
+const hasMdxSignal = (allDeps: DependencyMap, detectRootDir: string): boolean => hasAnyDependency(allDeps, MDX_DEPS) ||
   hasFileMatching(detectRootDir, f => f.endsWith('.mdx'))
 
-const hasMarkdownSignal = (allDeps: DependencyMap, detectRootDir: string): boolean =>
-  hasAnyDependency(allDeps, MARKDOWN_DEPS) ||
+const hasMarkdownSignal = (allDeps: DependencyMap, detectRootDir: string): boolean => hasAnyDependency(allDeps, MARKDOWN_DEPS) ||
   ['.markdownlint.json', '.markdownlint.yaml'].some(f => pathExists(join(detectRootDir, f))) ||
   hasFileMatching(detectRootDir, f => f.endsWith('.md'))
 
-const hasJsoncSignal = (allDeps: DependencyMap, detectRootDir: string): boolean =>
-  hasAnyDependency(allDeps, ['eslint-plugin-jsonc']) ||
+const hasJsoncSignal = (allDeps: DependencyMap, detectRootDir: string): boolean => hasAnyDependency(allDeps, ['eslint-plugin-jsonc']) ||
   hasFileMatching(detectRootDir, f => f.endsWith('.jsonc'))
 
-const hasYamlSignal = (detectRootDir: string): boolean =>
-  YAML_SIGNALS.some(f => pathExists(join(detectRootDir, f)))
+const hasYamlSignal = (detectRootDir: string): boolean => YAML_SIGNALS.some(f => pathExists(join(detectRootDir, f)))
 
-const hasTomlSignal = (allDeps: DependencyMap, detectRootDir: string): boolean =>
-  hasAnyDependency(allDeps, ['eslint-plugin-toml']) ||
+const hasTomlSignal = (allDeps: DependencyMap, detectRootDir: string): boolean => hasAnyDependency(allDeps, ['eslint-plugin-toml']) ||
   hasFileMatching(detectRootDir, f => f.endsWith('.toml'))
 
 const detectFormats = (allDeps: DependencyMap, detectRootDir: string): Format[] => {
@@ -310,30 +300,24 @@ const PRETTIER_CONFIGS = ['.prettierrc', '.prettierrc.json', '.prettierrc.yaml',
 const CSPELL_CONFIGS = ['cspell.config.yaml', 'cspell.config.yml', 'cspell.config.json']
 const JSDOC_CONFIGS = ['jsdoc.json', 'jsdoc.config.js', 'jsdoc.config.cjs', 'jsdoc.config.mjs']
 
-const hasPrettierConfig = (allDeps: DependencyMap, detectRootDir: string): boolean =>
-  hasAnyDependency(allDeps, ['prettier', 'prettier-plugin-astro', 'prettier-plugin-tailwindcss']) ||
+const hasPrettierConfig = (allDeps: DependencyMap, detectRootDir: string): boolean => hasAnyDependency(allDeps, ['prettier', 'prettier-plugin-astro', 'prettier-plugin-tailwindcss']) ||
   PRETTIER_CONFIGS.some(f => pathExists(join(detectRootDir, f)))
 
-const hasCspellConfig = (allDeps: DependencyMap, detectRootDir: string): boolean =>
-  hasAnyDependency(allDeps, ['@cspell/eslint-plugin']) ||
+const hasCspellConfig = (allDeps: DependencyMap, detectRootDir: string): boolean => hasAnyDependency(allDeps, ['@cspell/eslint-plugin']) ||
   CSPELL_CONFIGS.some(f => pathExists(join(detectRootDir, f)))
 
-const hasJsdocConfig = (allDeps: DependencyMap, detectRootDir: string): boolean =>
-  hasAnyDependency(allDeps, ['jsdoc', 'eslint-plugin-jsdoc']) ||
+const hasJsdocConfig = (allDeps: DependencyMap, detectRootDir: string): boolean => hasAnyDependency(allDeps, ['jsdoc', 'eslint-plugin-jsdoc']) ||
   JSDOC_CONFIGS.some(f => pathExists(join(detectRootDir, f)))
 
-const hasNxConfig = (allDeps: DependencyMap, detectRootDir: string): boolean =>
-  hasAnyDependency(allDeps, ['nx', '@nx/js', '@nx/eslint', '@nrwl/workspace']) ||
+const hasNxConfig = (allDeps: DependencyMap, detectRootDir: string): boolean => hasAnyDependency(allDeps, ['nx', '@nx/js', '@nx/eslint', '@nrwl/workspace']) ||
   pathExists(join(detectRootDir, 'nx.json'))
 
-const hasDockerConfig = (detectRootDir: string): boolean =>
-  pathExists(join(detectRootDir, 'Dockerfile')) ||
+const hasDockerConfig = (detectRootDir: string): boolean => pathExists(join(detectRootDir, 'Dockerfile')) ||
   pathExists(join(detectRootDir, 'docker-compose.yml')) ||
   pathExists(join(detectRootDir, 'docker-compose.yaml')) ||
   hasFileMatching(detectRootDir, f => f === 'Dockerfile' || f.startsWith('Dockerfile.'))
 
-const hasPnpmConfig = (allDeps: DependencyMap, detectRootDir: string): boolean =>
-  hasAnyDependency(allDeps, ['eslint-plugin-pnpm']) ||
+const hasPnpmConfig = (allDeps: DependencyMap, detectRootDir: string): boolean => hasAnyDependency(allDeps, ['eslint-plugin-pnpm']) ||
   pathExists(join(detectRootDir, 'pnpm-workspace.yaml'))
 
 const detectTools = (allDeps: DependencyMap, detectRootDir: string): Tool[] => {
@@ -472,7 +456,9 @@ const resolvePreset = (options: EslintConfigOptions): Preset => {
  * Do not use these in application code.
  */
 export const __detectionInternals = {
-  clearDetectionCache: (): void => { detectionCache.clear(); },
+  clearDetectionCache: (): void => {
+    detectionCache.clear()
+  },
   collectAllDependencies,
   createDefaultOptions,
   createRuntimeSetter,

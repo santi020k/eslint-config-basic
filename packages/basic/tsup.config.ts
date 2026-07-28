@@ -17,7 +17,7 @@ const shared = {
   minify: false,
   skipNodeModulesBundle: true,
   watch: env === 'development',
-  target: 'es2020' as const,
+  target: 'es2022' as const,
   outDir: 'dist',
   external: [/^node:/, /^@santi020k\//],
 }
@@ -30,7 +30,9 @@ export default defineConfig([
       'src/index.ts',
       'src/frameworks.ts',
       'src/integrations.ts',
+      'src/recommended.ts',
       'src/resolvers.ts',
+      'src/tailwind.ts',
     ],
   },
   {

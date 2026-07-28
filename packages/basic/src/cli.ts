@@ -45,8 +45,7 @@ const getFrameworkKeys = (detectedFrameworks?: string[]): string[] => {
   return [...frameworkKeys].sort()
 }
 
-const toPropertyKey = (key: string): string =>
-  /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(key) ? key : `'${key}'`
+const toPropertyKey = (key: string): string => /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(key) ? key : `'${key}'`
 
 const FRAMEWORK_PACKAGE_TO_KEY: Record<string, string> = {
   '@santi020k/eslint-config-angular': 'angular',
@@ -266,40 +265,8 @@ const detectWorkspaceProjects = (cwd: string): string[] => {
   return [...new Set(patterns.flatMap(pattern => expandWorkspacePattern(cwd, pattern)))].sort()
 }
 
-const getDetectionValues = (options: ReturnType<typeof detectProjectOptions>) => ({
-  extensions: options.extensions ?? [],
-  formats: options.formats ?? [],
-  libraries: options.libraries ?? [],
-  runtime: options.runtime ?? 'universal',
-  settings: options.settings ?? [],
-  testing: options.testing ?? [],
-  tools: options.tools ?? [],
-  typescript: options.typescript ?? false
-})
-
 const createConfigContent = (cwd: string): { configContent: string, configPath: string } => {
-  const options = detectProjectOptions(cwd)
-  const values = getDetectionValues(options)
-  const frameworkKeys = getFrameworkKeys(options.detectedFrameworks)
-  const imports: string[] = ['import { eslintConfig } from \'@santi020k/eslint-config-basic\'']
-  const presetLine = options.preset && options.preset !== 'basic' ? `  preset: ${JSON.stringify(options.preset)},\n` : ''
-
-  const configContent = `${imports.join('\n')}
-
-export default await eslintConfig({
-${presetLine}  typescript: ${JSON.stringify(values.typescript)},
-  frameworks: {
-    ${frameworkKeys.map(key => `${toPropertyKey(key)}: true`).join(',\n    ')}
-  },
-  libraries: ${JSON.stringify(values.libraries, null, 2)},
-  testing: ${JSON.stringify(values.testing, null, 2)},
-  formats: ${JSON.stringify(values.formats, null, 2)},
-  tools: ${JSON.stringify(values.tools, null, 2)},
-  extensions: ${JSON.stringify(values.extensions, null, 2)},
-  runtime: ${JSON.stringify(values.runtime)},
-  settings: ${JSON.stringify(values.settings, null, 2)}
-})
-`
+  const configContent = 'export { default } from \'@santi020k/eslint-config-basic/recommended\'\n'
 
   return {
     configContent,
@@ -385,9 +352,9 @@ const printUsage = () => {
     'Commands:',
     '  init            Create eslint.config.js/mjs if missing',
     '  update          Regenerate eslint.config.js/mjs from detection',
-    '  explain         Print detected v2 config inputs',
+    '  explain         Print detected v3 config inputs',
     '  inspect         Print detected inputs and active config features',
-    '  doctor          Check project setup for common v2 adoption issues',
+    '  doctor          Check project setup for common v3 adoption issues',
     '  docs            Generate ESLINT_STANDARDS.md from detection',
     '  migrate         Report v1-to-v2 migration suggestions',
     '  generate-skill  Generate AI agent standards files',
@@ -847,9 +814,9 @@ export const handleDoctor = async (cwd: string = process.cwd(), json = false, li
   const liteInstallPackages = getLiteInstallPackages(summary, declaredDependencies)
   const liteInstallCommand = createInstallCommand(packageManager, liteInstallPackages)
 
-  const hasV1FrameworkImports = configContent
-    ? Object.keys(FRAMEWORK_PACKAGE_TO_KEY).some(packageName => configContent.includes(packageName))
-    : false
+  const hasV1FrameworkImports = configContent ?
+    Object.keys(FRAMEWORK_PACKAGE_TO_KEY).some(packageName => configContent.includes(packageName)) :
+    false
 
   if (liteInstall) {
     if (json) {
@@ -925,7 +892,7 @@ const processConfigMigration = (configPath: string, write: boolean, suggestions:
 
     writeFileSync(configPath, result.content)
 
-    const message = `Rewrote ${basename(configPath)} with v2 framework booleans: ${result.frameworks.join(', ')}. Original backed up to ${basename(backupPath)}.`
+    const message = `Rewrote ${basename(configPath)} with framework booleans: ${result.frameworks.join(', ')}. Original backed up to ${basename(backupPath)}.`
 
     applied.push(message)
 
@@ -945,8 +912,8 @@ export const handleMigrate = (cwd: string = process.cwd(), write = false, json =
     '- Install only @santi020k/eslint-config-basic for the public config API.',
     '- Replace framework imports with bundled booleans such as frameworks: { react: true, next: true }.',
     '- Remove app-level @santi020k/eslint-config-react/next/vue/etc. config package imports.',
-    '- Try eslintConfig() first; v2 auto-detects supported frameworks and integrations.',
-    '- Use basic-eslint explain to review what v2 detects before committing the migration.'
+    '- Try eslintConfig() first; v3 auto-detects supported frameworks and integrations.',
+    '- Use basic-eslint explain to review what v3 detects before committing the migration.'
   ]
 
   const applied = processConfigMigration(configPath, write, suggestions)

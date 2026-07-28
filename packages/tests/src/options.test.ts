@@ -327,7 +327,7 @@ describe('Deep Rule Assertions (#5)', () => {
 
     const tailwindSettings = config.find(entry => entry.name === 'eslint-config-basic/tailwind-settings')
 
-    expect(tailwindSettings?.plugins?.['better-tailwindcss']).toBeDefined()
+    expect(config.some(entry => entry.plugins?.['better-tailwindcss'])).toBe(true)
     expect(tailwindSettings?.settings).toEqual({
       'better-tailwindcss': {
         cwd: process.cwd(),
@@ -355,7 +355,7 @@ describe('Deep Rule Assertions (#5)', () => {
 
     const tailwindSettings = config.find(entry => entry.name === 'eslint-config-basic/tailwind-settings')
 
-    expect(tailwindSettings?.plugins?.['better-tailwindcss']).toBeDefined()
+    expect(config.some(entry => entry.plugins?.['better-tailwindcss'])).toBe(true)
     expect(tailwindSettings?.settings).toEqual({
       'better-tailwindcss': {
         cwd: process.cwd(),

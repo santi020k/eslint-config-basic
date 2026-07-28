@@ -1,0 +1,91 @@
+{
+  "name": "@santi020k/eslint-config-full",
+  "version": "3.0.0",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "description": "Batteries-included ESLint flat config with every supported framework and integration.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": [
+    "./dist/recommended.js"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./recommended": {
+      "types": "./dist/recommended.d.ts",
+      "import": "./dist/recommended.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf dist",
+    "check:exports": "publint",
+    "lint": "eslint . --no-warn-ignored --pass-on-no-patterns",
+    "lint:fix": "eslint . --fix --no-warn-ignored --pass-on-no-patterns",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@santi020k/eslint-config-angular": "workspace:^",
+    "@santi020k/eslint-config-astro": "workspace:^",
+    "@santi020k/eslint-config-basic": "workspace:^",
+    "@santi020k/eslint-config-expo": "workspace:^",
+    "@santi020k/eslint-config-hono": "workspace:^",
+    "@santi020k/eslint-config-integrations": "workspace:^",
+    "@santi020k/eslint-config-lit": "workspace:^",
+    "@santi020k/eslint-config-nest": "workspace:^",
+    "@santi020k/eslint-config-next": "workspace:^",
+    "@santi020k/eslint-config-nuxt": "workspace:^",
+    "@santi020k/eslint-config-preact": "workspace:^",
+    "@santi020k/eslint-config-qwik": "workspace:^",
+    "@santi020k/eslint-config-react": "workspace:^",
+    "@santi020k/eslint-config-react-router": "workspace:^",
+    "@santi020k/eslint-config-remix": "workspace:^",
+    "@santi020k/eslint-config-slidev": "workspace:^",
+    "@santi020k/eslint-config-solid": "workspace:^",
+    "@santi020k/eslint-config-svelte": "workspace:^",
+    "@santi020k/eslint-config-tanstack-start": "workspace:^",
+    "@santi020k/eslint-config-vite": "workspace:^",
+    "@santi020k/eslint-config-vue": "workspace:^"
+  },
+  "devDependencies": {
+    "publint": "catalog:",
+    "tsup": "catalog:",
+    "typescript": "catalog:"
+  },
+  "peerDependencies": {
+    "eslint": "^10.0.0",
+    "typescript": ">=5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": "^20.19.0 || >=22.18.0"
+  },
+  "packageManager": "pnpm@11.6.0+sha512.9a36518224080c6fe5165afdcfe79bfa118c29be703f3f462b1e32efe1e98e47e8750b148e08286250aad4113cc7993ca413c4e2cd447752708c2ee5751bc95f",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/santi020k/eslint-config-basic.git",
+    "directory": "packages/full"
+  },
+  "homepage": "https://eslint.santi020k.com/packages/full",
+  "bugs": {
+    "url": "https://github.com/santi020k/eslint-config-basic/issues"
+  },
+  "author": "santi020k",
+  "license": "MIT"
+}

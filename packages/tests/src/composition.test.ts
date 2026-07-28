@@ -414,10 +414,10 @@ describe('eslintConfig Function', () => {
   })
 
   test('should union explicit values with detected values when optionMergeStrategy is merge', async () => {
-    // Preset.Basic includes Tool.Prettier; explicit Jsdoc must be added, not replace it
+    // Preset.CI includes Tool.Prettier; explicit Jsdoc must be added, not replace it
     const config = await defineConfig({
       autoFrameworks: false,
-      preset: Preset.Basic,
+      preset: Preset.CI,
       tools: [Tool.Jsdoc]
     })
 

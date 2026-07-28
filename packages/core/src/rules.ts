@@ -33,6 +33,7 @@ const APP_LAYER_NAMES =
  * Options for {@link createImportGroups}.
  */
 export interface ImportGroupOptions {
+
   /**
    * Workspace / monorepo package prefixes that should sort with internal code
    * rather than external npm packages.
@@ -80,7 +81,7 @@ export const createImportGroups = (options: ImportGroupOptions = {}): string[][]
     // [2] Node.js built-in modules
     // Modern `node:` prefix is preferred; legacy bare names included for compatibility.
     // e.g.: import fs from 'node:fs', import path from 'path'
-    [`^node:`, `^(${NODE_BUILTINS})(/.*|$)`],
+    ['^node:', `^(${NODE_BUILTINS})(/.*|$)`],
 
     // [3] Framework virtual modules — must precede externals
     // `virtual:icons` and `astro:content` also match ^@?\w, so they go here first.
@@ -228,7 +229,6 @@ export const rules: TSESLint.Linter.RulesRecord = {
   'import/export': 'warn',
   'import/no-duplicates': 'warn',
   indent: 'off',
-  'jsx-a11y/alt-text': 'warn',
   // Node rules
   'n/no-extraneous-import': 'off',
   'n/no-missing-import': 'off',

@@ -268,15 +268,19 @@ const buildLiteIgnoresConfig = (
   useGitignore: boolean,
   optIgnores: EslintConfigOptions['ignores']
 ) => ({
-  defaultIgnores: useDefaultIgnores ? [{
-    ignores: [...DEFAULT_IGNORES, ...(useGeneratedCodeIgnores ? GENERATED_CODE_IGNORES : [])],
-    name: 'eslint-config-lite/default-ignores'
-  } as TSESLint.FlatConfig.Config] : [],
+  defaultIgnores: useDefaultIgnores ?
+    [{
+      ignores: [...DEFAULT_IGNORES, ...(useGeneratedCodeIgnores ? GENERATED_CODE_IGNORES : [])],
+      name: 'eslint-config-lite/default-ignores'
+    } as TSESLint.FlatConfig.Config] :
+    [],
   gitignoreConfig: useGitignore ? gitignore : [] as FlatConfigArray,
-  userIgnores: optIgnores?.length ? [{
-    ignores: optIgnores,
-    name: 'eslint-config-lite/ignores'
-  } as TSESLint.FlatConfig.Config] : []
+  userIgnores: optIgnores?.length ?
+    [{
+      ignores: optIgnores,
+      name: 'eslint-config-lite/ignores'
+    } as TSESLint.FlatConfig.Config] :
+    []
 })
 
 interface LiteDebugInfo {
@@ -350,8 +354,7 @@ const resolveEnabledFrameworks = async (
       .filter((entry): entry is [DetectedFrameworkName, ImportedFramework] => Boolean(entry[1]))
       .map(([name, value]) =>
         // eslint-disable-next-line security/detect-object-injection
-        resolveFramework(name, value, FRAMEWORK_EXTRA_OPTS[name]?.(ctx)).then(config => [name, config] as const)
-      )
+        resolveFramework(name, value, FRAMEWORK_EXTRA_OPTS[name]?.(ctx)).then(config => [name, config] as const))
   )
 
   return Object.fromEntries(entries)
@@ -521,9 +524,7 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
   const shouldDefaultProjectDetection = requestedPreset === Preset.Monorepo
 
   const detected = applyDetectionControls(
-    detectProjectOptions(detectRootDir),
-    detection,
-    { projects: shouldDefaultProjectDetection }
+    detectProjectOptions(detectRootDir), detection, { projects: shouldDefaultProjectDetection }
   )
 
   const { configuredProjects, frameworkDefaults, preset, presetDefaults } = resolveLitePresetMeta(
@@ -533,9 +534,7 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
   const { detectedExtensions, detectedFormats, detectedLibraries, detectedTesting, detectedTools } = resolveLiteBucketDefaults(detected)
 
   const { nextMode, runtime, settings, strict, typescript } = resolveLiteScalars(
-    { nextMode: optNextMode, runtime: optRuntime, settings: optSettings, strict: optStrict, typescript: optTypescript },
-    presetDefaults,
-    detected
+    { nextMode: optNextMode, runtime: optRuntime, settings: optSettings, strict: optStrict, typescript: optTypescript }, presetDefaults, detected
   )
 
   // NOTE: these must be computed unconditionally (not via destructuring defaults)
@@ -584,8 +583,7 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
   )
 
   const frameworkConfigs = await resolveEnabledFrameworks(
-    resolvedFrameworks,
-    { hasReact, hasSolid, hasSvelte, hasVue, runtime }
+    resolvedFrameworks, { hasReact, hasSolid, hasSvelte, hasVue, runtime }
   )
 
   const configs = await buildLiteEslintConfigs({
@@ -608,9 +606,20 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
   })
 
   logLiteDebug({
-    autoFrameworks, detectRootDir, nextMode, optionMergeStrategy, preset,
-    resolvedFrameworks, resolvedTypescript, runtime, tsconfigRootDir,
-    uniqueExtensions, uniqueFormats, uniqueLibraries, uniqueTesting, uniqueTools
+    autoFrameworks,
+    detectRootDir,
+    nextMode,
+    optionMergeStrategy,
+    preset,
+    resolvedFrameworks,
+    resolvedTypescript,
+    runtime,
+    tsconfigRootDir,
+    uniqueExtensions,
+    uniqueFormats,
+    uniqueLibraries,
+    uniqueTesting,
+    uniqueTools
   })
 
   const projectConfigs = await Promise.all(
@@ -632,9 +641,9 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
 
   const allConfigs = [...configs, ...projectConfigs.flat()]
 
-  const patchedConfigs = workspacePrefixes?.length
-    ? patchImportGroups(allConfigs, workspacePrefixes)
-    : allConfigs
+  const patchedConfigs = workspacePrefixes?.length ?
+    patchImportGroups(allConfigs, workspacePrefixes) :
+    allConfigs
 
   return applyStrictMode(patchedConfigs, strict)
 }

@@ -8,7 +8,7 @@ import {
   Tool
 } from '@santi020k/eslint-config-core'
 
-const loadModule = createModuleLoader((specifier) => import.meta.resolve(specifier))
+const loadModule = createModuleLoader(specifier => import.meta.resolve(specifier))
 
 interface IntegrationModule {
   getIntegrationConfigs?: (
@@ -45,8 +45,7 @@ const loadIntegrations = async (): Promise<IntegrationModule> => {
   } catch (error) {
     throw new Error(
       'Unable to load optional package "@santi020k/eslint-config-integrations". ' +
-      'Install it when using lite package integrations, or remove the selected integrations from your eslintConfig options.',
-      { cause: error }
+      'Install it when using lite package integrations, or remove the selected integrations from your eslintConfig options.', { cause: error }
     )
   }
 }

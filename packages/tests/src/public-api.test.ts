@@ -1,3 +1,4 @@
+import * as basicApi from '@santi020k/eslint-config-basic'
 import {
   a11y,
   aiSdk,
@@ -63,7 +64,7 @@ import {
   vitest,
   yaml,
   zod
-} from '@santi020k/eslint-config-basic'
+} from '@santi020k/eslint-config-full'
 import * as integrationExtensions from '@santi020k/eslint-config-integrations/extensions'
 import * as integrationFormats from '@santi020k/eslint-config-integrations/formats'
 import * as integrationLibraries from '@santi020k/eslint-config-integrations/libraries'
@@ -79,6 +80,11 @@ import {
 import { describe, expect, test } from 'vitest'
 
 describe('Public API Re-exports', () => {
+  test('basic keeps integrations out of the lean root API', () => {
+    expect('vitest' in basicApi).toBe(false)
+    expect('tailwind' in basicApi).toBe(false)
+  })
+
   test('should expose defineConfig as the main config factory', async () => {
     expect(defineConfig).toBeDefined()
     expect(Array.isArray(await defineConfig({ detection: false }))).toBe(true)

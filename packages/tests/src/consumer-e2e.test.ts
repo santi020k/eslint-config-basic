@@ -1,5 +1,6 @@
 import { execFileSync } from 'node:child_process'
 import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs'
+import { createRequire } from 'node:module'
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
@@ -7,6 +8,8 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 import { afterEach, describe, expect, test } from 'vitest'
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '../../..')
+const repoRequire = createRequire(join(repoRoot, 'package.json'))
+const eslintEntry = pathToFileURL(repoRequire.resolve('eslint')).href
 const tempDirs: string[] = []
 
 const createConsumerProject = (files: Record<string, string>): string => {
@@ -48,7 +51,9 @@ const writeConsumerConfig = (cwd: string, options: string): void => {
 interface LintResult { errorCount: number, ruleIds: string[], warningCount: number }
 const runExternalLint = (cwd: string, files: string[]): LintResult => {
   const script = `
-    import { ESLint } from 'eslint'
+    import eslintModule from ${JSON.stringify(eslintEntry)}
+
+    const { ESLint } = eslintModule
 
     const eslint = new ESLint({
       cwd: ${JSON.stringify(cwd)},
@@ -68,7 +73,7 @@ const runExternalLint = (cwd: string, files: string[]): LintResult => {
   delete env.VITEST
 
   const output = execFileSync(process.execPath, ['--input-type=module', '--eval', script], {
-    cwd: repoRoot,
+    cwd,
     encoding: 'utf8',
     env
   })
@@ -83,6 +88,24 @@ afterEach(() => {
 })
 
 describe('external consumer e2e', () => {
+  test('loads the zero-config entry from a one-line config file', () => {
+    const cwd = createConsumerProject({
+      'src/index.js': 'const unused = 1\n'
+    })
+    const recommendedEntry = pathToFileURL(
+      join(repoRoot, 'packages/basic/dist/recommended.js')
+    ).href
+
+    writeFileSync(
+      join(cwd, 'eslint.config.mjs'), `export { default } from ${JSON.stringify(recommendedEntry)}\n`
+    )
+
+    const result = runExternalLint(cwd, ['src/index.js'])
+
+    expect(result.errorCount).toBeGreaterThan(0)
+    expect(result.ruleIds).toContain('no-unused-vars')
+  })
+
   test('loads the built package from an external JavaScript project and reports core rules', () => {
     const cwd = createConsumerProject({
       'src/index.js': 'const unused = 1\n'

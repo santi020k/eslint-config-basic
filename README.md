@@ -1,221 +1,136 @@
 # @santi020k/eslint-config-basic
 
-> **Start here:** Install from [npm](https://www.npmjs.com/package/@santi020k/eslint-config-basic) and follow the full guide at **[eslint.santi020k.com](https://eslint.santi020k.com/)** (canonical docs). This README summarizes features and philosophy.
+DX-first ESLint 10 flat config for JavaScript and TypeScript, with auto-detection
+and opt-in framework packages.
 
-[![CI](https://github.com/santi020k/eslint-config-basic/actions/workflows/build.yml/badge.svg)](https://github.com/santi020k/eslint-config-basic/actions/workflows/build.yml)
-[![npm version](https://img.shields.io/npm/v/@santi020k/eslint-config-basic.svg)](https://www.npmjs.com/package/@santi020k/eslint-config-basic)
-[![npm downloads](https://img.shields.io/npm/dm/@santi020k/eslint-config-basic.svg)](https://www.npmjs.com/package/@santi020k/eslint-config-basic)
-[![Docs](https://img.shields.io/badge/docs-Starlight-114d66.svg)](https://eslint.santi020k.com/)
-[![license](https://img.shields.io/npm/l/@santi020k/eslint-config-basic.svg)](https://github.com/santi020k/eslint-config-basic/blob/main/LICENSE)
+[Documentation](https://eslint.santi020k.com/) ·
+[npm](https://www.npmjs.com/package/@santi020k/eslint-config-basic) ·
+[Migration to v3](https://eslint.santi020k.com/guide/migration-v2-to-v3/)
 
-![ESLint toolkit branding](./cover.webp)
+## Quick start
 
-Composable ESLint 10+ flat-config tooling for JavaScript and TypeScript projects, with optional framework packages for React, Next.js, Astro, Vue, Nuxt, Svelte, Solid, Angular, NestJS, Hono, Expo, Preact, Qwik, Remix, React Router, TanStack Start, Lit, Vite, and Slidev.
+Install the lean package and ESLint:
 
-## Canonical Docs
-
-- Docs site: [eslint.santi020k.com](https://eslint.santi020k.com/)
-- Repository: [github.com/santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)
-- Author: [santi020k](https://santi020k.com)
-
-## 🎯 Philosophy: DX Above All
-
-This project follows a **DX-First & Stability-First** mission. We prioritize a seamless developer experience and reliable installations. To achieve this:
-
-- **Handled Versioning**: Core packages like `eslint` and `@eslint/js` are included as hard dependencies. This ensures the config "just works" with tested versions, preventing the dreaded "peer dependency hell."
-- **Modern Baseline**: Built for **ESLint 10** flat config, taking advantage of v10 improvements like per-file config lookup and JSX reference tracking.
-- **Install Size, Explained**: Bundling every framework and plugin behind one install is a deliberate tradeoff — `node_modules` is larger, but versions are vetted together, installs never break on peer conflicts, and lazy loading means unused frameworks are never imported at lint time. For dependency-sensitive projects, `@santi020k/eslint-config-lite` keeps the same composer API while letting you install framework and integration config packages manually.
-
-## Compatibility
-
-| Runtime | Supported Version |
-| :--- | :--- |
-| Node.js | `^20.19.0 \|\| >=22.18.0` |
-| ESLint | `^10.0.0` |
-| TypeScript | `>=5.0.0` when TypeScript linting is enabled |
-
-`@santi020k/eslint-config-basic` owns the tested plugin set for the full install. Use `@santi020k/eslint-config-lite` when you want the same composer API but prefer to install framework and integration config packages yourself.
-
-## ✨ Key Features
-
-- **🎯 Composable & Modular**: Mix and match configurations for different frameworks and tools using a clean, options-based API.
-- **🔍 Deep Auto-Detection**: Automatically detects your project's frameworks, libraries, and tools. Core features like TypeScript and runtime presets are enabled by default if detected.
-- **🧩 Simple Optional Features**: Enable optional configs with enums, matching strings, or a single `features` boolean map.
-- **⚡ Lazy Loading**: Framework-specific configurations are loaded only when needed.
-- **🛡️ Strict Mode**: Opt-in strict mode with three levels — `true`/`'ci'` promotes all warnings to errors; `'pedantic'` additionally enables best-practice rules (`no-console`, `no-alert`, cyclomatic complexity ≤ 10, block nesting ≤ 4).
-- **🌐 Smart Runtime Support**: Built-in support for Node.js, Browser, Worker, Cloudflare, Bun, Deno, and Universal runtimes with appropriate globals and rules.
-- **🧭 Explainable Detection**: `basic-eslint explain` shows exactly which frameworks, runtimes, and integrations were detected.
-- **🏗️ Monorepo Projects**: Scope presets and integrations per workspace folder with the `projects` option, or let `Preset.Monorepo` detect workspace packages.
-- **💅 Prettier Integrated**: Seamlessly integrated with Prettier out of the box for consistent code formatting.
-- **🤖 Agent Skill Generator (Beta)**: Automatically generates tailored ESLint standards for AI agents (Cursor, Claude Code, Copilot, Windsurf, Aider, Gemini, Cline, Roo Code, Kiro, and any `AGENTS.md`-based tool such as Codex CLI or OpenCode) based on your active config. A non-breaking, opt-in feature to boost AI assistance.
-- **🧩 Extensive Plugin Support**: Tailored rules for AI SDK, OpenAI Agents SDK, Mastra, MCP, LangChain, LlamaIndex, Tailwind CSS, Vitest, Testing Library, Storybook, TanStack (Query/Router), and more.
-
-## 🚀 Quick Start
-
-### Installation
-
-```bash
-npm install -D @santi020k/eslint-config-basic
+```sh
+npm install -D eslint @santi020k/eslint-config-basic
 ```
 
-*(No need to install `eslint` manually; it's handled as a dependency of the config to ensure the best DX!)*
+Create `eslint.config.mjs`:
 
-For a smaller opt-in install where you manage framework and integration packages yourself:
-
-```bash
-npm install -D @santi020k/eslint-config-lite eslint
+```js
+export { default } from '@santi020k/eslint-config-basic/recommended'
 ```
 
-### Usage
+That is the complete zero-config setup. It detects JavaScript, TypeScript,
+runtime, and installed optional features from the project where ESLint runs.
 
-Create an `eslint.config.js` in your project root. By default, it will detect your project settings:
+For a framework, add its config package to the same install:
+
+```sh
+npm install -D eslint @santi020k/eslint-config-basic @santi020k/eslint-config-react
+```
+
+For testing, formatting, Tailwind, or other optional tooling, add integrations:
+
+```sh
+npm install -D eslint @santi020k/eslint-config-basic @santi020k/eslint-config-integrations
+```
+
+If install size is not a concern, the batteries-included package keeps the same
+one-line config:
+
+```sh
+npm install -D eslint @santi020k/eslint-config-full
+```
+
+```js
+export { default } from '@santi020k/eslint-config-full/recommended'
+```
+
+## Why v3 changed dependency ownership
+
+`@santi020k/eslint-config-basic` no longer installs every supported framework
+and integration. Its production boundary is limited to the composer, core rules,
+TypeScript support, and a small runtime utility. Frameworks and integrations are
+optional peers loaded only when detected or selected.
+
+This gives projects:
+
+- fewer transitive dependencies and audit paths by default;
+- no Angular, Expo, Storybook, GraphQL, Cypress, or Tailwind packages unless used;
+- actionable errors naming an optional config package when it is missing;
+- a full-package escape hatch for teams that prefer one dependency.
+
+The lean security boundary is checked during release and has direct-dependency
+budgets to prevent accidental growth.
+
+## Custom configuration
+
+Use the named factory when auto-detection needs an override:
 
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default await defineConfig()
+export default await defineConfig({
+  frameworks: { react: true },
+  strict: 'ci',
+  typescript: 'strict'
+})
 ```
 
-Optional integrations are loaded only when you enable them. A Node-only project can use the base config without installing unrelated peer packages such as Storybook, GraphQL, Cypress, or Testing Library.
-
-For a compact manual setup, use the `features` map. Set a key to `true` to enable an optional config, or `false` to disable one that was detected or enabled by a preset:
+Optional integrations require `@santi020k/eslint-config-integrations`:
 
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
 export default await defineConfig({
   features: {
-    boundaries: true,
-    'github-actions': true,
     playwright: true,
     prettier: true,
-    tailwind: true,
-    unicorn: false,
-    zod: true
+    tailwind: true
   }
 })
 ```
 
-Inspect what v2 auto-detected:
+The factory also accepts local flat-config overrides after the options object:
 
-```bash
+```js
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig({}, {
+  files: ['scripts/**/*.js'],
+  rules: { 'no-console': 'off' }
+})
+```
+
+## Package choice
+
+| Package | Use it when | Dependency model |
+| --- | --- | --- |
+| `@santi020k/eslint-config-basic` | Default for applications and libraries | Lean core; frameworks and integrations are optional |
+| `@santi020k/eslint-config-full` | Install simplicity matters more than footprint | Every supported framework and integration |
+| `@santi020k/eslint-config-lite` | Existing v2 lite users | Compatibility path; migrate to `basic` in v3 |
+| Individual framework packages | Custom composition | One framework and its plugin set |
+
+## CLI
+
+```sh
+npx @santi020k/eslint-config-basic init
 npx @santi020k/eslint-config-basic explain
+npx @santi020k/eslint-config-basic doctor
 ```
 
-### Comprehensive Example
+`init` creates the one-line recommended config. `explain` shows detection, and
+`doctor` reports missing optional packages and peer/version problems.
 
-Here is an example with many features activated. Note that many of these are automatically detected if the corresponding packages are in your `package.json`.
+## Compatibility
 
-```js
-import { defineConfig, Extension, Format, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
+- Node.js: `^20.19.0 || >=22.18.0`
+- ESLint: `^10.0.0`
+- TypeScript: `>=5.0.0` when enabled
+- Package managers: npm, pnpm, Yarn, and Bun
 
-export default await defineConfig({
-  extensions: [Extension.Unicorn, Extension.Sonarjs, Extension.Perfectionist, Extension.Boundaries],
+See the [v2 → v3 migration guide](https://eslint.santi020k.com/guide/migration-v2-to-v3/)
+for package moves and copy-paste commands.
 
-  formats: [Format.Mdx, Format.Jsonc, 'graphql'],
-
-  // Frameworks
-  frameworks: {
-    next: true,
-    react: true
-  },
-
-  // Optional integrations
-  libraries: [Library.AiSdk, Library.OpenAiAgents, Library.Mastra, Library.Mcp, Library.Tailwind, 'tanstack-query'],
-  // Strict mode: warnings become errors
-  strict: 'ci',
-  testing: [Testing.Vitest, Testing.Playwright, 'testing-library'],
-  tools: [Tool.Prettier, Tool.Cspell, Tool.GithubActions, Tool.Docker, Tool.Nx],
-  // Explicitly enable strict TypeScript mode (auto-detected if tsconfig.json exists)
-  typescript: 'strict'
-})
-```
-
-### Monorepo Example
-
-```js
-import { defineConfig, Preset, Runtime } from '@santi020k/eslint-config-basic'
-
-export default await defineConfig({
-  preset: Preset.Monorepo,
-  projects: {
-    'apps/api': {
-      preset: Preset.Library,
-      runtime: Runtime.Node
-    },
-    'apps/web': {
-      frameworks: { next: true },
-      preset: Preset.App
-    }
-  }
-})
-```
-
-## Framework packages
-
-- TypeScript: [`@santi020k/eslint-config-typescript`](https://eslint.santi020k.com/frameworks/typescript)
-- React: [`@santi020k/eslint-config-react`](https://eslint.santi020k.com/frameworks/react)
-- Next.js: [`@santi020k/eslint-config-next`](https://eslint.santi020k.com/frameworks/next)
-- Astro: [`@santi020k/eslint-config-astro`](https://eslint.santi020k.com/frameworks/astro)
-- Vue: [`@santi020k/eslint-config-vue`](https://eslint.santi020k.com/frameworks/vue)
-- Nuxt: [`@santi020k/eslint-config-nuxt`](https://eslint.santi020k.com/frameworks/nuxt)
-- Svelte: [`@santi020k/eslint-config-svelte`](https://eslint.santi020k.com/frameworks/svelte)
-- Solid: [`@santi020k/eslint-config-solid`](https://eslint.santi020k.com/frameworks/solid)
-- Angular: [`@santi020k/eslint-config-angular`](https://eslint.santi020k.com/frameworks/angular)
-- NestJS: [`@santi020k/eslint-config-nest`](https://eslint.santi020k.com/frameworks/nest)
-- Hono: [`@santi020k/eslint-config-hono`](https://eslint.santi020k.com/frameworks/hono)
-- Expo: [`@santi020k/eslint-config-expo`](https://eslint.santi020k.com/frameworks/expo)
-- Preact: [`@santi020k/eslint-config-preact`](https://eslint.santi020k.com/frameworks/preact)
-- Qwik: [`@santi020k/eslint-config-qwik`](https://eslint.santi020k.com/frameworks/qwik)
-- Remix: [`@santi020k/eslint-config-remix`](https://eslint.santi020k.com/frameworks/remix)
-- React Router: [`@santi020k/eslint-config-react-router`](https://eslint.santi020k.com/frameworks/react-router)
-- TanStack Start: [`@santi020k/eslint-config-tanstack-start`](https://eslint.santi020k.com/frameworks/tanstack-start)
-- Lit: [`@santi020k/eslint-config-lit`](https://eslint.santi020k.com/frameworks/lit)
-- Vite: [`@santi020k/eslint-config-vite`](https://eslint.santi020k.com/frameworks/vite)
-- Slidev: [`@santi020k/eslint-config-slidev`](https://eslint.santi020k.com/frameworks/slidev)
-
-## 🤖 Agent Skill Generator (Beta)
-
-The Agent Skill Generator is a new, **beta** feature designed to help AI coding assistants (like Cursor, Claude Code, Copilot, Windsurf, Aider, Gemini, Cline, Roo Code, and Kiro) understand and follow your project's specific ESLint standards.
-
-It is **non-breaking** and strictly opt-in. It works by:
-1. Scanning for agent-specific folders (e.g., `.cursor/rules`, `.claude/commands`, `.clinerules`, `.roo/rules`, `.kiro/steering`, `.gemini`).
-2. Analyzing your `eslint.config.js` to see which frameworks and tools are active.
-3. Generating a tailored `.md` or `.mdc` file that explains your coding conventions to the AI.
-
-It also maintains a guarded ESLint-standards section inside an existing root `AGENTS.md` (the open standard read by Codex CLI, OpenCode, Jules, Amp, and others) and inside `.github/copilot-instructions.md`.
-
-To use it, run:
-```bash
-npx @santi020k/eslint-config-basic generate-skill
-```
-
-Useful flags:
-- `--force` overwrites existing skill files.
-- `--check` verifies skill files are up to date without writing (exits 1 when stale — ideal for CI).
-- `--create` scaffolds a root `AGENTS.md` when the project has none.
-
-Generated agent folders (`.claude/`, `.cursor/`, `.kiro/`, etc.) are ignored by the config's default ignore block, so agent artifacts are never linted as source code.
-
-## v2 Migration Helpers
-
-```bash
-npx @santi020k/eslint-config-basic migrate
-npx @santi020k/eslint-config-basic docs
-```
-
-`migrate` reports v1-to-v2 changes, and `docs` generates a project-local `ESLINT_STANDARDS.md` summary.
-
-## Development
-
-```bash
-pnpm install    # Install dependencies
-pnpm run build  # Build all packages
-pnpm run test   # Run integration tests
-pnpm run lint   # Run linting checks
-pnpm run ok     # Run all checks
-```
-
----
-
-*Authored with ❤️ by [santi020k](https://santi020k.com)*
+MIT © [santi020k](https://santi020k.com)

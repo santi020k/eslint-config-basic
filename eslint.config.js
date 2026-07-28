@@ -9,7 +9,7 @@ export default await defineConfig({
   autoFrameworks: false,
   detection: { libraries: false },
   detectRootDir: import.meta.dirname,
-  extensions: [Extension.Boundaries],
+  extensions: [Extension.Boundaries, Extension.Security],
   formats: [Format.Jsonc, Format.Markdown],
   ignores: [
     '**/tsup.config.ts',

@@ -5,7 +5,7 @@ import {
   type Runtime
 } from '@santi020k/eslint-config-core'
 
-const loadModule = createModuleLoader((specifier) => import.meta.resolve(specifier, import.meta.url))
+const loadModule = createModuleLoader(specifier => import.meta.resolve(specifier, import.meta.url))
 
 export type FrameworkFlags = Partial<Record<FrameworkName, true>>
 
@@ -80,8 +80,7 @@ const loadFrameworkConfigInput = (frameworkName: FrameworkName): Promise<Framewo
 
     throw new Error(
       `Unable to load optional framework config "${frameworkName}". ` +
-      `Install "@santi020k/eslint-config-${frameworkName}" or remove that framework from your eslintConfig options.`,
-      { cause: error }
+      `Install "@santi020k/eslint-config-${frameworkName}" or remove that framework from your eslintConfig options.`, { cause: error }
     )
   })
 
@@ -101,10 +100,9 @@ export const getBundledFrameworkConfig = async (
 
 const createBundledFramework = (
   frameworkName: FrameworkName
-): ((options?: FrameworkOptions) => Promise<FlatConfigArray>) =>
-  async (options?: FrameworkOptions): Promise<FlatConfigArray> => getBundledFrameworkConfig(frameworkName, options)
+): ((options?: FrameworkOptions) => Promise<FlatConfigArray>) => async (options?: FrameworkOptions): Promise<FlatConfigArray> => getBundledFrameworkConfig(frameworkName, options)
 
-// Public framework factories (v2 naming: bare framework names).
+// Public framework factories (bare framework names).
 // Each lazily imports its framework package on first call.
 export const angular = createBundledFramework('angular')
 export const astro = createBundledFramework('astro')

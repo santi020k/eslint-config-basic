@@ -127,7 +127,10 @@ See the [Monorepo guide](/guide/monorepo) for a full walk-through.
 
 Enables TypeScript and every bundled optional integration (all tools, libraries, testing frameworks, formats, and extensions). Intended for exploration and auditing — not recommended as a long-term production config because it includes integrations your project may not actually use.
 
-When using `@santi020k/eslint-config-lite`, `Preset.All` requires `@santi020k/eslint-config-integrations` because the preset selects integration configs. Lite projects usually get better dependency control by enabling only the specific integrations they need.
+With the lean `basic` package (or the compatibility `lite` package),
+`Preset.All` requires `@santi020k/eslint-config-integrations` because the preset
+selects integration configs. Modular projects usually get better dependency
+control by enabling only the specific integrations they need.
 
 ```js
 import { defineConfig, Preset } from '@santi020k/eslint-config-basic'

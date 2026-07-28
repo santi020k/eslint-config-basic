@@ -20,7 +20,9 @@ description: "The API reference is generated from the source packages with TypeD
 - `@santi020k/eslint-config-typescript`
 - `@santi020k/eslint-config-integrations`
 
-Framework config packages are still part of the generated internal API reference, but v2 application code should import from `@santi020k/eslint-config-basic`.
+Framework config packages remain part of the generated API reference. In v3,
+application code imports the composer from `@santi020k/eslint-config-basic` and
+installs only the framework packages it uses.
 
 The generated reference is meant to complement the guide pages, not replace them.
 

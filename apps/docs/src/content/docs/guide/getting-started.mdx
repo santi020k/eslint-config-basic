@@ -1,72 +1,68 @@
 ---
 title: "Getting Started"
-description: "This library is a DX-first, composable ESLint 10+ flat-config toolkit for JavaScript and TypeScript teams. In v2, application projects install @santi020k/"
+description: "Install the lean v3 package and create a one-line ESLint config."
 ---
 
 import { Steps } from '@astrojs/starlight/components'
-import { Card, Icon } from '@santi020k/lumen-astro'
 import InstallTabs from '../../../components/InstallTabs.astro'
 
-This library is a DX-first, composable ESLint 10+ flat-config toolkit for JavaScript and TypeScript teams. In v2, application projects install [`@santi020k/eslint-config-basic`](https://www.npmjs.com/package/@santi020k/eslint-config-basic) and enable bundled framework configs directly from it.
+Version 3 makes the smallest dependency graph the default without making the
+configuration verbose.
 
 ## Requirements
 
 - Node.js `^20.19.0 || >=22.18.0`
-- ESLint `10+`
+- ESLint `^10.0.0`
 
-## Setup Process
+## Setup
 
 <Steps>
-1. **Install the Base Package**
+1. **Install the lean package**
 
-    The smallest install is the main package itself. It brings a supported ESLint version automatically.
+    <InstallTabs packages={['eslint', '@santi020k/eslint-config-basic']} />
 
-    <InstallTabs packages="@santi020k/eslint-config-basic" />
+    Add the config package for each detected framework. For React:
 
-2. **Create Configuration File**
+    <InstallTabs packages="@santi020k/eslint-config-react" />
 
-    Create an `eslint.config.mjs` file, or `eslint.config.js` if your project uses `"type": "module"`.
+2. **Create one configuration line**
 
     ```js title="eslint.config.mjs"
-    import { defineConfig } from '@santi020k/eslint-config-basic'
+    export { default } from '@santi020k/eslint-config-basic/recommended'
+    ```
 
-    export default await defineConfig()
+3. **Run ESLint**
+
+    ```sh
+    npx eslint .
     ```
 </Steps>
 
-## Understand the Architecture
+The recommended entry detects TypeScript, frameworks, runtime, and supported
+optional tooling from the working project. Missing optional packages produce an
+error with the exact package name to install.
 
-<div class="s2k-feature-grid">
-  <Card as="article" class="s2k-feature-card">
-    <Icon name="rocket" decorative />
-    <h3>Unified Entry</h3>
-    <p><code>@santi020k/eslint-config-basic</code> is the main package. You no longer need to install framework configs directly.</p>
-  </Card>
-  <Card as="article" class="s2k-feature-card">
-    <Icon name="sliders-horizontal" decorative />
-    <h3>Enum-based Toggles</h3>
-    <p>Integrations can be enabled through enums, matching strings, or the simple <code>features</code> map.</p>
-  </Card>
-  <Card as="article" class="s2k-feature-card">
-    <Icon name="blocks" decorative />
-    <h3>Flexible Versions</h3>
-    <p>ESLint can still be installed manually if you want to pin it yourself, as long as you stay on <code>^10</code>.</p>
-  </Card>
-</div>
+## Prefer one package?
 
-## Pick the Right Starting Point
+Install the full bundle when dependency footprint is less important than a
+single batteries-included dependency:
 
-Use the links below to navigate based on your immediate needs:
+<InstallTabs packages={['eslint', '@santi020k/eslint-config-full']} />
 
-- **[Configuration](/guide/configuration):** When you want to compose the config manually.
-- **[CLI](/guide/cli):** When you want a generated starting file.
-- **[Frameworks](/frameworks/typescript):** When you already know the application stack.
-- **[Integrations](/tooling/overview):** When the main need is integrating Tailwind, Vitest, Prettier, or similar packages.
-- **[Packages](/packages/basic):** When you want to understand how the monorepo is organized.
+```js title="eslint.config.mjs"
+export { default } from '@santi020k/eslint-config-full/recommended'
+```
 
-## Next Steps
+## Customize only when needed
 
-- Continue with **[Detailed Installation](/guide/installation)**
-- Review **[Configuration Options](/guide/configuration)**
-- Use the **[CLI generator](/guide/cli)** if you want scaffolding
-- Jump to **[Framework Guides](/frameworks/typescript)**
+```js title="eslint.config.mjs"
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig({
+  strict: 'ci',
+  typescript: 'strict'
+})
+```
+
+Continue with [Installation](/guide/installation/) for package selection or the
+[v2 to v3 migration guide](/guide/migration-v2-to-v3/) for an existing project.

@@ -13,7 +13,7 @@ This document defines contributor-facing architecture boundaries for the monorep
   - Must stay side-effect free beyond filesystem reads.
 - [resolvers.ts](file:///Users/smith/Projects/santi020k/eslint-config-basic/packages/basic/src/resolvers.ts)
   - Resolves preset defaults and framework inputs.
-  - Accepts bundled framework flags (`true`) and imported config arrays/factories.
+  - Accepts installed optional framework flags (`true`) and imported config arrays/factories.
 - [index.ts](file:///Users/smith/Projects/santi020k/eslint-config-basic/packages/basic/src/index.ts)
   - Composes final flat-config order.
   - Applies merge strategy, framework dependencies, integrations, and strict mode.

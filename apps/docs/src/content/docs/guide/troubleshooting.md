@@ -31,19 +31,20 @@ npx @santi020k/eslint-config-basic explain
 
 ## Install Size
 
-### Why does one package install so many plugins?
+### Why is an optional package missing?
 
-v2 bundles every framework config and integration plugin as regular dependencies of `@santi020k/eslint-config-basic`. This is a deliberate DX-first tradeoff:
+Version 3 keeps `@santi020k/eslint-config-basic` lean. A detected framework must
+have its config package installed, and integration options require
+`@santi020k/eslint-config-integrations`.
 
-- **Vetted together**: every plugin version is tested against the others in CI, so you never resolve peer-dependency conflicts yourself.
-- **Installs never break**: there are no optional peers to forget or mismatch — `pnpm add -D @santi020k/eslint-config-basic` is the whole setup.
-- **Lazy at runtime**: framework packages and integration plugins are imported only when enabled, so unused frameworks cost disk space but zero lint startup time.
+```sh
+pnpm add -D @santi020k/eslint-config-react
+pnpm add -D @santi020k/eslint-config-integrations
+```
 
-If install size is critical (e.g. tight CI caches), the individual `@santi020k/eslint-config-*` packages remain published and can be composed manually.
-
-For projects that still want the main composer API with a smaller default install, use `@santi020k/eslint-config-lite`. It installs the core composer and TypeScript support, but requires you to install framework config packages and `@santi020k/eslint-config-integrations` yourself when you enable those features.
-
-Run `basic-eslint doctor --lite-install` to generate the install command for the current project before switching.
+The thrown error names the missing config package. Run `basic-eslint explain`
+to see why it was detected. If you prefer every supported package to be
+installed together, switch to `@santi020k/eslint-config-full`.
 
 ---
 
@@ -51,7 +52,8 @@ Run `basic-eslint doctor --lite-install` to generate the install command for the
 
 ### A framework I did not enable is being linted
 
-Auto-detection reads `package.json` and enables bundled framework configs for packages it finds. To disable this:
+Auto-detection reads `package.json` and enables installed optional framework
+configs for packages it finds. To disable this:
 
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
@@ -184,13 +186,17 @@ Make sure you are on ESLint extension v3.0+ and add to `.vscode/settings.json`:
 
 ### `eslintConfig is not a function` or import error
 
-In v2, the primary export is `defineConfig`. Both names are exported for compatibility:
+The named v3 factory is `defineConfig`:
 
 ```js
-// v1 style (still works in v2)
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
-// v2 preferred
+export default await defineConfig()
 ```
+
+For zero-config projects, prefer the one-line `/recommended` entry. Integration
+factories must be imported from `@santi020k/eslint-config-integrations` or
+`@santi020k/eslint-config-full`, not from the lean `basic` root.
 
 ### A rule I disabled keeps coming back
 
