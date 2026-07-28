@@ -111,9 +111,6 @@
     },
     "packages/react-router": {
       "ignoreDependencies": ["@santi020k/eslint-config-core"]
-    },
-    "packages/expo": {
-      "ignoreDependencies": ["eslint-config-expo"]
     }
   }
 

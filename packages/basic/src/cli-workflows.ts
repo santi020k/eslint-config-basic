@@ -561,6 +561,23 @@ export const createConfigSnapshot = async (
 
 const sameValue = (left: unknown, right: unknown): boolean => JSON.stringify(left) === JSON.stringify(right)
 
+const getSnapshotValues = (snapshot?: EslintSnapshotFile): Record<string, unknown> => {
+  if (!snapshot) return {}
+
+  return {
+    ...snapshot.rules,
+    ...Object.fromEntries(
+      Object.entries(snapshot.globals).map(([name, value]) => [`globals:${name}`, value])
+    ),
+    ...Object.fromEntries(
+      Object.entries(snapshot.languageOptions)
+        .filter(([, value]) => value !== undefined)
+        .map(([name, value]) => [`languageOptions:${name}`, value])
+    ),
+    ...Object.fromEntries(snapshot.plugins.map(name => [`plugins:${name}`, true]))
+  }
+}
+
 export const diffConfigSnapshots = (
   previous: EslintSnapshot,
   current: EslintSnapshot
@@ -569,13 +586,8 @@ export const diffConfigSnapshots = (
   const diffs: SnapshotDiff[] = []
 
   for (const file of [...files].sort()) {
-    let before: Record<string, unknown> = {}
-    let after: Record<string, unknown> = {}
-
-    if (Object.hasOwn(previous.files, file)) before = previous.files[file].rules
-
-    if (Object.hasOwn(current.files, file)) after = current.files[file].rules
-
+    const before = getSnapshotValues(previous.files[file])
+    const after = getSnapshotValues(current.files[file])
     const added = Object.keys(after).filter(rule => !(rule in before)).sort()
     const removed = Object.keys(before).filter(rule => !(rule in after)).sort()
 
@@ -594,7 +606,7 @@ export const diffConfigSnapshots = (
 
 const outputSnapshotDiff = (diffs: SnapshotDiff[]): void => {
   if (diffs.length === 0) {
-    console.log('✅ Effective ESLint rules match the saved snapshot.')
+    console.log('✅ Effective ESLint configuration matches the saved snapshot.')
 
     return
   }
@@ -620,7 +632,6 @@ export const handleSnapshot = async (
   eslint?: ProjectEslint
 ): Promise<void> => {
   const snapshotPath = resolve(cwd, options.snapshotPath ?? SNAPSHOT_FILENAME)
-  const current = await createConfigSnapshot(cwd, options.files, eslint)
   const previous = readJson(snapshotPath) as EslintSnapshot | null
 
   if (options.check) {
@@ -636,6 +647,8 @@ export const handleSnapshot = async (
       return
     }
 
+    const files = options.files?.length ? options.files : Object.keys(previous.files)
+    const current = await createConfigSnapshot(cwd, files, eslint)
     const diffs = diffConfigSnapshots(previous, current)
 
     if (options.json) console.log(JSON.stringify({ diffs, snapshotPath }, null, 2))
@@ -645,6 +658,8 @@ export const handleSnapshot = async (
 
     return
   }
+
+  const current = await createConfigSnapshot(cwd, options.files, eslint)
 
   writeFileSync(snapshotPath, `${JSON.stringify(current, null, 2)}\n`)
 

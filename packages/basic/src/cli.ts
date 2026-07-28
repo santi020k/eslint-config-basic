@@ -395,6 +395,7 @@ const getProjectSummary = (cwd: string) => {
   const workspaceProjects = detectWorkspaceProjects(cwd)
 
   return {
+    detectedProjects: Object.keys(options.projects ?? {}).sort(),
     extensions: options.extensions ?? [],
     formats: options.formats ?? [],
     frameworks: getFrameworkKeys(options.detectedFrameworks),
@@ -749,7 +750,18 @@ const validateConfigContent = (
     warnings.push('Config still imports v1 framework packages. Run `basic-eslint migrate --write` or switch to framework booleans.')
   }
 
-  if (summary.workspaceProjects.length > 0 && !configContent.includes('projects:')) {
+  const usesBasicComposer = /from\s*['"]@santi020k\/eslint-config-(?:basic|full|lite)['"]/.test(configContent) &&
+    /\b(?:defineConfig|eslintConfig)\s*\(/.test(configContent)
+
+  const hasDetectedProjectScopes = summary.workspaceProjects.every(project => (
+    summary.detectedProjects.includes(project)
+  ))
+
+  if (
+    summary.workspaceProjects.length > 0 &&
+    !configContent.includes('projects:') &&
+    !(usesBasicComposer && hasDetectedProjectScopes)
+  ) {
     warnings.push('Workspace packages were detected, but the root config does not use `projects` scoping.')
   }
 

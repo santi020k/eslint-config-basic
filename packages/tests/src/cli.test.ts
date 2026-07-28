@@ -382,6 +382,35 @@ describe('CLI command UX', () => {
     process.exitCode = undefined
   })
 
+  test('should recognize auto-detected workspace project scoping', async () => {
+    const cwd = createTempProject({
+      name: 'tmp-project',
+      scripts: {
+        lint: 'eslint .'
+      },
+      type: 'module',
+      workspaces: ['packages/*']
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    mkdirSync(join(cwd, 'packages', 'app'), { recursive: true })
+    writeFileSync(join(cwd, 'packages', 'app', 'package.json'), JSON.stringify({ name: 'app' }))
+    writeFileSync(
+      join(cwd, 'eslint.config.js'),
+      'import { defineConfig } from \'@santi020k/eslint-config-basic\'\nexport default defineConfig()\n'
+    )
+
+    await handleDoctor(cwd)
+
+    const output = logSpy.mock.calls.flat().join('\n')
+
+    expect(output).not.toContain(
+      'Workspace packages were detected, but the root config does not use `projects` scoping.'
+    )
+    logSpy.mockRestore()
+    process.exitCode = undefined
+  })
+
   test('should print doctor data as JSON', async () => {
     const cwd = createTempProject({
       name: 'tmp-project',

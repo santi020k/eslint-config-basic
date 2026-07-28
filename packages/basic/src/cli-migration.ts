@@ -172,6 +172,11 @@ const REMOVED_ALIAS_REPLACEMENTS: Record<string, string> = {
   vueConfig: 'vue'
 }
 
+const FACTORY_ALIAS_REPLACEMENTS = new Set([
+  'astroConfig',
+  'gitignore'
+])
+
 const dependencyFields = [
   'dependencies',
   'devDependencies',
@@ -239,9 +244,32 @@ const getDeclaredConfigPackages = (packageJson: Record<string, unknown>): Set<st
   return names
 }
 
-const replaceIdentifier = (content: string, from: string, to: string): string => (
-  content.replaceAll(new RegExp(`\\b${from}\\b`, 'g'), to)
+const getImportRanges = (content: string): { end: number, start: number }[] => (
+  [...content.matchAll(/import\s*\{[\s\S]*?\}\s*from\s*(['"])[^'"]+\1/g)]
+    .map(match => ({
+      end: match.index + match[0].length,
+      start: match.index
+    }))
 )
+
+const replaceIdentifier = (
+  content: string,
+  from: string,
+  to: string,
+  invokeReferences = false
+): string => {
+  const importRanges = invokeReferences ? getImportRanges(content) : []
+
+  return content.replaceAll(new RegExp(`\\b${from}\\b`, 'g'), (match, offset: number) => {
+    if (!invokeReferences) return to
+
+    const isImportSpecifier = importRanges.some(range => offset >= range.start && offset < range.end)
+    const following = content.slice(offset + match.length)
+    const isAlreadyInvoked = /^\s*\(/.test(following)
+
+    return isImportSpecifier || isAlreadyInvoked ? to : `${to}()`
+  })
+}
 
 const splitBasicIntegrationImports = (
   content: string
@@ -330,12 +358,13 @@ export const migrateConfigToV3 = (
   }
 
   for (const [removed, replacement] of Object.entries(REMOVED_ALIAS_REPLACEMENTS)) {
-    const updated = replaceIdentifier(migrated, removed, replacement)
+    const invokeReferences = FACTORY_ALIAS_REPLACEMENTS.has(removed)
+    const updated = replaceIdentifier(migrated, removed, replacement, invokeReferences)
 
     if (updated !== migrated) {
       migrated = updated
 
-      changes.push(`Replaced ${removed} with ${replacement}.`)
+      changes.push(`Replaced ${removed} with ${replacement}${invokeReferences ? '()' : ''}.`)
     }
   }
 
