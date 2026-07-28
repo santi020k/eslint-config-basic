@@ -74,7 +74,7 @@
       "cspell --no-must-find-files"
     ],
     "*.{js,jsx,ts,tsx,md,mdx,vue,svelte,astro}": [
-      "eslint --fix --no-warn-ignored"
+      "eslint --fix --no-warn-ignored --config eslint.config.js"
     ]
   },
   "engines": {

@@ -362,6 +362,7 @@ export const handleProfile = (
 
   const budgetRun = successfulRuns.toSorted((a, b) => a.durationMs - b.durationMs)[0] ?? runs[0]
 
+
   const violations: string[] = successfulRuns.length === 0 ?
     ['ESLint profiling did not produce a successful run.'] :
     []

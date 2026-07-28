@@ -1467,6 +1467,7 @@ const getNumericFlagValue = (argv: string[], flag: string): number | undefined =
 
   if (!present) return undefined
 
+
   if (value === undefined || value.trim() === '' || value.startsWith('--')) return Number.NaN
 
   return Number(value)

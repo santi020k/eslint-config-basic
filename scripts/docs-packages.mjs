@@ -185,6 +185,10 @@ export const packageDocs = [
     docsPath: '/packages/integrations',
     packageName: '@santi020k/eslint-config-integrations',
     packagePath: 'packages/integrations',
+    readmeNotice: [
+      'Deprecated in v3 and scheduled for removal in v4. Install the granular',
+      '`extensions`, `formats`, `libraries`, `testing`, and `tools` packages instead.'
+    ],
     title: 'Integrations package'
   },
   {
@@ -211,10 +215,16 @@ export const packageDocs = [
     title: 'Main package'
   },
   {
-    description: 'Lite composer for projects that install framework and integration config packages manually.',
+    description: 'Compatibility wrapper for projects migrating from the v2 Lite composer.\n' +
+      'Version 3 re-exports the lean `@santi020k/eslint-config-basic` API; new projects\n' +
+      'should install and import the Basic package directly.',
     docsPath: '/packages/lite',
     packageName: '@santi020k/eslint-config-lite',
     packagePath: 'packages/lite',
+    readmeNotice: [
+      'Deprecated in v3 and scheduled for removal in v4. Replace this package with',
+      '`@santi020k/eslint-config-basic`.'
+    ],
     title: 'Lite package'
   }
 ]
