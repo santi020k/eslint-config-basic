@@ -1,4 +1,6 @@
+import * as astroApi from '@santi020k/eslint-config-astro'
 import * as basicApi from '@santi020k/eslint-config-basic'
+import * as coreApi from '@santi020k/eslint-config-core'
 import {
   a11y,
   aiSdk,
@@ -75,6 +77,7 @@ import {
   defineConfig as defineLiteConfig,
   preact as litePreact
 } from '@santi020k/eslint-config-lite'
+import * as typescriptApi from '@santi020k/eslint-config-typescript'
 
 import { describe, expect, test } from 'vitest'
 
@@ -102,6 +105,15 @@ describe('Public API Re-exports', () => {
     ]) {
       expect(removedExport in basicApi).toBe(false)
     }
+  })
+
+  test('leaf packages exclude compatibility exports removed in v3', () => {
+    expect('astroConfig' in astroApi).toBe(false)
+    expect('rules' in astroApi).toBe(false)
+    expect('gitignore' in coreApi).toBe(false)
+    expect('jsConfig' in coreApi).toBe(false)
+    expect('loadModule' in coreApi).toBe(false)
+    expect('tsConfig' in typescriptApi).toBe(false)
   })
 
   test('should expose defineConfig as the main config factory', async () => {

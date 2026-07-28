@@ -1,4 +1,5 @@
-import { join } from 'node:path'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 import {
   applyDetectionControls,
@@ -195,6 +196,50 @@ const applyTestingFileOverrides = (
   })
 }
 
+const ESLINT_CONFIG_FILENAMES = [
+  'eslint.config.js',
+  'eslint.config.cjs',
+  'eslint.config.mjs',
+  'eslint.config.ts',
+  'eslint.config.cts',
+  'eslint.config.mts'
+]
+
+// A direct defineConfig() call retains the eslint.config.* frame in Node's
+// stack. Prefer that location over cwd because editor ESLint processes may be
+// launched from outside the project.
+const findConfigRootFromStack = (stack: string | undefined = new Error().stack): string | undefined => {
+  if (!stack) return undefined
+
+  for (const line of stack.split('\n')) {
+    const configFilename = ESLINT_CONFIG_FILENAMES.find(filename => line.includes(filename))
+
+    if (!configFilename) continue
+
+    const filenameStart = line.indexOf(configFilename)
+    const fileUrlStart = line.lastIndexOf('file://', filenameStart)
+    const windowsPathStart = line.slice(0, filenameStart).search(/[A-Za-z]:[\\/]/)
+    const absolutePathStart = line.indexOf('/')
+    let configPathStart = absolutePathStart
+
+    if (windowsPathStart >= 0) configPathStart = windowsPathStart
+
+    if (fileUrlStart >= 0) configPathStart = fileUrlStart
+
+    try {
+      if (configPathStart < 0) continue
+
+      const configPath = line.slice(configPathStart, filenameStart + configFilename.length)
+
+      return dirname(configPath.startsWith('file:') ? fileURLToPath(configPath) : configPath)
+    } catch {
+      // Ignore malformed or non-local stack URLs and retain the cwd fallback.
+    }
+  }
+
+  return undefined
+}
+
 const resolveConfigSetup = (options: EslintConfigOptions | undefined) => {
   const {
     autoFrameworks = true,
@@ -205,9 +250,11 @@ const resolveConfigSetup = (options: EslintConfigOptions | undefined) => {
     tsconfigRootDir
   } = options ?? {}
 
+  const implicitRootDir = root ?? detectRootDir ?? tsconfigRootDir ?? findConfigRootFromStack()
+
   return {
     autoFrameworks,
-    detectRootDir: root ?? detectRootDir ?? tsconfigRootDir,
+    detectRootDir: implicitRootDir,
     optionMergeStrategy,
     requestedPreset
   }

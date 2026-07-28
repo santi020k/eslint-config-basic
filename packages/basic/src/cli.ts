@@ -265,7 +265,12 @@ const detectWorkspaceProjects = (cwd: string): string[] => {
 }
 
 const createConfigContent = (cwd: string): { configContent: string, configPath: string } => {
-  const configContent = 'export { default } from \'@santi020k/eslint-config-basic/recommended\'\n'
+  const configContent = [
+    'import { defineConfig } from \'@santi020k/eslint-config-basic\'',
+    '',
+    'export default await defineConfig()',
+    ''
+  ].join('\n')
 
   return {
     configContent,

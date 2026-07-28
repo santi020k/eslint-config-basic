@@ -88,6 +88,30 @@ afterEach(() => {
 })
 
 describe('external consumer e2e', () => {
+  test('anchors a direct zero-argument defineConfig call to the config file', async () => {
+    const cwd = createConsumerProject({
+      '.gitignore': 'ignored.ts\n',
+      'src/index.ts': 'const value: string = \'hello\'\nconsole.log(value)\n',
+      'tsconfig.json': JSON.stringify({
+        compilerOptions: { strict: true },
+        include: ['src']
+      })
+    })
+
+    writeConsumerConfig(cwd, '')
+
+    const config = await import(`${pathToFileURL(join(cwd, 'eslint.config.mjs')).href}?test=${Date.now()}`) as {
+      default: { languageOptions?: { parserOptions?: { tsconfigRootDir?: string } }, name?: string }[]
+    }
+    const tsconfigRoot = config.default.find(
+      entry => entry.name === 'eslint-config-basic/tsconfig-root-dir'
+    )?.languageOptions?.parserOptions?.tsconfigRootDir
+
+    expect(tsconfigRoot).toBe(cwd)
+    expect(config.default.some(entry => entry.name === 'eslint-config/gitignore')).toBe(true)
+    expect(config.default.some(entry => entry.name === 'eslint-config-typescript/standard-rules')).toBe(true)
+  })
+
   test('loads the zero-config entry from a one-line config file', () => {
     const cwd = createConsumerProject({
       'src/index.js': 'const unused = 1\n'

@@ -40,7 +40,9 @@ npm install -D @santi020k/eslint-config-integrations
 Then create the smallest supported config:
 
 ```js title="eslint.config.mjs"
-export { default } from '@santi020k/eslint-config-basic/recommended'
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig()
 ```
 
 ## Full install
@@ -56,7 +58,7 @@ dependency and a single tested graph over install size and audit surface.
 
 ## Explicit configuration
 
-Use the named API only when a detected choice needs to be changed:
+Pass options only when a detected choice needs to be changed:
 
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'

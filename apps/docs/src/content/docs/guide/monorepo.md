@@ -14,7 +14,9 @@ ESLint 10 also resolves `eslint.config.*` starting from each linted file's direc
 package; the `full` package already includes it.
 
 ```js title="eslint.config.mjs"
-export { default } from '@santi020k/eslint-config-basic/recommended'
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig()
 ```
 
 Workspaces are inferred from `workspaces`, `pnpm-workspace.yaml`, Turborepo,
@@ -30,8 +32,7 @@ detection:
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
 export default await defineConfig({
-  detection: { projects: false },
-  root: import.meta.dirname
+  detection: { projects: false }
 })
 ```
 
@@ -70,7 +71,8 @@ Each project entry generates ESLint config entries scoped to that folder — rul
 ## Workspace Root
 
 By default each project entry uses its own folder for detection and TypeScript.
-Use one stable root for the workspace config:
+The config directory is the workspace root by default. Set a different root
+only when the config file lives elsewhere:
 
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'

@@ -14,7 +14,7 @@ The main package ships a CLI that can scaffold or refresh the project config.
 - Detects TypeScript, runtime, and supported optional integrations from `package.json`.
 - Chooses `eslint.config.js` for ESM projects.
 - Chooses `eslint.config.mjs` otherwise.
-- Writes the one-line `basic/recommended` config entry.
+- Writes the zero-argument `defineConfig()` setup.
 - Leaves framework selection to runtime detection, so the file stays stable as dependencies change.
 - Prints detected config inputs with `explain`.
 - Prints detected inputs, package-manager details, workspace projects, and active config features with `inspect`.
@@ -41,8 +41,8 @@ basic-eslint --version
 <RunnerTabs args="update" />
 
 
-Use `update` to replace an older generated config with the stable one-line v3
-entry. Adding or removing dependencies no longer requires regenerating it.
+Use `update` to replace an older generated config with the stable zero-argument
+v3 setup. Adding or removing dependencies no longer requires regenerating it.
 
 ## Explain Detection
 
@@ -185,22 +185,24 @@ npx @santi020k/eslint-config-basic generate-skill --check
 - Use `migrate` when moving a v1 config to v2.
 - Use manual editing when the config already has custom organization that you do not want regenerated.
 
-## Why the Generated Config Is One Line
+## Why the Generated Config Needs No Options
 
 The CLI writes:
 
 ```js
-export { default } from '@santi020k/eslint-config-basic/recommended'
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig()
 ```
 
 Detection happens when ESLint loads the config, so dependency changes do not
-make the generated file stale. Switch to the named `defineConfig()` API only
-when the project needs explicit options or local overrides.
+make the generated file stale. Add arguments only when the project needs
+explicit options or local overrides.
 
 ## Notes
 
 - The CLI detects frameworks and `doctor` explains missing optional packages.
-- Generated files delegate to the documented recommended entry.
+- Generated files use the documented zero-argument `defineConfig()` setup.
 - Existing `eslint.config.js` or `eslint.config.mjs` files are respected for updates.
 - The generated file is a starting point that you can still edit by hand.
 

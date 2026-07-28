@@ -25,10 +25,12 @@ configuration verbose.
 
     <InstallTabs packages="@santi020k/eslint-config-react" />
 
-2. **Create one configuration line**
+2. **Create the zero-config setup**
 
     ```js title="eslint.config.mjs"
-    export { default } from '@santi020k/eslint-config-basic/recommended'
+    import { defineConfig } from '@santi020k/eslint-config-basic'
+
+    export default await defineConfig()
     ```
 
 3. **Run ESLint**
@@ -38,9 +40,10 @@ configuration verbose.
     ```
 </Steps>
 
-The recommended entry detects TypeScript, frameworks, runtime, and supported
-optional tooling from the working project. Missing optional packages produce an
-error with the exact package name to install.
+The direct call detects TypeScript, frameworks, runtime, and supported optional
+tooling relative to `eslint.config.mjs`. That remains stable when an editor
+starts ESLint from another working directory. Missing optional packages produce
+an error with the exact package name to install.
 
 ## Prefer one package?
 

@@ -1,3 +1,4 @@
+import { unified } from '@astrojs/markdown-remark'
 import starlight from '@astrojs/starlight'
 import { santi020kShikiThemes } from '@santi020k/theme/shiki'
 import { defineConfig } from 'astro/config'
@@ -377,7 +378,9 @@ export default defineConfig({
     })
   ],
   markdown: {
-    rehypePlugins: [rehypeTableFocusable]
+    processor: unified({
+      rehypePlugins: [rehypeTableFocusable]
+    })
   },
   site
 })

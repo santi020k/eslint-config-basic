@@ -18,11 +18,14 @@ npm install -D eslint @santi020k/eslint-config-basic
 Create `eslint.config.mjs`:
 
 ```js
-export { default } from '@santi020k/eslint-config-basic/recommended'
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig()
 ```
 
 That is the complete zero-config setup. It detects JavaScript, TypeScript,
-runtime, and installed optional features from the project where ESLint runs.
+runtime, and installed optional features relative to the config file, even when
+an editor starts ESLint from another working directory.
 
 For a framework, add its config package to the same install:
 
@@ -104,9 +107,9 @@ export default await defineConfig({}, {
 })
 ```
 
-`root` is the only path most projects need. It anchors dependency detection,
-TypeScript, Tailwind, workspace packages, and `.gitignore` even when an editor
-starts ESLint from another directory.
+Direct calls from `eslint.config.*` automatically anchor dependency detection,
+TypeScript, Tailwind, workspace packages, and `.gitignore` to that file. Set
+`root` only when the intended project root differs from the config directory.
 
 Type-aware projects can keep generated, template, or other out-of-project files
 on syntax-only linting without importing `typescript-eslint`:
@@ -140,7 +143,7 @@ npx @santi020k/eslint-config-basic explain
 npx @santi020k/eslint-config-basic doctor
 ```
 
-`init` creates the one-line recommended config. `explain` shows detection, and
+`init` creates the zero-argument config. `explain` shows detection, and
 `doctor` reports missing optional packages and peer/version problems.
 
 ## Compatibility

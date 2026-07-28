@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "catalog:",
+    "@astrojs/markdown-remark": "catalog:",
     "@astrojs/starlight": "catalog:",
     "@axe-core/playwright": "catalog:",
     "@lhci/cli": "catalog:",

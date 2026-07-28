@@ -194,8 +194,9 @@ import { defineConfig } from '@santi020k/eslint-config-basic'
 export default await defineConfig()
 ```
 
-For zero-config projects, prefer the one-line `/recommended` entry. Integration
-factories must be imported from `@santi020k/eslint-config-integrations` or
+The zero-argument call anchors detection to this config file, independently of
+the ESLint process's working directory. Integration factories must be imported
+from `@santi020k/eslint-config-integrations` or
 `@santi020k/eslint-config-full`, not from the lean `basic` root.
 
 ### A rule I disabled keeps coming back

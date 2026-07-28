@@ -9,7 +9,7 @@ description: "@santi020k/eslint-config-basic"
 
 > `const` **nextConfig**: `TSESLint.FlatConfig.ConfigArray`
 
-Defined in: [next/src/index.ts:12](https://github.com/santi020k/eslint-config-basic/blob/6cebf4cdf151cec08c94d58ab63d0b295946afcf/packages/next/src/index.ts#L12)
+Defined in: [next/src/index.ts:12](https://github.com/santi020k/eslint-config-basic/blob/d07034b2a1105ffc3db245d82883fb153728350b/packages/next/src/index.ts#L12)
 
 Next.js ESLint configuration
 Includes Next.js plugin with core-web-vitals rules
@@ -20,7 +20,7 @@ Includes Next.js plugin with core-web-vitals rules
 
 > `const` **rules**: `TSESLint.Linter.RulesRecord`
 
-Defined in: [next/src/rules.ts:5](https://github.com/santi020k/eslint-config-basic/blob/6cebf4cdf151cec08c94d58ab63d0b295946afcf/packages/next/src/rules.ts#L5)
+Defined in: [next/src/rules.ts:5](https://github.com/santi020k/eslint-config-basic/blob/d07034b2a1105ffc3db245d82883fb153728350b/packages/next/src/rules.ts#L5)
 
 ## References
 

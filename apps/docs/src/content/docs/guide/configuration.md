@@ -9,7 +9,7 @@ packages installed by the project.
 
 ## Mental Model
 
-- Start with the one-line `recommended` entry; use `defineConfig()` when options or overrides are needed.
+- Start with `defineConfig()` and no arguments; add options or overrides only when detection needs help.
 - Let project detection enable TypeScript, frameworks, runtime, and supported tooling.
 - Make options explicit when you want stable, reviewable config.
 - Use booleans for installed optional framework configs.
@@ -44,9 +44,10 @@ export default await defineConfig({
 
 ## Recommended v3 Project Config
 
-For application packages, prefer the one-line recommended entry when no options
-are needed. Use one `defineConfig()` call with a stable detection root when the
-project needs explicit framework, TypeScript, or integration choices. Install
+For application packages, prefer `defineConfig()` with no arguments when no
+options are needed. A direct call automatically uses the directory containing
+`eslint.config.*` as its stable detection root. Add explicit options when the
+project needs specific framework, TypeScript, or integration choices. Install
 `@santi020k/eslint-config-integrations` for the integration options below.
 
 ```js
@@ -68,7 +69,9 @@ export default await defineConfig({
 })
 ```
 
-Use `root: import.meta.dirname` when a package can be linted from more than one working directory. It anchors dependency detection, TypeScript, Tailwind, subprojects, and `.gitignore` to the config file instead of the process working directory.
+Set `root` when the intended project root differs from the directory containing
+`eslint.config.*`. It anchors dependency detection, TypeScript, Tailwind,
+subprojects, and `.gitignore` to that alternate directory.
 
 ## Optional Configs
 

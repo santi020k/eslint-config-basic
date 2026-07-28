@@ -41,13 +41,12 @@ npm install -D eslint@^10 @santi020k/eslint-config-full@^3
 
 ## 2. Simplify the config
 
-The zero-config form can now be one line.
+The zero-config form now needs no options.
 
-```diff
-- import { defineConfig } from '@santi020k/eslint-config-basic'
--
-- export default await defineConfig()
-+ export { default } from '@santi020k/eslint-config-basic/recommended'
+```js
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig()
 ```
 
 For the full bundle:
@@ -97,12 +96,13 @@ introduced. Replace the package name; the composer options remain the same:
 + import { defineConfig } from '@santi020k/eslint-config-basic'
 ```
 
-You can also replace a zero-config file with the one-line recommended entry.
+You can also simplify a zero-config file to the zero-argument `defineConfig()`
+setup.
 
 ## 6. Replace removed compatibility APIs
 
-The v1 aggregate aliases have completed their deprecation period. Import the
-v3 names instead:
+The v1 aliases have completed their deprecation period. When these names were
+imported from Basic, Lite, Core, TypeScript, or Astro, use the v3 replacements:
 
 | Removed | Replacement |
 | :--- | :--- |
@@ -112,6 +112,9 @@ v3 names instead:
 | `jsConfig` | `coreConfig` |
 | `tsConfig` | `typescriptConfig` |
 | `astroConfig` | `createAstroConfig()` |
+| Astro `rules` | `getRules()` |
+| Core `gitignore` | `createGitignoreConfig(rootDir)` |
+| Core `loadModule` | `createModuleLoader(resolver)` |
 
 ## 7. Move Remix to React Router
 
