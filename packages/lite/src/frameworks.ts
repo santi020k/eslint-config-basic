@@ -18,6 +18,7 @@ export interface FrameworkOptions {
   hasSvelte?: boolean
   hasVue?: boolean
   runtime?: Runtime
+  tsconfigRootDir?: string
 }
 
 /**

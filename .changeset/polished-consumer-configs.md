@@ -1,6 +1,7 @@
 ---
 "@santi020k/eslint-config-basic": major
 "@santi020k/eslint-config-core": major
+"@santi020k/eslint-config-lite": major
 "@santi020k/eslint-config-typescript": major
 ---
 

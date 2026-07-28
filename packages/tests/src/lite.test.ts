@@ -1,3 +1,7 @@
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+
 import {
   defineConfig,
   Extension,
@@ -272,6 +276,53 @@ describe('scripts-overrides block', () => {
 })
 
 describe('defineConfig with projects', () => {
+  test('uses root for workspace detection, TypeScript, Tailwind, and gitignore', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'eslint-config-lite-root-'))
+    const projectRoot = join(root, 'apps/web')
+
+    try {
+      mkdirSync(join(projectRoot, 'src'), { recursive: true })
+      writeFileSync(join(root, '.gitignore'), 'root-only.tmp\n')
+      writeFileSync(join(root, 'package.json'), JSON.stringify({
+        devDependencies: { react: 'latest' },
+        name: 'workspace-root'
+      }))
+      writeFileSync(join(root, 'pnpm-workspace.yaml'), "packages:\n  - 'apps/*'\n")
+      writeFileSync(join(projectRoot, 'package.json'), JSON.stringify({
+        dependencies: {
+          astro: 'latest',
+          tailwindcss: 'latest'
+        },
+        name: 'web'
+      }))
+      writeFileSync(join(projectRoot, 'src/index.css'), '@import "tailwindcss";\n')
+      writeFileSync(join(projectRoot, 'tsconfig.json'), '{}')
+
+      const config = await defineConfig({ root })
+      const names = config.map(entry => entry.name)
+      const gitignoreEntry = config.find(entry => entry.name === 'eslint-config/gitignore')
+      const tailwindEntry = config.find(entry =>
+        entry.name === 'eslint-config-lite/tailwind-settings' &&
+        entry.files?.some(pattern => typeof pattern === 'string' && pattern.startsWith('apps/web/'))
+      )
+      const typescriptEntry = config.find(entry =>
+        entry.name === 'eslint-config-lite/tsconfig-root-dir' &&
+        entry.files?.some(pattern => typeof pattern === 'string' && pattern.startsWith('apps/web/'))
+      )
+
+      expect(gitignoreEntry?.ignores).toContain('**/root-only.tmp')
+      expect(names).toContain('astro/recommended')
+      expect(names).not.toContain('eslint-config-react/recommended')
+      expect(tailwindEntry?.settings?.['better-tailwindcss']).toMatchObject({
+        cwd: projectRoot,
+        entryPoint: 'src/index.css'
+      })
+      expect(typescriptEntry?.languageOptions?.parserOptions?.tsconfigRootDir).toBe(projectRoot)
+    } finally {
+      rmSync(root, { force: true, recursive: true })
+    }
+  })
+
   test('scopes sub-project configs to their path', async () => {
     const config = await defineConfig({
       ...baseOptions,

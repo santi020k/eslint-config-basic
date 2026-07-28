@@ -6,6 +6,7 @@ import {
   applyStrictProfileDefaults,
   coreConfig,
   createCoreConfig,
+  createGitignoreConfig,
   DEFAULT_IGNORES,
   type DetectedFrameworkName,
   detectProjectOptions,
@@ -16,7 +17,6 @@ import {
   type Format,
   GENERATED_CODE_IGNORES,
   getStrictMode,
-  gitignore,
   type ImportedFramework,
   Library,
   mergeFrameworkOption,
@@ -113,12 +113,12 @@ export type {
 export {
   coreConfig,
   createCoreConfig,
+  createGitignoreConfig,
   createImportGroups,
   detectProjectOptions,
   Extension,
   Format,
   getGlobalsForRuntime,
-  gitignore,
   hasReactConfig,
   jsConfig,
   Library,
@@ -134,12 +134,52 @@ export {
 // Re-export framework configs
 export { tsConfig, typescriptConfig } from '@santi020k/eslint-config-typescript'
 
-const resolveLiteSetup = (options: EslintConfigOptions | undefined) => ({
-  autoFrameworks: options?.autoFrameworks ?? true,
-  detectRootDir: options?.detectRootDir ?? options?.tsconfigRootDir,
-  optionMergeStrategy: (options?.optionMergeStrategy ?? 'merge'),
-  requestedPreset: options?.preset
-})
+const resolveLiteSetup = (options: EslintConfigOptions | undefined) => {
+  const {
+    autoFrameworks = true,
+    detectRootDir,
+    optionMergeStrategy = 'merge',
+    preset: requestedPreset,
+    root,
+    tsconfigRootDir
+  } = options ?? {}
+
+  return {
+    autoFrameworks,
+    detectRootDir: root ?? detectRootDir ?? tsconfigRootDir,
+    optionMergeStrategy,
+    requestedPreset
+  }
+}
+
+const scopeLiteWorkspaceDetection = (
+  detected: EslintConfigOptions,
+  isWorkspace: boolean
+): EslintConfigOptions => isWorkspace ?
+  {
+    ...detected,
+    detectedFrameworks: [],
+    libraries: [],
+    nextMode: undefined,
+    runtime: Runtime.Universal
+  } :
+  detected
+
+const resolveLiteDetectedOptions = (
+  detectRootDir: string | undefined,
+  detection: EslintConfigOptions['detection'],
+  requestedPreset: EslintConfigOptions['preset']
+): EslintConfigOptions => {
+  const rawDetected = detectProjectOptions(detectRootDir)
+  const isWorkspace = Object.keys(rawDetected.projects ?? {}).length > 0
+
+  const shouldDetectProjects = requestedPreset === Preset.Monorepo ||
+    rawDetected.preset === Preset.Monorepo
+
+  const detected = applyDetectionControls(rawDetected, detection, { projects: shouldDetectProjects })
+
+  return scopeLiteWorkspaceDetection(detected, isWorkspace)
+}
 
 const resolveLitePresetMeta = (
   requestedPreset: EslintConfigOptions['preset'],
@@ -223,8 +263,13 @@ const applyLiteFrameworkImpliedDeps = (
   return result
 }
 
-const buildLiteTailwindResult = (options: TailwindOptions, entryPoint: string | undefined): TailwindOptions => {
+const buildLiteTailwindResult = (
+  options: TailwindOptions,
+  entryPoint: string | undefined,
+  rootDir: string
+): TailwindOptions => {
   const result: TailwindOptions = {
+    cwd: options.cwd ?? rootDir,
     detectComponentClasses: options.detectComponentClasses ?? true
   }
 
@@ -239,6 +284,8 @@ const buildLiteTailwindResult = (options: TailwindOptions, entryPoint: string | 
 
 const hasLiteTailwindSettings = (options: TailwindOptions, entryPoint: string | undefined): boolean => {
   if (entryPoint) return true
+
+  if (options.cwd !== undefined) return true
 
   if (options.detectComponentClasses !== undefined) return true
 
@@ -259,14 +306,15 @@ const resolveLiteTailwindOptions = (
 
   if (!hasLiteTailwindSettings(options, entryPoint)) return undefined
 
-  return buildLiteTailwindResult(options, entryPoint)
+  return buildLiteTailwindResult(options, entryPoint, rootDir)
 }
 
 const buildLiteIgnoresConfig = (
   useDefaultIgnores: boolean,
   useGeneratedCodeIgnores: boolean,
   useGitignore: boolean,
-  optIgnores: EslintConfigOptions['ignores']
+  optIgnores: EslintConfigOptions['ignores'],
+  rootDir: string
 ) => ({
   defaultIgnores: useDefaultIgnores ?
     [{
@@ -274,7 +322,7 @@ const buildLiteIgnoresConfig = (
       name: 'eslint-config-lite/default-ignores'
     } as TSESLint.FlatConfig.Config] :
     [],
-  gitignoreConfig: useGitignore ? gitignore : [] as FlatConfigArray,
+  gitignoreConfig: useGitignore ? createGitignoreConfig(rootDir) : [] as FlatConfigArray,
   userIgnores: optIgnores?.length ?
     [{
       ignores: optIgnores,
@@ -338,8 +386,23 @@ const logLiteDebug = ({
   }, null, 2)}\n`)
 }
 
-const FRAMEWORK_EXTRA_OPTS: Partial<Record<string, (ctx: { hasReact: boolean, hasSolid: boolean, hasSvelte: boolean, hasVue: boolean, runtime: Runtime }) => FrameworkOptions>> = {
-  astro: ctx => ({ hasReact: ctx.hasReact, hasSolid: ctx.hasSolid, hasSvelte: ctx.hasSvelte, hasVue: ctx.hasVue }),
+interface LiteFrameworkResolutionContext {
+  hasReact: boolean
+  hasSolid: boolean
+  hasSvelte: boolean
+  hasVue: boolean
+  runtime: Runtime
+  tsconfigRootDir?: string
+}
+
+const FRAMEWORK_EXTRA_OPTS: Partial<Record<string, (ctx: LiteFrameworkResolutionContext) => FrameworkOptions>> = {
+  astro: ctx => ({
+    hasReact: ctx.hasReact,
+    hasSolid: ctx.hasSolid,
+    hasSvelte: ctx.hasSvelte,
+    hasVue: ctx.hasVue,
+    tsconfigRootDir: ctx.tsconfigRootDir
+  }),
   hono: ctx => ({ runtime: ctx.runtime }),
   slidev: ctx => ({ runtime: ctx.runtime }),
   vite: ctx => ({ runtime: ctx.runtime })
@@ -347,7 +410,7 @@ const FRAMEWORK_EXTRA_OPTS: Partial<Record<string, (ctx: { hasReact: boolean, ha
 
 const resolveEnabledFrameworks = async (
   frameworks: NonNullable<EslintConfigOptions['frameworks']>,
-  ctx: { hasReact: boolean, hasSolid: boolean, hasSvelte: boolean, hasVue: boolean, runtime: Runtime }
+  ctx: LiteFrameworkResolutionContext
 ): Promise<Record<string, FlatConfigArray>> => {
   const entries = await Promise.all(
     (Object.entries(frameworks) as [DetectedFrameworkName, ImportedFramework][])
@@ -521,11 +584,7 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
   } = options ?? {}
 
   const { autoFrameworks, detectRootDir, optionMergeStrategy, requestedPreset } = resolveLiteSetup(options)
-  const shouldDefaultProjectDetection = requestedPreset === Preset.Monorepo
-
-  const detected = applyDetectionControls(
-    detectProjectOptions(detectRootDir), detection, { projects: shouldDefaultProjectDetection }
-  )
+  const detected = resolveLiteDetectedOptions(detectRootDir, detection, requestedPreset)
 
   const { configuredProjects, frameworkDefaults, preset, presetDefaults } = resolveLitePresetMeta(
     requestedPreset, detected, autoFrameworks, optProjects
@@ -579,11 +638,11 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
   const runtimeCoreConfig = runtime === Runtime.Universal ? coreConfig : createCoreConfig(runtime)
 
   const { defaultIgnores, gitignoreConfig, userIgnores } = buildLiteIgnoresConfig(
-    useDefaultIgnores, useGeneratedCodeIgnores, useGitignore, optIgnores
+    useDefaultIgnores, useGeneratedCodeIgnores, useGitignore, optIgnores, rootDir
   )
 
   const frameworkConfigs = await resolveEnabledFrameworks(
-    resolvedFrameworks, { hasReact, hasSolid, hasSvelte, hasVue, runtime }
+    resolvedFrameworks, { hasReact, hasSolid, hasSvelte, hasVue, runtime, tsconfigRootDir }
   )
 
   const configs = await buildLiteEslintConfigs({
@@ -628,11 +687,11 @@ export const eslintConfig = async (options?: EslintConfigOptions): Promise<FlatC
       const inheritedOptions = mergeProjectOptions(projectDefaults ?? {}, projectOptions)
 
       const scopedConfigs = await eslintConfig({
+        autoFrameworks,
         ...inheritedOptions,
-        detectRootDir: inheritedOptions.detectRootDir ?? projectRoot,
         projectDefaults: undefined,
         projects: undefined,
-        tsconfigRootDir: inheritedOptions.tsconfigRootDir ?? projectRoot
+        root: inheritedOptions.root ?? inheritedOptions.detectRootDir ?? projectRoot
       })
 
       return scopedConfigs.map(config => scopeConfigToProject(config, projectPath))

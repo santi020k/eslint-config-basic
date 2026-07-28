@@ -209,12 +209,23 @@ const applyTestingFileOverrides = (
   })
 }
 
-const resolveConfigSetup = (options: EslintConfigOptions | undefined) => ({
-  autoFrameworks: options?.autoFrameworks ?? true,
-  detectRootDir: options?.root ?? options?.detectRootDir ?? options?.tsconfigRootDir,
-  optionMergeStrategy: options?.optionMergeStrategy ?? 'merge',
-  requestedPreset: options?.preset
-})
+const resolveConfigSetup = (options: EslintConfigOptions | undefined) => {
+  const {
+    autoFrameworks = true,
+    detectRootDir,
+    optionMergeStrategy = 'merge',
+    preset: requestedPreset,
+    root,
+    tsconfigRootDir
+  } = options ?? {}
+
+  return {
+    autoFrameworks,
+    detectRootDir: root ?? detectRootDir ?? tsconfigRootDir,
+    optionMergeStrategy,
+    requestedPreset
+  }
+}
 
 const resolveUniqueLibraries = (
   libraries: Library[],
