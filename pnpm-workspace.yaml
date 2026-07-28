@@ -10,8 +10,7 @@ overrides:
   devframe: 0.7.14
   'dompurify@^3.0.0': ^3.4.12
   'esbuild@^0.27.0': ^0.28.1
-  'eslint-plugin-jest>jest': '-'
-  'find-my-way@^9.0.0': ^9.6.1
+  'find-my-way@^9.0.0': ^9.7.0
   'js-yaml@^5.0.0': ^5.2.2
   # brace-expansion only patches CVE-2026-14257 on the 5.x line.
   # A compatibility patch preserves the callable CommonJS export expected by
@@ -19,7 +18,7 @@ overrides:
   brace-expansion: ^5.0.8
   'next>sharp': ^0.35.3
   'postcss@^8.0.0': ^8.5.22
-  'sequelize>uuid': ^11.1.1
+  'sequelize>uuid': ^14.0.1
   'valibot@^1.0.0': ^1.4.2
   'ws@^8.0.0': ^8.21.1
   'yaml@^2.0.0': ^2.8.3
@@ -118,11 +117,11 @@ catalog:
   eslint-plugin-yml: ^3.6.0
   eslint-plugin-zod: ^4.9.0
   globals: ^17.8.0
-  graphql: ^16.14.2
+  graphql: ^17.0.2
   husky: ^9.1.7
   knip: ^6.29.0
   lint-staged: ^17.2.0
-  lighthouse: ^12.8.2
+  lighthouse: ^13.4.1
   nuxt: ^4.5.1
   oxlint: ^1.75.0
   publint: ^0.3.22
@@ -150,11 +149,11 @@ catalog:
 
 catalogs:
   node25:
-    '@types/node': ^25.9.5
+    '@types/node': ^26.1.2
   unicorn65:
-    eslint-plugin-unicorn: ^65.0.1
+    eslint-plugin-unicorn: ^72.0.0
   vite7:
-    vite: ^7.3.6
+    vite: ^8.1.5
 
 allowBuilds:
   '@prisma/engines': true
