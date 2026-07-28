@@ -1,7 +1,4 @@
 // @ts-check
-import { defineConfig, Testing } from '@santi020k/eslint-config-basic'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default await defineConfig({
-  testing: [Testing.Jest],
-  tsconfigRootDir: import.meta.dirname
-})
+export default defineConfig()

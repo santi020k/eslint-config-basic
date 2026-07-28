@@ -7,12 +7,26 @@ Version 3 changes dependency ownership and removes integration factories from
 the lean root export. Rule options and the `defineConfig()` composer remain
 familiar, but this is intentionally a breaking release.
 
-## 1. Choose lean or full
+## 1. Choose a migration path
 
-### Recommended: lean
+### Easy way (recommended): full
 
-Keep `@santi020k/eslint-config-basic`, then add only the framework config
-packages used by the project:
+For the quickest migration, replace the old full-by-default package with the
+explicit full bundle:
+
+```sh
+npm remove @santi020k/eslint-config-basic
+npm install -D eslint@^10 @santi020k/eslint-config-full@^3
+```
+
+This keeps every supported framework and integration available without
+requiring you to map and install each package during the upgrade.
+
+### Complete way: lean
+
+To adopt the v3 modular dependency model fully, keep
+`@santi020k/eslint-config-basic`, then add only the framework config packages
+used by the project:
 
 ```sh
 npm install -D eslint@^10 @santi020k/eslint-config-basic@^3
@@ -30,29 +44,20 @@ If the project enables `libraries`, `testing`, `formats`, `tools`,
 npm install -D @santi020k/eslint-config-integrations@^3
 ```
 
-### Minimal migration effort: full
-
-Replace the old full-by-default package with the explicit full bundle:
-
-```sh
-npm remove @santi020k/eslint-config-basic
-npm install -D eslint@^10 @santi020k/eslint-config-full@^3
-```
-
 ## 2. Simplify the config
 
-The zero-config form now needs no options.
+For the easy full-bundle migration:
+
+```js
+export { default } from '@santi020k/eslint-config-full/recommended'
+```
+
+For the complete lean migration, the zero-config form now needs no options:
 
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
 export default defineConfig()
-```
-
-For the full bundle:
-
-```js
-export { default } from '@santi020k/eslint-config-full/recommended'
 ```
 
 Keep the named factory when options or local overrides are present:

@@ -50,11 +50,11 @@ const selectType = async prompt => {
 
   while (true) {
     const answer = (await prompt.question('Type: ')).trim().toLowerCase()
-    const numericIndex = Number.parseInt(answer, 10) - 1
+    const numericSelection = Number(answer)
 
-    const selected = Number.isNaN(numericIndex) ?
-      TYPES.find(([type]) => type === answer) :
-      TYPES.at(numericIndex)
+    const selected = Number.isInteger(numericSelection) ?
+      TYPES.find((_, index) => index === numericSelection - 1) :
+      TYPES.find(([type]) => type === answer)
 
     if (selected) return selected[0]
 

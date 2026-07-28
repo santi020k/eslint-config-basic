@@ -92,7 +92,6 @@ description: "Acknowledgements for the open source libraries that make @santi020
 
 | Library | What It Provides | Repository |
 | :--- | :--- | :--- |
-| `cross-dirname` | Cross-runtime `__dirname` resolution for the Expo preset. | [JumpLink/cross-dirname](https://github.com/JumpLink/cross-dirname) |
 | `svelte` | Svelte compiler, required by the Svelte preset. | [sveltejs/svelte](https://github.com/sveltejs/svelte) |
 | `storybook` | Storybook core, required by the Storybook integration. | [storybookjs/storybook](https://github.com/storybookjs/storybook) |
 
