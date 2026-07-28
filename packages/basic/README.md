@@ -1,30 +1,11 @@
 # @santi020k/eslint-config-basic
 
-The lean v3 default for ESLint 10 flat config.
+The primary entry point that composes all feature-specific configurations.
 
-```sh
-npm install -D eslint @santi020k/eslint-config-basic
-```
+This package is part of the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.
 
-```js
-import { defineConfig } from '@santi020k/eslint-config-basic'
+- Docs: [Main package](https://eslint.santi020k.com/packages/basic)
+- Repository: [santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)
+- Author: [santi020k](https://santi020k.com)
 
-export default defineConfig()
-```
-
-Add only the framework and granular feature-pack packages that the project
-uses. Choose `@santi020k/eslint-config-full` for the batteries-included
-dependency model.
-
-```sh
-basic-eslint migrate --to v3
-basic-eslint baseline --preset pedantic
-basic-eslint profile
-basic-eslint snapshot
-basic-eslint diff
-basic-eslint generate-skill --with-eslint-mcp
-```
-
-- [Documentation](https://eslint.santi020k.com/)
-- [Migration from v2](https://eslint.santi020k.com/guide/migration-v2-to-v3/)
-- [Repository](https://github.com/santi020k/eslint-config-basic)
+The canonical documentation lives on the Starlight site, so this README intentionally stays short to avoid duplication.

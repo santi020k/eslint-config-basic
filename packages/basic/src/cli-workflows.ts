@@ -30,6 +30,9 @@ export interface ProfileOptions {
   concurrency?: string
   files?: string[]
   json?: boolean
+  maxDurationMs?: number
+  maxRuleTimeMs?: number
+  maxWarnings?: number
 }
 
 export interface SnapshotOptions {
@@ -338,16 +341,61 @@ export const handleProfile = (
   options: ProfileOptions = {},
   runner: CommandRunner = defaultCommandRunner
 ): void => {
+  for (const [name, value] of [
+    ['max-duration', options.maxDurationMs],
+    ['max-rule-time', options.maxRuleTimeMs],
+    ['max-warnings', options.maxWarnings]
+  ] as const) {
+    if (value !== undefined && (!Number.isFinite(value) || value < 0)) {
+      throw new Error(`--${name} must be a non-negative number.`)
+    }
+  }
+
   const files = options.files?.length ? options.files : ['.']
   const concurrencyModes = options.concurrency ? [options.concurrency] : ['off', 'auto']
   const runs = concurrencyModes.map(concurrency => runProfile(cwd, files, concurrency, runner))
-  const successfulRuns = runs.filter(run => run.fatalErrorCount === 0)
+  const successfulRuns = runs.filter(run => run.fatalErrorCount === 0 && run.status < 2)
 
   const recommendation = successfulRuns.length > 0 ?
     successfulRuns.toSorted((a, b) => a.durationMs - b.durationMs)[0].concurrency :
     null
 
+  const budgetRun = successfulRuns.toSorted((a, b) => a.durationMs - b.durationMs)[0] ?? runs[0]
+
+  const violations: string[] = successfulRuns.length === 0 ?
+    ['ESLint profiling did not produce a successful run.'] :
+    []
+
+  if (options.maxDurationMs !== undefined && budgetRun.durationMs > options.maxDurationMs) {
+    violations.push(
+      `Duration ${round(budgetRun.durationMs)}ms exceeds the ${options.maxDurationMs}ms budget.`
+    )
+  }
+
+  if (options.maxWarnings !== undefined && budgetRun.warningCount > options.maxWarnings) {
+    violations.push(
+      `Warnings ${budgetRun.warningCount} exceed the ${options.maxWarnings} warning budget.`
+    )
+  }
+
+  const slowestRule = budgetRun.slowestRules.at(0)
+
+  if (options.maxRuleTimeMs !== undefined && slowestRule && slowestRule.timeMs > options.maxRuleTimeMs) {
+    violations.push(
+      `${slowestRule.rule} took ${round(slowestRule.timeMs)}ms, exceeding the ${options.maxRuleTimeMs}ms rule budget.`
+    )
+  }
+
   const payload = {
+    budget: {
+      limits: {
+        maxDurationMs: options.maxDurationMs ?? null,
+        maxRuleTimeMs: options.maxRuleTimeMs ?? null,
+        maxWarnings: options.maxWarnings ?? null
+      },
+      passed: violations.length === 0,
+      violations
+    },
     recommendation,
     runs: runs.map(run => ({
       ...run,
@@ -360,6 +408,8 @@ export const handleProfile = (
 
   if (options.json) {
     console.log(JSON.stringify(payload, null, 2))
+
+    if (!payload.budget.passed) process.exitCode = 1
 
     return
   }
@@ -374,6 +424,14 @@ export const handleProfile = (
   }
 
   if (payload.recommendation) console.log(`- Recommended concurrency: ${payload.recommendation}`)
+
+  if (!payload.budget.passed) {
+    console.log('Budget violations:')
+
+    for (const violation of payload.budget.violations) console.log(`- ${violation}`)
+
+    process.exitCode = 1
+  }
 
   const slowestRules = payload.runs[0]?.slowestRules ?? []
 

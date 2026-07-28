@@ -5,6 +5,11 @@ import { join, resolve } from 'node:path'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 
 import { generateAgentSkills } from '../../basic/src/agent-skill-generator.js'
+import { handleDoctor, handleInit, runCli } from '../../basic/src/cli.js'
+import {
+  createCompatibilityReport,
+  handleExplainRule
+} from '../../basic/src/cli-advanced.js'
 import {
   handleMigrateV3,
   migrateConfigToV3,
@@ -39,9 +44,19 @@ const writeFakeEslint = (cwd: string): void => {
   mkdirSync(join(packageDir, 'bin'), { recursive: true })
   writeFileSync(
     join(packageDir, 'package.json'),
-    JSON.stringify({ bin: { eslint: './bin/eslint.js' }, name: 'eslint', version: '10.0.0' })
+    JSON.stringify({
+      bin: { eslint: './bin/eslint.js' },
+      main: './index.js',
+      name: 'eslint',
+      version: '10.0.0'
+    })
   )
   writeFileSync(join(packageDir, 'bin', 'eslint.js'), '')
+  writeFileSync(
+    join(packageDir, 'index.js'),
+    'module.exports = { ESLint: class { async calculateConfigForFile() { ' +
+    'return { rules: { "example/rule": [2, { allow: [] }] } } } } }\n'
+  )
 }
 
 const migrationContext = (
@@ -68,6 +83,43 @@ afterEach(() => {
 })
 
 describe('v2 to v3 migration', () => {
+  test.each([
+    {
+      context: migrationContext({ libraries: ['tailwind'] }),
+      fixture: 'lean'
+    },
+    {
+      context: migrationContext({ frameworks: ['react'], typescript: true }),
+      fixture: 'lite-react'
+    },
+    {
+      context: migrationContext({ frameworks: ['react', 'react-router'] }),
+      fixture: 'full-remix'
+    }
+  ])('migrates the real $fixture v2 fixture with recoverable backups', ({ context, fixture }) => {
+    const fixtureRoot = join(import.meta.dirname, '../fixtures/v2-migrations', fixture)
+    const packageJson = JSON.parse(readFileSync(join(fixtureRoot, 'package.json'), 'utf8')) as Record<string, unknown>
+    const cwd = createTempProject(packageJson)
+
+    writeFileSync(
+      join(cwd, 'eslint.config.js'),
+      readFileSync(join(fixtureRoot, 'eslint.config.js'), 'utf8')
+    )
+    vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    handleMigrateV3(cwd, context, { write: true })
+
+    const migratedConfig = readFileSync(join(cwd, 'eslint.config.js'), 'utf8')
+    const migratedPackage = readFileSync(join(cwd, 'package.json'), 'utf8')
+
+    expect(migratedConfig).not.toContain('@santi020k/eslint-config-lite')
+    expect(migratedConfig).not.toContain('remix: true')
+    expect(migratedPackage).not.toContain('@santi020k/eslint-config-remix')
+    expect(migratedPackage).not.toContain('"@santi020k/eslint-config-lite"')
+    expect(existsSync(join(cwd, 'eslint.config.js.v2.bak'))).toBe(true)
+    expect(existsSync(join(cwd, 'package.json.v2.bak'))).toBe(true)
+  })
+
   test('moves removed aliases, Remix, and direct feature factories', () => {
     const input = [
       'import { eslintConfig, tailwind, vitest } from \'@santi020k/eslint-config-basic\'',
@@ -227,6 +279,88 @@ describe('performance profile', () => {
     expect(payload.runs?.[0]?.slowestRules[0]?.rule).toBe('example/slow-rule')
     logSpy.mockRestore()
   })
+
+  test('fails when warning and slow-rule budgets are exceeded', () => {
+    const cwd = createTempProject()
+
+    writeFakeEslint(cwd)
+    const runner: CommandRunner = () => ({
+      status: 0,
+      stderr: '',
+      stdout: JSON.stringify([{
+        errorCount: 0,
+        stats: {
+          times: {
+            passes: [{
+              rules: {
+                'example/slow-rule': { total: 8 }
+              }
+            }]
+          }
+        },
+        warningCount: 2
+      }])
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    handleProfile(cwd, {
+      json: true,
+      maxRuleTimeMs: 5,
+      maxWarnings: 0
+    }, runner)
+
+    const payload = JSON.parse(String(logSpy.mock.calls[0]?.[0])) as {
+      budget: { passed: boolean, violations: string[] }
+    }
+
+    expect(payload.budget.passed).toBe(false)
+    expect(payload.budget.violations).toHaveLength(2)
+    expect(process.exitCode).toBe(1)
+  })
+
+  test('fails closed when ESLint only produces fatal profile runs', () => {
+    const cwd = createTempProject()
+
+    writeFakeEslint(cwd)
+    const runner: CommandRunner = () => ({
+      status: 2,
+      stderr: 'fatal configuration error',
+      stdout: JSON.stringify([{
+        errorCount: 1,
+        fatalErrorCount: 1,
+        warningCount: 0
+      }])
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    handleProfile(cwd, { json: true, maxWarnings: 0 }, runner)
+
+    const payload = JSON.parse(String(logSpy.mock.calls[0]?.[0])) as {
+      budget: { passed: boolean, violations: string[] }
+    }
+
+    expect(payload.budget.passed).toBe(false)
+    expect(payload.budget.violations).toContain(
+      'ESLint profiling did not produce a successful run.'
+    )
+    expect(process.exitCode).toBe(1)
+  })
+
+  test.each([
+    ['--max-duration'],
+    ['--max-rule-time='],
+    ['--max-warnings', '--json']
+  ])('rejects a missing numeric budget value for %s', (...args) => {
+    const cwd = createTempProject()
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+
+    runCli(['node', 'basic-eslint', 'profile', ...args], cwd)
+
+    expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining(
+      'must be a non-negative number'
+    ))
+    expect(process.exitCode).toBe(1)
+  })
 })
 
 describe('configuration snapshots', () => {
@@ -307,5 +441,88 @@ describe('ESLint MCP scaffolding', () => {
 
     expect(result.stale).toContain(join(cwd, '.mcp.json'))
     expect(existsSync(join(cwd, '.mcp.json'))).toBe(false)
+  })
+})
+
+describe('v3 project assistance', () => {
+  test('explains an effective rule and its defining config entry', async () => {
+    const cwd = createTempProject()
+
+    writeFakeEslint(cwd)
+    writeFileSync(
+      join(cwd, 'eslint.config.js'),
+      'export default [{ name: "project/rules", rules: { "example/rule": [2, { allow: [] }] } }]\n'
+    )
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    await handleExplainRule(cwd, {
+      file: 'src/index.ts',
+      json: true,
+      rule: 'example/rule'
+    })
+
+    const payload = JSON.parse(String(logSpy.mock.calls[0]?.[0])) as {
+      enabled: boolean
+      sources: { name: string }[]
+    }
+
+    expect(payload.enabled).toBe(true)
+    expect(payload.sources).toEqual(expect.arrayContaining([
+      expect.objectContaining({ name: 'project/rules' })
+    ]))
+  })
+
+  test('reports declared config packages that are not installed', () => {
+    const cwd = createTempProject({
+      devDependencies: {
+        '@santi020k/eslint-config-basic': '^3.0.0'
+      },
+      name: 'test-project',
+      type: 'module'
+    })
+    const report = createCompatibilityReport(cwd)
+
+    expect(report.compatible).toBe(false)
+    expect(report.packages[0]?.issues).toContain('declared but not installed')
+  })
+
+  test('doctor fix creates safe backups, a config, a lint script, and declarations', async () => {
+    const cwd = createTempProject({ name: 'test-project', type: 'module' })
+
+    vi.spyOn(console, 'log').mockImplementation(() => {})
+    await handleDoctor(cwd, false, false, true)
+
+    const packageJson = JSON.parse(readFileSync(join(cwd, 'package.json'), 'utf8')) as {
+      devDependencies: Record<string, string>
+      scripts: Record<string, string>
+    }
+
+    expect(packageJson.scripts.lint).toBe('eslint .')
+    expect(packageJson.devDependencies.eslint).toBe('^10.0.0')
+    expect(packageJson.devDependencies['@santi020k/eslint-config-basic']).toBe('^3.0.0')
+    expect(existsSync(join(cwd, 'package.json.doctor.bak'))).toBe(true)
+    expect(existsSync(join(cwd, 'eslint.config.js'))).toBe(true)
+  })
+
+  test('init explicit records the detected framework and TypeScript settings', () => {
+    const cwd = createTempProject({
+      dependencies: {
+        react: '^19.0.0'
+      },
+      devDependencies: {
+        typescript: '^5.9.0'
+      },
+      name: 'test-project',
+      type: 'module'
+    })
+
+    writeFileSync(join(cwd, 'tsconfig.json'), '{}\n')
+    vi.spyOn(console, 'log').mockImplementation(() => {})
+    handleInit(cwd, false, true)
+
+    const config = readFileSync(join(cwd, 'eslint.config.js'), 'utf8')
+
+    expect(config).toContain('typescript: true')
+    expect(config).toContain('react: true')
   })
 })

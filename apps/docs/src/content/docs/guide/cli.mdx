@@ -7,7 +7,7 @@ import RunnerTabs from '../../../components/RunnerTabs.astro'
 
 The main package ships a CLI that can scaffold or refresh the project config.
 
-<RunnerTabs args={['init', 'update', 'explain', 'inspect', 'install', 'doctor', 'migrate --to v3', 'baseline', 'profile', 'snapshot', 'diff', 'docs', 'generate-skill']} />
+<RunnerTabs args={['init', 'update', 'explain', 'inspect', 'install', 'doctor', 'compatibility', 'migrate --to v3', 'baseline', 'profile', 'snapshot', 'diff', 'docs', 'generate-skill']} />
 
 ## What It Does
 
@@ -20,6 +20,7 @@ The main package ships a CLI that can scaffold or refresh the project config.
 - Prints detected inputs, package-manager details, workspace projects, and active config features with `inspect`.
 - Installs missing framework and feature-category packages with `install`.
 - Checks common v3 adoption issues with `doctor`.
+- Checks Node, ESLint, TypeScript, and config-package peer compatibility.
 - Generates human-readable `ESLINT_STANDARDS.md` docs with `docs`.
 - Plans and safely applies v1-to-v2 or v2-to-v3 migrations with `migrate`.
 - Creates an incremental-adoption suppression baseline with `baseline`.
@@ -31,6 +32,13 @@ The main package ships a CLI that can scaffold or refresh the project config.
 
 <RunnerTabs args="init" />
 
+The default output remains the smallest zero-config setup. Use `--explicit` when
+the detected TypeScript, framework, and feature selections should be committed
+directly for reproducible configuration:
+
+```sh
+npx @santi020k/eslint-config-basic init --explicit
+```
 
 If the package is already installed locally, the `basic-eslint` bin is also available through your package manager's local binary resolution.
 
@@ -57,6 +65,16 @@ npx @santi020k/eslint-config-basic explain
 ```
 
 It prints the detected TypeScript state, preset, runtime, framework list, optional integrations, tools, and formats.
+
+Pass a rule name and representative file to inspect the final value and every
+loaded flat-config entry that defines it:
+
+```sh
+npx @santi020k/eslint-config-basic explain @typescript-eslint/no-floating-promises --file src/index.ts
+```
+
+The report includes the effective severity and options, defining config names,
+and the likely config package responsible for the rule.
 
 ## Inspect the Active Setup
 
@@ -112,6 +130,15 @@ For Astro projects, `doctor` also reports mismatched Astro Doctor configuration,
 npx @santi020k/eslint-config-basic doctor
 ```
 
+Use `--fix` to create a missing generated config, add a lint script, declare
+detected v3 packages, and rewrite straightforward v1 framework imports.
+`package.json` and rewritten configs receive numbered `.doctor.bak` backups.
+The command changes metadata only; run the package-manager install afterward.
+
+```sh
+npx @santi020k/eslint-config-basic doctor --fix
+```
+
 `doctor --lite-install` is deprecated and remains available only for existing
 v2 lite migrations. It is scheduled for removal in v4. New v3 projects should
 install `basic` plus their detected framework and category packages.
@@ -125,6 +152,19 @@ Use `init --check` when CI should verify that a project already has an ESLint fl
 ```sh
 npx @santi020k/eslint-config-basic init --check
 ```
+
+## Check Compatibility
+
+`compatibility` resolves every declared `@santi020k/eslint-config-*` package
+and checks its Node engine plus ESLint and TypeScript peer ranges:
+
+```sh
+npx @santi020k/eslint-config-basic compatibility
+npx @santi020k/eslint-config-basic compatibility --json
+```
+
+It exits with code 1 for missing or incompatible declared packages, making it
+suitable for dependency-update pull requests.
 
 ## Generate Team Standards
 
@@ -212,6 +252,18 @@ npx @santi020k/eslint-config-basic profile --concurrency 4 --file src
 npx @santi020k/eslint-config-basic profile --json
 ```
 
+Enforce warning and performance budgets in CI:
+
+```sh
+npx @santi020k/eslint-config-basic profile \
+  --max-warnings 0 \
+  --max-duration 15000 \
+  --max-rule-time 2000
+```
+
+The fastest successful concurrency run is evaluated and the command exits with
+code 1 when any configured budget is exceeded.
+
 ## Snapshot Effective Rules
 
 Save the effective rule configuration for representative source, test,
@@ -231,6 +283,26 @@ npx @santi020k/eslint-config-basic diff
 repeatable `--file` options to select explicit representatives,
 `--snapshot-path` to choose another file, or `snapshot --check` for the same
 comparison in CI.
+
+## GitHub Action
+
+The repository root publishes a composite action that installs the consumer,
+checks compatibility, verifies a committed effective-config snapshot, runs the
+normal lint command, and optionally enforces profiler budgets:
+
+```yaml
+- uses: santi020k/eslint-config-basic@v3
+  with:
+    install-command: pnpm install --frozen-lockfile
+    lint-command: pnpm lint
+    profile: "true"
+    max-warnings: "0"
+    max-duration: "15000"
+    max-rule-time: "2000"
+```
+
+Set `snapshot-check: "false"` when the project intentionally does not commit
+`.eslint-config-snapshot.json`.
 
 ## Generate Agent Standards (Beta)
 
@@ -283,8 +355,10 @@ npx @santi020k/eslint-config-basic generate-skill --with-eslint-mcp
 - Use `init` when the project does not have an ESLint flat config yet.
 - Use `update` when the dependency graph changed and you want a fresh generated baseline.
 - Use `explain` when you want to review what auto-detection found.
+- Use `explain <rule> --file <path>` to trace an effective rule value.
 - Use `inspect` when you need machine-readable details or active config feature extraction.
 - Use `doctor` when a v3 setup is not behaving as expected.
+- Use `compatibility` during dependency and runtime upgrades.
 - Use `docs` when you want a committed standards summary.
 - Use `migrate --to v3` when upgrading a v2 consumer.
 - Use `baseline` when enabling strict rules in an established codebase.

@@ -5,7 +5,10 @@ on:
     branches:
       - main
 
-concurrency: ${{ github.workflow }}-${{ github.ref }}
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  # Publishing and tagging must finish as one transaction.
+  cancel-in-progress: false
 
 jobs:
   release:
@@ -50,14 +53,51 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: "true"
 
-      - name: Create umbrella version tag
-        if: steps.changesets.outputs.published == 'true'
+      # Changesets creates one tag per published package. Mirror the Basic package
+      # tag with a shorter vX.Y.Z tag, including when a previous run published
+      # successfully but failed before creating the umbrella tag.
+      - name: Reconcile umbrella version tag
+        shell: bash
         run: |
+          set -eu
+
           VERSION=$(node -p "require('./packages/basic/package.json').version")
+          TAG="v${VERSION}"
+          MAJOR_TAG="v${VERSION%%.*}"
+          PACKAGE_TAG="@santi020k/eslint-config-basic@${VERSION}"
+
+          if ! git rev-parse --verify --quiet "refs/tags/${PACKAGE_TAG}" >/dev/null; then
+            git fetch --quiet origin "refs/tags/${PACKAGE_TAG}:refs/tags/${PACKAGE_TAG}" || true
+          fi
+
+          if ! git rev-parse --verify --quiet "refs/tags/${PACKAGE_TAG}" >/dev/null; then
+            echo "Package tag ${PACKAGE_TAG} does not exist yet; no umbrella tag is needed."
+            exit 0
+          fi
+
+          RELEASE_COMMIT=$(git rev-list -n 1 "${PACKAGE_TAG}")
+
+          if git rev-parse --verify --quiet "refs/tags/${TAG}" >/dev/null; then
+            TAG_COMMIT=$(git rev-list -n 1 "${TAG}")
+            if [[ "${TAG_COMMIT}" != "${RELEASE_COMMIT}" ]]; then
+              echo "::error::Tag ${TAG} already points to ${TAG_COMMIT}, expected ${RELEASE_COMMIT}."
+              exit 1
+            fi
+
+            echo "Tag ${TAG} already points to the release commit; nothing to do."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git tag -a "${TAG}" -m "Release ${TAG}" "${RELEASE_COMMIT}"
+            git push origin "refs/tags/${TAG}"
+            echo "Created umbrella release tag ${TAG}." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -a "v${VERSION}" -m "Release v${VERSION}"
-          git push origin "v${VERSION}"
+          git tag -fa "${MAJOR_TAG}" -m "Release ${MAJOR_TAG}" "${RELEASE_COMMIT}"
+          git push --force origin "refs/tags/${MAJOR_TAG}"
+          echo "Updated rolling action tag ${MAJOR_TAG}." >> "$GITHUB_STEP_SUMMARY"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

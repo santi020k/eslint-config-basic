@@ -487,6 +487,9 @@ const printUsage = () => {
     '  --full          migrate --to v3: choose the batteries-included package',
     '  --json          Print JSON for commands that support it',
     '  --lite-install  doctor: print the deprecated v2 Lite install command (removed in v4)',
+    '  --max-duration  profile: maximum duration in milliseconds',
+    '  --max-rule-time profile: maximum time for the slowest rule in milliseconds',
+    '  --max-warnings  profile: maximum warning count',
     '  --preset        baseline: enable ci or pedantic strict mode before suppressing',
     '  --prune         baseline: remove suppressions for resolved violations',
     '  --snapshot-path snapshot/diff: override .eslint-config-snapshot.json',
@@ -1255,6 +1258,9 @@ const dispatchCommand = (
     hasPrune: boolean
     hasWrite: boolean
     hasWithEslintMcp: boolean
+    maxDurationMs?: number
+    maxRuleTimeMs?: number
+    maxWarnings?: number
     preset?: string
     rule?: string
     snapshotPath?: string
@@ -1392,7 +1398,10 @@ const dispatchCommand = (
         handleProfile(cwd, {
           concurrency: flags.concurrency,
           files: flags.files,
-          json: flags.hasJson
+          json: flags.hasJson,
+          maxDurationMs: flags.maxDurationMs,
+          maxRuleTimeMs: flags.maxRuleTimeMs,
+          maxWarnings: flags.maxWarnings
         })
       } catch (error) {
         console.error(`❌ Failed to profile ESLint: ${String(error)}`)
@@ -1452,6 +1461,17 @@ const getFlagValues = (argv: string[], flag: string): string[] => argv.flatMap((
   return []
 })
 
+const getNumericFlagValue = (argv: string[], flag: string): number | undefined => {
+  const value = getFlagValue(argv, flag)
+  const present = argv.includes(flag) || argv.some(argument => argument.startsWith(`${flag}=`))
+
+  if (!present) return undefined
+
+  if (value === undefined || value.trim() === '' || value.startsWith('--')) return Number.NaN
+
+  return Number(value)
+}
+
 export const runCli = (argv: string[] = process.argv, cwd: string = process.cwd()) => {
   const command = argv[2]
   const isHelp = command === '--help' || command === '-h'
@@ -1484,6 +1504,9 @@ export const runCli = (argv: string[] = process.argv, cwd: string = process.cwd(
     hasPrune: argv.includes('--prune'),
     hasWithEslintMcp: argv.includes('--with-eslint-mcp'),
     hasWrite: argv.includes('--write'),
+    maxDurationMs: getNumericFlagValue(argv, '--max-duration'),
+    maxRuleTimeMs: getNumericFlagValue(argv, '--max-rule-time'),
+    maxWarnings: getNumericFlagValue(argv, '--max-warnings'),
     preset: getFlagValue(argv, '--preset'),
     rule: argv[3] && !argv[3].startsWith('-') ? argv[3] : undefined,
     snapshotPath: getFlagValue(argv, '--snapshot-path'),
