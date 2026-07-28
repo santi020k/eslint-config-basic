@@ -18,11 +18,16 @@ const reactHooksRecommended = pluginReactHooks.configs.flat['recommended-latest'
 }
 
 const compilerRules = Object.fromEntries(
-  Object.entries(reactHooksRecommended.rules).filter(([ruleName]) => {
-    const equivalentRuleName = ruleName.replace(/^react-hooks\//, '@eslint-react/')
+  Object.entries(reactHooksRecommended.rules)
+    .filter(([ruleName]) => {
+      const equivalentRuleName = ruleName.replace(/^react-hooks\//, '@eslint-react/')
 
-    return !(equivalentRuleName in recommended.rules)
-  })
+      return !(equivalentRuleName in recommended.rules)
+    })
+    .map(([ruleName, ruleConfig]) => [
+      ruleName,
+      Array.isArray(ruleConfig) ? ['warn', ...ruleConfig.slice(1)] : 'warn'
+    ])
 ) as TSESLint.FlatConfig.Rules
 
 const languageOptions: TSESLint.FlatConfig.LanguageOptions = {

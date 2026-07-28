@@ -82,8 +82,8 @@ exports[`Config Snapshots — Critical Rule Entries > react critical rule entrie
   "@eslint-react/exhaustive-deps": "warn",
   "@eslint-react/no-missing-key": "error",
   "@eslint-react/rules-of-hooks": "error",
-  "react-hooks/config": "error",
-  "react-hooks/immutability": "error",
+  "react-hooks/config": "warn",
+  "react-hooks/immutability": "warn",
 }
 `;
 

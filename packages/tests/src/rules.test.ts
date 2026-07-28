@@ -74,8 +74,8 @@ describe('React Rules', () => {
   })
 
   test('should include official React Compiler diagnostics without duplicate hook rules', () => {
-    expect(getEffectiveRuleValue(reactConfig, 'react-hooks/config')).toBe('error')
-    expect(getEffectiveRuleValue(reactConfig, 'react-hooks/immutability')).toBe('error')
+    expect(getEffectiveRuleValue(reactConfig, 'react-hooks/config')).toBe('warn')
+    expect(getEffectiveRuleValue(reactConfig, 'react-hooks/immutability')).toBe('warn')
     expect(getEffectiveRuleValue(reactConfig, 'react-hooks/exhaustive-deps')).toBeUndefined()
   })
 })
