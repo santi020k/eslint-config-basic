@@ -397,6 +397,7 @@ overrides:
   js-yaml@^4.0.0: ^4.3.0
   js-yaml@^5.0.0: ^5.2.2
   minimatch@^3.0.0>brace-expansion: ^1.1.12
+  minimatch@^5.0.0>brace-expansion: ^2.0.2
   minimatch@^9.0.0>brace-expansion: ^2.0.2
   minimatch@^10.0.0>brace-expansion: ^5.0.8
   next@^16.0.0: ^16.2.11

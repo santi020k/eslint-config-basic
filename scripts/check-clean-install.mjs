@@ -12,7 +12,7 @@ const ignoredDirectories = new Set(['.git', '.pnpm-store', 'dist', 'node_modules
 const getExpectedBraceMajor = (minimatchMajor) => {
   if (minimatchMajor >= 10) return 5
 
-  if (minimatchMajor >= 9) return 2
+  if (minimatchMajor >= 5) return 2
 
   return 1
 }

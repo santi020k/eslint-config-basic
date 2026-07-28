@@ -1,6 +1,6 @@
+export { getIntegrationConfigs, getPrettierConfig } from './compose.js'
 export * from './extensions.js'
 export * from './formats.js'
 export * from './libraries.js'
 export * from './testing.js'
 export * from './tools.js'
-export { getIntegrationConfigs, getPrettierConfig } from './compose.js'

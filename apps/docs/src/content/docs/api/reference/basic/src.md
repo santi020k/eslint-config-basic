@@ -9,7 +9,7 @@ description: "@santi020k/eslint-config-basic"
 
 > `const` **angular**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:106](https://github.com/santi020k/eslint-config-basic/blob/834bcc650d282b691bfa356ea9834fddf330e673/packages/basic/src/frameworks.ts#L106)
+Defined in: [basic/src/frameworks.ts:106](https://github.com/santi020k/eslint-config-basic/blob/3b8ba4d23ba7114d9e2d1fca98d4c4b3989f224d/packages/basic/src/frameworks.ts#L106)
 
 #### Parameters
 
@@ -27,7 +27,7 @@ Defined in: [basic/src/frameworks.ts:106](https://github.com/santi020k/eslint-co
 
 > `const` **astro**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:107](https://github.com/santi020k/eslint-config-basic/blob/834bcc650d282b691bfa356ea9834fddf330e673/packages/basic/src/frameworks.ts#L107)
+Defined in: [basic/src/frameworks.ts:107](https://github.com/santi020k/eslint-config-basic/blob/3b8ba4d23ba7114d9e2d1fca98d4c4b3989f224d/packages/basic/src/frameworks.ts#L107)
 
 #### Parameters
 
@@ -45,7 +45,7 @@ Defined in: [basic/src/frameworks.ts:107](https://github.com/santi020k/eslint-co
 
 > `const` **expo**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:108](https://github.com/santi020k/eslint-config-basic/blob/834bcc650d282b691bfa356ea9834fddf330e673/packages/basic/src/frameworks.ts#L108)
+Defined in: [basic/src/frameworks.ts:108](https://github.com/santi020k/eslint-config-basic/blob/3b8ba4d23ba7114d9e2d1fca98d4c4b3989f224d/packages/basic/src/frameworks.ts#L108)
 
 #### Parameters
 
@@ -63,7 +63,7 @@ Defined in: [basic/src/frameworks.ts:108](https://github.com/santi020k/eslint-co
 
 > `const` **hono**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:109](https://github.com/santi020k/eslint-config-basic/blob/834bcc650d282b691bfa356ea9834fddf330e673/packages/basic/src/frameworks.ts#L109)
+Defined in: [basic/src/frameworks.ts:109](https://github.com/santi020k/eslint-config-basic/blob/3b8ba4d23ba7114d9e2d1fca98d4c4b3989f224d/packages/basic/src/frameworks.ts#L109)
 
 #### Parameters
 
@@ -81,7 +81,7 @@ Defined in: [basic/src/frameworks.ts:109](https://github.com/santi020k/eslint-co
 
 > `const` **lit**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:110](https://github.com/santi020k/eslint-config-basic/blob/834bcc650d282b691bfa356ea9834fddf330e673/packages/basic/src/frameworks.ts#L110)
+Defined in: [basic/src/frameworks.ts:110](https://github.com/santi020k/eslint-config-basic/blob/3b8ba4d23ba7114d9e2d1fca98d4c4b3989f224d/packages/basic/src/frameworks.ts#L110)
 
 #### Parameters
 
@@ -99,7 +99,7 @@ Defined in: [basic/src/frameworks.ts:110](https://github.com/santi020k/eslint-co
 
 > `const` **nest**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:111](https://github.com/santi020k/eslint-config-basic/blob/834bcc650d282b691bfa356ea9834fddf330e673/packages/basic/src/frameworks.ts#L111)
+Defined in: [basic/src/frameworks.ts:111](https://github.com/santi020k/eslint-config-basic/blob/3b8ba4d23ba7114d9e2d1fca98d4c4b3989f224d/packages/basic/src/frameworks.ts#L111)
 
 #### Parameters
 
@@ -117,7 +117,7 @@ Defined in: [basic/src/frameworks.ts:111](https://github.com/santi020k/eslint-co
 
 > `const` **next**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:112](https://github.com/santi020k/eslint-config-basic/blob/834bcc650d282b691bfa356ea9834fddf330e673/packages/basic/src/frameworks.ts#L112)
+Defined in: [basic/src/frameworks.ts:112](https://github.com/santi020k/eslint-config-basic/blob/3b8ba4d23ba7114d9e2d1fca98d4c4b3989f224d/packages/basic/src/frameworks.ts#L112)
 
 #### Parameters
 
@@ -135,7 +135,7 @@ Defined in: [basic/src/frameworks.ts:112](https://github.com/santi020k/eslint-co
 
 > `const` **nuxt**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:113](https://github.com/santi020k/eslint-config-basic/blob/834bcc650d282b691bfa356ea9834fddf330e673/packages/basic/src/frameworks.ts#L113)
+Defined in: [basic/src/frameworks.ts:113](https://github.com/santi020k/eslint-config-basic/blob/3b8ba4d23ba7114d9e2d1fca98d4c4b3989f224d/packages/basic/src/frameworks.ts#L113)
 
 #### Parameters
 
@@ -153,7 +153,7 @@ Defined in: [basic/src/frameworks.ts:113](https://github.com/santi020k/eslint-co
 
 > `const` **preact**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:114](https://github.com/santi020k/eslint-config-basic/blob/834bcc650d282b691bfa356ea9834fddf330e673/packages/basic/src/frameworks.ts#L114)
+Defined in: [basic/src/frameworks.ts:114](https://github.com/santi020k/eslint-config-basic/blob/3b8ba4d23ba7114d9e2d1fca98d4c4b3989f224d/packages/basic/src/frameworks.ts#L114)
 
 #### Parameters
 
@@ -171,7 +171,7 @@ Defined in: [basic/src/frameworks.ts:114](https://github.com/santi020k/eslint-co
 
 > `const` **qwik**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:115](https://github.com/santi020k/eslint-config-basic/blob/834bcc650d282b691bfa356ea9834fddf330e673/packages/basic/src/frameworks.ts#L115)
+Defined in: [basic/src/frameworks.ts:115](https://github.com/santi020k/eslint-config-basic/blob/3b8ba4d23ba7114d9e2d1fca98d4c4b3989f224d/packages/basic/src/frameworks.ts#L115)
 
 #### Parameters
 
@@ -189,7 +189,7 @@ Defined in: [basic/src/frameworks.ts:115](https://github.com/santi020k/eslint-co
 
 > `const` **react**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:116](https://github.com/santi020k/eslint-config-basic/blob/834bcc650d282b691bfa356ea9834fddf330e673/packages/basic/src/frameworks.ts#L116)
+Defined in: [basic/src/frameworks.ts:116](https://github.com/santi020k/eslint-config-basic/blob/3b8ba4d23ba7114d9e2d1fca98d4c4b3989f224d/packages/basic/src/frameworks.ts#L116)
 
 #### Parameters
 
@@ -207,7 +207,7 @@ Defined in: [basic/src/frameworks.ts:116](https://github.com/santi020k/eslint-co
 
 > `const` **reactRouter**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:117](https://github.com/santi020k/eslint-config-basic/blob/834bcc650d282b691bfa356ea9834fddf330e673/packages/basic/src/frameworks.ts#L117)
+Defined in: [basic/src/frameworks.ts:117](https://github.com/santi020k/eslint-config-basic/blob/3b8ba4d23ba7114d9e2d1fca98d4c4b3989f224d/packages/basic/src/frameworks.ts#L117)
 
 #### Parameters
 
@@ -225,7 +225,7 @@ Defined in: [basic/src/frameworks.ts:117](https://github.com/santi020k/eslint-co
 
 > `const` **slidev**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:118](https://github.com/santi020k/eslint-config-basic/blob/834bcc650d282b691bfa356ea9834fddf330e673/packages/basic/src/frameworks.ts#L118)
+Defined in: [basic/src/frameworks.ts:118](https://github.com/santi020k/eslint-config-basic/blob/3b8ba4d23ba7114d9e2d1fca98d4c4b3989f224d/packages/basic/src/frameworks.ts#L118)
 
 #### Parameters
 
@@ -243,7 +243,7 @@ Defined in: [basic/src/frameworks.ts:118](https://github.com/santi020k/eslint-co
 
 > `const` **solid**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:119](https://github.com/santi020k/eslint-config-basic/blob/834bcc650d282b691bfa356ea9834fddf330e673/packages/basic/src/frameworks.ts#L119)
+Defined in: [basic/src/frameworks.ts:119](https://github.com/santi020k/eslint-config-basic/blob/3b8ba4d23ba7114d9e2d1fca98d4c4b3989f224d/packages/basic/src/frameworks.ts#L119)
 
 #### Parameters
 
@@ -261,7 +261,7 @@ Defined in: [basic/src/frameworks.ts:119](https://github.com/santi020k/eslint-co
 
 > `const` **svelte**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:120](https://github.com/santi020k/eslint-config-basic/blob/834bcc650d282b691bfa356ea9834fddf330e673/packages/basic/src/frameworks.ts#L120)
+Defined in: [basic/src/frameworks.ts:120](https://github.com/santi020k/eslint-config-basic/blob/3b8ba4d23ba7114d9e2d1fca98d4c4b3989f224d/packages/basic/src/frameworks.ts#L120)
 
 #### Parameters
 
@@ -279,7 +279,7 @@ Defined in: [basic/src/frameworks.ts:120](https://github.com/santi020k/eslint-co
 
 > `const` **tanstackStart**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:121](https://github.com/santi020k/eslint-config-basic/blob/834bcc650d282b691bfa356ea9834fddf330e673/packages/basic/src/frameworks.ts#L121)
+Defined in: [basic/src/frameworks.ts:121](https://github.com/santi020k/eslint-config-basic/blob/3b8ba4d23ba7114d9e2d1fca98d4c4b3989f224d/packages/basic/src/frameworks.ts#L121)
 
 #### Parameters
 
@@ -297,7 +297,7 @@ Defined in: [basic/src/frameworks.ts:121](https://github.com/santi020k/eslint-co
 
 > `const` **vite**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:122](https://github.com/santi020k/eslint-config-basic/blob/834bcc650d282b691bfa356ea9834fddf330e673/packages/basic/src/frameworks.ts#L122)
+Defined in: [basic/src/frameworks.ts:122](https://github.com/santi020k/eslint-config-basic/blob/3b8ba4d23ba7114d9e2d1fca98d4c4b3989f224d/packages/basic/src/frameworks.ts#L122)
 
 #### Parameters
 
@@ -315,7 +315,7 @@ Defined in: [basic/src/frameworks.ts:122](https://github.com/santi020k/eslint-co
 
 > `const` **vue**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:123](https://github.com/santi020k/eslint-config-basic/blob/834bcc650d282b691bfa356ea9834fddf330e673/packages/basic/src/frameworks.ts#L123)
+Defined in: [basic/src/frameworks.ts:123](https://github.com/santi020k/eslint-config-basic/blob/3b8ba4d23ba7114d9e2d1fca98d4c4b3989f224d/packages/basic/src/frameworks.ts#L123)
 
 #### Parameters
 
@@ -333,7 +333,7 @@ Defined in: [basic/src/frameworks.ts:123](https://github.com/santi020k/eslint-co
 
 > **defineConfig**(`options?`, ...`extraConfigs`): `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/index.ts:679](https://github.com/santi020k/eslint-config-basic/blob/834bcc650d282b691bfa356ea9834fddf330e673/packages/basic/src/index.ts#L679)
+Defined in: [basic/src/index.ts:679](https://github.com/santi020k/eslint-config-basic/blob/3b8ba4d23ba7114d9e2d1fca98d4c4b3989f224d/packages/basic/src/index.ts#L679)
 
 Generates the ESLint configuration array, applying configurations
 and integration settings based on the input configuration.

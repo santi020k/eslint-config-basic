@@ -1,6 +1,7 @@
 {
   "name": "@santi020k/eslint-config-tools",
   "version": "2.1.1",
+  "publishConfig": { "access": "public", "provenance": true },
   "description": "Tooling ESLint configs for eslint-config-basic",
   "type": "module",
   "main": "./dist/index.js",
@@ -54,12 +55,11 @@
     "typescript": { "optional": true }
   },
   "engines": { "node": "^20.19.0 || >=22.18.0" },
-  "publishConfig": { "access": "public", "provenance": true },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/santi020k/eslint-config-basic.git",
     "directory": "packages/tools"
   },
-  "homepage": "https://eslint.santi020k.com/packages/tools",
+  "homepage": "https://eslint.santi020k.com/tooling/tools",
   "license": "MIT"
 }

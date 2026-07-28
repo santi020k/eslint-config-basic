@@ -23,6 +23,7 @@ const loadFeaturePack = async (specifier: string): Promise<ConfigFeature[]> => {
 
   if (!pending) {
     pending = loadModule<FeaturePack>(specifier)
+
     packCache.set(specifier, pending)
   }
 

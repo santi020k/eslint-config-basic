@@ -1,6 +1,6 @@
-import type { TSESLint } from '@typescript-eslint/utils'
-
 import { yaml } from '@santi020k/eslint-config-formats'
+
+import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
  * GitHub Actions ESLint configuration
