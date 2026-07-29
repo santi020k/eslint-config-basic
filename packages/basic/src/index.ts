@@ -43,6 +43,7 @@ import { createTypescriptConfig } from '@santi020k/eslint-config-typescript'
 
 import type { TSESLint } from '@typescript-eslint/utils'
 
+import { attachDefineConfigMetadata } from './define-config-metadata.js'
 import { createDetectedFrameworkFlags, type FrameworkOptions } from './frameworks.js'
 import { getIntegrationConfigs, getPrettierConfig } from './integrations.js'
 import { resolveFramework, resolvePreset } from './resolvers.js'
@@ -888,5 +889,7 @@ export const defineConfig = async (
     patchImportGroups(allConfigs, workspacePrefixes) :
     allConfigs
 
-  return attachReferencedPlugins(applyStrictMode(patchedConfigs, strict))
+  const finalConfig = attachReferencedPlugins(applyStrictMode(patchedConfigs, strict))
+
+  return attachDefineConfigMetadata(finalConfig, { extraConfigs, options })
 }

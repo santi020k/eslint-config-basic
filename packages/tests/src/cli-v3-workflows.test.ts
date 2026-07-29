@@ -370,6 +370,23 @@ describe('v2 to v3 migration', () => {
     expect(result.content).toContain('export default [...createGitignoreConfig()]')
   })
 
+  test('preserves removed alias references in block-bodied arrow scopes', () => {
+    const input = [
+      'import { gitignore } from \'@santi020k/eslint-config-basic\'',
+      '',
+      'const build = gitignore => {',
+      '  return gitignore',
+      '}',
+      'export default [...gitignore]',
+      'void build'
+    ].join('\n')
+
+    const result = migrateConfigToV3(input, 'lean')
+
+    expect(result.content).toContain('const build = gitignore => {\n  return gitignore\n}')
+    expect(result.content).toContain('export default [...createGitignoreConfig()]')
+  })
+
   test('writes config and package backups with granular v3 dependencies', () => {
     const cwd = createTempProject({
       devDependencies: {
@@ -744,6 +761,24 @@ describe('preset adoption', () => {
 
     expect(compatibilityConfig).toContain("name: 'eslint-config-basic/preset-app-compatibility'")
     expect(compatibilityConfig).toContain('"@stylistic/indent": "warn"')
+  })
+
+  test('retains explicit config overrides in the preset adoption target', async () => {
+    const cwd = createTempProject()
+
+    writeFakeEslint(cwd, { 'explicit/rule': 'error' })
+    writeFileSync(join(cwd, 'eslint.config.js'), [
+      'const config = []',
+      'Object.defineProperty(config, Symbol.for(\'@santi020k/eslint-config-basic/define-config-metadata\'), {',
+      '  value: { extraConfigs: [{ rules: { \'explicit/rule\': \'error\' } }], options: {} }',
+      '})',
+      'export default config'
+    ].join('\n'))
+
+    const report = await createPresetReport(cwd, 'app', 'src/index.ts')
+
+    expect(report.changed).not.toHaveProperty('explicit/rule')
+    expect(report.removed).not.toHaveProperty('explicit/rule')
   })
 
   test('excludes detected frameworks whose optional packs are unavailable', async () => {

@@ -13,6 +13,7 @@ import {
   Preset
 } from '@santi020k/eslint-config-core'
 
+import { type DefineConfigMetadata, getDefineConfigMetadata } from './define-config-metadata.js'
 import { defineConfig } from './index.js'
 import { isMissingRequestedPackage } from './optional-package-errors.js'
 import { resolvePreset } from './resolvers.js'
@@ -39,6 +40,31 @@ export interface ExplainPresetOptions {
 }
 
 const PRESETS = new Set<string>(Object.values(Preset))
+
+const CONFIG_FILENAMES = [
+  'eslint.config.js',
+  'eslint.config.mjs',
+  'eslint.config.cjs',
+  'eslint.config.ts',
+  'eslint.config.mts',
+  'eslint.config.cts'
+]
+
+const loadDefineConfigMetadata = async (cwd: string): Promise<DefineConfigMetadata | undefined> => {
+  const configPath = CONFIG_FILENAMES.map(name => join(cwd, name)).find(path => existsSync(path))
+
+  if (!configPath) return undefined
+
+  try {
+    const loaded = await import(`${pathToFileURL(configPath).href}?basic-eslint-preset=${Date.now()}`) as {
+      default?: unknown
+    }
+
+    return getDefineConfigMetadata(await loaded.default)
+  } catch {
+    return undefined
+  }
+}
 
 const PRESET_FEATURE_PACKAGES = {
   extensions: '@santi020k/eslint-config-extensions',
@@ -273,12 +299,23 @@ export const createPresetReport = async (
   const presetOptions = resolvePreset(preset)
   const { missingPackages, options: resolvablePresetOptions } = getResolvablePresetOptions(cwd, presetOptions)
   const current = await loadProjectEslint(cwd).calculateConfigForFile(file)
+  const currentMetadata = await loadDefineConfigMetadata(cwd)
+  const currentOptions = currentMetadata?.options ?? {}
 
   const selectedConfig = await defineConfig({
-    preset,
     ...resolvablePresetOptions,
-    root: cwd
-  })
+    ...currentOptions,
+    features: {
+      ...resolvablePresetOptions.features,
+      ...currentOptions.features
+    },
+    frameworks: {
+      ...resolvablePresetOptions.frameworks,
+      ...currentOptions.frameworks
+    },
+    preset,
+    root: currentOptions.root ?? cwd
+  }, ...(currentMetadata?.extraConfigs ?? []))
 
   const selected = await loadProjectEslint(cwd, selectedConfig).calculateConfigForFile(file)
   const currentRules = current?.rules ?? {}

@@ -488,13 +488,20 @@ const getShadowedRanges = (content: string, name: string): SourceRange[] => {
 
   const ranges = [...searchable.matchAll(parameterPattern)].map(match => {
     const start = match.index
-    const bodyStart = start + match[0].length - 1
+    const matchedBodyStart = start + match[0].length - 1
+
+    if (searchable[matchedBodyStart] === '{') {
+      return { end: findClosingDelimiter(searchable, matchedBodyStart, '{', '}'), start }
+    }
+
+    const arrowIndex = searchable.indexOf('=>', start)
+    const relativeBodyStart = searchable.slice(arrowIndex + 2).search(/\S/)
+    const bodyStart = relativeBodyStart === -1 ? searchable.length : arrowIndex + 2 + relativeBodyStart
 
     if (searchable[bodyStart] === '{') {
       return { end: findClosingDelimiter(searchable, bodyStart, '{', '}'), start }
     }
 
-    const arrowIndex = searchable.indexOf('=>', start)
     const lineEnd = searchable.indexOf('\n', arrowIndex + 2)
 
     return { end: lineEnd === -1 ? searchable.length : lineEnd, start }
