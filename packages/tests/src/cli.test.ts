@@ -387,6 +387,38 @@ describe('CLI command UX', () => {
     logSpy.mockRestore()
   })
 
+  test('should scope pnpm doctor install commands to the workspace root', async () => {
+    const cwd = createTempProject({ name: 'tmp-workspace' })
+
+    writeFileSync(join(cwd, 'pnpm-workspace.yaml'), 'packages:\n  - "apps/*"\n')
+
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    await handleDoctor(cwd, false, true)
+
+    expect(logSpy).toHaveBeenCalledWith(
+      expect.stringContaining('pnpm add -D --workspace-root ')
+    )
+    logSpy.mockRestore()
+  })
+
+  test('should retain pnpm workspace-root scoping after doctor fixes', async () => {
+    const cwd = createTempProject({ name: 'tmp-workspace', type: 'module' })
+
+    writeFileSync(join(cwd, 'pnpm-workspace.yaml'), 'packages:\n  - "apps/*"\n')
+
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    await handleDoctor(cwd, true, false, true)
+
+    const payload = JSON.parse(String(logSpy.mock.calls.at(-1)?.[0])) as {
+      liteInstallCommand?: string
+    }
+
+    expect(payload.liteInstallCommand).toContain('pnpm add -D --workspace-root ')
+    logSpy.mockRestore()
+  })
+
   test('should print detected project settings as JSON', () => {
     const cwd = createTempProject({
       dependencies: {

@@ -1126,6 +1126,7 @@ export const handleDoctor = async (
   fix = false
 ) => {
   const packageManager = detectPackageManager(cwd)
+  const workspaceRoot = packageManager === 'pnpm' && existsSync(join(cwd, 'pnpm-workspace.yaml'))
   let configPath = getConfigPathIfPresent(cwd)
   let packageJson = readPackageJson(cwd)
   let declaredDependencies = getDeclaredDependencyNames(packageJson)
@@ -1133,7 +1134,7 @@ export const handleDoctor = async (
   let activeConfig = await analyzeEslintConfig(cwd)
   let configContent = configPath ? readFileSync(configPath, 'utf8') : null
   let liteInstallPackages = getLiteInstallPackages(summary, declaredDependencies)
-  let liteInstallCommand = createInstallCommand(packageManager, liteInstallPackages)
+  let liteInstallCommand = createInstallCommand(packageManager, liteInstallPackages, workspaceRoot)
   let hasV1FrameworkImports = hasV1FrameworkPackageImports(configContent)
 
   if (liteInstall) {
@@ -1163,7 +1164,7 @@ export const handleDoctor = async (
 
     liteInstallPackages = getLiteInstallPackages(summary, declaredDependencies)
 
-    liteInstallCommand = createInstallCommand(packageManager, liteInstallPackages)
+    liteInstallCommand = createInstallCommand(packageManager, liteInstallPackages, workspaceRoot)
 
     hasV1FrameworkImports = hasV1FrameworkPackageImports(configContent)
   }
