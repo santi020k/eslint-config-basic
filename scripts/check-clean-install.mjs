@@ -9,14 +9,6 @@ const rootDir = dirname(dirname(fileURLToPath(import.meta.url)))
 const tempDir = mkdtempSync(join(tmpdir(), 'eslint-config-clean-install-'))
 const ignoredDirectories = new Set(['.git', '.pnpm-store', 'dist', 'node_modules'])
 
-const getExpectedBraceMajor = (minimatchMajor) => {
-  if (minimatchMajor >= 10) return 5
-
-  if (minimatchMajor >= 5) return 2
-
-  return 1
-}
-
 const copyManifestTree = (sourceDir) => {
   for (const entry of readdirSync(sourceDir, { withFileTypes: true })) {
     if (ignoredDirectories.has(entry.name)) continue
@@ -88,9 +80,8 @@ try {
     const braceManifestPath = minimatchRequire.resolve('brace-expansion/package.json')
     const minimatchVersion = JSON.parse(readFileSync(minimatchManifestPath, 'utf8')).version
     const braceVersion = JSON.parse(readFileSync(braceManifestPath, 'utf8')).version
-    const minimatchMajor = Number.parseInt(minimatchVersion, 10)
     const braceMajor = Number.parseInt(braceVersion, 10)
-    const expectedBraceMajor = getExpectedBraceMajor(minimatchMajor)
+    const expectedBraceMajor = 5
 
     if (braceMajor !== expectedBraceMajor) {
       throw new Error(
