@@ -67,13 +67,22 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: "true"
 
-      # Changesets creates one tag per published package. Mirror the Basic package
-      # tag with a shorter vX.Y.Z tag, including when a previous run published
-      # successfully but failed before creating the umbrella tag.
+      # Changesets creates one tag per published package. Only a Basic release
+      # updates the umbrella and rolling Action tags; independent releases for
+      # other packages must never move those tags back to an older Basic commit.
       - name: Reconcile umbrella version tag
+        if: steps.changesets.outputs.published == 'true'
         shell: bash
         run: |
           set -eu
+
+          if ! node -e '
+            const published = JSON.parse(process.env.PUBLISHED_PACKAGES || "[]")
+            process.exit(published.some(pkg => pkg.name === "@santi020k/eslint-config-basic") ? 0 : 1)
+          '; then
+            echo "Basic was not published; umbrella tags remain unchanged." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
 
           VERSION=$(node -p "require('./packages/basic/package.json').version")
           TAG="v${VERSION}"
@@ -114,6 +123,7 @@ jobs:
           echo "Updated rolling action tag ${MAJOR_TAG}." >> "$GITHUB_STEP_SUMMARY"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PUBLISHED_PACKAGES: ${{ steps.changesets.outputs.publishedPackages }}
 
       # These packages remain installable throughout v3 so existing consumers
       # receive a migration message instead of a broken dependency. Do not
