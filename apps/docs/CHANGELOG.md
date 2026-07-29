@@ -1,5 +1,24 @@
 # @santi020k/eslint-config-docs
 
+## 3.1.0
+
+### Patch Changes
+
+- [#99](https://github.com/santi020k/eslint-config-basic/pull/99) [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967) Thanks [@santi020k](https://github.com/santi020k)! - Deprecate the Lite and Integrations compatibility packages during v3 and
+  schedule their removal for v4. Add TypeScript deprecation annotations,
+  migration guidance, and post-publish npm registry warnings. Also deprecate the
+  `integrations` option alias and `doctor --lite-install` compatibility workflow.
+
+- [#99](https://github.com/santi020k/eslint-config-basic/pull/99) [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967) Thanks [@santi020k](https://github.com/santi020k)! - Add a `basic-eslint install` command that detects missing framework, feature
+  category, ESLint, and TypeScript dependencies and installs them with the
+  project's package manager. Document the command in the v3 setup flow.
+
+- [#99](https://github.com/santi020k/eslint-config-basic/pull/99) [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967) Thanks [@santi020k](https://github.com/santi020k)! - Add v3 lifecycle tooling to the `basic-eslint` CLI: an automated v2-to-v3
+  migration planner and writer, incremental strict-mode baselines backed by ESLint
+  bulk suppressions, rule-performance profiling with concurrency comparison,
+  effective-rule snapshots and diffs, and optional official ESLint MCP
+  scaffolding for generated agent standards.
+
 ## 2.1.1
 
 ## 2.1.0

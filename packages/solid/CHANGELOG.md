@@ -1,5 +1,7 @@
 # @santi020k/eslint-config-solid
 
+## 3.1.0
+
 ## 2.1.1
 
 ## 2.1.0

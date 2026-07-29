@@ -1,5 +1,20 @@
 # @santi020k/eslint-config-typescript
 
+## 3.1.0
+
+### Minor Changes
+
+- [#99](https://github.com/santi020k/eslint-config-basic/pull/99) [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967) Thanks [@santi020k](https://github.com/santi020k)! - Polish real-world consumer configuration: add one `root` option for detection,
+  TypeScript, Tailwind, projects, and `.gitignore`; auto-detect and scope workspace
+  packages without leaking root framework dependencies; accept native project
+  service options; and syntax-lint TypeScript config files plus explicit
+  `untypedFiles` without consumer-side `typescript-eslint` imports.
+
+### Patch Changes
+
+- Updated dependencies [[`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967), [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967), [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967), [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967), [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967), [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967), [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967)]:
+  - @santi020k/eslint-config-core@3.1.0
+
 ## 2.1.1
 
 ### Patch Changes
