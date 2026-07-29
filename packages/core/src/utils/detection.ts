@@ -403,7 +403,15 @@ const getWorkspacePatternsForProjectDetection = (pkg: PackageJson, detectRootDir
     ...getWorkspacePatterns(pkg),
     ...parsePnpmWorkspacePatterns(detectRootDir)
   ]
-    .map(pattern => pattern.replace(/^\.\//, '').replace(/\/$/, ''))
+    .map(pattern => {
+      const negative = pattern.startsWith('!')
+
+      const pathPattern = (negative ? pattern.slice(1) : pattern)
+        .replace(/^\.\//, '')
+        .replace(/\/$/, '')
+
+      return negative ? `!${pathPattern}` : pathPattern
+    })
     .filter(Boolean)
 
   if (patterns.some(pattern => !pattern.startsWith('!'))) return dedupe(patterns)

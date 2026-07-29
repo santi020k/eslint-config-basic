@@ -122,4 +122,17 @@ describe('parsePnpmWorkspacePatterns', () => {
 
     expect(Object.keys(projects)).toEqual(['apps/site/packages/ui'])
   })
+
+  test('detectProjects normalizes dot-prefixed workspace exclusions', () => {
+    mkdirSync(join(tmpDir, 'packages', 'public'), { recursive: true })
+    mkdirSync(join(tmpDir, 'packages', 'private'), { recursive: true })
+    writeFileSync(join(tmpDir, 'packages', 'public', 'package.json'), '{}')
+    writeFileSync(join(tmpDir, 'packages', 'private', 'package.json'), '{}')
+
+    const projects = __detectionInternals.detectProjects({
+      workspaces: ['./packages/*', '!./packages/private']
+    }, tmpDir)
+
+    expect(Object.keys(projects)).toEqual(['packages/public'])
+  })
 })

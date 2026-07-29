@@ -4,6 +4,15 @@ import { pathToFileURL } from 'node:url'
 
 import { detectProjectOptions } from './index.js'
 
+export const ESLINT_CONFIG_FILENAMES = [
+  'eslint.config.js',
+  'eslint.config.mjs',
+  'eslint.config.cjs',
+  'eslint.config.ts',
+  'eslint.config.mts',
+  'eslint.config.cts'
+] as const
+
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 export interface AgentTarget {
@@ -482,7 +491,7 @@ const extractFeatures = (
  * found, or `null` when none exist.
  */
 const findEslintConfig = (cwd: string): null | string => {
-  for (const name of ['eslint.config.js', 'eslint.config.mjs', 'eslint.config.cjs']) {
+  for (const name of ESLINT_CONFIG_FILENAMES) {
     const p = join(cwd, name)
 
     if (existsSync(p)) return p

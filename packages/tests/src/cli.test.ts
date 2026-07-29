@@ -7,6 +7,7 @@ import { afterEach, describe, expect, test, vi } from 'vitest'
 import type { EslintConfigFeatures } from '../../basic/src/agent-skill-generator.js'
 import {
   AGENT_TARGETS,
+  analyzeEslintConfig,
   generateAgentSkills,
   generateSkillContent,
   handleGenerateSkill
@@ -166,6 +167,35 @@ describe('CLI command UX', () => {
 
     expect(output).toBe(
       'npm install -D @santi020k/eslint-config-react @santi020k/eslint-config-testing'
+    )
+    logSpy.mockRestore()
+  })
+
+  test('should include feature packs selected explicitly in the config', () => {
+    const cwd = createTempProject({
+      devDependencies: {
+        '@santi020k/eslint-config-basic': '3.0.0',
+        eslint: '10.0.0'
+      },
+      name: 'tmp-project',
+      type: 'module'
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    writeFileSync(join(cwd, 'eslint.config.js'), `
+      import { defineConfig, Extension, Preset } from '@santi020k/eslint-config-basic'
+      export default defineConfig({
+        extensions: [Extension.Security],
+        features: { markdown: true },
+        preset: Preset.App,
+        strict: 'pedantic'
+      })
+    `)
+
+    handleInstall(cwd, true)
+
+    expect(logSpy).toHaveBeenCalledWith(
+      'npm install -D @santi020k/eslint-config-extensions @santi020k/eslint-config-formats @santi020k/eslint-config-testing @santi020k/eslint-config-tools'
     )
     logSpy.mockRestore()
   })
@@ -767,6 +797,19 @@ describe('CLI command UX', () => {
     expect(output).toContain('could not be loaded')
     logSpy.mockRestore()
     process.exitCode = undefined
+  })
+
+  test.each(['ts', 'mts', 'cts'])('should analyze eslint.config.%s files', async extension => {
+    const cwd = createTempProject({ name: 'tmp-project', type: 'module' })
+
+    writeFileSync(join(cwd, `eslint.config.${extension}`), `
+      export default [{ name: 'eslint-config-basic/typescript', rules: {} }]
+    `)
+
+    const result = await analyzeEslintConfig(cwd)
+
+    expect(result?.configFile).toBe(join(cwd, `eslint.config.${extension}`))
+    expect(result?.source).toBe('config-file')
   })
 })
 

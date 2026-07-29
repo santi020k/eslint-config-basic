@@ -171,6 +171,7 @@ const FEATURE_NAME_TO_PACKAGE = new Map(
 )
 
 const PRESET_FEATURE_PACKAGES: Record<string, string[]> = {
+  all: Object.values(FEATURE_PACKAGES),
   app: [
     FEATURE_PACKAGES.testing,
     FEATURE_PACKAGES.tools
@@ -578,7 +579,7 @@ const hasCodePropertySeparator = (codeContent: string, match: RegExpMatchArray):
   return matchIndex >= 0 && separatorOffset >= 0 && codeContent[matchIndex + separatorOffset] === ':'
 }
 
-const getConfigFeaturePackages = (content: string): string[] => {
+export const getExplicitConfigFeaturePackages = (content: string): string[] => {
   const packages = new Set<string>()
   const codeContent = maskNonCode(content)
   const searchableContent = maskNonCode(content, true)
@@ -616,7 +617,7 @@ const getConfigFeaturePackages = (content: string): string[] => {
     }
   }
 
-  const enumPresetPattern = /(?:\bpreset\b|['"]preset['"])\s*:\s*Preset\.(App|CI|Library|Monorepo)/g
+  const enumPresetPattern = /(?:\bpreset\b|['"]preset['"])\s*:\s*Preset\.(All|App|CI|Library|Monorepo)/g
 
   for (const match of searchableContent.matchAll(enumPresetPattern)) {
     if (!hasCodePropertySeparator(codeContent, match)) continue
@@ -628,7 +629,7 @@ const getConfigFeaturePackages = (content: string): string[] => {
     }
   }
 
-  const stringPresetPattern = /(?:\bpreset\b|['"]preset['"])\s*:\s*(['"`])(app|ci|library|monorepo)\1/g
+  const stringPresetPattern = /(?:\bpreset\b|['"]preset['"])\s*:\s*(['"`])(all|app|ci|library|monorepo)\1/g
 
   for (const match of searchableContent.matchAll(stringPresetPattern)) {
     if (!hasCodePropertySeparator(codeContent, match)) continue
@@ -656,7 +657,7 @@ export const migrateConfigToV3 = (
   mode: 'full' | 'lean'
 ): { changes: string[], content: string, featurePackages: string[] } => {
   const changes: string[] = []
-  const featurePackages = new Set(getConfigFeaturePackages(content))
+  const featurePackages = new Set(getExplicitConfigFeaturePackages(content))
   let migrated = content
 
   if (migrated.includes(LITE_PACKAGE)) {

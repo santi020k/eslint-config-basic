@@ -4,9 +4,13 @@ import { createRequire } from 'node:module'
 import { basename, dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { analyzeEslintConfig, handleGenerateSkill } from './agent-skill-generator.js'
+import {
+  analyzeEslintConfig,
+  ESLINT_CONFIG_FILENAMES,
+  handleGenerateSkill
+} from './agent-skill-generator.js'
 import { handleCompatibility, handleExplainRule } from './cli-advanced.js'
-import { handleMigrateV3 } from './cli-migration.js'
+import { getExplicitConfigFeaturePackages, handleMigrateV3 } from './cli-migration.js'
 import {
   handleBaseline,
   handleProfile,
@@ -30,14 +34,9 @@ const getDefaultConfigFilename = (cwd: string): string => {
 }
 
 const resolveConfigPath = (cwd: string): string => {
-  const existingConfigPath = [
-    'eslint.config.js',
-    'eslint.config.mjs',
-    'eslint.config.cjs',
-    'eslint.config.ts',
-    'eslint.config.mts',
-    'eslint.config.cts'
-  ].map(filename => join(cwd, filename)).find(p => existsSync(p))
+  const existingConfigPath = ESLINT_CONFIG_FILENAMES
+    .map(filename => join(cwd, filename))
+    .find(p => existsSync(p))
 
   return existingConfigPath ?? join(cwd, getDefaultConfigFilename(cwd))
 }
@@ -106,14 +105,9 @@ const CATEGORY_PACKAGES = {
 } as const
 
 const getConfigPathIfPresent = (cwd: string): null | string => {
-  const configPath = [
-    'eslint.config.js',
-    'eslint.config.mjs',
-    'eslint.config.cjs',
-    'eslint.config.ts',
-    'eslint.config.mts',
-    'eslint.config.cts'
-  ].map(filename => join(cwd, filename)).find(p => existsSync(p))
+  const configPath = ESLINT_CONFIG_FILENAMES
+    .map(filename => join(cwd, filename))
+    .find(p => existsSync(p))
 
   return configPath ?? null
 }
@@ -198,7 +192,8 @@ const getLiteInstallPackages = (
 
 const getInstallPackages = (
   summary: ReturnType<typeof getProjectSummary>,
-  declaredDependencies: Set<string>
+  declaredDependencies: Set<string>,
+  explicitFeaturePackages: string[] = []
 ): string[] => {
   const usesFullPackage = declaredDependencies.has(FULL_PACKAGE_NAME)
   const packages = new Set<string>(['eslint'])
@@ -223,6 +218,10 @@ const getInstallPackages = (
 
     for (const [features, packageName] of categorySelections) {
       if (features.length > 0) packages.add(packageName)
+    }
+
+    for (const packageName of explicitFeaturePackages) {
+      packages.add(packageName)
     }
   }
 
@@ -1183,7 +1182,18 @@ export const handleInstall = (cwd: string = process.cwd(), dryRun = false) => {
   }
 
   const packageManager = detectPackageManager(cwd)
-  const packages = getInstallPackages(getInstallProjectSummary(cwd), getDeclaredDependencyNames(packageJson))
+  const configPath = getConfigPathIfPresent(cwd)
+
+  const explicitFeaturePackages = configPath
+    ? getExplicitConfigFeaturePackages(readFileSync(configPath, 'utf8'))
+    : []
+
+  const packages = getInstallPackages(
+    getInstallProjectSummary(cwd),
+    getDeclaredDependencyNames(packageJson),
+    explicitFeaturePackages
+  )
+
   const workspaceRoot = packageManager === 'pnpm' && existsSync(join(cwd, 'pnpm-workspace.yaml'))
 
   if (packages.length === 0) {
