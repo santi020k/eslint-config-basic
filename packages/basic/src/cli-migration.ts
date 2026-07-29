@@ -478,23 +478,7 @@ const getShadowedRanges = (content: string, name: string): SourceRange[] => {
     searchable = `${searchable.slice(0, range.start)}${' '.repeat(range.end - range.start)}${searchable.slice(range.end)}`
   }
 
-  // eslint-disable-next-line security/detect-non-literal-regexp -- binding names come from parsed import specifiers
-  const parameterPattern = new RegExp([
-    `\\b${name}\\b\\s*=>`,
-    `\\([^)]*\\b${name}\\b[^)]*\\)\\s*=>`,
-    `(?:\\bfunction\\b[^()]*|\\bcatch)\\s*\\([^)]*\\b${name}\\b[^)]*\\)\\s*\\{`,
-    `\\b(?:constructor|[a-zA-Z_$][\\w$]*)\\s*\\([^)]*\\b${name}\\b[^)]*\\)\\s*\\{`
-  ].join('|'), 'gm')
-
-  const ranges = [...searchable.matchAll(parameterPattern)].map(match => {
-    const start = match.index
-    const matchedBodyStart = start + match[0].length - 1
-
-    if (searchable[matchedBodyStart] === '{') {
-      return { end: findClosingDelimiter(searchable, matchedBodyStart, '{', '}'), start }
-    }
-
-    const arrowIndex = searchable.indexOf('=>', start)
+  const getArrowRange = (start: number, arrowIndex: number): SourceRange => {
     const relativeBodyStart = searchable.slice(arrowIndex + 2).search(/\S/)
     const bodyStart = relativeBodyStart === -1 ? searchable.length : arrowIndex + 2 + relativeBodyStart
     const bodyDelimiter = searchable[bodyStart]
@@ -514,7 +498,50 @@ const getShadowedRanges = (content: string, name: string): SourceRange[] => {
     const lineEnd = searchable.indexOf('\n', arrowIndex + 2)
 
     return { end: lineEnd === -1 ? searchable.length : lineEnd, start }
-  })
+  }
+
+  // eslint-disable-next-line security/detect-non-literal-regexp -- binding names come from parsed import specifiers
+  const unparenthesizedArrowPattern = new RegExp(`\\b${name}\\b\\s*=>`, 'gm')
+
+  const ranges = [...searchable.matchAll(unparenthesizedArrowPattern)].map(match => (
+    getArrowRange(match.index, searchable.indexOf('=>', match.index))
+  ))
+
+  // eslint-disable-next-line security/detect-non-literal-regexp -- binding names come from parsed import specifiers
+  const parameterNamePattern = new RegExp(`\\b${name}\\b`)
+  const parameterOwnerPattern = /(?:\bfunction\b[^()]*|\bcatch|\b(?:constructor|[a-zA-Z_$][\w$]*))\s*$/
+
+  for (let parameterStart = 0; parameterStart < searchable.length; parameterStart++) {
+    if (searchable[parameterStart] !== '(') continue
+
+    const parameterEnd = findClosingDelimiter(searchable, parameterStart, '(', ')')
+
+    if (searchable[parameterEnd - 1] !== ')') continue
+
+    const parameters = searchable.slice(parameterStart + 1, parameterEnd - 1)
+
+    if (!parameterNamePattern.test(parameters)) continue
+
+    const relativeBodyStart = searchable.slice(parameterEnd).search(/\S/)
+    const bodyStart = relativeBodyStart === -1 ? searchable.length : parameterEnd + relativeBodyStart
+
+    if (searchable.startsWith('=>', bodyStart)) {
+      ranges.push(getArrowRange(parameterStart, bodyStart))
+
+      continue
+    }
+
+    if (searchable[bodyStart] !== '{') continue
+
+    const ownerMatch = parameterOwnerPattern.exec(searchable.slice(0, parameterStart))
+
+    if (!ownerMatch) continue
+
+    ranges.push({
+      end: findClosingDelimiter(searchable, bodyStart, '{', '}'),
+      start: ownerMatch.index
+    })
+  }
 
   // eslint-disable-next-line security/detect-non-literal-regexp -- binding names come from parsed import specifiers
   const blockBindingPattern = new RegExp(`\\b(?:const|let|var|function|class)\\s+${name}\\b`, 'g')

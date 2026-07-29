@@ -370,6 +370,21 @@ describe('v2 to v3 migration', () => {
     expect(result.content).toContain('export default [...createGitignoreConfig()]')
   })
 
+  test('preserves removed alias parameters with parenthesized defaults', () => {
+    const input = [
+      'import { gitignore } from \'@santi020k/eslint-config-basic\'',
+      '',
+      'const build = (gitignore = makeDefault()) => gitignore',
+      'export default [...gitignore]',
+      'void build'
+    ].join('\n')
+
+    const result = migrateConfigToV3(input, 'lean')
+
+    expect(result.content).toContain('const build = (gitignore = makeDefault()) => gitignore')
+    expect(result.content).toContain('export default [...createGitignoreConfig()]')
+  })
+
   test('preserves removed alias references in block-bodied arrow scopes', () => {
     const input = [
       'import { gitignore } from \'@santi020k/eslint-config-basic\'',
