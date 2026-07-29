@@ -192,6 +192,51 @@ describe('CLI command UX', () => {
     logSpy.mockRestore()
   })
 
+  test('should aggregate install requirements from workspace projects', () => {
+    const cwd = createTempProject({
+      devDependencies: {
+        '@santi020k/eslint-config-basic': '3.0.0',
+        eslint: '10.0.0'
+      },
+      name: 'tmp-workspace',
+      workspaces: ['apps/*']
+    })
+
+    mkdirSync(join(cwd, 'apps/web'), { recursive: true })
+    writeFileSync(join(cwd, 'apps/web/package.json'), JSON.stringify({
+      dependencies: { react: '19.0.0' },
+      name: 'web'
+    }))
+
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    handleInstall(cwd, true)
+
+    expect(logSpy).toHaveBeenCalledWith('npm install -D @santi020k/eslint-config-react')
+    logSpy.mockRestore()
+  })
+
+  test('should scope pnpm installs to the workspace root', () => {
+    const cwd = createTempProject({
+      devDependencies: {
+        '@santi020k/eslint-config-formats': '3.0.0',
+        '@santi020k/eslint-config-tools': '3.0.0'
+      },
+      name: 'tmp-workspace'
+    })
+
+    writeFileSync(join(cwd, 'pnpm-workspace.yaml'), 'packages:\n  - "apps/*"\n')
+
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    handleInstall(cwd, true)
+
+    expect(logSpy).toHaveBeenCalledWith(
+      'pnpm add -D --workspace-root eslint @santi020k/eslint-config-basic'
+    )
+    logSpy.mockRestore()
+  })
+
   test('should print detected project settings as JSON', () => {
     const cwd = createTempProject({
       dependencies: {

@@ -2,7 +2,6 @@
 /* eslint-disable complexity -- migration planners intentionally cover dry-run, write, lean, full, and compatibility branches */
 /* eslint-disable no-console -- CLI handlers own user-facing terminal output */
 /* eslint-disable security/detect-non-literal-fs-filename -- all paths are scoped to the caller-selected project root */
-/* eslint-disable security/detect-non-literal-regexp -- replacement identifiers come from an internal constant map */
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { basename, join } from 'node:path'
 
@@ -252,23 +251,169 @@ const getImportRanges = (content: string): { end: number, start: number }[] => (
     }))
 )
 
-const replaceIdentifier = (
+const maskNonCode = (content: string): string => {
+  const characters = Array<string>(content.length)
+  let quote: null | string = null
+  let blockComment = false
+  let lineComment = false
+
+  for (let index = 0; index < content.length; index++) {
+    characters[index] = content[index]
+  }
+
+  for (let index = 0; index < characters.length; index++) {
+    const character = characters[index]
+    const next = characters[index + 1]
+
+    if (lineComment) {
+      if (character === '\n') {
+        lineComment = false
+      } else {
+        characters[index] = ' '
+      }
+
+      continue
+    }
+
+    if (blockComment) {
+      characters[index] = character === '\n' ? '\n' : ' '
+
+      if (character === '*' && next === '/') {
+        characters[index + 1] = ' '
+
+        blockComment = false
+
+        index++
+      }
+
+      continue
+    }
+
+    if (quote) {
+      characters[index] = character === '\n' ? '\n' : ' '
+
+      if (character === '\\') {
+        if (index + 1 < characters.length) characters[index + 1] = next === '\n' ? '\n' : ' '
+
+        index++
+      } else if (character === quote) {
+        quote = null
+      }
+
+      continue
+    }
+
+    if (character === '/' && next === '/') {
+      characters[index] = ' '
+
+      characters[index + 1] = ' '
+
+      lineComment = true
+
+      index++
+
+      continue
+    }
+
+    if (character === '/' && next === '*') {
+      characters[index] = ' '
+
+      characters[index + 1] = ' '
+
+      blockComment = true
+
+      index++
+
+      continue
+    }
+
+    if (character === '\'' || character === '"' || character === '`') {
+      characters[index] = ' '
+
+      quote = character
+    }
+  }
+
+  return characters.join('')
+}
+
+const replaceBindingReferences = (
   content: string,
   from: string,
   to: string,
   invokeReferences = false
 ): string => {
-  const importRanges = invokeReferences ? getImportRanges(content) : []
+  const importRanges = getImportRanges(content)
+  const masked = maskNonCode(content)
+  // eslint-disable-next-line security/detect-non-literal-regexp -- binding names come from the internal migration map
+  const identifierPattern = new RegExp(`\\b${from}\\b`, 'g')
+  const matches = [...masked.matchAll(identifierPattern)]
+  let updated = content
 
-  return content.replaceAll(new RegExp(`\\b${from}\\b`, 'g'), (match, offset: number) => {
-    if (!invokeReferences) return to
-
+  for (const match of matches.reverse()) {
+    const offset = match.index
     const isImportSpecifier = importRanges.some(range => offset >= range.start && offset < range.end)
-    const following = content.slice(offset + match.length)
-    const isAlreadyInvoked = /^\s*\(/.test(following)
 
-    return isImportSpecifier || isAlreadyInvoked ? to : `${to}()`
+    if (isImportSpecifier) continue
+
+    const precedingContent = masked.slice(0, offset).trimEnd()
+    const preceding = precedingContent.at(-1)
+    const following = masked.slice(offset + from.length)
+    const isMemberAccess = preceding === '.' && !precedingContent.endsWith('...')
+    const isProperty = isMemberAccess || /^\s*:/.test(following)
+    const isAlreadyInvoked = /^\s*\(/.test(following)
+    const replacement = invokeReferences && !isAlreadyInvoked ? `${to}()` : to
+
+    if (isProperty) continue
+
+    updated = `${updated.slice(0, offset)}${replacement}${updated.slice(offset + from.length)}`
+  }
+
+  return updated
+}
+
+const replaceImportedAlias = (
+  content: string,
+  from: string,
+  to: string,
+  invokeReferences = false
+): string => {
+  const bindings: { from: string, to: string }[] = []
+  const importPattern = /import\s*\{([\s\S]*?)\}\s*from\s*(['"])(@santi020k\/eslint-config-(?:basic|full))\2/g
+
+  let updated = content.replace(importPattern, (statement, specifierText: string) => {
+    const specifiers = specifierText.split(',')
+
+    const rewritten = specifiers.map(specifier => {
+      const aliasMatch = /^(\s*)([a-zA-Z_$][\w$]*)\s+as\s+([a-zA-Z_$][\w$]*)(\s*)$/.exec(specifier)
+
+      if (aliasMatch?.[2] === from) {
+        const localName = aliasMatch[3]
+
+        bindings.push({ from: localName, to: localName })
+
+        return `${aliasMatch[1]}${to} as ${localName}${aliasMatch[4]}`
+      }
+
+      const directMatch = /^(\s*)([a-zA-Z_$][\w$]*)(\s*)$/.exec(specifier)
+
+      if (directMatch?.[2] !== from) return specifier
+
+      bindings.push({ from, to })
+
+      return `${directMatch[1]}${to}${directMatch[3]}`
+    })
+
+    const rewrittenText = rewritten.join(',')
+
+    return rewrittenText === specifierText ? statement : statement.replace(specifierText, rewrittenText)
   })
+
+  for (const binding of bindings) {
+    updated = replaceBindingReferences(updated, binding.from, binding.to, invokeReferences)
+  }
+
+  return updated
 }
 
 const splitBasicIntegrationImports = (
@@ -359,7 +504,7 @@ export const migrateConfigToV3 = (
 
   for (const [removed, replacement] of Object.entries(REMOVED_ALIAS_REPLACEMENTS)) {
     const invokeReferences = FACTORY_ALIAS_REPLACEMENTS.has(removed)
-    const updated = replaceIdentifier(migrated, removed, replacement, invokeReferences)
+    const updated = replaceImportedAlias(migrated, removed, replacement, invokeReferences)
 
     if (updated !== migrated) {
       migrated = updated

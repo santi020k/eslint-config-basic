@@ -226,7 +226,11 @@ const getInstallPackages = (
   return [...packages].filter(packageName => !declaredDependencies.has(packageName))
 }
 
-const createInstallCommand = (packageManager: string, packages: string[]): string => {
+const createInstallCommand = (
+  packageManager: string,
+  packages: string[],
+  workspaceRoot = false
+): string => {
   const packageList = packages.join(' ')
 
   switch (packageManager) {
@@ -240,11 +244,15 @@ const createInstallCommand = (packageManager: string, packages: string[]): strin
       return `yarn add -D ${packageList}`
 
     default:
-      return `pnpm add -D ${packageList}`
+      return `pnpm add -D${workspaceRoot ? ' --workspace-root' : ''} ${packageList}`
   }
 }
 
-const createInstallInvocation = (packageManager: string, packages: string[]): [string, string[]] => {
+const createInstallInvocation = (
+  packageManager: string,
+  packages: string[],
+  workspaceRoot = false
+): [string, string[]] => {
   switch (packageManager) {
     case 'bun':
       return ['bun', ['add', '-d', ...packages]]
@@ -256,7 +264,7 @@ const createInstallInvocation = (packageManager: string, packages: string[]): [s
       return ['yarn', ['add', '-D', ...packages]]
 
     default:
-      return ['pnpm', ['add', '-D', ...packages]]
+      return ['pnpm', ['add', '-D', ...(workspaceRoot ? ['--workspace-root'] : []), ...packages]]
   }
 }
 
@@ -415,6 +423,27 @@ const getProjectSummary = (cwd: string) => {
     tools: options.tools ?? [],
     typescript: Boolean(options.typescript),
     workspaceProjects
+  }
+}
+
+const getInstallProjectSummary = (cwd: string): ReturnType<typeof getProjectSummary> => {
+  const rootSummary = getProjectSummary(cwd)
+
+  const projectSummaries = rootSummary.workspaceProjects.map(projectPath => (
+    getProjectSummary(join(cwd, projectPath))
+  ))
+
+  const summaries = [rootSummary, ...projectSummaries]
+
+  return {
+    ...rootSummary,
+    extensions: [...new Set(summaries.flatMap(summary => summary.extensions))],
+    formats: [...new Set(summaries.flatMap(summary => summary.formats))],
+    frameworks: [...new Set(summaries.flatMap(summary => summary.frameworks))].sort(),
+    libraries: [...new Set(summaries.flatMap(summary => summary.libraries))],
+    testing: [...new Set(summaries.flatMap(summary => summary.testing))],
+    tools: [...new Set(summaries.flatMap(summary => summary.tools))],
+    typescript: summaries.some(summary => summary.typescript)
   }
 }
 
@@ -1109,7 +1138,8 @@ export const handleInstall = (cwd: string = process.cwd(), dryRun = false) => {
   }
 
   const packageManager = detectPackageManager(cwd)
-  const packages = getInstallPackages(getProjectSummary(cwd), getDeclaredDependencyNames(packageJson))
+  const packages = getInstallPackages(getInstallProjectSummary(cwd), getDeclaredDependencyNames(packageJson))
+  const workspaceRoot = packageManager === 'pnpm' && existsSync(join(cwd, 'pnpm-workspace.yaml'))
 
   if (packages.length === 0) {
     console.log('✅ All packages required by the detected ESLint configuration are already declared.')
@@ -1117,7 +1147,7 @@ export const handleInstall = (cwd: string = process.cwd(), dryRun = false) => {
     return
   }
 
-  const installCommand = createInstallCommand(packageManager, packages)
+  const installCommand = createInstallCommand(packageManager, packages, workspaceRoot)
 
   if (dryRun) {
     console.log(installCommand)
@@ -1127,7 +1157,7 @@ export const handleInstall = (cwd: string = process.cwd(), dryRun = false) => {
 
   console.log(`Installing detected ESLint dependencies:\n${installCommand}`)
 
-  const [command, args] = createInstallInvocation(packageManager, packages)
+  const [command, args] = createInstallInvocation(packageManager, packages, workspaceRoot)
   const result = spawnSync(command, args, { cwd, stdio: 'inherit' })
 
   if (result.error) {

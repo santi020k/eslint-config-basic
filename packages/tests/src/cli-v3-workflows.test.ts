@@ -156,6 +156,38 @@ describe('v2 to v3 migration', () => {
     expect(result.content).toContain('export default [...createAstroConfig(), ...createGitignoreConfig()]')
   })
 
+  test('invokes aliased factory bindings without rewriting unrelated lookalikes', () => {
+    const input = [
+      'import { astroConfig as astro, gitignore } from \'@santi020k/eslint-config-basic\'',
+      '',
+      'const label = "gitignore"',
+      'const options = { gitignore: false }',
+      'export default [...astro, ...gitignore]',
+      'void label',
+      'void options'
+    ].join('\n')
+
+    const result = migrateConfigToV3(input, 'lean')
+
+    expect(result.content).toContain('import { createAstroConfig as astro, createGitignoreConfig }')
+    expect(result.content).toContain('const label = "gitignore"')
+    expect(result.content).toContain('const options = { gitignore: false }')
+    expect(result.content).toContain('export default [...astro(), ...createGitignoreConfig()]')
+  })
+
+  test('does not rewrite removed alias names that are not imported bindings', () => {
+    const input = [
+      'import { defineConfig } from \'@santi020k/eslint-config-basic\'',
+      '',
+      'const gitignore = false',
+      'export default defineConfig({ gitignore })'
+    ].join('\n')
+
+    const result = migrateConfigToV3(input, 'lean')
+
+    expect(result.content).toBe(input)
+  })
+
   test('writes config and package backups with granular v3 dependencies', () => {
     const cwd = createTempProject({
       devDependencies: {
