@@ -9,3 +9,6 @@ This package is part of the [`@santi020k/eslint-config-basic`](https://github.co
 - Author: [santi020k](https://santi020k.com)
 
 The canonical documentation lives on the Starlight site, so this README intentionally stays short to avoid duplication.
+
+Consumer integration findings and their acceptance criteria are tracked in
+[IMPROVEMENTS.md](./IMPROVEMENTS.md).

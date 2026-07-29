@@ -357,13 +357,13 @@ const createExplicitOptions = (cwd: string): string[] => {
   const summary = getProjectSummary(cwd)
   const options: string[] = []
 
-  const optionalCategories = [
-    ['libraries', summary.libraries],
-    ['testing', summary.testing],
-    ['formats', summary.formats],
-    ['tools', summary.tools],
-    ['extensions', summary.extensions]
-  ] as const
+  const features = [...new Set([
+    ...summary.extensions,
+    ...summary.formats,
+    ...summary.libraries,
+    ...summary.testing,
+    ...summary.tools
+  ])].sort()
 
   if (summary.typescript) options.push('  typescript: true,')
 
@@ -375,10 +375,12 @@ const createExplicitOptions = (cwd: string): string[] => {
     )
   }
 
-  for (const [category, values] of optionalCategories) {
-    if (values.length > 0) {
-      options.push(`  ${category}: ${JSON.stringify(values)},`)
-    }
+  if (features.length > 0) {
+    options.push(
+      '  features: {',
+      ...features.map(feature => `    ${toPropertyKey(feature)}: true,`),
+      '  },'
+    )
   }
 
   return options
@@ -433,7 +435,12 @@ const getProjectSummary = (cwd: string) => {
 const getInstallProjectSummary = (cwd: string): ReturnType<typeof getProjectSummary> => {
   const rootSummary = getProjectSummary(cwd)
 
-  const projectSummaries = rootSummary.detectedProjects.map(projectPath => (
+  const projectPaths = [...new Set([
+    ...rootSummary.detectedProjects,
+    ...rootSummary.workspaceProjects
+  ])]
+
+  const projectSummaries = projectPaths.map(projectPath => (
     getProjectSummary(join(cwd, projectPath))
   ))
 
@@ -850,6 +857,19 @@ const validateConfigContent = (
     }
   }
 
+  const missingPackages = getInstallPackages(
+    summary,
+    declaredDependencies,
+    getExplicitConfigFeaturePackages(configContent)
+  )
+
+  if (missingPackages.length > 0) {
+    warnings.push(
+      `The active configuration requires undeclared packages: ${missingPackages.join(', ')}. ` +
+      'Run `basic-eslint install` to add the modular v3 dependency set.'
+    )
+  }
+
   return warnings
 }
 
@@ -959,7 +979,8 @@ const outputDoctorResult = (
   configPath: null | string,
   packageManager: string,
   summary: ReturnType<typeof getProjectSummary>,
-  liteInstallCommand: string,
+  installCommand: string | undefined,
+  requiredPackages: string[],
   issues: string[],
   warnings: string[],
   fixes: string[] = []
@@ -975,9 +996,10 @@ const outputDoctorResult = (
   const payload = {
     configFile: configPath ? basename(configPath) : null,
     fixes,
+    ...(installCommand ? { installCommand } : {}),
     issues,
-    liteInstallCommand,
     packageManager,
+    requiredPackages,
     status,
     warnings,
     workspaceProjects: summary.workspaceProjects
@@ -996,6 +1018,8 @@ const outputDoctorResult = (
     `- Package manager: ${payload.packageManager}`,
     `- Config file: ${payload.configFile ?? 'none'}`,
     `- Workspace projects: ${formatList(summary.workspaceProjects)}`,
+    `- Required packages: ${formatList(requiredPackages)}`,
+    ...(installCommand ? [`- Install command: ${installCommand}`] : []),
     ...(fixes.length > 0 ? ['', 'Fixes applied:', ...fixes.map(fix => `- ${fix}`)] : []),
     ...(issues.length > 0 ? ['', 'Issues:', ...issues.map(issue => `- ${issue}`)] : []),
     ...(warnings.length > 0 ? ['', 'Warnings:', ...warnings.map(warning => `- ${warning}`)] : [])
@@ -1133,11 +1157,12 @@ export const handleDoctor = async (
   let summary = getInstallProjectSummary(cwd)
   let activeConfig = await analyzeEslintConfig(cwd)
   let configContent = configPath ? readFileSync(configPath, 'utf8') : null
-  let liteInstallPackages = getLiteInstallPackages(summary, declaredDependencies)
-  let liteInstallCommand = createInstallCommand(packageManager, liteInstallPackages, workspaceRoot)
   let hasV1FrameworkImports = hasV1FrameworkPackageImports(configContent)
 
   if (liteInstall) {
+    const liteInstallPackages = getLiteInstallPackages(summary, declaredDependencies)
+    const liteInstallCommand = createInstallCommand(packageManager, liteInstallPackages, workspaceRoot)
+
     if (json) {
       console.log(JSON.stringify({ command: liteInstallCommand, packageManager, packages: liteInstallPackages }, null, 2))
     } else {
@@ -1162,18 +1187,34 @@ export const handleDoctor = async (
 
     configContent = configPath ? readFileSync(configPath, 'utf8') : null
 
-    liteInstallPackages = getLiteInstallPackages(summary, declaredDependencies)
-
-    liteInstallCommand = createInstallCommand(packageManager, liteInstallPackages, workspaceRoot)
-
     hasV1FrameworkImports = hasV1FrameworkPackageImports(configContent)
   }
+
+  const explicitFeaturePackages = configContent
+    ? getExplicitConfigFeaturePackages(configContent)
+    : []
+
+  const requiredPackages = getInstallPackages(summary, declaredDependencies, explicitFeaturePackages)
+
+  const installCommand = requiredPackages.length > 0
+    ? createInstallCommand(packageManager, requiredPackages, workspaceRoot)
+    : undefined
 
   const { issues, warnings } = buildDoctorDiagnosis(
     cwd, configPath, configContent, hasV1FrameworkImports, activeConfig, declaredDependencies, summary
   )
 
-  outputDoctorResult(json, configPath, packageManager, summary, liteInstallCommand, issues, warnings, fixes)
+  outputDoctorResult(
+    json,
+    configPath,
+    packageManager,
+    summary,
+    installCommand,
+    requiredPackages,
+    issues,
+    warnings,
+    fixes
+  )
 }
 
 export const handleInstall = (cwd: string = process.cwd(), dryRun = false) => {

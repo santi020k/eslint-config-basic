@@ -402,7 +402,7 @@ describe('CLI command UX', () => {
     logSpy.mockRestore()
   })
 
-  test('should retain pnpm workspace-root scoping after doctor fixes', async () => {
+  test('should omit deprecated Lite advice after doctor fixes', async () => {
     const cwd = createTempProject({ name: 'tmp-workspace', type: 'module' })
 
     writeFileSync(join(cwd, 'pnpm-workspace.yaml'), 'packages:\n  - "apps/*"\n')
@@ -412,10 +412,55 @@ describe('CLI command UX', () => {
     await handleDoctor(cwd, true, false, true)
 
     const payload = JSON.parse(String(logSpy.mock.calls.at(-1)?.[0])) as {
+      installCommand?: string
       liteInstallCommand?: string
+      requiredPackages?: string[]
     }
 
-    expect(payload.liteInstallCommand).toContain('pnpm add -D --workspace-root ')
+    expect(payload.installCommand).toBeUndefined()
+    expect(payload.liteInstallCommand).toBeUndefined()
+    expect(payload.requiredPackages).toEqual([])
+    logSpy.mockRestore()
+  })
+
+  test('should report modular packages required by pnpm workspace projects', async () => {
+    const cwd = createTempProject({
+      devDependencies: {
+        '@santi020k/eslint-config-basic': '3.0.0',
+        eslint: '10.0.0'
+      },
+      name: 'tmp-workspace',
+      type: 'module'
+    })
+
+    writeFileSync(join(cwd, 'pnpm-workspace.yaml'), 'packages:\n  - "apps/*"\n')
+    mkdirSync(join(cwd, 'apps/docs'), { recursive: true })
+    writeFileSync(join(cwd, 'apps/docs/package.json'), JSON.stringify({
+      dependencies: {
+        astro: 'latest',
+        tailwindcss: 'latest'
+      },
+      name: 'docs'
+    }))
+    writeFileSync(
+      join(cwd, 'eslint.config.js'),
+      'import { defineConfig } from \'@santi020k/eslint-config-basic\'\nexport default defineConfig()\n'
+    )
+
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    await handleDoctor(cwd, true)
+
+    const payload = JSON.parse(String(logSpy.mock.calls.at(-1)?.[0])) as {
+      installCommand?: string
+      requiredPackages: string[]
+    }
+
+    expect(payload.requiredPackages).toEqual(expect.arrayContaining([
+      '@santi020k/eslint-config-astro',
+      '@santi020k/eslint-config-libraries'
+    ]))
+    expect(payload.installCommand).toContain('pnpm add -D --workspace-root')
     logSpy.mockRestore()
   })
 

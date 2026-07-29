@@ -30,7 +30,8 @@
   "files": [
     "dist",
     "README.md",
-    "CHANGELOG.md"
+    "CHANGELOG.md",
+    "IMPROVEMENTS.md"
   ],
   "bin": {
     "basic-eslint": "./dist/cli.js"

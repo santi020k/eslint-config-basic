@@ -102,20 +102,39 @@ jobs:
         with:
           script: |
             const sha = context.payload.workflow_run?.head_sha ?? context.sha
-            await github.rest.issues.create({
+            const title = 'Docs build failed — site may be out of sync with latest release'
+            const body = [
+              `The docs **build** step failed on commit \`${sha}\`.`,
+              '',
+              `Workflow run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              '',
+              'The docs site was **not** redeployed. If a release was just published to npm, the live docs may be stale.',
+              'To redeploy, fix the build and trigger a manual run via **Actions → Deploy Docs → Run workflow**.',
+            ].join('\n')
+            const openIssues = await github.paginate(github.rest.issues.listForRepo, {
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: 'Docs build failed — site may be out of sync with latest release',
-              body: [
-                `The docs **build** step failed on commit \`${sha}\`.`,
-                '',
-                `Workflow run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
-                '',
-                'The docs site was **not** redeployed. If a release was just published to npm, the live docs may be stale.',
-                'To redeploy, fix the build and trigger a manual run via **Actions → Deploy Docs → Run workflow**.',
-              ].join('\n'),
-              labels: ['bug', 'documentation'],
+              state: 'open',
+              per_page: 100,
             })
+            const existingIssue = openIssues.find(issue => !issue.pull_request && issue.title === title)
+
+            if (existingIssue) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingIssue.number,
+                body,
+              })
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ['bug', 'documentation'],
+              })
+            }
 
   deploy:
     needs: build
@@ -137,16 +156,35 @@ jobs:
         with:
           script: |
             const sha = context.payload.workflow_run?.head_sha ?? context.sha
-            await github.rest.issues.create({
+            const title = 'Docs deploy to GitHub Pages failed — site may be out of sync with latest release'
+            const body = [
+              `The docs **deploy** step failed on commit \`${sha}\` (the artifact was built successfully but Pages rejected the deploy).`,
+              '',
+              `Workflow run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              '',
+              'To redeploy, trigger a manual run via **Actions → Deploy Docs → Run workflow**.',
+            ].join('\n')
+            const openIssues = await github.paginate(github.rest.issues.listForRepo, {
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: 'Docs deploy to GitHub Pages failed — site may be out of sync with latest release',
-              body: [
-                `The docs **deploy** step failed on commit \`${sha}\` (the artifact was built successfully but Pages rejected the deploy).`,
-                '',
-                `Workflow run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
-                '',
-                'To redeploy, trigger a manual run via **Actions → Deploy Docs → Run workflow**.',
-              ].join('\n'),
-              labels: ['bug', 'documentation'],
+              state: 'open',
+              per_page: 100,
             })
+            const existingIssue = openIssues.find(issue => !issue.pull_request && issue.title === title)
+
+            if (existingIssue) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingIssue.number,
+                body,
+              })
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ['bug', 'documentation'],
+              })
+            }

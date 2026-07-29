@@ -471,6 +471,21 @@ const buildEslintConfigs = async (params: BuildConfigsParams): Promise<FlatConfi
   // eslint-disable-next-line security/detect-object-injection
   const get = (name: string): FlatConfigArray => fw[name] ?? []
 
+  const typescriptConfigs = resolvedTypescript ?
+    createTypescriptConfig({
+      ...resolvedTypescript,
+      tsconfigRootDir: resolvedTypescript.tsconfigRootDir ?? tsconfigRootDir
+    }) :
+    []
+
+  const untypedTypescriptConfigs = typescriptConfigs.filter(
+    config => config.name === 'eslint-config-typescript/untyped-files'
+  )
+
+  const typedTypescriptConfigs = typescriptConfigs.filter(
+    config => config.name !== 'eslint-config-typescript/untyped-files'
+  )
+
   return [
     ...defaultIgnores,
     ...userIgnores,
@@ -513,12 +528,7 @@ const buildEslintConfigs = async (params: BuildConfigsParams): Promise<FlatConfi
     ...get('lit'),
     ...get('slidev'),
     ...get('vite'),
-    ...(resolvedTypescript ?
-      createTypescriptConfig({
-        ...resolvedTypescript,
-        tsconfigRootDir: resolvedTypescript.tsconfigRootDir ?? tsconfigRootDir
-      }) :
-      []),
+    ...typedTypescriptConfigs,
     ...get('astro'),
     ...(resolvedFrameworks.next && nextMode === NextMode.AppRouter ?
       [{
@@ -539,6 +549,7 @@ const buildEslintConfigs = async (params: BuildConfigsParams): Promise<FlatConfi
       }
     },
     ...(tailwindOptions ? [buildTailwindSettingsConfig(tailwindOptions)] : []),
+    ...untypedTypescriptConfigs,
     ...(await getPrettierConfig(uniqueTools))
   ]
 }
@@ -632,6 +643,76 @@ const resolveProjectConfigs = async (
       config.name === 'eslint-config/gitignore' ? config : scopeConfigToProject(config, projectPath))
   })
 )
+
+const resolveInheritedProjectDefaults = (
+  options: EslintConfigOptions | undefined
+): EslintConfigOptions['projectDefaults'] => mergeProjectOptions(
+  {
+    ...(options?.detection === undefined ? {} : { detection: options.detection }),
+    ...(options?.tailwind === undefined ? {} : { tailwind: options.tailwind })
+  },
+  options?.projectDefaults ?? {}
+)
+
+const getPluginNameFromRule = (
+  ruleName: string,
+  availablePluginNames: Iterable<string>
+): string | undefined => {
+  const segments = ruleName.split('/')
+
+  if (segments.length < 2) return undefined
+
+  const registeredPrefix = [...availablePluginNames]
+    .filter(pluginName => ruleName.startsWith(`${pluginName}/`))
+    .sort((left, right) => right.length - left.length)[0]
+
+  if (registeredPrefix) return registeredPrefix
+
+  return ruleName.startsWith('@') && segments.length > 2
+    ? segments.slice(0, 2).join('/')
+    : segments[0]
+}
+
+/**
+ * Copies already-loaded plugin objects onto rule blocks that reference them.
+ * ESLint 10 validates plugin availability per effective config object, while
+ * feature packs often keep plugin setup and consumer overrides separate.
+ */
+export const attachReferencedPlugins = (configs: FlatConfigArray): FlatConfigArray => {
+  const availablePlugins = new Map<string, NonNullable<TSESLint.FlatConfig.Config['plugins']>[string]>()
+
+  for (const config of configs) {
+    for (const [pluginName, plugin] of Object.entries(config.plugins ?? {})) {
+      if (!availablePlugins.has(pluginName)) availablePlugins.set(pluginName, plugin)
+    }
+  }
+
+  return configs.map((config) => {
+    const requiredPlugins = new Set(
+      Object.keys(config.rules ?? {})
+        .map(ruleName => getPluginNameFromRule(ruleName, availablePlugins.keys()))
+        .filter((pluginName): pluginName is string => pluginName !== undefined)
+    )
+
+    const missingPluginEntries = [...requiredPlugins].flatMap((pluginName) => {
+      const plugin = availablePlugins.get(pluginName)
+
+      return !Object.hasOwn(config.plugins ?? {}, pluginName) && plugin
+        ? [[pluginName, plugin] as const]
+        : []
+    })
+
+    if (missingPluginEntries.length === 0) return config
+
+    return {
+      ...config,
+      plugins: {
+        ...config.plugins,
+        ...Object.fromEntries(missingPluginEntries)
+      }
+    }
+  })
+}
 
 const getConfigsParams = (
   options: EslintConfigOptions | undefined,
@@ -787,7 +868,7 @@ export const defineConfig = async (
   })
 
   const projectConfigs = await resolveProjectConfigs(
-    configuredProjects, options?.projectDefaults, detectRootDir, options?.autoFrameworks
+    configuredProjects, resolveInheritedProjectDefaults(options), detectRootDir, options?.autoFrameworks
   )
 
   // Merge workspace import group into any existing simple-import-sort/imports rules
@@ -798,5 +879,5 @@ export const defineConfig = async (
     patchImportGroups(allConfigs, workspacePrefixes) :
     allConfigs
 
-  return applyStrictMode(patchedConfigs, strict)
+  return attachReferencedPlugins(applyStrictMode(patchedConfigs, strict))
 }

@@ -621,6 +621,23 @@ describe('defineConfig Function', () => {
     })
   })
 
+  test('should apply untyped TypeScript files after Astro parser options', async () => {
+    const config = await defineConfig({
+      detection: false,
+      frameworks: { astro: true },
+      typescript: {
+        untypedFiles: ['**/*.astro']
+      }
+    })
+    const astroIndex = config.findLastIndex(entry => entry.name?.includes('astro'))
+    const untypedIndex = config.findIndex(
+      entry => entry.name === 'eslint-config-typescript/untyped-files'
+    )
+
+    expect(astroIndex).toBeGreaterThanOrEqual(0)
+    expect(untypedIndex).toBeGreaterThan(astroIndex)
+  })
+
   test('should use detectRootDir independently from tsconfigRootDir', async () => {
     const cwd = mkdtempSync(join(tmpdir(), 'eslint-config-detect-root-'))
     try {
@@ -889,6 +906,32 @@ describe('scripts-overrides block', () => {
 })
 
 describe('Monorepo project scoping', () => {
+  test('root detection and Tailwind options are inherited by scoped projects', async () => {
+    const config = await defineConfig({
+      detection: { libraries: false },
+      projects: {
+        'apps/docs': {
+          libraries: ['tailwind'],
+          typescript: false
+        }
+      },
+      root: '/repo',
+      tailwind: {
+        entryPoint: 'src/styles/global.css',
+        noUnknownClasses: false
+      }
+    })
+    const tailwindSettings = config.find(entry =>
+      entry.name === 'eslint-config-basic/tailwind-settings' &&
+      entry.files?.some(pattern => pattern === 'apps/docs/**/*'))
+
+    expect(tailwindSettings?.rules?.['better-tailwindcss/no-unknown-classes']).toBe('off')
+    expect(tailwindSettings?.settings?.['better-tailwindcss']).toMatchObject({
+      cwd: '/repo/apps/docs',
+      entryPoint: 'src/styles/global.css'
+    })
+  })
+
   test('projectDefaults are inherited and merged with project overrides', async () => {
     const config = await defineConfig({
       detection: false,

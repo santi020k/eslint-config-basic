@@ -1304,7 +1304,8 @@ describe('v3 project assistance', () => {
         react: '^19.0.0'
       },
       devDependencies: {
-        typescript: '^5.9.0'
+        typescript: '^5.9.0',
+        vitest: '^4.0.0'
       },
       name: 'test-project',
       type: 'module'
@@ -1318,5 +1319,8 @@ describe('v3 project assistance', () => {
 
     expect(config).toContain('typescript: true')
     expect(config).toContain('react: true')
+    expect(config).toContain('features: {')
+    expect(config).toContain('vitest: true')
+    expect(config).not.toContain('testing: [')
   })
 })

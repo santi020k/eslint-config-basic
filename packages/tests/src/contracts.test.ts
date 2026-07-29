@@ -50,6 +50,36 @@ const createLiteBaseOptions = (): LiteEslintConfigOptions => ({
 const countLiteConfigs = async (options: LiteEslintConfigOptions) => (await defineLiteConfig(options)).length
 
 describe('defineConfig enum contracts', () => {
+  test('registers every referenced plugin on the config object that uses it', async () => {
+    const config = await defineConfig({
+      ...createBaseOptions(),
+      extensions: Object.values(Extension),
+      formats: Object.values(Format),
+      libraries: Object.values(Library),
+      testing: Object.values(Testing),
+      tools: Object.values(Tool)
+    })
+    const availablePluginNames = new Set(
+      config.flatMap(entry => Object.keys(entry.plugins ?? {}))
+    )
+
+    for (const entry of config) {
+      for (const ruleName of Object.keys(entry.rules ?? {})) {
+        const pluginName = [...availablePluginNames]
+          .filter(name => ruleName.startsWith(`${name}/`))
+          .sort((left, right) => right.length - left.length)[0]
+
+        if (!pluginName) continue
+
+        expect(
+          // eslint-disable-next-line security/detect-object-injection -- name is selected from registered plugin keys
+          entry.plugins?.[pluginName],
+          `${entry.name ?? '<anonymous>'} references ${ruleName} without registering ${pluginName}`
+        ).toBeDefined()
+      }
+    }
+  })
+
   test('maps all library enums to optional configs', async () => {
     const baseLength = await countConfigs(createBaseOptions())
 
