@@ -44,7 +44,7 @@ const createTempProject = (
 
 const writeFakeEslint = (
   cwd: string,
-  currentRules: Record<string, unknown> = { 'example/rule': [2, { allow: [] }] }
+  currentRules: null | Record<string, unknown> = { 'example/rule': [2, { allow: [] }] }
 ): void => {
   const packageDir = join(cwd, 'node_modules', 'eslint')
 
@@ -65,7 +65,7 @@ const writeFakeEslint = (
     'async calculateConfigForFile() { if (this.options.overrideConfig) { ' +
     'const entries = Array.isArray(this.options.overrideConfig) ? this.options.overrideConfig.flat(Infinity) : [this.options.overrideConfig]; ' +
     'return { rules: Object.assign({}, ...entries.map(entry => entry.rules || {})) } } ' +
-    `return { rules: ${JSON.stringify(currentRules)} } } } }\n`
+    `return ${currentRules === null ? 'null' : `{ rules: ${JSON.stringify(currentRules)} }`} } } }\n`
   )
 }
 
@@ -385,6 +385,41 @@ describe('v2 to v3 migration', () => {
 
     expect(result.content).toContain('const build = gitignore => {\n  return gitignore\n}')
     expect(result.content).toContain('export default [...createGitignoreConfig()]')
+  })
+
+  test('preserves removed alias references in multiline expression-bodied arrow scopes', () => {
+    const input = [
+      'import { gitignore } from \'@santi020k/eslint-config-basic\'',
+      '',
+      'const build = gitignore => (',
+      '  gitignore',
+      ')',
+      'export default [...gitignore]',
+      'void build'
+    ].join('\n')
+
+    const result = migrateConfigToV3(input, 'lean')
+
+    expect(result.content).toContain('const build = gitignore => (\n  gitignore\n)')
+    expect(result.content).toContain('export default [...createGitignoreConfig()]')
+  })
+
+  test('rewrites package module specifiers without changing comments or data strings', () => {
+    const input = [
+      '// Keep @santi020k/eslint-config-lite in migration docs.',
+      'const packageName = "@santi020k/eslint-config-remix"',
+      'import basic from \'@santi020k/eslint-config-lite\'',
+      'export { config } from \'@santi020k/eslint-config-remix\'',
+      'void basic',
+      'void packageName'
+    ].join('\n')
+
+    const result = migrateConfigToV3(input, 'lean')
+
+    expect(result.content).toContain('// Keep @santi020k/eslint-config-lite in migration docs.')
+    expect(result.content).toContain('const packageName = "@santi020k/eslint-config-remix"')
+    expect(result.content).toContain('import basic from \'@santi020k/eslint-config-basic\'')
+    expect(result.content).toContain('from \'@santi020k/eslint-config-react-router\'')
   })
 
   test('writes config and package backups with granular v3 dependencies', () => {
@@ -838,6 +873,47 @@ describe('preset adoption', () => {
     expect(report.missingPackages).not.toContain('@santi020k/eslint-config-react')
     expect(report.removed).not.toHaveProperty('@eslint-react/exhaustive-deps')
     expect(report.groups.framework).toContain('@eslint-react/no-array-index-key')
+  })
+
+  test('reports unavailable packs selected by project detection', async () => {
+    const cwd = createTempProject({
+      dependencies: { tailwindcss: '^4.0.0' },
+      name: 'tailwind-project',
+      type: 'module'
+    })
+
+    writeFakeEslint(cwd)
+    const report = await createPresetReport(cwd, 'app', 'src/index.ts')
+
+    expect(report.missingPackages).toContain('@santi020k/eslint-config-libraries')
+  })
+
+  test('rejects files without an effective current configuration', async () => {
+    const cwd = createTempProject()
+
+    writeFakeEslint(cwd, null)
+
+    await expect(createPresetReport(cwd, 'app', 'ignored.ts')).rejects.toThrow(
+      'ESLint did not calculate a current configuration for ignored.ts'
+    )
+  })
+
+  test('reports nested compatibility output paths relative to the project', async () => {
+    const cwd = createTempProject()
+
+    mkdirSync(join(cwd, 'config'), { recursive: true })
+    writeFakeEslint(cwd)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    await handleExplainPreset(cwd, 'app', {
+      compatibility: true,
+      json: true,
+      output: 'config/app-compat.mjs'
+    })
+
+    const payload = JSON.parse(String(logSpy.mock.calls[0]?.[0])) as { compatibilityFile: string }
+
+    expect(payload.compatibilityFile).toBe('config/app-compat.mjs')
   })
 
   test('rejects unknown preset names', async () => {

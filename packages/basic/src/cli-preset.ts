@@ -3,7 +3,7 @@
 /* eslint-disable complexity, security/detect-object-injection -- report comparison indexes validated ESLint rule maps */
 import { existsSync, writeFileSync } from 'node:fs'
 import { createRequire, findPackageJSON } from 'node:module'
-import { basename, join } from 'node:path'
+import { join, relative } from 'node:path'
 import { pathToFileURL } from 'node:url'
 
 import {
@@ -197,12 +197,26 @@ const getResolvablePresetOptions = (
 ): { missingPackages: string[], options: Partial<EslintConfigOptions> } => {
   const projectPackageUrl = pathToFileURL(join(cwd, 'package.json'))
   const options = { ...presetOptions }
-  const missingPackages: string[] = []
+  const detectedOptions = detectProjectOptions(cwd)
+  const missingPackages = new Set<string>()
+  const detection = options.detection
+  const detectionControls = typeof detection === 'object' ? detection : {}
+
+  const detectionEnabled = (category: keyof typeof PRESET_FEATURE_PACKAGES): boolean => (
+    detection !== false && detectionControls[category] !== false
+  )
 
   for (const [category, specifier] of Object.entries(PRESET_FEATURE_PACKAGES)) {
-    const selected = options[category as keyof typeof PRESET_FEATURE_PACKAGES]
+    const categoryKey = category as keyof typeof PRESET_FEATURE_PACKAGES
+    const explicit = options[categoryKey]
+    const detected = detectionEnabled(categoryKey) ? detectedOptions[categoryKey] : []
 
-    if (!Array.isArray(selected) || selected.length === 0) continue
+    const selected = [...new Set([
+      ...(Array.isArray(explicit) ? explicit : []),
+      ...(Array.isArray(detected) ? detected : [])
+    ])]
+
+    if (selected.length === 0) continue
 
     try {
       findPackageJSON(specifier, projectPackageUrl)
@@ -211,20 +225,34 @@ const getResolvablePresetOptions = (
 
       Object.assign(options, {
         [category]: [],
+        detection: {
+          ...(typeof options.detection === 'object' ? options.detection : detectionControls),
+          [category]: false
+        },
         features: {
           ...options.features,
           ...Object.fromEntries(selected.map(feature => [feature, false]))
         }
       })
 
-      missingPackages.push(specifier)
+      missingPackages.add(specifier)
     }
   }
 
-  const detectedFrameworks = detectProjectOptions(cwd).detectedFrameworks ?? []
-  const resolvableFrameworks: NonNullable<EslintConfigOptions['frameworks']> = {}
+  const frameworkDetectionEnabled = detection !== false && detectionControls.frameworks !== false
+  const detectedFrameworks = frameworkDetectionEnabled ? detectedOptions.detectedFrameworks ?? [] : []
 
-  for (const framework of detectedFrameworks) {
+  const configuredFrameworks = Object.entries(options.frameworks ?? {})
+    .filter((entry): entry is [DetectedFrameworkName, true] => entry[1] === true)
+    .map(([framework]) => framework)
+
+  const selectedFrameworks = [...new Set([...detectedFrameworks, ...configuredFrameworks])]
+
+  const resolvableFrameworks: NonNullable<EslintConfigOptions['frameworks']> = {
+    ...options.frameworks
+  }
+
+  for (const framework of selectedFrameworks) {
     const specifier = FRAMEWORK_PACKAGES[framework]
 
     try {
@@ -234,7 +262,9 @@ const getResolvablePresetOptions = (
     } catch (error) {
       if (!isMissingRequestedPackage(error, specifier)) throw error
 
-      missingPackages.push(specifier)
+      Reflect.deleteProperty(resolvableFrameworks, framework)
+
+      missingPackages.add(specifier)
     }
   }
 
@@ -254,13 +284,13 @@ const getResolvablePresetOptions = (
     delete resolvableFrameworks.slidev
   }
 
-  if (detectedFrameworks.length > 0) {
+  if (selectedFrameworks.length > 0) {
     options.autoFrameworks = false
 
     options.frameworks = resolvableFrameworks
   }
 
-  return { missingPackages, options }
+  return { missingPackages: [...missingPackages], options }
 }
 
 const createCompatibilityConfig = (
@@ -297,29 +327,44 @@ export const createPresetReport = async (
 
   const preset = normalizedPreset as Preset
   const presetOptions = resolvePreset(preset)
-  const { missingPackages, options: resolvablePresetOptions } = getResolvablePresetOptions(cwd, presetOptions)
   const current = await loadProjectEslint(cwd).calculateConfigForFile(file)
   const currentMetadata = await loadDefineConfigMetadata(cwd)
   const currentOptions = currentMetadata?.options ?? {}
 
-  const selectedConfig = await defineConfig({
-    ...resolvablePresetOptions,
+  const targetOptions = {
+    ...presetOptions,
     ...currentOptions,
     features: {
-      ...resolvablePresetOptions.features,
+      ...presetOptions.features,
       ...currentOptions.features
     },
     frameworks: {
-      ...resolvablePresetOptions.frameworks,
+      ...presetOptions.frameworks,
       ...currentOptions.frameworks
     },
     preset,
     root: currentOptions.root ?? cwd
-  }, ...(currentMetadata?.extraConfigs ?? []))
+  }
+
+  const { missingPackages, options: resolvablePresetOptions } = getResolvablePresetOptions(cwd, targetOptions)
+
+  if (!current) {
+    throw new Error(`ESLint did not calculate a current configuration for ${file}. Check that the file is not ignored.`)
+  }
+
+  const selectedConfig = await defineConfig(
+    resolvablePresetOptions,
+    ...(currentMetadata?.extraConfigs ?? [])
+  )
 
   const selected = await loadProjectEslint(cwd, selectedConfig).calculateConfigForFile(file)
-  const currentRules = current?.rules ?? {}
-  const selectedRules = selected?.rules ?? {}
+
+  if (!selected) {
+    throw new Error(`The ${normalizedPreset} preset did not produce a configuration for ${file}.`)
+  }
+
+  const currentRules = current.rules ?? {}
+  const selectedRules = selected.rules ?? {}
   const added: Record<string, unknown> = {}
   const changed: Record<string, { from: unknown, to: unknown }> = {}
   const removed: Record<string, unknown> = {}
@@ -384,7 +429,7 @@ export const handleExplainPreset = async (
 
     writeFileSync(outputPath, createCompatibilityConfig(report.preset, report.added, report.changed))
 
-    compatibilityFile = basename(outputPath)
+    compatibilityFile = relative(cwd, outputPath)
   }
 
   const payload = { ...report, compatibilityFile }

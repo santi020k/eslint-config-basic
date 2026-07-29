@@ -31,6 +31,7 @@ export default defineConfig([
       'src/cli-migration.ts',
       'src/cli-preset.ts',
       'src/cli-workflows.ts',
+      'src/define-config-metadata.ts',
       'src/index.ts',
       'src/frameworks.ts',
       'src/integrations.ts',

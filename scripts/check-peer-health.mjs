@@ -85,7 +85,8 @@ export const createPeerHealthReport = (cwd, rawReport, policy) => {
       entry.kind === issue.kind &&
       entry.peer === issue.peer &&
       entry.introducedBy === issue.introducedBy &&
-      entry.wantedRange === issue.wantedRange
+      entry.wantedRange === issue.wantedRange &&
+      entry.owner === issue.project
     ))
 
     if (exception) accepted.push({ ...issue, owner: exception.owner, removalCondition: exception.removalCondition })

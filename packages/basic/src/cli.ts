@@ -30,7 +30,7 @@ interface InstallResult {
 type InstallRunner = (
   command: string,
   args: string[],
-  options: { cwd: string, encoding: 'utf8', stdio: 'pipe' }
+  options: { cwd: string, encoding: 'utf8', maxBuffer: number, stdio: 'pipe' }
 ) => InstallResult
 
 const getDefaultConfigFilename = (cwd: string): string => {
@@ -1644,7 +1644,14 @@ export const handleInstall = (
   console.log(`Installing detected ESLint dependencies:\n${installCommand}`)
 
   const [command, args] = createInstallInvocation(packageManager, installPackages, workspaceRoot, catalog)
-  const result = runner(command, args, { cwd: projectRoot, encoding: 'utf8', stdio: 'pipe' })
+
+  const result = runner(command, args, {
+    cwd: projectRoot,
+    encoding: 'utf8',
+    maxBuffer: 16 * 1024 * 1024,
+    stdio: 'pipe'
+  })
+
   const stdout = String(result.stdout ?? '')
   const stderr = String(result.stderr ?? '')
 

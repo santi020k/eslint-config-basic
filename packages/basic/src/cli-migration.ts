@@ -497,9 +497,18 @@ const getShadowedRanges = (content: string, name: string): SourceRange[] => {
     const arrowIndex = searchable.indexOf('=>', start)
     const relativeBodyStart = searchable.slice(arrowIndex + 2).search(/\S/)
     const bodyStart = relativeBodyStart === -1 ? searchable.length : arrowIndex + 2 + relativeBodyStart
+    const bodyDelimiter = searchable[bodyStart]
+    let bodyCloser: string | undefined
 
-    if (searchable[bodyStart] === '{') {
+    if (bodyDelimiter === '(') bodyCloser = ')'
+    else if (bodyDelimiter === '[') bodyCloser = ']'
+
+    if (bodyDelimiter === '{') {
       return { end: findClosingDelimiter(searchable, bodyStart, '{', '}'), start }
+    }
+
+    if (bodyCloser) {
+      return { end: findClosingDelimiter(searchable, bodyStart, bodyDelimiter, bodyCloser), start }
     }
 
     const lineEnd = searchable.indexOf('\n', arrowIndex + 2)
@@ -1097,6 +1106,14 @@ export const getExplicitConfigFeaturePackages = (content: string): string[] => {
   return [...packages]
 }
 
+const replacePackageSpecifiers = (content: string, from: string, to: string): string => content.replace(
+  // eslint-disable-next-line security/detect-unsafe-regex -- bounded module specifiers cannot cross quote characters
+  /(\b(?:from|import|export)\s*(?:\(\s*)?|\brequire\s*\(\s*)(['"])([^'"]+)\2/g,
+  (statement, prefix: string, quote: string, specifier: string) => (
+    specifier === from ? `${prefix}${quote}${to}${quote}` : statement
+  )
+)
+
 export const migrateConfigToV3 = (
   content: string,
   mode: 'full' | 'lean'
@@ -1104,17 +1121,22 @@ export const migrateConfigToV3 = (
   const changes: string[] = []
   const featurePackages = new Set(getExplicitConfigFeaturePackages(content))
   let migrated = content
+  const liteMigrated = replacePackageSpecifiers(migrated, LITE_PACKAGE, BASIC_PACKAGE)
 
-  if (migrated.includes(LITE_PACKAGE)) {
-    migrated = migrated.replaceAll(LITE_PACKAGE, BASIC_PACKAGE)
+  if (liteMigrated !== migrated) {
+    migrated = liteMigrated
 
     changes.push('Replaced the Lite compatibility import with Basic.')
   }
 
-  if (mode === 'full' && migrated.includes(BASIC_PACKAGE)) {
-    migrated = migrated.replaceAll(BASIC_PACKAGE, FULL_PACKAGE)
+  if (mode === 'full') {
+    const fullMigrated = replacePackageSpecifiers(migrated, BASIC_PACKAGE, FULL_PACKAGE)
 
-    changes.push('Switched the root config import to the full bundle.')
+    if (fullMigrated !== migrated) {
+      migrated = fullMigrated
+
+      changes.push('Switched the root config import to the full bundle.')
+    }
   }
 
   if (mode === 'lean') {
@@ -1153,8 +1175,14 @@ export const migrateConfigToV3 = (
     changes.push('Moved frameworks.remix to frameworks["react-router"].')
   }
 
-  if (migrated.includes(REMIX_PACKAGE)) {
-    migrated = migrated.replaceAll(REMIX_PACKAGE, FRAMEWORK_PACKAGES['react-router'])
+  const reactRouterMigrated = replacePackageSpecifiers(
+    migrated,
+    REMIX_PACKAGE,
+    FRAMEWORK_PACKAGES['react-router']
+  )
+
+  if (reactRouterMigrated !== migrated) {
+    migrated = reactRouterMigrated
 
     changes.push('Replaced the Remix package import with React Router.')
   }

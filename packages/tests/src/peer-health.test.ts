@@ -38,7 +38,7 @@ describe('peer health policy', () => {
       wantedRange: '^16'
     }
     const report = createPeerHealthReport(cwd, {
-      project: {
+      'packages/formats': {
         bad: {
           graphql: [{ ...occurrence, foundVersion: '17.0.0' }]
         },
@@ -62,5 +62,33 @@ describe('peer health policy', () => {
     expect(report.actionable).toHaveLength(1)
     expect(report.actionable[0]?.kind).toBe('missing')
     expect(report.healthy).toBe(false)
+  })
+
+  test('does not accept an exception owned by another workspace project', () => {
+    const cwd = createTempProject()
+    const report = createPeerHealthReport(cwd, {
+      'packages/other': {
+        bad: {
+          graphql: [{
+            foundVersion: '17.0.0',
+            parents: [{ name: '@graphql-eslint/eslint-plugin' }],
+            wantedRange: '^16'
+          }]
+        }
+      }
+    }, {
+      accepted: [{
+        introducedBy: '@graphql-eslint/eslint-plugin',
+        kind: 'incompatible',
+        owner: 'packages/formats',
+        peer: 'graphql',
+        removalCondition: 'Remove after upstream support.',
+        wantedRange: '^16'
+      }]
+    })
+
+    expect(report.accepted).toEqual([])
+    expect(report.actionable).toHaveLength(1)
+    expect(report.actionable[0]?.project).toBe('packages/other')
   })
 })
