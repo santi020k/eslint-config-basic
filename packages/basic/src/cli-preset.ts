@@ -6,7 +6,12 @@ import { createRequire, findPackageJSON } from 'node:module'
 import { basename, join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 
-import { type EslintConfigOptions, Preset } from '@santi020k/eslint-config-core'
+import {
+  type DetectedFrameworkName,
+  detectProjectOptions,
+  type EslintConfigOptions,
+  Preset
+} from '@santi020k/eslint-config-core'
 
 import { defineConfig } from './index.js'
 import { isMissingRequestedPackage } from './optional-package-errors.js'
@@ -42,6 +47,27 @@ const PRESET_FEATURE_PACKAGES = {
   testing: '@santi020k/eslint-config-testing',
   tools: '@santi020k/eslint-config-tools'
 } as const
+
+const FRAMEWORK_PACKAGES: Record<DetectedFrameworkName, string> = {
+  angular: '@santi020k/eslint-config-angular',
+  astro: '@santi020k/eslint-config-astro',
+  expo: '@santi020k/eslint-config-expo',
+  hono: '@santi020k/eslint-config-hono',
+  lit: '@santi020k/eslint-config-lit',
+  nest: '@santi020k/eslint-config-nest',
+  next: '@santi020k/eslint-config-next',
+  nuxt: '@santi020k/eslint-config-nuxt',
+  preact: '@santi020k/eslint-config-preact',
+  qwik: '@santi020k/eslint-config-qwik',
+  react: '@santi020k/eslint-config-react',
+  'react-router': '@santi020k/eslint-config-react-router',
+  slidev: '@santi020k/eslint-config-slidev',
+  solid: '@santi020k/eslint-config-solid',
+  svelte: '@santi020k/eslint-config-svelte',
+  'tanstack-start': '@santi020k/eslint-config-tanstack-start',
+  vite: '@santi020k/eslint-config-vite',
+  vue: '@santi020k/eslint-config-vue'
+}
 
 const FRAMEWORK_PREFIXES = new Set([
   '@angular-eslint',
@@ -169,12 +195,52 @@ const getResolvablePresetOptions = (
     }
   }
 
+  const detectedFrameworks = detectProjectOptions(cwd).detectedFrameworks ?? []
+  const resolvableFrameworks: NonNullable<EslintConfigOptions['frameworks']> = {}
+
+  for (const framework of detectedFrameworks) {
+    const specifier = FRAMEWORK_PACKAGES[framework]
+
+    try {
+      findPackageJSON(specifier, projectPackageUrl)
+
+      resolvableFrameworks[framework] = true
+    } catch (error) {
+      if (!isMissingRequestedPackage(error, specifier)) throw error
+
+      missingPackages.push(specifier)
+    }
+  }
+
+  if (!resolvableFrameworks.react) {
+    delete resolvableFrameworks.expo
+
+    delete resolvableFrameworks.next
+
+    delete resolvableFrameworks['react-router']
+
+    if (!resolvableFrameworks.solid) delete resolvableFrameworks['tanstack-start']
+  }
+
+  if (!resolvableFrameworks.vue) {
+    delete resolvableFrameworks.nuxt
+
+    delete resolvableFrameworks.slidev
+  }
+
+  if (detectedFrameworks.length > 0) {
+    options.autoFrameworks = false
+
+    options.frameworks = resolvableFrameworks
+  }
+
   return { missingPackages, options }
 }
 
 const createCompatibilityConfig = (
   preset: string,
-  addedRules: Record<string, unknown>
+  addedRules: Record<string, unknown>,
+  changedRules: Record<string, { from: unknown, to: unknown }>
 ): string => [
   `// Temporary compatibility override generated for Preset.${preset.charAt(0).toUpperCase()}${preset.slice(1)}.`,
   '// Remove entries as the project adopts the preset findings.',
@@ -182,6 +248,9 @@ const createCompatibilityConfig = (
   `  name: 'eslint-config-basic/preset-${preset}-compatibility',`,
   '  rules: {',
   ...Object.keys(addedRules).sort().map(rule => `    ${JSON.stringify(rule)}: 'off',`),
+  ...Object.keys(changedRules).sort().map(rule => (
+    `    ${JSON.stringify(rule)}: ${JSON.stringify(changedRules[rule].from)},`
+  )),
   '  },',
   '}',
   ''
@@ -276,7 +345,7 @@ export const handleExplainPreset = async (
       throw new Error(`${output} already exists; remove it or choose another path with --output.`)
     }
 
-    writeFileSync(outputPath, createCompatibilityConfig(report.preset, report.added))
+    writeFileSync(outputPath, createCompatibilityConfig(report.preset, report.added, report.changed))
 
     compatibilityFile = basename(outputPath)
   }

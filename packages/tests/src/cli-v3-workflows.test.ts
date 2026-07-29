@@ -354,7 +354,7 @@ describe('v2 to v3 migration', () => {
     expect(result.content).toBe(input)
   })
 
-  test('skips alias replacement when the imported binding is shadowed', () => {
+  test('replaces alias references outside a shadowing scope', () => {
     const input = [
       'import { gitignore } from \'@santi020k/eslint-config-basic\'',
       '',
@@ -365,9 +365,9 @@ describe('v2 to v3 migration', () => {
 
     const result = migrateConfigToV3(input, 'lean')
 
-    expect(result.content).toBe(input)
+    expect(result.content).toContain('import { createGitignoreConfig }')
     expect(result.content).toContain('const build = gitignore => gitignore')
-    expect(result.content).not.toContain('createGitignoreConfig')
+    expect(result.content).toContain('export default [...createGitignoreConfig()]')
   })
 
   test('writes config and package backups with granular v3 dependencies', () => {
@@ -533,6 +533,17 @@ describe('v2 to v3 migration', () => {
     )
 
     expect(result.featurePackages).toEqual(expect.arrayContaining(expected))
+  })
+
+  test('includes feature packages selected through an options variable', () => {
+    const result = migrateConfigToV3([
+      'const options = { features: { security: true } }',
+      'export default defineConfig(options)'
+    ].join('\n'), 'lean')
+
+    expect(result.featurePackages).toEqual([
+      '@santi020k/eslint-config-extensions'
+    ])
   })
 
   test('includes feature packages selected through project defaults', () => {
@@ -707,7 +718,7 @@ describe('preset adoption', () => {
   test('groups preset changes and writes a compatibility override', async () => {
     const cwd = createTempProject()
 
-    writeFakeEslint(cwd)
+    writeFakeEslint(cwd, { '@stylistic/indent': 'warn' })
     const report = await createPresetReport(cwd, 'app', 'src/index.ts')
 
     expect(report.preset).toBe('app')
@@ -728,10 +739,14 @@ describe('preset adoption', () => {
     }
 
     expect(payload.compatibilityFile).toBe('.eslint-preset-app-compat.mjs')
-    expect(readFileSync(output, 'utf8')).toContain("name: 'eslint-config-basic/preset-app-compatibility'")
+
+    const compatibilityConfig = readFileSync(output, 'utf8')
+
+    expect(compatibilityConfig).toContain("name: 'eslint-config-basic/preset-app-compatibility'")
+    expect(compatibilityConfig).toContain('"@stylistic/indent": "warn"')
   })
 
-  test('keeps automatically detected framework rules in preset comparisons', async () => {
+  test('excludes detected frameworks whose optional packs are unavailable', async () => {
     const cwd = createTempProject({
       dependencies: { react: '^19.0.0' },
       name: 'react-project',
@@ -741,9 +756,53 @@ describe('preset adoption', () => {
     writeFakeEslint(cwd, { '@eslint-react/exhaustive-deps': 'warn' })
     const report = await createPresetReport(cwd, 'app', 'src/index.tsx')
 
+    expect(report.missingPackages).toContain('@santi020k/eslint-config-react')
+    expect(report.removed).toHaveProperty('@eslint-react/exhaustive-deps')
+    expect(report.groups.framework).not.toContain('@eslint-react/no-array-index-key')
+    expect(report.groups.formatting).toContain('@stylistic/indent')
+  })
+
+  test('excludes installed detected frameworks whose implied pack is unavailable', async () => {
+    const cwd = createTempProject({
+      dependencies: { next: '^16.0.0' },
+      name: 'next-project',
+      type: 'module'
+    })
+    const packageDir = join(cwd, 'node_modules', '@santi020k', 'eslint-config-next')
+
+    mkdirSync(packageDir, { recursive: true })
+    writeFileSync(join(packageDir, 'package.json'), JSON.stringify({
+      name: '@santi020k/eslint-config-next',
+      version: '3.1.0'
+    }))
+    writeFakeEslint(cwd)
+
+    const report = await createPresetReport(cwd, 'app', 'src/index.tsx')
+
+    expect(report.missingPackages).toContain('@santi020k/eslint-config-react')
+    expect(report.groups.framework).not.toContain('@next/next/no-html-link-for-pages')
+  })
+
+  test('keeps detected framework rules when the optional pack is installed', async () => {
+    const cwd = createTempProject({
+      dependencies: { react: '^19.0.0' },
+      name: 'react-project',
+      type: 'module'
+    })
+    const packageDir = join(cwd, 'node_modules', '@santi020k', 'eslint-config-react')
+
+    mkdirSync(packageDir, { recursive: true })
+    writeFileSync(join(packageDir, 'package.json'), JSON.stringify({
+      name: '@santi020k/eslint-config-react',
+      version: '3.1.0'
+    }))
+    writeFakeEslint(cwd, { '@eslint-react/exhaustive-deps': 'warn' })
+
+    const report = await createPresetReport(cwd, 'app', 'src/index.tsx')
+
+    expect(report.missingPackages).not.toContain('@santi020k/eslint-config-react')
     expect(report.removed).not.toHaveProperty('@eslint-react/exhaustive-deps')
     expect(report.groups.framework).toContain('@eslint-react/no-array-index-key')
-    expect(report.groups.formatting).toContain('@stylistic/indent')
   })
 
   test('rejects unknown preset names', async () => {

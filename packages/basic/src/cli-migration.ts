@@ -448,7 +448,28 @@ const getEnclosingDelimiter = (content: string, offset: number): null | string =
   return null
 }
 
-const hasShadowingBinding = (content: string, name: string): boolean => {
+interface SourceRange {
+  end: number
+  start: number
+}
+
+const findClosingDelimiter = (
+  content: string,
+  start: number,
+  opener: string,
+  closer: string
+): number => {
+  let depth = 0
+
+  for (let index = start; index < content.length; index++) {
+    if (content[index] === opener) depth++
+    else if (content[index] === closer && --depth === 0) return index + 1
+  }
+
+  return content.length
+}
+
+const getShadowedRanges = (content: string, name: string): SourceRange[] => {
   const masked = maskNonCode(content)
   const importRanges = getImportRanges(content)
   let searchable = masked
@@ -458,16 +479,42 @@ const hasShadowingBinding = (content: string, name: string): boolean => {
   }
 
   // eslint-disable-next-line security/detect-non-literal-regexp -- binding names come from parsed import specifiers
-  const bindingPattern = new RegExp([
-    `\\b(?:const|let|var|function|class)\\s+${name}\\b`,
-    `\\b(?:const|let|var)\\s+[\\[{][^;\\n=]*\\b${name}\\b`,
-    `(?:\\bfunction\\b[^()]*|\\bcatch)\\s*\\([^)]*\\b${name}\\b[^)]*\\)`,
-    `\\([^)]*\\b${name}\\b[^)]*\\)\\s*=>`,
+  const parameterPattern = new RegExp([
     `\\b${name}\\b\\s*=>`,
+    `\\([^)]*\\b${name}\\b[^)]*\\)\\s*=>`,
+    `(?:\\bfunction\\b[^()]*|\\bcatch)\\s*\\([^)]*\\b${name}\\b[^)]*\\)\\s*\\{`,
     `\\b(?:constructor|[a-zA-Z_$][\\w$]*)\\s*\\([^)]*\\b${name}\\b[^)]*\\)\\s*\\{`
-  ].join('|'), 'm')
+  ].join('|'), 'gm')
 
-  return bindingPattern.test(searchable)
+  const ranges = [...searchable.matchAll(parameterPattern)].map(match => {
+    const start = match.index
+    const bodyStart = start + match[0].length - 1
+
+    if (searchable[bodyStart] === '{') {
+      return { end: findClosingDelimiter(searchable, bodyStart, '{', '}'), start }
+    }
+
+    const arrowIndex = searchable.indexOf('=>', start)
+    const lineEnd = searchable.indexOf('\n', arrowIndex + 2)
+
+    return { end: lineEnd === -1 ? searchable.length : lineEnd, start }
+  })
+
+  // eslint-disable-next-line security/detect-non-literal-regexp -- binding names come from parsed import specifiers
+  const blockBindingPattern = new RegExp(`\\b(?:const|let|var|function|class)\\s+${name}\\b`, 'g')
+
+  for (const match of searchable.matchAll(blockBindingPattern)) {
+    const blockStart = searchable.lastIndexOf('{', match.index)
+
+    if (blockStart !== -1) {
+      ranges.push({
+        end: findClosingDelimiter(searchable, blockStart, '{', '}'),
+        start: blockStart
+      })
+    }
+  }
+
+  return ranges
 }
 
 const replaceBindingReferences = (
@@ -481,13 +528,15 @@ const replaceBindingReferences = (
   // eslint-disable-next-line security/detect-non-literal-regexp -- binding names come from the internal migration map
   const identifierPattern = new RegExp(`\\b${from}\\b`, 'g')
   const matches = [...masked.matchAll(identifierPattern)]
+  const shadowedRanges = getShadowedRanges(content, from)
   let updated = content
 
   for (const match of matches.reverse()) {
     const offset = match.index
     const isImportSpecifier = importRanges.some(range => offset >= range.start && offset < range.end)
+    const isShadowed = shadowedRanges.some(range => offset >= range.start && offset < range.end)
 
-    if (isImportSpecifier) continue
+    if (isImportSpecifier || isShadowed) continue
 
     const precedingContent = masked.slice(0, offset).trimEnd()
     const preceding = precedingContent.at(-1)
@@ -540,8 +589,6 @@ const replaceImportedAlias = (
       if (aliasMatch?.[2] === from) {
         const localName = aliasMatch[3]
 
-        if (hasShadowingBinding(content, localName)) return specifier
-
         bindings.push({ from: localName, to: localName })
 
         return `${aliasMatch[1]}${to} as ${localName}${aliasMatch[4]}`
@@ -549,7 +596,7 @@ const replaceImportedAlias = (
 
       const directMatch = /^(\s*)([a-zA-Z_$][\w$]*)(\s*)$/.exec(specifier)
 
-      if (directMatch?.[2] !== from || hasShadowingBinding(content, from)) return specifier
+      if (directMatch?.[2] !== from) return specifier
 
       bindings.push({ from, to })
 
@@ -673,10 +720,28 @@ const getOwningObjectStart = (structure: string, position: number): number | und
   return objectStarts.at(-1)
 }
 
-const getDefineConfigOptionOwners = (searchable: string): Set<number> => new Set(
-  [...searchable.matchAll(/\bdefineConfig\s*\(\s*\{/g)]
-    .map(match => match.index + match[0].lastIndexOf('{'))
-)
+const getDefineConfigOptionOwners = (searchable: string): Set<number> => {
+  const owners = new Set(
+    [...searchable.matchAll(/\bdefineConfig\s*\(\s*\{/g)]
+      .map(match => match.index + match[0].lastIndexOf('{'))
+  )
+
+  const optionNames = new Set(
+    [...searchable.matchAll(/\bdefineConfig\s*\(\s*([a-zA-Z_$][\w$]*)\b/g)]
+      .map(match => match[1])
+  )
+
+  for (const optionName of optionNames) {
+    // eslint-disable-next-line security/detect-non-literal-regexp -- option names come from local identifier matches
+    const bindingPattern = new RegExp(`\\b(?:const|let|var)\\s+${optionName}\\s*=\\s*\\{`, 'g')
+
+    for (const match of searchable.matchAll(bindingPattern)) {
+      owners.add(match.index + match[0].lastIndexOf('{'))
+    }
+  }
+
+  return owners
+}
 
 const getDirectChildObjectStarts = (
   structure: string,
