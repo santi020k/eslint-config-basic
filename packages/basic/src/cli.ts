@@ -344,18 +344,87 @@ const getCatalogPreference = (
   return false
 }
 
-const getCatalogVersion = (workspaceRoot: string, packageName: string): string | undefined => {
+interface YamlMappingLine {
+  indent: number
+  key: string
+  value: string
+}
+
+const parseYamlMappingLine = (line: string): undefined | YamlMappingLine => {
+  const match = /^(\s*)(?:"([^"]+)"|'([^']+)'|([^'"].*?))\s*:\s*(.*?)\s*$/.exec(line)
+
+  if (!match) return undefined
+
+  const value = match[5].replace(/\s+#.*$/, '').trim()
+  const key = match[2] || match[3] || match[4]
+
+  return {
+    indent: match[1].length,
+    key: key.trim(),
+    value: /^(['"]).*\1$/.test(value) ? value.slice(1, -1) : value
+  }
+}
+
+const getCatalogVersion = (
+  workspaceRoot: string,
+  packageName: string,
+  catalog: string | true
+): string | undefined => {
   const workspacePath = join(workspaceRoot, 'pnpm-workspace.yaml')
 
   if (!existsSync(workspacePath)) return undefined
 
-  const escapedName = packageName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const lines = readFileSync(workspacePath, 'utf8').split(/\r?\n/)
+  let sectionIndex = -1
+  let sectionIndent = -1
 
-  // eslint-disable-next-line security/detect-non-literal-regexp -- packageName is escaped before interpolation
-  const match = new RegExp(`^\\s*['"]?${escapedName}['"]?\\s*:\\s*['"]?([^'"\\s#]+)`, 'm')
-    .exec(readFileSync(workspacePath, 'utf8'))
+  if (catalog === true) {
+    sectionIndex = lines.findIndex(line => {
+      const mapping = parseYamlMappingLine(line)
 
-  return match?.[1]
+      return mapping?.indent === 0 && mapping.key === 'catalog' && mapping.value === ''
+    })
+
+    sectionIndent = 0
+  } else {
+    const catalogsIndex = lines.findIndex(line => {
+      const mapping = parseYamlMappingLine(line)
+
+      return mapping?.indent === 0 && mapping.key === 'catalogs' && mapping.value === ''
+    })
+
+    if (catalogsIndex >= 0) {
+      for (let index = catalogsIndex + 1; index < lines.length; index++) {
+        const mapping = parseYamlMappingLine(lines.at(index) ?? '')
+
+        if (!mapping) continue
+
+        if (mapping.indent === 0) break
+
+        if (mapping.key === catalog && mapping.value === '') {
+          sectionIndex = index
+
+          sectionIndent = mapping.indent
+
+          break
+        }
+      }
+    }
+  }
+
+  if (sectionIndex < 0) return undefined
+
+  for (let index = sectionIndex + 1; index < lines.length; index++) {
+    const mapping = parseYamlMappingLine(lines.at(index) ?? '')
+
+    if (!mapping) continue
+
+    if (mapping.indent <= sectionIndent) break
+
+    if (mapping.key === packageName) return mapping.value || undefined
+  }
+
+  return undefined
 }
 
 const getCompatibleConfigVersion = (
@@ -381,8 +450,18 @@ const getCompatibleConfigVersion = (
     }
   }
 
-  const resolvedSpec = basicSpec?.startsWith('catalog:') && workspaceRoot
-    ? getCatalogVersion(workspaceRoot, BASIC_PACKAGE_NAME)
+  const catalogName = basicSpec?.startsWith('catalog:')
+    ? basicSpec.slice('catalog:'.length)
+    : undefined
+
+  let selectedCatalog: string | true | undefined
+
+  if (catalogName !== undefined) {
+    selectedCatalog = catalogName && catalogName !== 'default' ? catalogName : true
+  }
+
+  const resolvedSpec = selectedCatalog && workspaceRoot
+    ? getCatalogVersion(workspaceRoot, BASIC_PACKAGE_NAME, selectedCatalog)
     : basicSpec
 
   const match = /(\d+)\.(\d+)\.(\d+)/.exec(resolvedSpec ?? getCliVersion())

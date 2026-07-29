@@ -2,12 +2,14 @@
 /* eslint-disable security/detect-non-literal-fs-filename -- output is scoped to the caller-selected project root */
 /* eslint-disable complexity, security/detect-object-injection -- report comparison indexes validated ESLint rule maps */
 import { existsSync, writeFileSync } from 'node:fs'
-import { createRequire } from 'node:module'
+import { createRequire, findPackageJSON } from 'node:module'
 import { basename, join } from 'node:path'
+import { pathToFileURL } from 'node:url'
 
-import { Preset } from '@santi020k/eslint-config-core'
+import { type EslintConfigOptions, Preset } from '@santi020k/eslint-config-core'
 
 import { defineConfig } from './index.js'
+import { isMissingRequestedPackage } from './optional-package-errors.js'
 import { resolvePreset } from './resolvers.js'
 
 interface EffectiveConfig {
@@ -32,6 +34,14 @@ export interface ExplainPresetOptions {
 }
 
 const PRESETS = new Set<string>(Object.values(Preset))
+
+const PRESET_FEATURE_PACKAGES = {
+  extensions: '@santi020k/eslint-config-extensions',
+  formats: '@santi020k/eslint-config-formats',
+  libraries: '@santi020k/eslint-config-libraries',
+  testing: '@santi020k/eslint-config-testing',
+  tools: '@santi020k/eslint-config-tools'
+} as const
 
 const FRAMEWORK_PREFIXES = new Set([
   '@angular-eslint',
@@ -123,6 +133,33 @@ const loadProjectEslint = (
   })
 }
 
+const getResolvablePresetOptions = (
+  cwd: string,
+  presetOptions: Partial<EslintConfigOptions>
+): { missingPackages: string[], options: Partial<EslintConfigOptions> } => {
+  const projectPackageUrl = pathToFileURL(join(cwd, 'package.json'))
+  const options = { ...presetOptions }
+  const missingPackages: string[] = []
+
+  for (const [category, specifier] of Object.entries(PRESET_FEATURE_PACKAGES)) {
+    const selected = options[category as keyof typeof PRESET_FEATURE_PACKAGES]
+
+    if (!Array.isArray(selected) || selected.length === 0) continue
+
+    try {
+      findPackageJSON(specifier, projectPackageUrl)
+    } catch (error) {
+      if (!isMissingRequestedPackage(error, specifier)) throw error
+
+      Object.assign(options, { [category]: [] })
+
+      missingPackages.push(specifier)
+    }
+  }
+
+  return { missingPackages, options }
+}
+
 const createCompatibilityConfig = (
   preset: string,
   addedRules: Record<string, unknown>
@@ -152,8 +189,16 @@ export const createPresetReport = async (
   }
 
   const preset = normalizedPreset as Preset
+  const presetOptions = resolvePreset(preset)
+  const { missingPackages, options: resolvablePresetOptions } = getResolvablePresetOptions(cwd, presetOptions)
   const current = await loadProjectEslint(cwd).calculateConfigForFile(file)
-  const selectedConfig = await defineConfig({ detection: false, preset, root: cwd })
+
+  const selectedConfig = await defineConfig({
+    ...resolvablePresetOptions,
+    detection: false,
+    root: cwd
+  })
+
   const selected = await loadProjectEslint(cwd, selectedConfig).calculateConfigForFile(file)
   const currentRules = current?.rules ?? {}
   const selectedRules = selected?.rules ?? {}
@@ -191,8 +236,9 @@ export const createPresetReport = async (
     changed,
     file,
     groups,
+    missingPackages,
     preset: normalizedPreset,
-    presetOptions: resolvePreset(preset),
+    presetOptions,
     removed,
     totals: {
       added: Object.keys(added).length,
@@ -237,6 +283,7 @@ export const handleExplainPreset = async (
     `- Newly enabled rules: ${report.totals.added}`,
     `- Changed rule options: ${report.totals.changed}`,
     `- Rules no longer enabled: ${report.totals.removed}`,
+    `- Optional packs not installed (excluded from comparison): ${report.missingPackages.length > 0 ? report.missingPackages.join(', ') : 'none'}`,
     '',
     ...Object.entries(report.groups).map(([group, rules]) => (
       `- ${group}: ${rules.length}${rules.length > 0 ? ` (${rules.join(', ')})` : ''}`

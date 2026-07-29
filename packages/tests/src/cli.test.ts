@@ -508,6 +508,8 @@ describe('CLI command UX', () => {
     writeFileSync(join(cwd, 'pnpm-workspace.yaml'), [
       'packages:',
       '  - "apps/*"',
+      'catalog:',
+      '  "@santi020k/eslint-config-basic": ^2.9.0',
       'catalogs:',
       '  lint:',
       '    "@santi020k/eslint-config-basic": ^3.1.0',

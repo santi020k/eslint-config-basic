@@ -79,6 +79,12 @@ describe('optional package errors', () => {
       ),
       { code: 'ERR_MODULE_NOT_FOUND' }
     )
+    const exportedSubpathError = Object.assign(
+      new Error(
+        'Cannot find package \'@santi020k/eslint-config-tools\' imported from /consumer/eslint.config.mjs'
+      ),
+      { code: 'ERR_MODULE_NOT_FOUND' }
+    )
     const transitiveError = Object.assign(
       new Error(
         'Cannot find package \'incompatible-peer\' imported from /node_modules/@santi020k/eslint-config-vite/dist/index.js'
@@ -87,6 +93,10 @@ describe('optional package errors', () => {
     )
 
     expect(isMissingRequestedPackage(directError, '@santi020k/eslint-config-vite')).toBe(true)
+    expect(isMissingRequestedPackage(
+      exportedSubpathError,
+      '@santi020k/eslint-config-tools/registry'
+    )).toBe(true)
     expect(isMissingRequestedPackage(transitiveError, '@santi020k/eslint-config-vite')).toBe(false)
   })
 })

@@ -114,6 +114,22 @@ describe('v2 to v3 migration', () => {
     ]))
   })
 
+  test('preserves category arrays within each owning project option', () => {
+    const result = migrateConfigToV3([
+      'export default defineConfig({',
+      '  projects: {',
+      '    app: { testing: [Testing.Vitest] },',
+      '    docs: { formats: [Format.Markdown] },',
+      '  },',
+      '})'
+    ].join('\n'), 'lean')
+
+    expect(result.content).toContain('app: { features: {\n      "vitest": true,\n    },}')
+    expect(result.content).toContain('docs: { features: {\n      "markdown": true,\n    },}')
+    expect(result.content).not.toContain('app: { features: {\n      "markdown": true,')
+    expect(result.content).not.toContain('docs: { features: {\n      "vitest": true,')
+  })
+
   test('preserves dynamic category expressions and reports raw Tailwind overrides', () => {
     const config = [
       'export default defineConfig({',
@@ -557,6 +573,10 @@ describe('preset adoption', () => {
     const report = await createPresetReport(cwd, 'app', 'src/index.ts')
 
     expect(report.preset).toBe('app')
+    expect(report.missingPackages).toEqual([
+      '@santi020k/eslint-config-testing',
+      '@santi020k/eslint-config-tools'
+    ])
     expect(report.totals.added).toBeGreaterThan(0)
     expect(Object.values(report.groups).flat()).toHaveLength(report.totals.added)
 

@@ -150,7 +150,7 @@ const FEATURE_EXPORTS: Record<keyof typeof FEATURE_PACKAGES, string[]> = {
 const EXPORT_TO_FEATURE_PACKAGE = new Map(
   Object.entries(FEATURE_EXPORTS).flatMap(([category, exports]) => exports.map(exportName => [
     exportName,
-     
+
     FEATURE_PACKAGES[category as keyof typeof FEATURE_PACKAGES]
   ] as const))
 )
@@ -632,10 +632,23 @@ const toFeatureName = (value: string): null | string => {
   return raw ? toKebabCase(raw) : null
 }
 
+const getOwningObjectStart = (structure: string, position: number): number | undefined => {
+  const objectStarts: number[] = []
+
+  for (let index = 0; index < position; index++) {
+    if (structure[index] === '{') objectStarts.push(index)
+
+    if (structure[index] === '}') objectStarts.pop()
+  }
+
+  return objectStarts.at(-1)
+}
+
 const modernizeLiteralFeatureArrays = (
   content: string
 ): { changed: boolean, content: string, features: string[] } => {
   const searchable = maskNonCode(content, true)
+  const structure = maskNonCode(content)
 
   const selections = [...searchable.matchAll(
     /\b(?:extensions|formats|libraries|testing|tools)\b\s*:\s*\[([\s\S]*?)\]\s*,?/g
@@ -643,12 +656,14 @@ const modernizeLiteralFeatureArrays = (
     if (/\/[/*]/.test(content.slice(match.index, match.index + match[0].length))) return []
 
     const features = match[1].split(',').filter(Boolean).map(toFeatureName)
+    const owner = getOwningObjectStart(structure, match.index)
 
-    if (features.some(feature => feature === null)) return []
+    if (owner === undefined || features.some(feature => feature === null)) return []
 
     return [{
       end: match.index + match[0].length,
       features: features as string[],
+      owner,
       start: match.index
     }]
   })
@@ -656,34 +671,54 @@ const modernizeLiteralFeatureArrays = (
   if (selections.length === 0) return { changed: false, content, features: [] }
 
   const features = [...new Set(selections.flatMap(selection => selection.features))]
-  const first = selections[0]
-  const lineStart = content.lastIndexOf('\n', first.start) + 1
-  const indent = /^\s*/.exec(content.slice(lineStart, first.start))?.[0] ?? ''
-  const existingFeatures = /\bfeatures\b\s*:\s*\{/.exec(searchable)
+  const selectionsByOwner = Map.groupBy(selections, selection => selection.owner)
+  const existingFeaturesByOwner = new Map<number, RegExpMatchArray>()
 
-  const featureBlock = existingFeatures
-    ? `\n${features.map(feature => `${indent}  ${JSON.stringify(feature)}: true,`).join('\n')}`
-    : [
-      'features: {',
-      ...features.map(feature => `${indent}  ${JSON.stringify(feature)}: true,`),
-      `${indent}},`
-    ].join('\n')
+  for (const match of searchable.matchAll(/\bfeatures\b\s*:\s*\{/g)) {
+    const owner = getOwningObjectStart(structure, match.index)
+
+    if (owner !== undefined && !existingFeaturesByOwner.has(owner)) {
+      existingFeaturesByOwner.set(owner, match)
+    }
+  }
+
+  const edits: { end: number, replacement: string, start: number }[] = []
+
+  for (const [owner, ownedSelections] of selectionsByOwner) {
+    const ownedFeatures = [...new Set(ownedSelections.flatMap(selection => selection.features))]
+    const first = ownedSelections[0]
+    const lineStart = content.lastIndexOf('\n', first.start) + 1
+    const indent = /^\s*/.exec(content.slice(lineStart, first.start))?.[0] ?? ''
+    const existingFeatures = existingFeaturesByOwner.get(owner)
+
+    const featureBlock = existingFeatures
+      ? `\n${ownedFeatures.map(feature => `${indent}  ${JSON.stringify(feature)}: true,`).join('\n')}`
+      : [
+        'features: {',
+        ...ownedFeatures.map(feature => `${indent}  ${JSON.stringify(feature)}: true,`),
+        `${indent}},`
+      ].join('\n')
+
+    for (const selection of ownedSelections) {
+      edits.push({
+        end: selection.end,
+        replacement: !existingFeatures && selection === first ? featureBlock : '',
+        start: selection.start
+      })
+    }
+
+    if (existingFeatures) {
+      const insertionIndex = (existingFeatures.index ?? 0) + existingFeatures[0].length
+
+      edits.push({
+        end: insertionIndex,
+        replacement: featureBlock,
+        start: insertionIndex
+      })
+    }
+  }
 
   let updated = content
-
-  const edits = selections.map(selection => ({
-    end: selection.end,
-    replacement: !existingFeatures && selection === first ? featureBlock : '',
-    start: selection.start
-  }))
-
-  if (existingFeatures) {
-    edits.push({
-      end: existingFeatures.index + existingFeatures[0].length,
-      replacement: featureBlock,
-      start: existingFeatures.index + existingFeatures[0].length
-    })
-  }
 
   for (const edit of edits.sort((a, b) => b.start - a.start)) {
     updated = `${updated.slice(0, edit.start)}${edit.replacement}${updated.slice(edit.end)}`

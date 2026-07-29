@@ -1,3 +1,9 @@
+const getPackageRoot = (specifier: string): string => {
+  const segments = specifier.split('/')
+
+  return specifier.startsWith('@') ? segments.slice(0, 2).join('/') : segments[0]
+}
+
 export const isMissingRequestedPackage = (error: unknown, specifier: string): boolean => {
   if (!(error instanceof Error)) return false
 
@@ -7,5 +13,5 @@ export const isMissingRequestedPackage = (error: unknown, specifier: string): bo
 
   const missingSpecifier = /Cannot find (?:module|package) ['"]([^'"]+)['"]/.exec(error.message)?.[1]
 
-  return missingSpecifier === specifier || missingSpecifier?.startsWith(`${specifier}/`) === true
+  return missingSpecifier !== undefined && getPackageRoot(missingSpecifier) === getPackageRoot(specifier)
 }
