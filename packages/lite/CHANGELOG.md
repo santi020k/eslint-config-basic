@@ -1,5 +1,34 @@
 # @santi020k/eslint-config-lite
 
+## 3.1.0
+
+### Minor Changes
+
+- [#99](https://github.com/santi020k/eslint-config-basic/pull/99) [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967) Thanks [@santi020k](https://github.com/santi020k)! - Complete the v3 lean dependency boundary and one-line recommended entry point. Framework and feature-pack packages are now optional, dynamically loaded peers with actionable installation errors. Feature factories move from the basic root export to granular extensions, formats, libraries, testing, and tools packages; `@santi020k/eslint-config-integrations` remains as a compatibility aggregate, while the new `@santi020k/eslint-config-full` package provides the batteries-included installation path. Core no longer owns JSX accessibility rules, the CLI writes the one-line configuration, and release checks enforce dependency budgets, packed-consumer compatibility, and lean production-audit boundaries.
+
+  Remove the v1 compatibility exports (`*Config`, `jsConfig`, `tsConfig`,
+  `astroConfig`, `rules`, `loadModule`, and `eslintConfig`) from the aggregate
+  v3 API. Remove the deprecated Remix package and `frameworks.remix` option;
+  Remix dependencies now resolve through the React Router v7 configuration.
+  The Lite package is now a thin compatibility re-export of Basic.
+
+- [#99](https://github.com/santi020k/eslint-config-basic/pull/99) [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967) Thanks [@santi020k](https://github.com/santi020k)! - Polish real-world consumer configuration: add one `root` option for detection,
+  TypeScript, Tailwind, projects, and `.gitignore`; auto-detect and scope workspace
+  packages without leaking root framework dependencies; accept native project
+  service options; and syntax-lint TypeScript config files plus explicit
+  `untypedFiles` without consumer-side `typescript-eslint` imports.
+
+### Patch Changes
+
+- [#99](https://github.com/santi020k/eslint-config-basic/pull/99) [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967) Thanks [@santi020k](https://github.com/santi020k)! - Resolve package-scoped Tailwind and Astro configuration roots, keep lazy framework imports anchored to their declaring package, add shared `projectDefaults` inheritance for monorepos, and move integration host libraries to optional peers.
+
+- [#99](https://github.com/santi020k/eslint-config-basic/pull/99) [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967) Thanks [@santi020k](https://github.com/santi020k)! - Deprecate the Lite and Integrations compatibility packages during v3 and
+  schedule their removal for v4. Add TypeScript deprecation annotations,
+  migration guidance, and post-publish npm registry warnings. Also deprecate the
+  `integrations` option alias and `doctor --lite-install` compatibility workflow.
+- Updated dependencies [[`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967), [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967), [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967), [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967), [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967), [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967), [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967), [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967), [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967), [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967), [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967)]:
+  - @santi020k/eslint-config-basic@3.1.0
+
 ## 3.0.0
 
 ### Major Changes

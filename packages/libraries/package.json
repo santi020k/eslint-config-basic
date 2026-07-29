@@ -1,7 +1,10 @@
 {
   "name": "@santi020k/eslint-config-libraries",
-  "version": "3.0.0",
-  "publishConfig": { "access": "public", "provenance": true },
+  "version": "3.1.0",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "description": "Library-specific ESLint configs for eslint-config-basic",
   "type": "module",
   "main": "./dist/index.js",
@@ -18,7 +21,9 @@
       "import": "./dist/registry.js"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup",
     "check:exports": "publint",
@@ -59,12 +64,22 @@
     "zod": "^4.0.0"
   },
   "peerDependenciesMeta": {
-    "storybook": { "optional": true },
-    "tailwindcss": { "optional": true },
-    "typescript": { "optional": true },
-    "zod": { "optional": true }
+    "storybook": {
+      "optional": true
+    },
+    "tailwindcss": {
+      "optional": true
+    },
+    "typescript": {
+      "optional": true
+    },
+    "zod": {
+      "optional": true
+    }
   },
-  "engines": { "node": ">=22.19.0" },
+  "engines": {
+    "node": ">=22.19.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/santi020k/eslint-config-basic.git",

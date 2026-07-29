@@ -1,5 +1,20 @@
 # @santi020k/eslint-config-react
 
+## 3.1.0
+
+### Minor Changes
+
+- [#99](https://github.com/santi020k/eslint-config-basic/pull/99) [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967) Thanks [@santi020k](https://github.com/santi020k)! - Replace the prerelease `eslint-plugin-react-compiler` integration with the
+  official compiler diagnostics from `eslint-plugin-react-hooks`. Compiler
+  diagnostics now use the `react-hooks/*` namespace, while diagnostics already
+  provided by `@eslint-react/eslint-plugin` remain deduplicated. The diagnostics
+  remain warnings to preserve the previous configuration's enforcement level.
+
+### Patch Changes
+
+- Updated dependencies [[`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967), [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967), [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967), [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967), [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967), [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967), [`0f89b89`](https://github.com/santi020k/eslint-config-basic/commit/0f89b89b466732ea582650b4e0baee0c47b0c967)]:
+  - @santi020k/eslint-config-core@3.1.0
+
 ## 2.1.1
 
 ### Patch Changes
