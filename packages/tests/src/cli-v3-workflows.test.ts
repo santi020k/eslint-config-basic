@@ -16,6 +16,7 @@ import {
   migrateConfigToV3,
   type V3MigrationContext
 } from '../../basic/src/cli-migration.js'
+import { createPresetReport, handleExplainPreset } from '../../basic/src/cli-preset.js'
 import {
   type CommandRunner,
   createConfigSnapshot,
@@ -57,7 +58,10 @@ const writeFakeEslint = (cwd: string): void => {
   writeFileSync(join(packageDir, 'bin', 'eslint.js'), '')
   writeFileSync(
     join(packageDir, 'index.js'),
-    'module.exports = { ESLint: class { async calculateConfigForFile() { ' +
+    'module.exports = { ESLint: class { constructor(options) { this.options = options } ' +
+    'async calculateConfigForFile() { if (this.options.overrideConfig) { ' +
+    'const entries = Array.isArray(this.options.overrideConfig) ? this.options.overrideConfig.flat(Infinity) : [this.options.overrideConfig]; ' +
+    'return { rules: Object.assign({}, ...entries.map(entry => entry.rules || {})) } } ' +
     'return { rules: { "example/rule": [2, { allow: [] }] } } } } }\n'
   )
 }
@@ -86,6 +90,46 @@ afterEach(() => {
 })
 
 describe('v2 to v3 migration', () => {
+  test('modernizes literal categories, integrations, and root aliases', () => {
+    const result = migrateConfigToV3([
+      'export default defineConfig({',
+      '  detectRootDir: import.meta.dirname,',
+      '  integrations: { vitest: true },',
+      '  extensions: [Extension.Security],',
+      '  formats: [Format.Jsonc, "yaml"],',
+      '})'
+    ].join('\n'), 'lean')
+
+    expect(result.content).toContain('root: import.meta.dirname')
+    expect(result.content).toContain('features: {')
+    expect(result.content).toContain('"security": true')
+    expect(result.content).toContain('"jsonc": true')
+    expect(result.content).toContain('"yaml": true')
+    expect(result.content).not.toContain('integrations:')
+    expect(result.content).not.toContain('extensions:')
+    expect(result.changes).toEqual(expect.arrayContaining([
+      expect.stringContaining('deprecated integrations map'),
+      expect.stringContaining('v3 root option'),
+      expect.stringContaining('literal category arrays')
+    ]))
+  })
+
+  test('preserves dynamic category expressions and reports raw Tailwind overrides', () => {
+    const config = [
+      'export default defineConfig({',
+      '  extensions: [...sharedExtensions],',
+      '  rules: { "better-tailwindcss/no-unknown-classes": "off" },',
+      '})'
+    ].join('\n')
+    const result = migrateConfigToV3(config, 'lean')
+
+    expect(result.content).toBe(config)
+    expect(result.changes).toContain(
+      'Manual action required: replace the raw better-tailwindcss/no-unknown-classes override with ' +
+      'projects["<scope>"].tailwind.noUnknownClasses.'
+    )
+  })
+
   test.each([
     {
       context: migrationContext({ libraries: ['tailwind'] }),
@@ -502,6 +546,39 @@ describe('v2 to v3 migration', () => {
 
     expect(payload.mode).toBe('lean')
     logSpy.mockRestore()
+  })
+})
+
+describe('preset adoption', () => {
+  test('groups preset changes and writes a compatibility override', async () => {
+    const cwd = createTempProject()
+
+    writeFakeEslint(cwd)
+    const report = await createPresetReport(cwd, 'app', 'src/index.ts')
+
+    expect(report.preset).toBe('app')
+    expect(report.totals.added).toBeGreaterThan(0)
+    expect(Object.values(report.groups).flat()).toHaveLength(report.totals.added)
+
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    await handleExplainPreset(cwd, 'app', { compatibility: true, json: true })
+
+    const output = join(cwd, '.eslint-preset-app-compat.mjs')
+    const payload = JSON.parse(String(logSpy.mock.calls[0]?.[0])) as {
+      compatibilityFile: string
+    }
+
+    expect(payload.compatibilityFile).toBe('.eslint-preset-app-compat.mjs')
+    expect(readFileSync(output, 'utf8')).toContain("name: 'eslint-config-basic/preset-app-compatibility'")
+  })
+
+  test('rejects unknown preset names', async () => {
+    const cwd = createTempProject()
+
+    writeFakeEslint(cwd)
+
+    await expect(createPresetReport(cwd, 'mystery')).rejects.toThrow('Unknown preset')
   })
 })
 

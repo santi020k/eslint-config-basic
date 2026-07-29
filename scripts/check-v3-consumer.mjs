@@ -3,6 +3,8 @@ import { cpSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writ
 import { tmpdir } from 'node:os'
 import { basename, isAbsolute, join } from 'node:path'
 
+import { checkPeerHealth } from './check-peer-health.mjs'
+
 const rootDir = process.cwd()
 const tempDir = mkdtempSync(join(tmpdir(), 'eslint-config-v3-consumer-'))
 const packageDirs = ['core', 'typescript', 'basic']
@@ -367,10 +369,16 @@ try {
     stdio: 'pipe'
   })
 
+  const peerReport = checkPeerHealth(
+    modularConsumerDir,
+    join(rootDir, 'scripts', 'peer-health-policy.json')
+  )
+
   process.stdout.write(
     'V3 modular monorepo verified: packed feature and framework packages install, ' +
     'doctor resolves every project dependency, ESLint 10 lints cleanly, the config typechecks, ' +
-    'and the generated lockfile supports a frozen install.\n'
+    `the generated lockfile supports a frozen install, and peer health has ` +
+    `${peerReport.accepted.length} accepted and zero actionable warnings.\n`
   )
 } finally {
   rmSync(tempDir, { force: true, recursive: true })

@@ -7,7 +7,7 @@ import RunnerTabs from '../../../components/RunnerTabs.astro'
 
 The main package ships a CLI that can scaffold or refresh the project config.
 
-<RunnerTabs args={['init', 'update', 'explain', 'inspect', 'install', 'doctor', 'compatibility', 'migrate --to v3', 'baseline', 'profile', 'snapshot', 'diff', 'docs', 'generate-skill']} />
+<RunnerTabs args={['init', 'update', 'explain', 'explain-preset app', 'inspect', 'install', 'doctor', 'compatibility', 'migrate --to v3', 'baseline', 'profile', 'snapshot', 'diff', 'docs', 'generate-skill']} />
 
 ## What It Does
 
@@ -17,6 +17,7 @@ The main package ships a CLI that can scaffold or refresh the project config.
 - Writes the zero-argument `defineConfig()` setup.
 - Leaves framework selection to runtime detection, so the file stays stable as dependencies change.
 - Prints detected config inputs with `explain`.
+- Compares preset adoption by rule category with `explain-preset`.
 - Prints detected inputs, package-manager details, workspace projects, and active config features with `inspect`.
 - Installs missing framework and feature-category packages with `install`.
 - Checks common v3 adoption issues with `doctor`.
@@ -76,6 +77,28 @@ npx @santi020k/eslint-config-basic explain @typescript-eslint/no-floating-promis
 The report includes the effective severity and options, defining config names,
 and the likely config package responsible for the rule.
 
+## Explain Preset Adoption
+
+Before changing an existing project to a broader preset, compare its current
+effective rules for a representative file:
+
+```sh
+npx @santi020k/eslint-config-basic explain-preset app --file src/index.ts
+```
+
+The report groups newly enabled rules into formatting, correctness, security,
+framework, and domain sections. Use `--json` for migration tooling. To keep a
+migration incremental, generate a temporary override that disables only the
+newly enabled rules:
+
+```sh
+npx @santi020k/eslint-config-basic explain-preset app --file src/index.ts --compatibility
+```
+
+Import the generated `.eslint-preset-app-compat.mjs` after the preset config,
+then remove its entries as findings are adopted. Use `--output <path>` to choose
+another filename.
+
 ## Inspect the Active Setup
 
 Use `inspect` when you want a fuller view than `explain`, including package-manager detection, workspace package discovery, and features read from the active ESLint config when it can be loaded.
@@ -114,6 +137,10 @@ Preview the package-manager command without changing `package.json`:
 ```sh
 npx @santi020k/eslint-config-basic install --dry-run
 ```
+
+Companion config packages use the installed Basic major/minor range. If pnpm's
+`minimumReleaseAge` blocks that exact compatible release, the CLI reports the
+policy explicitly instead of suggesting an older incompatible major.
 
 ## Diagnose Setup Issues
 
@@ -192,7 +219,10 @@ npx @santi020k/eslint-config-basic migrate --to v3
 
 The command selects lean mode by default, detects required framework and
 feature-pack packages, moves direct factory imports to their granular packages,
-replaces removed aliases, and migrates Remix to React Router. Config and
+replaces removed aliases, migrates literal category arrays and the deprecated
+`integrations` map to `features`, consolidates a single root-directory alias
+into `root`, and migrates Remix to React Router. Dynamic expressions and
+conflicting root aliases are left unchanged with a manual-action note. Config and
 `package.json` changes are dry-run only until `--write` is passed:
 
 ```sh

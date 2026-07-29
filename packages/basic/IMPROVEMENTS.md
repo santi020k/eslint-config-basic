@@ -18,6 +18,13 @@ successfully.
 - TypeScript `untypedFiles` overrides are composed after framework parser
   configs, including Astro projects.
 - `init --explicit` now generates the v3 `features` map.
+- Preset adoption reports compare effective rules by category and can write a
+  temporary compatibility override.
+- CLI subcommands now have strict, side-effect-free help and flag validation.
+- Minimum-release-age failures receive a dedicated compatible-range diagnostic.
+- Release checks enforce peer health with owned, conditional exceptions.
+- Safe migration rewrites prefer `features` and `root`, while dynamic cases
+  receive explicit manual-action guidance.
 - The release check now installs a packed pnpm monorepo consumer with Astro,
   Tailwind, TypeScript, Vitest, format, tool, and extension packs; it runs
   doctor, ESLint 10, config typechecking, and a frozen-lockfile reinstall.
@@ -174,7 +181,7 @@ Error handling should distinguish:
 Always retain the original error as `cause`, show the failing package path, and
 include the one-command remediation only when the package is genuinely absent.
 
-## P2 — Make preset expansion visible and adoption-friendly
+## Completed — Make preset expansion visible and adoption-friendly
 
 `Preset.App`, `Preset.Worker`, and `Preset.Library` can activate substantially
 more rules than an existing default config. That is useful for new projects,
@@ -186,17 +193,17 @@ the current effective config with the selected preset. Group the output into
 formatting, correctness, security, framework, and domain rules, and generate a
 temporary compatibility override when requested.
 
-## Partially completed — Make CLI help side-effect free
+## Completed — Make CLI help side-effect free
 
 `basic-eslint install --help` should print subcommand help and exit without
 installing packages. Add command-level parsing tests for `--help`, `--dry-run`,
 and invalid flags so documentation discovery can never mutate a workspace.
 
-Help flags are now intercepted before command dispatch, so they cannot trigger
-installation. Dedicated subcommand help and strict invalid-flag validation
-remain follow-up work.
+Help flags are intercepted before command dispatch, dedicated subcommand help
+lists only supported flags, and strict parsing rejects unknown or incomplete
+options before any handler can mutate the workspace.
 
-## Partially completed — Respect release compatibility under minimum-age policies
+## Completed — Respect release compatibility under minimum-age policies
 
 With pnpm's `minimumReleaseAge`, requesting an unversioned companion package can
 resolve an older major while Basic itself is already pinned to 3.1. The install
@@ -207,12 +214,13 @@ For Basic 3.1, generated install requests should use a compatible 3.1 range and
 produce a clear message when workspace supply-chain policy temporarily blocks
 that release.
 
-Install and doctor commands now derive a compatible caret range from the
-installed Basic dependency, including catalog-backed versions, and use that
-range for modular companion packages. A dedicated diagnostic for package
-manager minimum-age rejection remains follow-up work.
+Install and doctor commands derive a compatible caret range from the installed
+Basic dependency, including catalog-backed versions, and use that range for
+modular companion packages. Install also recognizes pnpm minimum-release-age
+failures and explains the wait-or-exclude policy without suggesting an
+incompatible release.
 
-## P2 — Treat peer health as a release signal
+## Completed — Treat peer health as a release signal
 
 The modular consumer installed and linted successfully but `pnpm peers check`
 still reported stale ESLint and TypeScript peer ranges from transitive plugins.
@@ -226,16 +234,18 @@ Add a release report that:
 - records explicitly accepted upstream range gaps with an owner and removal
   condition.
 
-## In progress — Generate modern configuration during migration
+## Completed — Generate modern configuration during migration
 
 Migration output should prefer the v3 `features` map and `root` option over
 legacy category arrays and root-directory aliases. When custom classes are
 detected, it should offer the supported project-scoped Tailwind option instead
 of generating a raw rule override.
 
-`init --explicit` now emits `features`; rewriting arbitrary existing JavaScript
-config objects remains future work because migration must preserve expressions,
-spreads, comments, and computed values without changing behavior.
+`init --explicit` emits `features`. The v3 migration rewrites literal category
+arrays, the deprecated `integrations` alias, and unambiguous root aliases.
+Expressions, spreads, comments inside dynamic selections, conflicting root
+aliases, and raw Tailwind rule overrides are preserved and reported as manual
+actions so migration never changes behavior it cannot prove safe.
 
 An ideal generated result is concise and self-explanatory:
 

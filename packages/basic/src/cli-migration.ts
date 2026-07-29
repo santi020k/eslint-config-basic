@@ -605,6 +605,143 @@ const hasCodePropertySeparator = (codeContent: string, match: RegExpMatchArray):
   return matchIndex >= 0 && separatorOffset >= 0 && codeContent[matchIndex + separatorOffset] === ':'
 }
 
+const replaceCodeProperty = (
+  content: string,
+  property: string,
+  replacement: string
+): string => {
+  const masked = maskNonCode(content, true)
+  // eslint-disable-next-line security/detect-non-literal-regexp -- property is an internal migration key
+  const pattern = new RegExp(`\\b${property}\\b(?=\\s*:)`, 'g')
+  const matches = [...masked.matchAll(pattern)]
+  let updated = content
+
+  for (const match of matches.reverse()) {
+    updated = `${updated.slice(0, match.index)}${replacement}${updated.slice(match.index + property.length)}`
+  }
+
+  return updated
+}
+
+const toFeatureName = (value: string): null | string => {
+  const trimmed = value.trim()
+  const enumMatch = /^(?:Extension|Format|Library|Testing|Tool)\.([a-zA-Z0-9_$]+)$/.exec(trimmed)
+  const stringMatch = /^(['"])([^'"]+)\1$/.exec(trimmed)
+  const raw = enumMatch?.[1] ?? stringMatch?.[2]
+
+  return raw ? toKebabCase(raw) : null
+}
+
+const modernizeLiteralFeatureArrays = (
+  content: string
+): { changed: boolean, content: string, features: string[] } => {
+  const searchable = maskNonCode(content, true)
+
+  const selections = [...searchable.matchAll(
+    /\b(?:extensions|formats|libraries|testing|tools)\b\s*:\s*\[([\s\S]*?)\]\s*,?/g
+  )].flatMap(match => {
+    if (/\/[/*]/.test(content.slice(match.index, match.index + match[0].length))) return []
+
+    const features = match[1].split(',').filter(Boolean).map(toFeatureName)
+
+    if (features.some(feature => feature === null)) return []
+
+    return [{
+      end: match.index + match[0].length,
+      features: features as string[],
+      start: match.index
+    }]
+  })
+
+  if (selections.length === 0) return { changed: false, content, features: [] }
+
+  const features = [...new Set(selections.flatMap(selection => selection.features))]
+  const first = selections[0]
+  const lineStart = content.lastIndexOf('\n', first.start) + 1
+  const indent = /^\s*/.exec(content.slice(lineStart, first.start))?.[0] ?? ''
+  const existingFeatures = /\bfeatures\b\s*:\s*\{/.exec(searchable)
+
+  const featureBlock = existingFeatures
+    ? `\n${features.map(feature => `${indent}  ${JSON.stringify(feature)}: true,`).join('\n')}`
+    : [
+      'features: {',
+      ...features.map(feature => `${indent}  ${JSON.stringify(feature)}: true,`),
+      `${indent}},`
+    ].join('\n')
+
+  let updated = content
+
+  const edits = selections.map(selection => ({
+    end: selection.end,
+    replacement: !existingFeatures && selection === first ? featureBlock : '',
+    start: selection.start
+  }))
+
+  if (existingFeatures) {
+    edits.push({
+      end: existingFeatures.index + existingFeatures[0].length,
+      replacement: featureBlock,
+      start: existingFeatures.index + existingFeatures[0].length
+    })
+  }
+
+  for (const edit of edits.sort((a, b) => b.start - a.start)) {
+    updated = `${updated.slice(0, edit.start)}${edit.replacement}${updated.slice(edit.end)}`
+  }
+
+  return { changed: updated !== content, content: updated, features }
+}
+
+const modernizeConfigOptions = (
+  content: string
+): { changes: string[], content: string } => {
+  const changes: string[] = []
+  let updated = content
+  const searchable = maskNonCode(updated, true)
+  const hasFeatures = /\bfeatures\b\s*:/.test(searchable)
+  const hasIntegrations = /\bintegrations\b\s*:/.test(searchable)
+
+  if (hasIntegrations && !hasFeatures) {
+    updated = replaceCodeProperty(updated, 'integrations', 'features')
+
+    changes.push('Replaced the deprecated integrations map with features.')
+  }
+
+  const updatedSearchable = maskNonCode(updated, true)
+
+  const rootAliases = [
+    ...(/\bdetectRootDir\b\s*:/.test(updatedSearchable) ? ['detectRootDir'] : []),
+    ...(/\btsconfigRootDir\b\s*:/.test(updatedSearchable) ? ['tsconfigRootDir'] : [])
+  ]
+
+  if (!/\broot\b\s*:/.test(updatedSearchable) && rootAliases.length === 1) {
+    updated = replaceCodeProperty(updated, rootAliases[0], 'root')
+
+    changes.push(`Replaced ${rootAliases[0]} with the v3 root option.`)
+  } else if (rootAliases.length > 0) {
+    changes.push(
+      `Manual action required: consolidate ${rootAliases.join(' and ')} into root after confirming they resolve to the same directory.`
+    )
+  }
+
+  const featureMigration = modernizeLiteralFeatureArrays(updated)
+
+  if (featureMigration.changed) {
+    updated = featureMigration.content
+
+    changes.push(`Replaced literal category arrays with the v3 features map (${featureMigration.features.join(', ')}).`)
+  }
+
+  if (maskNonCode(updated, true).includes('better-tailwindcss/no-unknown-classes')) {
+    changes.push(
+      'Manual action required: replace the raw better-tailwindcss/no-unknown-classes override with ' +
+      'projects["<scope>"].tailwind.noUnknownClasses.'
+    )
+  }
+
+  return { changes, content: updated }
+}
+
 export const getExplicitConfigFeaturePackages = (content: string): string[] => {
   const packages = new Set<string>()
   const codeContent = maskNonCode(content)
@@ -743,6 +880,12 @@ export const migrateConfigToV3 = (
   if (/\bloadModule\b/.test(migrated)) {
     changes.push('Manual action required: replace loadModule usage with createModuleLoader(resolver).')
   }
+
+  const modernized = modernizeConfigOptions(migrated)
+
+  migrated = modernized.content
+
+  changes.push(...modernized.changes)
 
   return {
     changes,

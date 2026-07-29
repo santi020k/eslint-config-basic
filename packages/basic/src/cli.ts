@@ -11,6 +11,7 @@ import {
 } from './agent-skill-generator.js'
 import { handleCompatibility, handleExplainRule } from './cli-advanced.js'
 import { getExplicitConfigFeaturePackages, handleMigrateV3 } from './cli-migration.js'
+import { handleExplainPreset } from './cli-preset.js'
 import {
   handleBaseline,
   handleProfile,
@@ -18,6 +19,19 @@ import {
   handleSnapshotDiff
 } from './cli-workflows.js'
 import { detectProjectOptions } from './index.js'
+
+interface InstallResult {
+  error?: Error
+  status: null | number
+  stderr?: Buffer | string
+  stdout?: Buffer | string
+}
+
+type InstallRunner = (
+  command: string,
+  args: string[],
+  options: { cwd: string, encoding: 'utf8', stdio: 'pipe' }
+) => InstallResult
 
 const getDefaultConfigFilename = (cwd: string): string => {
   const packageJsonPath = join(cwd, 'package.json')
@@ -632,6 +646,7 @@ const printUsage = () => {
     '  init            Create eslint.config.js/mjs if missing',
     '  update          Regenerate eslint.config.js/mjs from detection',
     '  explain         Print detected v3 config inputs',
+    '  explain-preset  Compare the current config with a preset',
     '  inspect         Print detected inputs and active config features',
     '  install         Install missing packages for detected v3 features',
     '  doctor          Check project setup for common v3 adoption issues',
@@ -651,7 +666,7 @@ const printUsage = () => {
     '  --create        generate-skill: scaffold a root AGENTS.md when missing',
     '  --dry-run       install: print the detected install command without running it',
     '  --explicit      init: write detected settings explicitly',
-    '  --file          profile/snapshot/diff: representative file or lint target (repeatable)',
+    '  --file          explain/profile/snapshot/diff: representative file or lint target (repeatable)',
     '  --fix           doctor: safely repair generated config and package metadata',
     '  --full          migrate --to v3: choose the batteries-included package',
     '  --json          Print JSON for commands that support it',
@@ -659,6 +674,8 @@ const printUsage = () => {
     '  --max-duration  profile: maximum duration in milliseconds',
     '  --max-rule-time profile: maximum time for the slowest rule in milliseconds',
     '  --max-warnings  profile: maximum warning count',
+    '  --compatibility explain-preset: write a temporary compatibility override',
+    '  --output        explain-preset: compatibility override path',
     '  --preset        baseline: enable ci or pedantic strict mode before suppressing',
     '  --prune         baseline: remove suppressions for resolved violations',
     '  --snapshot-path snapshot/diff: override .eslint-config-snapshot.json',
@@ -669,6 +686,126 @@ const printUsage = () => {
     '  --version, -v   Show CLI version'
   ].join('\n'))
 }
+
+const COMMAND_OPTIONS: Partial<Record<string, string[]>> = {
+  baseline: ['--json', '--preset', '--prune'],
+  compatibility: ['--json'],
+  diff: ['--file', '--json', '--snapshot-path'],
+  docs: [],
+  doctor: ['--fix', '--json', '--lite-install'],
+  explain: ['--file', '--json'],
+  'explain-preset': ['--compatibility', '--file', '--json', '--output'],
+  'generate-skill': ['--check', '--create', '--force', '--with-eslint-mcp'],
+  init: ['--check', '--explicit'],
+  inspect: ['--json'],
+  install: ['--dry-run'],
+  migrate: ['--check', '--full', '--json', '--to', '--write'],
+  profile: ['--concurrency', '--file', '--json', '--max-duration', '--max-rule-time', '--max-warnings'],
+  snapshot: ['--check', '--file', '--json', '--snapshot-path'],
+  update: []
+}
+
+const VALUE_OPTIONS = new Set([
+  '--concurrency',
+  '--file',
+  '--max-duration',
+  '--max-rule-time',
+  '--max-warnings',
+  '--output',
+  '--preset',
+  '--snapshot-path',
+  '--to'
+])
+
+/* eslint-disable security/detect-object-injection -- command and option keys are validated against the registry */
+const printCommandUsage = (command: string): void => {
+  let positional = ''
+
+  if (command === 'explain') positional = ' [rule]'
+  else if (command === 'explain-preset') positional = ' <preset>'
+
+  const options = COMMAND_OPTIONS[command] ?? []
+
+  console.log([
+    'Usage: basic-eslint <command> [options]',
+    '',
+    `Usage: basic-eslint ${command}${positional}${options.length > 0 ? ' [options]' : ''}`,
+    ...(options.length > 0 ? ['', 'Options:', ...options.map(option => `  ${option}`)] : [])
+  ].join('\n'))
+}
+
+const validateCommandArguments = (
+  command: string,
+  args: string[]
+): { ok: boolean, positional?: string } => {
+  const allowed = COMMAND_OPTIONS[command]
+
+  if (!allowed) return { ok: true }
+
+  const allowedOptions = new Set(allowed)
+  const positionals: string[] = []
+
+  for (let index = 0; index < args.length; index++) {
+    const argument = args[index]
+
+    if (!argument.startsWith('-')) {
+      positionals.push(argument)
+
+      continue
+    }
+
+    const option = argument.includes('=') ? argument.slice(0, argument.indexOf('=')) : argument
+
+    if (!allowedOptions.has(option)) {
+      console.error(`Unknown option for ${command}: ${option}`)
+
+      process.exitCode = 1
+
+      return { ok: false }
+    }
+
+    if (VALUE_OPTIONS.has(option) && !argument.includes('=')) {
+      const value = args[index + 1]
+
+      if (!value || value.startsWith('-')) {
+        console.error(
+          ['--max-duration', '--max-rule-time', '--max-warnings'].includes(option)
+            ? `${option} must be a non-negative number.`
+            : `Option ${option} requires a value.`
+        )
+
+        process.exitCode = 1
+
+        return { ok: false }
+      }
+
+      index++
+    } else if (VALUE_OPTIONS.has(option) && argument.endsWith('=')) {
+      console.error(
+        ['--max-duration', '--max-rule-time', '--max-warnings'].includes(option)
+          ? `${option} must be a non-negative number.`
+          : `Option ${option} requires a value.`
+      )
+
+      process.exitCode = 1
+
+      return { ok: false }
+    }
+  }
+
+  const maximumPositionals = command === 'explain' || command === 'explain-preset' ? 1 : 0
+
+  if (positionals.length > maximumPositionals) {
+    console.error(`Unexpected argument for ${command}: ${positionals[maximumPositionals]}`)
+
+    process.exitCode = 1
+
+    return { ok: false }
+  }
+
+  return { ok: true, positional: positionals[0] }
+}
+/* eslint-enable security/detect-object-injection */
 
 export const handleInit = (cwd: string = process.cwd(), check = false, explicit = false) => {
   const configPath = resolveConfigPath(cwd)
@@ -1342,7 +1479,17 @@ export const handleDoctor = async (
   )
 }
 
-export const handleInstall = (cwd: string = process.cwd(), dryRun = false) => {
+const isMinimumReleaseAgeFailure = (output: string): boolean => (
+  /minimum[\s_-]*release[\s_-]*age/i.test(output) ||
+  /release (?:is )?(?:too young|not old enough)/i.test(output) ||
+  /blocked by (?:the )?minimum age/i.test(output)
+)
+
+export const handleInstall = (
+  cwd: string = process.cwd(),
+  dryRun = false,
+  runner: InstallRunner = spawnSync
+) => {
   const pnpmWorkspaceRoot = findPnpmWorkspaceRoot(cwd)
   const projectRoot = pnpmWorkspaceRoot ?? cwd
   const packageJson = readPackageJson(projectRoot)
@@ -1393,13 +1540,27 @@ export const handleInstall = (cwd: string = process.cwd(), dryRun = false) => {
   console.log(`Installing detected ESLint dependencies:\n${installCommand}`)
 
   const [command, args] = createInstallInvocation(packageManager, installPackages, workspaceRoot, catalog)
-  const result = spawnSync(command, args, { cwd: projectRoot, stdio: 'inherit' })
+  const result = runner(command, args, { cwd: projectRoot, encoding: 'utf8', stdio: 'pipe' })
+  const stdout = String(result.stdout ?? '')
+  const stderr = String(result.stderr ?? '')
+
+  if (stdout) process.stdout.write(stdout)
+
+  if (stderr) process.stderr.write(stderr)
 
   if (result.error) {
     console.error(`❌ Failed to run ${packageManager}: ${result.error.message}`)
 
     process.exitCode = 1
   } else if (result.status !== 0) {
+    if (packageManager === 'pnpm' && isMinimumReleaseAgeFailure(`${stdout}\n${stderr}`)) {
+      console.error(
+        '❌ pnpm minimumReleaseAge temporarily blocks the compatible ESLint config release ' +
+        `(${installPackages.join(', ')}). Keep the generated compatible range and either wait for the policy window ` +
+        'or add the exact release to minimumReleaseAgeExclude in pnpm-workspace.yaml.'
+      )
+    }
+
     process.exitCode = result.status ?? 1
   }
 }
@@ -1540,6 +1701,7 @@ const dispatchCommand = (
     concurrency?: string
     files: string[]
     hasCheck: boolean
+    hasCompatibility: boolean
     hasCreate: boolean
     hasDryRun: boolean
     hasExplicit: boolean
@@ -1554,7 +1716,9 @@ const dispatchCommand = (
     maxDurationMs?: number
     maxRuleTimeMs?: number
     maxWarnings?: number
+    output?: string
     preset?: string
+    positional?: string
     rule?: string
     snapshotPath?: string
     target?: string
@@ -1627,6 +1791,29 @@ const dispatchCommand = (
       } else {
         handleExplain(cwd, flags.hasJson)
       }
+
+      break
+    }
+
+    case 'explain-preset': {
+      if (!flags.positional) {
+        console.error('Missing preset. Usage: basic-eslint explain-preset <preset> [options]')
+
+        process.exitCode = 1
+
+        break
+      }
+
+      handleExplainPreset(cwd, flags.positional, {
+        compatibility: flags.hasCompatibility,
+        file: flags.files[0],
+        json: flags.hasJson,
+        output: flags.output
+      }).catch((error: unknown) => {
+        console.error(`❌ Failed to explain preset: ${String(error)}`)
+
+        process.exitCode = 1
+      })
 
       break
     }
@@ -1768,10 +1955,10 @@ const getNumericFlagValue = (argv: string[], flag: string): number | undefined =
 
 export const runCli = (argv: string[] = process.argv, cwd: string = process.cwd()) => {
   const command = argv[2]
-  const isHelp = argv.slice(2).some(argument => argument === '--help' || argument === '-h')
+  const isHelp = argv.slice(3).some(argument => argument === '--help' || argument === '-h')
   const isVersion = command === '--version' || command === '-v'
 
-  if (!command || isHelp) {
+  if (!command || command === '--help' || command === '-h') {
     printUsage()
 
     return
@@ -1783,10 +1970,23 @@ export const runCli = (argv: string[] = process.argv, cwd: string = process.cwd(
     return
   }
 
+  if (isHelp) {
+    // eslint-disable-next-line security/detect-object-injection -- command is used only to test registry membership
+    if (COMMAND_OPTIONS[command]) printCommandUsage(command)
+    else printUsage()
+
+    return
+  }
+
+  const validation = validateCommandArguments(command, argv.slice(3))
+
+  if (!validation.ok) return
+
   dispatchCommand(command, cwd, {
     concurrency: getFlagValue(argv, '--concurrency'),
     files: getFlagValues(argv, '--file'),
     hasCheck: argv.includes('--check'),
+    hasCompatibility: argv.includes('--compatibility'),
     hasCreate: argv.includes('--create'),
     hasDryRun: argv.includes('--dry-run'),
     hasExplicit: argv.includes('--explicit'),
@@ -1801,8 +2001,10 @@ export const runCli = (argv: string[] = process.argv, cwd: string = process.cwd(
     maxDurationMs: getNumericFlagValue(argv, '--max-duration'),
     maxRuleTimeMs: getNumericFlagValue(argv, '--max-rule-time'),
     maxWarnings: getNumericFlagValue(argv, '--max-warnings'),
+    output: getFlagValue(argv, '--output'),
+    positional: validation.positional,
     preset: getFlagValue(argv, '--preset'),
-    rule: argv[3] && !argv[3].startsWith('-') ? argv[3] : undefined,
+    rule: command === 'explain' ? validation.positional : undefined,
     snapshotPath: getFlagValue(argv, '--snapshot-path'),
     target: getFlagValue(argv, '--to')
   })

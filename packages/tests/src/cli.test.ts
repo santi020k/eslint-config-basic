@@ -140,6 +140,30 @@ describe('CLI command UX', () => {
     process.exitCode = undefined
   })
 
+  test('should reject command flags that are not supported without mutating files', () => {
+    const cwd = createTempProject({ name: 'tmp-project' })
+    const before = readFileSync(join(cwd, 'package.json'), 'utf8')
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+
+    runCli(['node', 'basic-eslint', 'install', '--write'], cwd)
+
+    expect(errorSpy).toHaveBeenCalledWith('Unknown option for install: --write')
+    expect(process.exitCode).toBe(1)
+    expect(readFileSync(join(cwd, 'package.json'), 'utf8')).toBe(before)
+    errorSpy.mockRestore()
+    process.exitCode = undefined
+  })
+
+  test('should print dedicated install help', () => {
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    runCli(['node', 'basic-eslint', 'install', '--help'])
+
+    expect(logSpy.mock.calls.flat().join('\n')).toContain('Usage: basic-eslint install [options]')
+    expect(logSpy.mock.calls.flat().join('\n')).toContain('--dry-run')
+    logSpy.mockRestore()
+  })
+
   test('should explain detected project settings', () => {
     const cwd = createTempProject({
       dependencies: {
@@ -185,6 +209,38 @@ describe('CLI command UX', () => {
       'npm install -D @santi020k/eslint-config-react@^3.0.0 @santi020k/eslint-config-testing@^3.0.0'
     )
     logSpy.mockRestore()
+  })
+
+  test('should diagnose pnpm minimum-release-age failures', () => {
+    const cwd = createTempProject({
+      dependencies: { react: '19.0.0' },
+      devDependencies: {
+        '@santi020k/eslint-config-basic': '3.1.0',
+        eslint: '10.0.0'
+      },
+      name: 'tmp-project'
+    })
+
+    writeFileSync(join(cwd, 'pnpm-workspace.yaml'), 'packages: []\n')
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const stderrSpy = vi.spyOn(process.stderr, 'write').mockImplementation(() => true)
+
+    handleInstall(cwd, false, () => ({
+      status: 1,
+      stderr: 'ERR_PNPM_NO_MATCHING_VERSION_INSIDE_WORKSPACE minimumReleaseAge blocked this release',
+      stdout: ''
+    }))
+
+    expect(errorSpy.mock.calls.flat().join('\n')).toContain(
+      'pnpm minimumReleaseAge temporarily blocks the compatible ESLint config release'
+    )
+    expect(errorSpy.mock.calls.flat().join('\n')).toContain(
+      '@santi020k/eslint-config-react@^3.1.0'
+    )
+    expect(process.exitCode).toBe(1)
+    stderrSpy.mockRestore()
+    errorSpy.mockRestore()
+    process.exitCode = undefined
   })
 
   test('should include feature packs selected explicitly in the config', () => {

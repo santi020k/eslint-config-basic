@@ -33,6 +33,16 @@ and/or Tools; `All` uses all five packs. `Node`, `Browser`, and `Worker` stay
 within the core + TypeScript boundary. The `full` package includes every preset
 dependency.
 
+For an existing codebase, inspect the adoption delta before switching:
+
+```sh
+basic-eslint explain-preset app --file src/index.ts
+```
+
+Add `--compatibility` to generate a temporary override for newly enabled rules.
+The report groups the delta by formatting, correctness, security, framework,
+and domain rules so migration work can be planned independently.
+
 ## What Each Preset Enables
 
 ### `Preset.Basic`
