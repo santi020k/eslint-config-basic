@@ -88,7 +88,7 @@ jobs:
         run: pnpm exec turbo run typecheck lint test:coverage //#lint:spell //#lint:knip //#lint:repo
       - name: Run concurrent CI checks (Node 24.x)
         if: matrix.node-version == '24.x'
-        run: pnpm exec turbo run typecheck lint test:coverage
+        run: pnpm exec turbo run typecheck lint test:coverage --concurrency=50%
       - name: Build docs (smoke check)
         if: matrix.node-version == '22.x'
         run: pnpm run docs:sync-readmes && pnpm run docs:build
