@@ -671,7 +671,15 @@ const modernizeLiteralFeatureArrays = (
   if (selections.length === 0) return { changed: false, content, features: [] }
 
   const features = [...new Set(selections.flatMap(selection => selection.features))]
-  const selectionsByOwner = Map.groupBy(selections, selection => selection.owner)
+  const selectionsByOwner = new Map<number, typeof selections>()
+
+  for (const selection of selections) {
+    const ownedSelections = selectionsByOwner.get(selection.owner)
+
+    if (ownedSelections) ownedSelections.push(selection)
+    else selectionsByOwner.set(selection.owner, [selection])
+  }
+
   const existingFeaturesByOwner = new Map<number, RegExpMatchArray>()
 
   for (const match of searchable.matchAll(/\bfeatures\b\s*:\s*\{/g)) {
