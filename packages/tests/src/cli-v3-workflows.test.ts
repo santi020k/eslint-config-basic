@@ -848,6 +848,26 @@ describe('configuration snapshots', () => {
     expect(isDirectory(join(cwd, 'missing'))).toBe(false)
   })
 
+  test('skips ESLint-ignored files when selecting snapshot representatives', async () => {
+    const cwd = createTempProject()
+
+    mkdirSync(join(cwd, 'generated'), { recursive: true })
+    mkdirSync(join(cwd, 'src'), { recursive: true })
+    writeFileSync(join(cwd, 'generated', 'schema.ts'), 'export const generated = true\n')
+    writeFileSync(join(cwd, 'src', 'index.ts'), 'export const source = true\n')
+    const eslint = {
+      calculateConfigForFile: vi.fn().mockResolvedValue({
+        rules: { 'example/rule': 2 }
+      }),
+      isPathIgnored: vi.fn(async (filePath: string) => filePath.startsWith('generated/'))
+    }
+
+    const snapshot = await createConfigSnapshot(cwd, undefined, eslint)
+
+    expect(Object.keys(snapshot.files)).toEqual(['package.json', 'src/index.ts'])
+    expect(eslint.calculateConfigForFile).not.toHaveBeenCalledWith('generated/schema.ts')
+  })
+
   test('rejects snapshots when no representative files exist', async () => {
     const cwd = mkdtempSync(resolve(tmpdir(), 'eslint-config-basic-v3-cli-empty-'))
 
@@ -884,7 +904,7 @@ describe('configuration snapshots', () => {
       plugins: [],
       rules: {}
     })
-    expect(snapshot.files['src/unserializable.ts']?.plugins).toEqual([])
+    expect(snapshot.files['src/unserializable.ts']?.plugins).toEqual(['circular'])
   })
 
   test('reports added and removed files and unchanged snapshots', () => {

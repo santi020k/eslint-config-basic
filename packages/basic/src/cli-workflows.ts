@@ -98,6 +98,7 @@ interface ProfileRun {
 
 interface ProjectEslint {
   calculateConfigForFile: (filePath: string) => Promise<unknown>
+  isPathIgnored?: (filePath: string) => Promise<boolean>
 }
 
 type ProjectEslintConstructor = new(options: { cwd: string }) => ProjectEslint
@@ -499,6 +500,31 @@ export const findRepresentativeFiles = (cwd: string): string[] => {
   return [...selected.values()].sort()
 }
 
+const findUnignoredRepresentativeFiles = async (
+  cwd: string,
+  eslint: ProjectEslint
+): Promise<string[]> => {
+  const selected = new Map<string, string>()
+
+  for (const filePath of walkSourceFiles(cwd)) {
+    const category = classifyRepresentativeFile(filePath)
+
+    if (selected.has(category)) continue
+
+    const config = eslint.isPathIgnored ?
+      undefined :
+      await eslint.calculateConfigForFile(filePath)
+
+    const ignored = eslint.isPathIgnored ?
+      await eslint.isPathIgnored(filePath) :
+      config === null || config === undefined
+
+    if (!ignored) selected.set(category, filePath)
+  }
+
+  return [...selected.values()].sort()
+}
+
 const loadProjectEslint = (cwd: string): ProjectEslint => {
   const projectRequire = resolveProjectRequire(cwd)
   const eslintModule = projectRequire('eslint') as { ESLint?: ProjectEslintConstructor }
@@ -526,6 +552,12 @@ const normalizeSerializableObject = (value: unknown): Record<string, unknown> =>
   )
 }
 
+const getObjectKeys = (value: unknown): string[] => {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return []
+
+  return Object.keys(value).sort()
+}
+
 const normalizeConfig = (config: unknown): EslintSnapshotFile => {
   const resolved = config && typeof config === 'object' ? config as {
     languageOptions?: {
@@ -543,7 +575,7 @@ const normalizeConfig = (config: unknown): EslintSnapshotFile => {
       ecmaVersion: resolved.languageOptions?.ecmaVersion,
       sourceType: resolved.languageOptions?.sourceType
     },
-    plugins: Object.keys(normalizeSerializableObject(resolved.plugins)).sort(),
+    plugins: getObjectKeys(resolved.plugins),
     rules: normalizeSerializableObject(resolved.rules)
   }
 }
@@ -553,7 +585,9 @@ export const createConfigSnapshot = async (
   files?: string[],
   eslint: ProjectEslint = loadProjectEslint(cwd)
 ): Promise<EslintSnapshot> => {
-  const representativeFiles = files?.length ? files : findRepresentativeFiles(cwd)
+  const representativeFiles = files?.length ?
+    files :
+    await findUnignoredRepresentativeFiles(cwd, eslint)
 
   if (representativeFiles.length === 0) {
     throw new Error('No representative source files were found. Pass one or more --file paths.')
