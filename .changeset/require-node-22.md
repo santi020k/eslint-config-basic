@@ -1,5 +1,5 @@
 ---
-"@santi020k/eslint-config-basic": major
+"@santi020k/eslint-config-basic": minor
 ---
 
 Drop Node.js 20 support and require Node.js 22.19.0 or newer across the package

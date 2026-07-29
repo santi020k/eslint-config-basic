@@ -107,15 +107,27 @@ const SNAPSHOT_FILENAME = '.eslint-config-snapshot.json'
 const SOURCE_EXTENSIONS = new Set([
   '.astro',
   '.cjs',
+  '.css',
   '.cts',
+  '.gql',
+  '.graphql',
+  '.html',
   '.js',
+  '.json',
+  '.json5',
+  '.jsonc',
   '.jsx',
+  '.md',
+  '.mdx',
   '.mjs',
   '.mts',
   '.svelte',
+  '.toml',
   '.ts',
   '.tsx',
-  '.vue'
+  '.vue',
+  '.yaml',
+  '.yml'
 ])
 
 const IGNORED_DIRECTORIES = new Set([

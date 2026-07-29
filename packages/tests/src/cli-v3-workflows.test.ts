@@ -175,6 +175,18 @@ describe('v2 to v3 migration', () => {
     expect(result.content).toContain('export default [...astro(), ...createGitignoreConfig()]')
   })
 
+  test('preserves property keys when invoking factory bindings used as object shorthand', () => {
+    const input = [
+      'import { astroConfig as astro, gitignore } from \'@santi020k/eslint-config-basic\'',
+      '',
+      'export default { astro, gitignore }'
+    ].join('\n')
+
+    const result = migrateConfigToV3(input, 'lean')
+
+    expect(result.content).toContain('export default { astro: astro(), gitignore: createGitignoreConfig() }')
+  })
+
   test('does not rewrite removed alias names that are not imported bindings', () => {
     const input = [
       'import { defineConfig } from \'@santi020k/eslint-config-basic\'',
@@ -239,7 +251,8 @@ describe('v2 to v3 migration', () => {
         'export default defineConfig({',
         '  extensions: [Extension.Security],',
         '  formats: [Format.Css],',
-        '  features: { zod: true }',
+        '  features: { zod: true },',
+        '  integrations: { prettier: true }',
         '})'
       ].join('\n')
     )
@@ -254,6 +267,7 @@ describe('v2 to v3 migration', () => {
     expect(packageJson.devDependencies['@santi020k/eslint-config-extensions']).toBe('^3.0.0')
     expect(packageJson.devDependencies['@santi020k/eslint-config-formats']).toBe('^3.0.0')
     expect(packageJson.devDependencies['@santi020k/eslint-config-libraries']).toBe('^3.0.0')
+    expect(packageJson.devDependencies['@santi020k/eslint-config-tools']).toBe('^3.0.0')
   })
 
   test('selects full automatically for Preset.All', () => {
@@ -652,21 +666,38 @@ describe('configuration snapshots', () => {
     writeFileSync(join(cwd, 'eslint.config.js'), 'export default []\n')
     writeFileSync(join(cwd, 'src', 'component.tsx'), 'export const Component = () => null\n')
     writeFileSync(join(cwd, 'src', 'component.test.tsx'), 'test("component", () => {})\n')
+    writeFileSync(join(cwd, 'src', 'data.jsonc'), '{}\n')
+    writeFileSync(join(cwd, 'src', 'query.graphql'), 'query Example { example }\n')
+    writeFileSync(join(cwd, 'src', 'readme.mdx'), '# Example\n')
+    writeFileSync(join(cwd, 'src', 'settings.toml'), 'enabled = true\n')
+    writeFileSync(join(cwd, 'src', 'styles.css'), '.example {}\n')
+    writeFileSync(join(cwd, 'src', 'template.html'), '<main></main>\n')
     writeFileSync(join(cwd, 'src', 'view.vue'), '<template />\n')
+    writeFileSync(join(cwd, 'src', 'workflow.yaml'), 'name: example\n')
     writeFileSync(join(cwd, 'node_modules', 'ignored', 'index.js'), '')
 
     expect(findRepresentativeFiles(cwd)).toEqual([
       'eslint.config.js',
+      'package.json',
       'src/component.test.tsx',
       'src/component.tsx',
-      'src/view.vue'
+      'src/data.jsonc',
+      'src/query.graphql',
+      'src/readme.mdx',
+      'src/settings.toml',
+      'src/styles.css',
+      'src/template.html',
+      'src/view.vue',
+      'src/workflow.yaml'
     ])
     expect(isDirectory(join(cwd, 'src'))).toBe(true)
     expect(isDirectory(join(cwd, 'missing'))).toBe(false)
   })
 
   test('rejects snapshots when no representative files exist', async () => {
-    const cwd = createTempProject()
+    const cwd = mkdtempSync(resolve(tmpdir(), 'eslint-config-basic-v3-cli-empty-'))
+
+    tempDirs.push(cwd)
 
     await expect(createConfigSnapshot(cwd, [], createFakeEslint(1))).rejects.toThrow(
       'No representative source files were found'

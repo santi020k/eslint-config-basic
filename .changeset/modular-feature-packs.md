@@ -1,13 +1,13 @@
 ---
-"@santi020k/eslint-config-basic": major
-"@santi020k/eslint-config-core": major
-"@santi020k/eslint-config-extensions": major
-"@santi020k/eslint-config-formats": major
-"@santi020k/eslint-config-full": major
-"@santi020k/eslint-config-integrations": major
-"@santi020k/eslint-config-libraries": major
-"@santi020k/eslint-config-testing": major
-"@santi020k/eslint-config-tools": major
+"@santi020k/eslint-config-basic": minor
+"@santi020k/eslint-config-core": minor
+"@santi020k/eslint-config-extensions": minor
+"@santi020k/eslint-config-formats": minor
+"@santi020k/eslint-config-full": minor
+"@santi020k/eslint-config-integrations": minor
+"@santi020k/eslint-config-libraries": minor
+"@santi020k/eslint-config-testing": minor
+"@santi020k/eslint-config-tools": minor
 ---
 
 Complete the v3 modular dependency boundary with five category feature packs.

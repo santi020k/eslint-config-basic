@@ -1,8 +1,8 @@
 ---
-"@santi020k/eslint-config-basic": major
-"@santi020k/eslint-config-core": major
-"@santi020k/eslint-config-lite": major
-"@santi020k/eslint-config-typescript": major
+"@santi020k/eslint-config-basic": minor
+"@santi020k/eslint-config-core": minor
+"@santi020k/eslint-config-lite": minor
+"@santi020k/eslint-config-typescript": minor
 ---
 
 Polish real-world consumer configuration: add one `root` option for detection,

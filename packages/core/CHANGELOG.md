@@ -1,5 +1,15 @@
 # @santi020k/eslint-config-core
 
+## 3.0.0
+
+### Major Changes
+
+- Remove `eslint-plugin-jsx-a11y` and its `jsx-a11y/alt-text` rule from core.
+  Accessibility plugins are now owned by the framework or integration packages
+  that enable their rules.
+- Establish the minimal production dependency and security boundary used by
+  the v3 lean package.
+
 ## 2.1.1
 
 ### Patch Changes

@@ -1,5 +1,5 @@
 ---
-"@santi020k/eslint-config-react": major
+"@santi020k/eslint-config-react": minor
 ---
 
 Replace the prerelease `eslint-plugin-react-compiler` integration with the

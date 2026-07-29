@@ -1,5 +1,14 @@
 # @santi020k/eslint-config-lite
 
+## 3.0.0
+
+### Major Changes
+
+- Enter compatibility mode. The main `@santi020k/eslint-config-basic` package
+  now uses the modular dependency model introduced by `lite`.
+- New projects should migrate to `basic`; existing composer options remain
+  available during the transition.
+
 ## 2.1.1
 
 ### Patch Changes

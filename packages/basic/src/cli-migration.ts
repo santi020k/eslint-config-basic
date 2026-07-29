@@ -352,6 +352,37 @@ const maskNonCode = (content: string): string => {
   return characters.join('')
 }
 
+const getEnclosingDelimiter = (content: string, offset: number): null | string => {
+  const expectedOpeners: string[] = []
+
+  const closingDelimiters: Record<string, string> = {
+    ')': '(',
+    ']': '[',
+    '}': '{'
+  }
+
+  for (let index = offset - 1; index >= 0; index--) {
+    const character = content[index]
+    const expectedOpener = closingDelimiters[character]
+
+    if (expectedOpener) {
+      expectedOpeners.push(expectedOpener)
+
+      continue
+    }
+
+    if (!['(', '[', '{'].includes(character)) continue
+
+    if (expectedOpeners.at(-1) === character) {
+      expectedOpeners.pop()
+    } else if (expectedOpeners.length === 0) {
+      return character
+    }
+  }
+
+  return null
+}
+
 const replaceBindingReferences = (
   content: string,
   from: string,
@@ -377,9 +408,22 @@ const replaceBindingReferences = (
     const isMemberAccess = preceding === '.' && !precedingContent.endsWith('...')
     const isProperty = isMemberAccess || /^\s*:/.test(following)
     const isAlreadyInvoked = /^\s*\(/.test(following)
-    const replacement = invokeReferences && !isAlreadyInvoked ? `${to}()` : to
+
+    const isObjectShorthand = (
+      getEnclosingDelimiter(masked, offset) === '{' &&
+      (preceding === '{' || preceding === ',') &&
+      /^\s*[,}]/.test(following)
+    )
 
     if (isProperty) continue
+
+    let replacement = to
+
+    if (invokeReferences && isObjectShorthand) {
+      replacement = `${from}: ${to}()`
+    } else if (invokeReferences && !isAlreadyInvoked) {
+      replacement = `${to}()`
+    }
 
     updated = `${updated.slice(0, offset)}${replacement}${updated.slice(offset + from.length)}`
   }
@@ -497,12 +541,12 @@ const getExplicitFeaturePackages = (content: string): string[] => {
     }
   }
 
-  const featuresMatch = /\bfeatures\s*:\s*\{([\s\S]*?)\}/.exec(content)
+  const featureSelections = /\b(?:features|integrations)\s*:\s*\{([\s\S]*?)\}/g
 
-  if (featuresMatch) {
+  for (const selection of content.matchAll(featureSelections)) {
     const enabledFeaturePattern = /(?:['"]([^'"]+)['"]|([a-zA-Z_$][\w$-]*))\s*:\s*true\b/g
 
-    for (const match of featuresMatch[1].matchAll(enabledFeaturePattern)) {
+    for (const match of selection[1].matchAll(enabledFeaturePattern)) {
       const featureName = (match[1] || match[2]).toLowerCase()
       const packageName = FEATURE_NAME_TO_PACKAGE.get(featureName)
 
