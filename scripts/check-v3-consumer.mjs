@@ -1,7 +1,7 @@
 import { execFileSync } from 'node:child_process'
-import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { cpSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
-import { isAbsolute, join } from 'node:path'
+import { basename, isAbsolute, join } from 'node:path'
 
 const rootDir = process.cwd()
 const tempDir = mkdtempSync(join(tmpdir(), 'eslint-config-v3-consumer-'))
@@ -127,12 +127,23 @@ try {
   )
 
   const fullConsumerDir = join(tempDir, 'full-consumer')
+  const fullConsumerTarballDir = join(fullConsumerDir, 'tarballs')
 
-  mkdirSync(fullConsumerDir)
+  mkdirSync(fullConsumerTarballDir, { recursive: true })
+
+  const fullTarballRefs = Object.fromEntries(
+    Object.entries(fullTarballs).map(([packageName, tarball]) => {
+      const filename = basename(tarball)
+
+      cpSync(tarball, join(fullConsumerTarballDir, filename))
+
+      return [packageName, `file:./tarballs/${filename}`]
+    })
+  )
 
   writeFileSync(join(fullConsumerDir, 'package.json'), JSON.stringify({
     dependencies: {
-      '@santi020k/eslint-config-full': `file:${fullTarballs['@santi020k/eslint-config-full']}`,
+      '@santi020k/eslint-config-full': fullTarballRefs['@santi020k/eslint-config-full'],
       eslint: '^10.0.0',
       react: '^19.0.0'
     },
@@ -147,8 +158,8 @@ try {
       'packages:',
       '  - .',
       'overrides:',
-      ...Object.entries(fullTarballs).map(
-        ([name, tarball]) => `  ${JSON.stringify(name)}: ${JSON.stringify(`file:${tarball}`)}`
+      ...Object.entries(fullTarballRefs).map(
+        ([name, tarball]) => `  ${JSON.stringify(name)}: ${JSON.stringify(tarball)}`
       ),
       ''
     ].join('\n')

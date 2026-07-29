@@ -487,6 +487,10 @@ const detectProjects = (pkg: PackageJson, detectRootDir: string): NonNullable<Es
   const projects: NonNullable<EslintConfigOptions['projects']> = {}
 
   for (const projectPath of candidates) {
+    // The workspace root is configured by the outer defineConfig call. Treating
+    // "." as a child project recursively configures the same directory forever.
+    if (projectPath === '.') continue
+
     if (!positivePatterns.some(pattern => workspacePatternMatches(projectPath, pattern))) continue
 
     if (negativePatterns.some(pattern => workspacePatternMatches(projectPath, pattern))) continue

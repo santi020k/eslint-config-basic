@@ -101,6 +101,15 @@ describe('parsePnpmWorkspacePatterns', () => {
     expect(Object.keys(projects)).toEqual(['apps/web'])
   })
 
+  test('detectProjects excludes the workspace root from child projects', () => {
+    writeFileSync(join(tmpDir, 'package.json'), '{}')
+    writeFileSync(join(tmpDir, 'pnpm-workspace.yaml'), 'packages:\n  - \'.\'\n')
+
+    const projects = __detectionInternals.detectProjects({}, tmpDir)
+
+    expect(projects).toEqual({})
+  })
+
   test('detectProjects resolves nested workspace globs and exclusions', () => {
     mkdirSync(join(tmpDir, 'apps', 'site', 'packages', 'ui'), { recursive: true })
     mkdirSync(join(tmpDir, 'apps', 'site', 'packages', 'private'), { recursive: true })
