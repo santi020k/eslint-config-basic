@@ -1490,7 +1490,7 @@ Defined in: [core/src/types.ts:322](https://github.com/santi020k/eslint-config-b
 
 > `const` **\_\_detectionInternals**: `object`
 
-Defined in: [core/src/utils/detection.ts:469](https://github.com/santi020k/eslint-config-basic/blob/main/packages/core/src/utils/detection.ts#L469)
+Defined in: [core/src/utils/detection.ts:531](https://github.com/santi020k/eslint-config-basic/blob/main/packages/core/src/utils/detection.ts#L531)
 
 Internal detection helpers exposed for focused unit tests.
 Do not use these in application code.
@@ -2246,7 +2246,7 @@ Defined in: [core/src/lazy.ts:20](https://github.com/santi020k/eslint-config-bas
 
 > **detectProjectOptions**(`detectRootDir?`): [`EslintConfigOptions`](#eslintconfigoptions)
 
-Defined in: [core/src/utils/detection.ts:497](https://github.com/santi020k/eslint-config-basic/blob/main/packages/core/src/utils/detection.ts#L497)
+Defined in: [core/src/utils/detection.ts:559](https://github.com/santi020k/eslint-config-basic/blob/main/packages/core/src/utils/detection.ts#L559)
 
 Automatically detects project settings based on package.json content
 

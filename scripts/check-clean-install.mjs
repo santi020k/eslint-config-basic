@@ -48,6 +48,10 @@ try {
     cpSync(join(rootDir, '.npmrc'), join(tempDir, '.npmrc'))
   }
 
+  if (existsSync(join(rootDir, 'patches'))) {
+    cpSync(join(rootDir, 'patches'), join(tempDir, 'patches'), { recursive: true })
+  }
+
   copyManifestTree(join(rootDir, 'apps'))
 
   copyManifestTree(join(rootDir, 'packages'))

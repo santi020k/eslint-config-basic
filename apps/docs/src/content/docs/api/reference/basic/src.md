@@ -333,7 +333,7 @@ Defined in: [basic/src/frameworks.ts:123](https://github.com/santi020k/eslint-co
 
 > **defineConfig**(`options?`, ...`extraConfigs`): `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/index.ts:679](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L679)
+Defined in: [basic/src/index.ts:680](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L680)
 
 Generates the ESLint configuration array, applying configurations
 and integration settings based on the input configuration.
