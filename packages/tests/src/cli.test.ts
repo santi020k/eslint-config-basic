@@ -154,6 +154,21 @@ describe('CLI command UX', () => {
     process.exitCode = undefined
   })
 
+  test('should reject assigned values for boolean safety flags without mutating files', () => {
+    const cwd = createTempProject({ name: 'tmp-project' })
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+
+    runCli(['node', 'basic-eslint', 'init', '--check=true'], cwd)
+
+    const configExists = existsSync(join(cwd, 'eslint.config.mjs'))
+
+    expect(errorSpy).toHaveBeenCalledWith('Option --check does not accept a value.')
+    expect(process.exitCode).toBe(1)
+    expect(configExists).toBe(false)
+    errorSpy.mockRestore()
+    process.exitCode = undefined
+  })
+
   test('should print dedicated install help', () => {
     const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
@@ -526,6 +541,41 @@ describe('CLI command UX', () => {
       '@santi020k/eslint-config-react@^3.1.0 ' +
       '@santi020k/eslint-config-formats@^3.1.0 ' +
       '@santi020k/eslint-config-tools@^3.1.0'
+    )
+    logSpy.mockRestore()
+  })
+
+  test('should prefer Basic\'s named catalog over an earlier unrelated dependency catalog', () => {
+    const cwd = createTempProject({
+      devDependencies: {
+        'unrelated-package': 'catalog:frontend',
+        '@santi020k/eslint-config-basic': 'catalog:lint',
+        eslint: 'catalog:lint'
+      },
+      name: 'tmp-workspace'
+    })
+
+    writeFileSync(join(cwd, 'pnpm-workspace.yaml'), [
+      'packages:',
+      '  - "apps/*"',
+      'catalogs:',
+      '  frontend:',
+      '    "unrelated-package": ^1.0.0',
+      '  lint:',
+      '    "@santi020k/eslint-config-basic": ^3.1.0',
+      '    eslint: ^10.0.0',
+      ''
+    ].join('\n'))
+
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    handleInstall(cwd, true)
+
+    expect(logSpy).toHaveBeenCalledWith(
+      expect.stringContaining('--save-catalog-name=lint')
+    )
+    expect(logSpy).not.toHaveBeenCalledWith(
+      expect.stringContaining('--save-catalog-name=frontend')
     )
     logSpy.mockRestore()
   })

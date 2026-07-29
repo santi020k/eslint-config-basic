@@ -36,6 +36,30 @@ describe('defineConfig Function', () => {
     expect(config[1]?.plugins?.example).toBe(plugin)
   })
 
+  test('does not attach an ambiguous plugin implementation across disjoint scopes', () => {
+    const appPlugin = { rules: { example: { create: () => ({}), meta: { schema: [] } } } }
+    const docsPlugin = { rules: { example: { create: () => ({}), meta: { schema: [] } } } }
+    const config = attachReferencedPlugins([
+      {
+        files: ['apps/**'],
+        name: 'app-plugin-registration',
+        plugins: { example: appPlugin }
+      },
+      {
+        files: ['docs/**'],
+        name: 'docs-plugin-registration',
+        plugins: { example: docsPlugin }
+      },
+      {
+        files: ['docs/**'],
+        name: 'docs-rule-override',
+        rules: { 'example/example': 'off' }
+      }
+    ])
+
+    expect(config[2]?.plugins).toBeUndefined()
+  })
+
   test('should return an array when called with minimal options', async () => {
     const config = await defineConfig({})
 

@@ -1,0 +1,65 @@
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+
+import { afterEach, describe, expect, test } from 'vitest'
+
+// eslint-disable-next-line import/no-relative-packages -- release script behavior is exercised from the test package
+import { createPeerHealthReport } from '../../../scripts/check-peer-health.mjs'
+
+const tempDirs: string[] = []
+
+const createTempProject = (): string => {
+  const cwd = mkdtempSync(join(tmpdir(), 'eslint-config-peer-health-'))
+
+  tempDirs.push(cwd)
+  writeFileSync(join(cwd, 'package.json'), JSON.stringify({
+    devDependencies: {
+      '@graphql-eslint/eslint-plugin': '^4.0.0'
+    },
+    name: 'peer-health-test'
+  }))
+
+  return cwd
+}
+
+afterEach(() => {
+  for (const dir of tempDirs.splice(0)) {
+    rmSync(dir, { force: true, recursive: true })
+  }
+})
+
+describe('peer health policy', () => {
+  test('does not accept a missing peer through an incompatible-peer exception', () => {
+    const cwd = createTempProject()
+    const occurrence = {
+      parents: [{ name: '@graphql-eslint/eslint-plugin' }],
+      wantedRange: '^16'
+    }
+    const report = createPeerHealthReport(cwd, {
+      project: {
+        bad: {
+          graphql: [{ ...occurrence, foundVersion: '17.0.0' }]
+        },
+        missing: {
+          graphql: [occurrence]
+        }
+      }
+    }, {
+      accepted: [{
+        introducedBy: '@graphql-eslint/eslint-plugin',
+        kind: 'incompatible',
+        owner: 'packages/formats',
+        peer: 'graphql',
+        removalCondition: 'Remove after upstream support.',
+        wantedRange: '^16'
+      }]
+    })
+
+    expect(report.accepted).toHaveLength(1)
+    expect(report.accepted[0]?.kind).toBe('incompatible')
+    expect(report.actionable).toHaveLength(1)
+    expect(report.actionable[0]?.kind).toBe('missing')
+    expect(report.healthy).toBe(false)
+  })
+})

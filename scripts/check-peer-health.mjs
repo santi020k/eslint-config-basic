@@ -82,6 +82,7 @@ export const createPeerHealthReport = (cwd, rawReport, policy) => {
 
   for (const issue of issues) {
     const exception = policy.accepted.find(entry => (
+      entry.kind === issue.kind &&
       entry.peer === issue.peer &&
       entry.introducedBy === issue.introducedBy &&
       entry.wantedRange === issue.wantedRange

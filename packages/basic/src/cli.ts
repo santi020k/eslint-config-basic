@@ -325,6 +325,15 @@ const getCatalogPreference = (
   packageJson: null | Record<string, unknown>
 ): false | string | true => {
   const dependencyFields = ['devDependencies', 'dependencies'] as const
+  const dependencyRecords: Record<string, unknown>[] = []
+
+  const parseCatalog = (value: unknown): false | string | true => {
+    if (typeof value !== 'string' || !value.startsWith('catalog:')) return false
+
+    const name = value.slice('catalog:'.length)
+
+    return name && name !== 'default' ? name : true
+  }
 
   for (const field of dependencyFields) {
     // eslint-disable-next-line security/detect-object-injection -- field is constrained to known dependency records
@@ -332,12 +341,20 @@ const getCatalogPreference = (
 
     if (!dependencies || typeof dependencies !== 'object' || Array.isArray(dependencies)) continue
 
+    dependencyRecords.push(dependencies as Record<string, unknown>)
+  }
+
+  for (const dependencies of dependencyRecords) {
+    const basicCatalog = parseCatalog(Reflect.get(dependencies, BASIC_PACKAGE_NAME))
+
+    if (basicCatalog) return basicCatalog
+  }
+
+  for (const dependencies of dependencyRecords) {
     for (const value of Object.values(dependencies)) {
-      if (typeof value !== 'string' || !value.startsWith('catalog:')) continue
+      const catalog = parseCatalog(value)
 
-      const name = value.slice('catalog:'.length)
-
-      return name && name !== 'default' ? name : true
+      if (catalog) return catalog
     }
   }
 
@@ -837,6 +854,14 @@ const validateCommandArguments = (
 
     if (!allowedOptions.has(option)) {
       console.error(`Unknown option for ${command}: ${option}`)
+
+      process.exitCode = 1
+
+      return { ok: false }
+    }
+
+    if (argument.includes('=') && !VALUE_OPTIONS.has(option)) {
+      console.error(`Option ${option} does not accept a value.`)
 
       process.exitCode = 1
 

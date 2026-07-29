@@ -680,10 +680,19 @@ const getPluginNameFromRule = (
  */
 export const attachReferencedPlugins = (configs: FlatConfigArray): FlatConfigArray => {
   const availablePlugins = new Map<string, NonNullable<TSESLint.FlatConfig.Config['plugins']>[string]>()
+  const ambiguousPluginNames = new Set<string>()
 
   for (const config of configs) {
     for (const [pluginName, plugin] of Object.entries(config.plugins ?? {})) {
-      if (!availablePlugins.has(pluginName)) availablePlugins.set(pluginName, plugin)
+      const existingPlugin = availablePlugins.get(pluginName)
+
+      if (existingPlugin && existingPlugin !== plugin) {
+        availablePlugins.delete(pluginName)
+
+        ambiguousPluginNames.add(pluginName)
+      } else if (!ambiguousPluginNames.has(pluginName)) {
+        availablePlugins.set(pluginName, plugin)
+      }
     }
   }
 

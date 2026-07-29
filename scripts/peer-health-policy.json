@@ -1,6 +1,7 @@
 {
   "accepted": [
     {
+      "kind": "incompatible",
       "peer": "graphql",
       "introducedBy": "@graphql-eslint/eslint-plugin",
       "wantedRange": "^16",
@@ -8,6 +9,7 @@
       "removalCondition": "Remove when @graphql-eslint/eslint-plugin supports GraphQL 17."
     },
     {
+      "kind": "incompatible",
       "peer": "graphql",
       "introducedBy": "@graphql-eslint/eslint-plugin",
       "wantedRange": "^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0",
@@ -15,6 +17,7 @@
       "removalCondition": "Remove when graphql-config supports GraphQL 17."
     },
     {
+      "kind": "incompatible",
       "peer": "vite",
       "introducedBy": "@builder.io/qwik",
       "wantedRange": ">=5 <8",
@@ -22,6 +25,7 @@
       "removalCondition": "Remove when Qwik supports Vite 8."
     },
     {
+      "kind": "incompatible",
       "peer": "eslint",
       "introducedBy": "@santi020k/eslint-config-astro",
       "wantedRange": "^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9",
@@ -29,6 +33,7 @@
       "removalCondition": "Remove when eslint-plugin-astro declares ESLint 10 support."
     },
     {
+      "kind": "incompatible",
       "peer": "eslint",
       "introducedBy": "@santi020k/eslint-config-testing",
       "wantedRange": "^6.8.0 || ^7.0.0 || ^8.0.0 || ^9.0.0",
@@ -36,6 +41,7 @@
       "removalCondition": "Remove when eslint-plugin-testing-library declares ESLint 10 support."
     },
     {
+      "kind": "incompatible",
       "peer": "@emnapi/core",
       "introducedBy": "@santi020k/eslint-config-core",
       "wantedRange": "^2.0.0-alpha.3",
@@ -43,6 +49,7 @@
       "removalCondition": "Remove when the transitive native resolver aligns its emnapi peer family."
     },
     {
+      "kind": "incompatible",
       "peer": "@emnapi/core",
       "introducedBy": "@santi020k/eslint-config-libraries",
       "wantedRange": "^2.0.0-alpha.3",
@@ -50,6 +57,7 @@
       "removalCondition": "Remove when the transitive native resolver aligns its emnapi peer family."
     },
     {
+      "kind": "incompatible",
       "peer": "@emnapi/runtime",
       "introducedBy": "@santi020k/eslint-config-core",
       "wantedRange": "^2.0.0-alpha.3",
@@ -57,6 +65,7 @@
       "removalCondition": "Remove when the transitive native resolver aligns its emnapi peer family."
     },
     {
+      "kind": "incompatible",
       "peer": "@emnapi/runtime",
       "introducedBy": "@santi020k/eslint-config-libraries",
       "wantedRange": "^2.0.0-alpha.3",
@@ -64,6 +73,7 @@
       "removalCondition": "Remove when the transitive native resolver aligns its emnapi peer family."
     },
     {
+      "kind": "incompatible",
       "peer": "zod",
       "introducedBy": "@santi020k/eslint-config-libraries",
       "wantedRange": "^4.0.0",
@@ -71,6 +81,7 @@
       "removalCondition": "Remove when the AI SDK dependency graph no longer mixes Zod 3 and Zod 4 peers."
     },
     {
+      "kind": "incompatible",
       "peer": "zod",
       "introducedBy": "@santi020k/eslint-config-libraries",
       "wantedRange": "^4",
