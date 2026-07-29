@@ -104,16 +104,16 @@ description: "Release history for @santi020k/eslint-config-basic."
 
   ```js
   // before (v1)
-  import { reactConfig } from '@santi020k/eslint-config-basic'
-  
-  export default [...reactConfig]
+  import { reactConfig } from "@santi020k/eslint-config-basic";
+
+  export default [...reactConfig];
   ```
 
   ```js
   // after (v2)
-  import { react } from '@santi020k/eslint-config-basic'
-  
-  export default [...(await react())]
+  import { react } from "@santi020k/eslint-config-basic";
+
+  export default [...(await react())];
   ```
 
   Most users are unaffected: `frameworks: { react: true }` and auto-detection behave exactly as before.
@@ -344,16 +344,16 @@ description: "Release history for @santi020k/eslint-config-basic."
 
   ```js
   // before (v1)
-  import { reactConfig } from '@santi020k/eslint-config-basic'
-  
-  export default [...reactConfig]
+  import { reactConfig } from "@santi020k/eslint-config-basic";
+
+  export default [...reactConfig];
   ```
 
   ```js
   // after (v2)
-  import { react } from '@santi020k/eslint-config-basic'
-  
-  export default [...(await react())]
+  import { react } from "@santi020k/eslint-config-basic";
+
+  export default [...(await react())];
   ```
 
   Most users are unaffected: `frameworks: { react: true }` and auto-detection behave exactly as before.
@@ -470,12 +470,12 @@ description: "Release history for @santi020k/eslint-config-basic."
   **Programmatic API:**
 
   ```ts
-  import { generateAgentSkills } from '@santi020k/eslint-config-basic'
-  
+  import { generateAgentSkills } from "@santi020k/eslint-config-basic";
+
   const { skipped, written } = generateAgentSkills({
     cwd: process.cwd(),
-    force: true
-  })
+    force: true,
+  });
   ```
 
 ### Patch Changes
@@ -522,18 +522,18 @@ description: "Release history for @santi020k/eslint-config-basic."
 
   ```ts
   // Before (would throw)
-  const opts = detectProjectOptions()
-  
-  eslintConfig(opts) // ❌
-  
+  const opts = detectProjectOptions();
+
+  eslintConfig(opts); // ❌
+
   // opts.frameworks.next === true → TypeError inside eslintConfig()
-  
+
   // After (safe)
-  const opts = detectProjectOptions()
-  
+  const opts = detectProjectOptions();
+
   // opts.detectedFrameworks → ['next', 'react']  (informational)
   // opts.frameworks → {}                          (safe to spread)
-  eslintConfig(opts) // ✅
+  eslintConfig(opts); // ✅
   ```
 
   ## New features
@@ -545,7 +545,7 @@ description: "Release history for @santi020k/eslint-config-basic."
   - `max-depth` (warn, max 4) — flags deeply nested blocks
 
   ```ts
-  eslintConfig({ extensions: [Extension.BestPractices] })
+  eslintConfig({ extensions: [Extension.BestPractices] });
   ```
 
   **Category barrel exports for `@santi020k/eslint-config-optionals`** — five new sub-path exports let you import a whole category at once:
