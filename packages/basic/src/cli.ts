@@ -233,7 +233,8 @@ const getInstallPackages = (
 const createInstallCommand = (
   packageManager: string,
   packages: string[],
-  workspaceRoot = false
+  workspaceRoot = false,
+  catalog: false | string | true = false
 ): string => {
   const packageList = packages.join(' ')
 
@@ -248,14 +249,17 @@ const createInstallCommand = (
       return `yarn add -D ${packageList}`
 
     default:
-      return `pnpm add -D${workspaceRoot ? ' --workspace-root' : ''} ${packageList}`
+      return `pnpm add -D${workspaceRoot ? ' --workspace-root' : ''}` +
+        (catalog === true ? ' --save-catalog' : '') +
+        `${typeof catalog === 'string' ? ` --save-catalog-name=${catalog}` : ''} ${packageList}`
   }
 }
 
 const createInstallInvocation = (
   packageManager: string,
   packages: string[],
-  workspaceRoot = false
+  workspaceRoot = false,
+  catalog: false | string | true = false
 ): [string, string[]] => {
   switch (packageManager) {
     case 'bun':
@@ -268,12 +272,33 @@ const createInstallInvocation = (
       return ['yarn', ['add', '-D', ...packages]]
 
     default:
-      return ['pnpm', ['add', '-D', ...(workspaceRoot ? ['--workspace-root'] : []), ...packages]]
+      return ['pnpm', [
+        'add',
+        '-D',
+        ...(workspaceRoot ? ['--workspace-root'] : []),
+        ...(catalog === true ? ['--save-catalog'] : []),
+        ...(typeof catalog === 'string' ? [`--save-catalog-name=${catalog}`] : []),
+        ...packages
+      ]]
+  }
+}
+
+const findPnpmWorkspaceRoot = (cwd: string): string | undefined => {
+  let current = cwd
+
+  for (;;) {
+    if (existsSync(join(current, 'pnpm-workspace.yaml'))) return current
+
+    const parent = dirname(current)
+
+    if (parent === current) return undefined
+
+    current = parent
   }
 }
 
 const detectPackageManager = (cwd: string): string => {
-  if (existsSync(join(cwd, 'pnpm-lock.yaml')) || existsSync(join(cwd, 'pnpm-workspace.yaml'))) return 'pnpm'
+  if (findPnpmWorkspaceRoot(cwd) || existsSync(join(cwd, 'pnpm-lock.yaml'))) return 'pnpm'
 
   if (existsSync(join(cwd, 'yarn.lock'))) return 'yarn'
 
@@ -281,6 +306,86 @@ const detectPackageManager = (cwd: string): string => {
 
   return 'npm'
 }
+
+const getCatalogPreference = (
+  packageJson: null | Record<string, unknown>
+): false | string | true => {
+  const dependencyFields = ['devDependencies', 'dependencies'] as const
+
+  for (const field of dependencyFields) {
+    // eslint-disable-next-line security/detect-object-injection -- field is constrained to known dependency records
+    const dependencies = packageJson?.[field]
+
+    if (!dependencies || typeof dependencies !== 'object' || Array.isArray(dependencies)) continue
+
+    for (const value of Object.values(dependencies)) {
+      if (typeof value !== 'string' || !value.startsWith('catalog:')) continue
+
+      const name = value.slice('catalog:'.length)
+
+      return name && name !== 'default' ? name : true
+    }
+  }
+
+  return false
+}
+
+const getCatalogVersion = (workspaceRoot: string, packageName: string): string | undefined => {
+  const workspacePath = join(workspaceRoot, 'pnpm-workspace.yaml')
+
+  if (!existsSync(workspacePath)) return undefined
+
+  const escapedName = packageName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+  // eslint-disable-next-line security/detect-non-literal-regexp -- packageName is escaped before interpolation
+  const match = new RegExp(`^\\s*['"]?${escapedName}['"]?\\s*:\\s*['"]?([^'"\\s#]+)`, 'm')
+    .exec(readFileSync(workspacePath, 'utf8'))
+
+  return match?.[1]
+}
+
+const getCompatibleConfigVersion = (
+  packageJson: null | Record<string, unknown>,
+  workspaceRoot?: string
+): string => {
+  const dependencyFields = ['devDependencies', 'dependencies', 'peerDependencies'] as const
+  let basicSpec: string | undefined
+
+  for (const field of dependencyFields) {
+    // eslint-disable-next-line security/detect-object-injection -- field is constrained to known dependency records
+    const dependencies = packageJson?.[field]
+
+    if (!dependencies || typeof dependencies !== 'object' || Array.isArray(dependencies)) continue
+
+    const value = Object.entries(dependencies as Record<string, unknown>)
+      .find(([packageName]) => packageName === BASIC_PACKAGE_NAME)?.[1]
+
+    if (typeof value === 'string') {
+      basicSpec = value
+
+      break
+    }
+  }
+
+  const resolvedSpec = basicSpec?.startsWith('catalog:') && workspaceRoot
+    ? getCatalogVersion(workspaceRoot, BASIC_PACKAGE_NAME)
+    : basicSpec
+
+  const match = /(\d+)\.(\d+)\.(\d+)/.exec(resolvedSpec ?? getCliVersion())
+
+  return match ? `^${match[1]}.${match[2]}.${match[3]}` : '^3.1.0'
+}
+
+const addCompatibleConfigVersions = (
+  packages: string[],
+  version: string
+): string[] => packages.map(packageName =>
+  packageName.startsWith('@santi020k/eslint-config-') &&
+  packageName !== LITE_PACKAGE_NAME &&
+  packageName !== INTEGRATIONS_PACKAGE_NAME
+    ? `${packageName}@${version}`
+    : packageName
+)
 
 const hasLintScript = (cwd: string): boolean => {
   const packageJson = readPackageJson(cwd) as null | { scripts?: Record<string, string> }
@@ -1149,19 +1254,31 @@ export const handleDoctor = async (
   liteInstall = false,
   fix = false
 ) => {
-  const packageManager = detectPackageManager(cwd)
-  const workspaceRoot = packageManager === 'pnpm' && existsSync(join(cwd, 'pnpm-workspace.yaml'))
-  let configPath = getConfigPathIfPresent(cwd)
-  let packageJson = readPackageJson(cwd)
+  const pnpmWorkspaceRoot = findPnpmWorkspaceRoot(cwd)
+  const projectRoot = pnpmWorkspaceRoot ?? cwd
+  const packageManager = detectPackageManager(projectRoot)
+  const workspaceRoot = packageManager === 'pnpm' && pnpmWorkspaceRoot !== undefined
+  const catalog = workspaceRoot ? getCatalogPreference(readPackageJson(projectRoot)) : false
+  let configPath = getConfigPathIfPresent(projectRoot)
+  let packageJson = readPackageJson(projectRoot)
   let declaredDependencies = getDeclaredDependencyNames(packageJson)
-  let summary = getInstallProjectSummary(cwd)
-  let activeConfig = await analyzeEslintConfig(cwd)
+  let summary = getInstallProjectSummary(projectRoot)
+  let activeConfig = await analyzeEslintConfig(projectRoot)
   let configContent = configPath ? readFileSync(configPath, 'utf8') : null
   let hasV1FrameworkImports = hasV1FrameworkPackageImports(configContent)
 
   if (liteInstall) {
     const liteInstallPackages = getLiteInstallPackages(summary, declaredDependencies)
-    const liteInstallCommand = createInstallCommand(packageManager, liteInstallPackages, workspaceRoot)
+
+    const liteInstallCommand = createInstallCommand(
+      packageManager,
+      addCompatibleConfigVersions(
+        liteInstallPackages,
+        getCompatibleConfigVersion(packageJson, pnpmWorkspaceRoot)
+      ),
+      workspaceRoot,
+      catalog
+    )
 
     if (json) {
       console.log(JSON.stringify({ command: liteInstallCommand, packageManager, packages: liteInstallPackages }, null, 2))
@@ -1172,18 +1289,18 @@ export const handleDoctor = async (
     return
   }
 
-  const fixes = fix ? applyDoctorFixes(cwd, packageJson, configPath, configContent, summary) : []
+  const fixes = fix ? applyDoctorFixes(projectRoot, packageJson, configPath, configContent, summary) : []
 
   if (fixes.length > 0) {
-    configPath = getConfigPathIfPresent(cwd)
+    configPath = getConfigPathIfPresent(projectRoot)
 
-    packageJson = readPackageJson(cwd)
+    packageJson = readPackageJson(projectRoot)
 
     declaredDependencies = getDeclaredDependencyNames(packageJson)
 
-    summary = getInstallProjectSummary(cwd)
+    summary = getInstallProjectSummary(projectRoot)
 
-    activeConfig = await analyzeEslintConfig(cwd)
+    activeConfig = await analyzeEslintConfig(projectRoot)
 
     configContent = configPath ? readFileSync(configPath, 'utf8') : null
 
@@ -1197,11 +1314,19 @@ export const handleDoctor = async (
   const requiredPackages = getInstallPackages(summary, declaredDependencies, explicitFeaturePackages)
 
   const installCommand = requiredPackages.length > 0
-    ? createInstallCommand(packageManager, requiredPackages, workspaceRoot)
+    ? createInstallCommand(
+      packageManager,
+      addCompatibleConfigVersions(
+        requiredPackages,
+        getCompatibleConfigVersion(packageJson, pnpmWorkspaceRoot)
+      ),
+      workspaceRoot,
+      catalog
+    )
     : undefined
 
   const { issues, warnings } = buildDoctorDiagnosis(
-    cwd, configPath, configContent, hasV1FrameworkImports, activeConfig, declaredDependencies, summary
+    projectRoot, configPath, configContent, hasV1FrameworkImports, activeConfig, declaredDependencies, summary
   )
 
   outputDoctorResult(
@@ -1218,7 +1343,9 @@ export const handleDoctor = async (
 }
 
 export const handleInstall = (cwd: string = process.cwd(), dryRun = false) => {
-  const packageJson = readPackageJson(cwd)
+  const pnpmWorkspaceRoot = findPnpmWorkspaceRoot(cwd)
+  const projectRoot = pnpmWorkspaceRoot ?? cwd
+  const packageJson = readPackageJson(projectRoot)
 
   if (!packageJson) {
     console.error('❌ package.json is missing or invalid.')
@@ -1228,20 +1355,26 @@ export const handleInstall = (cwd: string = process.cwd(), dryRun = false) => {
     return
   }
 
-  const packageManager = detectPackageManager(cwd)
-  const configPath = getConfigPathIfPresent(cwd)
+  const packageManager = detectPackageManager(projectRoot)
+  const configPath = getConfigPathIfPresent(projectRoot)
 
   const explicitFeaturePackages = configPath
     ? getExplicitConfigFeaturePackages(readFileSync(configPath, 'utf8'))
     : []
 
   const packages = getInstallPackages(
-    getInstallProjectSummary(cwd),
+    getInstallProjectSummary(projectRoot),
     getDeclaredDependencyNames(packageJson),
     explicitFeaturePackages
   )
 
-  const workspaceRoot = packageManager === 'pnpm' && existsSync(join(cwd, 'pnpm-workspace.yaml'))
+  const workspaceRoot = packageManager === 'pnpm' && pnpmWorkspaceRoot !== undefined
+  const catalog = workspaceRoot ? getCatalogPreference(packageJson) : false
+
+  const installPackages = addCompatibleConfigVersions(
+    packages,
+    getCompatibleConfigVersion(packageJson, pnpmWorkspaceRoot)
+  )
 
   if (packages.length === 0) {
     console.log('✅ All packages required by the detected ESLint configuration are already declared.')
@@ -1249,7 +1382,7 @@ export const handleInstall = (cwd: string = process.cwd(), dryRun = false) => {
     return
   }
 
-  const installCommand = createInstallCommand(packageManager, packages, workspaceRoot)
+  const installCommand = createInstallCommand(packageManager, installPackages, workspaceRoot, catalog)
 
   if (dryRun) {
     console.log(installCommand)
@@ -1259,8 +1392,8 @@ export const handleInstall = (cwd: string = process.cwd(), dryRun = false) => {
 
   console.log(`Installing detected ESLint dependencies:\n${installCommand}`)
 
-  const [command, args] = createInstallInvocation(packageManager, packages, workspaceRoot)
-  const result = spawnSync(command, args, { cwd, stdio: 'inherit' })
+  const [command, args] = createInstallInvocation(packageManager, installPackages, workspaceRoot, catalog)
+  const result = spawnSync(command, args, { cwd: projectRoot, stdio: 'inherit' })
 
   if (result.error) {
     console.error(`❌ Failed to run ${packageManager}: ${result.error.message}`)
@@ -1635,7 +1768,7 @@ const getNumericFlagValue = (argv: string[], flag: string): number | undefined =
 
 export const runCli = (argv: string[] = process.argv, cwd: string = process.cwd()) => {
   const command = argv[2]
-  const isHelp = command === '--help' || command === '-h'
+  const isHelp = argv.slice(2).some(argument => argument === '--help' || argument === '-h')
   const isVersion = command === '--version' || command === '-v'
 
   if (!command || isHelp) {

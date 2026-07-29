@@ -5,6 +5,8 @@ import {
   type Runtime
 } from '@santi020k/eslint-config-core'
 
+import { isMissingRequestedPackage } from './optional-package-errors.js'
+
 const loadModule = createModuleLoader(specifier => import.meta.resolve(specifier, import.meta.url))
 
 export type FrameworkFlags = Partial<Record<FrameworkName, true>>
@@ -77,9 +79,16 @@ const loadFrameworkConfigInput = (frameworkName: FrameworkName): Promise<Framewo
   const pending = loader().catch((error: unknown) => {
     frameworkConfigCache.delete(frameworkName)
 
+    const specifier = `@santi020k/eslint-config-${frameworkName}`
+
+    const remediation = isMissingRequestedPackage(error, specifier)
+      ? `Install "${specifier}" or remove that framework from your defineConfig options.`
+      : `The installed package "${specifier}" failed while evaluating. Inspect this error's cause for the original dependency or runtime failure.`
+
     throw new Error(
       `Unable to load optional framework config "${frameworkName}". ` +
-      `Install "@santi020k/eslint-config-${frameworkName}" or remove that framework from your defineConfig options.`, { cause: error }
+      remediation,
+      { cause: error }
     )
   })
 

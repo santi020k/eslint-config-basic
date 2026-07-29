@@ -3,6 +3,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
 import {
+  attachReferencedPlugins,
   defineConfig,
   Extension,
   Format,
@@ -19,6 +20,22 @@ import { describe, expect, test } from 'vitest'
 import { extractConfigNames, extractRuleNames } from './test-utils.js'
 
 describe('defineConfig Function', () => {
+  test('attaches referenced plugins to the same ESLint 10 config object', () => {
+    const plugin = { rules: { example: { create: () => ({}), meta: { schema: [] } } } }
+    const config = attachReferencedPlugins([
+      {
+        name: 'plugin-registration',
+        plugins: { example: plugin }
+      },
+      {
+        name: 'consumer-rule-override',
+        rules: { 'example/example': 'off' }
+      }
+    ])
+
+    expect(config[1]?.plugins?.example).toBe(plugin)
+  })
+
   test('should return an array when called with minimal options', async () => {
     const config = await defineConfig({})
 

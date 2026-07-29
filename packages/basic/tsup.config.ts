@@ -33,6 +33,7 @@ export default defineConfig([
       'src/index.ts',
       'src/frameworks.ts',
       'src/integrations.ts',
+      'src/optional-package-errors.ts',
       'src/recommended.ts',
       'src/resolvers.ts',
       'src/tailwind.ts',

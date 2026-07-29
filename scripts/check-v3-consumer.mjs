@@ -234,27 +234,27 @@ try {
   )
 
   writeFileSync(join(modularConsumerDir, 'package.json'), JSON.stringify({
-    devDependencies: {
-      ...modularTarballRefs,
-      astro: '^5.0.0',
-      eslint: '^10.0.0',
-      tailwindcss: '^4.1.0',
-      typescript: '^5.9.0',
-      vitest: '^4.0.0'
-    },
     name: 'eslint-config-v3-modular-consumer-check',
     private: true,
-    type: 'module'
+    type: 'module',
+    devDependencies: {
+      ...modularTarballRefs,
+      astro: 'catalog:',
+      eslint: 'catalog:',
+      tailwindcss: 'catalog:',
+      typescript: 'catalog:',
+      vitest: 'catalog:'
+    }
   }, null, 2))
 
   writeFileSync(join(modularConsumerDir, 'apps', 'docs', 'package.json'), JSON.stringify({
-    dependencies: {
-      astro: '^5.0.0',
-      tailwindcss: '^4.1.0'
-    },
     name: 'docs',
     private: true,
-    type: 'module'
+    type: 'module',
+    dependencies: {
+      astro: 'catalog:',
+      tailwindcss: 'catalog:'
+    }
   }, null, 2))
 
   writeFileSync(
@@ -262,6 +262,12 @@ try {
     [
       'packages:',
       '  - apps/*',
+      'catalog:',
+      '  astro: ^5.0.0',
+      '  eslint: ^10.0.0',
+      '  tailwindcss: ^4.1.0',
+      '  typescript: ^5.9.0',
+      '  vitest: ^4.0.0',
       'overrides:',
       ...Object.entries(modularTarballRefs).map(
         ([name, tarball]) => `  ${JSON.stringify(name)}: ${JSON.stringify(tarball)}`
@@ -295,7 +301,7 @@ try {
       '      typescript: { untypedFiles: [\'**/*.astro\'] }',
       '    }',
       '  },',
-      '  root: import.meta.dirname,',
+      '  root: new URL(\'.\', import.meta.url).pathname,',
       '  typescript: true',
       '})',
       ''
@@ -303,6 +309,16 @@ try {
   )
 
   writeFileSync(join(modularConsumerDir, 'index.ts'), 'export const answer = 42\n')
+
+  writeFileSync(join(modularConsumerDir, 'tsconfig.json'), JSON.stringify({
+    compilerOptions: {
+      module: 'NodeNext',
+      moduleResolution: 'NodeNext',
+      noEmit: true,
+      strict: true
+    },
+    include: ['index.ts']
+  }, null, 2))
 
   writeFileSync(
     join(modularConsumerDir, 'apps', 'docs', 'src', 'page.astro'),
@@ -326,11 +342,19 @@ try {
     )
   }
 
-  execFileSync(
-    join(modularConsumerDir, 'node_modules', '.bin', 'eslint'),
-    ['.', '--max-warnings=0'],
-    { cwd: modularConsumerDir, stdio: 'pipe' }
-  )
+  try {
+    execFileSync(
+      join(modularConsumerDir, 'node_modules', '.bin', 'eslint'),
+      ['.', '--max-warnings=0'],
+      { cwd: modularConsumerDir, encoding: 'utf8', stdio: 'pipe' }
+    )
+  } catch (error) {
+    throw new Error(
+      'Modular consumer lint failed.\n' +
+      `${error.stdout ?? ''}${error.stderr ?? ''}`,
+      { cause: error }
+    )
+  }
 
   execFileSync(
     join(modularConsumerDir, 'node_modules', '.bin', 'tsc'),

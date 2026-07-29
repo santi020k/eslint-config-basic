@@ -100,6 +100,22 @@ describe('CLI command UX', () => {
     logSpy.mockRestore()
   })
 
+  test('should treat subcommand help as side-effect free', () => {
+    const cwd = createTempProject({ name: 'tmp-project' })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    runCli(['node', 'basic-eslint', 'install', '--help'], cwd)
+
+    const output = logSpy.mock.calls.flat().join('\n')
+
+    expect(output).toContain('Usage: basic-eslint <command> [options]')
+    expect(output).not.toContain('npm install')
+    expect(readFileSync(join(cwd, 'package.json'), 'utf8')).toBe(
+      JSON.stringify({ name: 'tmp-project' }, null, 2)
+    )
+    logSpy.mockRestore()
+  })
+
   test('should print version for --version', () => {
     const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
@@ -166,7 +182,7 @@ describe('CLI command UX', () => {
     const output = String(logSpy.mock.calls[0]?.[0])
 
     expect(output).toBe(
-      'npm install -D @santi020k/eslint-config-react @santi020k/eslint-config-testing'
+      'npm install -D @santi020k/eslint-config-react@^3.0.0 @santi020k/eslint-config-testing@^3.0.0'
     )
     logSpy.mockRestore()
   })
@@ -195,7 +211,7 @@ describe('CLI command UX', () => {
     handleInstall(cwd, true)
 
     expect(logSpy).toHaveBeenCalledWith(
-      'npm install -D @santi020k/eslint-config-extensions @santi020k/eslint-config-formats @santi020k/eslint-config-testing @santi020k/eslint-config-tools'
+      'npm install -D @santi020k/eslint-config-extensions@^3.0.0 @santi020k/eslint-config-formats@^3.0.0 @santi020k/eslint-config-testing@^3.0.0 @santi020k/eslint-config-tools@^3.0.0'
     )
     logSpy.mockRestore()
   })
@@ -217,7 +233,7 @@ describe('CLI command UX', () => {
     handleInstall(cwd, true)
 
     expect(logSpy).toHaveBeenCalledWith(
-      'npm install -D @santi020k/eslint-config-react-router'
+      'npm install -D @santi020k/eslint-config-react-router@^3.0.0'
     )
     logSpy.mockRestore()
   })
@@ -264,7 +280,7 @@ describe('CLI command UX', () => {
 
     handleInstall(cwd, true)
 
-    expect(logSpy).toHaveBeenCalledWith('npm install -D @santi020k/eslint-config-react')
+    expect(logSpy).toHaveBeenCalledWith('npm install -D @santi020k/eslint-config-react@^3.0.0')
     logSpy.mockRestore()
   })
 
@@ -362,7 +378,7 @@ describe('CLI command UX', () => {
 
     handleInstall(cwd, true)
 
-    expect(logSpy).toHaveBeenCalledWith('npm install -D @santi020k/eslint-config-react')
+    expect(logSpy).toHaveBeenCalledWith('npm install -D @santi020k/eslint-config-react@^3.0.0')
     logSpy.mockRestore()
   })
 
@@ -382,7 +398,76 @@ describe('CLI command UX', () => {
     handleInstall(cwd, true)
 
     expect(logSpy).toHaveBeenCalledWith(
-      'pnpm add -D --workspace-root eslint @santi020k/eslint-config-basic'
+      'pnpm add -D --workspace-root eslint @santi020k/eslint-config-basic@^3.1.0'
+    )
+    logSpy.mockRestore()
+  })
+
+  test('should preserve the default pnpm catalog convention', () => {
+    const cwd = createTempProject({
+      devDependencies: {
+        '@santi020k/eslint-config-basic': 'catalog:',
+        eslint: 'catalog:'
+      },
+      name: 'tmp-workspace'
+    })
+
+    writeFileSync(join(cwd, 'pnpm-workspace.yaml'), [
+      'packages:',
+      '  - "apps/*"',
+      'catalog:',
+      '  "@santi020k/eslint-config-basic": ^3.1.0',
+      '  eslint: ^10.0.0',
+      ''
+    ].join('\n'))
+
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    handleInstall(cwd, true)
+
+    expect(logSpy).toHaveBeenCalledWith(
+      'pnpm add -D --workspace-root --save-catalog ' +
+      '@santi020k/eslint-config-formats@^3.1.0 ' +
+      '@santi020k/eslint-config-tools@^3.1.0'
+    )
+    logSpy.mockRestore()
+  })
+
+  test('should discover a named pnpm catalog from a nested workspace package', () => {
+    const cwd = createTempProject({
+      devDependencies: {
+        '@santi020k/eslint-config-basic': 'catalog:lint',
+        eslint: 'catalog:lint'
+      },
+      name: 'tmp-workspace',
+      workspaces: ['apps/*']
+    })
+    const child = join(cwd, 'apps/web')
+
+    mkdirSync(child, { recursive: true })
+    writeFileSync(join(child, 'package.json'), JSON.stringify({
+      dependencies: { react: '19.0.0' },
+      name: 'web'
+    }))
+    writeFileSync(join(cwd, 'pnpm-workspace.yaml'), [
+      'packages:',
+      '  - "apps/*"',
+      'catalogs:',
+      '  lint:',
+      '    "@santi020k/eslint-config-basic": ^3.1.0',
+      '    eslint: ^10.0.0',
+      ''
+    ].join('\n'))
+
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    handleInstall(child, true)
+
+    expect(logSpy).toHaveBeenCalledWith(
+      'pnpm add -D --workspace-root --save-catalog-name=lint ' +
+      '@santi020k/eslint-config-react@^3.1.0 ' +
+      '@santi020k/eslint-config-formats@^3.1.0 ' +
+      '@santi020k/eslint-config-tools@^3.1.0'
     )
     logSpy.mockRestore()
   })

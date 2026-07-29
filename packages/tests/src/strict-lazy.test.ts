@@ -2,6 +2,8 @@ import { defineConfig } from '@santi020k/eslint-config-basic'
 
 import { describe, expect, test, vi } from 'vitest'
 
+import { isMissingRequestedPackage } from '../../basic/src/optional-package-errors.js'
+
 import { getEffectiveRuleValue } from './test-utils.js'
 
 const noDetectRootDir = '/__eslint-config_basic_strict_lazy_tests_no_detect__'
@@ -66,6 +68,26 @@ describe('lazy framework loading', () => {
     expect((error as Error).message).not.toContain('Module not found')
 
     vi.doUnmock('@santi020k/eslint-config-vite')
+  })
+})
+
+describe('optional package errors', () => {
+  test('distinguishes the requested package from a missing transitive dependency', () => {
+    const directError = Object.assign(
+      new Error(
+        'Cannot find package \'@santi020k/eslint-config-vite\' imported from /consumer/eslint.config.mjs'
+      ),
+      { code: 'ERR_MODULE_NOT_FOUND' }
+    )
+    const transitiveError = Object.assign(
+      new Error(
+        'Cannot find package \'incompatible-peer\' imported from /node_modules/@santi020k/eslint-config-vite/dist/index.js'
+      ),
+      { code: 'ERR_MODULE_NOT_FOUND' }
+    )
+
+    expect(isMissingRequestedPackage(directError, '@santi020k/eslint-config-vite')).toBe(true)
+    expect(isMissingRequestedPackage(transitiveError, '@santi020k/eslint-config-vite')).toBe(false)
   })
 })
 
