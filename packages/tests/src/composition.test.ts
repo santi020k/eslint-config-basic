@@ -3,6 +3,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
 import {
+  attachReferencedPlugins,
   defineConfig,
   Extension,
   Format,
@@ -19,6 +20,46 @@ import { describe, expect, test } from 'vitest'
 import { extractConfigNames, extractRuleNames } from './test-utils.js'
 
 describe('defineConfig Function', () => {
+  test('attaches referenced plugins to the same ESLint 10 config object', () => {
+    const plugin = { rules: { example: { create: () => ({}), meta: { schema: [] } } } }
+    const config = attachReferencedPlugins([
+      {
+        name: 'plugin-registration',
+        plugins: { example: plugin }
+      },
+      {
+        name: 'consumer-rule-override',
+        rules: { 'example/example': 'off' }
+      }
+    ])
+
+    expect(config[1]?.plugins?.example).toBe(plugin)
+  })
+
+  test('does not attach an ambiguous plugin implementation across disjoint scopes', () => {
+    const appPlugin = { rules: { example: { create: () => ({}), meta: { schema: [] } } } }
+    const docsPlugin = { rules: { example: { create: () => ({}), meta: { schema: [] } } } }
+    const config = attachReferencedPlugins([
+      {
+        files: ['apps/**'],
+        name: 'app-plugin-registration',
+        plugins: { example: appPlugin }
+      },
+      {
+        files: ['docs/**'],
+        name: 'docs-plugin-registration',
+        plugins: { example: docsPlugin }
+      },
+      {
+        files: ['docs/**'],
+        name: 'docs-rule-override',
+        rules: { 'example/example': 'off' }
+      }
+    ])
+
+    expect(config[2]?.plugins).toBeUndefined()
+  })
+
   test('should return an array when called with minimal options', async () => {
     const config = await defineConfig({})
 
@@ -621,6 +662,23 @@ describe('defineConfig Function', () => {
     })
   })
 
+  test('should apply untyped TypeScript files after Astro parser options', async () => {
+    const config = await defineConfig({
+      detection: false,
+      frameworks: { astro: true },
+      typescript: {
+        untypedFiles: ['**/*.astro']
+      }
+    })
+    const astroIndex = config.findLastIndex(entry => entry.name?.includes('astro'))
+    const untypedIndex = config.findIndex(
+      entry => entry.name === 'eslint-config-typescript/untyped-files'
+    )
+
+    expect(astroIndex).toBeGreaterThanOrEqual(0)
+    expect(untypedIndex).toBeGreaterThan(astroIndex)
+  })
+
   test('should use detectRootDir independently from tsconfigRootDir', async () => {
     const cwd = mkdtempSync(join(tmpdir(), 'eslint-config-detect-root-'))
     try {
@@ -889,6 +947,32 @@ describe('scripts-overrides block', () => {
 })
 
 describe('Monorepo project scoping', () => {
+  test('root detection and Tailwind options are inherited by scoped projects', async () => {
+    const config = await defineConfig({
+      detection: { libraries: false },
+      projects: {
+        'apps/docs': {
+          libraries: ['tailwind'],
+          typescript: false
+        }
+      },
+      root: '/repo',
+      tailwind: {
+        entryPoint: 'src/styles/global.css',
+        noUnknownClasses: false
+      }
+    })
+    const tailwindSettings = config.find(entry =>
+      entry.name === 'eslint-config-basic/tailwind-settings' &&
+      entry.files?.some(pattern => pattern === 'apps/docs/**/*'))
+
+    expect(tailwindSettings?.rules?.['better-tailwindcss/no-unknown-classes']).toBe('off')
+    expect(tailwindSettings?.settings?.['better-tailwindcss']).toMatchObject({
+      cwd: '/repo/apps/docs',
+      entryPoint: 'src/styles/global.css'
+    })
+  })
+
   test('projectDefaults are inherited and merged with project overrides', async () => {
     const config = await defineConfig({
       detection: false,

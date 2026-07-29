@@ -16,8 +16,11 @@ npx @santi020k/eslint-config-basic@^3 migrate --to v3
 ```
 
 The migration detects framework and feature-pack packages, replaces removed
-aliases, moves direct factory imports, and maps Remix to React Router. Apply
-safe changes with backups:
+aliases, moves direct factory imports, maps Remix to React Router, converts
+literal category arrays and `integrations` to the v3 `features` map, and
+replaces a single root-directory alias with `root`. Dynamic expressions,
+conflicting root aliases, and raw Tailwind rule overrides remain unchanged and
+receive an explicit manual-action note. Apply safe changes with backups:
 
 ```sh
 npx @santi020k/eslint-config-basic@^3 migrate --to v3 --write

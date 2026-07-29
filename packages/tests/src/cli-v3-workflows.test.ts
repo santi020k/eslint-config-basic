@@ -16,6 +16,7 @@ import {
   migrateConfigToV3,
   type V3MigrationContext
 } from '../../basic/src/cli-migration.js'
+import { createPresetReport, handleExplainPreset } from '../../basic/src/cli-preset.js'
 import {
   type CommandRunner,
   createConfigSnapshot,
@@ -41,7 +42,10 @@ const createTempProject = (
   return cwd
 }
 
-const writeFakeEslint = (cwd: string): void => {
+const writeFakeEslint = (
+  cwd: string,
+  currentRules: null | Record<string, unknown> = { 'example/rule': [2, { allow: [] }] }
+): void => {
   const packageDir = join(cwd, 'node_modules', 'eslint')
 
   mkdirSync(join(packageDir, 'bin'), { recursive: true })
@@ -57,8 +61,11 @@ const writeFakeEslint = (cwd: string): void => {
   writeFileSync(join(packageDir, 'bin', 'eslint.js'), '')
   writeFileSync(
     join(packageDir, 'index.js'),
-    'module.exports = { ESLint: class { async calculateConfigForFile() { ' +
-    'return { rules: { "example/rule": [2, { allow: [] }] } } } } }\n'
+    'module.exports = { ESLint: class { constructor(options) { this.options = options } ' +
+    'async calculateConfigForFile() { if (this.options.overrideConfig) { ' +
+    'const entries = Array.isArray(this.options.overrideConfig) ? this.options.overrideConfig.flat(Infinity) : [this.options.overrideConfig]; ' +
+    'return { rules: Object.assign({}, ...entries.map(entry => entry.rules || {})) } } ' +
+    `return ${currentRules === null ? 'null' : `{ rules: ${JSON.stringify(currentRules)} }`} } } }\n`
   )
 }
 
@@ -86,6 +93,128 @@ afterEach(() => {
 })
 
 describe('v2 to v3 migration', () => {
+  test('modernizes literal categories, integrations, and root aliases', () => {
+    const result = migrateConfigToV3([
+      'export default defineConfig({',
+      '  detectRootDir: import.meta.dirname,',
+      '  integrations: { vitest: true },',
+      '  extensions: [Extension.Security],',
+      '  formats: [Format.Jsonc, "yaml"],',
+      '})'
+    ].join('\n'), 'lean')
+
+    expect(result.content).toContain('root: import.meta.dirname')
+    expect(result.content).toContain('features: {')
+    expect(result.content).toContain('"security": true')
+    expect(result.content).toContain('"jsonc": true')
+    expect(result.content).toContain('"yaml": true')
+    expect(result.content).not.toContain('integrations:')
+    expect(result.content).not.toContain('extensions:')
+    expect(result.changes).toEqual(expect.arrayContaining([
+      expect.stringContaining('deprecated integrations map'),
+      expect.stringContaining('v3 root option'),
+      expect.stringContaining('literal category arrays')
+    ]))
+  })
+
+  test('preserves nested root aliases while modernizing only defineConfig options', () => {
+    const result = migrateConfigToV3([
+      'export default defineConfig({',
+      '  detectRootDir: import.meta.dirname,',
+      '  typescript: { tsconfigRootDir: import.meta.dirname },',
+      '}, { languageOptions: { parserOptions: { tsconfigRootDir: import.meta.dirname } } })'
+    ].join('\n'), 'lean')
+
+    expect(result.content).toContain('root: import.meta.dirname')
+    expect(result.content).toContain('typescript: { tsconfigRootDir: import.meta.dirname }')
+    expect(result.content).toContain('parserOptions: { tsconfigRootDir: import.meta.dirname }')
+    expect(result.content).not.toContain('typescript: { root:')
+  })
+
+  test('does not modernize a root alias found only in nested options', () => {
+    const config = [
+      'export default defineConfig({',
+      '  typescript: { tsconfigRootDir: import.meta.dirname },',
+      '})'
+    ].join('\n')
+    const result = migrateConfigToV3(config, 'lean')
+
+    expect(result.content).toBe(config)
+    expect(result.changes).not.toContain(expect.stringContaining('v3 root option'))
+  })
+
+  test('preserves explicit empty category replacements', () => {
+    const config = [
+      'export default defineConfig({',
+      '  optionMergeStrategy: "replace",',
+      '  libraries: [],',
+      '})'
+    ].join('\n')
+    const result = migrateConfigToV3(config, 'lean')
+
+    expect(result.content).toBe(config)
+    expect(result.content).not.toContain('features:')
+  })
+
+  test('preserves category arrays within each owning project option', () => {
+    const result = migrateConfigToV3([
+      'export default defineConfig({',
+      '  projects: {',
+      '    app: { testing: [Testing.Vitest] },',
+      '    docs: { formats: [Format.Markdown] },',
+      '  },',
+      '})'
+    ].join('\n'), 'lean')
+
+    expect(result.content).toContain('app: { features: {\n      "vitest": true,\n    },}')
+    expect(result.content).toContain('docs: { features: {\n      "markdown": true,\n    },}')
+    expect(result.content).not.toContain('app: { features: {\n      "markdown": true,')
+    expect(result.content).not.toContain('docs: { features: {\n      "vitest": true,')
+  })
+
+  test('does not migrate category arrays in unrelated ESLint settings', () => {
+    const config = [
+      'export default defineConfig({',
+      '  settings: {',
+      '    "import/resolver": { extensions: [".js", ".ts"] },',
+      '  },',
+      '})'
+    ].join('\n')
+    const result = migrateConfigToV3(config, 'lean')
+
+    expect(result.content).toBe(config)
+    expect(result.changes).not.toContain(expect.stringContaining('literal category arrays'))
+  })
+
+  test('only modernizes integrations owned by Basic options', () => {
+    const result = migrateConfigToV3([
+      'export default defineConfig({',
+      '  integrations: { vitest: true },',
+      '  settings: { integrations: { custom: true } },',
+      '}, { settings: { integrations: { extra: true } } })'
+    ].join('\n'), 'lean')
+
+    expect(result.content).toContain('  features: { vitest: true },')
+    expect(result.content).toContain('settings: { integrations: { custom: true } }')
+    expect(result.content).toContain('settings: { integrations: { extra: true } }')
+  })
+
+  test('preserves dynamic category expressions and reports raw Tailwind overrides', () => {
+    const config = [
+      'export default defineConfig({',
+      '  extensions: [...sharedExtensions],',
+      '  rules: { "better-tailwindcss/no-unknown-classes": "off" },',
+      '})'
+    ].join('\n')
+    const result = migrateConfigToV3(config, 'lean')
+
+    expect(result.content).toBe(config)
+    expect(result.changes).toContain(
+      'Manual action required: replace the raw better-tailwindcss/no-unknown-classes override with ' +
+      'projects["<scope>"].tailwind.noUnknownClasses.'
+    )
+  })
+
   test.each([
     {
       context: migrationContext({ libraries: ['tailwind'] }),
@@ -223,6 +352,74 @@ describe('v2 to v3 migration', () => {
     const result = migrateConfigToV3(input, 'lean')
 
     expect(result.content).toBe(input)
+  })
+
+  test('replaces alias references outside a shadowing scope', () => {
+    const input = [
+      'import { gitignore } from \'@santi020k/eslint-config-basic\'',
+      '',
+      'const build = gitignore => gitignore',
+      'export default [...gitignore]',
+      'void build'
+    ].join('\n')
+
+    const result = migrateConfigToV3(input, 'lean')
+
+    expect(result.content).toContain('import { createGitignoreConfig }')
+    expect(result.content).toContain('const build = gitignore => gitignore')
+    expect(result.content).toContain('export default [...createGitignoreConfig()]')
+  })
+
+  test('preserves removed alias references in block-bodied arrow scopes', () => {
+    const input = [
+      'import { gitignore } from \'@santi020k/eslint-config-basic\'',
+      '',
+      'const build = gitignore => {',
+      '  return gitignore',
+      '}',
+      'export default [...gitignore]',
+      'void build'
+    ].join('\n')
+
+    const result = migrateConfigToV3(input, 'lean')
+
+    expect(result.content).toContain('const build = gitignore => {\n  return gitignore\n}')
+    expect(result.content).toContain('export default [...createGitignoreConfig()]')
+  })
+
+  test('preserves removed alias references in multiline expression-bodied arrow scopes', () => {
+    const input = [
+      'import { gitignore } from \'@santi020k/eslint-config-basic\'',
+      '',
+      'const build = gitignore => (',
+      '  gitignore',
+      ')',
+      'export default [...gitignore]',
+      'void build'
+    ].join('\n')
+
+    const result = migrateConfigToV3(input, 'lean')
+
+    expect(result.content).toContain('const build = gitignore => (\n  gitignore\n)')
+    expect(result.content).toContain('export default [...createGitignoreConfig()]')
+  })
+
+  test('rewrites package module specifiers without changing comments or data strings', () => {
+    const input = [
+      '// Keep @santi020k/eslint-config-lite in migration docs.',
+      'const packageName = "@santi020k/eslint-config-remix"',
+      'import basic from \'@santi020k/eslint-config-lite\'',
+      'export { config } from \'@santi020k/eslint-config-remix\'',
+      'void basic',
+      'void packageName'
+    ].join('\n')
+
+    const result = migrateConfigToV3(input, 'lean')
+
+    expect(result.content).toContain('// Keep @santi020k/eslint-config-lite in migration docs.')
+    expect(result.content).toContain('const packageName = "@santi020k/eslint-config-remix"')
+    expect(result.content).toContain('import basic from \'@santi020k/eslint-config-basic\'')
+    expect(result.content).toContain('from \'@santi020k/eslint-config-react-router\'')
   })
 
   test('writes config and package backups with granular v3 dependencies', () => {
@@ -390,6 +587,31 @@ describe('v2 to v3 migration', () => {
     expect(result.featurePackages).toEqual(expect.arrayContaining(expected))
   })
 
+  test('includes feature packages selected through an options variable', () => {
+    const result = migrateConfigToV3([
+      'const options = { features: { security: true } }',
+      'export default defineConfig(options)'
+    ].join('\n'), 'lean')
+
+    expect(result.featurePackages).toEqual([
+      '@santi020k/eslint-config-extensions'
+    ])
+  })
+
+  test('includes feature packages selected through project defaults', () => {
+    const result = migrateConfigToV3([
+      'export default defineConfig({',
+      '  projectDefaults: { features: { security: true } },',
+      '  settings: { features: { zod: true } },',
+      '  projects: { app: {} },',
+      '})'
+    ].join('\n'), 'lean')
+
+    expect(result.featurePackages).toEqual([
+      '@santi020k/eslint-config-extensions'
+    ])
+  })
+
   test('includes extensions for pedantic strict mode', () => {
     const result = migrateConfigToV3(
       'export default defineConfig({ strict: "pedantic" })',
@@ -397,6 +619,21 @@ describe('v2 to v3 migration', () => {
     )
 
     expect(result.featurePackages).toContain('@santi020k/eslint-config-extensions')
+  })
+
+  test('ignores feature selections outside Basic option objects', () => {
+    const result = migrateConfigToV3([
+      'export default defineConfig({',
+      '  settings: {',
+      '    "import/resolver": { extensions: [".js", ".ts"] },',
+      '    features: { zod: true },',
+      '    preset: Preset.App,',
+      '    strict: "pedantic",',
+      '  },',
+      '}, { settings: { integrations: { prettier: true } } })'
+    ].join('\n'), 'lean')
+
+    expect(result.featurePackages).toEqual([])
   })
 
   test('writes all feature packs implied by presets and strict profiles', () => {
@@ -461,6 +698,30 @@ describe('v2 to v3 migration', () => {
     logSpy.mockRestore()
   })
 
+  test('does not select full from Preset.All outside root Basic options', () => {
+    const cwd = createTempProject({
+      devDependencies: {
+        '@santi020k/eslint-config-basic': '^2.0.0'
+      },
+      name: 'test-project',
+      type: 'module'
+    })
+
+    writeFileSync(
+      join(cwd, 'eslint.config.js'),
+      'import { defineConfig, Preset } from \'@santi020k/eslint-config-basic\'\n' +
+      'export default defineConfig({}, { settings: { preset: Preset.All } })\n'
+    )
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    handleMigrateV3(cwd, migrationContext(), { json: true })
+
+    const payload = JSON.parse(String(logSpy.mock.calls[0]?.[0])) as { mode?: string }
+
+    expect(payload.mode).toBe('lean')
+    logSpy.mockRestore()
+  })
+
   test('adds the pnpm workspace-root flag to the migration install command', () => {
     const cwd = createTempProject({
       devDependencies: {
@@ -502,6 +763,165 @@ describe('v2 to v3 migration', () => {
 
     expect(payload.mode).toBe('lean')
     logSpy.mockRestore()
+  })
+})
+
+describe('preset adoption', () => {
+  test('groups preset changes and writes a compatibility override', async () => {
+    const cwd = createTempProject()
+
+    writeFakeEslint(cwd, { '@stylistic/indent': 'warn' })
+    const report = await createPresetReport(cwd, 'app', 'src/index.ts')
+
+    expect(report.preset).toBe('app')
+    expect(report.missingPackages).toEqual([
+      '@santi020k/eslint-config-testing',
+      '@santi020k/eslint-config-tools'
+    ])
+    expect(report.totals.added).toBeGreaterThan(0)
+    expect(Object.values(report.groups).flat()).toHaveLength(report.totals.added)
+
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    await handleExplainPreset(cwd, 'app', { compatibility: true, json: true })
+
+    const output = join(cwd, '.eslint-preset-app-compat.mjs')
+    const payload = JSON.parse(String(logSpy.mock.calls[0]?.[0])) as {
+      compatibilityFile: string
+    }
+
+    expect(payload.compatibilityFile).toBe('.eslint-preset-app-compat.mjs')
+
+    const compatibilityConfig = readFileSync(output, 'utf8')
+
+    expect(compatibilityConfig).toContain("name: 'eslint-config-basic/preset-app-compatibility'")
+    expect(compatibilityConfig).toContain('"@stylistic/indent": "warn"')
+  })
+
+  test('retains explicit config overrides in the preset adoption target', async () => {
+    const cwd = createTempProject()
+
+    writeFakeEslint(cwd, { 'explicit/rule': 'error' })
+    writeFileSync(join(cwd, 'eslint.config.js'), [
+      'const config = []',
+      'Object.defineProperty(config, Symbol.for(\'@santi020k/eslint-config-basic/define-config-metadata\'), {',
+      '  value: { extraConfigs: [{ rules: { \'explicit/rule\': \'error\' } }], options: {} }',
+      '})',
+      'export default config'
+    ].join('\n'))
+
+    const report = await createPresetReport(cwd, 'app', 'src/index.ts')
+
+    expect(report.changed).not.toHaveProperty('explicit/rule')
+    expect(report.removed).not.toHaveProperty('explicit/rule')
+  })
+
+  test('excludes detected frameworks whose optional packs are unavailable', async () => {
+    const cwd = createTempProject({
+      dependencies: { react: '^19.0.0' },
+      name: 'react-project',
+      type: 'module'
+    })
+
+    writeFakeEslint(cwd, { '@eslint-react/exhaustive-deps': 'warn' })
+    const report = await createPresetReport(cwd, 'app', 'src/index.tsx')
+
+    expect(report.missingPackages).toContain('@santi020k/eslint-config-react')
+    expect(report.removed).toHaveProperty('@eslint-react/exhaustive-deps')
+    expect(report.groups.framework).not.toContain('@eslint-react/no-array-index-key')
+    expect(report.groups.formatting).toContain('@stylistic/indent')
+  })
+
+  test('excludes installed detected frameworks whose implied pack is unavailable', async () => {
+    const cwd = createTempProject({
+      dependencies: { next: '^16.0.0' },
+      name: 'next-project',
+      type: 'module'
+    })
+    const packageDir = join(cwd, 'node_modules', '@santi020k', 'eslint-config-next')
+
+    mkdirSync(packageDir, { recursive: true })
+    writeFileSync(join(packageDir, 'package.json'), JSON.stringify({
+      name: '@santi020k/eslint-config-next',
+      version: '3.1.0'
+    }))
+    writeFakeEslint(cwd)
+
+    const report = await createPresetReport(cwd, 'app', 'src/index.tsx')
+
+    expect(report.missingPackages).toContain('@santi020k/eslint-config-react')
+    expect(report.groups.framework).not.toContain('@next/next/no-html-link-for-pages')
+  })
+
+  test('keeps detected framework rules when the optional pack is installed', async () => {
+    const cwd = createTempProject({
+      dependencies: { react: '^19.0.0' },
+      name: 'react-project',
+      type: 'module'
+    })
+    const packageDir = join(cwd, 'node_modules', '@santi020k', 'eslint-config-react')
+
+    mkdirSync(packageDir, { recursive: true })
+    writeFileSync(join(packageDir, 'package.json'), JSON.stringify({
+      name: '@santi020k/eslint-config-react',
+      version: '3.1.0'
+    }))
+    writeFakeEslint(cwd, { '@eslint-react/exhaustive-deps': 'warn' })
+
+    const report = await createPresetReport(cwd, 'app', 'src/index.tsx')
+
+    expect(report.missingPackages).not.toContain('@santi020k/eslint-config-react')
+    expect(report.removed).not.toHaveProperty('@eslint-react/exhaustive-deps')
+    expect(report.groups.framework).toContain('@eslint-react/no-array-index-key')
+  })
+
+  test('reports unavailable packs selected by project detection', async () => {
+    const cwd = createTempProject({
+      dependencies: { tailwindcss: '^4.0.0' },
+      name: 'tailwind-project',
+      type: 'module'
+    })
+
+    writeFakeEslint(cwd)
+    const report = await createPresetReport(cwd, 'app', 'src/index.ts')
+
+    expect(report.missingPackages).toContain('@santi020k/eslint-config-libraries')
+  })
+
+  test('rejects files without an effective current configuration', async () => {
+    const cwd = createTempProject()
+
+    writeFakeEslint(cwd, null)
+
+    await expect(createPresetReport(cwd, 'app', 'ignored.ts')).rejects.toThrow(
+      'ESLint did not calculate a current configuration for ignored.ts'
+    )
+  })
+
+  test('reports nested compatibility output paths relative to the project', async () => {
+    const cwd = createTempProject()
+
+    mkdirSync(join(cwd, 'config'), { recursive: true })
+    writeFakeEslint(cwd)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    await handleExplainPreset(cwd, 'app', {
+      compatibility: true,
+      json: true,
+      output: 'config/app-compat.mjs'
+    })
+
+    const payload = JSON.parse(String(logSpy.mock.calls[0]?.[0])) as { compatibilityFile: string }
+
+    expect(payload.compatibilityFile).toBe('config/app-compat.mjs')
+  })
+
+  test('rejects unknown preset names', async () => {
+    const cwd = createTempProject()
+
+    writeFakeEslint(cwd)
+
+    await expect(createPresetReport(cwd, 'mystery')).rejects.toThrow('Unknown preset')
   })
 })
 
@@ -1304,7 +1724,8 @@ describe('v3 project assistance', () => {
         react: '^19.0.0'
       },
       devDependencies: {
-        typescript: '^5.9.0'
+        typescript: '^5.9.0',
+        vitest: '^4.0.0'
       },
       name: 'test-project',
       type: 'module'
@@ -1318,5 +1739,8 @@ describe('v3 project assistance', () => {
 
     expect(config).toContain('typescript: true')
     expect(config).toContain('react: true')
+    expect(config).toContain('features: {')
+    expect(config).toContain('vitest: true')
+    expect(config).not.toContain('testing: [')
   })
 })

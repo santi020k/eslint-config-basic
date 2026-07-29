@@ -365,6 +365,7 @@ describe('Deep Rule Assertions (#5)', () => {
       }
     })
     expect(tailwindSettings?.rules?.['better-tailwindcss/no-unknown-classes']).toBe('off')
+    expect(tailwindSettings?.plugins?.['better-tailwindcss']).toBeDefined()
   })
 
   test('should resolve Tailwind from detectRootDir in monorepo package configs', async () => {

@@ -3,6 +3,8 @@ import { cpSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writ
 import { tmpdir } from 'node:os'
 import { basename, isAbsolute, join } from 'node:path'
 
+import { checkPeerHealth } from './check-peer-health.mjs'
+
 const rootDir = process.cwd()
 const tempDir = mkdtempSync(join(tmpdir(), 'eslint-config-v3-consumer-'))
 const packageDirs = ['core', 'typescript', 'basic']
@@ -197,6 +199,186 @@ try {
   process.stdout.write(
     'V3 full consumer verified: the meta-package supplies optional framework peers ' +
     'and the one-line config loads detected React rules.\n'
+  )
+
+  const modularPackageNames = [
+    '@santi020k/eslint-config-astro',
+    '@santi020k/eslint-config-basic',
+    '@santi020k/eslint-config-core',
+    '@santi020k/eslint-config-extensions',
+    '@santi020k/eslint-config-formats',
+    '@santi020k/eslint-config-libraries',
+    '@santi020k/eslint-config-testing',
+    '@santi020k/eslint-config-tools',
+    '@santi020k/eslint-config-typescript'
+  ]
+
+  const modularConsumerDir = join(tempDir, 'modular-consumer')
+  const modularTarballDir = join(modularConsumerDir, 'tarballs')
+
+  mkdirSync(join(modularConsumerDir, 'apps', 'docs', 'src'), { recursive: true })
+
+  mkdirSync(modularTarballDir, { recursive: true })
+
+  const modularTarballRefs = Object.fromEntries(
+    modularPackageNames.map(packageName => {
+      const packageDir = packageNameToDir.get(packageName)
+
+      if (!packageDir) throw new Error(`Missing workspace package for ${packageName}.`)
+
+      const tarball = pack(packageDir)
+      const filename = basename(tarball)
+
+      cpSync(tarball, join(modularTarballDir, filename))
+
+      return [packageName, `file:./tarballs/${filename}`]
+    })
+  )
+
+  writeFileSync(join(modularConsumerDir, 'package.json'), JSON.stringify({
+    name: 'eslint-config-v3-modular-consumer-check',
+    private: true,
+    type: 'module',
+    devDependencies: {
+      ...modularTarballRefs,
+      astro: 'catalog:',
+      eslint: 'catalog:',
+      tailwindcss: 'catalog:',
+      typescript: 'catalog:',
+      vitest: 'catalog:'
+    }
+  }, null, 2))
+
+  writeFileSync(join(modularConsumerDir, 'apps', 'docs', 'package.json'), JSON.stringify({
+    name: 'docs',
+    private: true,
+    type: 'module',
+    dependencies: {
+      astro: 'catalog:',
+      tailwindcss: 'catalog:'
+    }
+  }, null, 2))
+
+  writeFileSync(
+    join(modularConsumerDir, 'pnpm-workspace.yaml'),
+    [
+      'packages:',
+      '  - apps/*',
+      'catalog:',
+      '  astro: ^5.0.0',
+      '  eslint: ^10.0.0',
+      '  tailwindcss: ^4.1.0',
+      '  typescript: ^5.9.0',
+      '  vitest: ^4.0.0',
+      'overrides:',
+      ...Object.entries(modularTarballRefs).map(
+        ([name, tarball]) => `  ${JSON.stringify(name)}: ${JSON.stringify(tarball)}`
+      ),
+      ''
+    ].join('\n')
+  )
+
+  writeFileSync(
+    join(modularConsumerDir, 'eslint.config.mjs'),
+    [
+      'import { defineConfig } from \'@santi020k/eslint-config-basic\'',
+      '',
+      'export default await defineConfig({',
+      '  detection: { libraries: false },',
+      '  features: {',
+      '    boundaries: true,',
+      '    cspell: true,',
+      '    jsonc: true,',
+      '    markdown: true,',
+      '    pnpm: true,',
+      '    unicorn: true,',
+      '    vitest: true,',
+      '    yaml: true',
+      '  },',
+      '  projects: {',
+      '    \'apps/docs\': {',
+      '      frameworks: { astro: true },',
+      '      libraries: [\'tailwind\'],',
+      '      tailwind: { noUnknownClasses: false },',
+      '      typescript: { untypedFiles: [\'**/*.astro\'] }',
+      '    }',
+      '  },',
+      '  root: new URL(\'.\', import.meta.url).pathname,',
+      '  typescript: true',
+      '})',
+      ''
+    ].join('\n')
+  )
+
+  writeFileSync(join(modularConsumerDir, 'index.ts'), 'export const answer = 42\n')
+
+  writeFileSync(join(modularConsumerDir, 'tsconfig.json'), JSON.stringify({
+    compilerOptions: {
+      module: 'NodeNext',
+      moduleResolution: 'NodeNext',
+      noEmit: true,
+      strict: true
+    },
+    include: ['index.ts']
+  }, null, 2))
+
+  writeFileSync(
+    join(modularConsumerDir, 'apps', 'docs', 'src', 'page.astro'),
+    '---\nconst title = \'Docs\'\n---\n<h1>{title}</h1>\n'
+  )
+
+  execFileSync('pnpm', ['install', '--ignore-scripts'], {
+    cwd: modularConsumerDir,
+    stdio: 'pipe'
+  })
+
+  const doctor = JSON.parse(execFileSync(
+    join(modularConsumerDir, 'node_modules', '.bin', 'basic-eslint'),
+    ['doctor', '--json'],
+    { cwd: modularConsumerDir, encoding: 'utf8', stdio: 'pipe' }
+  ))
+
+  if (doctor.requiredPackages?.length > 0) {
+    throw new Error(
+      `Modular consumer doctor reported missing packages: ${doctor.requiredPackages.join(', ')}`
+    )
+  }
+
+  try {
+    execFileSync(
+      join(modularConsumerDir, 'node_modules', '.bin', 'eslint'),
+      ['.', '--max-warnings=0'],
+      { cwd: modularConsumerDir, encoding: 'utf8', stdio: 'pipe' }
+    )
+  } catch (error) {
+    throw new Error(
+      'Modular consumer lint failed.\n' +
+      `${error.stdout ?? ''}${error.stderr ?? ''}`,
+      { cause: error }
+    )
+  }
+
+  execFileSync(
+    join(modularConsumerDir, 'node_modules', '.bin', 'tsc'),
+    ['--noEmit', '--allowJs', '--checkJs', '--module', 'NodeNext', '--moduleResolution', 'NodeNext', 'eslint.config.mjs'],
+    { cwd: modularConsumerDir, stdio: 'pipe' }
+  )
+
+  execFileSync('pnpm', ['install', '--frozen-lockfile', '--ignore-scripts'], {
+    cwd: modularConsumerDir,
+    stdio: 'pipe'
+  })
+
+  const peerReport = checkPeerHealth(
+    modularConsumerDir,
+    join(rootDir, 'scripts', 'peer-health-policy.json')
+  )
+
+  process.stdout.write(
+    'V3 modular monorepo verified: packed feature and framework packages install, ' +
+    'doctor resolves every project dependency, ESLint 10 lints cleanly, the config typechecks, ' +
+    `the generated lockfile supports a frozen install, and peer health has ` +
+    `${peerReport.accepted.length} accepted and zero actionable warnings.\n`
   )
 } finally {
   rmSync(tempDir, { force: true, recursive: true })

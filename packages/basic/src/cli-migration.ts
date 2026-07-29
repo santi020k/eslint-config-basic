@@ -150,7 +150,7 @@ const FEATURE_EXPORTS: Record<keyof typeof FEATURE_PACKAGES, string[]> = {
 const EXPORT_TO_FEATURE_PACKAGE = new Map(
   Object.entries(FEATURE_EXPORTS).flatMap(([category, exports]) => exports.map(exportName => [
     exportName,
-     
+
     FEATURE_PACKAGES[category as keyof typeof FEATURE_PACKAGES]
   ] as const))
 )
@@ -448,6 +448,91 @@ const getEnclosingDelimiter = (content: string, offset: number): null | string =
   return null
 }
 
+interface SourceRange {
+  end: number
+  start: number
+}
+
+const findClosingDelimiter = (
+  content: string,
+  start: number,
+  opener: string,
+  closer: string
+): number => {
+  let depth = 0
+
+  for (let index = start; index < content.length; index++) {
+    if (content[index] === opener) depth++
+    else if (content[index] === closer && --depth === 0) return index + 1
+  }
+
+  return content.length
+}
+
+const getShadowedRanges = (content: string, name: string): SourceRange[] => {
+  const masked = maskNonCode(content)
+  const importRanges = getImportRanges(content)
+  let searchable = masked
+
+  for (const range of importRanges.toReversed()) {
+    searchable = `${searchable.slice(0, range.start)}${' '.repeat(range.end - range.start)}${searchable.slice(range.end)}`
+  }
+
+  // eslint-disable-next-line security/detect-non-literal-regexp -- binding names come from parsed import specifiers
+  const parameterPattern = new RegExp([
+    `\\b${name}\\b\\s*=>`,
+    `\\([^)]*\\b${name}\\b[^)]*\\)\\s*=>`,
+    `(?:\\bfunction\\b[^()]*|\\bcatch)\\s*\\([^)]*\\b${name}\\b[^)]*\\)\\s*\\{`,
+    `\\b(?:constructor|[a-zA-Z_$][\\w$]*)\\s*\\([^)]*\\b${name}\\b[^)]*\\)\\s*\\{`
+  ].join('|'), 'gm')
+
+  const ranges = [...searchable.matchAll(parameterPattern)].map(match => {
+    const start = match.index
+    const matchedBodyStart = start + match[0].length - 1
+
+    if (searchable[matchedBodyStart] === '{') {
+      return { end: findClosingDelimiter(searchable, matchedBodyStart, '{', '}'), start }
+    }
+
+    const arrowIndex = searchable.indexOf('=>', start)
+    const relativeBodyStart = searchable.slice(arrowIndex + 2).search(/\S/)
+    const bodyStart = relativeBodyStart === -1 ? searchable.length : arrowIndex + 2 + relativeBodyStart
+    const bodyDelimiter = searchable[bodyStart]
+    let bodyCloser: string | undefined
+
+    if (bodyDelimiter === '(') bodyCloser = ')'
+    else if (bodyDelimiter === '[') bodyCloser = ']'
+
+    if (bodyDelimiter === '{') {
+      return { end: findClosingDelimiter(searchable, bodyStart, '{', '}'), start }
+    }
+
+    if (bodyCloser) {
+      return { end: findClosingDelimiter(searchable, bodyStart, bodyDelimiter, bodyCloser), start }
+    }
+
+    const lineEnd = searchable.indexOf('\n', arrowIndex + 2)
+
+    return { end: lineEnd === -1 ? searchable.length : lineEnd, start }
+  })
+
+  // eslint-disable-next-line security/detect-non-literal-regexp -- binding names come from parsed import specifiers
+  const blockBindingPattern = new RegExp(`\\b(?:const|let|var|function|class)\\s+${name}\\b`, 'g')
+
+  for (const match of searchable.matchAll(blockBindingPattern)) {
+    const blockStart = searchable.lastIndexOf('{', match.index)
+
+    if (blockStart !== -1) {
+      ranges.push({
+        end: findClosingDelimiter(searchable, blockStart, '{', '}'),
+        start: blockStart
+      })
+    }
+  }
+
+  return ranges
+}
+
 const replaceBindingReferences = (
   content: string,
   from: string,
@@ -459,13 +544,15 @@ const replaceBindingReferences = (
   // eslint-disable-next-line security/detect-non-literal-regexp -- binding names come from the internal migration map
   const identifierPattern = new RegExp(`\\b${from}\\b`, 'g')
   const matches = [...masked.matchAll(identifierPattern)]
+  const shadowedRanges = getShadowedRanges(content, from)
   let updated = content
 
   for (const match of matches.reverse()) {
     const offset = match.index
     const isImportSpecifier = importRanges.some(range => offset >= range.start && offset < range.end)
+    const isShadowed = shadowedRanges.some(range => offset >= range.start && offset < range.end)
 
-    if (isImportSpecifier) continue
+    if (isImportSpecifier || isShadowed) continue
 
     const precedingContent = masked.slice(0, offset).trimEnd()
     const preceding = precedingContent.at(-1)
@@ -605,10 +692,351 @@ const hasCodePropertySeparator = (codeContent: string, match: RegExpMatchArray):
   return matchIndex >= 0 && separatorOffset >= 0 && codeContent[matchIndex + separatorOffset] === ':'
 }
 
+const replaceCodeProperty = (
+  content: string,
+  property: string,
+  replacement: string,
+  matches?: RegExpMatchArray[]
+): string => {
+  const masked = maskNonCode(content, true)
+  // eslint-disable-next-line security/detect-non-literal-regexp -- property is an internal migration key
+  const pattern = new RegExp(`\\b${property}\\b(?=\\s*:)`, 'g')
+  const propertyMatches = matches ?? [...masked.matchAll(pattern)]
+  let updated = content
+
+  for (const match of propertyMatches.toReversed()) {
+    const { index } = match
+
+    if (index === undefined) continue
+
+    updated = `${updated.slice(0, index)}${replacement}${updated.slice(index + property.length)}`
+  }
+
+  return updated
+}
+
+const toFeatureName = (value: string): null | string => {
+  const trimmed = value.trim()
+  const enumMatch = /^(?:Extension|Format|Library|Testing|Tool)\.([a-zA-Z0-9_$]+)$/.exec(trimmed)
+  const stringMatch = /^(['"])([^'"]+)\1$/.exec(trimmed)
+  const raw = enumMatch?.[1] ?? stringMatch?.[2]
+
+  return raw ? toKebabCase(raw) : null
+}
+
+const getOwningObjectStart = (structure: string, position: number): number | undefined => {
+  const objectStarts: number[] = []
+
+  for (let index = 0; index < position; index++) {
+    if (structure[index] === '{') objectStarts.push(index)
+
+    if (structure[index] === '}') objectStarts.pop()
+  }
+
+  return objectStarts.at(-1)
+}
+
+const getDefineConfigOptionOwners = (searchable: string): Set<number> => {
+  const owners = new Set(
+    [...searchable.matchAll(/\bdefineConfig\s*\(\s*\{/g)]
+      .map(match => match.index + match[0].lastIndexOf('{'))
+  )
+
+  const optionNames = new Set(
+    [...searchable.matchAll(/\bdefineConfig\s*\(\s*([a-zA-Z_$][\w$]*)\b/g)]
+      .map(match => match[1])
+  )
+
+  for (const optionName of optionNames) {
+    // eslint-disable-next-line security/detect-non-literal-regexp -- option names come from local identifier matches
+    const bindingPattern = new RegExp(`\\b(?:const|let|var)\\s+${optionName}\\s*=\\s*\\{`, 'g')
+
+    for (const match of searchable.matchAll(bindingPattern)) {
+      owners.add(match.index + match[0].lastIndexOf('{'))
+    }
+  }
+
+  return owners
+}
+
+const getDirectChildObjectStarts = (
+  structure: string,
+  containerStart: number
+): number[] => {
+  const children: number[] = []
+  const objectStarts = [containerStart]
+
+  for (let index = containerStart + 1; index < structure.length && objectStarts.length > 0; index++) {
+    if (structure[index] === '{') {
+      if (objectStarts.at(-1) === containerStart) children.push(index)
+
+      objectStarts.push(index)
+    } else if (structure[index] === '}') {
+      objectStarts.pop()
+    }
+  }
+
+  return children
+}
+
+const getOwnedObjectPropertyStarts = (
+  searchable: string,
+  structure: string,
+  property: string,
+  owners: Set<number>
+): number[] => {
+  // eslint-disable-next-line security/detect-non-literal-regexp -- property is an internal migration key
+  const pattern = new RegExp(`\\b${property}\\b\\s*:\\s*\\{`, 'g')
+
+  return [...searchable.matchAll(pattern)].flatMap(match => {
+    const owner = getOwningObjectStart(structure, match.index)
+    const objectStart = match.index + match[0].lastIndexOf('{')
+
+    return owner !== undefined &&
+      owners.has(owner) &&
+      hasCodePropertySeparator(structure, match) &&
+      structure[objectStart] === '{' ? [objectStart] : []
+  })
+}
+
+const getBasicOptionOwners = (
+  searchable: string,
+  structure: string
+): Set<number> => {
+  const owners = getDefineConfigOptionOwners(searchable)
+
+  for (const projectDefaultsOwner of getOwnedObjectPropertyStarts(
+    searchable,
+    structure,
+    'projectDefaults',
+    owners
+  )) {
+    owners.add(projectDefaultsOwner)
+  }
+
+  const visitedProjectContainers = new Set<number>()
+  let projectContainers = getOwnedObjectPropertyStarts(searchable, structure, 'projects', owners)
+
+  while (projectContainers.length > 0) {
+    for (const container of projectContainers) {
+      visitedProjectContainers.add(container)
+
+      for (const projectOwner of getDirectChildObjectStarts(structure, container)) {
+        owners.add(projectOwner)
+      }
+    }
+
+    projectContainers = getOwnedObjectPropertyStarts(searchable, structure, 'projects', owners)
+      .filter(container => !visitedProjectContainers.has(container))
+  }
+
+  return owners
+}
+
+const getOwnedPropertyMatches = (
+  searchable: string,
+  structure: string,
+  property: string,
+  owners: Set<number>
+): RegExpMatchArray[] => {
+  // eslint-disable-next-line security/detect-non-literal-regexp -- property is an internal migration key
+  const pattern = new RegExp(`\\b${property}\\b\\s*:`, 'g')
+
+  return [...searchable.matchAll(pattern)].flatMap(match => {
+    const owner = getOwningObjectStart(structure, match.index)
+
+    return owner !== undefined && owners.has(owner) && hasCodePropertySeparator(structure, match) ? [match] : []
+  })
+}
+
+const modernizeLiteralFeatureArrays = (
+  content: string
+): { changed: boolean, content: string, features: string[] } => {
+  const searchable = maskNonCode(content, true)
+  const structure = maskNonCode(content)
+  const optionOwners = getBasicOptionOwners(searchable, structure)
+
+  const selections = [...searchable.matchAll(
+    /\b(?:extensions|formats|libraries|testing|tools)\b\s*:\s*\[([\s\S]*?)\]\s*,?/g
+  )].flatMap(match => {
+    if (/\/[/*]/.test(content.slice(match.index, match.index + match[0].length))) return []
+
+    const features = match[1].split(',').filter(Boolean).map(toFeatureName)
+    const owner = getOwningObjectStart(structure, match.index)
+
+    if (
+      owner === undefined ||
+      !optionOwners.has(owner) ||
+      !hasCodePropertySeparator(structure, match) ||
+      features.length === 0 ||
+      features.some(feature => feature === null)
+    ) return []
+
+    return [{
+      end: match.index + match[0].length,
+      features: features as string[],
+      owner,
+      start: match.index
+    }]
+  })
+
+  if (selections.length === 0) return { changed: false, content, features: [] }
+
+  const features = [...new Set(selections.flatMap(selection => selection.features))]
+  const selectionsByOwner = new Map<number, typeof selections>()
+
+  for (const selection of selections) {
+    const ownedSelections = selectionsByOwner.get(selection.owner)
+
+    if (ownedSelections) ownedSelections.push(selection)
+    else selectionsByOwner.set(selection.owner, [selection])
+  }
+
+  const existingFeaturesByOwner = new Map<number, RegExpMatchArray>()
+
+  for (const match of searchable.matchAll(/\bfeatures\b\s*:\s*\{/g)) {
+    const owner = getOwningObjectStart(structure, match.index)
+
+    if (owner !== undefined && !existingFeaturesByOwner.has(owner)) {
+      existingFeaturesByOwner.set(owner, match)
+    }
+  }
+
+  const edits: { end: number, replacement: string, start: number }[] = []
+
+  for (const [owner, ownedSelections] of selectionsByOwner) {
+    const ownedFeatures = [...new Set(ownedSelections.flatMap(selection => selection.features))]
+    const first = ownedSelections[0]
+    const lineStart = content.lastIndexOf('\n', first.start) + 1
+    const indent = /^\s*/.exec(content.slice(lineStart, first.start))?.[0] ?? ''
+    const existingFeatures = existingFeaturesByOwner.get(owner)
+
+    const featureBlock = existingFeatures
+      ? `\n${ownedFeatures.map(feature => `${indent}  ${JSON.stringify(feature)}: true,`).join('\n')}`
+      : [
+        'features: {',
+        ...ownedFeatures.map(feature => `${indent}  ${JSON.stringify(feature)}: true,`),
+        `${indent}},`
+      ].join('\n')
+
+    for (const selection of ownedSelections) {
+      edits.push({
+        end: selection.end,
+        replacement: !existingFeatures && selection === first ? featureBlock : '',
+        start: selection.start
+      })
+    }
+
+    if (existingFeatures) {
+      const insertionIndex = (existingFeatures.index ?? 0) + existingFeatures[0].length
+
+      edits.push({
+        end: insertionIndex,
+        replacement: featureBlock,
+        start: insertionIndex
+      })
+    }
+  }
+
+  let updated = content
+
+  for (const edit of edits.sort((a, b) => b.start - a.start)) {
+    updated = `${updated.slice(0, edit.start)}${edit.replacement}${updated.slice(edit.end)}`
+  }
+
+  return { changed: updated !== content, content: updated, features }
+}
+
+const modernizeConfigOptions = (
+  content: string
+): { changes: string[], content: string } => {
+  const changes: string[] = []
+  let updated = content
+  const searchable = maskNonCode(updated, true)
+  const structure = maskNonCode(updated)
+  const basicOptionOwners = getBasicOptionOwners(searchable, structure)
+
+  const featureOwners = new Set(
+    getOwnedPropertyMatches(searchable, structure, 'features', basicOptionOwners)
+      .flatMap(match => {
+        if (match.index === undefined) return []
+
+        const owner = getOwningObjectStart(structure, match.index)
+
+        return owner === undefined ? [] : [owner]
+      })
+  )
+
+  const integrationMatches = getOwnedPropertyMatches(searchable, structure, 'integrations', basicOptionOwners)
+    .filter(match => {
+      if (match.index === undefined) return false
+
+      const owner = getOwningObjectStart(structure, match.index)
+
+      return owner !== undefined && !featureOwners.has(owner)
+    })
+
+  if (integrationMatches.length > 0) {
+    updated = replaceCodeProperty(updated, 'integrations', 'features', integrationMatches)
+
+    changes.push('Replaced the deprecated integrations map with features.')
+  }
+
+  const updatedSearchable = maskNonCode(updated, true)
+  const updatedStructure = maskNonCode(updated)
+  const optionOwners = getDefineConfigOptionOwners(updatedSearchable)
+  const rootMatches = getOwnedPropertyMatches(updatedSearchable, updatedStructure, 'root', optionOwners)
+
+  const rootAliasMatches = new Map([
+    ['detectRootDir', getOwnedPropertyMatches(updatedSearchable, updatedStructure, 'detectRootDir', optionOwners)],
+    ['tsconfigRootDir', getOwnedPropertyMatches(updatedSearchable, updatedStructure, 'tsconfigRootDir', optionOwners)]
+  ])
+
+  const rootAliases = [...rootAliasMatches]
+    .filter(([, matches]) => matches.length > 0)
+    .map(([alias]) => alias)
+
+  if (rootMatches.length === 0 && rootAliases.length === 1) {
+    const alias = rootAliases[0]
+
+    updated = replaceCodeProperty(updated, alias, 'root', rootAliasMatches.get(alias))
+
+    changes.push(`Replaced ${alias} with the v3 root option.`)
+  } else if (rootAliases.length > 0) {
+    changes.push(
+      `Manual action required: consolidate ${rootAliases.join(' and ')} into root after confirming they resolve to the same directory.`
+    )
+  }
+
+  const featureMigration = modernizeLiteralFeatureArrays(updated)
+
+  if (featureMigration.changed) {
+    updated = featureMigration.content
+
+    changes.push(`Replaced literal category arrays with the v3 features map (${featureMigration.features.join(', ')}).`)
+  }
+
+  if (maskNonCode(updated, true).includes('better-tailwindcss/no-unknown-classes')) {
+    changes.push(
+      'Manual action required: replace the raw better-tailwindcss/no-unknown-classes override with ' +
+      'projects["<scope>"].tailwind.noUnknownClasses.'
+    )
+  }
+
+  return { changes, content: updated }
+}
+
 export const getExplicitConfigFeaturePackages = (content: string): string[] => {
   const packages = new Set<string>()
   const codeContent = maskNonCode(content)
   const searchableContent = maskNonCode(content, true)
+  const optionOwners = getBasicOptionOwners(searchableContent, codeContent)
+
+  const isBasicOption = (match: RegExpMatchArray): boolean => {
+    const owner = getOwningObjectStart(codeContent, match.index ?? -1)
+
+    return owner !== undefined && optionOwners.has(owner) && hasCodePropertySeparator(codeContent, match)
+  }
 
   for (const category of Object.keys(FEATURE_PACKAGES) as (keyof typeof FEATURE_PACKAGES)[]) {
     const categorySelections = searchableContent.matchAll(
@@ -618,7 +1046,7 @@ export const getExplicitConfigFeaturePackages = (content: string): string[] => {
 
     for (const selection of categorySelections) {
       if (
-        hasCodePropertySeparator(codeContent, selection) &&
+        isBasicOption(selection) &&
         selection[1].trim()
       ) {
         packages.add(FEATURE_PACKAGES[category])
@@ -631,7 +1059,7 @@ export const getExplicitConfigFeaturePackages = (content: string): string[] => {
   const featureSelections = /(?:\b(?:features|integrations)\b|['"](?:features|integrations)['"])\s*:\s*\{([\s\S]*?)\}/g
 
   for (const selection of searchableContent.matchAll(featureSelections)) {
-    if (!hasCodePropertySeparator(codeContent, selection)) continue
+    if (!isBasicOption(selection)) continue
 
     const enabledFeaturePattern = /(?:['"]([^'"]+)['"]|([a-zA-Z_$][\w$-]*))\s*:\s*true\b/g
 
@@ -646,7 +1074,7 @@ export const getExplicitConfigFeaturePackages = (content: string): string[] => {
   const enumPresetPattern = /(?:\bpreset\b|['"]preset['"])\s*:\s*Preset\.(All|App|CI|Library|Monorepo)/g
 
   for (const match of searchableContent.matchAll(enumPresetPattern)) {
-    if (!hasCodePropertySeparator(codeContent, match)) continue
+    if (!isBasicOption(match)) continue
 
     const presetName = match[1].toLowerCase()
 
@@ -658,7 +1086,7 @@ export const getExplicitConfigFeaturePackages = (content: string): string[] => {
   const stringPresetPattern = /(?:\bpreset\b|['"]preset['"])\s*:\s*(['"`])(all|app|ci|library|monorepo)\1/g
 
   for (const match of searchableContent.matchAll(stringPresetPattern)) {
-    if (!hasCodePropertySeparator(codeContent, match)) continue
+    if (!isBasicOption(match)) continue
 
     for (const packageName of PRESET_FEATURE_PACKAGES[match[2]] ?? []) {
       packages.add(packageName)
@@ -668,7 +1096,7 @@ export const getExplicitConfigFeaturePackages = (content: string): string[] => {
   const strictPattern = /(?:\bstrict\b|['"]strict['"])\s*:\s*(['"`])pedantic\1/g
 
   for (const match of searchableContent.matchAll(strictPattern)) {
-    if (hasCodePropertySeparator(codeContent, match)) {
+    if (isBasicOption(match)) {
       packages.add(FEATURE_PACKAGES.extensions)
 
       break
@@ -678,6 +1106,14 @@ export const getExplicitConfigFeaturePackages = (content: string): string[] => {
   return [...packages]
 }
 
+const replacePackageSpecifiers = (content: string, from: string, to: string): string => content.replace(
+  // eslint-disable-next-line security/detect-unsafe-regex -- bounded module specifiers cannot cross quote characters
+  /(\b(?:from|import|export)\s*(?:\(\s*)?|\brequire\s*\(\s*)(['"])([^'"]+)\2/g,
+  (statement, prefix: string, quote: string, specifier: string) => (
+    specifier === from ? `${prefix}${quote}${to}${quote}` : statement
+  )
+)
+
 export const migrateConfigToV3 = (
   content: string,
   mode: 'full' | 'lean'
@@ -685,17 +1121,22 @@ export const migrateConfigToV3 = (
   const changes: string[] = []
   const featurePackages = new Set(getExplicitConfigFeaturePackages(content))
   let migrated = content
+  const liteMigrated = replacePackageSpecifiers(migrated, LITE_PACKAGE, BASIC_PACKAGE)
 
-  if (migrated.includes(LITE_PACKAGE)) {
-    migrated = migrated.replaceAll(LITE_PACKAGE, BASIC_PACKAGE)
+  if (liteMigrated !== migrated) {
+    migrated = liteMigrated
 
     changes.push('Replaced the Lite compatibility import with Basic.')
   }
 
-  if (mode === 'full' && migrated.includes(BASIC_PACKAGE)) {
-    migrated = migrated.replaceAll(BASIC_PACKAGE, FULL_PACKAGE)
+  if (mode === 'full') {
+    const fullMigrated = replacePackageSpecifiers(migrated, BASIC_PACKAGE, FULL_PACKAGE)
 
-    changes.push('Switched the root config import to the full bundle.')
+    if (fullMigrated !== migrated) {
+      migrated = fullMigrated
+
+      changes.push('Switched the root config import to the full bundle.')
+    }
   }
 
   if (mode === 'lean') {
@@ -734,8 +1175,14 @@ export const migrateConfigToV3 = (
     changes.push('Moved frameworks.remix to frameworks["react-router"].')
   }
 
-  if (migrated.includes(REMIX_PACKAGE)) {
-    migrated = migrated.replaceAll(REMIX_PACKAGE, FRAMEWORK_PACKAGES['react-router'])
+  const reactRouterMigrated = replacePackageSpecifiers(
+    migrated,
+    REMIX_PACKAGE,
+    FRAMEWORK_PACKAGES['react-router']
+  )
+
+  if (reactRouterMigrated !== migrated) {
+    migrated = reactRouterMigrated
 
     changes.push('Replaced the Remix package import with React Router.')
   }
@@ -743,6 +1190,12 @@ export const migrateConfigToV3 = (
   if (/\bloadModule\b/.test(migrated)) {
     changes.push('Manual action required: replace loadModule usage with createModuleLoader(resolver).')
   }
+
+  const modernized = modernizeConfigOptions(migrated)
+
+  migrated = modernized.content
+
+  changes.push(...modernized.changes)
 
   return {
     changes,
@@ -763,16 +1216,24 @@ const shouldUseFullBundle = (
   if (configContent) {
     const codeContent = maskNonCode(configContent)
     const searchableContent = maskNonCode(configContent, true)
+    const optionOwners = getDefineConfigOptionOwners(searchableContent)
+
+    const isRootOption = (match: RegExpMatchArray): boolean => {
+      const owner = getOwningObjectStart(codeContent, match.index ?? -1)
+
+      return owner !== undefined && optionOwners.has(owner) && hasCodePropertySeparator(codeContent, match)
+    }
+
     const enumPresetPattern = /(?:\bpreset\b|['"]preset['"])\s*:\s*Preset\.All/g
 
     for (const match of searchableContent.matchAll(enumPresetPattern)) {
-      if (hasCodePropertySeparator(codeContent, match)) return true
+      if (isRootOption(match)) return true
     }
 
     const stringPresetPattern = /(?:\bpreset\b|['"]preset['"])\s*:\s*(['"`])all\1/g
 
     for (const match of searchableContent.matchAll(stringPresetPattern)) {
-      if (hasCodePropertySeparator(codeContent, match)) return true
+      if (isRootOption(match)) return true
     }
   }
 
