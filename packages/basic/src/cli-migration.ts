@@ -448,6 +448,28 @@ const getEnclosingDelimiter = (content: string, offset: number): null | string =
   return null
 }
 
+const hasShadowingBinding = (content: string, name: string): boolean => {
+  const masked = maskNonCode(content)
+  const importRanges = getImportRanges(content)
+  let searchable = masked
+
+  for (const range of importRanges.toReversed()) {
+    searchable = `${searchable.slice(0, range.start)}${' '.repeat(range.end - range.start)}${searchable.slice(range.end)}`
+  }
+
+  // eslint-disable-next-line security/detect-non-literal-regexp -- binding names come from parsed import specifiers
+  const bindingPattern = new RegExp([
+    `\\b(?:const|let|var|function|class)\\s+${name}\\b`,
+    `\\b(?:const|let|var)\\s+[\\[{][^;\\n=]*\\b${name}\\b`,
+    `(?:\\bfunction\\b[^()]*|\\bcatch)\\s*\\([^)]*\\b${name}\\b[^)]*\\)`,
+    `\\([^)]*\\b${name}\\b[^)]*\\)\\s*=>`,
+    `\\b${name}\\b\\s*=>`,
+    `\\b(?:constructor|[a-zA-Z_$][\\w$]*)\\s*\\([^)]*\\b${name}\\b[^)]*\\)\\s*\\{`
+  ].join('|'), 'm')
+
+  return bindingPattern.test(searchable)
+}
+
 const replaceBindingReferences = (
   content: string,
   from: string,
@@ -518,6 +540,8 @@ const replaceImportedAlias = (
       if (aliasMatch?.[2] === from) {
         const localName = aliasMatch[3]
 
+        if (hasShadowingBinding(content, localName)) return specifier
+
         bindings.push({ from: localName, to: localName })
 
         return `${aliasMatch[1]}${to} as ${localName}${aliasMatch[4]}`
@@ -525,7 +549,7 @@ const replaceImportedAlias = (
 
       const directMatch = /^(\s*)([a-zA-Z_$][\w$]*)(\s*)$/.exec(specifier)
 
-      if (directMatch?.[2] !== from) return specifier
+      if (directMatch?.[2] !== from || hasShadowingBinding(content, from)) return specifier
 
       bindings.push({ from, to })
 
@@ -915,6 +939,13 @@ export const getExplicitConfigFeaturePackages = (content: string): string[] => {
   const packages = new Set<string>()
   const codeContent = maskNonCode(content)
   const searchableContent = maskNonCode(content, true)
+  const optionOwners = getBasicOptionOwners(searchableContent, codeContent)
+
+  const isBasicOption = (match: RegExpMatchArray): boolean => {
+    const owner = getOwningObjectStart(codeContent, match.index ?? -1)
+
+    return owner !== undefined && optionOwners.has(owner) && hasCodePropertySeparator(codeContent, match)
+  }
 
   for (const category of Object.keys(FEATURE_PACKAGES) as (keyof typeof FEATURE_PACKAGES)[]) {
     const categorySelections = searchableContent.matchAll(
@@ -924,7 +955,7 @@ export const getExplicitConfigFeaturePackages = (content: string): string[] => {
 
     for (const selection of categorySelections) {
       if (
-        hasCodePropertySeparator(codeContent, selection) &&
+        isBasicOption(selection) &&
         selection[1].trim()
       ) {
         packages.add(FEATURE_PACKAGES[category])
@@ -937,7 +968,7 @@ export const getExplicitConfigFeaturePackages = (content: string): string[] => {
   const featureSelections = /(?:\b(?:features|integrations)\b|['"](?:features|integrations)['"])\s*:\s*\{([\s\S]*?)\}/g
 
   for (const selection of searchableContent.matchAll(featureSelections)) {
-    if (!hasCodePropertySeparator(codeContent, selection)) continue
+    if (!isBasicOption(selection)) continue
 
     const enabledFeaturePattern = /(?:['"]([^'"]+)['"]|([a-zA-Z_$][\w$-]*))\s*:\s*true\b/g
 
@@ -952,7 +983,7 @@ export const getExplicitConfigFeaturePackages = (content: string): string[] => {
   const enumPresetPattern = /(?:\bpreset\b|['"]preset['"])\s*:\s*Preset\.(All|App|CI|Library|Monorepo)/g
 
   for (const match of searchableContent.matchAll(enumPresetPattern)) {
-    if (!hasCodePropertySeparator(codeContent, match)) continue
+    if (!isBasicOption(match)) continue
 
     const presetName = match[1].toLowerCase()
 
@@ -964,7 +995,7 @@ export const getExplicitConfigFeaturePackages = (content: string): string[] => {
   const stringPresetPattern = /(?:\bpreset\b|['"]preset['"])\s*:\s*(['"`])(all|app|ci|library|monorepo)\1/g
 
   for (const match of searchableContent.matchAll(stringPresetPattern)) {
-    if (!hasCodePropertySeparator(codeContent, match)) continue
+    if (!isBasicOption(match)) continue
 
     for (const packageName of PRESET_FEATURE_PACKAGES[match[2]] ?? []) {
       packages.add(packageName)
@@ -974,7 +1005,7 @@ export const getExplicitConfigFeaturePackages = (content: string): string[] => {
   const strictPattern = /(?:\bstrict\b|['"]strict['"])\s*:\s*(['"`])pedantic\1/g
 
   for (const match of searchableContent.matchAll(strictPattern)) {
-    if (hasCodePropertySeparator(codeContent, match)) {
+    if (isBasicOption(match)) {
       packages.add(FEATURE_PACKAGES.extensions)
 
       break
@@ -1075,16 +1106,24 @@ const shouldUseFullBundle = (
   if (configContent) {
     const codeContent = maskNonCode(configContent)
     const searchableContent = maskNonCode(configContent, true)
+    const optionOwners = getDefineConfigOptionOwners(searchableContent)
+
+    const isRootOption = (match: RegExpMatchArray): boolean => {
+      const owner = getOwningObjectStart(codeContent, match.index ?? -1)
+
+      return owner !== undefined && optionOwners.has(owner) && hasCodePropertySeparator(codeContent, match)
+    }
+
     const enumPresetPattern = /(?:\bpreset\b|['"]preset['"])\s*:\s*Preset\.All/g
 
     for (const match of searchableContent.matchAll(enumPresetPattern)) {
-      if (hasCodePropertySeparator(codeContent, match)) return true
+      if (isRootOption(match)) return true
     }
 
     const stringPresetPattern = /(?:\bpreset\b|['"]preset['"])\s*:\s*(['"`])all\1/g
 
     for (const match of searchableContent.matchAll(stringPresetPattern)) {
-      if (hasCodePropertySeparator(codeContent, match)) return true
+      if (isRootOption(match)) return true
     }
   }
 
