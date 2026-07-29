@@ -42,7 +42,10 @@ const createTempProject = (
   return cwd
 }
 
-const writeFakeEslint = (cwd: string): void => {
+const writeFakeEslint = (
+  cwd: string,
+  currentRules: Record<string, unknown> = { 'example/rule': [2, { allow: [] }] }
+): void => {
   const packageDir = join(cwd, 'node_modules', 'eslint')
 
   mkdirSync(join(packageDir, 'bin'), { recursive: true })
@@ -62,7 +65,7 @@ const writeFakeEslint = (cwd: string): void => {
     'async calculateConfigForFile() { if (this.options.overrideConfig) { ' +
     'const entries = Array.isArray(this.options.overrideConfig) ? this.options.overrideConfig.flat(Infinity) : [this.options.overrideConfig]; ' +
     'return { rules: Object.assign({}, ...entries.map(entry => entry.rules || {})) } } ' +
-    'return { rules: { "example/rule": [2, { allow: [] }] } } } } }\n'
+    `return { rules: ${JSON.stringify(currentRules)} } } } }\n`
   )
 }
 
@@ -112,6 +115,45 @@ describe('v2 to v3 migration', () => {
       expect.stringContaining('v3 root option'),
       expect.stringContaining('literal category arrays')
     ]))
+  })
+
+  test('preserves nested root aliases while modernizing only defineConfig options', () => {
+    const result = migrateConfigToV3([
+      'export default defineConfig({',
+      '  detectRootDir: import.meta.dirname,',
+      '  typescript: { tsconfigRootDir: import.meta.dirname },',
+      '}, { languageOptions: { parserOptions: { tsconfigRootDir: import.meta.dirname } } })'
+    ].join('\n'), 'lean')
+
+    expect(result.content).toContain('root: import.meta.dirname')
+    expect(result.content).toContain('typescript: { tsconfigRootDir: import.meta.dirname }')
+    expect(result.content).toContain('parserOptions: { tsconfigRootDir: import.meta.dirname }')
+    expect(result.content).not.toContain('typescript: { root:')
+  })
+
+  test('does not modernize a root alias found only in nested options', () => {
+    const config = [
+      'export default defineConfig({',
+      '  typescript: { tsconfigRootDir: import.meta.dirname },',
+      '})'
+    ].join('\n')
+    const result = migrateConfigToV3(config, 'lean')
+
+    expect(result.content).toBe(config)
+    expect(result.changes).not.toContain(expect.stringContaining('v3 root option'))
+  })
+
+  test('preserves explicit empty category replacements', () => {
+    const config = [
+      'export default defineConfig({',
+      '  optionMergeStrategy: "replace",',
+      '  libraries: [],',
+      '})'
+    ].join('\n')
+    const result = migrateConfigToV3(config, 'lean')
+
+    expect(result.content).toBe(config)
+    expect(result.content).not.toContain('features:')
   })
 
   test('preserves category arrays within each owning project option', () => {
@@ -591,6 +633,19 @@ describe('preset adoption', () => {
 
     expect(payload.compatibilityFile).toBe('.eslint-preset-app-compat.mjs')
     expect(readFileSync(output, 'utf8')).toContain("name: 'eslint-config-basic/preset-app-compatibility'")
+  })
+
+  test('keeps automatically detected framework rules in preset comparisons', async () => {
+    const cwd = createTempProject({
+      dependencies: { react: '^19.0.0' },
+      name: 'react-project',
+      type: 'module'
+    })
+
+    writeFakeEslint(cwd, { 'react-hooks/rules-of-hooks': 'error' })
+    const report = await createPresetReport(cwd, 'app', 'src/index.tsx')
+
+    expect(report.removed).not.toHaveProperty('react-hooks/rules-of-hooks')
   })
 
   test('rejects unknown preset names', async () => {

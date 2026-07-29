@@ -151,7 +151,13 @@ const getResolvablePresetOptions = (
     } catch (error) {
       if (!isMissingRequestedPackage(error, specifier)) throw error
 
-      Object.assign(options, { [category]: [] })
+      Object.assign(options, {
+        [category]: [],
+        features: {
+          ...options.features,
+          ...Object.fromEntries(selected.map(feature => [feature, false]))
+        }
+      })
 
       missingPackages.push(specifier)
     }
@@ -194,8 +200,8 @@ export const createPresetReport = async (
   const current = await loadProjectEslint(cwd).calculateConfigForFile(file)
 
   const selectedConfig = await defineConfig({
+    preset,
     ...resolvablePresetOptions,
-    detection: false,
     root: cwd
   })
 

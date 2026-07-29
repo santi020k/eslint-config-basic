@@ -608,16 +608,21 @@ const hasCodePropertySeparator = (codeContent: string, match: RegExpMatchArray):
 const replaceCodeProperty = (
   content: string,
   property: string,
-  replacement: string
+  replacement: string,
+  matches?: RegExpMatchArray[]
 ): string => {
   const masked = maskNonCode(content, true)
   // eslint-disable-next-line security/detect-non-literal-regexp -- property is an internal migration key
   const pattern = new RegExp(`\\b${property}\\b(?=\\s*:)`, 'g')
-  const matches = [...masked.matchAll(pattern)]
+  const propertyMatches = matches ?? [...masked.matchAll(pattern)]
   let updated = content
 
-  for (const match of matches.reverse()) {
-    updated = `${updated.slice(0, match.index)}${replacement}${updated.slice(match.index + property.length)}`
+  for (const match of propertyMatches.toReversed()) {
+    const { index } = match
+
+    if (index === undefined) continue
+
+    updated = `${updated.slice(0, index)}${replacement}${updated.slice(index + property.length)}`
   }
 
   return updated
@@ -644,6 +649,27 @@ const getOwningObjectStart = (structure: string, position: number): number | und
   return objectStarts.at(-1)
 }
 
+const getDefineConfigOptionOwners = (searchable: string): Set<number> => new Set(
+  [...searchable.matchAll(/\bdefineConfig\s*\(\s*\{/g)]
+    .map(match => match.index + match[0].lastIndexOf('{'))
+)
+
+const getOwnedPropertyMatches = (
+  searchable: string,
+  structure: string,
+  property: string,
+  owners: Set<number>
+): RegExpMatchArray[] => {
+  // eslint-disable-next-line security/detect-non-literal-regexp -- property is an internal migration key
+  const pattern = new RegExp(`\\b${property}\\b(?=\\s*:)`, 'g')
+
+  return [...searchable.matchAll(pattern)].flatMap(match => {
+    const owner = getOwningObjectStart(structure, match.index)
+
+    return owner !== undefined && owners.has(owner) ? [match] : []
+  })
+}
+
 const modernizeLiteralFeatureArrays = (
   content: string
 ): { changed: boolean, content: string, features: string[] } => {
@@ -658,7 +684,7 @@ const modernizeLiteralFeatureArrays = (
     const features = match[1].split(',').filter(Boolean).map(toFeatureName)
     const owner = getOwningObjectStart(structure, match.index)
 
-    if (owner === undefined || features.some(feature => feature === null)) return []
+    if (owner === undefined || features.length === 0 || features.some(feature => feature === null)) return []
 
     return [{
       end: match.index + match[0].length,
@@ -751,16 +777,25 @@ const modernizeConfigOptions = (
   }
 
   const updatedSearchable = maskNonCode(updated, true)
+  const updatedStructure = maskNonCode(updated)
+  const optionOwners = getDefineConfigOptionOwners(updatedSearchable)
+  const rootMatches = getOwnedPropertyMatches(updatedSearchable, updatedStructure, 'root', optionOwners)
 
-  const rootAliases = [
-    ...(/\bdetectRootDir\b\s*:/.test(updatedSearchable) ? ['detectRootDir'] : []),
-    ...(/\btsconfigRootDir\b\s*:/.test(updatedSearchable) ? ['tsconfigRootDir'] : [])
-  ]
+  const rootAliasMatches = new Map([
+    ['detectRootDir', getOwnedPropertyMatches(updatedSearchable, updatedStructure, 'detectRootDir', optionOwners)],
+    ['tsconfigRootDir', getOwnedPropertyMatches(updatedSearchable, updatedStructure, 'tsconfigRootDir', optionOwners)]
+  ])
 
-  if (!/\broot\b\s*:/.test(updatedSearchable) && rootAliases.length === 1) {
-    updated = replaceCodeProperty(updated, rootAliases[0], 'root')
+  const rootAliases = [...rootAliasMatches]
+    .filter(([, matches]) => matches.length > 0)
+    .map(([alias]) => alias)
 
-    changes.push(`Replaced ${rootAliases[0]} with the v3 root option.`)
+  if (rootMatches.length === 0 && rootAliases.length === 1) {
+    const alias = rootAliases[0]
+
+    updated = replaceCodeProperty(updated, alias, 'root', rootAliasMatches.get(alias))
+
+    changes.push(`Replaced ${alias} with the v3 root option.`)
   } else if (rootAliases.length > 0) {
     changes.push(
       `Manual action required: consolidate ${rootAliases.join(' and ')} into root after confirming they resolve to the same directory.`
