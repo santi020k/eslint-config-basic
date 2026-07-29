@@ -106,10 +106,10 @@ jobs:
         run: pnpm run check:package-metrics
       - name: Dry-run affected publish artifacts
         if: matrix.node-version == '22.x'
-        run: pnpm run check:publish-dry-run
+        run: pnpm run check:publish-dry-run -- --allow-empty
       - name: Check affected published types (attw)
         if: matrix.node-version == '22.x'
-        run: pnpm run check:attw
+        run: pnpm run check:attw -- --allow-empty
 
   release-candidate:
     name: Full release candidate

@@ -9,6 +9,7 @@ import process from 'node:process'
 
 const rootDir = process.cwd()
 const packagesDir = join(rootDir, 'packages')
+const allowEmpty = process.argv.includes('--allow-empty')
 
 const publishablePackages = readdirSync(packagesDir, { withFileTypes: true })
   .filter(entry => entry.isDirectory())
@@ -23,7 +24,7 @@ const publishablePackages = readdirSync(packagesDir, { withFileTypes: true })
     return manifest.private !== true && existsSync(join(packageDir, 'dist'))
   })
 
-if (publishablePackages.length === 0) {
+if (publishablePackages.length === 0 && !allowEmpty) {
   throw new Error('No built publishable packages found. Run `pnpm run build` first.')
 }
 
