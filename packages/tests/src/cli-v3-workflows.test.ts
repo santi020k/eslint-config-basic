@@ -172,6 +172,33 @@ describe('v2 to v3 migration', () => {
     expect(result.content).not.toContain('docs: { features: {\n      "vitest": true,')
   })
 
+  test('does not migrate category arrays in unrelated ESLint settings', () => {
+    const config = [
+      'export default defineConfig({',
+      '  settings: {',
+      '    "import/resolver": { extensions: [".js", ".ts"] },',
+      '  },',
+      '})'
+    ].join('\n')
+    const result = migrateConfigToV3(config, 'lean')
+
+    expect(result.content).toBe(config)
+    expect(result.changes).not.toContain(expect.stringContaining('literal category arrays'))
+  })
+
+  test('only modernizes integrations owned by Basic options', () => {
+    const result = migrateConfigToV3([
+      'export default defineConfig({',
+      '  integrations: { vitest: true },',
+      '  settings: { integrations: { custom: true } },',
+      '}, { settings: { integrations: { extra: true } } })'
+    ].join('\n'), 'lean')
+
+    expect(result.content).toContain('  features: { vitest: true },')
+    expect(result.content).toContain('settings: { integrations: { custom: true } }')
+    expect(result.content).toContain('settings: { integrations: { extra: true } }')
+  })
+
   test('preserves dynamic category expressions and reports raw Tailwind overrides', () => {
     const config = [
       'export default defineConfig({',
@@ -646,6 +673,8 @@ describe('preset adoption', () => {
     const report = await createPresetReport(cwd, 'app', 'src/index.tsx')
 
     expect(report.removed).not.toHaveProperty('@eslint-react/exhaustive-deps')
+    expect(report.groups.framework).toContain('@eslint-react/no-array-index-key')
+    expect(report.groups.formatting).toContain('@stylistic/indent')
   })
 
   test('rejects unknown preset names', async () => {

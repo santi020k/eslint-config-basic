@@ -83,10 +83,16 @@ const FORMAT_PREFIXES = new Set([
   'yaml'
 ])
 
-const getRulePrefix = (rule: string): string => {
-  if (rule.startsWith('@')) return rule.split('/').slice(0, 2).join('/')
+const MULTI_SEGMENT_RULE_PREFIXES = new Set(['@next/next'])
 
-  return rule.split('/')[0]
+const getRulePrefix = (rule: string): string => {
+  const segments = rule.split('/')
+
+  if (!rule.startsWith('@')) return segments[0]
+
+  const multiSegmentPrefix = segments.slice(0, 2).join('/')
+
+  return MULTI_SEGMENT_RULE_PREFIXES.has(multiSegmentPrefix) ? multiSegmentPrefix : segments[0]
 }
 
 const getRuleGroup = (rule: string): 'correctness' | 'domain' | 'formatting' | 'framework' | 'security' => {

@@ -654,6 +654,70 @@ const getDefineConfigOptionOwners = (searchable: string): Set<number> => new Set
     .map(match => match.index + match[0].lastIndexOf('{'))
 )
 
+const getDirectChildObjectStarts = (
+  structure: string,
+  containerStart: number
+): number[] => {
+  const children: number[] = []
+  const objectStarts = [containerStart]
+
+  for (let index = containerStart + 1; index < structure.length && objectStarts.length > 0; index++) {
+    if (structure[index] === '{') {
+      if (objectStarts.at(-1) === containerStart) children.push(index)
+
+      objectStarts.push(index)
+    } else if (structure[index] === '}') {
+      objectStarts.pop()
+    }
+  }
+
+  return children
+}
+
+const getOwnedObjectPropertyStarts = (
+  searchable: string,
+  structure: string,
+  property: string,
+  owners: Set<number>
+): number[] => {
+  // eslint-disable-next-line security/detect-non-literal-regexp -- property is an internal migration key
+  const pattern = new RegExp(`\\b${property}\\b\\s*:\\s*\\{`, 'g')
+
+  return [...searchable.matchAll(pattern)].flatMap(match => {
+    const owner = getOwningObjectStart(structure, match.index)
+    const objectStart = match.index + match[0].lastIndexOf('{')
+
+    return owner !== undefined &&
+      owners.has(owner) &&
+      hasCodePropertySeparator(structure, match) &&
+      structure[objectStart] === '{' ? [objectStart] : []
+  })
+}
+
+const getBasicOptionOwners = (
+  searchable: string,
+  structure: string
+): Set<number> => {
+  const owners = getDefineConfigOptionOwners(searchable)
+  const visitedProjectContainers = new Set<number>()
+  let projectContainers = getOwnedObjectPropertyStarts(searchable, structure, 'projects', owners)
+
+  while (projectContainers.length > 0) {
+    for (const container of projectContainers) {
+      visitedProjectContainers.add(container)
+
+      for (const projectOwner of getDirectChildObjectStarts(structure, container)) {
+        owners.add(projectOwner)
+      }
+    }
+
+    projectContainers = getOwnedObjectPropertyStarts(searchable, structure, 'projects', owners)
+      .filter(container => !visitedProjectContainers.has(container))
+  }
+
+  return owners
+}
+
 const getOwnedPropertyMatches = (
   searchable: string,
   structure: string,
@@ -661,12 +725,12 @@ const getOwnedPropertyMatches = (
   owners: Set<number>
 ): RegExpMatchArray[] => {
   // eslint-disable-next-line security/detect-non-literal-regexp -- property is an internal migration key
-  const pattern = new RegExp(`\\b${property}\\b(?=\\s*:)`, 'g')
+  const pattern = new RegExp(`\\b${property}\\b\\s*:`, 'g')
 
   return [...searchable.matchAll(pattern)].flatMap(match => {
     const owner = getOwningObjectStart(structure, match.index)
 
-    return owner !== undefined && owners.has(owner) ? [match] : []
+    return owner !== undefined && owners.has(owner) && hasCodePropertySeparator(structure, match) ? [match] : []
   })
 }
 
@@ -675,6 +739,7 @@ const modernizeLiteralFeatureArrays = (
 ): { changed: boolean, content: string, features: string[] } => {
   const searchable = maskNonCode(content, true)
   const structure = maskNonCode(content)
+  const optionOwners = getBasicOptionOwners(searchable, structure)
 
   const selections = [...searchable.matchAll(
     /\b(?:extensions|formats|libraries|testing|tools)\b\s*:\s*\[([\s\S]*?)\]\s*,?/g
@@ -684,7 +749,13 @@ const modernizeLiteralFeatureArrays = (
     const features = match[1].split(',').filter(Boolean).map(toFeatureName)
     const owner = getOwningObjectStart(structure, match.index)
 
-    if (owner === undefined || features.length === 0 || features.some(feature => feature === null)) return []
+    if (
+      owner === undefined ||
+      !optionOwners.has(owner) ||
+      !hasCodePropertySeparator(structure, match) ||
+      features.length === 0 ||
+      features.some(feature => feature === null)
+    ) return []
 
     return [{
       end: match.index + match[0].length,
@@ -767,11 +838,31 @@ const modernizeConfigOptions = (
   const changes: string[] = []
   let updated = content
   const searchable = maskNonCode(updated, true)
-  const hasFeatures = /\bfeatures\b\s*:/.test(searchable)
-  const hasIntegrations = /\bintegrations\b\s*:/.test(searchable)
+  const structure = maskNonCode(updated)
+  const basicOptionOwners = getBasicOptionOwners(searchable, structure)
 
-  if (hasIntegrations && !hasFeatures) {
-    updated = replaceCodeProperty(updated, 'integrations', 'features')
+  const featureOwners = new Set(
+    getOwnedPropertyMatches(searchable, structure, 'features', basicOptionOwners)
+      .flatMap(match => {
+        if (match.index === undefined) return []
+
+        const owner = getOwningObjectStart(structure, match.index)
+
+        return owner === undefined ? [] : [owner]
+      })
+  )
+
+  const integrationMatches = getOwnedPropertyMatches(searchable, structure, 'integrations', basicOptionOwners)
+    .filter(match => {
+      if (match.index === undefined) return false
+
+      const owner = getOwningObjectStart(structure, match.index)
+
+      return owner !== undefined && !featureOwners.has(owner)
+    })
+
+  if (integrationMatches.length > 0) {
+    updated = replaceCodeProperty(updated, 'integrations', 'features', integrationMatches)
 
     changes.push('Replaced the deprecated integrations map with features.')
   }
