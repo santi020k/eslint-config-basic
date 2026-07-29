@@ -1,4 +1,4 @@
-name: ESLint Config v3 Check
+name: ESLint Config Check
 description: Validate an eslint-config-basic consumer, including compatibility, snapshots, and lint budgets.
 author: santi020k
 
