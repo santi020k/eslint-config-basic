@@ -1,6 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalEnv": ["VITEST"],
+  "globalEnv": ["DOCS_ROOT", "ESLINT_BASIC_DEBUG", "VITEST"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
