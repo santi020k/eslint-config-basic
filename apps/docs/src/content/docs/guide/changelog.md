@@ -187,16 +187,16 @@ See the [v2 to v3 migration guide](https://eslint.santi020k.com/guide/migration-
 
   ```js
   // before (v1)
-  import { reactConfig } from "@santi020k/eslint-config-basic";
+  import { reactConfig } from '@santi020k/eslint-config-basic'
 
-  export default [...reactConfig];
+  export default [...reactConfig]
   ```
 
   ```js
   // after (v2)
-  import { react } from "@santi020k/eslint-config-basic";
+  import { react } from '@santi020k/eslint-config-basic'
 
-  export default [...(await react())];
+  export default [...(await react())]
   ```
 
   Most users are unaffected: `frameworks: { react: true }` and auto-detection behave exactly as before.
@@ -427,16 +427,16 @@ See the [v2 to v3 migration guide](https://eslint.santi020k.com/guide/migration-
 
   ```js
   // before (v1)
-  import { reactConfig } from "@santi020k/eslint-config-basic";
+  import { reactConfig } from '@santi020k/eslint-config-basic'
 
-  export default [...reactConfig];
+  export default [...reactConfig]
   ```
 
   ```js
   // after (v2)
-  import { react } from "@santi020k/eslint-config-basic";
+  import { react } from '@santi020k/eslint-config-basic'
 
-  export default [...(await react())];
+  export default [...(await react())]
   ```
 
   Most users are unaffected: `frameworks: { react: true }` and auto-detection behave exactly as before.
@@ -553,12 +553,12 @@ See the [v2 to v3 migration guide](https://eslint.santi020k.com/guide/migration-
   **Programmatic API:**
 
   ```ts
-  import { generateAgentSkills } from "@santi020k/eslint-config-basic";
+  import { generateAgentSkills } from '@santi020k/eslint-config-basic'
 
   const { skipped, written } = generateAgentSkills({
     cwd: process.cwd(),
-    force: true,
-  });
+    force: true
+  })
   ```
 
 ### Patch Changes
@@ -605,18 +605,18 @@ See the [v2 to v3 migration guide](https://eslint.santi020k.com/guide/migration-
 
   ```ts
   // Before (would throw)
-  const opts = detectProjectOptions();
+  const opts = detectProjectOptions()
 
-  eslintConfig(opts); // ❌
+  eslintConfig(opts) // ❌
 
   // opts.frameworks.next === true → TypeError inside eslintConfig()
 
   // After (safe)
-  const opts = detectProjectOptions();
+  const opts = detectProjectOptions()
 
   // opts.detectedFrameworks → ['next', 'react']  (informational)
   // opts.frameworks → {}                          (safe to spread)
-  eslintConfig(opts); // ✅
+  eslintConfig(opts) // ✅
   ```
 
   ## New features
@@ -628,7 +628,7 @@ See the [v2 to v3 migration guide](https://eslint.santi020k.com/guide/migration-
   - `max-depth` (warn, max 4) — flags deeply nested blocks
 
   ```ts
-  eslintConfig({ extensions: [Extension.BestPractices] });
+  eslintConfig({ extensions: [Extension.BestPractices] })
   ```
 
   **Category barrel exports for `@santi020k/eslint-config-optionals`** — five new sub-path exports let you import a whole category at once:
