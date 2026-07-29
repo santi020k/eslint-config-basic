@@ -90,7 +90,7 @@ body:
           OS: macOS 15.0
           CPU: Apple M3
         Binaries:
-          Node: 22.18.0
+          Node: 22.19.0
           pnpm: 10.0.0
         npmPackages:
           eslint: ^10.0.0 => 10.5.0
