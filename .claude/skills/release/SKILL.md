@@ -7,6 +7,8 @@ description: How to release new versions and manage changesets for @santi020k/es
 
 This project uses [Changesets](https://github.com/changesets/changesets) for versioning, changelogs, and npm publishing.
 
+Public packages share a compatibility major and release minor and patch versions independently. Add only packages with meaningful changes to each changeset. Coordinate a major bump across packages affected by a breaking family-wide contract, and keep internal dependency and peer ranges accurate so mixed minor and patch versions remain installable.
+
 **Never edit `packages/*/CHANGELOG.md` by hand.** Always use `pnpm run changeset`; CI rewrites those files from Changesets data on merge.
 
 ## 1. Pre-Release Validation

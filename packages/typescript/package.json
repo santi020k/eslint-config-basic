@@ -30,7 +30,7 @@
     "lint:fix": "eslint . --fix --no-warn-ignored --pass-on-no-patterns"
   },
   "dependencies": {
-    "@santi020k/eslint-config-core": "workspace:*",
+    "@santi020k/eslint-config-core": "workspace:^",
     "@typescript-eslint/parser": "catalog:",
     "typescript-eslint": "catalog:",
     "@typescript-eslint/utils": "catalog:"

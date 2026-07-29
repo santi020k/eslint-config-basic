@@ -110,4 +110,15 @@ Run `basic-eslint explain` to see why a feature was detected and
 | ESLint | `^10.0.0` |
 | TypeScript | `>=5.0.0` when enabled |
 
+### Package versions
+
+Packages in the `@santi020k/eslint-config-*` family share a compatibility major
+but release minor and patch versions independently. Packages on the same major
+are designed to work together, so a setup can safely combine versions such as
+`eslint-config-basic@3.4.0` and `eslint-config-react@3.2.1`.
+
+Use the latest version of each package within the chosen major. Internal
+`dependencies` and `peerDependencies` declare any more specific minimum version,
+and `basic-eslint doctor` reports incompatible installed ranges.
+
 For existing projects, continue with [Migrate from v2](/guide/migration-v2-to-v3/).
