@@ -570,6 +570,36 @@ describe('defineConfig Function', () => {
     }
   })
 
+  test('should preserve root detections when workspace project detection is disabled', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'eslint-config-monorepo-opt-out-'))
+
+    try {
+      mkdirSync(join(root, 'apps/web'), { recursive: true })
+      writeFileSync(join(root, 'package.json'), JSON.stringify({
+        dependencies: { react: 'latest' },
+        name: 'workspace-root'
+      }))
+      writeFileSync(join(root, 'pnpm-workspace.yaml'), "packages:\n  - 'apps/*'\n")
+      writeFileSync(join(root, 'apps/web/package.json'), JSON.stringify({
+        dependencies: { astro: 'latest' },
+        name: 'web'
+      }))
+
+      const config = await defineConfig({
+        detection: { projects: false },
+        root,
+        settings: [Setting.NoGitignore],
+        tools: []
+      })
+      const names = extractConfigNames(config)
+
+      expect(names).toContain('eslint-config-react/recommended')
+      expect(names).not.toContain('astro/recommended')
+    } finally {
+      rmSync(root, { force: true, recursive: true })
+    }
+  })
+
   test('should syntax-lint config files and explicit untyped TypeScript files', async () => {
     const config = await defineConfig({
       detection: false,

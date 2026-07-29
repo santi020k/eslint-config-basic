@@ -314,17 +314,17 @@ const resolveDetectedOptions = (
   requestedPreset: EslintConfigOptions['preset']
 ): EslintConfigOptions => {
   const rawDetected = detectProjectOptions(detectRootDir)
-  const isWorkspace = Object.keys(rawDetected.projects ?? {}).length > 0
 
   const shouldDetectProjects = requestedPreset === Preset.Monorepo ||
     rawDetected.preset === Preset.Monorepo
 
   const detected = applyDetectionControls(rawDetected, detection, { projects: shouldDetectProjects })
+  const hasDetectedProjects = Object.keys(detected.projects ?? {}).length > 0
 
   // Root devDependencies in a workspace commonly contain frameworks and
   // libraries used by only one package. Keep those detections package-scoped;
   // explicit root options still apply normally.
-  return scopeWorkspaceDetection(detected, isWorkspace)
+  return scopeWorkspaceDetection(detected, hasDetectedProjects)
 }
 
 const resolveNextModeValue = (
