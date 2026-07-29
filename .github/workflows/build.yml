@@ -15,16 +15,23 @@ concurrency:
 
 jobs:
   contracts:
-    name: Config Contracts
+    name: Affected integration
+    if: github.event_name != 'pull_request' || github.head_ref != 'changeset-release/main'
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
     env:
+      CI_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+      CI_HEAD_SHA: ${{ github.sha }}
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+      TURBO_SCM_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+      TURBO_SCM_HEAD: ${{ github.sha }}
 
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
       - name: Install pnpm
         uses: pnpm/action-setup@v5
       - name: Setup Node
@@ -41,11 +48,13 @@ jobs:
             ${{ runner.os }}-turbo-22.x-
             ${{ runner.os }}-turbo-
       - run: pnpm install --frozen-lockfile
-      - run: pnpm run build
-      - name: Run contract and invariant tests
-        run: pnpm --filter @santi020k/eslint-config-tests exec vitest run src/contracts.test.ts src/invariants.test.ts --maxWorkers=1
+      - name: Build affected packages
+        run: pnpm exec turbo run build --affected --concurrency=50%
+      - name: Run affected tests and integration contracts
+        run: pnpm run test:affected
 
   build:
+    if: github.event_name != 'pull_request' || github.head_ref != 'changeset-release/main'
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -57,14 +66,20 @@ jobs:
     # Turbo remote cache — set TURBO_TOKEN and TURBO_TEAM in repo secrets for cross-run caching
     # See: https://turbo.build/repo/docs/ci/github-actions#remote-caching
     env:
+      CI_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+      CI_HEAD_SHA: ${{ github.sha }}
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+      TURBO_SCM_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+      TURBO_SCM_HEAD: ${{ github.sha }}
       # better-tailwindcss uses Synckit workers that can exceed the default
       # 30-second timeout while the full workspace runs concurrently.
       SYNCKIT_TIMEOUT: 120000
 
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
       - name: Install pnpm
         uses: pnpm/action-setup@v5
       - name: Use Node.js ${{ matrix.node-version }}
@@ -81,35 +96,36 @@ jobs:
             ${{ runner.os }}-turbo-${{ matrix.node-version }}-
             ${{ runner.os }}-turbo-
       - run: pnpm install --frozen-lockfile
-      - name: Build all packages
-        run: pnpm run build
-      - name: Run concurrent CI checks (Node 22.x)
+      - name: Run affected package checks
+        run: pnpm exec turbo run build typecheck lint --affected --concurrency=50%
+      - name: Run repository checks (Node 22.x)
         if: matrix.node-version == '22.x'
-        run: pnpm exec turbo run typecheck lint test:coverage //#lint:spell //#lint:knip //#lint:repo --concurrency=50%
-      - name: Run concurrent CI checks (Node 24.x)
-        if: matrix.node-version == '24.x'
-        run: pnpm exec turbo run typecheck lint test:coverage --concurrency=50%
-      - name: Build docs (smoke check)
-        if: matrix.node-version == '22.x'
-        run: pnpm run docs:sync-readmes && pnpm run docs:build
-      - name: Check package READMEs are in sync
-        if: matrix.node-version == '22.x'
-        run: git diff --exit-code -- 'packages/*/README.md' || (echo 'Package READMEs are stale. Run `pnpm run docs:sync-readmes` and commit the result.' && exit 1)
+        run: pnpm run lint:changed && pnpm run check:internal-compatibility
       - name: Package metrics
+        if: matrix.node-version == '22.x'
         run: pnpm run check:package-metrics
-      - name: Dry-run publish check
+      - name: Dry-run affected publish artifacts
+        if: matrix.node-version == '22.x'
         run: pnpm run check:publish-dry-run
-      - name: Check published types (attw)
+      - name: Check affected published types (attw)
         if: matrix.node-version == '22.x'
         run: pnpm run check:attw
 
-  windows-smoke:
-    name: Windows smoke (CLI + detection)
-    runs-on: windows-latest
-    timeout-minutes: 20
+  release-candidate:
+    name: Full release candidate
+    if: github.event_name == 'pull_request' && github.head_ref == 'changeset-release/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+      SYNCKIT_TIMEOUT: 120000
 
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
       - name: Install pnpm
         uses: pnpm/action-setup@v5
       - name: Setup Node
@@ -118,7 +134,28 @@ jobs:
           node-version: 22.x
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
-      - name: Build (serialised to avoid native-binary contention on Windows)
-        run: pnpm exec turbo run build --concurrency=1 --output-logs=new-only
+      - name: Run final release gate once
+        run: pnpm run release:check
+
+  windows-smoke:
+    name: Windows smoke (CLI + detection)
+    if: github.event_name != 'pull_request' || github.head_ref != 'changeset-release/main'
+    runs-on: windows-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Install pnpm
+        uses: pnpm/action-setup@v5
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22.x
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - name: Build CLI dependencies (serialised to avoid native-binary contention on Windows)
+        run: pnpm exec turbo run build --filter=@santi020k/eslint-config-basic --concurrency=1 --output-logs=new-only
       - name: Run CLI and detection tests on Windows
         run: pnpm --filter @santi020k/eslint-config-tests exec vitest run src/cli.test.ts src/detection.test.ts src/detection-fixtures.test.ts src/detection-internals.test.ts --maxWorkers=1

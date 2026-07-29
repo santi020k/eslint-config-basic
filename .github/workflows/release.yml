@@ -46,11 +46,20 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build and validate versioned packages
+        run: |
+          pnpm run release:build-versioned
+          pnpm run check:internal-compatibility
+          pnpm run check:publish-dry-run
+          pnpm run check:attw
+        env:
+          RELEASE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+
       - name: Publish versioned packages
         id: changesets
         uses: changesets/action@v1
         with:
-          publish: pnpm run release
+          publish: pnpm run release:publish
           createGithubReleases: true
         env:
           HUSKY: 0

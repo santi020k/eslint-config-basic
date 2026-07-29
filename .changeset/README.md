@@ -13,4 +13,6 @@ Public `@santi020k/eslint-config-*` packages share a compatibility major but
 release minor and patch versions independently. Select only packages with
 meaningful changes when creating a changeset. Coordinate major releases for
 packages affected by a breaking family-wide contract, and express narrower
-compatibility requirements through internal dependency and peer ranges.
+compatibility requirements through internal dependency and peer ranges. Run
+`pnpm run check:internal-compatibility` to validate the shared major and require
+`workspace:^` for production references between public packages.

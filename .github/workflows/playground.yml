@@ -20,11 +20,15 @@ jobs:
     timeout-minutes: 20
 
     env:
+      TURBO_SCM_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+      TURBO_SCM_HEAD: ${{ github.sha }}
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
 
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Install pnpm
         uses: pnpm/action-setup@v5
@@ -46,8 +50,5 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Build packages
-        run: pnpm run build
-
-      - name: Lint all playgrounds
-        run: pnpm exec turbo run lint --filter="@playground/*" --filter="@santi020k/playground-*"
+      - name: Lint affected playgrounds
+        run: pnpm exec turbo run lint --affected --filter="@playground/*" --filter="@santi020k/playground-*"
