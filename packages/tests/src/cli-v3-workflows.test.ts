@@ -295,6 +295,92 @@ describe('v2 to v3 migration', () => {
     expect(packageJson.devDependencies['@santi020k/eslint-config-tools']).toBe('^3.0.0')
   })
 
+  test.each([
+    {
+      expected: [
+        '@santi020k/eslint-config-testing',
+        '@santi020k/eslint-config-tools'
+      ],
+      selection: 'Preset.App'
+    },
+    {
+      expected: [
+        '@santi020k/eslint-config-extensions',
+        '@santi020k/eslint-config-tools'
+      ],
+      selection: 'Preset.CI'
+    },
+    {
+      expected: [
+        '@santi020k/eslint-config-extensions',
+        '@santi020k/eslint-config-tools'
+      ],
+      selection: "'library'"
+    },
+    {
+      expected: [
+        '@santi020k/eslint-config-extensions',
+        '@santi020k/eslint-config-tools'
+      ],
+      property: "'preset'",
+      selection: '`monorepo`'
+    }
+  ])('includes feature packages implied by preset $selection', ({ expected, property = 'preset', selection }) => {
+    const result = migrateConfigToV3(
+      `export default defineConfig({ ${property}: ${selection} })`,
+      'lean'
+    )
+
+    expect(result.featurePackages).toEqual(expect.arrayContaining(expected))
+  })
+
+  test('includes extensions for pedantic strict mode', () => {
+    const result = migrateConfigToV3(
+      'export default defineConfig({ strict: "pedantic" })',
+      'lean'
+    )
+
+    expect(result.featurePackages).toContain('@santi020k/eslint-config-extensions')
+  })
+
+  test('writes all feature packs implied by presets and strict profiles', () => {
+    const cwd = createTempProject({
+      devDependencies: {
+        '@santi020k/eslint-config-basic': '^2.0.0'
+      },
+      name: 'test-project',
+      type: 'module'
+    })
+
+    writeFileSync(
+      join(cwd, 'eslint.config.js'),
+      'export default defineConfig({ preset: Preset.App, strict: "pedantic" })\n'
+    )
+    vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    handleMigrateV3(cwd, migrationContext(), { write: true })
+
+    const packageJson = JSON.parse(readFileSync(join(cwd, 'package.json'), 'utf8')) as {
+      devDependencies: Record<string, string>
+    }
+
+    expect(packageJson.devDependencies['@santi020k/eslint-config-extensions']).toBe('^3.0.0')
+    expect(packageJson.devDependencies['@santi020k/eslint-config-testing']).toBe('^3.0.0')
+    expect(packageJson.devDependencies['@santi020k/eslint-config-tools']).toBe('^3.0.0')
+  })
+
+  test('ignores feature and preset selections inside comments', () => {
+    const result = migrateConfigToV3([
+      '// preset: Preset.App',
+      '/* strict: "pedantic", features: { zod: true } */',
+      'const example = "preset: Preset.CI, integrations: { prettier: true }"',
+      'void example',
+      'export default defineConfig()'
+    ].join('\n'), 'lean')
+
+    expect(result.featurePackages).toEqual([])
+  })
+
   test('selects full automatically for Preset.All', () => {
     const cwd = createTempProject({
       devDependencies: {
@@ -316,6 +402,49 @@ describe('v2 to v3 migration', () => {
     const payload = JSON.parse(String(logSpy.mock.calls[0]?.[0])) as { mode?: string }
 
     expect(payload.mode).toBe('full')
+    logSpy.mockRestore()
+  })
+
+  test('adds the pnpm workspace-root flag to the migration install command', () => {
+    const cwd = createTempProject({
+      devDependencies: {
+        '@santi020k/eslint-config-basic': '^2.0.0'
+      },
+      name: 'test-project',
+      type: 'module'
+    })
+
+    writeFileSync(join(cwd, 'pnpm-workspace.yaml'), 'packages: []\n')
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    handleMigrateV3(cwd, migrationContext({ packageManager: 'pnpm' }), { json: true })
+
+    const payload = JSON.parse(String(logSpy.mock.calls[0]?.[0])) as { installCommand?: string }
+
+    expect(payload.installCommand).toContain('pnpm add -D --workspace-root ')
+    logSpy.mockRestore()
+  })
+
+  test('does not select full from a commented Preset.All example', () => {
+    const cwd = createTempProject({
+      devDependencies: {
+        '@santi020k/eslint-config-basic': '^2.0.0'
+      },
+      name: 'test-project',
+      type: 'module'
+    })
+
+    writeFileSync(
+      join(cwd, 'eslint.config.js'),
+      '// preset: Preset.All\nconst example = "preset: Preset.All"\nexport default defineConfig()\n'
+    )
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    handleMigrateV3(cwd, migrationContext(), { json: true })
+
+    const payload = JSON.parse(String(logSpy.mock.calls[0]?.[0])) as { mode?: string }
+
+    expect(payload.mode).toBe('lean')
     logSpy.mockRestore()
   })
 })

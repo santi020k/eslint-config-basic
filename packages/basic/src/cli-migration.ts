@@ -170,6 +170,25 @@ const FEATURE_NAME_TO_PACKAGE = new Map(
   }))
 )
 
+const PRESET_FEATURE_PACKAGES: Record<string, string[]> = {
+  app: [
+    FEATURE_PACKAGES.testing,
+    FEATURE_PACKAGES.tools
+  ],
+  ci: [
+    FEATURE_PACKAGES.extensions,
+    FEATURE_PACKAGES.tools
+  ],
+  library: [
+    FEATURE_PACKAGES.extensions,
+    FEATURE_PACKAGES.tools
+  ],
+  monorepo: [
+    FEATURE_PACKAGES.extensions,
+    FEATURE_PACKAGES.tools
+  ]
+}
+
 const REMOVED_ALIAS_REPLACEMENTS: Record<string, string> = {
   angularConfig: 'angular',
   astroConfig: 'createAstroConfig',
@@ -283,7 +302,7 @@ const getImportRanges = (content: string): { end: number, start: number }[] => (
     }))
 )
 
-const maskNonCode = (content: string): string => {
+const maskNonCode = (content: string, preserveStrings = false): string => {
   const characters = Array<string>(content.length)
   let quote: null | string = null
   let blockComment = false
@@ -322,10 +341,12 @@ const maskNonCode = (content: string): string => {
     }
 
     if (quote) {
-      characters[index] = character === '\n' ? '\n' : ' '
+      if (!preserveStrings) characters[index] = character === '\n' ? '\n' : ' '
 
       if (character === '\\') {
-        if (index + 1 < characters.length) characters[index + 1] = next === '\n' ? '\n' : ' '
+        if (!preserveStrings && index + 1 < characters.length) {
+          characters[index + 1] = next === '\n' ? '\n' : ' '
+        }
 
         index++
       } else if (character === quote) {
@@ -360,7 +381,7 @@ const maskNonCode = (content: string): string => {
     }
 
     if (character === '\'' || character === '"' || character === '`') {
-      characters[index] = ' '
+      if (!preserveStrings) characters[index] = ' '
 
       quote = character
     }
@@ -550,21 +571,41 @@ const splitBasicIntegrationImports = (
   }
 }
 
-const getExplicitFeaturePackages = (content: string): string[] => {
+const hasCodePropertySeparator = (codeContent: string, match: RegExpMatchArray): boolean => {
+  const separatorOffset = match[0].indexOf(':')
+  const matchIndex = match.index ?? -1
+
+  return matchIndex >= 0 && separatorOffset >= 0 && codeContent[matchIndex + separatorOffset] === ':'
+}
+
+const getConfigFeaturePackages = (content: string): string[] => {
   const packages = new Set<string>()
+  const codeContent = maskNonCode(content)
+  const searchableContent = maskNonCode(content, true)
 
   for (const category of Object.keys(FEATURE_PACKAGES) as (keyof typeof FEATURE_PACKAGES)[]) {
-    // eslint-disable-next-line security/detect-non-literal-regexp -- category names come from the internal package registry
-    const categorySelection = new RegExp(`\\b${category}\\s*:\\s*\\[([\\s\\S]*?)\\]`).exec(content)
+    const categorySelections = searchableContent.matchAll(
+      // eslint-disable-next-line security/detect-non-literal-regexp -- category names come from the internal package registry
+      new RegExp(`(?:\\b${category}\\b|['"]${category}['"])\\s*:\\s*\\[([\\s\\S]*?)\\]`, 'g')
+    )
 
-    if (categorySelection?.[1].trim()) {
-      packages.add(FEATURE_PACKAGES[category])
+    for (const selection of categorySelections) {
+      if (
+        hasCodePropertySeparator(codeContent, selection) &&
+        selection[1].trim()
+      ) {
+        packages.add(FEATURE_PACKAGES[category])
+
+        break
+      }
     }
   }
 
-  const featureSelections = /\b(?:features|integrations)\s*:\s*\{([\s\S]*?)\}/g
+  const featureSelections = /(?:\b(?:features|integrations)\b|['"](?:features|integrations)['"])\s*:\s*\{([\s\S]*?)\}/g
 
-  for (const selection of content.matchAll(featureSelections)) {
+  for (const selection of searchableContent.matchAll(featureSelections)) {
+    if (!hasCodePropertySeparator(codeContent, selection)) continue
+
     const enabledFeaturePattern = /(?:['"]([^'"]+)['"]|([a-zA-Z_$][\w$-]*))\s*:\s*true\b/g
 
     for (const match of selection[1].matchAll(enabledFeaturePattern)) {
@@ -572,6 +613,38 @@ const getExplicitFeaturePackages = (content: string): string[] => {
       const packageName = FEATURE_NAME_TO_PACKAGE.get(featureName)
 
       if (packageName) packages.add(packageName)
+    }
+  }
+
+  const enumPresetPattern = /(?:\bpreset\b|['"]preset['"])\s*:\s*Preset\.(App|CI|Library|Monorepo)/g
+
+  for (const match of searchableContent.matchAll(enumPresetPattern)) {
+    if (!hasCodePropertySeparator(codeContent, match)) continue
+
+    const presetName = match[1].toLowerCase()
+
+    for (const packageName of PRESET_FEATURE_PACKAGES[presetName] ?? []) {
+      packages.add(packageName)
+    }
+  }
+
+  const stringPresetPattern = /(?:\bpreset\b|['"]preset['"])\s*:\s*(['"`])(app|ci|library|monorepo)\1/g
+
+  for (const match of searchableContent.matchAll(stringPresetPattern)) {
+    if (!hasCodePropertySeparator(codeContent, match)) continue
+
+    for (const packageName of PRESET_FEATURE_PACKAGES[match[2]] ?? []) {
+      packages.add(packageName)
+    }
+  }
+
+  const strictPattern = /(?:\bstrict\b|['"]strict['"])\s*:\s*(['"`])pedantic\1/g
+
+  for (const match of searchableContent.matchAll(strictPattern)) {
+    if (hasCodePropertySeparator(codeContent, match)) {
+      packages.add(FEATURE_PACKAGES.extensions)
+
+      break
     }
   }
 
@@ -583,7 +656,7 @@ export const migrateConfigToV3 = (
   mode: 'full' | 'lean'
 ): { changes: string[], content: string, featurePackages: string[] } => {
   const changes: string[] = []
-  const featurePackages = new Set(getExplicitFeaturePackages(content))
+  const featurePackages = new Set(getConfigFeaturePackages(content))
   let migrated = content
 
   if (migrated.includes(LITE_PACKAGE)) {
@@ -660,15 +733,30 @@ const shouldUseFullBundle = (
 
   if (configContent?.includes(FULL_PACKAGE)) return true
 
-  if (configContent && (
-    /\bPreset\.All\b/.test(configContent) ||
-    /preset\s*:\s*['"]all['"]/.test(configContent)
-  )) return true
+  if (configContent) {
+    const codeContent = maskNonCode(configContent)
+    const searchableContent = maskNonCode(configContent, true)
+    const enumPresetPattern = /(?:\bpreset\b|['"]preset['"])\s*:\s*Preset\.All/g
+
+    for (const match of searchableContent.matchAll(enumPresetPattern)) {
+      if (hasCodePropertySeparator(codeContent, match)) return true
+    }
+
+    const stringPresetPattern = /(?:\bpreset\b|['"]preset['"])\s*:\s*(['"`])all\1/g
+
+    for (const match of searchableContent.matchAll(stringPresetPattern)) {
+      if (hasCodePropertySeparator(codeContent, match)) return true
+    }
+  }
 
   return getDeclaredConfigPackages(packageJson).has(FULL_PACKAGE)
 }
 
-const createInstallCommand = (packageManager: string, packages: string[]): string => {
+const createInstallCommand = (
+  packageManager: string,
+  packages: string[],
+  workspaceRoot = false
+): string => {
   const packageList = packages.join(' ')
 
   switch (packageManager) {
@@ -676,7 +764,7 @@ const createInstallCommand = (packageManager: string, packages: string[]): strin
       return `bun add -d ${packageList}`
 
     case 'pnpm':
-      return `pnpm add -D ${packageList}`
+      return `pnpm add -D${workspaceRoot ? ' --workspace-root' : ''} ${packageList}`
 
     case 'yarn':
       return `yarn add -D ${packageList}`
@@ -858,7 +946,11 @@ export const handleMigrateV3 = (
   const result: MigrationResult = {
     changes,
     configFile: configPath ? basename(configPath) : null,
-    installCommand: createInstallCommand(context.packageManager, packageMigration.packages),
+    installCommand: createInstallCommand(
+      context.packageManager,
+      packageMigration.packages,
+      context.packageManager === 'pnpm' && existsSync(join(cwd, 'pnpm-workspace.yaml'))
+    ),
     mode,
     packages: packageMigration.packages,
     written
