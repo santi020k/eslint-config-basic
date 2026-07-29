@@ -47,17 +47,28 @@ const dependencyFields = [
   'peerDependencies'
 ]
 
-const workspaceManifests = readdirSync(join(rootDir, 'packages'), { withFileTypes: true })
+const workspacePackages = readdirSync(join(rootDir, 'packages'), { withFileTypes: true })
   .filter(entry => entry.isDirectory())
-  .map(entry => join(rootDir, 'packages', entry.name, 'package.json'))
-  .filter(existsSync)
-  .map(manifestPath => JSON.parse(readFileSync(manifestPath, 'utf8')))
-  .filter(manifest => manifest.name)
+  .map(entry => ({
+    directory: entry.name,
+    manifestPath: join(rootDir, 'packages', entry.name, 'package.json')
+  }))
+  .filter(({ manifestPath }) => existsSync(manifestPath))
+  .map(({ directory, manifestPath }) => ({
+    directory,
+    manifest: JSON.parse(readFileSync(manifestPath, 'utf8'))
+  }))
+  .filter(({ manifest }) => manifest.name)
 
-const workspacePackageNames = new Set(workspaceManifests.map(manifest => manifest.name))
+const workspacePackageNames = new Set(workspacePackages.map(({ manifest }) => manifest.name))
+
+const workspacePackagesByName = new Map(
+  workspacePackages.map(workspacePackage => [workspacePackage.manifest.name, workspacePackage])
+)
+
 const dependentsByPackage = new Map()
 
-for (const manifest of workspaceManifests) {
+for (const { manifest } of workspacePackages) {
   for (const field of dependencyFields) {
     // eslint-disable-next-line security/detect-object-injection -- field is constrained to known dependency records
     for (const dependencyName of Object.keys(manifest[field] ?? {})) {
@@ -102,11 +113,21 @@ if (requiresFullSuite) {
     }
   }
 
+  const affectedPackages = [...affectedPackageNames]
+    .map(packageName => workspacePackagesByName.get(packageName))
+    .filter(Boolean)
+
+  const hasAffectedPublicPackage = affectedPackages.some(
+    ({ manifest }) => manifest.private !== true
+  )
+
   const alwaysRun = new Set([
     'contracts.test.ts',
     'integration.test.ts',
     'invariants.test.ts'
   ])
+
+  if (hasAffectedPublicPackage) alwaysRun.add('package-artifacts.test.ts')
 
   const directlyChangedTests = new Set(
     changedFiles
@@ -121,7 +142,9 @@ if (requiresFullSuite) {
 
     const source = readFileSync(testFile, 'utf8')
 
-    return [...affectedPackageNames].some(packageName => source.includes(packageName))
+    return affectedPackages.some(({ directory, manifest }) => (
+      source.includes(manifest.name) || source.includes(`packages/${directory}/`)
+    ))
   })
 }
 

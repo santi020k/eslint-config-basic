@@ -44,7 +44,7 @@
     "check:v3-consumer": "node scripts/check-v3-consumer.mjs",
     "check:publish-dry-run": "node scripts/check-publish-dry-run.mjs",
     "check:attw": "node scripts/check-attw.mjs",
-    "release:check": "TURBO_LOG_ORDER=grouped pnpm run build && pnpm run lint:knip && pnpm run lint:repo && pnpm run docs:build && pnpm run check:exports && pnpm run check:clean-install && pnpm run check:package-metrics && pnpm run check:internal-compatibility && pnpm run check:peer-health && pnpm run check:security-boundaries && pnpm run check:v3-consumer && pnpm run check:publish-dry-run && pnpm run check:attw && pnpm run typecheck && pnpm run test:run",
+    "release:check": "TURBO_LOG_ORDER=grouped pnpm run build && pnpm run lint:knip && pnpm run lint:repo && pnpm run docs:build && pnpm run check:exports && pnpm run check:clean-install && pnpm run check:package-metrics && pnpm run check:internal-compatibility && pnpm run check:peer-health && pnpm run check:security-boundaries && pnpm run check:v3-consumer && pnpm run check:publish-dry-run && pnpm run check:attw && pnpm run typecheck && pnpm run test:coverage",
     "release:build-versioned": "node scripts/build-versioned-packages.mjs",
     "release:publish": "changeset publish",
     "release": "pnpm run release:check && changeset publish",

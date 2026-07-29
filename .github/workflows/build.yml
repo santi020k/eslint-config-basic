@@ -98,6 +98,9 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Run affected package checks
         run: pnpm exec turbo run build typecheck lint --affected --concurrency=50%
+      - name: Enforce test coverage thresholds (Node 22.x)
+        if: matrix.node-version == '22.x'
+        run: pnpm run test:coverage
       - name: Run repository checks (Node 22.x)
         if: matrix.node-version == '22.x'
         run: pnpm run lint:changed && pnpm run check:internal-compatibility
