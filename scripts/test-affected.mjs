@@ -64,7 +64,7 @@ if (requiresFullSuite) {
   const directlyChangedTests = new Set(
     changedFiles
       .filter(file => file.startsWith('packages/tests/src/') && file.endsWith('.test.ts'))
-      .map(basename)
+      .map(file => basename(file))
   )
 
   selected = testFiles.filter(testFile => {
@@ -96,8 +96,7 @@ if (selected.length === 0) {
       'exec',
       'vitest',
       'run',
-      ...relativeTests,
-      '--maxWorkers=1'
+      ...relativeTests
     ],
     { cwd: rootDir, stdio: 'inherit' }
   )
