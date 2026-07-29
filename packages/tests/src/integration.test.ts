@@ -2,7 +2,7 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import { angularConfig } from '@santi020k/eslint-config-angular'
-import astro, { astroConfig } from '@santi020k/eslint-config-astro'
+import astro from '@santi020k/eslint-config-astro'
 import { defineConfig, Format } from '@santi020k/eslint-config-basic'
 import { expoConfig } from '@santi020k/eslint-config-expo'
 import { honoConfig } from '@santi020k/eslint-config-hono'
@@ -23,6 +23,7 @@ import { lintFile, lintText } from './test-utils.js'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 const FIXTURES_DIR = join(__dirname, '../fixtures')
+const astroConfig = astro()
 
 describe('Integration Tests', () => {
   describe('JavaScript', () => {

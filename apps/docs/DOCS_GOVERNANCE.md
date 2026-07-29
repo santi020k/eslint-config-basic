@@ -1,6 +1,6 @@
 # Docs Governance
 
-This policy defines how the current docs set and `v1` docs coexist.
+This policy defines how the current v3 docs and frozen v2/v1 archives coexist.
 
 ## Scope
 
@@ -10,35 +10,40 @@ This policy defines how the current docs set and `v1` docs coexist.
   - `apps/docs/src/content/docs/tooling`
   - `apps/docs/src/content/docs/packages`
   - `apps/docs/src/content/docs/api`
-- Legacy docs archive lives under:
+- Frozen docs archives live under:
+  - `apps/docs/src/content/docs/v2`
   - `apps/docs/src/content/docs/v1`
 
 ## Ownership Model
 
 - Current docs are the source of truth for product behavior and setup guidance.
-- `v1` docs are a frozen archive for users pinned to v1.
+- `v2` and `v1` docs are frozen archives for users pinned to those majors.
 - New product features and behavior updates go to current docs only.
-- `v1` should not be edited during normal development.
-- Emergency `v1` edits are allowed only for:
+- Archived docs should not be edited during normal development.
+- Emergency archive edits are allowed only for:
   - broken-link fixes,
   - critical security clarification notes,
   - explicit deprecation/migration pointers.
 
 ## Navigation and Cross-Linking
 
-- Keep version switching in Starlight navigation so users can move between current docs and frozen `v1`.
-- Add migration links from relevant `v1` pages to current `guide/migration-v1-to-v2`.
-- Do not duplicate full feature guides across current and `v1` trees.
+- Keep version switching in Starlight navigation so users can move between v3,
+  v2, and v1.
+- Point v2 users to `guide/migration-v2-to-v3`.
+- Keep the historical v1-to-v2 guide, with a clear continuation link to the
+  v2-to-v3 guide.
+- Do not copy new feature guides into either archive.
 
 ## CI and Build Expectations
 
-- Any workflow that builds docs should run `docs:sync-readmes` before `docs:build`.
+- API reference and changelog generation are part of `docs:build`.
 - Script commands should use `pnpm` consistently across root docs scripts.
 
 ## Contribution Checklist
 
-- For current-doc changes, update `apps/docs/CHANGELOG.md` under `Unreleased`.
-- If `v1` must be edited for emergency reasons, explain the reason in PR.
+- Record publishable docs changes through Changesets; do not hand-edit generated
+  changelog entries.
+- If an archive must be edited for an emergency, explain the reason in the PR.
 - Validate with:
-  - `pnpm run docs:sync-readmes`
   - `pnpm run docs:build`
+  - an internal-link crawl of the built output

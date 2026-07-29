@@ -26,7 +26,7 @@ export default await defineConfig({
 })
 ```
 
-Most projects can also rely on auto-detection and use `eslintConfig()` with no framework object.
+With the required config packages installed, the one-line recommended entry auto-detects the framework; custom configs can use `defineConfig()` without a `frameworks` object.
 
 ## What It Adds
 
@@ -51,11 +51,11 @@ export default await defineConfig({
 })
 ```
 
-This integration adds Astro Doctor's proprietary ESLint rules without applying the official Astro preset a second time. Health scoring, project audits, baselines, and changed-file scanning remain available through the separate `@santi020k/astro-doctor` CLI.
+This integration adds Astro Doctor's proprietary rules and its recommended official Astro rules while reusing the framework config's parser and plugin registration. Health scoring, project audits, baselines, and changed-file scanning remain available through the separate `@santi020k/astro-doctor` CLI.
 
 ## Notes
 
-- The internal package still exists in the monorepo for modular development and generated API docs.
+- This framework package is a public, optional dependency in v3; the basic composer loads it only when enabled.
 - For the archived v1 setup, see the [v1 Astro guide](/v1/frameworks/astro).
 
 ## Related Pages

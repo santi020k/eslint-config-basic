@@ -7,7 +7,7 @@ Package: [`@santi020k/eslint-config-basic`](https://www.npmjs.com/package/@santi
 
 This is the recommended v3 package. It owns the composer, core JavaScript
 rules, TypeScript support, public options, and the `basic-eslint` CLI.
-Framework and integration packages are optional peers.
+Framework and category feature packs are optional peers.
 
 ## Minimal usage
 
@@ -31,8 +31,12 @@ export default await defineConfig({
 ```
 
 Install `@santi020k/eslint-config-react` for that example. Install
-`@santi020k/eslint-config-integrations` when using optional libraries, testing,
-formats, tools, or extensions.
+the matching category pack when using optional features:
+`eslint-config-extensions`, `eslint-config-formats`,
+`eslint-config-libraries`, `eslint-config-testing`, or `eslint-config-tools`.
+
+Node-oriented agent generation is intentionally outside the config runtime
+entry point. Import it from `@santi020k/eslint-config-basic/agent`.
 
 The package has a four-direct-dependency release budget. Its production tree is
 checked independently from the full bundle.

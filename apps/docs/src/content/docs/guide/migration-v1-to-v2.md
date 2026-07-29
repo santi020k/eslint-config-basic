@@ -5,6 +5,11 @@ description: "Version 2 moves the npm-level public API to a single package: @san
 
 Version 2 moves the npm-level public API to a single package: `@santi020k/eslint-config-basic`.
 
+> [!IMPORTANT]
+> This guide intentionally targets the frozen v2 release. To move a v1
+> project to the current v3 release, complete these steps and then follow the
+> [v2 to v3 migration guide](/guide/migration-v2-to-v3/).
+
 The internal architecture is still modular, but application projects no longer need to install or import separate framework config packages.
 
 ## What Changed
@@ -13,7 +18,7 @@ The internal architecture is still modular, but application projects no longer n
 | :--- | :--- |
 | Install `basic` plus framework config packages. | Install only `@santi020k/eslint-config-basic`. |
 | Import framework configs from `@santi020k/eslint-config-react`, `@santi020k/eslint-config-next`, etc. | Use `frameworks.<name>: true`. |
-| Detected frameworks were informational. | Detected frameworks are enabled by `eslintConfig()` by default. |
+| Detected frameworks were informational. | Detected frameworks are enabled by `defineConfig()` by default. |
 | Next.js and Expo required an explicit React config. | Next.js, Expo, and Remix automatically include React rules. |
 | Manual inspection required reading generated config. | `basic-eslint explain` prints detected v2 inputs. |
 | Migration was fully manual. | `basic-eslint migrate` reports v1-to-v2 changes to make. |
@@ -34,7 +39,7 @@ Targeting v10 only lets the configs rely on v10 behavior: per-file config lookup
 
 If you composed configs manually from named exports, two things changed:
 
-1. **Bare names**: the mixed v1 naming (`reactConfig`, `vueConfig`, `nextConfig` next to bare `astro`, `hono`, `vite`) is normalized to bare framework names: `angular`, `astro`, `expo`, `hono`, `lit`, `nest`, `next`, `nuxt`, `qwik`, `react`, `reactRouter`, `slidev`, `solid`, `svelte`, `tanstackStart`, `vite`, `vue`. The old `*Config` names still exist as deprecated aliases.
+1. **Bare names**: the mixed v1 naming (`reactConfig`, `vueConfig`, `nextConfig` next to bare `astro`, `hono`, `vite`) is normalized to bare framework names: `angular`, `astro`, `expo`, `hono`, `lit`, `nest`, `next`, `nuxt`, `qwik`, `react`, `reactRouter`, `slidev`, `solid`, `svelte`, `tanstackStart`, `vite`, `vue`. The deprecated `*Config` aliases were removed in v3.
 2. **Async factories**: every framework export is now a lazy factory returning `Promise<FlatConfigArray>` — the framework's plugins are only imported when you call it. Exports that used to be plain arrays must now be called and awaited.
 
 ```js
@@ -110,11 +115,11 @@ Keep `eslint`, `typescript`, React, Next.js, Vue, or other runtime framework pac
 Before:
 
 ```js
-import { eslintConfig } from '@santi020k/eslint-config-basic'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 import next from '@santi020k/eslint-config-next'
 import react from '@santi020k/eslint-config-react'
 
-export default await eslintConfig({
+export default await defineConfig({
   frameworks: {
     next,
     react
@@ -261,4 +266,6 @@ npx @santi020k/eslint-config-basic docs
 
 ## Keeping v1 Docs
 
-The v1 docs remain available at `/v1/`. The current root docs track v2. Future docs can be added the same way under versioned paths such as `/v2.1/` or `/v2.2.1/` when a release needs permanent documentation.
+The v1 docs remain available at `/v1/`, and the frozen v2 documentation is
+available at `/v2/`. The current root documentation tracks v3. After completing
+this migration, continue with the [v2 to v3 guide](/guide/migration-v2-to-v3/).

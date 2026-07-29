@@ -1,0 +1,52 @@
+---
+title: "Angular"
+description: "Use Angular support from the main v2 package. Application projects no longer install a separate @santi020k/eslint-config-angular package."
+---
+
+import InstallTabs from '../../../../components/InstallTabs.astro'
+
+Use Angular support from the main v2 package. Application projects no longer install a separate `@santi020k/eslint-config-angular` package.
+
+## Install
+
+
+<InstallTabs packages="@santi020k/eslint-config-basic" />
+
+
+## Using Lite
+
+The default install above remains recommended. If you use the manual-dependency lite package, install this framework config package too:
+
+<InstallTabs packages={["@santi020k/eslint-config-lite", "@santi020k/eslint-config-angular", "eslint"]} />
+
+## Configure
+
+```js
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig({
+  frameworks: {
+    angular: true
+  },
+  typescript: true
+})
+```
+
+Most projects can also rely on auto-detection and use `eslintConfig()` with no framework object.
+
+## What It Adds
+
+- Angular project rules.
+- Composition through the same `@santi020k/eslint-config-basic` entry point as every other framework.
+- Compatibility with advanced overrides if you pass a custom config array or factory instead of `true`.
+
+## Notes
+
+- The internal package still exists in the monorepo for modular development and generated API docs.
+- For the old multi-package installation model, see the [v1 Angular guide](/v1/frameworks/angular).
+
+## Related Pages
+
+- [Installation](/v2/guide/installation)
+- [Configuration](/v2/guide/configuration)
+- [v1 to v2 Migration](/v2/guide/migration-v1-to-v2)

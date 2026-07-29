@@ -1,2 +1,6 @@
 export * from '@santi020k/eslint-config-basic'
-export * from '@santi020k/eslint-config-integrations'
+export * from '@santi020k/eslint-config-extensions'
+export * from '@santi020k/eslint-config-formats'
+export * from '@santi020k/eslint-config-libraries'
+export * from '@santi020k/eslint-config-testing'
+export * from '@santi020k/eslint-config-tools'

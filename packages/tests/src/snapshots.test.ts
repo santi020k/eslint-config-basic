@@ -1,5 +1,5 @@
 import { angularConfig } from '@santi020k/eslint-config-angular'
-import { astroConfig } from '@santi020k/eslint-config-astro'
+import { createAstroConfig } from '@santi020k/eslint-config-astro'
 import { coreConfig } from '@santi020k/eslint-config-core'
 import { expoConfig } from '@santi020k/eslint-config-expo'
 import { hono as honoConfig } from '@santi020k/eslint-config-hono'
@@ -20,6 +20,8 @@ import { vite as viteConfig } from '@santi020k/eslint-config-vite'
 import { vueConfig } from '@santi020k/eslint-config-vue'
 
 import { describe, expect, test } from 'vitest'
+
+const astroConfig = createAstroConfig()
 
 /**
  * Extract rule names for semantic package contracts.
@@ -81,7 +83,7 @@ interface RuleContract {
 const ruleContracts: RuleContract[] = [
   { config: coreConfig as Record<string, unknown>[], name: 'core', requiredRules: ['eqeqeq', 'no-unused-vars'] },
   { config: typescriptConfig as Record<string, unknown>[], name: 'typescript', requiredPrefixes: ['@typescript-eslint/'] },
-  { config: reactConfig as Record<string, unknown>[], name: 'react', requiredPrefixes: ['@eslint-react/', 'react-compiler/'] },
+  { config: reactConfig as Record<string, unknown>[], name: 'react', requiredPrefixes: ['@eslint-react/', 'react-hooks/'] },
   { config: preactConfig as Record<string, unknown>[], name: 'preact', requiredPrefixes: ['@eslint-react/'] },
   { config: nextConfig as Record<string, unknown>[], name: 'next', requiredPrefixes: ['@next/next/'] },
   { config: astroConfig as Record<string, unknown>[], name: 'astro', requiredPrefixes: ['astro/'] },
@@ -252,7 +254,9 @@ describe('Config Snapshots — Critical Rule Entries', () => {
   })
 
   test('typescript critical rule entries should match snapshot', () => {
-    const entries = extractRuleEntries(typescriptConfig as Record<string, unknown>[], [
+    const typeCheckedConfig = (typescriptConfig as Record<string, unknown>[])
+      .filter(entry => entry.name !== 'eslint-config-typescript/untyped-files')
+    const entries = extractRuleEntries(typeCheckedConfig, [
       '@typescript-eslint/no-explicit-any',
       '@typescript-eslint/no-unused-vars',
       '@typescript-eslint/consistent-type-imports',
@@ -267,7 +271,8 @@ describe('Config Snapshots — Critical Rule Entries', () => {
       '@eslint-react/no-missing-key',
       '@eslint-react/rules-of-hooks',
       '@eslint-react/exhaustive-deps',
-      'react-compiler/react-compiler'
+      'react-hooks/config',
+      'react-hooks/immutability'
     ])
 
     expect(entries).toMatchSnapshot()

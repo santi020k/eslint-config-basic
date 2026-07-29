@@ -1,0 +1,79 @@
+---
+title: "Release Center"
+description: "Website release highlights, current package version, upgrade commands, and the recommended migration path."
+sidebar:
+  badge:
+    text: New
+    variant: success
+---
+
+import { Badge, ButtonLink, Card, CodeTabs } from '@santi020k/lumen-astro'
+import RunnerTabs from '../../../../components/RunnerTabs.astro'
+import { siteMetrics } from '../../../../data/site-metrics'
+
+export const updateCommands = [
+  { value: 'pnpm', label: 'pnpm', code: 'pnpm update @santi020k/eslint-config-basic', language: 'bash' },
+  { value: 'npm', label: 'npm', code: 'npm update @santi020k/eslint-config-basic', language: 'bash' },
+  { value: 'yarn', label: 'Yarn', code: 'yarn up @santi020k/eslint-config-basic', language: 'bash' },
+  { value: 'bun', label: 'Bun', code: 'bun update @santi020k/eslint-config-basic', language: 'bash' }
+]
+
+<div class="s2k-release-hero">
+  <div>
+    <Badge variant="success">Website release</Badge>
+    <h2>From reference library to adoption workspace</h2>
+    <p>The new site helps teams produce a setup, diagnose it, and share the result—not only read about the available options.</p>
+  </div>
+  <div class="s2k-release-version">
+    <span>Current package line</span>
+    <strong>v{siteMetrics.packageVersion}</strong>
+  </div>
+</div>
+
+## Highlights
+
+<div class="s2k-release-grid">
+  <Card as="article">
+    <Badge variant="secondary">Build</Badge>
+    <h3>Interactive config builder</h3>
+    <p>Generate Basic or Lite install commands and a flat config from framework, runtime, preset, and integration choices. Share the same selections through the URL.</p>
+    <ButtonLink href="/v2/guide/config-builder/" variant="secondary" showArrow>Open builder</ButtonLink>
+  </Card>
+  <Card as="article">
+    <Badge variant="secondary">Diagnose</Badge>
+    <h3>Private doctor viewer</h3>
+    <p>Paste <code>doctor --json</code> output and receive focused repair actions. Parsing happens entirely in the browser.</p>
+    <ButtonLink href="/v2/guide/doctor-report/" variant="secondary" showArrow>Analyze report</ButtonLink>
+  </Card>
+  <Card as="article">
+    <Badge variant="secondary">Discover</Badge>
+    <h3>Repository-backed metrics</h3>
+    <p>Homepage framework and optional-config totals are derived from source files during the build, preventing stale feature claims.</p>
+  </Card>
+  <Card as="article">
+    <Badge variant="secondary">Improve</Badge>
+    <h3>Page feedback</h3>
+    <p>Every documentation page now has a private, one-click usefulness control and an optional GitHub follow-up when more context is needed.</p>
+  </Card>
+</div>
+
+## Upgrade the package
+
+Choose the command for the repository's package manager:
+
+<CodeTabs
+  ariaLabel="Choose a package manager"
+  class="not-content"
+  items={updateCommands}
+  storageKey="s2k-preferred-package-manager"
+/>
+
+After upgrading, run:
+
+<RunnerTabs args={['doctor', 'inspect']} />
+
+## Moving from v1
+
+The website release does not change the package migration contract. Existing v1 users should follow the [v1-to-v2 migration guide](/v2/guide/migration-v1-to-v2/) and use `migrate --write` only after reviewing the proposed framework changes.
+
+For package-level release notes, continue to the [changelog index](/v2/guide/changelog/).

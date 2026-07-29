@@ -26,7 +26,7 @@ export default await defineConfig({
 })
 ```
 
-Most projects can also rely on auto-detection and use `eslintConfig()` with no framework object.
+With the required config packages installed, the one-line recommended entry auto-detects the framework; custom configs can use `defineConfig()` without a `frameworks` object.
 
 ## What It Adds
 
@@ -36,7 +36,7 @@ Most projects can also rely on auto-detection and use `eslintConfig()` with no f
 
 ## Notes
 
-- The internal package still exists in the monorepo for modular development and generated API docs.
+- This framework package is a public, optional dependency in v3; the basic composer loads it only when enabled.
 - For the archived v1 setup, see the [v1 Qwik guide](/v1/frameworks/qwik).
 
 ## Related Pages

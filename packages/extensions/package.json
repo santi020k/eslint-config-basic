@@ -1,0 +1,76 @@
+{
+  "name": "@santi020k/eslint-config-extensions",
+  "version": "3.0.0",
+  "publishConfig": { "access": "public", "provenance": true },
+  "description": "Optional ESLint rule-set extensions for eslint-config-basic",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./registry": {
+      "types": "./dist/registry.d.ts",
+      "import": "./dist/registry.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "check:exports": "publint",
+    "clean": "rm -rf dist",
+    "dev": "tsup --watch",
+    "lint": "eslint . --no-warn-ignored --pass-on-no-patterns",
+    "lint:fix": "eslint . --fix --no-warn-ignored --pass-on-no-patterns",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@santi020k/eslint-config-core": "workspace:^",
+    "@typescript-eslint/utils": "catalog:",
+    "eslint-plugin-compat": "catalog:",
+    "eslint-plugin-de-morgan": "catalog:",
+    "eslint-plugin-depend": "catalog:",
+    "eslint-plugin-jsx-a11y": "catalog:",
+    "eslint-plugin-n": "catalog:",
+    "eslint-plugin-no-only-tests": "catalog:",
+    "eslint-plugin-oxlint": "catalog:",
+    "eslint-plugin-perfectionist": "catalog:",
+    "eslint-plugin-regexp": "catalog:",
+    "eslint-plugin-security": "catalog:",
+    "eslint-plugin-sonarjs": "catalog:",
+    "eslint-plugin-unicorn": "catalog:",
+    "eslint-plugin-vuejs-accessibility": "catalog:"
+  },
+  "optionalDependencies": {
+    "@santi020k/eslint-plugin-astro-doctor": "catalog:"
+  },
+  "devDependencies": {
+    "@types/eslint-plugin-jsx-a11y": "catalog:",
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "publint": "catalog:",
+    "tsup": "catalog:",
+    "typescript": "catalog:"
+  },
+  "peerDependencies": {
+    "eslint": "^10.0.0",
+    "oxlint": "^1.0.0",
+    "typescript": ">=5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "oxlint": { "optional": true },
+    "typescript": { "optional": true }
+  },
+  "engines": { "node": ">=22.19.0" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/santi020k/eslint-config-basic.git",
+    "directory": "packages/extensions"
+  },
+  "homepage": "https://eslint.santi020k.com/tooling/extensions",
+  "license": "MIT"
+}

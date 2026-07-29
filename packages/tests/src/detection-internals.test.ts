@@ -91,4 +91,48 @@ describe('parsePnpmWorkspacePatterns', () => {
 
     expect(Object.keys(projects)).toContain('services/api')
   })
+
+  test('detectProjects resolves an exact workspace package path', () => {
+    mkdirSync(join(tmpDir, 'apps', 'web'), { recursive: true })
+    writeFileSync(join(tmpDir, 'apps', 'web', 'package.json'), '{}')
+
+    const projects = __detectionInternals.detectProjects({ workspaces: ['apps/web'] }, tmpDir)
+
+    expect(Object.keys(projects)).toEqual(['apps/web'])
+  })
+
+  test('detectProjects excludes the workspace root from child projects', () => {
+    writeFileSync(join(tmpDir, 'package.json'), '{}')
+    writeFileSync(join(tmpDir, 'pnpm-workspace.yaml'), 'packages:\n  - \'.\'\n')
+
+    const projects = __detectionInternals.detectProjects({}, tmpDir)
+
+    expect(projects).toEqual({})
+  })
+
+  test('detectProjects resolves nested workspace globs and exclusions', () => {
+    mkdirSync(join(tmpDir, 'apps', 'site', 'packages', 'ui'), { recursive: true })
+    mkdirSync(join(tmpDir, 'apps', 'site', 'packages', 'private'), { recursive: true })
+    writeFileSync(join(tmpDir, 'apps', 'site', 'packages', 'ui', 'package.json'), '{}')
+    writeFileSync(join(tmpDir, 'apps', 'site', 'packages', 'private', 'package.json'), '{}')
+
+    const projects = __detectionInternals.detectProjects({
+      workspaces: ['apps/*/packages/*', '!apps/*/packages/private']
+    }, tmpDir)
+
+    expect(Object.keys(projects)).toEqual(['apps/site/packages/ui'])
+  })
+
+  test('detectProjects normalizes dot-prefixed workspace exclusions', () => {
+    mkdirSync(join(tmpDir, 'packages', 'public'), { recursive: true })
+    mkdirSync(join(tmpDir, 'packages', 'private'), { recursive: true })
+    writeFileSync(join(tmpDir, 'packages', 'public', 'package.json'), '{}')
+    writeFileSync(join(tmpDir, 'packages', 'private', 'package.json'), '{}')
+
+    const projects = __detectionInternals.detectProjects({
+      workspaces: ['./packages/*', '!./packages/private']
+    }, tmpDir)
+
+    expect(Object.keys(projects)).toEqual(['packages/public'])
+  })
 })

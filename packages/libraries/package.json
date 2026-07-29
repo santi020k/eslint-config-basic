@@ -1,0 +1,75 @@
+{
+  "name": "@santi020k/eslint-config-libraries",
+  "version": "3.0.0",
+  "publishConfig": { "access": "public", "provenance": true },
+  "description": "Library-specific ESLint configs for eslint-config-basic",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./registry": {
+      "types": "./dist/registry.d.ts",
+      "import": "./dist/registry.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "check:exports": "publint",
+    "clean": "rm -rf dist",
+    "dev": "tsup --watch",
+    "lint": "eslint . --no-warn-ignored --pass-on-no-patterns",
+    "lint:fix": "eslint . --fix --no-warn-ignored --pass-on-no-patterns",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@santi020k/eslint-config-core": "workspace:^",
+    "@stencil/eslint-plugin": "catalog:",
+    "@tanstack/eslint-plugin-query": "catalog:",
+    "@tanstack/eslint-plugin-router": "catalog:",
+    "@typescript-eslint/utils": "catalog:",
+    "eslint-plugin-better-tailwindcss": "catalog:",
+    "eslint-plugin-i18next": "catalog:",
+    "eslint-plugin-storybook": "catalog:",
+    "eslint-plugin-turbo": "catalog:",
+    "eslint-plugin-vercel-ai-security": "catalog:",
+    "eslint-plugin-zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "publint": "catalog:",
+    "storybook": "catalog:",
+    "tailwindcss": "catalog:",
+    "tsup": "catalog:",
+    "typescript": "catalog:",
+    "zod": "catalog:"
+  },
+  "peerDependencies": {
+    "eslint": "^10.0.0",
+    "storybook": "^10.0.0",
+    "tailwindcss": "^3.3.0 || ^4.1.0",
+    "typescript": ">=5.0.0",
+    "zod": "^4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "storybook": { "optional": true },
+    "tailwindcss": { "optional": true },
+    "typescript": { "optional": true },
+    "zod": { "optional": true }
+  },
+  "engines": { "node": ">=22.19.0" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/santi020k/eslint-config-basic.git",
+    "directory": "packages/libraries"
+  },
+  "homepage": "https://eslint.santi020k.com/tooling/libraries",
+  "license": "MIT"
+}

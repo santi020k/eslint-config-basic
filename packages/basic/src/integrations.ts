@@ -1,42 +1,66 @@
 import {
+  type ConfigFeature,
   createModuleLoader,
   type Extension,
   type FlatConfigArray,
   type Format,
   type Library,
+  resolveConfigFeatures,
   type Testing,
-  Tool
+  type Tool
 } from '@santi020k/eslint-config-core'
 
 const loadModule = createModuleLoader(specifier => import.meta.resolve(specifier, import.meta.url))
 
-interface IntegrationModule {
-  getIntegrationConfigs?: (
-    libraries: Library[],
-    tools: Tool[],
-    testing: Testing[],
-    formats: Format[],
-    extensions: Extension[]
-  ) => Promise<FlatConfigArray>
-  getPrettierConfig?: (tools: Tool[]) => Promise<FlatConfigArray>
+interface FeaturePack {
+  features?: ConfigFeature[]
 }
 
-let integrationsModule: Promise<IntegrationModule> | undefined
+const packCache = new Map<string, Promise<FeaturePack>>()
 
-const loadIntegrations = async (): Promise<IntegrationModule> => {
-  integrationsModule ??= loadModule<IntegrationModule>('@santi020k/eslint-config-integrations')
+const loadFeaturePack = async (specifier: string): Promise<ConfigFeature[]> => {
+  let pending = packCache.get(specifier)
+
+  if (!pending) {
+    pending = loadModule<FeaturePack>(specifier)
+
+    packCache.set(specifier, pending)
+  }
 
   try {
-    return await integrationsModule
+    const module = await pending
+
+    if (!module.features) {
+      throw new Error(`Installed package "${specifier}" does not export a feature registry.`)
+    }
+
+    return module.features
   } catch (error) {
-    integrationsModule = undefined
+    packCache.delete(specifier)
 
     throw new Error(
-      'Unable to load optional package "@santi020k/eslint-config-integrations". ' +
-      'Install it for integrations, or remove the selected integration options.', { cause: error }
+      `Unable to load optional feature pack "${specifier}". ` +
+      'Install it for the selected options, or remove those options from defineConfig().',
+      { cause: error }
     )
   }
 }
+
+const loadSelectedPacks = async (
+  libraries: Library[],
+  tools: Tool[],
+  testing: Testing[],
+  formats: Format[],
+  extensions: Extension[]
+): Promise<ConfigFeature[]> => (
+  await Promise.all([
+    extensions.length > 0 ? loadFeaturePack('@santi020k/eslint-config-extensions/registry') : [],
+    formats.length > 0 ? loadFeaturePack('@santi020k/eslint-config-formats/registry') : [],
+    libraries.length > 0 ? loadFeaturePack('@santi020k/eslint-config-libraries/registry') : [],
+    testing.length > 0 ? loadFeaturePack('@santi020k/eslint-config-testing/registry') : [],
+    tools.length > 0 ? loadFeaturePack('@santi020k/eslint-config-tools/registry') : []
+  ])
+).flat()
 
 export const getIntegrationConfigs = async (
   libraries: Library[],
@@ -45,35 +69,19 @@ export const getIntegrationConfigs = async (
   formats: Format[],
   extensions: Extension[]
 ): Promise<FlatConfigArray> => {
-  if (
-    libraries.length === 0 &&
-    tools.length === 0 &&
-    testing.length === 0 &&
-    formats.length === 0 &&
-    extensions.length === 0
-  ) return []
+  const selected = [...libraries, ...tools, ...testing, ...formats, ...extensions]
 
-  const module = await loadIntegrations()
+  if (selected.length === 0) return []
 
-  if (!module.getIntegrationConfigs) {
-    throw new Error(
-      'Installed "@santi020k/eslint-config-integrations" is incompatible. Update it to v3 or newer.'
-    )
-  }
+  const features = await loadSelectedPacks(libraries, tools, testing, formats, extensions)
 
-  return module.getIntegrationConfigs(libraries, tools, testing, formats, extensions)
+  return resolveConfigFeatures(features, selected)
 }
 
 export const getPrettierConfig = async (tools: Tool[]): Promise<FlatConfigArray> => {
-  if (!tools.includes(Tool.Prettier)) return []
+  if (tools.length === 0) return []
 
-  const module = await loadIntegrations()
+  const features = await loadFeaturePack('@santi020k/eslint-config-tools/registry')
 
-  if (!module.getPrettierConfig) {
-    throw new Error(
-      'Installed "@santi020k/eslint-config-integrations" is incompatible. Update it to v3 or newer.'
-    )
-  }
-
-  return module.getPrettierConfig(tools)
+  return resolveConfigFeatures(features, tools, 'finalizer')
 }

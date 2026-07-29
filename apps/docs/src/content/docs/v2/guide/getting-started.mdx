@@ -1,0 +1,72 @@
+---
+title: "Getting Started"
+description: "This library is a DX-first, composable ESLint 10+ flat-config toolkit for JavaScript and TypeScript teams. In v2, application projects install @santi020k/"
+---
+
+import { Steps } from '@astrojs/starlight/components'
+import { Card, Icon } from '@santi020k/lumen-astro'
+import InstallTabs from '../../../../components/InstallTabs.astro'
+
+This library is a DX-first, composable ESLint 10+ flat-config toolkit for JavaScript and TypeScript teams. In v2, application projects install [`@santi020k/eslint-config-basic`](https://www.npmjs.com/package/@santi020k/eslint-config-basic) and enable bundled framework configs directly from it.
+
+## Requirements
+
+- Node.js `^20.19.0 || >=22.18.0`
+- ESLint `10+`
+
+## Setup Process
+
+<Steps>
+1. **Install the Base Package**
+
+    The smallest install is the main package itself. It brings a supported ESLint version automatically.
+
+    <InstallTabs packages="@santi020k/eslint-config-basic" />
+
+2. **Create Configuration File**
+
+    Create an `eslint.config.mjs` file, or `eslint.config.js` if your project uses `"type": "module"`.
+
+    ```js title="eslint.config.mjs"
+    import { defineConfig } from '@santi020k/eslint-config-basic'
+
+    export default await defineConfig()
+    ```
+</Steps>
+
+## Understand the Architecture
+
+<div class="s2k-feature-grid">
+  <Card as="article" class="s2k-feature-card">
+    <Icon name="rocket" decorative />
+    <h3>Unified Entry</h3>
+    <p><code>@santi020k/eslint-config-basic</code> is the main package. You no longer need to install framework configs directly.</p>
+  </Card>
+  <Card as="article" class="s2k-feature-card">
+    <Icon name="sliders-horizontal" decorative />
+    <h3>Enum-based Toggles</h3>
+    <p>Integrations can be enabled through enums, matching strings, or the simple <code>features</code> map.</p>
+  </Card>
+  <Card as="article" class="s2k-feature-card">
+    <Icon name="blocks" decorative />
+    <h3>Flexible Versions</h3>
+    <p>ESLint can still be installed manually if you want to pin it yourself, as long as you stay on <code>^10</code>.</p>
+  </Card>
+</div>
+
+## Pick the Right Starting Point
+
+Use the links below to navigate based on your immediate needs:
+
+- **[Configuration](/v2/guide/configuration):** When you want to compose the config manually.
+- **[CLI](/v2/guide/cli):** When you want a generated starting file.
+- **[Frameworks](/v2/frameworks/typescript):** When you already know the application stack.
+- **[Integrations](/v2/tooling/overview):** When the main need is integrating Tailwind, Vitest, Prettier, or similar packages.
+- **[Packages](/v2/packages/basic):** When you want to understand how the monorepo is organized.
+
+## Next Steps
+
+- Continue with **[Detailed Installation](/v2/guide/installation)**
+- Review **[Configuration Options](/v2/guide/configuration)**
+- Use the **[CLI generator](/v2/guide/cli)** if you want scaffolding
+- Jump to **[Framework Guides](/v2/frameworks/typescript)**

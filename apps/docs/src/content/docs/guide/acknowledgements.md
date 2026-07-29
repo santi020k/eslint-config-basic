@@ -12,8 +12,6 @@ description: "Acknowledgements for the open source libraries that make @santi020
 | `eslint` | The linter itself — everything in this project builds on it. | [eslint/eslint](https://github.com/eslint/eslint) |
 | `@eslint/js` | Official JavaScript rules and recommended presets. | [eslint/eslint](https://github.com/eslint/eslint) |
 | `@eslint/config-helpers` | Helpers for composing flat configs (`defineConfig`). | [eslint/rewrite](https://github.com/eslint/rewrite) |
-| `@eslint/compat` | Compatibility utilities for legacy plugins in flat config. | [eslint/rewrite](https://github.com/eslint/rewrite) |
-| `@eslint/eslintrc` | Bridge for legacy ESLintRC-style shareable configs. | [eslint/eslintrc](https://github.com/eslint/eslintrc) |
 | `@eslint/markdown` | Official Markdown language plugin. | [eslint/markdown](https://github.com/eslint/markdown) |
 | `typescript` | The TypeScript language and compiler. | [microsoft/TypeScript](https://github.com/microsoft/TypeScript) |
 | `typescript-eslint` | TypeScript parser, utilities, and type-aware rules. | [typescript-eslint/typescript-eslint](https://github.com/typescript-eslint/typescript-eslint) |
@@ -43,7 +41,6 @@ description: "Acknowledgements for the open source libraries that make @santi020
 | `eslint-plugin-qwik` | Qwik rules. | [QwikDev/qwik](https://github.com/QwikDev/qwik) |
 | `eslint-plugin-react` | React rules. | [jsx-eslint/eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) |
 | `eslint-plugin-react-hooks` | Rules of Hooks. | [facebook/react](https://github.com/facebook/react) |
-| `eslint-plugin-react-compiler` | React Compiler diagnostics. | [facebook/react](https://github.com/facebook/react) |
 | `eslint-plugin-react-refresh` | Fast Refresh safety rules. | [ArnaudBarre/eslint-plugin-react-refresh](https://github.com/ArnaudBarre/eslint-plugin-react-refresh) |
 | `eslint-plugin-solid` | Solid rules. | [solidjs-community/eslint-plugin-solid](https://github.com/solidjs-community/eslint-plugin-solid) |
 | `eslint-plugin-svelte` | Svelte rules. | [sveltejs/eslint-plugin-svelte](https://github.com/sveltejs/eslint-plugin-svelte) |
@@ -56,11 +53,10 @@ description: "Acknowledgements for the open source libraries that make @santi020
 | :--- | :--- | :--- |
 | `@cspell/eslint-plugin` | Spell checking. | [streetsidesoftware/cspell](https://github.com/streetsidesoftware/cspell) |
 | `@graphql-eslint/eslint-plugin` | GraphQL rules. | [dimaMachina/graphql-eslint](https://github.com/dimaMachina/graphql-eslint) |
-| `@stencil-community/eslint-plugin` | Stencil rules. | [stencil-community/stencil-eslint](https://github.com/stencil-community/stencil-eslint) |
+| `@stencil/eslint-plugin` | Stencil rules. | [stenciljs/eslint-plugin](https://github.com/stenciljs/eslint-plugin) |
 | `@tanstack/eslint-plugin-query` | TanStack Query rules. | [TanStack/query](https://github.com/TanStack/query) |
 | `@tanstack/eslint-plugin-router` | TanStack Router rules. | [TanStack/router](https://github.com/TanStack/router) |
 | `@vitest/eslint-plugin` | Vitest rules. | [vitest-dev/eslint-plugin-vitest](https://github.com/vitest-dev/eslint-plugin-vitest) |
-| `eslint-config-biome` | Disables rules covered by Biome. | [ftzi/eslint-config-biome](https://github.com/ftzi/eslint-config-biome) |
 | `eslint-config-prettier` | Disables rules that conflict with Prettier. | [prettier/eslint-config-prettier](https://github.com/prettier/eslint-config-prettier) |
 | `eslint-plugin-better-tailwindcss` | Tailwind CSS class rules. | [schoero/eslint-plugin-better-tailwindcss](https://github.com/schoero/eslint-plugin-better-tailwindcss) |
 | `eslint-plugin-command` | Comment-as-command codemods. | [antfu/eslint-plugin-command](https://github.com/antfu/eslint-plugin-command) |
@@ -92,7 +88,6 @@ description: "Acknowledgements for the open source libraries that make @santi020
 
 | Library | What It Provides | Repository |
 | :--- | :--- | :--- |
-| `cross-dirname` | Cross-runtime `__dirname` resolution for the Expo preset. | [JumpLink/cross-dirname](https://github.com/JumpLink/cross-dirname) |
 | `svelte` | Svelte compiler, required by the Svelte preset. | [sveltejs/svelte](https://github.com/sveltejs/svelte) |
 | `storybook` | Storybook core, required by the Storybook integration. | [storybookjs/storybook](https://github.com/storybookjs/storybook) |
 

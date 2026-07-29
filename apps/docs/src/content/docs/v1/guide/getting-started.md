@@ -2,7 +2,7 @@
 title: "Getting Started"
 description: "This library is a DX-first, composable ESLint 9/10+ flat-config toolkit for JavaScript and TypeScript teams. The main entry point is @santi020k/eslint-confi"
 banner:
-  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v3 docs</a>; the v2 release is preserved at <a href=\"/v2/\">/v2/</a>."
 ---
 
 Version 1 is a DX-first, composable ESLint 9/10+ flat-config toolkit for JavaScript and TypeScript teams. The main entry point is [`@santi020k/eslint-config-basic`](https://www.npmjs.com/package/@santi020k/eslint-config-basic), and framework support is added through explicit framework package imports.

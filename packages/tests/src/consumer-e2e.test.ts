@@ -33,7 +33,7 @@ const createConsumerProject = (files: Record<string, string>): string => {
   return cwd
 }
 
-const writeConsumerConfig = (cwd: string, options: string): void => {
+const writeConsumerConfig = (cwd: string, options: string, useAwait = true): void => {
   const packageEntry = pathToFileURL(join(repoRoot, 'packages/basic/dist/index.js')).href
 
   if (!existsSync(join(repoRoot, 'packages/basic/dist/index.js'))) {
@@ -43,7 +43,7 @@ const writeConsumerConfig = (cwd: string, options: string): void => {
   writeFileSync(join(cwd, 'eslint.config.mjs'), [
     `import { defineConfig } from '${packageEntry}'`,
     '',
-    `export default await defineConfig(${options})`,
+    `export default ${useAwait ? 'await ' : ''}defineConfig(${options})`,
     ''
   ].join('\n'))
 }
@@ -88,6 +88,43 @@ afterEach(() => {
 })
 
 describe('external consumer e2e', () => {
+  test('loads a direct defineConfig promise export without top-level await', () => {
+    const cwd = createConsumerProject({
+      'src/index.js': 'const unused = 1\n'
+    })
+
+    writeConsumerConfig(cwd, '', false)
+
+    const result = runExternalLint(cwd, ['src/index.js'])
+
+    expect(result.errorCount).toBeGreaterThan(0)
+    expect(result.ruleIds).toContain('no-unused-vars')
+  })
+
+  test('anchors a direct zero-argument defineConfig call to the config file', async () => {
+    const cwd = createConsumerProject({
+      '.gitignore': 'ignored.ts\n',
+      'src/index.ts': 'const value: string = \'hello\'\nconsole.log(value)\n',
+      'tsconfig.json': JSON.stringify({
+        compilerOptions: { strict: true },
+        include: ['src']
+      })
+    })
+
+    writeConsumerConfig(cwd, '')
+
+    const config = await import(`${pathToFileURL(join(cwd, 'eslint.config.mjs')).href}?test=${Date.now()}`) as {
+      default: { languageOptions?: { parserOptions?: { tsconfigRootDir?: string } }, name?: string }[]
+    }
+    const tsconfigRoot = config.default.find(
+      entry => entry.name === 'eslint-config-basic/tsconfig-root-dir'
+    )?.languageOptions?.parserOptions?.tsconfigRootDir
+
+    expect(tsconfigRoot).toBe(cwd)
+    expect(config.default.some(entry => entry.name === 'eslint-config/gitignore')).toBe(true)
+    expect(config.default.some(entry => entry.name === 'eslint-config-typescript/standard-rules')).toBe(true)
+  })
+
   test('loads the zero-config entry from a one-line config file', () => {
     const cwd = createConsumerProject({
       'src/index.js': 'const unused = 1\n'

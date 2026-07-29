@@ -25,8 +25,9 @@ Or simplify a zero-config file:
 export { default } from '@santi020k/eslint-config-basic/recommended'
 ```
 
-Keep the framework config packages and
-`@santi020k/eslint-config-integrations` already installed by the lite project.
+Keep the framework config packages already installed by the lite project.
+Replace the integrations aggregate with the granular category packs when you
+want the smallest dependency tree; keeping the aggregate remains supported.
 The composer option names remain the same.
 
 See the complete [v2 to v3 migration guide](/guide/migration-v2-to-v3/).

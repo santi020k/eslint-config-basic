@@ -1,0 +1,12 @@
+{
+  "name": "v2-full-remix-fixture",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@santi020k/eslint-config-basic": "^2.1.1",
+    "@santi020k/eslint-config-full": "^2.1.1",
+    "@santi020k/eslint-config-remix": "^2.1.1",
+    "eslint": "^10.0.0",
+    "react": "^19.0.0"
+  }
+}

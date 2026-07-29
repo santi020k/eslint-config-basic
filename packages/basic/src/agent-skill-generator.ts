@@ -4,6 +4,15 @@ import { pathToFileURL } from 'node:url'
 
 import { detectProjectOptions } from './index.js'
 
+export const ESLINT_CONFIG_FILENAMES = [
+  'eslint.config.js',
+  'eslint.config.mjs',
+  'eslint.config.cjs',
+  'eslint.config.ts',
+  'eslint.config.mts',
+  'eslint.config.cts'
+] as const
+
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 export interface AgentTarget {
@@ -75,6 +84,13 @@ export interface GenerateSkillOptions {
    * @default false
    */
   force?: boolean
+
+  /**
+   * Add the official `eslint --mcp` server to the project root `.mcp.json`.
+   * Existing unrelated MCP server entries are preserved.
+   * @default false
+   */
+  withEslintMcp?: boolean
 }
 
 export interface GenerateSkillResult {
@@ -204,7 +220,6 @@ const FEATURE_MAP: readonly [pattern: string, category: FeatureCategory, label: 
   ['eslint-config-expo/',   'frameworks', 'Expo'],
   ['eslint-config-qwik/',   'frameworks', 'Qwik'],
   ['eslint-config-react-router/', 'frameworks', 'React Router'],
-  ['eslint-config-remix/',  'frameworks', 'Remix'],
   ['eslint-config-solid/',  'frameworks', 'SolidJS'],
   ['eslint-config-nuxt/',   'frameworks', 'Nuxt'],
   ['eslint-config-lit/',    'frameworks', 'Lit'],
@@ -307,7 +322,6 @@ const DETECTED_FRAMEWORK_LABELS = new Map<string, string>([
   ['qwik', 'Qwik'],
   ['react', 'React'],
   ['react-router', 'React Router'],
-  ['remix', 'Remix'],
   ['slidev', 'Slidev'],
   ['solid', 'SolidJS'],
   ['svelte', 'Svelte'],
@@ -477,7 +491,7 @@ const extractFeatures = (
  * found, or `null` when none exist.
  */
 const findEslintConfig = (cwd: string): null | string => {
-  for (const name of ['eslint.config.js', 'eslint.config.mjs', 'eslint.config.cjs']) {
+  for (const name of ESLINT_CONFIG_FILENAMES) {
     const p = join(cwd, name)
 
     if (existsSync(p)) return p
@@ -899,8 +913,59 @@ const resolveSkillOptions = (opts: GenerateSkillOptions) => ({
   check: opts.check ?? false,
   createAgentsMd: opts.createAgentsMd ?? false,
   cwd: opts.cwd ?? process.cwd(),
-  force: opts.force ?? false
+  force: opts.force ?? false,
+  withEslintMcp: opts.withEslintMcp ?? false
 })
+
+const createEslintMcpServer = (cwd: string): { args: string[], command: string } => {
+  if (existsSync(join(cwd, 'pnpm-lock.yaml')) || existsSync(join(cwd, 'pnpm-workspace.yaml'))) {
+    return { args: ['exec', 'eslint', '--mcp'], command: 'pnpm' }
+  }
+
+  if (existsSync(join(cwd, 'yarn.lock'))) {
+    return { args: ['exec', 'eslint', '--mcp'], command: 'yarn' }
+  }
+
+  if (existsSync(join(cwd, 'bun.lockb')) || existsSync(join(cwd, 'bun.lock'))) {
+    return { args: ['eslint', '--mcp'], command: 'bunx' }
+  }
+
+  return { args: ['eslint', '--mcp'], command: 'npx' }
+}
+
+const handleEslintMcpConfig = (
+  cwd: string,
+  force: boolean,
+  check: boolean
+): GuardedSectionResult => {
+  const configPath = join(cwd, '.mcp.json')
+  const server = createEslintMcpServer(cwd)
+  let config: { mcpServers?: Record<string, unknown>, [key: string]: unknown } = {}
+
+  if (existsSync(configPath)) {
+    try {
+      config = JSON.parse(readFileSync(configPath, 'utf8')) as typeof config
+    } catch {
+      throw new Error('.mcp.json is invalid JSON; fix it before adding the ESLint MCP server.')
+    }
+  }
+
+  const current = config.mcpServers?.eslint
+  const isCurrent = JSON.stringify(current) === JSON.stringify(server)
+
+  if (check) return isCurrent ? 'skipped' : 'stale'
+
+  if (current && !force) return 'skipped'
+
+  config.mcpServers = {
+    ...config.mcpServers,
+    eslint: server
+  }
+
+  writeFileSync(configPath, `${JSON.stringify(config, null, 2)}\n`)
+
+  return 'written'
+}
 
 /**
  * Detects which AI agent folders exist in the project, reads the actual
@@ -912,7 +977,7 @@ const resolveSkillOptions = (opts: GenerateSkillOptions) => ({
  *
  * @example
  * ```ts
- * import { generateAgentSkills } from '@santi020k/eslint-config-basic'
+ * import { generateAgentSkills } from '@santi020k/eslint-config-basic/agent'
  *
  * const result = await generateAgentSkills({ cwd: process.cwd() })
  * process.stdout.write(`Written to: ${result.written}\n`)
@@ -921,7 +986,7 @@ const resolveSkillOptions = (opts: GenerateSkillOptions) => ({
 export const generateAgentSkills = async (
   opts: GenerateSkillOptions = {}
 ): Promise<GenerateSkillResult> => {
-  const { check, createAgentsMd, cwd, force } = resolveSkillOptions(opts)
+  const { check, createAgentsMd, cwd, force, withEslintMcp } = resolveSkillOptions(opts)
   const written: string[] = []
   const skipped: string[] = []
   const stale: string[] = []
@@ -957,6 +1022,12 @@ export const generateAgentSkills = async (
   const agentsMdPath = join(cwd, AGENTS_MD_PATH)
 
   recordGuardedResult(agentsMdPath, handleGuardedSectionFile(agentsMdPath, plainBody, force, check, createAgentsMd))
+
+  if (withEslintMcp) {
+    const eslintMcpPath = join(cwd, '.mcp.json')
+
+    recordGuardedResult(eslintMcpPath, handleEslintMcpConfig(cwd, force, check))
+  }
 
   // ── Standard agent targets ─────────────────────────────────────────────────
   for (const target of AGENT_TARGETS) {
@@ -995,11 +1066,15 @@ export interface HandleGenerateSkillFlags {
 
   /** Create a root `AGENTS.md` when it does not exist */
   createAgentsMd?: boolean
+
+  /** Add the official ESLint MCP server to `.mcp.json` */
+  withEslintMcp?: boolean
 }
 
 const resolveGenerateSkillFlags = (flags: HandleGenerateSkillFlags) => ({
   check: flags.check ?? false,
-  createAgentsMd: flags.createAgentsMd ?? false
+  createAgentsMd: flags.createAgentsMd ?? false,
+  withEslintMcp: flags.withEslintMcp ?? false
 })
 
 const outputGenerateSkillResults = (
@@ -1051,7 +1126,7 @@ export const handleGenerateSkill = async (
   force = false,
   flags: HandleGenerateSkillFlags = {}
 ): Promise<void> => {
-  const { check, createAgentsMd } = resolveGenerateSkillFlags(flags)
+  const { check, createAgentsMd, withEslintMcp } = resolveGenerateSkillFlags(flags)
 
   console.log(check ? '🔍 Checking AI agent skill files...' : '🔍 Scanning for AI agent folders...')
 
@@ -1063,7 +1138,7 @@ export const handleGenerateSkill = async (
     console.log('⚠️  No eslint.config.js found — falling back to package.json detection.')
   }
 
-  const result = await generateAgentSkills({ check, createAgentsMd, cwd, force })
+  const result = await generateAgentSkills({ check, createAgentsMd, cwd, force, withEslintMcp })
 
   if (result.written.length === 0 && result.skipped.length === 0 && result.stale.length === 0) {
     console.log('\n⚠️  No agent folders found (.agent, .agents, .claude, .cursor, .windsurf, .copilot, .aider, .gemini, .clinerules, .roo, .kiro) and no AGENTS.md.')

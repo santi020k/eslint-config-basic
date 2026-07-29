@@ -129,6 +129,7 @@ export const getFeatureEntries = (
   enabled: boolean
 ): string[] => [
   ...Object.entries(options?.features ?? {}),
+  // eslint-disable-next-line @typescript-eslint/no-deprecated -- v3 continues to read this compatibility alias until its documented v4 removal
   ...Object.entries(options?.integrations ?? {})
 ]
   .filter(([name, value]) => value === enabled && isOptionalBucketValue(bucket, name))
@@ -230,6 +231,7 @@ export const mergeProjectOptions = (
     formats: mergeInheritedArray(defaults.formats, project.formats, strategy),
     frameworks: mergeInheritedObject(defaults.frameworks, project.frameworks, strategy),
     ignores: mergeInheritedArray(defaults.ignores, project.ignores, strategy),
+    // eslint-disable-next-line @typescript-eslint/no-deprecated -- preserve the public v3 compatibility alias while merging project options
     integrations: mergeInheritedObject(defaults.integrations, project.integrations, strategy),
     libraries: mergeInheritedArray(defaults.libraries, project.libraries, strategy),
     settings: mergeInheritedArray(defaults.settings, project.settings, strategy),

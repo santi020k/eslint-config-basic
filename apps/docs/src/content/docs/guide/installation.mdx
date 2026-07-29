@@ -23,20 +23,32 @@ Add only the framework packages your project uses:
 
 ```sh
 npm install -D @santi020k/eslint-config-react
-npm install -D @santi020k/eslint-config-next
+npm install -D @santi020k/eslint-config-next @santi020k/eslint-config-react
 ```
 
-Add the integrations package when enabling testing, formats, libraries, tools,
-or extension features:
+Meta-frameworks also need the config they imply: Next.js, Expo, React Router,
+and Remix need React; Nuxt and Slidev need Vue; TanStack Start needs React or
+Solid. Each framework guide has the exact install command.
+
+Add the relevant category packages when enabling testing, formats, libraries,
+tools, or extension features:
 
 ```sh
-npm install -D @santi020k/eslint-config-integrations
+npm install -D @santi020k/eslint-config-extensions
+npm install -D @santi020k/eslint-config-formats
+npm install -D @santi020k/eslint-config-libraries
+npm install -D @santi020k/eslint-config-testing
+npm install -D @santi020k/eslint-config-tools
 ```
+
+Install only the categories selected by the project.
 
 Then create the smallest supported config:
 
 ```js title="eslint.config.mjs"
-export { default } from '@santi020k/eslint-config-basic/recommended'
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
+export default defineConfig()
 ```
 
 ## Full install
@@ -52,7 +64,7 @@ dependency and a single tested graph over install size and audit surface.
 
 ## Explicit configuration
 
-Use the named API only when a detected choice needs to be changed:
+Pass options only when a detected choice needs to be changed:
 
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
@@ -94,7 +106,7 @@ Run `basic-eslint explain` to see why a feature was detected and
 
 | Runtime | Supported version |
 | :--- | :--- |
-| Node.js | `^20.19.0 \|\| >=22.18.0` |
+| Node.js | `>=22.19.0` |
 | ESLint | `^10.0.0` |
 | TypeScript | `>=5.0.0` when enabled |
 

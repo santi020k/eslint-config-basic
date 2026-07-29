@@ -1,0 +1,29 @@
+---
+title: "next/src"
+description: "@santi020k/eslint-config-basic"
+---
+
+## Variables
+
+### nextConfig
+
+> `const` **nextConfig**: `TSESLint.FlatConfig.ConfigArray`
+
+Defined in: [next/src/index.ts:12](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/next/src/index.ts#L12)
+
+Next.js ESLint configuration
+Includes Next.js plugin with core-web-vitals rules
+
+***
+
+### rules
+
+> `const` **rules**: `TSESLint.Linter.RulesRecord`
+
+Defined in: [next/src/rules.ts:5](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/next/src/rules.ts#L5)
+
+## References
+
+### default
+
+Renames and re-exports [nextConfig](#nextconfig)

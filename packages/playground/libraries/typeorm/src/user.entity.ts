@@ -18,4 +18,6 @@ export class UserEntity {
   id!: string
 }
 
-export const createUserRepository = (dataSource: DataSource): Repository<UserEntity> => dataSource.getRepository(UserEntity)
+export const createUserRepository = (
+  dataSource: DataSource
+): Repository<UserEntity> => dataSource.getRepository(UserEntity)

@@ -20,3 +20,7 @@ package-lock.json
 
 # pnpm store
 .pnpm-store
+
+# Test reports
+apps/docs/playwright-report/
+apps/docs/test-results/

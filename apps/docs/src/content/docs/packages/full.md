@@ -4,8 +4,8 @@ description: "Package: @santi020k/eslint-config-full"
 ---
 
 `@santi020k/eslint-config-full` is the explicit batteries-included v3 bundle.
-It depends on the lean composer, every supported framework config, and the
-integrations package.
+It depends on the lean composer, every supported framework config, and all five
+feature packs.
 
 ```sh
 npm install -D eslint @santi020k/eslint-config-full

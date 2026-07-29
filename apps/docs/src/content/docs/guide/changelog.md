@@ -121,14 +121,14 @@ See the [v2 to v3 migration guide](https://eslint.santi020k.com/guide/migration-
   ```js
   // before (v1)
   import { reactConfig } from '@santi020k/eslint-config-basic'
-  
+
   export default [...reactConfig]
   ```
 
   ```js
   // after (v2)
   import { react } from '@santi020k/eslint-config-basic'
-  
+
   export default [...(await react())]
   ```
 
@@ -361,14 +361,14 @@ See the [v2 to v3 migration guide](https://eslint.santi020k.com/guide/migration-
   ```js
   // before (v1)
   import { reactConfig } from '@santi020k/eslint-config-basic'
-  
+
   export default [...reactConfig]
   ```
 
   ```js
   // after (v2)
   import { react } from '@santi020k/eslint-config-basic'
-  
+
   export default [...(await react())]
   ```
 
@@ -487,7 +487,7 @@ See the [v2 to v3 migration guide](https://eslint.santi020k.com/guide/migration-
 
   ```ts
   import { generateAgentSkills } from '@santi020k/eslint-config-basic'
-  
+
   const { skipped, written } = generateAgentSkills({
     cwd: process.cwd(),
     force: true
@@ -539,14 +539,14 @@ See the [v2 to v3 migration guide](https://eslint.santi020k.com/guide/migration-
   ```ts
   // Before (would throw)
   const opts = detectProjectOptions()
-  
+
   eslintConfig(opts) // ❌
-  
+
   // opts.frameworks.next === true → TypeError inside eslintConfig()
-  
+
   // After (safe)
   const opts = detectProjectOptions()
-  
+
   // opts.detectedFrameworks → ['next', 'react']  (informational)
   // opts.frameworks → {}                          (safe to spread)
   eslintConfig(opts) // ✅

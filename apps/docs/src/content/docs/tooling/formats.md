@@ -5,6 +5,10 @@ description: "The formats option enables linting for non-code or mixed-content f
 
 The `formats` option enables linting for non-code or mixed-content file formats.
 
+Install `@santi020k/eslint-config-formats` alongside the lean `basic`
+package before enabling entries on this page. The `full` package already
+includes it.
+
 | Format | Enum | Use It When |
 | :--- | :--- | :--- |
 | Markdown | `Format.Markdown` | The project contains Markdown content that should be linted. |
@@ -35,4 +39,4 @@ export default await defineConfig({
 ## Repository Examples
 
 - Format Playgrounds: [packages/playground/formats](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/formats)
-- Integrations Package Source: [packages/integrations](https://github.com/santi020k/eslint-config-basic/tree/main/packages/integrations)
+- Formats Package Source: [packages/formats](https://github.com/santi020k/eslint-config-basic/tree/main/packages/formats)

@@ -19,14 +19,9 @@ concurrency:
 
 jobs:
   analyze:
-    name: Analyze
+    name: Analyze JavaScript and TypeScript
     runs-on: ubuntu-latest
     timeout-minutes: 30
-
-    strategy:
-      fail-fast: false
-      matrix:
-        language: [ 'javascript', 'typescript' ]
 
     steps:
     - name: Checkout repository
@@ -35,7 +30,8 @@ jobs:
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v4
       with:
-        languages: ${{ matrix.language }}
+        # CodeQL analyzes JavaScript and TypeScript with one combined extractor.
+        languages: javascript-typescript
 
     - name: Autobuild
       uses: github/codeql-action/autobuild@v4
@@ -43,4 +39,4 @@ jobs:
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v4
       with:
-        category: "/language:${{matrix.language}}"
+        category: /language:javascript-typescript

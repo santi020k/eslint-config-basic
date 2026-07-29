@@ -22,8 +22,14 @@ export default {
     'packages/vite/src/index.ts',
     'packages/slidev/src/index.ts',
     'packages/lite/src/index.ts',
+    'packages/extensions/src/index.ts',
+    'packages/formats/src/index.ts',
+    'packages/libraries/src/index.ts',
+    'packages/testing/src/index.ts',
+    'packages/tools/src/index.ts',
     'packages/integrations/src/index.ts',
-    'packages/basic/src/index.ts'
+    'packages/basic/src/index.ts',
+    'packages/basic/src/agent-skill-generator.ts'
   ],
   out: 'docs',
   tsconfig: './tsconfig.docs.json',

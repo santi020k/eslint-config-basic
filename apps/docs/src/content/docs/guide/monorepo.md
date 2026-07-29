@@ -9,23 +9,31 @@ ESLint 10 also resolves `eslint.config.*` starting from each linted file's direc
 
 ## Minimal Setup
 
-```js title="eslint.config.mjs"
-import { defineConfig, Preset } from '@santi020k/eslint-config-basic'
+`Preset.Monorepo` enables Prettier and best-practice integrations. Install
+`@santi020k/eslint-config-tools` and
+`@santi020k/eslint-config-extensions` with the lean `basic` package; the `full`
+package already includes them.
 
-export default await defineConfig({
-  preset: Preset.Monorepo
-})
+```js title="eslint.config.mjs"
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
+export default defineConfig()
 ```
 
-`Preset.Monorepo` sets universal TypeScript defaults that work as a safe base across mixed project types. It also enables workspace project detection by default, so common workspace folders and `package.json#workspaces` entries can become scoped project configs automatically. Auto-detection reads each package's `package.json` and project structure to activate frameworks and integrations found there.
+Workspaces are inferred from `workspaces`, `pnpm-workspace.yaml`, Turborepo,
+or Nx. The root receives safe universal defaults, while each package's
+`package.json` activates only the frameworks and integrations used in that
+package. Root devDependencies do not leak framework or library rules across the
+workspace.
 
-Outside `Preset.Monorepo`, project detection is opt-in:
+Use the factory when you need local overrides or want to disable package
+detection:
 
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
 export default await defineConfig({
-  detection: { projects: true }
+  detection: { projects: false }
 })
 ```
 
@@ -61,24 +69,22 @@ export default await defineConfig({
 
 Each project entry generates ESLint config entries scoped to that folder — rules and globals from `apps/api` only apply to files under `apps/api/`.
 
-## Detection Roots
+## Workspace Root
 
-By default each project entry uses its own folder as the detection root. You can override this:
+By default each project entry uses its own folder for detection and TypeScript.
+The config directory is the workspace root by default. Set a different root
+only when the config file lives elsewhere:
 
 ```js
-import { defineConfig, Preset } from '@santi020k/eslint-config-basic'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
 export default await defineConfig({
-  detectRootDir: process.cwd(),
-  preset: Preset.Monorepo,
-  tsconfigRootDir: import.meta.dirname
+  root: import.meta.dirname
 })
 ```
 
-- `detectRootDir` — where to read `package.json` for auto-detection of frameworks, integrations, and runtime.
-- `tsconfigRootDir` — where the TypeScript parser looks for `tsconfig.json` / `tsconfig.base.json`.
-
-In large monorepos these may differ: `detectRootDir` typically points to the package being linted, while `tsconfigRootDir` points to the root `tsconfig.base.json`.
+Set `typescript.tsconfigRootDir` inside a project only when its TypeScript root
+intentionally differs from its package folder.
 
 ## Turborepo / pnpm Workspaces Pattern
 
@@ -88,16 +94,15 @@ For repos using Turborepo with pnpm workspaces, the recommended pattern is:
 import { defineConfig, Preset, Runtime } from '@santi020k/eslint-config-basic'
 
 export default await defineConfig({
-  detectRootDir: process.cwd(),
   preset: Preset.Monorepo,
+  root: import.meta.dirname,
   projects: {
     'apps/dashboard': { frameworks: { next: true }, preset: Preset.App },
     'apps/marketing': { frameworks: { astro: true }, preset: Preset.App },
     'packages/api': { preset: Preset.Node, runtime: Runtime.Node },
     'packages/core': { preset: Preset.Library, runtime: Runtime.Universal },
     'workers/auth': { preset: Preset.Library, runtime: Runtime.Worker }
-  },
-  tsconfigRootDir: import.meta.dirname
+  }
 })
 ```
 
@@ -149,24 +154,15 @@ export default await defineConfig({
 
 **Detected frameworks bleed between packages**
 
-Set `detection.frameworks: false` at the root and rely on the explicit `frameworks` object:
-
-```js
-import { defineConfig } from '@santi020k/eslint-config-basic'
-
-export default await defineConfig({
-  projects: {
-    'apps/api': {
-      detection: { frameworks: false },
-      typescript: true
-    }
-  }
-})
-```
+This should not happen in v3: root framework and library detection is
+suppressed for workspaces, then recomputed per package. Run `doctor` to inspect
+the detected package roots if a package is scoped incorrectly.
 
 **TypeScript parser rejects files from another package**
 
-Each package needs its own `tsconfig.json` that covers the files ESLint will process. Set `tsconfigRootDir` to the package folder:
+Each package needs its own `tsconfig.json` that covers its source. Mark tooling,
+templates, or generated TypeScript as syntax-only when it sits outside that
+project:
 
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
@@ -175,7 +171,9 @@ export default await defineConfig({
   projects: {
     'packages/ui': {
       frameworks: { react: true },
-      tsconfigRootDir: './packages/ui'
+      typescript: {
+        untypedFiles: ['templates/**/*.ts']
+      }
     }
   }
 })

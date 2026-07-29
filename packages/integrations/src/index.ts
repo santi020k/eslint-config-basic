@@ -1,64 +1,20 @@
-// Re-export all integrations from categorized subdirectories
+/**
+ * @deprecated Use the category packages directly.
+ * This compatibility aggregate is maintained for v3 and scheduled for removal in v4.
+ */
 export { getIntegrationConfigs, getPrettierConfig } from './compose.js'
 
-// Extensions
-export * from './extensions/a11y.js'
-export { astroDoctor } from './extensions/astro-doctor.js'
-export * from './extensions/best-practices.js'
-export * from './extensions/biome.js'
-export { boundaries } from './extensions/boundaries.js'
-export { compat } from './extensions/compat.js'
-export { deMorgan } from './extensions/de-morgan.js'
-export { depend } from './extensions/depend.js'
-export { noOnlyTests } from './extensions/no-only-tests.js'
-export { node } from './extensions/node.js'
-export { oxlint } from './extensions/oxlint.js'
-export { perfectionist } from './extensions/perfectionist.js'
-export { regexp } from './extensions/regexp.js'
-export { security } from './extensions/security.js'
-export { sonarjs } from './extensions/sonarjs.js'
-export { unicorn } from './extensions/unicorn.js'
-// Formats
-export { css } from './formats/css.js'
-export { graphql } from './formats/graphql.js'
-export { html } from './formats/html.js'
-export { jsonc } from './formats/jsonc.js'
-export { markdown } from './formats/markdown.js'
-export { mdx } from './formats/mdx.js'
-export { packageJson } from './formats/package-json.js'
-export { toml } from './formats/toml.js'
-export { yaml } from './formats/yaml.js'
-export { aiSdk } from './libraries/ai.js'
-export { autogen } from './libraries/autogen.js'
-export { googleGenAi } from './libraries/google-genai.js'
-export { i18next } from './libraries/i18next.js'
-export { langchain } from './libraries/langchain.js'
-export { llamaIndex } from './libraries/llamaindex.js'
-export { mastra } from './libraries/mastra.js'
-export { mcp } from './libraries/mcp.js'
-export { openAiAgents } from './libraries/openai-agents.js'
-// Libraries
-export { drizzle, mikroOrm, prisma, sequelize, typeorm } from './libraries/orm.js'
-export { stencil } from './libraries/stencil.js'
-export { storybook } from './libraries/storybook.js'
-export { tailwind } from './libraries/tailwind.js'
-export { tanstackQuery, tanstackRouter } from './libraries/tanstack.js'
-export * from './libraries/turbo.js'
-export * from './libraries/zod.js'
-// Testing
-export { cypress } from './testing/cypress.js'
-export { jest } from './testing/jest.js'
-export { jestDom } from './testing/jest-dom.js'
-export { playwright } from './testing/playwright.js'
-export { testingLibrary } from './testing/testing-library.js'
-export { vitest } from './testing/vitest.js'
-// Tools
-export { command } from './tools/command.js'
-export { cspell } from './tools/cspell.js'
-export { docker } from './tools/docker.js'
-export { githubActions } from './tools/github-actions.js'
-export { jsdoc } from './tools/jsdoc.js'
-export { nx } from './tools/nx.js'
-export { pnpm } from './tools/pnpm.js'
-export { prettier } from './tools/prettier.js'
-export { swagger } from './tools/swagger.js'
+/** @deprecated Import from `@santi020k/eslint-config-extensions` instead. */
+export * from './extensions.js'
+
+/** @deprecated Import from `@santi020k/eslint-config-formats` instead. */
+export * from './formats.js'
+
+/** @deprecated Import from `@santi020k/eslint-config-libraries` instead. */
+export * from './libraries.js'
+
+/** @deprecated Import from `@santi020k/eslint-config-testing` instead. */
+export * from './testing.js'
+
+/** @deprecated Import from `@santi020k/eslint-config-tools` instead. */
+export * from './tools.js'

@@ -1,4 +1,7 @@
+import * as astroApi from '@santi020k/eslint-config-astro'
 import * as basicApi from '@santi020k/eslint-config-basic'
+import * as agentApi from '@santi020k/eslint-config-basic/agent'
+import * as coreApi from '@santi020k/eslint-config-core'
 import {
   a11y,
   aiSdk,
@@ -73,9 +76,9 @@ import * as integrationTools from '@santi020k/eslint-config-integrations/tools'
 import {
   createImportGroups as createLiteImportGroups,
   defineConfig as defineLiteConfig,
-  preact as litePreact,
-  preactConfig as litePreactConfig
+  preact as litePreact
 } from '@santi020k/eslint-config-lite'
+import * as typescriptApi from '@santi020k/eslint-config-typescript'
 
 import { describe, expect, test } from 'vitest'
 
@@ -83,6 +86,40 @@ describe('Public API Re-exports', () => {
   test('basic keeps integrations out of the lean root API', () => {
     expect('vitest' in basicApi).toBe(false)
     expect('tailwind' in basicApi).toBe(false)
+  })
+
+  test('agent tooling is isolated behind the agent subpath', () => {
+    expect('generateAgentSkills' in basicApi).toBe(false)
+    expect(typeof agentApi.generateAgentSkills).toBe('function')
+  })
+
+  test('basic excludes APIs removed in v3', () => {
+    for (const removedExport of [
+      'angularConfig',
+      'eslintConfig',
+      'expoConfig',
+      'jsConfig',
+      'nestConfig',
+      'nextConfig',
+      'preactConfig',
+      'reactConfig',
+      'remix',
+      'solidConfig',
+      'svelteConfig',
+      'tsConfig',
+      'vueConfig'
+    ]) {
+      expect(removedExport in basicApi).toBe(false)
+    }
+  })
+
+  test('leaf packages exclude compatibility exports removed in v3', () => {
+    expect('astroConfig' in astroApi).toBe(false)
+    expect('rules' in astroApi).toBe(false)
+    expect('gitignore' in coreApi).toBe(false)
+    expect('jsConfig' in coreApi).toBe(false)
+    expect('loadModule' in coreApi).toBe(false)
+    expect('tsConfig' in typescriptApi).toBe(false)
   })
 
   test('should expose defineConfig as the main config factory', async () => {
@@ -161,11 +198,10 @@ describe('Public API Re-exports', () => {
     expect(hasWorkspaceGroup).toBe(false)
   })
 
-  test('lite package should expose expected composer utilities and Preact factories', async () => {
+  test('lite package should re-export the Basic composer API', async () => {
     expect(typeof defineLiteConfig).toBe('function')
     expect(typeof createLiteImportGroups).toBe('function')
     expect(typeof litePreact).toBe('function')
-    expect(typeof litePreactConfig).toBe('function')
     expect(Array.isArray(await defineLiteConfig({ detection: false }))).toBe(true)
   })
 

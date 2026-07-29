@@ -9,7 +9,7 @@ description: "@santi020k/eslint-config-basic"
 
 > `const` **a11y**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/extensions/a11y.ts:13](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/extensions/a11y.ts#L13)
+Defined in: [extensions/src/a11y.ts:13](https://github.com/santi020k/eslint-config-basic/blob/main/packages/extensions/src/a11y.ts#L13)
 
 A11y extension configurations
 Provides accessibility linting for JSX and Vue
@@ -24,7 +24,7 @@ Provides accessibility linting for JSX and Vue
 
 > `const` **aiSdk**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/libraries/ai.ts:33](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/libraries/ai.ts#L33)
+Defined in: [libraries/src/ai.ts:33](https://github.com/santi020k/eslint-config-basic/blob/main/packages/libraries/src/ai.ts#L33)
 
 Vercel AI SDK security ESLint configuration.
 
@@ -34,15 +34,21 @@ Vercel AI SDK security ESLint configuration.
 
 ***
 
-### astroDoctor
+### ~~astroDoctor~~
 
 > `const` **astroDoctor**: () => `Promise`\<[`FlatConfigArray`](../core/src.md#flatconfigarray)\>
 
-Defined in: [integrations/src/extensions/astro-doctor.ts:5](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/extensions/astro-doctor.ts#L5)
+Defined in: [extensions/src/astro-doctor.ts:5](https://github.com/santi020k/eslint-config-basic/blob/main/packages/extensions/src/astro-doctor.ts#L5)
 
 #### Returns
 
 `Promise`\<[`FlatConfigArray`](../core/src.md#flatconfigarray)\>
+
+#### Deprecated
+
+Import these factories from
+`@santi020k/eslint-config-extensions` instead. This compatibility subpath is
+scheduled for removal in v4.
 
 ***
 
@@ -50,7 +56,7 @@ Defined in: [integrations/src/extensions/astro-doctor.ts:5](https://github.com/s
 
 > `const` **bestPractices**: `TSESLint.FlatConfig.ConfigArray`
 
-Defined in: [integrations/src/extensions/best-practices.ts:16](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/extensions/best-practices.ts#L16)
+Defined in: [extensions/src/best-practices.ts:16](https://github.com/santi020k/eslint-config-basic/blob/main/packages/extensions/src/best-practices.ts#L16)
 
 Best-practices ESLint configuration
 
@@ -68,7 +74,7 @@ All rules use built-in ESLint only; no extra dependencies are required.
 
 > `const` **biome**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/extensions/biome.ts:13](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/extensions/biome.ts#L13)
+Defined in: [extensions/src/biome.ts:12](https://github.com/santi020k/eslint-config-basic/blob/main/packages/extensions/src/biome.ts#L12)
 
 Biome extension configurations
 Disables rules that conflict with Biome formatting and linting.
@@ -83,7 +89,7 @@ Disables rules that conflict with Biome formatting and linting.
 
 > `const` **boundaries**: `TSESLint.FlatConfig.ConfigArray`
 
-Defined in: [integrations/src/extensions/boundaries.ts:12](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/extensions/boundaries.ts#L12)
+Defined in: [extensions/src/boundaries.ts:12](https://github.com/santi020k/eslint-config-basic/blob/main/packages/extensions/src/boundaries.ts#L12)
 
 Import-boundary ESLint configuration
 
@@ -97,7 +103,7 @@ eslint-plugin-import-x, which the base config already loads.
 
 > `const` **command**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/tools/command.ts:12](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/tools/command.ts#L12)
+Defined in: [tools/src/command.ts:12](https://github.com/santi020k/eslint-config-basic/blob/main/packages/tools/src/command.ts#L12)
 
 Command ESLint configuration
 Provides in-editor micro-fixes via magic comments (e.g., /// @keep)
@@ -112,7 +118,7 @@ Provides in-editor micro-fixes via magic comments (e.g., /// @keep)
 
 > `const` **compat**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/extensions/compat.ts:11](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/extensions/compat.ts#L11)
+Defined in: [extensions/src/compat.ts:11](https://github.com/santi020k/eslint-config-basic/blob/main/packages/extensions/src/compat.ts#L11)
 
 Browser compatibility extension configuration
 Checks code against the project browserslist using `eslint-plugin-compat`
@@ -127,7 +133,7 @@ Checks code against the project browserslist using `eslint-plugin-compat`
 
 > `const` **cspell**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/tools/cspell.ts:12](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/tools/cspell.ts#L12)
+Defined in: [tools/src/cspell.ts:12](https://github.com/santi020k/eslint-config-basic/blob/main/packages/tools/src/cspell.ts#L12)
 
 CSpell ESLint configuration
 Enables spell checking in your codebase
@@ -142,7 +148,7 @@ Enables spell checking in your codebase
 
 > `const` **css**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/formats/css.ts:9](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/formats/css.ts#L9)
+Defined in: [formats/src/css.ts:9](https://github.com/santi020k/eslint-config-basic/blob/main/packages/formats/src/css.ts#L9)
 
 CSS ESLint configuration
 Lints plain CSS files using the official `@eslint/css` language plugin
@@ -157,7 +163,7 @@ Lints plain CSS files using the official `@eslint/css` language plugin
 
 > `const` **cypress**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/testing/cypress.ts:11](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/testing/cypress.ts#L11)
+Defined in: [testing/src/cypress.ts:10](https://github.com/santi020k/eslint-config-basic/blob/main/packages/testing/src/cypress.ts#L10)
 
 Cypress ESLint configuration
 Provides linting rules for Cypress end-to-end test files
@@ -172,7 +178,7 @@ Provides linting rules for Cypress end-to-end test files
 
 > `const` **deMorgan**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/extensions/de-morgan.ts:11](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/extensions/de-morgan.ts#L11)
+Defined in: [extensions/src/de-morgan.ts:11](https://github.com/santi020k/eslint-config-basic/blob/main/packages/extensions/src/de-morgan.ts#L11)
 
 De Morgan extension configuration
 Simplifies negated logical expressions using `eslint-plugin-de-morgan`
@@ -187,7 +193,7 @@ Simplifies negated logical expressions using `eslint-plugin-de-morgan`
 
 > `const` **depend**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/extensions/depend.ts:12](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/extensions/depend.ts#L12)
+Defined in: [extensions/src/depend.ts:12](https://github.com/santi020k/eslint-config-basic/blob/main/packages/extensions/src/depend.ts#L12)
 
 Depend extension configuration
 Suggests lighter or native alternatives to heavy dependencies using
@@ -203,7 +209,7 @@ Suggests lighter or native alternatives to heavy dependencies using
 
 > `const` **graphql**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/formats/graphql.ts:20](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/formats/graphql.ts#L20)
+Defined in: [formats/src/graphql.ts:20](https://github.com/santi020k/eslint-config-basic/blob/main/packages/formats/src/graphql.ts#L20)
 
 GraphQL ESLint configuration
 Provides linting rules for GraphQL schema and operations
@@ -218,7 +224,7 @@ Provides linting rules for GraphQL schema and operations
 
 > `const` **html**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/formats/html.ts:13](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/formats/html.ts#L13)
+Defined in: [formats/src/html.ts:13](https://github.com/santi020k/eslint-config-basic/blob/main/packages/formats/src/html.ts#L13)
 
 HTML ESLint configuration
 Lints plain HTML files using `@html-eslint/eslint-plugin` and its parser
@@ -233,7 +239,7 @@ Lints plain HTML files using `@html-eslint/eslint-plugin` and its parser
 
 > `const` **i18next**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/libraries/i18next.ts:13](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/libraries/i18next.ts#L13)
+Defined in: [libraries/src/i18next.ts:12](https://github.com/santi020k/eslint-config-basic/blob/main/packages/libraries/src/i18next.ts#L12)
 
 i18next ESLint configuration
 Enables i18next plugin for internationalization best practices
@@ -248,7 +254,7 @@ Enables i18next plugin for internationalization best practices
 
 > `const` **jest**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/testing/jest.ts:10](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/testing/jest.ts#L10)
+Defined in: [testing/src/jest.ts:10](https://github.com/santi020k/eslint-config-basic/blob/main/packages/testing/src/jest.ts#L10)
 
 Jest ESLint configuration
 Provides linting rules for Jest test files
@@ -263,7 +269,7 @@ Provides linting rules for Jest test files
 
 > `const` **jestDom**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/testing/jest-dom.ts:12](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/testing/jest-dom.ts#L12)
+Defined in: [testing/src/jest-dom.ts:12](https://github.com/santi020k/eslint-config-basic/blob/main/packages/testing/src/jest-dom.ts#L12)
 
 Jest DOM ESLint configuration
 Provides rules for @testing-library/jest-dom
@@ -278,7 +284,7 @@ Provides rules for @testing-library/jest-dom
 
 > `const` **jsdoc**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/tools/jsdoc.ts:11](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/tools/jsdoc.ts#L11)
+Defined in: [tools/src/jsdoc.ts:11](https://github.com/santi020k/eslint-config-basic/blob/main/packages/tools/src/jsdoc.ts#L11)
 
 JSDoc ESLint configuration
 Provides rules for TSDoc/JSDoc validation and formatting.
@@ -293,7 +299,7 @@ Provides rules for TSDoc/JSDoc validation and formatting.
 
 > `const` **jsonc**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/formats/jsonc.ts:10](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/formats/jsonc.ts#L10)
+Defined in: [formats/src/jsonc.ts:10](https://github.com/santi020k/eslint-config-basic/blob/main/packages/formats/src/jsonc.ts#L10)
 
 JSON/JSONC ESLint configuration
 Provides rules for JSON file linting and package.json key sorting
@@ -308,7 +314,7 @@ Provides rules for JSON file linting and package.json key sorting
 
 > `const` **markdown**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/formats/markdown.ts:21](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/formats/markdown.ts#L21)
+Defined in: [formats/src/markdown.ts:21](https://github.com/santi020k/eslint-config-basic/blob/main/packages/formats/src/markdown.ts#L21)
 
 Markdown ESLint configuration
 Lints markdown files for common issues
@@ -323,7 +329,7 @@ Lints markdown files for common issues
 
 > `const` **mdx**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/formats/mdx.ts:11](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/formats/mdx.ts#L11)
+Defined in: [formats/src/mdx.ts:11](https://github.com/santi020k/eslint-config-basic/blob/main/packages/formats/src/mdx.ts#L11)
 
 MDX ESLint configuration
 Lints MDX files with proper code block handling
@@ -338,7 +344,7 @@ Lints MDX files with proper code block handling
 
 > `const` **node**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/extensions/node.ts:13](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/extensions/node.ts#L13)
+Defined in: [extensions/src/node.ts:13](https://github.com/santi020k/eslint-config-basic/blob/main/packages/extensions/src/node.ts#L13)
 
 Node.js extension configuration
 Applies `eslint-plugin-n` recommended rules for Node.js codebases.
@@ -355,7 +361,7 @@ TypeScript compiler already validates imports.
 
 > `const` **noOnlyTests**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/extensions/no-only-tests.ts:11](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/extensions/no-only-tests.ts#L11)
+Defined in: [extensions/src/no-only-tests.ts:11](https://github.com/santi020k/eslint-config-basic/blob/main/packages/extensions/src/no-only-tests.ts#L11)
 
 Prevents `test.only` / `describe.only` from being committed to version
 control. Uses `eslint-plugin-no-only-tests`.
@@ -370,7 +376,7 @@ control. Uses `eslint-plugin-no-only-tests`.
 
 > `const` **oxlint**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/extensions/oxlint.ts:14](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/extensions/oxlint.ts#L14)
+Defined in: [extensions/src/oxlint.ts:14](https://github.com/santi020k/eslint-config-basic/blob/main/packages/extensions/src/oxlint.ts#L14)
 
 Oxlint extension configuration
 Disables ESLint rules already covered by Oxlint so both linters can run
@@ -386,7 +392,7 @@ side by side without duplicate reports (analogous to the Biome extension)
 
 > `const` **packageJson**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/formats/package-json.ts:10](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/formats/package-json.ts#L10)
+Defined in: [formats/src/package-json.ts:10](https://github.com/santi020k/eslint-config-basic/blob/main/packages/formats/src/package-json.ts#L10)
 
 Package.json ESLint configuration
 Provides validation for npm package standards
@@ -401,7 +407,7 @@ Provides validation for npm package standards
 
 > `const` **perfectionist**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/extensions/perfectionist.ts:12](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/extensions/perfectionist.ts#L12)
+Defined in: [extensions/src/perfectionist.ts:12](https://github.com/santi020k/eslint-config-basic/blob/main/packages/extensions/src/perfectionist.ts#L12)
 
 Perfectionist ESLint configuration
 Provides rules for sorting and organizing code (imports, exports, object keys, etc.)
@@ -416,7 +422,7 @@ Provides rules for sorting and organizing code (imports, exports, object keys, e
 
 > `const` **playwright**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/testing/playwright.ts:9](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/testing/playwright.ts#L9)
+Defined in: [testing/src/playwright.ts:9](https://github.com/santi020k/eslint-config-basic/blob/main/packages/testing/src/playwright.ts#L9)
 
 Playwright ESLint configuration
 Provides linting rules for Playwright end-to-end test files
@@ -431,7 +437,7 @@ Provides linting rules for Playwright end-to-end test files
 
 > `const` **pnpm**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/tools/pnpm.ts:14](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/tools/pnpm.ts#L14)
+Defined in: [tools/src/pnpm.ts:14](https://github.com/santi020k/eslint-config-basic/blob/main/packages/tools/src/pnpm.ts#L14)
 
 pnpm tooling ESLint configuration
 Enforces pnpm catalogs and workspace settings in `package.json` and
@@ -447,7 +453,7 @@ Enforces pnpm catalogs and workspace settings in `package.json` and
 
 > `const` **prettier**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/tools/prettier.ts:10](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/tools/prettier.ts#L10)
+Defined in: [tools/src/prettier.ts:10](https://github.com/santi020k/eslint-config-basic/blob/main/packages/tools/src/prettier.ts#L10)
 
 Prettier interop configuration
 Disables all ESLint rules that conflict with Prettier formatting
@@ -462,7 +468,7 @@ Disables all ESLint rules that conflict with Prettier formatting
 
 > `const` **regexp**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/extensions/regexp.ts:13](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/extensions/regexp.ts#L13)
+Defined in: [extensions/src/regexp.ts:13](https://github.com/santi020k/eslint-config-basic/blob/main/packages/extensions/src/regexp.ts#L13)
 
 RegExp ESLint configuration
 Catches common regex mistakes like exponential backtracking,
@@ -478,7 +484,7 @@ unnecessary escapes, and optimizable character classes
 
 > `const` **security**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/extensions/security.ts:11](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/extensions/security.ts#L11)
+Defined in: [extensions/src/security.ts:11](https://github.com/santi020k/eslint-config-basic/blob/main/packages/extensions/src/security.ts#L11)
 
 Security ESLint configuration
 Provides rules for catching common security vulnerabilities.
@@ -489,15 +495,21 @@ Provides rules for catching common security vulnerabilities.
 
 ***
 
-### sonarjs
+### ~~sonarjs~~
 
 > `const` **sonarjs**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/extensions/sonarjs.ts:7](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/extensions/sonarjs.ts#L7)
+Defined in: [extensions/src/sonarjs.ts:7](https://github.com/santi020k/eslint-config-basic/blob/main/packages/extensions/src/sonarjs.ts#L7)
 
 #### Returns
 
 `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
+
+#### Deprecated
+
+Import these factories from
+`@santi020k/eslint-config-extensions` instead. This compatibility subpath is
+scheduled for removal in v4.
 
 ***
 
@@ -505,7 +517,7 @@ Defined in: [integrations/src/extensions/sonarjs.ts:7](https://github.com/santi0
 
 > `const` **stencil**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/libraries/stencil.ts:11](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/libraries/stencil.ts#L11)
+Defined in: [libraries/src/stencil.ts:10](https://github.com/santi020k/eslint-config-basic/blob/main/packages/libraries/src/stencil.ts#L10)
 
 Stencil ESLint configuration
 Enforces best practices for Stencil.js components
@@ -520,7 +532,7 @@ Enforces best practices for Stencil.js components
 
 > `const` **storybook**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/libraries/storybook.ts:10](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/libraries/storybook.ts#L10)
+Defined in: [libraries/src/storybook.ts:10](https://github.com/santi020k/eslint-config-basic/blob/main/packages/libraries/src/storybook.ts#L10)
 
 Storybook ESLint configuration
 Provides rules for Storybook story best practices
@@ -535,7 +547,7 @@ Provides rules for Storybook story best practices
 
 > `const` **swagger**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/tools/swagger.ts:12](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/tools/swagger.ts#L12)
+Defined in: [tools/src/swagger.ts:12](https://github.com/santi020k/eslint-config-basic/blob/main/packages/tools/src/swagger.ts#L12)
 
 Swagger/NestJS documentation ESLint configuration
 Provides rules from the nestjs-typed plugin for Swagger decorator validation
@@ -550,7 +562,7 @@ Provides rules from the nestjs-typed plugin for Swagger decorator validation
 
 > `const` **tailwind**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/libraries/tailwind.ts:11](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/libraries/tailwind.ts#L11)
+Defined in: [libraries/src/tailwind.ts:11](https://github.com/santi020k/eslint-config-basic/blob/main/packages/libraries/src/tailwind.ts#L11)
 
 Tailwind CSS ESLint configuration
 Enforces Tailwind CSS best practices using eslint-plugin-better-tailwindcss
@@ -565,7 +577,7 @@ Enforces Tailwind CSS best practices using eslint-plugin-better-tailwindcss
 
 > `const` **tanstackQuery**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/libraries/tanstack.ts:10](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/libraries/tanstack.ts#L10)
+Defined in: [libraries/src/tanstack.ts:10](https://github.com/santi020k/eslint-config-basic/blob/main/packages/libraries/src/tanstack.ts#L10)
 
 TanStack Query ESLint configuration
 
@@ -579,7 +591,7 @@ TanStack Query ESLint configuration
 
 > `const` **tanstackRouter**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/libraries/tanstack.ts:30](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/libraries/tanstack.ts#L30)
+Defined in: [libraries/src/tanstack.ts:30](https://github.com/santi020k/eslint-config-basic/blob/main/packages/libraries/src/tanstack.ts#L30)
 
 TanStack Router ESLint configuration
 
@@ -593,7 +605,7 @@ TanStack Router ESLint configuration
 
 > `const` **testingLibrary**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/testing/testing-library.ts:11](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/testing/testing-library.ts#L11)
+Defined in: [testing/src/testing-library.ts:10](https://github.com/santi020k/eslint-config-basic/blob/main/packages/testing/src/testing-library.ts#L10)
 
 Testing Library ESLint configuration
 Provides linting rules for Testing Library usage in tests
@@ -608,7 +620,7 @@ Provides linting rules for Testing Library usage in tests
 
 > `const` **toml**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/formats/toml.ts:10](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/formats/toml.ts#L10)
+Defined in: [formats/src/toml.ts:10](https://github.com/santi020k/eslint-config-basic/blob/main/packages/formats/src/toml.ts#L10)
 
 TOML ESLint configuration
 Provides rules for TOML file linting
@@ -623,7 +635,7 @@ Provides rules for TOML file linting
 
 > `const` **turbo**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/libraries/turbo.ts:12](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/libraries/turbo.ts#L12)
+Defined in: [libraries/src/turbo.ts:12](https://github.com/santi020k/eslint-config-basic/blob/main/packages/libraries/src/turbo.ts#L12)
 
 Turborepo ESLint configuration
 Validates process.env usage against turbo.json
@@ -638,7 +650,7 @@ Validates process.env usage against turbo.json
 
 > `const` **unicorn**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/extensions/unicorn.ts:12](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/extensions/unicorn.ts#L12)
+Defined in: [extensions/src/unicorn.ts:12](https://github.com/santi020k/eslint-config-basic/blob/main/packages/extensions/src/unicorn.ts#L12)
 
 Unicorn ESLint configuration
 Modern JavaScript best practices from eslint-plugin-unicorn
@@ -653,7 +665,7 @@ Modern JavaScript best practices from eslint-plugin-unicorn
 
 > `const` **vitest**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/testing/vitest.ts:10](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/testing/vitest.ts#L10)
+Defined in: [testing/src/vitest.ts:10](https://github.com/santi020k/eslint-config-basic/blob/main/packages/testing/src/vitest.ts#L10)
 
 Vitest ESLint configuration
 Provides linting rules for Vitest test files with best practices
@@ -668,7 +680,7 @@ Provides linting rules for Vitest test files with best practices
 
 > `const` **yaml**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/formats/yaml.ts:10](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/formats/yaml.ts#L10)
+Defined in: [formats/src/yaml.ts:10](https://github.com/santi020k/eslint-config-basic/blob/main/packages/formats/src/yaml.ts#L10)
 
 YAML ESLint configuration
 Provides rules for YAML file linting
@@ -683,7 +695,7 @@ Provides rules for YAML file linting
 
 > `const` **zod**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [integrations/src/libraries/zod.ts:11](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/libraries/zod.ts#L11)
+Defined in: [libraries/src/zod.ts:11](https://github.com/santi020k/eslint-config-basic/blob/main/packages/libraries/src/zod.ts#L11)
 
 Zod ESLint configuration
 Provides validation rules for Zod schemas
@@ -698,7 +710,7 @@ Provides validation rules for Zod schemas
 
 > **autogen**(): `ConfigArray`
 
-Defined in: [integrations/src/libraries/autogen.ts:8](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/libraries/autogen.ts#L8)
+Defined in: [libraries/src/autogen.ts:8](https://github.com/santi020k/eslint-config-basic/blob/main/packages/libraries/src/autogen.ts#L8)
 
 AutoGen SDK ESLint configuration.
 
@@ -712,7 +724,7 @@ AutoGen SDK ESLint configuration.
 
 > **docker**(): `Promise`\<`ConfigArray`\>
 
-Defined in: [integrations/src/tools/docker.ts:10](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/tools/docker.ts#L10)
+Defined in: [tools/src/docker.ts:10](https://github.com/santi020k/eslint-config-basic/blob/main/packages/tools/src/docker.ts#L10)
 
 Docker tooling ESLint configuration
 Covers Docker Compose YAML files. Dockerfile linting is intentionally left to
@@ -728,7 +740,7 @@ dedicated Dockerfile linters until a stable ESLint parser/plugin is added.
 
 > **drizzle**(): `ConfigArray`
 
-Defined in: [integrations/src/libraries/orm.ts:77](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/libraries/orm.ts#L77)
+Defined in: [libraries/src/orm.ts:77](https://github.com/santi020k/eslint-config-basic/blob/main/packages/libraries/src/orm.ts#L77)
 
 Drizzle ORM ESLint configuration.
 
@@ -738,14 +750,11 @@ Drizzle ORM ESLint configuration.
 
 ***
 
-### getIntegrationConfigs()
+### ~~getIntegrationConfigs()~~
 
 > **getIntegrationConfigs**(`libraries`, `tools`, `testing`, `formats`, `extensions`): `Promise`\<`ConfigArray`\>
 
-Defined in: [integrations/src/compose.ts:82](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/compose.ts#L82)
-
-Gets integration configs based on selected options.
-This function maintains the recommended ordering (e.g. Prettier last).
+Defined in: [integrations/src/compose.ts:25](https://github.com/santi020k/eslint-config-basic/blob/main/packages/integrations/src/compose.ts#L25)
 
 #### Parameters
 
@@ -753,47 +762,38 @@ This function maintains the recommended ordering (e.g. Prettier last).
 
 [`Library`](../core/src.md#library)[]
 
-List of libraries to configure
-
 ##### tools
 
 [`Tool`](../core/src.md#tool)[]
-
-List of tools to configure
 
 ##### testing
 
 [`Testing`](../core/src.md#testing)[]
 
-List of testing frameworks to configure
-
 ##### formats
 
 [`Format`](../core/src.md#format)[]
-
-List of file formats to configure
 
 ##### extensions
 
 [`Extension`](../core/src.md#extension)[]
 
-List of extensions to configure
-
 #### Returns
 
 `Promise`\<`ConfigArray`\>
 
-The resolved flat configurations
+#### Deprecated
+
+Use the category packages directly.
+This compatibility aggregate is maintained for v3 and scheduled for removal in v4.
 
 ***
 
-### getPrettierConfig()
+### ~~getPrettierConfig()~~
 
 > **getPrettierConfig**(`tools`): `Promise`\<`ConfigArray`\>
 
-Defined in: [integrations/src/compose.ts:163](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/compose.ts#L163)
-
-Returns the Prettier configuration if selected.
+Defined in: [integrations/src/compose.ts:36](https://github.com/santi020k/eslint-config-basic/blob/main/packages/integrations/src/compose.ts#L36)
 
 #### Parameters
 
@@ -801,13 +801,14 @@ Returns the Prettier configuration if selected.
 
 [`Tool`](../core/src.md#tool)[]
 
-The tools to configure
-
 #### Returns
 
 `Promise`\<`ConfigArray`\>
 
-The prettier config or an empty array
+#### Deprecated
+
+Use the category packages directly.
+This compatibility aggregate is maintained for v3 and scheduled for removal in v4.
 
 ***
 
@@ -815,7 +816,7 @@ The prettier config or an empty array
 
 > **githubActions**(): `Promise`\<`ConfigArray`\>
 
-Defined in: [integrations/src/tools/github-actions.ts:10](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/tools/github-actions.ts#L10)
+Defined in: [tools/src/github-actions.ts:10](https://github.com/santi020k/eslint-config-basic/blob/main/packages/tools/src/github-actions.ts#L10)
 
 GitHub Actions ESLint configuration
 Lints workflow YAML files with the shared YAML rules and workflow-specific
@@ -831,7 +832,7 @@ guardrails.
 
 > **googleGenAi**(): `ConfigArray`
 
-Defined in: [integrations/src/libraries/google-genai.ts:8](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/libraries/google-genai.ts#L8)
+Defined in: [libraries/src/google-genai.ts:8](https://github.com/santi020k/eslint-config-basic/blob/main/packages/libraries/src/google-genai.ts#L8)
 
 Google GenAI SDK ESLint configuration.
 
@@ -845,7 +846,7 @@ Google GenAI SDK ESLint configuration.
 
 > **langchain**(): `ConfigArray`
 
-Defined in: [integrations/src/libraries/langchain.ts:8](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/libraries/langchain.ts#L8)
+Defined in: [libraries/src/langchain.ts:8](https://github.com/santi020k/eslint-config-basic/blob/main/packages/libraries/src/langchain.ts#L8)
 
 LangChain.js ESLint configuration.
 
@@ -859,7 +860,7 @@ LangChain.js ESLint configuration.
 
 > **llamaIndex**(): `ConfigArray`
 
-Defined in: [integrations/src/libraries/llamaindex.ts:8](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/libraries/llamaindex.ts#L8)
+Defined in: [libraries/src/llamaindex.ts:8](https://github.com/santi020k/eslint-config-basic/blob/main/packages/libraries/src/llamaindex.ts#L8)
 
 LlamaIndex.TS ESLint configuration.
 
@@ -873,7 +874,7 @@ LlamaIndex.TS ESLint configuration.
 
 > **mastra**(): `ConfigArray`
 
-Defined in: [integrations/src/libraries/mastra.ts:8](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/libraries/mastra.ts#L8)
+Defined in: [libraries/src/mastra.ts:8](https://github.com/santi020k/eslint-config-basic/blob/main/packages/libraries/src/mastra.ts#L8)
 
 Mastra agent framework ESLint configuration.
 
@@ -887,7 +888,7 @@ Mastra agent framework ESLint configuration.
 
 > **mcp**(): `ConfigArray`
 
-Defined in: [integrations/src/libraries/mcp.ts:8](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/libraries/mcp.ts#L8)
+Defined in: [libraries/src/mcp.ts:8](https://github.com/santi020k/eslint-config-basic/blob/main/packages/libraries/src/mcp.ts#L8)
 
 Model Context Protocol SDK ESLint configuration.
 
@@ -901,7 +902,7 @@ Model Context Protocol SDK ESLint configuration.
 
 > **mikroOrm**(): `ConfigArray`
 
-Defined in: [integrations/src/libraries/orm.ts:97](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/libraries/orm.ts#L97)
+Defined in: [libraries/src/orm.ts:97](https://github.com/santi020k/eslint-config-basic/blob/main/packages/libraries/src/orm.ts#L97)
 
 MikroORM ESLint configuration.
 
@@ -915,7 +916,7 @@ MikroORM ESLint configuration.
 
 > **nx**(): `Promise`\<`ConfigArray`\>
 
-Defined in: [integrations/src/tools/nx.ts:9](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/tools/nx.ts#L9)
+Defined in: [tools/src/nx.ts:9](https://github.com/santi020k/eslint-config-basic/blob/main/packages/tools/src/nx.ts#L9)
 
 Nx ESLint configuration
 Lints Nx workspace JSON/JSONC files using the shared JSONC parser rules.
@@ -930,7 +931,7 @@ Lints Nx workspace JSON/JSONC files using the shared JSONC parser rules.
 
 > **openAiAgents**(): `ConfigArray`
 
-Defined in: [integrations/src/libraries/openai-agents.ts:8](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/libraries/openai-agents.ts#L8)
+Defined in: [libraries/src/openai-agents.ts:8](https://github.com/santi020k/eslint-config-basic/blob/main/packages/libraries/src/openai-agents.ts#L8)
 
 OpenAI Agents SDK ESLint configuration.
 
@@ -944,7 +945,7 @@ OpenAI Agents SDK ESLint configuration.
 
 > **prisma**(): `ConfigArray`
 
-Defined in: [integrations/src/libraries/orm.ts:58](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/libraries/orm.ts#L58)
+Defined in: [libraries/src/orm.ts:58](https://github.com/santi020k/eslint-config-basic/blob/main/packages/libraries/src/orm.ts#L58)
 
 Prisma ESLint configuration.
 
@@ -961,7 +962,7 @@ internals that frequently change between generated client versions.
 
 > **sequelize**(): `ConfigArray`
 
-Defined in: [integrations/src/libraries/orm.ts:116](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/libraries/orm.ts#L116)
+Defined in: [libraries/src/orm.ts:116](https://github.com/santi020k/eslint-config-basic/blob/main/packages/libraries/src/orm.ts#L116)
 
 Sequelize ESLint configuration.
 
@@ -975,7 +976,7 @@ Sequelize ESLint configuration.
 
 > **typeorm**(): `ConfigArray`
 
-Defined in: [integrations/src/libraries/orm.ts:23](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/integrations/src/libraries/orm.ts#L23)
+Defined in: [libraries/src/orm.ts:23](https://github.com/santi020k/eslint-config-basic/blob/main/packages/libraries/src/orm.ts#L23)
 
 TypeORM ESLint configuration.
 

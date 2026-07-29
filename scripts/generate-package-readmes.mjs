@@ -7,14 +7,18 @@ import { docsOrigin, packageDocs } from './docs-packages.mjs'
  * Generate a standard README.md content for a package.
  */
 const generateReadmeContent = pkg => {
-  const { description, docsPath, packageName, title } = pkg
+  const { description, docsPath, packageName, readmeNotice, title } = pkg
 
   const monorepoLine =
     'This package is part of the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.'
 
+  const notice = readmeNotice?.length ?
+    `> [!WARNING]\n${readmeNotice.map(line => `> ${line}`).join('\n')}\n\n` :
+    ''
+
   return `# ${packageName}
 
-${description}
+${notice}${description}
 
 ${monorepoLine}
 

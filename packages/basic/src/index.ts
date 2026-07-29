@@ -1,4 +1,5 @@
-import { join } from 'node:path'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 import {
   applyDetectionControls,
@@ -7,6 +8,7 @@ import {
   type ConfigInput,
   coreConfig,
   createCoreConfig,
+  createGitignoreConfig,
   DEFAULT_IGNORES,
   type DetectedFrameworkName,
   detectProjectOptions,
@@ -18,7 +20,6 @@ import {
   type Format,
   GENERATED_CODE_IGNORES,
   getStrictMode,
-  gitignore,
   type ImportedFramework,
   Library,
   mergeFrameworkOption,
@@ -47,46 +48,27 @@ import { getIntegrationConfigs, getPrettierConfig } from './integrations.js'
 import { resolveFramework, resolvePreset } from './resolvers.js'
 import { buildTailwindSettingsConfig } from './tailwind.js'
 
-export type { AgentTarget, EslintConfigFeatures, GenerateSkillOptions, GenerateSkillResult } from './agent-skill-generator.js'
-export {
-  AGENT_TARGETS,
-  generateAgentSkills,
-  generateSkillContent
-} from './agent-skill-generator.js'
-// Lazy framework factories (bare framework names) plus
-// deprecated *Config aliases for the old mixed naming.
-/* eslint-disable @typescript-eslint/no-deprecated -- deliberate re-export of deprecated v1 aliases for migration */
+// Lazy framework factories.
 export {
   angular,
-  angularConfig,
   astro,
   expo,
-  expoConfig,
   hono,
   lit,
   nest,
-  nestConfig,
   next,
-  nextConfig,
   nuxt,
   preact,
-  preactConfig,
   qwik,
   react,
-  reactConfig,
   reactRouter,
-  remix,
   slidev,
   solid,
-  solidConfig,
   svelte,
-  svelteConfig,
   tanstackStart,
   vite,
-  vue,
-  vueConfig
+  vue
 } from './frameworks.js'
-/* eslint-enable @typescript-eslint/no-deprecated */
 
 // Re-export core types and utilities
 export type {
@@ -124,15 +106,14 @@ export type {
 export {
   coreConfig,
   createCoreConfig,
+  createGitignoreConfig,
   createImportGroups,
   detectProjectOptions,
   Extension,
   Format,
   getGlobalsForRuntime,
-  gitignore,
   groups,
   hasReactConfig,
-  jsConfig,
   Library,
   NextMode,
   Preset,
@@ -144,7 +125,7 @@ export {
 } from '@santi020k/eslint-config-core'
 
 // Re-export framework configs
-export { tsConfig, typescriptConfig } from '@santi020k/eslint-config-typescript'
+export { typescriptConfig } from '@santi020k/eslint-config-typescript'
 
 const buildTailwindResult = (
   options: TailwindOptions,
@@ -209,12 +190,69 @@ const applyTestingFileOverrides = (
   })
 }
 
-const resolveConfigSetup = (options: EslintConfigOptions | undefined) => ({
-  autoFrameworks: options?.autoFrameworks ?? true,
-  detectRootDir: options?.detectRootDir ?? options?.tsconfigRootDir,
-  optionMergeStrategy: options?.optionMergeStrategy ?? 'merge',
-  requestedPreset: options?.preset
-})
+const ESLINT_CONFIG_FILENAMES = [
+  'eslint.config.js',
+  'eslint.config.cjs',
+  'eslint.config.mjs',
+  'eslint.config.ts',
+  'eslint.config.cts',
+  'eslint.config.mts'
+]
+
+// A direct defineConfig() call retains the eslint.config.* frame in Node's
+// stack. Prefer that location over cwd because editor ESLint processes may be
+// launched from outside the project.
+const findConfigRootFromStack = (stack: string | undefined = new Error().stack): string | undefined => {
+  if (!stack) return undefined
+
+  for (const line of stack.split('\n')) {
+    const configFilename = ESLINT_CONFIG_FILENAMES.find(filename => line.includes(filename))
+
+    if (!configFilename) continue
+
+    const filenameStart = line.indexOf(configFilename)
+    const fileUrlStart = line.lastIndexOf('file://', filenameStart)
+    const windowsPathStart = line.slice(0, filenameStart).search(/[A-Za-z]:[\\/]/)
+    const absolutePathStart = line.indexOf('/')
+    let configPathStart = absolutePathStart
+
+    if (windowsPathStart >= 0) configPathStart = windowsPathStart
+
+    if (fileUrlStart >= 0) configPathStart = fileUrlStart
+
+    try {
+      if (configPathStart < 0) continue
+
+      const configPath = line.slice(configPathStart, filenameStart + configFilename.length)
+
+      return dirname(configPath.startsWith('file:') ? fileURLToPath(configPath) : configPath)
+    } catch {
+      // Ignore malformed or non-local stack URLs and retain the cwd fallback.
+    }
+  }
+
+  return undefined
+}
+
+const resolveConfigSetup = (options: EslintConfigOptions | undefined) => {
+  const {
+    autoFrameworks = true,
+    detectRootDir,
+    optionMergeStrategy = 'merge',
+    preset: requestedPreset,
+    root,
+    tsconfigRootDir
+  } = options ?? {}
+
+  const implicitRootDir = root ?? detectRootDir ?? tsconfigRootDir ?? findConfigRootFromStack()
+
+  return {
+    autoFrameworks,
+    detectRootDir: implicitRootDir,
+    optionMergeStrategy,
+    requestedPreset
+  }
+}
 
 const resolveUniqueLibraries = (
   libraries: Library[],
@@ -257,6 +295,38 @@ const resolveBucketDefaults = (detected: EslintConfigOptions) => ({
   detectedTools: detected.tools ?? []
 })
 
+const scopeWorkspaceDetection = (
+  detected: EslintConfigOptions,
+  isWorkspace: boolean
+): EslintConfigOptions => isWorkspace ?
+  {
+    ...detected,
+    detectedFrameworks: [],
+    libraries: [],
+    nextMode: undefined,
+    runtime: Runtime.Universal
+  } :
+  detected
+
+const resolveDetectedOptions = (
+  detectRootDir: string | undefined,
+  detection: EslintConfigOptions['detection'],
+  requestedPreset: EslintConfigOptions['preset']
+): EslintConfigOptions => {
+  const rawDetected = detectProjectOptions(detectRootDir)
+
+  const shouldDetectProjects = requestedPreset === Preset.Monorepo ||
+    rawDetected.preset === Preset.Monorepo
+
+  const detected = applyDetectionControls(rawDetected, detection, { projects: shouldDetectProjects })
+  const hasDetectedProjects = Object.keys(detected.projects ?? {}).length > 0
+
+  // Root devDependencies in a workspace commonly contain frameworks and
+  // libraries used by only one package. Keep those detections package-scoped;
+  // explicit root options still apply normally.
+  return scopeWorkspaceDetection(detected, hasDetectedProjects)
+}
+
 const resolveNextModeValue = (
   options: EslintConfigOptions | undefined,
   presetDefaults: Partial<EslintConfigOptions>,
@@ -286,7 +356,6 @@ const needsReactAutoAdd = (
 ): boolean => Boolean(
   frameworks.next ??
   frameworks.expo ??
-  (frameworks as Record<string, unknown>).remix ??
   frameworks['react-router'] ??
   (frameworks['tanstack-start'] && !frameworks.solid)
 ) && !frameworks.react
@@ -309,7 +378,8 @@ const buildIgnoresConfig = (
   useDefaultIgnores: boolean,
   useGeneratedCodeIgnores: boolean,
   useGitignore: boolean,
-  options: EslintConfigOptions | undefined
+  options: EslintConfigOptions | undefined,
+  rootDir: string
 ) => ({
   defaultIgnores: useDefaultIgnores ?
     [{
@@ -317,7 +387,7 @@ const buildIgnoresConfig = (
       name: 'eslint-config-basic/default-ignores'
     } as TSESLint.FlatConfig.Config] :
     [],
-  gitignoreConfig: useGitignore ? gitignore : [] as FlatConfigArray,
+  gitignoreConfig: useGitignore ? createGitignoreConfig(rootDir) : [] as FlatConfigArray,
   userIgnores: options?.ignores?.length ?
     [{
       ignores: options.ignores,
@@ -436,7 +506,6 @@ const buildEslintConfigs = async (params: BuildConfigsParams): Promise<FlatConfi
     ...get('solid'),
     ...get('angular'),
     ...get('qwik'),
-    ...get('remix'),
     ...get('react-router'),
     ...get('tanstack-start'),
     ...get('nuxt'),
@@ -529,12 +598,6 @@ const logEslintDebug = ({
   }, null, 2)}\n`)
 }
 
-const emitBasicWarnings = (options?: EslintConfigOptions) => {
-  if (options?.frameworks && 'remix' in options.frameworks) {
-    process.emitWarning('[eslint-config-basic] Warning: `frameworks.remix` is deprecated and will be removed in the next major. Please use `frameworks["react-router"]` instead.')
-  }
-}
-
 const emitAstroDoctorWarning = (
   extensions: Extension[],
   frameworks: Record<string, unknown>
@@ -557,16 +620,16 @@ const resolveProjectConfigs = async (
     const projectRoot = join(detectRootDir ?? process.cwd(), projectPath)
     const inheritedOptions = mergeProjectOptions(projectDefaults ?? {}, projectOptions)
 
-    const scopedConfigs = await eslintConfig({
+    const scopedConfigs = await defineConfig({
       autoFrameworks,
       ...inheritedOptions,
-      detectRootDir: inheritedOptions.detectRootDir ?? projectRoot,
       projectDefaults: undefined,
       projects: undefined,
-      tsconfigRootDir: inheritedOptions.tsconfigRootDir ?? projectRoot
+      root: inheritedOptions.root ?? inheritedOptions.detectRootDir ?? projectRoot
     })
 
-    return scopedConfigs.map(config => scopeConfigToProject(config, projectPath))
+    return scopedConfigs.map(config =>
+      config.name === 'eslint-config/gitignore' ? config : scopeConfigToProject(config, projectPath))
   })
 )
 
@@ -591,7 +654,10 @@ const getConfigsParams = (
     undefined
 
   const runtimeCoreConfig = runtime === Runtime.Universal ? coreConfig : createCoreConfig(runtime)
-  const { defaultIgnores, gitignoreConfig, userIgnores } = buildIgnoresConfig(useDefaultIgnores, useGeneratedCodeIgnores, useGitignore, options)
+
+  const { defaultIgnores, gitignoreConfig, userIgnores } = buildIgnoresConfig(
+    useDefaultIgnores, useGeneratedCodeIgnores, useGitignore, options, rootDir
+  )
 
   return {
     astroOptions: { hasReact, hasSolid, hasSvelte, hasVue },
@@ -611,12 +677,10 @@ const getConfigsParams = (
  * @param {ConfigInput[]} extraConfigs - Local flat-config overrides appended after generated config
  * @returns {FlatConfigArray} The final ESLint configuration array
  */
-export const eslintConfig = async (
+export const defineConfig = async (
   options?: EslintConfigOptions,
   ...extraConfigs: ConfigInput[]
 ): Promise<FlatConfigArray> => {
-  emitBasicWarnings(options)
-
   const {
     detection,
     extensions: optExtensions,
@@ -631,12 +695,7 @@ export const eslintConfig = async (
   } = options ?? {}
 
   const { autoFrameworks, detectRootDir, optionMergeStrategy, requestedPreset } = resolveConfigSetup(options)
-  const shouldDefaultProjectDetection = requestedPreset === Preset.Monorepo
-
-  const detected = applyDetectionControls(
-    detectProjectOptions(detectRootDir), detection, { projects: shouldDefaultProjectDetection }
-  )
-
+  const detected = resolveDetectedOptions(detectRootDir, detection, requestedPreset)
   const { frameworkDefaults, preset, presetDefaults } = resolvePresetMeta(requestedPreset, detected, autoFrameworks)
   const configuredProjects = resolveConfiguredProjects(detected, options)
   const { detectedExtensions, detectedFormats, detectedLibraries, detectedTesting, detectedTools } = resolveBucketDefaults(detected)
@@ -741,8 +800,3 @@ export const eslintConfig = async (
 
   return applyStrictMode(patchedConfigs, strict)
 }
-
-/**
- * Alias for `eslintConfig()` that reads naturally in `eslint.config.*` files.
- */
-export const defineConfig = eslintConfig

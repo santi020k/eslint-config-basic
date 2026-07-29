@@ -22,9 +22,9 @@
 ## Quick Start
 
 ```js
-import { eslintConfig } from '@santi020k/eslint-config-basic'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
-export default await eslintConfig() // Auto-detection enabled by default
+export default await defineConfig() // Auto-detection enabled by default
 ```
 
 ## Project Architecture
@@ -45,7 +45,7 @@ This is a monorepo containing multiple config packages.
 - `packages/astro/`, `packages/vue/`, `packages/nuxt/`, `packages/svelte/`, `packages/solid/`, `packages/lit/` — Frontend frameworks and Web Components
 - `packages/angular/`, `packages/nest/`, `packages/hono/` — Enterprise, backend, and edge frameworks
 - `packages/expo/` — React Native / Expo
-- `packages/qwik/`, `packages/remix/`, `packages/react-router/`, `packages/tanstack-start/` — Modern meta-frameworks
+- `packages/qwik/`, `packages/react-router/`, `packages/tanstack-start/` — Modern meta-frameworks
 - `packages/vite/`, `packages/slidev/` — Vite tooling and Slidev presentations
 - `packages/integrations/` — All integrations (tools, libraries, testing, formats, extensions)
 - `packages/basic/` — Main entry point composing all packages
@@ -66,7 +66,7 @@ This is a monorepo containing multiple config packages.
 | Hono | `@santi020k/eslint-config-hono` |
 | Expo | `@santi020k/eslint-config-expo` |
 | Qwik | `@santi020k/eslint-config-qwik` |
-| Remix | `@santi020k/eslint-config-remix` |
+| React Router and Remix | `@santi020k/eslint-config-react-router` |
 | React Router | `@santi020k/eslint-config-react-router` |
 | TanStack Start | `@santi020k/eslint-config-tanstack-start` |
 | Lit | `@santi020k/eslint-config-lit` |

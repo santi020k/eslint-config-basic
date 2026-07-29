@@ -5,6 +5,10 @@ description: "The testing option enables linting support for test runners, test 
 
 The `testing` option enables linting support for test runners, test environments, and testing-oriented utilities.
 
+Install `@santi020k/eslint-config-testing` alongside the lean `basic`
+package before enabling or auto-detecting entries on this page. The `full`
+package already includes it.
+
 | Integration | Enum | Use It When | Auto-Detected |
 | :--- | :--- | :--- | :--- |
 | Vitest | `Testing.Vitest` | The project uses Vitest. | Yes |
@@ -32,4 +36,4 @@ export default await defineConfig({
 ## Repository Examples
 
 - Testing Playgrounds: [packages/playground/testing](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/testing)
-- Integrations Package Source: [packages/integrations](https://github.com/santi020k/eslint-config-basic/tree/main/packages/integrations)
+- Testing Package Source: [packages/testing](https://github.com/santi020k/eslint-config-basic/tree/main/packages/testing)

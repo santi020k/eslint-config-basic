@@ -20,11 +20,17 @@ const workspacePackageAliases = Object.fromEntries(
 )
 
 const integrationSubpathAliases = {
-  '@santi020k/eslint-config-integrations/extensions': join(packagesDir, 'integrations/src/extensions/index.ts'),
-  '@santi020k/eslint-config-integrations/formats': join(packagesDir, 'integrations/src/formats/index.ts'),
-  '@santi020k/eslint-config-integrations/libraries': join(packagesDir, 'integrations/src/libraries/index.ts'),
-  '@santi020k/eslint-config-integrations/testing': join(packagesDir, 'integrations/src/testing/index.ts'),
-  '@santi020k/eslint-config-integrations/tools': join(packagesDir, 'integrations/src/tools/index.ts')
+  '@santi020k/eslint-config-basic/agent': join(packagesDir, 'basic/src/agent-skill-generator.ts'),
+  '@santi020k/eslint-config-extensions/registry': join(packagesDir, 'extensions/src/registry.ts'),
+  '@santi020k/eslint-config-formats/registry': join(packagesDir, 'formats/src/registry.ts'),
+  '@santi020k/eslint-config-integrations/extensions': join(packagesDir, 'integrations/src/extensions.ts'),
+  '@santi020k/eslint-config-integrations/formats': join(packagesDir, 'integrations/src/formats.ts'),
+  '@santi020k/eslint-config-integrations/libraries': join(packagesDir, 'integrations/src/libraries.ts'),
+  '@santi020k/eslint-config-integrations/testing': join(packagesDir, 'integrations/src/testing.ts'),
+  '@santi020k/eslint-config-integrations/tools': join(packagesDir, 'integrations/src/tools.ts'),
+  '@santi020k/eslint-config-libraries/registry': join(packagesDir, 'libraries/src/registry.ts'),
+  '@santi020k/eslint-config-testing/registry': join(packagesDir, 'testing/src/registry.ts'),
+  '@santi020k/eslint-config-tools/registry': join(packagesDir, 'tools/src/registry.ts')
 }
 
 const recommendedSubpathAliases = {

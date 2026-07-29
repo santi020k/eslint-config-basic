@@ -41,9 +41,11 @@
     "@santi020k/eslint-config-astro": "workspace:^",
     "@santi020k/eslint-config-basic": "workspace:^",
     "@santi020k/eslint-config-expo": "workspace:^",
+    "@santi020k/eslint-config-extensions": "workspace:^",
+    "@santi020k/eslint-config-formats": "workspace:^",
     "@santi020k/eslint-config-hono": "workspace:^",
-    "@santi020k/eslint-config-integrations": "workspace:^",
     "@santi020k/eslint-config-lit": "workspace:^",
+    "@santi020k/eslint-config-libraries": "workspace:^",
     "@santi020k/eslint-config-nest": "workspace:^",
     "@santi020k/eslint-config-next": "workspace:^",
     "@santi020k/eslint-config-nuxt": "workspace:^",
@@ -51,11 +53,12 @@
     "@santi020k/eslint-config-qwik": "workspace:^",
     "@santi020k/eslint-config-react": "workspace:^",
     "@santi020k/eslint-config-react-router": "workspace:^",
-    "@santi020k/eslint-config-remix": "workspace:^",
     "@santi020k/eslint-config-slidev": "workspace:^",
     "@santi020k/eslint-config-solid": "workspace:^",
     "@santi020k/eslint-config-svelte": "workspace:^",
     "@santi020k/eslint-config-tanstack-start": "workspace:^",
+    "@santi020k/eslint-config-testing": "workspace:^",
+    "@santi020k/eslint-config-tools": "workspace:^",
     "@santi020k/eslint-config-vite": "workspace:^",
     "@santi020k/eslint-config-vue": "workspace:^"
   },
@@ -74,7 +77,7 @@
     }
   },
   "engines": {
-    "node": "^20.19.0 || >=22.18.0"
+    "node": ">=22.19.0"
   },
   "packageManager": "pnpm@11.6.0+sha512.9a36518224080c6fe5165afdcfe79bfa118c29be703f3f462b1e32efe1e98e47e8750b148e08286250aad4113cc7993ca413c4e2cd447752708c2ee5751bc95f",
   "repository": {

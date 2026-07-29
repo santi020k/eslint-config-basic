@@ -1,0 +1,90 @@
+name: ESLint Config v3 Check
+description: Validate an eslint-config-basic consumer, including compatibility, snapshots, and lint budgets.
+author: santi020k
+
+branding:
+  color: purple
+  icon: check-circle
+
+inputs:
+  install-command:
+    description: Command used to install the consumer project's dependencies.
+    required: false
+    default: npm ci
+  lint-command:
+    description: Command used for the project's normal lint run.
+    required: false
+    default: npm run lint
+  node-version:
+    description: Node.js version passed to actions/setup-node.
+    required: false
+    default: "22"
+  profile:
+    description: Run the performance profiler and enforce configured budgets.
+    required: false
+    default: "false"
+  snapshot-check:
+    description: Check .eslint-config-snapshot.json when it exists.
+    required: false
+    default: "true"
+  max-duration:
+    description: Maximum profile duration in milliseconds.
+    required: false
+    default: ""
+  max-rule-time:
+    description: Maximum time for the slowest rule in milliseconds.
+    required: false
+    default: ""
+  max-warnings:
+    description: Maximum warning count.
+    required: false
+    default: "0"
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node
+      uses: actions/setup-node@v6
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: Enable Corepack
+      shell: bash
+      run: |
+        if command -v corepack >/dev/null 2>&1; then
+          corepack enable
+        fi
+
+    - name: Install dependencies
+      shell: bash
+      run: ${{ inputs.install-command }}
+
+    - name: Check config compatibility
+      shell: bash
+      run: npx --no-install basic-eslint compatibility
+
+    - name: Check effective-config snapshot
+      if: inputs.snapshot-check == 'true'
+      shell: bash
+      run: |
+        if [[ -f .eslint-config-snapshot.json ]]; then
+          npx --no-install basic-eslint snapshot --check
+        fi
+
+    - name: Lint
+      shell: bash
+      run: ${{ inputs.lint-command }}
+
+    - name: Enforce lint budgets
+      if: inputs.profile == 'true'
+      shell: bash
+      env:
+        MAX_DURATION: ${{ inputs.max-duration }}
+        MAX_RULE_TIME: ${{ inputs.max-rule-time }}
+        MAX_WARNINGS: ${{ inputs.max-warnings }}
+      run: |
+        args=(profile)
+        if [[ -n "$MAX_DURATION" ]]; then args+=(--max-duration "$MAX_DURATION"); fi
+        if [[ -n "$MAX_RULE_TIME" ]]; then args+=(--max-rule-time "$MAX_RULE_TIME"); fi
+        if [[ -n "$MAX_WARNINGS" ]]; then args+=(--max-warnings "$MAX_WARNINGS"); fi
+        npx --no-install basic-eslint "${args[@]}"

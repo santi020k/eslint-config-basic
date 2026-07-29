@@ -1,8 +1,10 @@
 import {
-  describe, expect, test,
-vi} from 'vitest'
+  describe, expect, test, vi
+} from 'vitest'
 
 const mockFn = vi.fn().mockReturnValue('mocked')
+// eslint-disable-next-line @typescript-eslint/require-await
+const asyncFn = async () => 'hello'
 
 describe('Comprehensive Test Suite', () => {
   test('should verify basic arithmetic', () => {
@@ -12,8 +14,6 @@ describe('Comprehensive Test Suite', () => {
   })
 
   test('should handle asynchronous functions', async () => {
-    // eslint-disable-next-line @typescript-eslint/require-await
-    const asyncFn = async () => 'hello'
     const result = await asyncFn()
 
     expect(result).toBe('hello')

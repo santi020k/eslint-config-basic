@@ -15,13 +15,13 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
-    "@tanstack/react-router": "^1.170.16",
+    "@tanstack/react-router": "^1.170.18",
     "@types/react": "catalog:",
     "eslint": "catalog:",
     "react": "catalog:"
   },
   "engines": {
-    "node": "^20.19.0 || >=22.18.0"
+    "node": ">=22.19.0"
   },
   "repository": {
     "type": "git",

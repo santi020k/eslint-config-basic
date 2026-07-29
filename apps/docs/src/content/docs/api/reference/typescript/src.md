@@ -9,7 +9,7 @@ description: "@santi020k/eslint-config-basic"
 
 > `const` **standardRules**: `TSESLint.Linter.RulesRecord`
 
-Defined in: [typescript/src/rules.ts:3](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/typescript/src/rules.ts#L3)
+Defined in: [typescript/src/rules.ts:3](https://github.com/santi020k/eslint-config-basic/blob/main/packages/typescript/src/rules.ts#L3)
 
 ***
 
@@ -17,7 +17,7 @@ Defined in: [typescript/src/rules.ts:3](https://github.com/santi020k/eslint-conf
 
 > `const` **typeCheckedRules**: `TSESLint.Linter.RulesRecord`
 
-Defined in: [typescript/src/rules.ts:37](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/typescript/src/rules.ts#L37)
+Defined in: [typescript/src/rules.ts:37](https://github.com/santi020k/eslint-config-basic/blob/main/packages/typescript/src/rules.ts#L37)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [typescript/src/rules.ts:37](https://github.com/santi020k/eslint-con
 
 > `const` **typescriptConfig**: `ConfigArray`
 
-Defined in: [typescript/src/index.ts:182](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/typescript/src/index.ts#L182)
+Defined in: [typescript/src/index.ts:206](https://github.com/santi020k/eslint-config-basic/blob/main/packages/typescript/src/index.ts#L206)
 
 ## Functions
 
@@ -33,7 +33,7 @@ Defined in: [typescript/src/index.ts:182](https://github.com/santi020k/eslint-co
 
 > **createTypescriptConfig**(`options?`): `ConfigArray`
 
-Defined in: [typescript/src/index.ts:83](https://github.com/santi020k/eslint-config-basic/blob/44a322e7ee001da615f50451f7a750c464b528c4/packages/typescript/src/index.ts#L83)
+Defined in: [typescript/src/index.ts:106](https://github.com/santi020k/eslint-config-basic/blob/main/packages/typescript/src/index.ts#L106)
 
 TypeScript ESLint configuration factory
 Extends typescript-eslint strict + stylistic type-checked presets with custom rules
@@ -55,11 +55,5 @@ If `tsconfigRootDir` is provided but does not exist on disk.
 ## References
 
 ### default
-
-Renames and re-exports [typescriptConfig](#typescriptconfig)
-
-***
-
-### tsConfig
 
 Renames and re-exports [typescriptConfig](#typescriptconfig)

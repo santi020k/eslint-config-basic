@@ -2,7 +2,7 @@ import { GLOB_JS_TS } from '@santi020k/eslint-config-core'
 
 import pluginReact from '@eslint-react/eslint-plugin'
 import type { TSESLint } from '@typescript-eslint/utils'
-import pluginReactCompiler from 'eslint-plugin-react-compiler'
+import pluginReactHooks from 'eslint-plugin-react-hooks'
 import pluginReactRefresh from 'eslint-plugin-react-refresh'
 import globals from 'globals'
 
@@ -12,6 +12,23 @@ const recommended = pluginReact.configs.recommended as TSESLint.FlatConfig.Confi
   rules: TSESLint.FlatConfig.Rules
   settings: TSESLint.FlatConfig.Config['settings']
 }
+
+const reactHooksRecommended = pluginReactHooks.configs.flat['recommended-latest'] as TSESLint.FlatConfig.Config & {
+  rules: TSESLint.FlatConfig.Rules
+}
+
+const compilerRules = Object.fromEntries(
+  Object.entries(reactHooksRecommended.rules)
+    .filter(([ruleName]) => {
+      const equivalentRuleName = ruleName.replace(/^react-hooks\//, '@eslint-react/')
+
+      return !(equivalentRuleName in recommended.rules)
+    })
+    .map(([ruleName, ruleConfig]) => [
+      ruleName,
+      Array.isArray(ruleConfig) ? ['warn', ...ruleConfig.slice(1)] : 'warn'
+    ])
+) as TSESLint.FlatConfig.Rules
 
 const languageOptions: TSESLint.FlatConfig.LanguageOptions = {
   ecmaVersion: 'latest',
@@ -29,8 +46,8 @@ const languageOptions: TSESLint.FlatConfig.LanguageOptions = {
 
 /**
  * React ESLint configuration
- * Uses `@eslint-react/eslint-plugin` for React and hooks rules, plus React
- * Compiler and React Refresh.
+ * Uses `@eslint-react/eslint-plugin` for React and hooks rules, the official
+ * React Hooks plugin for non-duplicated Compiler diagnostics, and React Refresh.
  */
 export const reactConfig: TSESLint.FlatConfig.ConfigArray = [
   {
@@ -52,11 +69,11 @@ export const reactConfig: TSESLint.FlatConfig.ConfigArray = [
     languageOptions,
     name: 'eslint-config-react/custom',
     plugins: {
-      'react-compiler': pluginReactCompiler,
+      'react-hooks': pluginReactHooks,
       'react-refresh': pluginReactRefresh
     },
     rules: {
-      'react-compiler/react-compiler': 'warn',
+      ...compilerRules,
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       ...rules
     }

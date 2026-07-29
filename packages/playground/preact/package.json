@@ -16,13 +16,13 @@
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
     "eslint": "catalog:",
-    "preact": "^10.29.2"
+    "preact": "^10.29.7"
   },
   "devDependencies": {
     "typescript": "catalog:"
   },
   "engines": {
-    "node": "^20.19.0 || >=22.18.0"
+    "node": ">=22.19.0"
   },
   "repository": {
     "type": "git",

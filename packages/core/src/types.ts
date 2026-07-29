@@ -324,8 +324,22 @@ export type TypeScriptMode = 'off' | 'strict' | 'syntax' | 'type-aware'
 export interface TypeScriptOptions {
   mode?: TypeScriptMode
   project?: boolean | string | string[]
-  projectService?: boolean
+  projectService?: boolean | {
+    allowDefaultProject?: string[]
+    defaultProject?: string
+    loadTypeScriptPlugins?: boolean
+    maximumDefaultProjectFileMatchCount_THIS_WILL_SLOW_DOWN_LINTING?: number
+  }
   tsconfigRootDir?: string
+
+  /**
+   * TypeScript files that should receive syntax-only linting even when the
+   * project uses type-aware mode. Config files are included by default because
+   * they commonly live outside an application's tsconfig.
+   *
+   * Set to `false` to require type information for every TypeScript file.
+   */
+  untypedFiles?: false | string[]
 }
 
 /**
@@ -337,7 +351,6 @@ export const ReactConfigKeys = [
   'next',
   'expo',
   'react-router',
-  'remix'
 ] as const
 
 /**
@@ -358,7 +371,6 @@ export type DetectedFrameworkName =
   'qwik' |
   'react' |
   'react-router' |
-  'remix' |
   'slidev' |
   'solid' |
   'svelte' |
@@ -379,7 +391,7 @@ export interface EslintConfigOptions {
 
   /**
    * Frameworks detected from package.json by `detectProjectOptions()`.
-   * In v3, `eslintConfig()` enables detected framework configs when their optional packages are installed.
+   * In v3, `defineConfig()` enables detected framework configs when their optional packages are installed.
    */
   detectedFrameworks?: DetectedFrameworkName[]
 
@@ -428,11 +440,8 @@ export interface EslintConfigOptions {
     qwik?: ImportedFramework
     react?: ImportedFramework
 
-    /** New name for Remix projects on React Router v7+. */
+    /** React Router v7 framework mode, including projects migrated from Remix. */
     'react-router'?: ImportedFramework
-
-    /** @deprecated Remix merged into React Router v7 — use `react-router` instead. */
-    remix?: ImportedFramework
     slidev?: ImportedFramework
     solid?: ImportedFramework
     svelte?: ImportedFramework
@@ -451,7 +460,9 @@ export interface EslintConfigOptions {
    */
   ignores?: string[]
 
-  /** List of application-level dependencies configurations */
+  /**
+   * @deprecated Use `features` instead. This alias is scheduled for removal in v4.
+   */
   integrations?: OptionalConfigMap
 
   libraries?: LibraryOption[]
@@ -481,6 +492,14 @@ export interface EslintConfigOptions {
    * Each key is a workspace-relative folder and each value is scoped to that folder.
    */
   projects?: Record<string, ProjectConfigOptions>
+
+  /**
+   * Absolute project root used consistently for dependency detection,
+   * TypeScript, Tailwind, subprojects, and `.gitignore`.
+   *
+   * In editor-sensitive configs, pass `import.meta.dirname`.
+   */
+  root?: string
 
   /** Runtime environment preset (Node, Browser, Universal) */
   runtime?: RuntimeOption

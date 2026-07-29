@@ -169,7 +169,7 @@ function withV1Banner(path, content) {
 
   const banner =
     'banner:\n' +
-    '  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\\"/guide/getting-started\\">v2 docs</a>."\n'
+    '  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\\"/guide/getting-started\\">v3 docs</a>."\n'
 
   return `${parts.frontmatter.replace(/\n---$/u, `\n${banner}---`)}\n\n${parts.body}`
 }

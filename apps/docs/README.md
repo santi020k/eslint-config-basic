@@ -12,11 +12,11 @@ This workspace includes automated testing to ensure the documentation remains ac
 
 - **Accessibility**: Powered by Playwright and axe-core.
 - **SEO**: Automated checks for meta tags and canonical URLs.
-- **Lighthouse CI**: Comprehensive audits for performance and best practices.
+- **Lighthouse**: Repository-owned performance, accessibility, best-practices, and SEO audits.
 
 ### Commands
 
 ```bash
 pnpm run test:a11y     # Run accessibility and SEO tests
-pnpm run lighthouse    # Run Lighthouse CI audits
+pnpm run lighthouse    # Run Lighthouse audits and enforce local budgets
 ```

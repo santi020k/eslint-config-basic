@@ -82,7 +82,8 @@ exports[`Config Snapshots — Critical Rule Entries > react critical rule entrie
   "@eslint-react/exhaustive-deps": "warn",
   "@eslint-react/no-missing-key": "error",
   "@eslint-react/rules-of-hooks": "error",
-  "react-compiler/react-compiler": "warn",
+  "react-hooks/config": "warn",
+  "react-hooks/immutability": "warn",
 }
 `;
 
@@ -259,6 +260,7 @@ exports[`Config Snapshots — Entry Names > typescript config entries should mat
   "eslint-config-typescript/setup",
   "eslint-config-typescript/standard-rules",
   "eslint-config-typescript/type-checked-rules",
+  "eslint-config-typescript/untyped-files",
   "eslint-config-typescript/virtual-parser-setup",
   "typescript-eslint/base",
   "typescript-eslint/base",

@@ -8,7 +8,8 @@ export default await defineConfig({
     astro: true
   },
   ignores: [
-    'src/content/docs/api/reference/**'
+    'src/content/docs/api/reference/**',
+    'src/content/docs/v2/api/reference/**'
   ],
   tsconfigRootDir: import.meta.dirname,
   typescript: 'syntax'

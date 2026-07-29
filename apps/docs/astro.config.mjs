@@ -1,3 +1,4 @@
+import { unified } from '@astrojs/markdown-remark'
 import starlight from '@astrojs/starlight'
 import { santi020kShikiThemes } from '@santi020k/theme/shiki'
 import { defineConfig } from 'astro/config'
@@ -53,6 +54,7 @@ const sidebar = sidebarLinks([
           { label: 'Configuration', slug: 'guide/configuration' },
           { badge: { text: 'New', variant: 'success' }, label: 'Config Builder', slug: 'guide/config-builder' },
           { badge: { text: 'v3', variant: 'tip' }, label: 'Migrate from v2', slug: 'guide/migration-v2-to-v3' },
+          { badge: { text: 'v4', variant: 'caution' }, label: 'Planned Removals', slug: 'guide/v4-removals' },
           { label: 'Presets', slug: 'guide/presets' },
           { label: 'Runtime', slug: 'guide/runtime' },
           { label: 'Monorepo', slug: 'guide/monorepo' },
@@ -77,7 +79,6 @@ const sidebar = sidebarLinks([
           { label: 'Hono', slug: 'frameworks/hono' },
           { label: 'Expo', slug: 'frameworks/expo' },
           { label: 'Qwik', slug: 'frameworks/qwik' },
-          { label: 'Remix', slug: 'frameworks/remix' },
           { label: 'React Router', slug: 'frameworks/react-router' },
           { label: 'TanStack Start', slug: 'frameworks/tanstack-start' },
           { label: 'Lit', slug: 'frameworks/lit' },
@@ -110,6 +111,11 @@ const sidebar = sidebarLinks([
           { badge: { text: 'Full', variant: 'tip' }, label: 'Full Config', slug: 'packages/full' },
           { badge: { text: 'Lite', variant: 'tip' }, label: 'Lite Config', slug: 'packages/lite' },
           { label: 'Base Rules', slug: 'packages/core' },
+          { label: 'Extensions Pack', slug: 'tooling/extensions' },
+          { label: 'Formats Pack', slug: 'tooling/formats' },
+          { label: 'Libraries Pack', slug: 'tooling/libraries' },
+          { label: 'Testing Pack', slug: 'tooling/testing' },
+          { label: 'Tools Pack', slug: 'tooling/tools' },
           { label: 'Integrations', slug: 'packages/integrations' },
           { label: 'Playground', slug: 'packages/playground' },
           { label: 'Testing Suite', slug: 'packages/tests' },
@@ -122,6 +128,72 @@ const sidebar = sidebarLinks([
       }
     ],
     label: 'Current Docs (v3)'
+  },
+  {
+    items: [
+      { label: 'Overview', slug: 'v2' },
+      { label: 'Getting Started', slug: 'v2/guide/getting-started' },
+      { label: 'Installation', slug: 'v2/guide/installation' },
+      { label: 'Configuration', slug: 'v2/guide/configuration' },
+      { label: 'Config Builder', slug: 'v2/guide/config-builder' },
+      { label: 'Migrate from v1', slug: 'v2/guide/migration-v1-to-v2' },
+      {
+        collapsed: true,
+        items: [
+          { label: 'TypeScript', slug: 'v2/frameworks/typescript' },
+          { label: 'React', slug: 'v2/frameworks/react' },
+          { label: 'Next.js', slug: 'v2/frameworks/next' },
+          { label: 'Astro', slug: 'v2/frameworks/astro' },
+          { label: 'Vue', slug: 'v2/frameworks/vue' },
+          { label: 'Svelte', slug: 'v2/frameworks/svelte' },
+          { label: 'Solid', slug: 'v2/frameworks/solid' },
+          { label: 'Angular', slug: 'v2/frameworks/angular' },
+          { label: 'NestJS', slug: 'v2/frameworks/nest' },
+          { label: 'Nuxt', slug: 'v2/frameworks/nuxt' },
+          { label: 'Preact', slug: 'v2/frameworks/preact' },
+          { label: 'Hono', slug: 'v2/frameworks/hono' },
+          { label: 'Expo', slug: 'v2/frameworks/expo' },
+          { label: 'Qwik', slug: 'v2/frameworks/qwik' },
+          { label: 'Remix', slug: 'v2/frameworks/remix' },
+          { label: 'React Router', slug: 'v2/frameworks/react-router' },
+          { label: 'TanStack Start', slug: 'v2/frameworks/tanstack-start' },
+          { label: 'Lit', slug: 'v2/frameworks/lit' },
+          { label: 'Vite', slug: 'v2/frameworks/vite' },
+          { label: 'Slidev', slug: 'v2/frameworks/slidev' }
+        ],
+        label: 'Frameworks'
+      },
+      {
+        collapsed: true,
+        items: [
+          { label: 'Overview', slug: 'v2/tooling/overview' },
+          { label: 'Libraries', slug: 'v2/tooling/libraries' },
+          { label: 'Testing', slug: 'v2/tooling/testing' },
+          { label: 'Formats', slug: 'v2/tooling/formats' },
+          { label: 'Tools', slug: 'v2/tooling/tools' },
+          { label: 'Extensions', slug: 'v2/tooling/extensions' }
+        ],
+        label: 'Tooling'
+      },
+      {
+        collapsed: true,
+        items: [
+          { label: 'Presets', slug: 'v2/guide/presets' },
+          { label: 'Runtime', slug: 'v2/guide/runtime' },
+          { label: 'Monorepo', slug: 'v2/guide/monorepo' },
+          { label: 'CLI', slug: 'v2/guide/cli' },
+          { label: 'Troubleshooting', slug: 'v2/guide/troubleshooting' },
+          { label: 'Basic', slug: 'v2/packages/basic' },
+          { label: 'Lite', slug: 'v2/packages/lite' },
+          { label: 'Core', slug: 'v2/packages/core' },
+          { label: 'Integrations', slug: 'v2/packages/integrations' },
+          { label: 'API Overview', slug: 'v2/api' },
+          { label: 'Generated Reference', slug: 'v2/api/reference' }
+        ],
+        label: 'Packages and API'
+      }
+    ],
+    label: 'Frozen Docs (v2)'
   },
   {
     items: [
@@ -204,14 +276,88 @@ export default defineConfig({
         { attrs: { content: 'summary_large_image', name: 'twitter:card' }, tag: 'meta' },
         {
           attrs: { is: 'inline' },
-          content:
-            '(() => { const HIDE_CLASS = \'s2k-version-hidden\'; const applyVersionSidebar = () => { const isV1 = window.location.pathname.startsWith(\'/v1/\'); document.documentElement.dataset.docsVersion = isV1 ? \'v1\' : \'v2\'; for (const section of document.querySelectorAll(\'.sidebar-content details\')) { const summary = section.querySelector(\':scope > summary\'); if (!summary) continue; const label = summary.textContent?.trim(); const isCurrentGroup = label === \'Current Docs (v2)\'; const isFrozenGroup = label === \'Frozen Docs (v1)\'; if (!isCurrentGroup && !isFrozenGroup) continue; const shouldHide = (isCurrentGroup && isV1) || (isFrozenGroup && !isV1); section.classList.toggle(HIDE_CLASS, shouldHide); section.setAttribute(\'aria-hidden\', shouldHide ? \'true\' : \'false\'); } }; if (document.readyState === \'loading\') { document.addEventListener(\'DOMContentLoaded\', applyVersionSidebar, { once: true }); } else { applyVersionSidebar(); } document.addEventListener(\'astro:page-load\', applyVersionSidebar); })();',
+          content: `(() => {
+            const HIDE_CLASS = 's2k-version-hidden';
+            const labels = {
+              v1: 'Frozen Docs (v1)',
+              v2: 'Frozen Docs (v2)',
+              v3: 'Current Docs (v3)'
+            };
+            const getVersion = () => {
+              if (window.location.pathname === '/v1' || window.location.pathname.startsWith('/v1/')) return 'v1';
+              if (window.location.pathname === '/v2' || window.location.pathname.startsWith('/v2/')) return 'v2';
+              return 'v3';
+            };
+            const applyVersionSidebar = () => {
+              const version = getVersion();
+              document.documentElement.dataset.docsVersion = version;
+              for (const section of document.querySelectorAll('.sidebar-content details')) {
+                const summary = section.querySelector(':scope > summary');
+                const label = summary?.textContent?.trim();
+                if (!label || !Object.values(labels).includes(label)) continue;
+                const shouldHide = label !== labels[version];
+                section.classList.toggle(HIDE_CLASS, shouldHide);
+                section.setAttribute('aria-hidden', shouldHide ? 'true' : 'false');
+              }
+            };
+            if (document.readyState === 'loading') {
+              document.addEventListener('DOMContentLoaded', applyVersionSidebar, { once: true });
+            } else {
+              applyVersionSidebar();
+            }
+            document.addEventListener('astro:page-load', applyVersionSidebar);
+          })();`,
           tag: 'script'
         },
         {
           attrs: { is: 'inline' },
-          content:
-            '(() => { const VERSION_ID = \'s2k-version-switcher\'; const getVersionTarget = version => { const { pathname, search, hash } = window.location; const isV1 = pathname.startsWith(\'/v1/\'); if (version === \'v1\') { const nextPath = isV1 ? pathname : `/v1${pathname === \'/\' ? \'/\' : pathname}`; return `${nextPath}${search}${hash}`; } const nextPath = isV1 ? pathname.replace(/^\\/v1/, \'\') || \'/\' : pathname; return `${nextPath}${search}${hash}`; }; const ensureSwitcher = () => { const header = document.querySelector(\'.header .right-group\'); if (!header) return; let wrapper = document.getElementById(VERSION_ID); if (!wrapper) { wrapper = document.createElement(\'label\'); wrapper.id = VERSION_ID; wrapper.className = \'s2k-version-switcher\'; wrapper.setAttribute(\'aria-label\', \'Select docs version\'); const select = document.createElement(\'select\'); select.innerHTML = \'<option value="v2">v2</option><option value="v1">v1</option>\'; select.addEventListener(\'change\', () => { const target = getVersionTarget(select.value); fetch(target, { method: \'HEAD\' }).then(res => { if (res.ok) { window.location.assign(target); } else { window.location.assign(select.value === \'v1\' ? \'/v1/\' : \'/\'); } }).catch(() => window.location.assign(target)); }); wrapper.appendChild(select); header.prepend(wrapper); } const select = wrapper.querySelector(\'select\'); if (!select) return; select.value = window.location.pathname.startsWith(\'/v1/\') ? \'v1\' : \'v2\'; }; if (document.readyState === \'loading\') { document.addEventListener(\'DOMContentLoaded\', ensureSwitcher, { once: true }); } else { ensureSwitcher(); } document.addEventListener(\'astro:page-load\', ensureSwitcher); })();',
+          content: `(() => {
+            const VERSION_ID = 's2k-version-switcher';
+            const getVersion = () => {
+              if (window.location.pathname === '/v1' || window.location.pathname.startsWith('/v1/')) return 'v1';
+              if (window.location.pathname === '/v2' || window.location.pathname.startsWith('/v2/')) return 'v2';
+              return 'v3';
+            };
+            const getVersionTarget = version => {
+              const { pathname, search, hash } = window.location;
+              const relativePath = pathname.replace(/^\\/v[12](?=\\/|$)/, '') || '/';
+              const prefix = version === 'v3' ? '' : '/' + version;
+              return prefix + relativePath + search + hash;
+            };
+            const getVersionHome = version => version === 'v3' ? '/' : '/' + version + '/';
+            const ensureSwitcher = () => {
+              const header = document.querySelector('.header .right-group');
+              if (!header) return;
+              let wrapper = document.getElementById(VERSION_ID);
+              if (!wrapper) {
+                wrapper = document.createElement('label');
+                wrapper.id = VERSION_ID;
+                wrapper.className = 's2k-version-switcher';
+                wrapper.setAttribute('aria-label', 'Select docs version');
+                const select = document.createElement('select');
+                select.innerHTML =
+                  '<option value="v3">v3 (current)</option>' +
+                  '<option value="v2">v2 (archive)</option>' +
+                  '<option value="v1">v1 (archive)</option>';
+                select.addEventListener('change', () => {
+                  const target = getVersionTarget(select.value);
+                  fetch(target, { method: 'HEAD' })
+                    .then(response => window.location.assign(response.ok ? target : getVersionHome(select.value)))
+                    .catch(() => window.location.assign(getVersionHome(select.value)));
+                });
+                wrapper.appendChild(select);
+                header.prepend(wrapper);
+              }
+              const select = wrapper.querySelector('select');
+              if (select) select.value = getVersion();
+            };
+            if (document.readyState === 'loading') {
+              document.addEventListener('DOMContentLoaded', ensureSwitcher, { once: true });
+            } else {
+              ensureSwitcher();
+            }
+            document.addEventListener('astro:page-load', ensureSwitcher);
+          })();`,
           tag: 'script'
         }
       ],
@@ -238,7 +384,9 @@ export default defineConfig({
     })
   ],
   markdown: {
-    rehypePlugins: [rehypeTableFocusable]
+    processor: unified({
+      rehypePlugins: [rehypeTableFocusable]
+    })
   },
   site
 })

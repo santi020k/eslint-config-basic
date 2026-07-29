@@ -1,6 +1,6 @@
 ---
 title: Santi020k ESLint Config v1 Archive
-description: Archived v1 documentation for @santi020k/eslint-config-basic users who have not migrated to the current v2 configuration model.
+description: Archived v1 documentation for @santi020k/eslint-config-basic users who remain on the original multi-package model.
 template: splash
 hero:
   title: Santi020k ESLint Config v1
@@ -11,18 +11,18 @@ hero:
     - text: v1 getting started
       link: /v1/guide/getting-started
       icon: right-arrow
-    - text: Current v2 docs
+    - text: Current v3 docs
       link: /
       variant: secondary
     - text: Migration guide
       link: /guide/migration-v1-to-v2
       variant: minimal
 banner:
-  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v3 docs</a>; the previous release remains in the <a href=\"/v2/\">v2 archive</a>."
 ---
 
 <p class="s2k-v1-note">
-  You are viewing the v1 archive. New projects should start with the current v2 documentation.
+  You are viewing the v1 archive. New projects should start with the current v3 documentation.
 </p>
 
 <section class="s2k-home-section">

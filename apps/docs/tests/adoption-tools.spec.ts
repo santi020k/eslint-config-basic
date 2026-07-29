@@ -1,10 +1,8 @@
 import { expect, test } from '@playwright/test'
 
 test.describe('Adoption tools', () => {
-  test('config builder generates and restores a shareable Lite setup', async ({ page }) => {
+  test('config builder generates and restores a shareable lean v3 setup', async ({ page }) => {
     await page.goto('/guide/config-builder/')
-
-    await page.locator('#builder-distribution').selectOption('lite')
 
     await page.check('input[name="framework"][value="react"]')
 
@@ -13,17 +11,17 @@ test.describe('Adoption tools', () => {
     const install = page.locator('[data-builder-install]')
     const config = page.locator('[data-builder-config]')
 
-    await expect(install).toContainText('@santi020k/eslint-config-lite')
+    await expect(install).toContainText('eslint@^10')
 
-    await expect(install).toContainText('@santi020k/eslint-config-react')
+    await expect(install).toContainText('@santi020k/eslint-config-basic@^3')
 
-    await expect(install).toContainText('@santi020k/eslint-config-integrations')
+    await expect(install).toContainText('@santi020k/eslint-config-react@^3')
+
+    await expect(install).toContainText('@santi020k/eslint-config-testing@^3')
 
     await expect(config).toContainText('react: true')
 
     await expect(config).toContainText('vitest: true')
-
-    await expect(page).toHaveURL(/pkg=lite/)
 
     await expect(page).toHaveURL(/fw=react/)
 
@@ -34,8 +32,8 @@ test.describe('Adoption tools', () => {
     await expect(page.locator('input[name="feature"][value="vitest"]')).toBeChecked()
   })
 
-  test('Lite install command includes implied framework packages', async ({ page }) => {
-    await page.goto('/guide/config-builder/?pkg=lite&fw=next,nuxt')
+  test('lean install command includes implied framework packages', async ({ page }) => {
+    await page.goto('/guide/config-builder/?fw=next,nuxt')
 
     const install = page.locator('[data-builder-install]')
 
@@ -46,6 +44,22 @@ test.describe('Adoption tools', () => {
     await expect(install).toContainText('@santi020k/eslint-config-react')
 
     await expect(install).toContainText('@santi020k/eslint-config-vue')
+  })
+
+  test('Full install stays compact and includes TypeScript when selected', async ({ page }) => {
+    await page.goto('/guide/config-builder/?pkg=full&fw=react&features=vitest')
+
+    const install = page.locator('[data-builder-install]')
+
+    await expect(install).toContainText('@santi020k/eslint-config-full@^3')
+
+    await expect(install).toContainText('typescript')
+
+    await expect(install).not.toContainText('@santi020k/eslint-config-react')
+
+    await expect(install).not.toContainText('@santi020k/eslint-config-testing')
+
+    await expect(page.locator('[data-builder-package-badge]')).toHaveText('Full')
   })
 
   test('doctor viewer validates JSON and renders repair guidance', async ({ page }) => {

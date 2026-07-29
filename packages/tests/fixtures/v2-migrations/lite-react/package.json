@@ -1,0 +1,12 @@
+{
+  "name": "v2-lite-react-fixture",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@santi020k/eslint-config-lite": "^2.1.1",
+    "@santi020k/eslint-config-react": "^2.1.1",
+    "eslint": "^10.0.0",
+    "react": "^19.0.0",
+    "typescript": "^5.9.0"
+  }
+}

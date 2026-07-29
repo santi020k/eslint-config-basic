@@ -5,6 +5,10 @@ description: "The tools option enables integrations for standalone developer too
 
 The `tools` option enables integrations for standalone developer tooling that commonly interacts with source code or documentation.
 
+Install `@santi020k/eslint-config-tools` alongside the lean `basic`
+package before enabling or auto-detecting entries on this page. The `full`
+package already includes it.
+
 | Tool | Enum | Use It When | Auto-Detected |
 | :--- | :--- | :--- | :--- |
 | Prettier | `Tool.Prettier` | The project uses Prettier and needs ESLint compatibility. | No |
@@ -38,4 +42,4 @@ export default await defineConfig({
 ## Repository Examples
 
 - Tool Playgrounds: [packages/playground/tools](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/tools)
-- Integrations Package Source: [packages/integrations](https://github.com/santi020k/eslint-config-basic/tree/main/packages/integrations)
+- Tools Package Source: [packages/tools](https://github.com/santi020k/eslint-config-basic/tree/main/packages/tools)

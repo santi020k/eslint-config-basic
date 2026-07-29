@@ -5,11 +5,18 @@ import { includeIgnoreFile } from '@eslint/config-helpers'
 import type { TSESLint } from '@typescript-eslint/utils'
 
 /**
- * Gitignore ESLint configuration
- * Automatically ignores files from .gitignore if it exists
+ * Creates an ESLint ignore block from the `.gitignore` at `rootDir`.
  */
-const gitignorePath = path.resolve(process.cwd(), '.gitignore')
+export const createGitignoreConfig = (
+  rootDir: string = process.cwd()
+): TSESLint.FlatConfig.ConfigArray => {
+  const gitignorePath = path.resolve(rootDir, '.gitignore')
 
-export const gitignore: TSESLint.FlatConfig.ConfigArray = fs.existsSync(gitignorePath) ?
-  [includeIgnoreFile(gitignorePath)] :
-  []
+  // eslint-disable-next-line security/detect-non-literal-fs-filename -- caller-selected root plus a fixed .gitignore basename
+  return fs.existsSync(gitignorePath) ?
+    [includeIgnoreFile(gitignorePath, {
+      gitignoreResolution: true,
+      name: 'eslint-config/gitignore'
+    })] :
+    []
+}

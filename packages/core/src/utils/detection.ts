@@ -1,5 +1,5 @@
-import { existsSync, readdirSync, readFileSync } from 'node:fs'
-import { join } from 'node:path'
+import { type Dirent, existsSync, readdirSync, readFileSync } from 'node:fs'
+import { dirname, join, matchesGlob } from 'node:path'
 
 import { type EslintConfigOptions, Extension, Format, Library, NextMode, Preset, Runtime, Testing, Tool } from '../types.js'
 
@@ -130,7 +130,7 @@ const FRAMEWORK_ENTRIES: FrameworkEntry[] = [
   { deps: ['@angular/core'], frameworks: ['angular'], runtime: Runtime.Browser },
   { deps: ['@builder.io/qwik'], frameworks: ['qwik'], runtime: Runtime.Browser },
   { deps: ['@slidev/cli'], frameworks: ['slidev', 'vue'], runtime: Runtime.Browser },
-  { deps: ['@remix-run/react', '@remix-run/node'], frameworks: ['remix'], runtime: Runtime.Browser },
+  { deps: ['@remix-run/react', '@remix-run/node'], frameworks: ['react-router'], runtime: Runtime.Browser },
   { deps: ['@react-router/dev'], frameworks: ['react-router', 'react'], runtime: Runtime.Browser },
   { deps: ['@tanstack/react-start'], frameworks: ['tanstack-start', 'react'], runtime: Runtime.Universal },
   { deps: ['@tanstack/solid-start'], frameworks: ['tanstack-start', 'solid'], runtime: Runtime.Universal }
@@ -138,7 +138,7 @@ const FRAMEWORK_ENTRIES: FrameworkEntry[] = [
 
 const CLOUDFLARE_DEPS = ['wrangler', '@cloudflare/workers-types', '@cloudflare/vitest-pool-workers']
 const REACT_EXCLUSIONS = ['next', 'expo', 'react-native', '@react-router/dev', '@remix-run/react', '@tanstack/react-start']
-const VITE_EXCLUSION_FRAMEWORKS = ['astro', 'next', 'nuxt', 'qwik', 'react-router', 'remix', 'slidev', 'tanstack-start']
+const VITE_EXCLUSION_FRAMEWORKS = ['astro', 'next', 'nuxt', 'qwik', 'react-router', 'slidev', 'tanstack-start']
 const isReactStandalone = (allDeps: DependencyMap): boolean => Boolean(allDeps.react) && !hasAnyDependency(allDeps, REACT_EXCLUSIONS)
 const isViteStandalone = (allDeps: DependencyMap, detected: DetectedFrameworkName[]): boolean => Boolean(allDeps.vite) && !detected.some(fw => VITE_EXCLUSION_FRAMEWORKS.includes(fw))
 
@@ -245,13 +245,20 @@ const detectTesting = (allDeps: DependencyMap): Testing[] => dedupe(
     .map(([, testing]) => testing)
 )
 
-const detectExtensions = (allDeps: DependencyMap): Extension[] => {
-  const extensions: Extension[] = []
+const EXTENSION_DEP_MAPPINGS: [string[], Extension][] = [
+  [['eslint-plugin-no-only-tests'], Extension.NoOnlyTests],
+  [['eslint-plugin-perfectionist'], Extension.Perfectionist],
+  [['eslint-plugin-regexp'], Extension.Regexp],
+  [['eslint-plugin-security'], Extension.Security],
+  [['eslint-plugin-sonarjs'], Extension.Sonarjs],
+  [['eslint-plugin-unicorn'], Extension.Unicorn]
+]
 
-  if (allDeps['eslint-plugin-no-only-tests']) extensions.push(Extension.NoOnlyTests)
-
-  return extensions
-}
+const detectExtensions = (allDeps: DependencyMap): Extension[] => dedupe(
+  EXTENSION_DEP_MAPPINGS
+    .filter(([deps]) => hasAnyDependency(allDeps, deps))
+    .map(([, extension]) => extension)
+)
 
 const GRAPHQL_DEPS = ['graphql', '@apollo/client', 'relay-runtime', 'urql', 'graphql-tag', '@graphql-typed-document-node/core']
 const MDX_DEPS = ['@mdx-js/react', '@mdx-js/mdx', '@astrojs/mdx']
@@ -391,47 +398,125 @@ const hasWorkspaceSignal = (pkg: PackageJson, detectRootDir: string): boolean =>
   pathExists(join(detectRootDir, 'nx.json'))
 )
 
-const getWorkspaceBaseDirs = (pkg: PackageJson, detectRootDir: string): string[] => {
-  const bases = [
+const getWorkspacePatternsForProjectDetection = (pkg: PackageJson, detectRootDir: string): string[] => {
+  const patterns = [
     ...getWorkspacePatterns(pkg),
     ...parsePnpmWorkspacePatterns(detectRootDir)
   ]
-    .map(pattern => pattern.replace(/^\.\//, '').split('*')[0]?.replace(/\/$/, ''))
-    .filter((pattern): pattern is string => Boolean(pattern) && !pattern.startsWith('!'))
+    .map(pattern => {
+      const negative = pattern.startsWith('!')
 
-  if (bases.length > 0) return dedupe(bases)
+      const pathPattern = (negative ? pattern.slice(1) : pattern)
+        .replace(/^\.\//, '')
+        .replace(/\/$/, '')
 
-  return ['apps', 'packages', 'workers', 'examples'].filter(base => pathExists(join(detectRootDir, base)))
+      return negative ? `!${pathPattern}` : pathPattern
+    })
+    .filter(Boolean)
+
+  if (patterns.some(pattern => !pattern.startsWith('!'))) return dedupe(patterns)
+
+  return ['apps/*', 'packages/*', 'workers/*', 'examples/*']
+    .filter(pattern => pathExists(join(detectRootDir, dirname(pattern))))
 }
 
-const detectProjects = (pkg: PackageJson, detectRootDir: string): NonNullable<EslintConfigOptions['projects']> => {
-  if (!hasWorkspaceSignal(pkg, detectRootDir)) return {}
+const workspacePatternMatches = (projectPath: string, pattern: string): boolean => {
+  try {
+    return matchesGlob(projectPath, pattern)
+  } catch {
+    return false
+  }
+}
 
-  const projects: NonNullable<EslintConfigOptions['projects']> = {}
+const getWorkspaceSearchRoot = (pattern: string): string => {
+  const firstGlobIndex = pattern.search(/[*?[\]{}]/)
 
-  for (const baseDir of getWorkspaceBaseDirs(pkg, detectRootDir)) {
-    const fullBaseDir = join(detectRootDir, baseDir)
+  if (firstGlobIndex === -1) return dirname(pattern)
+
+  const prefix = pattern.slice(0, firstGlobIndex).replace(/\/$/, '')
+
+  return prefix ? dirname(`${prefix}/placeholder`) : '.'
+}
+
+const isTraversableWorkspaceDir = (entry: Dirent): boolean => (
+  entry.isDirectory() &&
+  entry.name !== '.git' &&
+  entry.name !== 'node_modules'
+)
+
+const collectPackageDirs = (
+  detectRootDir: string,
+  searchRoot: string,
+  maxDepth: number
+): string[] => {
+  const packageDirs: string[] = []
+
+  const visit = (relativeDir: string): void => {
+    const fullDir = join(detectRootDir, relativeDir)
+    const depth = relativeDir === '.' ? 0 : relativeDir.split('/').length
+
+    if (relativeDir !== '.' && pathExists(join(fullDir, 'package.json'))) {
+      packageDirs.push(relativeDir)
+    }
+
+    if (depth >= maxDepth) return
 
     try {
-      for (const entry of readdirSync(fullBaseDir, { withFileTypes: true })) {
-        if (!entry.isDirectory()) continue
+      for (const entry of readdirSync(fullDir, { withFileTypes: true })) {
+        if (!isTraversableWorkspaceDir(entry)) continue
 
-        const projectPath = `${baseDir}/${entry.name}`
-
-        if (pathExists(join(detectRootDir, projectPath, 'package.json'))) {
-          // eslint-disable-next-line security/detect-object-injection -- projectPath is formed from readdirSync entries; directory names cannot be __proto__ on real filesystems
-          projects[projectPath] = {}
-        }
+        visit(relativeDir === '.' ? entry.name : `${relativeDir}/${entry.name}`)
       }
     } catch {
       // Missing or unreadable workspace folders are ignored; detection stays best-effort.
     }
   }
 
+  visit(searchRoot)
+
+  return packageDirs
+}
+
+const detectProjects = (pkg: PackageJson, detectRootDir: string): NonNullable<EslintConfigOptions['projects']> => {
+  if (!hasWorkspaceSignal(pkg, detectRootDir)) return {}
+
+  const patterns = getWorkspacePatternsForProjectDetection(pkg, detectRootDir)
+  const positivePatterns = patterns.filter(pattern => !pattern.startsWith('!'))
+  const negativePatterns = patterns.filter(pattern => pattern.startsWith('!')).map(pattern => pattern.slice(1))
+
+  const candidates = dedupe(positivePatterns.flatMap(pattern => {
+    if (!/[*?[\]{}]/.test(pattern)) return [pattern]
+
+    const maxDepth = pattern.includes('**') ? Number.POSITIVE_INFINITY : pattern.split('/').length
+
+    return collectPackageDirs(detectRootDir, getWorkspaceSearchRoot(pattern), maxDepth)
+  }))
+
+  const projects: NonNullable<EslintConfigOptions['projects']> = {}
+
+  for (const projectPath of candidates) {
+    // The workspace root is configured by the outer defineConfig call. Treating
+    // "." as a child project recursively configures the same directory forever.
+    if (projectPath === '.') continue
+
+    if (!positivePatterns.some(pattern => workspacePatternMatches(projectPath, pattern))) continue
+
+    if (negativePatterns.some(pattern => workspacePatternMatches(projectPath, pattern))) continue
+
+    if (!pathExists(join(detectRootDir, projectPath, 'package.json'))) continue
+
+    // eslint-disable-next-line security/detect-object-injection -- projectPath is a matched package directory from the workspace declaration
+    projects[projectPath] = {}
+  }
+
   return projects
 }
 
 const resolvePreset = (options: EslintConfigOptions): Preset => {
+  if (Object.keys(options.projects ?? {}).length > 0) {
+    return Preset.Monorepo
+  }
+
   if (!options.typescript) {
     return Preset.Basic
   }

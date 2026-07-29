@@ -7,6 +7,7 @@ import { afterEach, describe, expect, test, vi } from 'vitest'
 import type { EslintConfigFeatures } from '../../basic/src/agent-skill-generator.js'
 import {
   AGENT_TARGETS,
+  analyzeEslintConfig,
   generateAgentSkills,
   generateSkillContent,
   handleGenerateSkill
@@ -18,6 +19,7 @@ import {
   handleExplain,
   handleInit,
   handleInspect,
+  handleInstall,
   handleMigrate,
   handleUpdate,
   runCli
@@ -47,7 +49,7 @@ describe('CLI scaffolding', () => {
     handleInit(cwd)
 
     expect(readFileSync(join(cwd, 'eslint.config.mjs'), 'utf8')).toBe(
-      'export { default } from \'@santi020k/eslint-config-basic/recommended\'\n'
+      'import { defineConfig } from \'@santi020k/eslint-config-basic\'\n\nexport default defineConfig()\n'
     )
   })
 
@@ -64,7 +66,7 @@ describe('CLI scaffolding', () => {
 
     const config = readFileSync(join(cwd, 'eslint.config.js'), 'utf8')
 
-    expect(config).toBe('export { default } from \'@santi020k/eslint-config-basic/recommended\'\n')
+    expect(config).toBe('import { defineConfig } from \'@santi020k/eslint-config-basic\'\n\nexport default defineConfig()\n')
   })
 
   test('should update an existing config file in place', () => {
@@ -83,7 +85,7 @@ describe('CLI scaffolding', () => {
     const config = readFileSync(join(cwd, 'eslint.config.js'), 'utf8')
 
     expect(config).not.toContain('// old config')
-    expect(config).toBe('export { default } from \'@santi020k/eslint-config-basic/recommended\'\n')
+    expect(config).toBe('import { defineConfig } from \'@santi020k/eslint-config-basic\'\n\nexport default defineConfig()\n')
   })
 })
 
@@ -141,6 +143,279 @@ describe('CLI command UX', () => {
     expect(output).toContain('ESLint Basic detected configuration:')
     expect(output).toContain('Frameworks: react')
     expect(output).toContain('Testing: vitest')
+    logSpy.mockRestore()
+  })
+
+  test('should print one install command for all missing detected packages', () => {
+    const cwd = createTempProject({
+      dependencies: {
+        react: '19.0.0'
+      },
+      devDependencies: {
+        '@santi020k/eslint-config-basic': '3.0.0',
+        eslint: '10.0.0',
+        typescript: '6.0.0',
+        vitest: 'latest'
+      },
+      name: 'tmp-project'
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    handleInstall(cwd, true)
+
+    const output = String(logSpy.mock.calls[0]?.[0])
+
+    expect(output).toBe(
+      'npm install -D @santi020k/eslint-config-react @santi020k/eslint-config-testing'
+    )
+    logSpy.mockRestore()
+  })
+
+  test('should include feature packs selected explicitly in the config', () => {
+    const cwd = createTempProject({
+      devDependencies: {
+        '@santi020k/eslint-config-basic': '3.0.0',
+        eslint: '10.0.0'
+      },
+      name: 'tmp-project',
+      type: 'module'
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    writeFileSync(join(cwd, 'eslint.config.js'), `
+      import { defineConfig, Extension, Preset } from '@santi020k/eslint-config-basic'
+      export default defineConfig({
+        extensions: [Extension.Security],
+        features: { markdown: true },
+        preset: Preset.App,
+        strict: 'pedantic'
+      })
+    `)
+
+    handleInstall(cwd, true)
+
+    expect(logSpy).toHaveBeenCalledWith(
+      'npm install -D @santi020k/eslint-config-extensions @santi020k/eslint-config-formats @santi020k/eslint-config-testing @santi020k/eslint-config-tools'
+    )
+    logSpy.mockRestore()
+  })
+
+  test('should install the canonical React Router package', () => {
+    const cwd = createTempProject({
+      dependencies: {
+        '@react-router/dev': 'latest'
+      },
+      devDependencies: {
+        '@santi020k/eslint-config-basic': '3.0.0',
+        '@santi020k/eslint-config-react': '3.0.0',
+        eslint: '10.0.0'
+      },
+      name: 'tmp-project'
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    handleInstall(cwd, true)
+
+    expect(logSpy).toHaveBeenCalledWith(
+      'npm install -D @santi020k/eslint-config-react-router'
+    )
+    logSpy.mockRestore()
+  })
+
+  test('should report when every detected package is already declared', () => {
+    const cwd = createTempProject({
+      dependencies: {
+        react: '19.0.0'
+      },
+      devDependencies: {
+        '@santi020k/eslint-config-basic': '3.0.0',
+        '@santi020k/eslint-config-react': '3.0.0',
+        eslint: '10.0.0'
+      },
+      name: 'tmp-project'
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    handleInstall(cwd, true)
+
+    expect(logSpy).toHaveBeenCalledWith(
+      '✅ All packages required by the detected ESLint configuration are already declared.'
+    )
+    logSpy.mockRestore()
+  })
+
+  test('should aggregate install requirements from workspace projects', () => {
+    const cwd = createTempProject({
+      devDependencies: {
+        '@santi020k/eslint-config-basic': '3.0.0',
+        eslint: '10.0.0'
+      },
+      name: 'tmp-workspace',
+      workspaces: ['apps/*']
+    })
+
+    mkdirSync(join(cwd, 'apps/web'), { recursive: true })
+    writeFileSync(join(cwd, 'apps/web/package.json'), JSON.stringify({
+      dependencies: { react: '19.0.0' },
+      name: 'web'
+    }))
+
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    handleInstall(cwd, true)
+
+    expect(logSpy).toHaveBeenCalledWith('npm install -D @santi020k/eslint-config-react')
+    logSpy.mockRestore()
+  })
+
+  test('should aggregate workspace requirements when doctor applies fixes', async () => {
+    const cwd = createTempProject({
+      name: 'tmp-workspace',
+      type: 'module',
+      workspaces: ['apps/*']
+    })
+
+    mkdirSync(join(cwd, 'apps/web'), { recursive: true })
+    writeFileSync(join(cwd, 'apps/web/package.json'), JSON.stringify({
+      dependencies: {
+        react: '19.0.0',
+        vitest: '4.0.0'
+      },
+      name: 'web'
+    }))
+
+    vi.spyOn(console, 'log').mockImplementation(() => {})
+    await handleDoctor(cwd, false, false, true)
+
+    const packageJson = JSON.parse(readFileSync(join(cwd, 'package.json'), 'utf8')) as {
+      devDependencies: Record<string, string>
+    }
+
+    expect(packageJson.devDependencies['@santi020k/eslint-config-react']).toBe('^3.0.0')
+    expect(packageJson.devDependencies['@santi020k/eslint-config-testing']).toBe('^3.0.0')
+  })
+
+  test('should aggregate workspace requirements and declarations for v3 migration', () => {
+    const cwd = createTempProject({
+      devDependencies: {
+        '@santi020k/eslint-config-basic': '^2.0.0'
+      },
+      name: 'tmp-workspace',
+      type: 'module',
+      workspaces: ['apps/*']
+    })
+
+    mkdirSync(join(cwd, 'apps/web'), { recursive: true })
+    writeFileSync(join(cwd, 'apps/web/package.json'), JSON.stringify({
+      dependencies: {
+        react: '19.0.0',
+        vitest: '4.0.0'
+      },
+      devDependencies: {
+        '@santi020k/eslint-config-formats': '^2.0.0'
+      },
+      name: 'web'
+    }))
+    writeFileSync(
+      join(cwd, 'eslint.config.js'),
+      'import { defineConfig } from \'@santi020k/eslint-config-basic\'\nexport default defineConfig()\n'
+    )
+
+    vi.spyOn(console, 'log').mockImplementation(() => {})
+    handleMigrate(cwd, true, false, 'v3')
+
+    const packageJson = JSON.parse(readFileSync(join(cwd, 'package.json'), 'utf8')) as {
+      devDependencies: Record<string, string>
+    }
+
+    expect(packageJson.devDependencies['@santi020k/eslint-config-react']).toBe('^3.0.0')
+    expect(packageJson.devDependencies['@santi020k/eslint-config-testing']).toBe('^3.0.0')
+    expect(packageJson.devDependencies['@santi020k/eslint-config-formats']).toBe('^3.0.0')
+  })
+
+  test.each([
+    {
+      childPath: 'apps/web',
+      workspaces: ['apps/web']
+    },
+    {
+      childPath: 'packages/group/web',
+      workspaces: ['packages/**']
+    }
+  ])('should aggregate install requirements from $workspaces', ({ childPath, workspaces }) => {
+    const cwd = createTempProject({
+      devDependencies: {
+        '@santi020k/eslint-config-basic': '3.0.0',
+        eslint: '10.0.0'
+      },
+      name: 'tmp-workspace',
+      workspaces
+    })
+
+    mkdirSync(join(cwd, childPath), { recursive: true })
+    writeFileSync(join(cwd, childPath, 'package.json'), JSON.stringify({
+      dependencies: { react: '19.0.0' },
+      name: 'web'
+    }))
+
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    handleInstall(cwd, true)
+
+    expect(logSpy).toHaveBeenCalledWith('npm install -D @santi020k/eslint-config-react')
+    logSpy.mockRestore()
+  })
+
+  test('should scope pnpm installs to the workspace root', () => {
+    const cwd = createTempProject({
+      devDependencies: {
+        '@santi020k/eslint-config-formats': '3.0.0',
+        '@santi020k/eslint-config-tools': '3.0.0'
+      },
+      name: 'tmp-workspace'
+    })
+
+    writeFileSync(join(cwd, 'pnpm-workspace.yaml'), 'packages:\n  - "apps/*"\n')
+
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    handleInstall(cwd, true)
+
+    expect(logSpy).toHaveBeenCalledWith(
+      'pnpm add -D --workspace-root eslint @santi020k/eslint-config-basic'
+    )
+    logSpy.mockRestore()
+  })
+
+  test('should scope pnpm doctor install commands to the workspace root', async () => {
+    const cwd = createTempProject({ name: 'tmp-workspace' })
+
+    writeFileSync(join(cwd, 'pnpm-workspace.yaml'), 'packages:\n  - "apps/*"\n')
+
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    await handleDoctor(cwd, false, true)
+
+    expect(logSpy).toHaveBeenCalledWith(
+      expect.stringContaining('pnpm add -D --workspace-root ')
+    )
+    logSpy.mockRestore()
+  })
+
+  test('should retain pnpm workspace-root scoping after doctor fixes', async () => {
+    const cwd = createTempProject({ name: 'tmp-workspace', type: 'module' })
+
+    writeFileSync(join(cwd, 'pnpm-workspace.yaml'), 'packages:\n  - "apps/*"\n')
+
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    await handleDoctor(cwd, true, false, true)
+
+    const payload = JSON.parse(String(logSpy.mock.calls.at(-1)?.[0])) as {
+      liteInstallCommand?: string
+    }
+
+    expect(payload.liteInstallCommand).toContain('pnpm add -D --workspace-root ')
     logSpy.mockRestore()
   })
 
@@ -255,7 +530,7 @@ describe('CLI command UX', () => {
     const backup = readFileSync(join(cwd, 'eslint.config.js.bak'), 'utf8')
     const output = logSpy.mock.calls.flat().join('\n')
 
-    expect(config).toContain('eslintConfig')
+    expect(config).toContain('defineConfig')
     expect(config).toContain('next: true')
     expect(config).toContain('react: true')
     expect(config).not.toContain('@santi020k/eslint-config-next')
@@ -330,6 +605,35 @@ describe('CLI command UX', () => {
     expect(output).toContain('ESLint Basic doctor: passed with warnings')
     expect(output).toContain('Config still imports v1 framework packages')
     expect(output).toContain('Workspace packages were detected')
+    logSpy.mockRestore()
+    process.exitCode = undefined
+  })
+
+  test('should recognize auto-detected workspace project scoping', async () => {
+    const cwd = createTempProject({
+      name: 'tmp-project',
+      scripts: {
+        lint: 'eslint .'
+      },
+      type: 'module',
+      workspaces: ['packages/*']
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    mkdirSync(join(cwd, 'packages', 'app'), { recursive: true })
+    writeFileSync(join(cwd, 'packages', 'app', 'package.json'), JSON.stringify({ name: 'app' }))
+    writeFileSync(
+      join(cwd, 'eslint.config.js'),
+      'import { defineConfig } from \'@santi020k/eslint-config-basic\'\nexport default defineConfig()\n'
+    )
+
+    await handleDoctor(cwd)
+
+    const output = logSpy.mock.calls.flat().join('\n')
+
+    expect(output).not.toContain(
+      'Workspace packages were detected, but the root config does not use `projects` scoping.'
+    )
     logSpy.mockRestore()
     process.exitCode = undefined
   })
@@ -525,6 +829,19 @@ describe('CLI command UX', () => {
     expect(output).toContain('could not be loaded')
     logSpy.mockRestore()
     process.exitCode = undefined
+  })
+
+  test.each(['ts', 'mts', 'cts'])('should analyze eslint.config.%s files', async extension => {
+    const cwd = createTempProject({ name: 'tmp-project', type: 'module' })
+
+    writeFileSync(join(cwd, `eslint.config.${extension}`), `
+      export default [{ name: 'eslint-config-basic/typescript', rules: {} }]
+    `)
+
+    const result = await analyzeEslintConfig(cwd)
+
+    expect(result?.configFile).toBe(join(cwd, `eslint.config.${extension}`))
+    expect(result?.source).toBe('config-file')
   })
 })
 

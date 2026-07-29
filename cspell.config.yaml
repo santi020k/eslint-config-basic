@@ -17,13 +17,13 @@ words:
   - behaviour
   - better-tailwindcss
   - bunfig
+  - bunx
   - canonicalurl
   - changeset
   - changesets
   - clinerules
   - codecov
   - codegen
-  - commitizen
   - commitlint
   - commonmark
   - cspell
@@ -119,6 +119,7 @@ words:
   - st
   - stnl
   - stringly
+  - synckit
   - styl
   - styleguide
   - stylistic
@@ -172,3 +173,4 @@ ignorePaths:
   - llms.txt
   - llms-full.txt
   - .pnpm-store
+  - .pnpm-patches

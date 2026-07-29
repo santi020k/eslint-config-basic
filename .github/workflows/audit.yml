@@ -3,8 +3,16 @@ name: Security Audit
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'package.json'
+      - 'packages/*/package.json'
+      - 'apps/*/package.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - '.github/workflows/audit.yml'
   schedule:
     - cron: '0 9 * * 1' # Every Monday at 9am UTC
+  workflow_dispatch: {}
 
 permissions:
   contents: read

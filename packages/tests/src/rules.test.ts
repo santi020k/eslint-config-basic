@@ -65,12 +65,18 @@ describe('TypeScript Rules', () => {
 
 describe('React Rules', () => {
   test('should include React plugin configuration', () => {
-    const hasReactPlugin = reactConfig.some(c => c.plugins && ('@eslint-react' in c.plugins || 'react-compiler' in c.plugins))
+    const hasReactPlugin = reactConfig.some(c => c.plugins && ('@eslint-react' in c.plugins || 'react-hooks' in c.plugins))
     expect(hasReactPlugin).toBe(true)
   })
 
   test('should have React Hooks rules enabled', () => {
     expect(getEffectiveRuleValue(reactConfig, '@eslint-react/exhaustive-deps')).toBe('warn')
+  })
+
+  test('should include official React Compiler diagnostics without duplicate hook rules', () => {
+    expect(getEffectiveRuleValue(reactConfig, 'react-hooks/config')).toBe('warn')
+    expect(getEffectiveRuleValue(reactConfig, 'react-hooks/immutability')).toBe('warn')
+    expect(getEffectiveRuleValue(reactConfig, 'react-hooks/exhaustive-deps')).toBeUndefined()
   })
 })
 

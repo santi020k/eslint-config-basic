@@ -24,7 +24,6 @@ const frameworks = [
   ['qwik', 'Qwik'],
   ['react', 'React'],
   ['react-router', 'React Router'],
-  ['remix', 'Remix'],
   ['slidev', 'Slidev'],
   ['solid', 'Solid'],
   ['svelte', 'Svelte'],
@@ -36,9 +35,11 @@ const frameworks = [
 const featureGroups = [
   {
     label: 'Testing',
+    packageName: '@santi020k/eslint-config-testing',
     options: [
       ['vitest', 'Vitest'],
       ['jest', 'Jest'],
+      ['jest-dom', 'Jest DOM'],
       ['playwright', 'Playwright'],
       ['cypress', 'Cypress'],
       ['testing-library', 'Testing Library']
@@ -46,6 +47,7 @@ const featureGroups = [
   },
   {
     label: 'Libraries',
+    packageName: '@santi020k/eslint-config-libraries',
     options: [
       ['tailwind', 'Tailwind CSS'],
       ['storybook', 'Storybook'],
@@ -56,19 +58,37 @@ const featureGroups = [
     ]
   },
   {
-    label: 'Formats and tools',
+    label: 'Formats',
+    packageName: '@santi020k/eslint-config-formats',
     options: [
-      ['prettier', 'Prettier'],
+      ['css', 'CSS'],
+      ['html', 'HTML'],
       ['markdown', 'Markdown'],
       ['mdx', 'MDX'],
+      ['package-json', 'Package JSON'],
       ['jsonc', 'JSON / JSONC'],
       ['yaml', 'YAML'],
+      ['toml', 'TOML'],
+      ['graphql', 'GraphQL']
+    ]
+  },
+  {
+    label: 'Tools',
+    packageName: '@santi020k/eslint-config-tools',
+    options: [
+      ['prettier', 'Prettier'],
       ['cspell', 'CSpell'],
-      ['github-actions', 'GitHub Actions']
+      ['github-actions', 'GitHub Actions'],
+      ['docker', 'Docker'],
+      ['nx', 'Nx'],
+      ['pnpm', 'pnpm workspaces'],
+      ['jsdoc', 'JSDoc'],
+      ['swagger', 'Swagger']
     ]
   },
   {
     label: 'Rule extensions',
+    packageName: '@santi020k/eslint-config-extensions',
     options: [
       ['a11y', 'Accessibility'],
       ['best-practices', 'Best practices'],
@@ -83,10 +103,10 @@ const featureGroups = [
 
 <div class="not-content s2k-tool" data-config-builder>
   <Callout class="s2k-tool__intro">
-    <Badge variant="success">Runs in your browser</Badge>
+    <Badge variant="success">v3 package model</Badge>
     <p>
-      Choose your stack, then copy a complete install command and flat config.
-      Your selections stay in the URL so the setup can be shared with a teammate.
+      Build a lean, explicit install or choose the batteries-included Full bundle.
+      Everything runs locally, and your selections stay in the shareable URL.
     </p>
   </Callout>
 
@@ -194,7 +214,12 @@ const featureGroups = [
             <div class="s2k-check-grid">
               {group.options.map(([value, label]) => (
                 <label class="s2k-check-option s2k-check-option--compact">
-                  <Checkbox name="feature" value={value} data-builder-option />
+                  <Checkbox
+                    name="feature"
+                    value={value}
+                    data-builder-option
+                    data-feature-package={group.packageName}
+                  />
                   <span>{label}</span>
                 </label>
               ))}
@@ -264,6 +289,11 @@ const featureGroups = [
     yarn: packages => `yarn add -D ${packages}`
   }
 
+  const featurePackages = Object.fromEntries(
+    [...document.querySelectorAll<HTMLInputElement>('[data-feature-package]')]
+      .map(control => [control.value, control.dataset.featurePackage])
+  )
+
   const readState = (root: HTMLElement): BuilderState => {
     const form = root.querySelector<HTMLFormElement>('[data-builder-form]')
     const data = new FormData(form ?? undefined)
@@ -282,18 +312,16 @@ const featureGroups = [
   const createInstallCommand = (state: BuilderState): string => {
     const packages = new Set<string>()
 
-    packages.add('eslint')
+    packages.add('eslint@^10')
 
     if (state.distribution === 'full') {
-      packages.add('@santi020k/eslint-config-full')
+      packages.add('@santi020k/eslint-config-full@^3')
     } else {
-      packages.add('@santi020k/eslint-config-basic')
-
-      if (state.typescript) packages.add('typescript')
+      packages.add('@santi020k/eslint-config-basic@^3')
 
       const frameworkPackages = new Set(state.frameworks)
 
-      const needsReact = ['next', 'expo', 'remix', 'react-router'].some(
+      const needsReact = ['next', 'expo', 'react-router'].some(
         framework => frameworkPackages.has(framework)
       ) || (frameworkPackages.has('tanstack-start') && !frameworkPackages.has('solid'))
 
@@ -301,10 +329,18 @@ const featureGroups = [
 
       if (frameworkPackages.has('nuxt') || frameworkPackages.has('slidev')) frameworkPackages.add('vue')
 
-      for (const framework of frameworkPackages) packages.add(`@santi020k/eslint-config-${framework}`)
+      for (const framework of frameworkPackages) {
+        packages.add(`@santi020k/eslint-config-${framework}@^3`)
+      }
 
-      if (state.features.length > 0) packages.add('@santi020k/eslint-config-integrations')
+      for (const feature of state.features) {
+        const packageName = featurePackages[feature]
+
+        if (packageName) packages.add(`${packageName}@^3`)
+      }
     }
+
+    if (state.typescript) packages.add('typescript')
 
     const command = packageCommands[state.packageManager] ?? packageCommands.pnpm
 
@@ -433,7 +469,7 @@ const featureGroups = [
 
       if (configOutput) configOutput.textContent = createConfig(state)
 
-      if (badge) badge.textContent = state.distribution === 'lite' ? 'Lite' : 'Basic'
+      if (badge) badge.textContent = state.distribution === 'full' ? 'Full' : 'Basic'
 
       updateURL(state)
     }

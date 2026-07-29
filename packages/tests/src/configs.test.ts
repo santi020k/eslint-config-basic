@@ -1,5 +1,5 @@
 import { angularConfig } from '@santi020k/eslint-config-angular'
-import { astroConfig } from '@santi020k/eslint-config-astro'
+import { createAstroConfig } from '@santi020k/eslint-config-astro'
 import {
   coreConfig,
   Extension,
@@ -20,7 +20,6 @@ import { preactConfig } from '@santi020k/eslint-config-preact'
 import { qwik as qwikConfig } from '@santi020k/eslint-config-qwik'
 import { reactConfig } from '@santi020k/eslint-config-react'
 import { reactRouter as reactRouterConfig } from '@santi020k/eslint-config-react-router'
-import { remix as remixConfig } from '@santi020k/eslint-config-remix'
 import { slidevConfig } from '@santi020k/eslint-config-slidev'
 import { solidConfig } from '@santi020k/eslint-config-solid'
 import { svelteConfig } from '@santi020k/eslint-config-svelte'
@@ -31,6 +30,8 @@ import { vueConfig } from '@santi020k/eslint-config-vue'
 
 import type { TSESLint } from '@typescript-eslint/utils'
 import { describe, expect, test } from 'vitest'
+
+const astroConfig = createAstroConfig()
 
 describe('Core Config', () => {
   test('should export coreConfig as an array', () => {
@@ -85,7 +86,7 @@ describe('React Config', () => {
   test('should include react-related plugins', () => {
     const plugins = reactConfig.flatMap(c => Object.keys(c.plugins ?? {}))
     expect(plugins).toContain('@eslint-react')
-    expect(plugins).toContain('react-compiler')
+    expect(plugins).toContain('react-hooks')
     expect(plugins).toContain('react-refresh')
   })
 })
@@ -117,6 +118,16 @@ describe('Expo Config', () => {
 
   test('should have at least one config entry', () => {
     expect(expoConfig.length).toBeGreaterThan(0)
+  })
+
+  test('should retain Expo rules without legacy plugin families', () => {
+    const plugins = expoConfig.flatMap(config => Object.keys(config.plugins ?? {}))
+    const rules = expoConfig.flatMap(config => Object.keys(config.rules ?? {}))
+
+    expect(plugins).toContain('expo')
+    expect(plugins).not.toEqual(expect.arrayContaining(['@typescript-eslint', 'import', 'react', 'react-hooks']))
+    expect(rules.some(rule => ['@typescript-eslint/', 'import/', 'react/', 'react-hooks/']
+      .some(prefix => rule.startsWith(prefix)))).toBe(false)
   })
 })
 
@@ -372,22 +383,6 @@ describe('Preact Config', () => {
 
     expect(names).toContain('eslint-config-preact/recommended')
     expect(names).toContain('eslint-config-preact/custom')
-  })
-})
-
-describe('Remix Config', () => {
-  test('should export remix as an array', () => {
-    expect(Array.isArray(remixConfig)).toBe(true)
-  })
-
-  test('should have at least one config entry', () => {
-    expect(remixConfig.length).toBeGreaterThan(0)
-  })
-
-  test('should re-export react-router config with eslint-config-remix prefix', () => {
-    const names = remixConfig.flatMap((c: TSESLint.FlatConfig.Config) => (c.name ? [c.name] : []))
-
-    expect(names.every((name: string) => name.startsWith('eslint-config-remix'))).toBe(true)
   })
 })
 

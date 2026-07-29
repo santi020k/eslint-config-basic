@@ -32,7 +32,7 @@
       ]
     },
     "DetectedFrameworkName": {
-      "description": "Framework names that can be auto-detected by `detectProjectOptions`. These are informational only — you still need to import and pass the actual framework config via `frameworks.<name>` in `eslintConfig()`.",
+      "description": "Framework names that can be auto-detected by `detectProjectOptions`. The composer enables these automatically when the matching optional config package is installed.",
       "enum": [
         "angular",
         "astro",
@@ -46,7 +46,6 @@
         "qwik",
         "react",
         "react-router",
-        "remix",
         "slidev",
         "solid",
         "svelte",
@@ -213,7 +212,7 @@
       "description": "ESLint configuration interface",
       "properties": {
         "autoFrameworks": {
-          "description": "Enables bundled framework configs detected from dependencies. Disable this when you want manual framework control only.",
+          "description": "Enables installed optional framework configs detected from dependencies. Disable this when you want manual framework control only.",
           "type": "boolean"
         },
         "detectRootDir": {
@@ -221,7 +220,7 @@
           "type": "string"
         },
         "detectedFrameworks": {
-          "description": "Frameworks detected from package.json by `detectProjectOptions()`. In v2, `eslintConfig()` enables these bundled framework configs by default.",
+          "description": "Frameworks detected from package.json by `detectProjectOptions()`. In v3, `defineConfig()` enables detected framework configs when their optional packages are installed.",
           "items": {
             "$ref": "#/definitions/DetectedFrameworkName"
           },
@@ -258,7 +257,7 @@
         },
         "frameworks": {
           "additionalProperties": false,
-          "description": "Framework and library specific configurations.\n\nSet a framework to `true` to use the bundled v2 config from `@santi020k/eslint-config-basic`, or pass a config array/factory when you need to override the bundled config.",
+          "description": "Framework and library specific configurations.\n\nSet a framework to `true` to load its installed `@santi020k/eslint-config-*` package, or pass a config array/factory when you need to override the package config.",
           "properties": {
             "angular": {
               "$ref": "#/definitions/ImportedFramework"
@@ -295,11 +294,7 @@
             },
             "react-router": {
               "$ref": "#/definitions/ImportedFramework",
-              "description": "New name for Remix projects on React Router v7+."
-            },
-            "remix": {
-              "$ref": "#/definitions/ImportedFramework",
-              "deprecated": "Remix merged into React Router v7 — use `react-router` instead."
+              "description": "React Router v7 framework mode, including projects migrated from Remix."
             },
             "slidev": {
               "$ref": "#/definitions/ImportedFramework"
@@ -366,6 +361,10 @@
           },
           "description": "Package-aware subproject configuration for monorepos. Each key is a workspace-relative folder and each value is scoped to that folder.",
           "type": "object"
+        },
+        "root": {
+          "description": "Absolute project root used consistently for dependency detection, TypeScript, Tailwind, subprojects, and `.gitignore`.\n\nIn editor-sensitive configs, pass `import.meta.dirname`.",
+          "type": "string"
         },
         "runtime": {
           "$ref": "#/definitions/RuntimeOption",
@@ -853,7 +852,7 @@
           "type": "object"
         }
       ],
-      "description": "Type for framework option values: `true` enables the bundled v2 config, or pass a config array, a factory function (sync or async, like the lazy framework factories exported from `@santi020k/eslint-config-basic`), or an imported module with a default export. Any other value throws a descriptive `TypeError` (see `resolveFramework` in `@santi020k/eslint-config-basic`)."
+      "description": "Type for framework option values: `true` enables the optional v3 config, or pass a config array, a factory function (sync or async, like the lazy framework factories exported from `@santi020k/eslint-config-basic`), or an imported module with a default export. Any other value throws a descriptive `TypeError` (see `resolveFramework` in `@santi020k/eslint-config-basic`)."
     },
     "JSDocParsingMode": {
       "enum": [
@@ -2029,10 +2028,50 @@
           ]
         },
         "projectService": {
-          "type": "boolean"
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "allowDefaultProject": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "defaultProject": {
+                  "type": "string"
+                },
+                "loadTypeScriptPlugins": {
+                  "type": "boolean"
+                },
+                "maximumDefaultProjectFileMatchCount_THIS_WILL_SLOW_DOWN_LINTING": {
+                  "type": "number"
+                }
+              },
+              "type": "object"
+            }
+          ]
         },
         "tsconfigRootDir": {
           "type": "string"
+        },
+        "untypedFiles": {
+          "anyOf": [
+            {
+              "const": false,
+              "type": "boolean"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          ],
+          "description": "TypeScript files that should receive syntax-only linting even when the project uses type-aware mode. Config files are included by default because they commonly live outside an application's tsconfig.\n\nSet to `false` to require type information for every TypeScript file."
         }
       },
       "type": "object"

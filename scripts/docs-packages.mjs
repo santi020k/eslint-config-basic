@@ -104,13 +104,6 @@ export const packageDocs = [
     title: 'Qwik guide'
   },
   {
-    description: 'Remix-specific linting support for the shared configuration stack.',
-    docsPath: '/frameworks/remix',
-    packageName: '@santi020k/eslint-config-remix',
-    packagePath: 'packages/remix',
-    title: 'Remix guide'
-  },
-  {
     description: 'React Router v7 (framework mode) rules, successor to the Remix configuration.',
     docsPath: '/frameworks/react-router',
     packageName: '@santi020k/eslint-config-react-router',
@@ -153,10 +146,49 @@ export const packageDocs = [
     title: 'Slidev guide'
   },
   {
+    description: 'Specialized rule packs such as security, accessibility, Unicorn, and Oxlint.',
+    docsPath: '/tooling/extensions',
+    packageName: '@santi020k/eslint-config-extensions',
+    packagePath: 'packages/extensions',
+    title: 'Extensions'
+  },
+  {
+    description: 'ESLint parsers and rules for Markdown, JSONC, YAML, GraphQL, CSS, HTML, and other formats.',
+    docsPath: '/tooling/formats',
+    packageName: '@santi020k/eslint-config-formats',
+    packagePath: 'packages/formats',
+    title: 'Formats'
+  },
+  {
+    description: 'Library-specific rules for Tailwind, Storybook, AI SDKs, ORMs, and related ecosystems.',
+    docsPath: '/tooling/libraries',
+    packageName: '@santi020k/eslint-config-libraries',
+    packagePath: 'packages/libraries',
+    title: 'Libraries'
+  },
+  {
+    description: 'Testing configs for Vitest, Jest, Cypress, Playwright, and Testing Library.',
+    docsPath: '/tooling/testing',
+    packageName: '@santi020k/eslint-config-testing',
+    packagePath: 'packages/testing',
+    title: 'Testing'
+  },
+  {
+    description: 'Tool-specific configs for Prettier, CSpell, JSDoc, pnpm, Swagger, and more.',
+    docsPath: '/tooling/tools',
+    packageName: '@santi020k/eslint-config-tools',
+    packagePath: 'packages/tools',
+    title: 'Tools'
+  },
+  {
     description: 'Libraries, tools, testing, formats, and extensions integrations.',
     docsPath: '/packages/integrations',
     packageName: '@santi020k/eslint-config-integrations',
     packagePath: 'packages/integrations',
+    readmeNotice: [
+      'Deprecated in v3 and scheduled for removal in v4. Install the granular',
+      '`extensions`, `formats`, `libraries`, `testing`, and `tools` packages instead.'
+    ],
     title: 'Integrations package'
   },
   {
@@ -183,10 +215,16 @@ export const packageDocs = [
     title: 'Main package'
   },
   {
-    description: 'Lite composer for projects that install framework and integration config packages manually.',
+    description: 'Compatibility wrapper for projects migrating from the v2 Lite composer.\n' +
+      'Version 3 re-exports the lean `@santi020k/eslint-config-basic` API; new projects\n' +
+      'should install and import the Basic package directly.',
     docsPath: '/packages/lite',
     packageName: '@santi020k/eslint-config-lite',
     packagePath: 'packages/lite',
+    readmeNotice: [
+      'Deprecated in v3 and scheduled for removal in v4. Replace this package with',
+      '`@santi020k/eslint-config-basic`.'
+    ],
     title: 'Lite package'
   }
 ]

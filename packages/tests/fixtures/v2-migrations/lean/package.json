@@ -1,0 +1,10 @@
+{
+  "name": "v2-lean-fixture",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@santi020k/eslint-config-basic": "^2.1.1",
+    "eslint": "^10.0.0",
+    "tailwindcss": "^4.1.0"
+  }
+}

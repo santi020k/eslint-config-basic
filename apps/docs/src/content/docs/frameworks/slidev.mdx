@@ -9,7 +9,7 @@ Use Slidev support from the lean v3 composer.
 
 ## Install
 
-<InstallTabs packages={["@santi020k/eslint-config-basic", "@santi020k/eslint-config-slidev", "eslint"]} />
+<InstallTabs packages={["@santi020k/eslint-config-basic", "@santi020k/eslint-config-slidev", "@santi020k/eslint-config-vue", "eslint"]} />
 
 ## Configure
 
@@ -24,7 +24,7 @@ export default await defineConfig({
 })
 ```
 
-Most projects can also rely on auto-detection and use `eslintConfig()` with no framework object.
+With the required config packages installed, the one-line recommended entry auto-detects the framework; custom configs can use `defineConfig()` without a `frameworks` object.
 
 ## What It Adds
 

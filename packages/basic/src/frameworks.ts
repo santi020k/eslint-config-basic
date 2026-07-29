@@ -55,7 +55,6 @@ const frameworkLoaders = new Map<FrameworkName, FrameworkLoader>([
   ['qwik', async () => (await loadModule<{ qwik: FlatConfigArray }>('@santi020k/eslint-config-qwik')).qwik],
   ['react', async () => (await loadModule<{ reactConfig: FlatConfigArray }>('@santi020k/eslint-config-react')).reactConfig],
   ['react-router', async () => (await loadModule<{ reactRouter: FlatConfigArray }>('@santi020k/eslint-config-react-router')).reactRouter],
-  ['remix', async () => (await loadModule<{ default: FlatConfigArray }>('@santi020k/eslint-config-remix')).default],
   ['slidev', async () => (await loadModule<{ slidev: (options?: FrameworkOptions) => FlatConfigArray }>('@santi020k/eslint-config-slidev')).slidev],
   ['solid', async () => (await loadModule<{ solidConfig: FlatConfigArray }>('@santi020k/eslint-config-solid')).solidConfig],
   ['svelte', async () => (await loadModule<{ svelteConfig: FlatConfigArray }>('@santi020k/eslint-config-svelte')).svelteConfig],
@@ -80,7 +79,7 @@ const loadFrameworkConfigInput = (frameworkName: FrameworkName): Promise<Framewo
 
     throw new Error(
       `Unable to load optional framework config "${frameworkName}". ` +
-      `Install "@santi020k/eslint-config-${frameworkName}" or remove that framework from your eslintConfig options.`, { cause: error }
+      `Install "@santi020k/eslint-config-${frameworkName}" or remove that framework from your defineConfig options.`, { cause: error }
     )
   })
 
@@ -122,37 +121,3 @@ export const svelte = createBundledFramework('svelte')
 export const tanstackStart = createBundledFramework('tanstack-start')
 export const vite = createBundledFramework('vite')
 export const vue = createBundledFramework('vue')
-
-/**
- * @deprecated Remix merged into React Router v7. Use `reactRouter` (the
- * `react-router` framework key) instead. This alias loads the legacy Remix
- * config and will be removed in the next major version.
- */
-export const remix = createBundledFramework('remix')
-
-/** @deprecated Use `angular` instead. */
-export const angularConfig = angular
-
-/** @deprecated Use `expo` instead. */
-export const expoConfig = expo
-
-/** @deprecated Use `nest` instead. */
-export const nestConfig = nest
-
-/** @deprecated Use `next` instead. */
-export const nextConfig = next
-
-/** @deprecated Use `preact` instead. */
-export const preactConfig = preact
-
-/** @deprecated Use `react` instead. */
-export const reactConfig = react
-
-/** @deprecated Use `solid` instead. */
-export const solidConfig = solid
-
-/** @deprecated Use `svelte` instead. */
-export const svelteConfig = svelte
-
-/** @deprecated Use `vue` instead. */
-export const vueConfig = vue

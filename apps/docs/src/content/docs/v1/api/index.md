@@ -2,11 +2,11 @@
 title: "API Reference"
 description: "The API reference is generated from the source packages with TypeDoc and rendered as Markdown inside this Starlight site."
 banner:
-  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v2 docs</a>."
+  content: "You are viewing the v1 archive. For current setup guidance, use the <a href=\"/guide/getting-started\">v3 docs</a>; the v2 release is preserved at <a href=\"/v2/\">/v2/</a>."
 ---
 
 <div class="s2k-api-intro">
-  The v1 API reference is generated from source packages with TypeDoc and kept here for existing projects that have not moved to the current v2 import model.
+  The v1 API reference is generated from source packages with TypeDoc and kept here for existing projects that have not moved to the v1 import model.
 </div>
 
 ## Start Here

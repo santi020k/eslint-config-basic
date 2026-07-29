@@ -9,11 +9,11 @@ packages installed by the project.
 
 ## Mental Model
 
-- Start with `eslintConfig()`.
+- Start with `defineConfig()` and no arguments; add options or overrides only when detection needs help.
 - Let project detection enable TypeScript, frameworks, runtime, and supported tooling.
 - Make options explicit when you want stable, reviewable config.
 - Use booleans for installed optional framework configs.
-- Use enums or matching strings for integrations.
+- Prefer matching strings for concise configs; enums remain available when they improve discoverability.
 - Use `features` when you want one simple opt-in/opt-out map for optional configs.
 - Use `optionMergeStrategy` when you want strict replace behavior.
 - Use `detection` for granular auto-detection control.
@@ -24,52 +24,54 @@ packages installed by the project.
 ## Core Composition Model
 
 ```js
-import { defineConfig, Extension, Format, Library, Runtime, Testing, Tool } from '@santi020k/eslint-config-basic'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
 export default await defineConfig({
-  detectRootDir: process.cwd(),
-  extensions: [Extension.Unicorn, Extension.Security],
-  formats: [Format.Markdown, Format.Mdx],
+  extensions: ['unicorn', 'security'],
+  formats: ['markdown', 'mdx'],
   frameworks: {
     react: true
   },
-  libraries: [Library.Tailwind, Library.I18next],
+  libraries: ['tailwind', 'i18next'],
   optionMergeStrategy: 'merge',
-  runtime: Runtime.Browser,
-  testing: [Testing.Vitest],
-  tools: [Tool.Prettier],
+  root: import.meta.dirname,
+  runtime: 'browser',
+  testing: ['vitest'],
+  tools: ['prettier'],
   typescript: true
 })
 ```
 
 ## Recommended v3 Project Config
 
-For application packages, prefer the one-line recommended entry when no options
-are needed. Use one `defineConfig()` call with a stable detection root when the
-project needs explicit framework, TypeScript, or integration choices. Install
-`@santi020k/eslint-config-integrations` for the integration options below.
+For application packages, prefer `defineConfig()` with no arguments when no
+options are needed. A direct call automatically uses the directory containing
+`eslint.config.*` as its stable detection root. Add explicit options when the
+project needs specific framework, TypeScript, or integration choices. Install
+the matching category packs for the optional choices below.
 
 ```js
-import { defineConfig, NextMode, Testing } from '@santi020k/eslint-config-basic'
+import { defineConfig } from '@santi020k/eslint-config-basic'
 
 export default await defineConfig({
-  detectRootDir: import.meta.dirname,
   frameworks: {
     next: true
   },
-  nextMode: NextMode.AppRouter,
+  nextMode: 'app-router',
+  root: import.meta.dirname,
   tailwind: {
     entryPoint: 'src/app/globals.css',
     ignore: ['^prose-custom$', '^icon-wrapper$'],
     noUnknownClasses: 'warn'
   },
-  testing: [Testing.Vitest],
-  tsconfigRootDir: import.meta.dirname,
+  testing: ['vitest'],
   typescript: true
 })
 ```
 
-Use `detectRootDir: import.meta.dirname` when a package can be linted from more than one working directory, such as from a monorepo root and from the package folder. Use `tsconfigRootDir` when TypeScript project service needs to resolve `tsconfig.json` from that same package folder.
+Set `root` when the intended project root differs from the directory containing
+`eslint.config.*`. It anchors dependency detection, TypeScript, Tailwind,
+subprojects, and `.gitignore` to that alternate directory.
 
 ## Optional Configs
 
@@ -119,9 +121,12 @@ export default await defineConfig({
 | `App` | Browser app defaults with TypeScript, Prettier, and Vitest. |
 | `CI` | Universal TypeScript defaults with CI strict severities. |
 | `Monorepo` | Mixed-workspace defaults for package-aware configs. |
-| `All` | TypeScript plus all bundled integrations. |
+| `All` | TypeScript plus every optional integration; requires the integrations package. |
 
 Presets do not force a framework. Frameworks come from project detection or the `frameworks` option.
+
+With the lean `basic` package, presets that select optional features require
+their category packs. The `full` package already includes all five.
 
 ## Frameworks
 
@@ -136,7 +141,9 @@ export default await defineConfig({
 })
 ```
 
-Next.js, Expo, and Remix automatically include React rules. You can still pass imported config arrays or factories for advanced cases, but app configs should prefer booleans.
+Next.js, Expo, React Router, and detected Remix projects automatically include
+React rules. You can still pass imported config arrays or factories for
+advanced cases, but app configs should prefer booleans.
 
 | Framework | Option |
 | :--- | :--- |
@@ -151,7 +158,7 @@ Next.js, Expo, and Remix automatically include React rules. You can still pass i
 | Hono | `frameworks.hono` |
 | Expo | `frameworks.expo` |
 | Qwik | `frameworks.qwik` |
-| Remix | `frameworks.remix` |
+| React Router and Remix projects | `frameworks['react-router']` |
 | Vite | `frameworks.vite` |
 | Slidev | `frameworks.slidev` |
 
@@ -159,7 +166,7 @@ Next.js, Expo, and Remix automatically include React rules. You can still pass i
 
 Scalars always follow this order:
 
-1. Explicit options passed to `eslintConfig({})`.
+1. Explicit options passed to `defineConfig({})`.
 2. Preset defaults.
 3. Auto-detection from `package.json`, `tsconfig.json`, and project structure.
 
@@ -196,7 +203,7 @@ Supported detection keys are `typescript`, `frameworks`, `libraries`, `testing`,
 
 ## Additional global ignores
 
-Pass `ignores` when you want repo-specific globs inside `eslintConfig()` instead of a separate array entry. Patterns behave like ESLint flat config global ignores (relative to the ESLint working directory). They are not merged from presets or auto-detection. For `projects` sub-configs, patterns are not rewritten with the subfolder prefix; use paths that make sense from the config file's working directory.
+Pass `ignores` when you want repo-specific globs inside `defineConfig()` instead of a separate array entry. Patterns behave like ESLint flat config global ignores (relative to the ESLint working directory). They are not merged from presets or auto-detection. For `projects` sub-configs, patterns are not rewritten with the subfolder prefix; use paths that make sense from the config file's working directory.
 
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
@@ -230,34 +237,40 @@ export default await defineConfig(
 
 The composed config ships a default ignore block (`dist`, `build`, `coverage`, framework output folders, `node_modules`, and similar). It also ignores common generated-code folders and files such as `__generated__`, `generated`, `codegen`, `*.generated.*`, `*.gen.*`, GraphQL generated output, and `.prisma`. AI coding-assistant artifact folders — `.agent`, `.agents`, `.aider*`, `.claude`, `.clinerules`, `.codex`, `.copilot`, `.cursor`, `.gemini`, `.kiro`, `.opencode`, `.roo`, and `.windsurf` — are ignored too. Disable the whole block with `settings: [Setting.NoDefaultIgnores]`, or disable only generated-code ignores with `settings: [Setting.NoGeneratedCodeIgnores]`.
 
-## Detection and Root Directories
+## Project Root
 
-- `detectRootDir`: root used to detect dependencies, framework folders, and project files.
-- `tsconfigRootDir`: root passed to TypeScript parser options.
-
-In monorepos these can differ. Example:
+`root` is the shared base for dependency detection, TypeScript, Tailwind,
+workspace packages, and `.gitignore`:
 
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
 export default await defineConfig({
-  detectRootDir: process.cwd(),
-  tsconfigRootDir: new URL('.', import.meta.url).pathname
+  root: import.meta.dirname
 })
 ```
 
-When a project cannot use TypeScript's project service, keep the setting inside `typescript` instead of adding a manual parser override block:
+Advanced configs can still override `detectRootDir` or
+`typescript.tsconfigRootDir` when those roots intentionally differ.
+
+Type-aware mode syntax-lints `**/*.config.{ts,mts,cts}` by default because
+tooling config files commonly sit outside an application's tsconfig. Add other
+out-of-project files with `untypedFiles` instead of importing
+`typescript-eslint` only to spread `disableTypeChecked`:
 
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
 
 export default await defineConfig({
   typescript: {
-    project: true,
-    projectService: false
+    untypedFiles: ['templates/**/*.ts']
   }
 })
 ```
+
+Set `untypedFiles: false` to require type information for every TypeScript
+file. `projectService` also accepts the native options object when
+`allowDefaultProject` or `defaultProject` is genuinely needed.
 
 ## Tailwind Options
 
@@ -277,7 +290,7 @@ export default await defineConfig({
 
 Use `noUnknownClasses: false` when a project uses many generated or framework-provided classes but should keep the rest of the Tailwind rules.
 
-Relative entry points are resolved from `detectRootDir`, so project-scoped monorepo configs work when ESLint runs from the repository root. Set `tailwind.cwd` only when Tailwind must resolve from a different directory.
+Relative entry points are resolved from `root`, so project-scoped monorepo configs work when ESLint runs from the repository root. Set `tailwind.cwd` only when Tailwind must resolve from a different directory.
 
 Set `tailwind: false` to disable auto-detected Tailwind linting for a package.
 
@@ -410,13 +423,13 @@ See the [Core Package](/packages/core#import-sorting) page for the full group or
 
 ## Common Patterns
 
-### Fullstack Remix + Tailwind
+### React Router or Remix + Tailwind
 
 ```js
 import { defineConfig, Library } from '@santi020k/eslint-config-basic'
 
 export default await defineConfig({
-  frameworks: { remix: true },
+  frameworks: { 'react-router': true },
   libraries: [Library.Tailwind]
 })
 ```

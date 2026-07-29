@@ -1,5 +1,5 @@
 {
-  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "$schema": "https://unpkg.com/knip@6/schema.json",
   "ignoreWorkspaces": [
     "packages/playground",
     "packages/playground/**"
@@ -27,20 +27,25 @@
       "project": ["src/**/*.{js,jsx,ts,tsx,vue,svelte,astro}"]
     },
     "apps/docs": {
-      "project": ["src/**/*.ts", "tests/**/*.ts", "scripts/**/*.{js,mjs,ts}"]
+      "project": ["src/**/*.{ts,astro,mdx}", "tests/**/*.ts", "scripts/**/*.{js,mjs,ts}"]
     },
     "packages/tests": {
       "entry": ["src/**/*.test.ts"],
       "project": ["src/**/*.ts"]
+    },
+    "packages/svelte": {
+      "project": ["src/**/*.{ts,svelte}"]
     },
     "packages/basic": {
       "ignoreDependencies": [
         "@santi020k/eslint-config-angular",
         "@santi020k/eslint-config-astro",
         "@santi020k/eslint-config-expo",
+        "@santi020k/eslint-config-extensions",
+        "@santi020k/eslint-config-formats",
         "@santi020k/eslint-config-hono",
-        "@santi020k/eslint-config-integrations",
         "@santi020k/eslint-config-lit",
+        "@santi020k/eslint-config-libraries",
         "@santi020k/eslint-config-nest",
         "@santi020k/eslint-config-next",
         "@santi020k/eslint-config-nuxt",
@@ -48,76 +53,64 @@
         "@santi020k/eslint-config-qwik",
         "@santi020k/eslint-config-react",
         "@santi020k/eslint-config-react-router",
-        "@santi020k/eslint-config-remix",
         "@santi020k/eslint-config-slidev",
         "@santi020k/eslint-config-solid",
         "@santi020k/eslint-config-svelte",
         "@santi020k/eslint-config-tanstack-start",
+        "@santi020k/eslint-config-testing",
+        "@santi020k/eslint-config-tools",
         "@santi020k/eslint-config-vite",
         "@santi020k/eslint-config-vue",
         "semver"
       ]
     },
-    "packages/integrations": {
+    "packages/extensions": {
+      "ignoreDependencies": [
+        "eslint-plugin-compat",
+        "eslint-plugin-de-morgan",
+        "eslint-plugin-depend",
+        "eslint-plugin-n",
+        "eslint-plugin-no-only-tests",
+        "eslint-plugin-oxlint",
+        "eslint-plugin-security",
+        "eslint-plugin-sonarjs"
+      ]
+    },
+    "packages/formats": {
       "ignoreDependencies": [
         "@eslint/css",
         "@eslint/markdown",
         "@graphql-eslint/eslint-plugin",
         "@html-eslint/eslint-plugin",
         "@html-eslint/parser",
+        "graphql"
+      ]
+    },
+    "packages/libraries": {
+      "ignoreDependencies": [
         "@tanstack/eslint-plugin-query",
         "@tanstack/eslint-plugin-router",
-        "@vitest/eslint-plugin",
-        "eslint-config-biome",
         "eslint-plugin-better-tailwindcss",
-        "eslint-plugin-compat",
-        "eslint-plugin-de-morgan",
-        "eslint-plugin-depend",
-        "eslint-plugin-jsdoc",
-        "eslint-plugin-n",
-        "eslint-plugin-no-only-tests",
-        "eslint-plugin-oxlint",
-        "eslint-plugin-playwright",
-        "eslint-plugin-pnpm",
-        "eslint-plugin-security",
-        "eslint-plugin-sonarjs",
-        "eslint-plugin-tsdoc",
         "eslint-plugin-vercel-ai-security",
         "eslint-plugin-zod",
-        "graphql",
-        "oxlint",
         "zod"
       ]
     },
-    "packages/lite": {
+    "packages/testing": {
       "ignoreDependencies": [
-        "@santi020k/eslint-config-angular",
-        "@santi020k/eslint-config-astro",
-        "@santi020k/eslint-config-expo",
-        "@santi020k/eslint-config-hono",
-        "@santi020k/eslint-config-integrations",
-        "@santi020k/eslint-config-lit",
-        "@santi020k/eslint-config-nest",
-        "@santi020k/eslint-config-next",
-        "@santi020k/eslint-config-nuxt",
-        "@santi020k/eslint-config-preact",
-        "@santi020k/eslint-config-qwik",
-        "@santi020k/eslint-config-react",
-        "@santi020k/eslint-config-react-router",
-        "@santi020k/eslint-config-remix",
-        "@santi020k/eslint-config-slidev",
-        "@santi020k/eslint-config-solid",
-        "@santi020k/eslint-config-svelte",
-        "@santi020k/eslint-config-tanstack-start",
-        "@santi020k/eslint-config-vite",
-        "@santi020k/eslint-config-vue"
+        "@vitest/eslint-plugin",
+        "eslint-plugin-playwright"
+      ]
+    },
+    "packages/tools": {
+      "ignoreDependencies": [
+        "eslint-plugin-jsdoc",
+        "eslint-plugin-pnpm",
+        "eslint-plugin-tsdoc"
       ]
     },
     "packages/react-router": {
       "ignoreDependencies": ["@santi020k/eslint-config-core"]
-    },
-    "packages/expo": {
-      "ignoreDependencies": ["eslint-config-expo"]
     }
   }
 
