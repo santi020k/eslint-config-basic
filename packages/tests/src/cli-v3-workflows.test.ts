@@ -259,6 +259,62 @@ describe('v2 to v3 migration', () => {
     vi.restoreAllMocks()
   })
 
+  test('preserves runtime dependency fields for publishable shared configs', () => {
+    const cwd = createTempProject({
+      dependencies: {
+        '@santi020k/eslint-config-basic': '^2.0.0'
+      },
+      optionalDependencies: {
+        '@santi020k/eslint-config-react': '^2.0.0'
+      },
+      peerDependencies: {
+        '@santi020k/eslint-config-testing': '^2.0.0',
+        eslint: '^9.0.0'
+      },
+      peerDependenciesMeta: {
+        '@santi020k/eslint-config-testing': {
+          optional: true
+        }
+      },
+      name: 'eslint-config-shared',
+      type: 'module'
+    })
+
+    writeFileSync(
+      join(cwd, 'eslint.config.js'),
+      'export default defineConfig({ features: { security: true } })\n'
+    )
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    handleMigrateV3(
+      cwd,
+      migrationContext({ frameworks: ['react'], testing: ['vitest'] }),
+      { json: true, write: true }
+    )
+
+    const packageJson = JSON.parse(readFileSync(join(cwd, 'package.json'), 'utf8')) as {
+      dependencies: Record<string, string>
+      devDependencies?: Record<string, string>
+      optionalDependencies: Record<string, string>
+      peerDependencies: Record<string, string>
+      peerDependenciesMeta: Record<string, { optional?: boolean }>
+    }
+
+    expect(packageJson.dependencies['@santi020k/eslint-config-basic']).toBe('^3.0.0')
+    expect(packageJson.dependencies['@santi020k/eslint-config-extensions']).toBe('^3.0.0')
+    expect(packageJson.optionalDependencies['@santi020k/eslint-config-react']).toBe('^3.0.0')
+    expect(packageJson.peerDependencies['@santi020k/eslint-config-testing']).toBe('^3.0.0')
+    expect(packageJson.peerDependenciesMeta['@santi020k/eslint-config-testing']).toEqual({
+      optional: true
+    })
+    expect(packageJson.peerDependencies.eslint).toBe('^10.0.0')
+    expect(packageJson.devDependencies).toBeUndefined()
+
+    const payload = JSON.parse(String(logSpy.mock.calls[0]?.[0])) as { installCommand: string }
+
+    expect(payload.installCommand).toBe('npm install')
+  })
+
   test('includes feature packages selected explicitly in the config', () => {
     const cwd = createTempProject({
       devDependencies: {
@@ -1197,6 +1253,33 @@ describe('v3 project assistance', () => {
     expect(packageJson.devDependencies['@santi020k/eslint-config-basic']).toBe('^3.0.0')
     expect(existsSync(join(cwd, 'package.json.doctor.bak'))).toBe(true)
     expect(existsSync(join(cwd, 'eslint.config.js'))).toBe(true)
+  })
+
+  test('doctor fix declares feature packs selected explicitly in the config', async () => {
+    const cwd = createTempProject({
+      devDependencies: {
+        '@santi020k/eslint-config-basic': '^3.0.0',
+        eslint: '^10.0.0'
+      },
+      name: 'test-project',
+      type: 'module'
+    })
+
+    writeFileSync(
+      join(cwd, 'eslint.config.js'),
+      'export default defineConfig({ preset: Preset.App, strict: "pedantic" })\n'
+    )
+    vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    await handleDoctor(cwd, false, false, true)
+
+    const packageJson = JSON.parse(readFileSync(join(cwd, 'package.json'), 'utf8')) as {
+      devDependencies: Record<string, string>
+    }
+
+    expect(packageJson.devDependencies['@santi020k/eslint-config-extensions']).toBe('^3.0.0')
+    expect(packageJson.devDependencies['@santi020k/eslint-config-testing']).toBe('^3.0.0')
+    expect(packageJson.devDependencies['@santi020k/eslint-config-tools']).toBe('^3.0.0')
   })
 
   test('doctor fix reports the repaired project state', async () => {

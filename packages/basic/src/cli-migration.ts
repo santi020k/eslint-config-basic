@@ -235,6 +235,8 @@ const dependencyFields = [
   'peerDependencies'
 ] as const
 
+type DependencyField = typeof dependencyFields[number]
+
 const readPackageJson = (cwd: string): Record<string, unknown> => {
   const packagePath = join(cwd, 'package.json')
 
@@ -274,13 +276,37 @@ const createBackupPath = (filePath: string, suffix: string): string => {
 
 const getDependencyRecord = (
   packageJson: Record<string, unknown>,
-  field: typeof dependencyFields[number]
+  field: DependencyField
 ): Record<string, string> => {
   const value = packageJson[field]
 
   if (!value || typeof value !== 'object' || Array.isArray(value)) return {}
 
   return value as Record<string, string>
+}
+
+const getPackageDependencyFields = (
+  packageJson: Record<string, unknown>,
+  packageName: string
+): DependencyField[] => (
+  dependencyFields.filter(field => packageName in getDependencyRecord(packageJson, field))
+)
+
+const getPreferredConfigDependencyFields = (
+  packageJson: Record<string, unknown>
+): DependencyField[] => {
+  const fields = new Set<DependencyField>()
+
+  for (const packageName of [
+    BASIC_PACKAGE,
+    FULL_PACKAGE,
+    INTEGRATIONS_PACKAGE,
+    LITE_PACKAGE
+  ]) {
+    for (const field of getPackageDependencyFields(packageJson, packageName)) fields.add(field)
+  }
+
+  return fields.size > 0 ? [...fields] : ['devDependencies']
 }
 
 const getDeclaredConfigPackages = (packageJson: Record<string, unknown>): Set<string> => {
@@ -775,18 +801,56 @@ const createInstallCommand = (
   }
 }
 
+const createManifestInstallCommand = (packageManager: string): string => {
+  switch (packageManager) {
+    case 'bun':
+      return 'bun install'
+
+    case 'pnpm':
+      return 'pnpm install'
+
+    case 'yarn':
+      return 'yarn install'
+
+    default:
+      return 'npm install'
+  }
+}
+
 const migratePackageJson = (
   packageJson: Record<string, unknown>,
   context: V3MigrationContext,
   mode: 'full' | 'lean',
   configFeaturePackages: string[]
-): { changed: boolean, packageJson: Record<string, unknown>, packages: string[] } => {
+): {
+  changed: boolean
+  packageJson: Record<string, unknown>
+  packages: string[]
+  preservesRuntimeFields: boolean
+} => {
   const next = structuredClone(packageJson)
+  const preferredFields = getPreferredConfigDependencyFields(packageJson)
+  const originalFields = new Map<string, DependencyField[]>()
+  const migratedPackages = new Map<string, Set<DependencyField>>()
 
   const previouslyDeclared = new Set([
     ...getDeclaredConfigPackages(next),
     ...(context.declaredConfigPackages ?? [])
   ])
+
+  const migratableConfigPackages = [
+    BASIC_PACKAGE,
+    FULL_PACKAGE,
+    INTEGRATIONS_PACKAGE,
+    LITE_PACKAGE,
+    REMIX_PACKAGE,
+    ...Object.values(FEATURE_PACKAGES),
+    ...Object.values(FRAMEWORK_PACKAGES)
+  ]
+
+  for (const packageName of ['eslint', 'typescript', ...migratableConfigPackages]) {
+    originalFields.set(packageName, getPackageDependencyFields(packageJson, packageName))
+  }
 
   for (const field of dependencyFields) {
     const dependencies = { ...getDependencyRecord(next, field) }
@@ -807,13 +871,54 @@ const migratePackageJson = (
     else delete next[field]
   }
 
-  const devDependencies = {
-    ...getDependencyRecord(next, 'devDependencies')
+  const addPackage = (
+    packageName: string,
+    version: string,
+    fields: DependencyField[] = originalFields.get(packageName) ?? []
+  ): void => {
+    const targetFields = fields.length > 0 ? fields : preferredFields
+
+    for (const field of targetFields) {
+      const dependencies = {
+        ...getDependencyRecord(next, field),
+        [packageName]: version
+      }
+
+      next[field] = dependencies
+
+      const packageFields = migratedPackages.get(packageName) ?? new Set<DependencyField>()
+
+      packageFields.add(field)
+
+      migratedPackages.set(packageName, packageFields)
+    }
   }
 
-  devDependencies.eslint = '^10.0.0'
+  addPackage(
+    'eslint',
+    '^10.0.0',
+    originalFields.get('eslint')?.length ? originalFields.get('eslint') : ['devDependencies']
+  )
 
-  devDependencies[mode === 'full' ? FULL_PACKAGE : BASIC_PACKAGE] = '^3.0.0'
+  const mainPackageFields = mode === 'full'
+    ? [
+      ...new Set(
+        migratableConfigPackages.flatMap(packageName => originalFields.get(packageName) ?? [])
+      )
+    ]
+    : [
+      ...new Set([
+        ...(originalFields.get(BASIC_PACKAGE) ?? []),
+        ...(originalFields.get(FULL_PACKAGE) ?? []),
+        ...(originalFields.get(LITE_PACKAGE) ?? [])
+      ])
+    ]
+
+  addPackage(
+    mode === 'full' ? FULL_PACKAGE : BASIC_PACKAGE,
+    '^3.0.0',
+    mainPackageFields
+  )
 
   if (mode === 'lean') {
     const frameworkNames = new Set(context.frameworks)
@@ -822,7 +927,12 @@ const migratePackageJson = (
 
     for (const [framework, packageName] of Object.entries(FRAMEWORK_PACKAGES)) {
       if (frameworkNames.has(framework) || previouslyDeclared.has(packageName)) {
-        devDependencies[packageName] = '^3.0.0'
+        const fields = [
+          ...(originalFields.get(packageName) ?? []),
+          ...(framework === 'react-router' ? originalFields.get(REMIX_PACKAGE) ?? [] : [])
+        ]
+
+        addPackage(packageName, '^3.0.0', [...new Set(fields)])
       }
     }
 
@@ -837,32 +947,80 @@ const migratePackageJson = (
     }
 
     for (const packageName of selectedFeaturePackages) {
-      devDependencies[packageName] = '^3.0.0'
+      addPackage(packageName, '^3.0.0')
     }
 
     if (previouslyDeclared.has(INTEGRATIONS_PACKAGE)) {
-      devDependencies[INTEGRATIONS_PACKAGE] = '^3.0.0'
+      addPackage(INTEGRATIONS_PACKAGE, '^3.0.0')
     }
   }
 
-  if (context.typescript && !Object.keys(devDependencies).includes('typescript')) {
-    const declaredElsewhere = dependencyFields.some(field => 'typescript' in getDependencyRecord(next, field))
+  if (context.typescript) {
+    const typescriptFields = originalFields.get('typescript') ?? []
 
-    if (!declaredElsewhere) devDependencies.typescript = '^5.0.0'
+    if (typescriptFields.length === 0) addPackage('typescript', '^5.0.0')
   }
 
-  next.devDependencies = Object.fromEntries(
-    Object.entries(devDependencies).sort(([a], [b]) => a.localeCompare(b))
-  )
+  const peerDependenciesMeta = packageJson.peerDependenciesMeta
 
-  const packages = Object.entries(next.devDependencies as Record<string, string>)
-    .filter(([name]) => name === 'eslint' || name === 'typescript' || name.startsWith('@santi020k/eslint-config-'))
-    .map(([name, version]) => `${name}@${version}`)
+  if (
+    peerDependenciesMeta &&
+    typeof peerDependenciesMeta === 'object' &&
+    !Array.isArray(peerDependenciesMeta)
+  ) {
+    const nextPeerNames = new Set(Object.keys(getDependencyRecord(next, 'peerDependencies')))
+    const nextPeerMeta: Record<string, unknown> = {}
+
+    for (const [packageName, metadata] of Object.entries(peerDependenciesMeta)) {
+      let targetPackage = packageName
+
+      if (!nextPeerNames.has(targetPackage)) {
+        if (packageName === REMIX_PACKAGE) {
+          targetPackage = FRAMEWORK_PACKAGES['react-router']
+        } else if (
+          [BASIC_PACKAGE, FULL_PACKAGE, LITE_PACKAGE].includes(packageName)
+        ) {
+          targetPackage = mode === 'full' ? FULL_PACKAGE : BASIC_PACKAGE
+        } else if (mode === 'full' && migratableConfigPackages.includes(packageName)) {
+          targetPackage = FULL_PACKAGE
+        }
+      }
+
+      if (nextPeerNames.has(targetPackage)) nextPeerMeta[targetPackage] = metadata
+    }
+
+    if (Object.keys(nextPeerMeta).length > 0) next.peerDependenciesMeta = nextPeerMeta
+    else delete next.peerDependenciesMeta
+  }
+
+  for (const field of dependencyFields) {
+    const dependencies = getDependencyRecord(next, field)
+
+    if (Object.keys(dependencies).length > 0) {
+      next[field] = Object.fromEntries(
+        Object.entries(dependencies).sort(([a], [b]) => a.localeCompare(b))
+      )
+    }
+  }
+
+  const packages = [...migratedPackages.keys()]
+    .sort((a, b) => a.localeCompare(b))
+    .map(name => {
+      for (const field of dependencyFields) {
+        const version = getDependencyRecord(next, field)[name]
+
+        if (version) return `${name}@${version}`
+      }
+
+      return name
+    })
 
   return {
     changed: JSON.stringify(next) !== JSON.stringify(packageJson),
     packageJson: next,
-    packages
+    packages,
+    preservesRuntimeFields: [...migratedPackages.values()]
+      .some(fields => [...fields].some(field => field !== 'devDependencies'))
   }
 }
 
@@ -947,11 +1105,13 @@ export const handleMigrateV3 = (
   const result: MigrationResult = {
     changes,
     configFile: configPath ? basename(configPath) : null,
-    installCommand: createInstallCommand(
-      context.packageManager,
-      packageMigration.packages,
-      context.packageManager === 'pnpm' && existsSync(join(cwd, 'pnpm-workspace.yaml'))
-    ),
+    installCommand: packageMigration.preservesRuntimeFields
+      ? createManifestInstallCommand(context.packageManager)
+      : createInstallCommand(
+        context.packageManager,
+        packageMigration.packages,
+        context.packageManager === 'pnpm' && existsSync(join(cwd, 'pnpm-workspace.yaml'))
+      ),
     mode,
     packages: packageMigration.packages,
     written

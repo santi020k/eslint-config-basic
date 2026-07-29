@@ -4,5 +4,7 @@
 ---
 
 Include explicit feature, preset, and strict config selections in CLI install
-planning, analyze TypeScript ESLint config files during doctor checks, and
-honor dot-prefixed workspace exclusion patterns during project detection.
+and doctor repair planning, preserve runtime dependency fields and peer metadata
+during v3 migrations, analyze TypeScript ESLint config files during doctor
+checks, and honor dot-prefixed workspace exclusion patterns during project
+detection.

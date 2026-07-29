@@ -1054,7 +1054,12 @@ const applyDoctorFixes = (
     updated.devDependencies ??= {}
 
     const declared = getDeclaredDependencyNames(packageJson)
-    const missingPackages = getInstallPackages(summary, declared)
+
+    const explicitFeaturePackages = configContent
+      ? getExplicitConfigFeaturePackages(configContent)
+      : []
+
+    const missingPackages = getInstallPackages(summary, declared, explicitFeaturePackages)
 
     const missingDependencies = Object.fromEntries(
       missingPackages.map(packageName => [packageName, getDoctorDependencyVersion(packageName)])
