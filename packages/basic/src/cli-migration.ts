@@ -6,6 +6,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { basename, join } from 'node:path'
 
 export interface V3MigrationContext {
+  declaredConfigPackages?: string[]
   extensions: string[]
   formats: string[]
   frameworks: string[]
@@ -184,6 +185,22 @@ const REMOVED_ALIAS_REPLACEMENTS: Record<string, string> = {
   svelteConfig: 'svelte',
   tsConfig: 'typescriptConfig',
   vueConfig: 'vue'
+}
+
+const REMOVED_ALIAS_OWNERS: Record<string, string> = {
+  angularConfig: '@santi020k/eslint-config-angular',
+  astroConfig: '@santi020k/eslint-config-astro',
+  expoConfig: '@santi020k/eslint-config-expo',
+  gitignore: '@santi020k/eslint-config-core',
+  jsConfig: '@santi020k/eslint-config-core',
+  nestConfig: '@santi020k/eslint-config-nest',
+  nextConfig: '@santi020k/eslint-config-next',
+  preactConfig: '@santi020k/eslint-config-preact',
+  reactConfig: '@santi020k/eslint-config-react',
+  solidConfig: '@santi020k/eslint-config-solid',
+  svelteConfig: '@santi020k/eslint-config-svelte',
+  tsConfig: '@santi020k/eslint-config-typescript',
+  vueConfig: '@santi020k/eslint-config-vue'
 }
 
 const FACTORY_ALIAS_REPLACEMENTS = new Set([
@@ -438,9 +455,13 @@ const replaceImportedAlias = (
   invokeReferences = false
 ): string => {
   const bindings: { from: string, to: string }[] = []
-  const importPattern = /import\s*\{([\s\S]*?)\}\s*from\s*(['"])(@santi020k\/eslint-config-(?:basic|full))\2/g
+  const owner = REMOVED_ALIAS_OWNERS[from]
+  const acceptedPackages = new Set([BASIC_PACKAGE, FULL_PACKAGE, ...(owner ? [owner] : [])])
+  const importPattern = /import\s*\{([^}]*)\}\s*from\s*(['"])(@santi020k\/eslint-config-[^'"]+)\2/g
 
-  let updated = content.replace(importPattern, (statement, specifierText: string) => {
+  let updated = content.replace(importPattern, (statement, specifierText: string, _quote: string, packageName: string) => {
+    if (!acceptedPackages.has(packageName)) return statement
+
     const specifiers = specifierText.split(',')
 
     const rewritten = specifiers.map(specifier => {
@@ -672,7 +693,11 @@ const migratePackageJson = (
   configFeaturePackages: string[]
 ): { changed: boolean, packageJson: Record<string, unknown>, packages: string[] } => {
   const next = structuredClone(packageJson)
-  const previouslyDeclared = getDeclaredConfigPackages(next)
+
+  const previouslyDeclared = new Set([
+    ...getDeclaredConfigPackages(next),
+    ...(context.declaredConfigPackages ?? [])
+  ])
 
   for (const field of dependencyFields) {
     const dependencies = { ...getDependencyRecord(next, field) }
@@ -715,7 +740,11 @@ const migratePackageJson = (
     const selectedFeaturePackages = new Set(configFeaturePackages)
 
     for (const category of Object.keys(FEATURE_PACKAGES) as (keyof typeof FEATURE_PACKAGES)[]) {
-      if (context[category].length > 0) selectedFeaturePackages.add(FEATURE_PACKAGES[category])
+      const packageName = FEATURE_PACKAGES[category]
+
+      if (context[category].length > 0 || previouslyDeclared.has(packageName)) {
+        selectedFeaturePackages.add(packageName)
+      }
     }
 
     for (const packageName of selectedFeaturePackages) {

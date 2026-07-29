@@ -238,6 +238,71 @@ describe('CLI command UX', () => {
     logSpy.mockRestore()
   })
 
+  test('should aggregate workspace requirements when doctor applies fixes', async () => {
+    const cwd = createTempProject({
+      name: 'tmp-workspace',
+      type: 'module',
+      workspaces: ['apps/*']
+    })
+
+    mkdirSync(join(cwd, 'apps/web'), { recursive: true })
+    writeFileSync(join(cwd, 'apps/web/package.json'), JSON.stringify({
+      dependencies: {
+        react: '19.0.0',
+        vitest: '4.0.0'
+      },
+      name: 'web'
+    }))
+
+    vi.spyOn(console, 'log').mockImplementation(() => {})
+    await handleDoctor(cwd, false, false, true)
+
+    const packageJson = JSON.parse(readFileSync(join(cwd, 'package.json'), 'utf8')) as {
+      devDependencies: Record<string, string>
+    }
+
+    expect(packageJson.devDependencies['@santi020k/eslint-config-react']).toBe('^3.0.0')
+    expect(packageJson.devDependencies['@santi020k/eslint-config-testing']).toBe('^3.0.0')
+  })
+
+  test('should aggregate workspace requirements and declarations for v3 migration', () => {
+    const cwd = createTempProject({
+      devDependencies: {
+        '@santi020k/eslint-config-basic': '^2.0.0'
+      },
+      name: 'tmp-workspace',
+      type: 'module',
+      workspaces: ['apps/*']
+    })
+
+    mkdirSync(join(cwd, 'apps/web'), { recursive: true })
+    writeFileSync(join(cwd, 'apps/web/package.json'), JSON.stringify({
+      dependencies: {
+        react: '19.0.0',
+        vitest: '4.0.0'
+      },
+      devDependencies: {
+        '@santi020k/eslint-config-formats': '^2.0.0'
+      },
+      name: 'web'
+    }))
+    writeFileSync(
+      join(cwd, 'eslint.config.js'),
+      'import { defineConfig } from \'@santi020k/eslint-config-basic\'\nexport default defineConfig()\n'
+    )
+
+    vi.spyOn(console, 'log').mockImplementation(() => {})
+    handleMigrate(cwd, true, false, 'v3')
+
+    const packageJson = JSON.parse(readFileSync(join(cwd, 'package.json'), 'utf8')) as {
+      devDependencies: Record<string, string>
+    }
+
+    expect(packageJson.devDependencies['@santi020k/eslint-config-react']).toBe('^3.0.0')
+    expect(packageJson.devDependencies['@santi020k/eslint-config-testing']).toBe('^3.0.0')
+    expect(packageJson.devDependencies['@santi020k/eslint-config-formats']).toBe('^3.0.0')
+  })
+
   test.each([
     {
       childPath: 'apps/web',

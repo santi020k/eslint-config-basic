@@ -452,6 +452,21 @@ const getInstallProjectSummary = (cwd: string): ReturnType<typeof getProjectSumm
   }
 }
 
+const getWorkspaceDeclaredConfigPackages = (
+  cwd: string,
+  summary: ReturnType<typeof getProjectSummary>
+): string[] => {
+  const packages = new Set<string>()
+
+  for (const projectPath of summary.detectedProjects) {
+    for (const packageName of getDeclaredDependencyNames(readPackageJson(join(cwd, projectPath)))) {
+      if (packageName.startsWith('@santi020k/eslint-config-')) packages.add(packageName)
+    }
+  }
+
+  return [...packages]
+}
+
 const createStandardsContent = (cwd: string): string => {
   const summary = getProjectSummary(cwd)
 
@@ -1110,7 +1125,7 @@ export const handleDoctor = async (
   let configPath = getConfigPathIfPresent(cwd)
   let packageJson = readPackageJson(cwd)
   let declaredDependencies = getDeclaredDependencyNames(packageJson)
-  let summary = getProjectSummary(cwd)
+  let summary = getInstallProjectSummary(cwd)
   let activeConfig = await analyzeEslintConfig(cwd)
   let configContent = configPath ? readFileSync(configPath, 'utf8') : null
   let liteInstallPackages = getLiteInstallPackages(summary, declaredDependencies)
@@ -1136,7 +1151,7 @@ export const handleDoctor = async (
 
     declaredDependencies = getDeclaredDependencyNames(packageJson)
 
-    summary = getProjectSummary(cwd)
+    summary = getInstallProjectSummary(cwd)
 
     activeConfig = await analyzeEslintConfig(cwd)
 
@@ -1279,9 +1294,10 @@ export const handleMigrate = (
   full = false
 ) => {
   if (target === 'v3' || target === '3') {
-    const summary = getProjectSummary(cwd)
+    const summary = getInstallProjectSummary(cwd)
 
     handleMigrateV3(cwd, {
+      declaredConfigPackages: getWorkspaceDeclaredConfigPackages(cwd, summary),
       extensions: summary.extensions,
       formats: summary.formats,
       frameworks: summary.frameworks,

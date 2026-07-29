@@ -156,6 +156,31 @@ describe('v2 to v3 migration', () => {
     expect(result.content).toContain('export default [...createAstroConfig(), ...createGitignoreConfig()]')
   })
 
+  test('replaces removed aliases imported from their owning packages', () => {
+    const input = [
+      'import { astroConfig } from \'@santi020k/eslint-config-astro\'',
+      'import { gitignore } from \'@santi020k/eslint-config-core\'',
+      'import { tsConfig } from \'@santi020k/eslint-config-typescript\'',
+      '',
+      'export default [...astroConfig, ...gitignore, ...tsConfig]'
+    ].join('\n')
+
+    const result = migrateConfigToV3(input, 'lean')
+
+    expect(result.content).toContain(
+      'import { createAstroConfig } from \'@santi020k/eslint-config-astro\''
+    )
+    expect(result.content).toContain(
+      'import { createGitignoreConfig } from \'@santi020k/eslint-config-core\''
+    )
+    expect(result.content).toContain(
+      'import { typescriptConfig } from \'@santi020k/eslint-config-typescript\''
+    )
+    expect(result.content).toContain(
+      'export default [...createAstroConfig(), ...createGitignoreConfig(), ...typescriptConfig]'
+    )
+  })
+
   test('invokes aliased factory bindings without rewriting unrelated lookalikes', () => {
     const input = [
       'import { astroConfig as astro, gitignore } from \'@santi020k/eslint-config-basic\'',
