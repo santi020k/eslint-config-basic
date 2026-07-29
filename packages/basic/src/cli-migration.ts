@@ -723,6 +723,16 @@ const getBasicOptionOwners = (
   structure: string
 ): Set<number> => {
   const owners = getDefineConfigOptionOwners(searchable)
+
+  for (const projectDefaultsOwner of getOwnedObjectPropertyStarts(
+    searchable,
+    structure,
+    'projectDefaults',
+    owners
+  )) {
+    owners.add(projectDefaultsOwner)
+  }
+
   const visitedProjectContainers = new Set<number>()
   let projectContainers = getOwnedObjectPropertyStarts(searchable, structure, 'projects', owners)
 

@@ -535,6 +535,20 @@ describe('v2 to v3 migration', () => {
     expect(result.featurePackages).toEqual(expect.arrayContaining(expected))
   })
 
+  test('includes feature packages selected through project defaults', () => {
+    const result = migrateConfigToV3([
+      'export default defineConfig({',
+      '  projectDefaults: { features: { security: true } },',
+      '  settings: { features: { zod: true } },',
+      '  projects: { app: {} },',
+      '})'
+    ].join('\n'), 'lean')
+
+    expect(result.featurePackages).toEqual([
+      '@santi020k/eslint-config-extensions'
+    ])
+  })
+
   test('includes extensions for pedantic strict mode', () => {
     const result = migrateConfigToV3(
       'export default defineConfig({ strict: "pedantic" })',
