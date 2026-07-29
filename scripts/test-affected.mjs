@@ -40,6 +40,38 @@ const testFiles = readdirSync(testsDir)
   .filter(fileName => fileName.endsWith('.test.ts'))
   .map(fileName => join(testsDir, fileName))
 
+const dependencyFields = [
+  'dependencies',
+  'devDependencies',
+  'optionalDependencies',
+  'peerDependencies'
+]
+
+const workspaceManifests = readdirSync(join(rootDir, 'packages'), { withFileTypes: true })
+  .filter(entry => entry.isDirectory())
+  .map(entry => join(rootDir, 'packages', entry.name, 'package.json'))
+  .filter(existsSync)
+  .map(manifestPath => JSON.parse(readFileSync(manifestPath, 'utf8')))
+  .filter(manifest => manifest.name)
+
+const workspacePackageNames = new Set(workspaceManifests.map(manifest => manifest.name))
+const dependentsByPackage = new Map()
+
+for (const manifest of workspaceManifests) {
+  for (const field of dependencyFields) {
+    // eslint-disable-next-line security/detect-object-injection -- field is constrained to known dependency records
+    for (const dependencyName of Object.keys(manifest[field] ?? {})) {
+      if (!workspacePackageNames.has(dependencyName)) continue
+
+      const dependents = dependentsByPackage.get(dependencyName) ?? new Set()
+
+      dependents.add(manifest.name)
+
+      dependentsByPackage.set(dependencyName, dependents)
+    }
+  }
+}
+
 let selected
 
 if (requiresFullSuite) {
@@ -54,6 +86,21 @@ if (requiresFullSuite) {
       .map(manifestPath => JSON.parse(readFileSync(manifestPath, 'utf8')).name)
       .filter(Boolean)
   )
+
+  const affectedPackageNames = new Set(changedPackageNames)
+  const pendingPackageNames = [...changedPackageNames]
+
+  while (pendingPackageNames.length > 0) {
+    const packageName = pendingPackageNames.pop()
+
+    for (const dependentName of dependentsByPackage.get(packageName) ?? []) {
+      if (affectedPackageNames.has(dependentName)) continue
+
+      affectedPackageNames.add(dependentName)
+
+      pendingPackageNames.push(dependentName)
+    }
+  }
 
   const alwaysRun = new Set([
     'contracts.test.ts',
@@ -74,7 +121,7 @@ if (requiresFullSuite) {
 
     const source = readFileSync(testFile, 'utf8')
 
-    return [...changedPackageNames].some(packageName => source.includes(packageName))
+    return [...affectedPackageNames].some(packageName => source.includes(packageName))
   })
 }
 

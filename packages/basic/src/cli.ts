@@ -489,13 +489,18 @@ const getCompatibleConfigVersion = (
 const addCompatibleConfigVersions = (
   packages: string[],
   version: string
-): string[] => packages.map(packageName =>
-  packageName.startsWith('@santi020k/eslint-config-') &&
-  packageName !== LITE_PACKAGE_NAME &&
-  packageName !== INTEGRATIONS_PACKAGE_NAME
-    ? `${packageName}@${version}`
-    : packageName
-)
+): string[] => {
+  const major = /\d+/.exec(version)?.[0]
+  const companionVersion = major ? `^${major}.0.0` : version
+
+  return packages.map(packageName =>
+    packageName.startsWith('@santi020k/eslint-config-') &&
+    packageName !== LITE_PACKAGE_NAME &&
+    packageName !== INTEGRATIONS_PACKAGE_NAME
+      ? `${packageName}@${packageName === BASIC_PACKAGE_NAME ? version : companionVersion}`
+      : packageName
+  )
+}
 
 const hasLintScript = (cwd: string): boolean => {
   const packageJson = readPackageJson(cwd) as null | { scripts?: Record<string, string> }

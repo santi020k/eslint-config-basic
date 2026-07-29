@@ -250,7 +250,7 @@ describe('CLI command UX', () => {
       'pnpm minimumReleaseAge temporarily blocks the compatible ESLint config release'
     )
     expect(errorSpy.mock.calls.flat().join('\n')).toContain(
-      '@santi020k/eslint-config-react@^3.1.0'
+      '@santi020k/eslint-config-react@^3.0.0'
     )
     expect(process.exitCode).toBe(1)
     stderrSpy.mockRestore()
@@ -498,8 +498,8 @@ describe('CLI command UX', () => {
 
     expect(logSpy).toHaveBeenCalledWith(
       'pnpm add -D --workspace-root --save-catalog ' +
-      '@santi020k/eslint-config-formats@^3.1.0 ' +
-      '@santi020k/eslint-config-tools@^3.1.0'
+      '@santi020k/eslint-config-formats@^3.0.0 ' +
+      '@santi020k/eslint-config-tools@^3.0.0'
     )
     logSpy.mockRestore()
   })
@@ -538,9 +538,9 @@ describe('CLI command UX', () => {
 
     expect(logSpy).toHaveBeenCalledWith(
       'pnpm add -D --workspace-root --save-catalog-name=lint ' +
-      '@santi020k/eslint-config-react@^3.1.0 ' +
-      '@santi020k/eslint-config-formats@^3.1.0 ' +
-      '@santi020k/eslint-config-tools@^3.1.0'
+      '@santi020k/eslint-config-react@^3.0.0 ' +
+      '@santi020k/eslint-config-formats@^3.0.0 ' +
+      '@santi020k/eslint-config-tools@^3.0.0'
     )
     logSpy.mockRestore()
   })
