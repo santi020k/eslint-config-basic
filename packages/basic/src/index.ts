@@ -628,7 +628,8 @@ const resolveProjectConfigs = async (
       root: inheritedOptions.root ?? inheritedOptions.detectRootDir ?? projectRoot
     })
 
-    return scopedConfigs.map(config => scopeConfigToProject(config, projectPath))
+    return scopedConfigs.map(config =>
+      config.name === 'eslint-config/gitignore' ? config : scopeConfigToProject(config, projectPath))
   })
 )
 

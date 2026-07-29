@@ -91,4 +91,26 @@ describe('parsePnpmWorkspacePatterns', () => {
 
     expect(Object.keys(projects)).toContain('services/api')
   })
+
+  test('detectProjects resolves an exact workspace package path', () => {
+    mkdirSync(join(tmpDir, 'apps', 'web'), { recursive: true })
+    writeFileSync(join(tmpDir, 'apps', 'web', 'package.json'), '{}')
+
+    const projects = __detectionInternals.detectProjects({ workspaces: ['apps/web'] }, tmpDir)
+
+    expect(Object.keys(projects)).toEqual(['apps/web'])
+  })
+
+  test('detectProjects resolves nested workspace globs and exclusions', () => {
+    mkdirSync(join(tmpDir, 'apps', 'site', 'packages', 'ui'), { recursive: true })
+    mkdirSync(join(tmpDir, 'apps', 'site', 'packages', 'private'), { recursive: true })
+    writeFileSync(join(tmpDir, 'apps', 'site', 'packages', 'ui', 'package.json'), '{}')
+    writeFileSync(join(tmpDir, 'apps', 'site', 'packages', 'private', 'package.json'), '{}')
+
+    const projects = __detectionInternals.detectProjects({
+      workspaces: ['apps/*/packages/*', '!apps/*/packages/private']
+    }, tmpDir)
+
+    expect(Object.keys(projects)).toEqual(['apps/site/packages/ui'])
+  })
 })

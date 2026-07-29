@@ -139,6 +139,31 @@ describe('defineConfig Function', () => {
     }
   })
 
+  test('should not scope child gitignore patterns twice', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'eslint-config-workspace-gitignore-'))
+    const projectRoot = join(root, 'apps', 'web')
+
+    try {
+      mkdirSync(projectRoot, { recursive: true })
+      writeFileSync(join(root, 'package.json'), JSON.stringify({ name: 'root-fixture' }))
+      writeFileSync(join(projectRoot, 'package.json'), JSON.stringify({ name: 'web' }))
+      writeFileSync(join(projectRoot, '.gitignore'), '/generated.js\n')
+
+      const config = await defineConfig({
+        projects: { 'apps/web': {} },
+        root
+      })
+      const gitignoreEntry = config.find(entry =>
+        entry.name === 'eslint-config/gitignore' && entry.ignores?.some(pattern => pattern.includes('generated.js')))
+
+      expect(gitignoreEntry?.basePath).toBe(projectRoot)
+      expect(gitignoreEntry?.ignores).toContain('generated.js')
+      expect(gitignoreEntry?.ignores).not.toContain('apps/web/apps/web/generated.js')
+    } finally {
+      rmSync(root, { force: true, recursive: true })
+    }
+  })
+
   test('should exclude gitignore when NoGitignore setting is specified', async () => {
     const config = await defineConfig({
       settings: [Setting.NoGitignore]

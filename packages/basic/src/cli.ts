@@ -1090,25 +1090,27 @@ const applyDoctorFixes = (
   return fixes
 }
 
+const hasV1FrameworkPackageImports = (configContent: null | string): boolean => (
+  configContent !== null &&
+  Object.keys(FRAMEWORK_PACKAGE_TO_KEY).some(packageName => configContent.includes(packageName))
+)
+
 export const handleDoctor = async (
   cwd: string = process.cwd(),
   json = false,
   liteInstall = false,
   fix = false
 ) => {
-  const configPath = getConfigPathIfPresent(cwd)
-  const packageJson = readPackageJson(cwd)
-  const declaredDependencies = getDeclaredDependencyNames(packageJson)
-  const summary = getProjectSummary(cwd)
-  const activeConfig = await analyzeEslintConfig(cwd)
-  const configContent = configPath ? readFileSync(configPath, 'utf8') : null
   const packageManager = detectPackageManager(cwd)
-  const liteInstallPackages = getLiteInstallPackages(summary, declaredDependencies)
-  const liteInstallCommand = createInstallCommand(packageManager, liteInstallPackages)
-
-  const hasV1FrameworkImports = configContent ?
-    Object.keys(FRAMEWORK_PACKAGE_TO_KEY).some(packageName => configContent.includes(packageName)) :
-    false
+  let configPath = getConfigPathIfPresent(cwd)
+  let packageJson = readPackageJson(cwd)
+  let declaredDependencies = getDeclaredDependencyNames(packageJson)
+  let summary = getProjectSummary(cwd)
+  let activeConfig = await analyzeEslintConfig(cwd)
+  let configContent = configPath ? readFileSync(configPath, 'utf8') : null
+  let liteInstallPackages = getLiteInstallPackages(summary, declaredDependencies)
+  let liteInstallCommand = createInstallCommand(packageManager, liteInstallPackages)
+  let hasV1FrameworkImports = hasV1FrameworkPackageImports(configContent)
 
   if (liteInstall) {
     if (json) {
@@ -1120,8 +1122,31 @@ export const handleDoctor = async (
     return
   }
 
-  const { issues, warnings } = buildDoctorDiagnosis(cwd, configPath, configContent, hasV1FrameworkImports, activeConfig, declaredDependencies, summary)
   const fixes = fix ? applyDoctorFixes(cwd, packageJson, configPath, configContent, summary) : []
+
+  if (fixes.length > 0) {
+    configPath = getConfigPathIfPresent(cwd)
+
+    packageJson = readPackageJson(cwd)
+
+    declaredDependencies = getDeclaredDependencyNames(packageJson)
+
+    summary = getProjectSummary(cwd)
+
+    activeConfig = await analyzeEslintConfig(cwd)
+
+    configContent = configPath ? readFileSync(configPath, 'utf8') : null
+
+    liteInstallPackages = getLiteInstallPackages(summary, declaredDependencies)
+
+    liteInstallCommand = createInstallCommand(packageManager, liteInstallPackages)
+
+    hasV1FrameworkImports = hasV1FrameworkPackageImports(configContent)
+  }
+
+  const { issues, warnings } = buildDoctorDiagnosis(
+    cwd, configPath, configContent, hasV1FrameworkImports, activeConfig, declaredDependencies, summary
+  )
 
   outputDoctorResult(json, configPath, packageManager, summary, liteInstallCommand, issues, warnings, fixes)
 }

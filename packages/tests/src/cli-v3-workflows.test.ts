@@ -960,6 +960,22 @@ describe('v3 project assistance', () => {
     expect(existsSync(join(cwd, 'eslint.config.js'))).toBe(true)
   })
 
+  test('doctor fix reports the repaired project state', async () => {
+    const cwd = createTempProject({ name: 'test-project', type: 'module' })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    await handleDoctor(cwd, true, false, true)
+
+    const payload = JSON.parse(String(logSpy.mock.calls.at(-1)?.[0])) as {
+      configFile: null | string
+      warnings: string[]
+    }
+
+    expect(payload.configFile).toBe('eslint.config.js')
+    expect(payload.warnings).not.toContain('No eslint.config.js/mjs/cjs file found. Run `basic-eslint init` to create one.')
+    expect(payload.warnings).not.toContain('No `lint` script found in package.json.')
+  })
+
   test('init explicit records the detected framework and TypeScript settings', () => {
     const cwd = createTempProject({
       dependencies: {

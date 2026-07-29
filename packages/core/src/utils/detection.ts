@@ -1,5 +1,5 @@
-import { existsSync, readdirSync, readFileSync } from 'node:fs'
-import { join } from 'node:path'
+import { type Dirent, existsSync, readdirSync, readFileSync } from 'node:fs'
+import { dirname, join, matchesGlob } from 'node:path'
 
 import { type EslintConfigOptions, Extension, Format, Library, NextMode, Preset, Runtime, Testing, Tool } from '../types.js'
 
@@ -398,41 +398,103 @@ const hasWorkspaceSignal = (pkg: PackageJson, detectRootDir: string): boolean =>
   pathExists(join(detectRootDir, 'nx.json'))
 )
 
-const getWorkspaceBaseDirs = (pkg: PackageJson, detectRootDir: string): string[] => {
-  const bases = [
+const getWorkspacePatternsForProjectDetection = (pkg: PackageJson, detectRootDir: string): string[] => {
+  const patterns = [
     ...getWorkspacePatterns(pkg),
     ...parsePnpmWorkspacePatterns(detectRootDir)
   ]
-    .map(pattern => pattern.replace(/^\.\//, '').split('*')[0]?.replace(/\/$/, ''))
-    .filter((pattern): pattern is string => Boolean(pattern) && !pattern.startsWith('!'))
+    .map(pattern => pattern.replace(/^\.\//, '').replace(/\/$/, ''))
+    .filter(Boolean)
 
-  if (bases.length > 0) return dedupe(bases)
+  if (patterns.some(pattern => !pattern.startsWith('!'))) return dedupe(patterns)
 
-  return ['apps', 'packages', 'workers', 'examples'].filter(base => pathExists(join(detectRootDir, base)))
+  return ['apps/*', 'packages/*', 'workers/*', 'examples/*']
+    .filter(pattern => pathExists(join(detectRootDir, dirname(pattern))))
+}
+
+const workspacePatternMatches = (projectPath: string, pattern: string): boolean => {
+  try {
+    return matchesGlob(projectPath, pattern)
+  } catch {
+    return false
+  }
+}
+
+const getWorkspaceSearchRoot = (pattern: string): string => {
+  const firstGlobIndex = pattern.search(/[*?[\]{}]/)
+
+  if (firstGlobIndex === -1) return dirname(pattern)
+
+  const prefix = pattern.slice(0, firstGlobIndex).replace(/\/$/, '')
+
+  return prefix ? dirname(`${prefix}/placeholder`) : '.'
+}
+
+const isTraversableWorkspaceDir = (entry: Dirent): boolean => (
+  entry.isDirectory() &&
+  entry.name !== '.git' &&
+  entry.name !== 'node_modules'
+)
+
+const collectPackageDirs = (
+  detectRootDir: string,
+  searchRoot: string,
+  maxDepth: number
+): string[] => {
+  const packageDirs: string[] = []
+
+  const visit = (relativeDir: string): void => {
+    const fullDir = join(detectRootDir, relativeDir)
+    const depth = relativeDir === '.' ? 0 : relativeDir.split('/').length
+
+    if (relativeDir !== '.' && pathExists(join(fullDir, 'package.json'))) {
+      packageDirs.push(relativeDir)
+    }
+
+    if (depth >= maxDepth) return
+
+    try {
+      for (const entry of readdirSync(fullDir, { withFileTypes: true })) {
+        if (!isTraversableWorkspaceDir(entry)) continue
+
+        visit(relativeDir === '.' ? entry.name : `${relativeDir}/${entry.name}`)
+      }
+    } catch {
+      // Missing or unreadable workspace folders are ignored; detection stays best-effort.
+    }
+  }
+
+  visit(searchRoot)
+
+  return packageDirs
 }
 
 const detectProjects = (pkg: PackageJson, detectRootDir: string): NonNullable<EslintConfigOptions['projects']> => {
   if (!hasWorkspaceSignal(pkg, detectRootDir)) return {}
 
+  const patterns = getWorkspacePatternsForProjectDetection(pkg, detectRootDir)
+  const positivePatterns = patterns.filter(pattern => !pattern.startsWith('!'))
+  const negativePatterns = patterns.filter(pattern => pattern.startsWith('!')).map(pattern => pattern.slice(1))
+
+  const candidates = dedupe(positivePatterns.flatMap(pattern => {
+    if (!/[*?[\]{}]/.test(pattern)) return [pattern]
+
+    const maxDepth = pattern.includes('**') ? Number.POSITIVE_INFINITY : pattern.split('/').length
+
+    return collectPackageDirs(detectRootDir, getWorkspaceSearchRoot(pattern), maxDepth)
+  }))
+
   const projects: NonNullable<EslintConfigOptions['projects']> = {}
 
-  for (const baseDir of getWorkspaceBaseDirs(pkg, detectRootDir)) {
-    const fullBaseDir = join(detectRootDir, baseDir)
+  for (const projectPath of candidates) {
+    if (!positivePatterns.some(pattern => workspacePatternMatches(projectPath, pattern))) continue
 
-    try {
-      for (const entry of readdirSync(fullBaseDir, { withFileTypes: true })) {
-        if (!entry.isDirectory()) continue
+    if (negativePatterns.some(pattern => workspacePatternMatches(projectPath, pattern))) continue
 
-        const projectPath = `${baseDir}/${entry.name}`
+    if (!pathExists(join(detectRootDir, projectPath, 'package.json'))) continue
 
-        if (pathExists(join(detectRootDir, projectPath, 'package.json'))) {
-          // eslint-disable-next-line security/detect-object-injection -- projectPath is formed from readdirSync entries; directory names cannot be __proto__ on real filesystems
-          projects[projectPath] = {}
-        }
-      }
-    } catch {
-      // Missing or unreadable workspace folders are ignored; detection stays best-effort.
-    }
+    // eslint-disable-next-line security/detect-object-injection -- projectPath is a matched package directory from the workspace declaration
+    projects[projectPath] = {}
   }
 
   return projects
