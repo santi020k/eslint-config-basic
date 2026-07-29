@@ -59,6 +59,9 @@ jobs:
     env:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+      # better-tailwindcss uses Synckit workers that can exceed the default
+      # 30-second timeout while the full workspace runs concurrently.
+      SYNCKIT_TIMEOUT: 120000
 
     steps:
       - uses: actions/checkout@v6
@@ -86,10 +89,6 @@ jobs:
       - name: Run concurrent CI checks (Node 24.x)
         if: matrix.node-version == '24.x'
         run: pnpm exec turbo run typecheck lint test:coverage
-        env:
-          # better-tailwindcss uses Synckit workers that can exceed the default
-          # 30-second timeout while the full workspace runs concurrently.
-          SYNCKIT_TIMEOUT: 120000
       - name: Build docs (smoke check)
         if: matrix.node-version == '22.x'
         run: pnpm run docs:sync-readmes && pnpm run docs:build
