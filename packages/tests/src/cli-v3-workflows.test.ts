@@ -222,6 +222,40 @@ describe('v2 to v3 migration', () => {
     vi.restoreAllMocks()
   })
 
+  test('includes feature packages selected explicitly in the config', () => {
+    const cwd = createTempProject({
+      devDependencies: {
+        '@santi020k/eslint-config-basic': '^2.0.0',
+        eslint: '^10.0.0'
+      },
+      name: 'test-project',
+      type: 'module'
+    })
+
+    writeFileSync(
+      join(cwd, 'eslint.config.js'),
+      [
+        'import { defineConfig, Extension, Format } from \'@santi020k/eslint-config-basic\'',
+        'export default defineConfig({',
+        '  extensions: [Extension.Security],',
+        '  formats: [Format.Css],',
+        '  features: { zod: true }',
+        '})'
+      ].join('\n')
+    )
+
+    vi.spyOn(console, 'log').mockImplementation(() => {})
+    handleMigrateV3(cwd, migrationContext(), { write: true })
+
+    const packageJson = JSON.parse(readFileSync(join(cwd, 'package.json'), 'utf8')) as {
+      devDependencies: Record<string, string>
+    }
+
+    expect(packageJson.devDependencies['@santi020k/eslint-config-extensions']).toBe('^3.0.0')
+    expect(packageJson.devDependencies['@santi020k/eslint-config-formats']).toBe('^3.0.0')
+    expect(packageJson.devDependencies['@santi020k/eslint-config-libraries']).toBe('^3.0.0')
+  })
+
   test('selects full automatically for Preset.All', () => {
     const cwd = createTempProject({
       devDependencies: {

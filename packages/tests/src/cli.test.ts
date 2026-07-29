@@ -170,6 +170,28 @@ describe('CLI command UX', () => {
     logSpy.mockRestore()
   })
 
+  test('should install the canonical React Router package', () => {
+    const cwd = createTempProject({
+      dependencies: {
+        '@react-router/dev': 'latest'
+      },
+      devDependencies: {
+        '@santi020k/eslint-config-basic': '3.0.0',
+        '@santi020k/eslint-config-react': '3.0.0',
+        eslint: '10.0.0'
+      },
+      name: 'tmp-project'
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    handleInstall(cwd, true)
+
+    expect(logSpy).toHaveBeenCalledWith(
+      'npm install -D @santi020k/eslint-config-react-router'
+    )
+    logSpy.mockRestore()
+  })
+
   test('should report when every detected package is already declared', () => {
     const cwd = createTempProject({
       dependencies: {
@@ -204,6 +226,39 @@ describe('CLI command UX', () => {
 
     mkdirSync(join(cwd, 'apps/web'), { recursive: true })
     writeFileSync(join(cwd, 'apps/web/package.json'), JSON.stringify({
+      dependencies: { react: '19.0.0' },
+      name: 'web'
+    }))
+
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+
+    handleInstall(cwd, true)
+
+    expect(logSpy).toHaveBeenCalledWith('npm install -D @santi020k/eslint-config-react')
+    logSpy.mockRestore()
+  })
+
+  test.each([
+    {
+      childPath: 'apps/web',
+      workspaces: ['apps/web']
+    },
+    {
+      childPath: 'packages/group/web',
+      workspaces: ['packages/**']
+    }
+  ])('should aggregate install requirements from $workspaces', ({ childPath, workspaces }) => {
+    const cwd = createTempProject({
+      devDependencies: {
+        '@santi020k/eslint-config-basic': '3.0.0',
+        eslint: '10.0.0'
+      },
+      name: 'tmp-workspace',
+      workspaces
+    })
+
+    mkdirSync(join(cwd, childPath), { recursive: true })
+    writeFileSync(join(cwd, childPath, 'package.json'), JSON.stringify({
       dependencies: { react: '19.0.0' },
       name: 'web'
     }))

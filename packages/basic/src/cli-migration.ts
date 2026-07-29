@@ -154,6 +154,21 @@ const EXPORT_TO_FEATURE_PACKAGE = new Map(
   ] as const))
 )
 
+const toKebabCase = (value: string): string => (
+  value.replaceAll(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
+)
+
+const FEATURE_NAME_TO_PACKAGE = new Map(
+  Object.entries(FEATURE_EXPORTS).flatMap(([category, exports]) => exports.flatMap(exportName => {
+    const packageName = FEATURE_PACKAGES[category as keyof typeof FEATURE_PACKAGES]
+
+    return [
+      [exportName.toLowerCase(), packageName],
+      [toKebabCase(exportName), packageName]
+    ] as const
+  }))
+)
+
 const REMOVED_ALIAS_REPLACEMENTS: Record<string, string> = {
   angularConfig: 'angular',
   astroConfig: 'createAstroConfig',
@@ -470,12 +485,40 @@ const splitBasicIntegrationImports = (
   }
 }
 
+const getExplicitFeaturePackages = (content: string): string[] => {
+  const packages = new Set<string>()
+
+  for (const category of Object.keys(FEATURE_PACKAGES) as (keyof typeof FEATURE_PACKAGES)[]) {
+    // eslint-disable-next-line security/detect-non-literal-regexp -- category names come from the internal package registry
+    const categorySelection = new RegExp(`\\b${category}\\s*:\\s*\\[([\\s\\S]*?)\\]`).exec(content)
+
+    if (categorySelection?.[1].trim()) {
+      packages.add(FEATURE_PACKAGES[category])
+    }
+  }
+
+  const featuresMatch = /\bfeatures\s*:\s*\{([\s\S]*?)\}/.exec(content)
+
+  if (featuresMatch) {
+    const enabledFeaturePattern = /(?:['"]([^'"]+)['"]|([a-zA-Z_$][\w$-]*))\s*:\s*true\b/g
+
+    for (const match of featuresMatch[1].matchAll(enabledFeaturePattern)) {
+      const featureName = (match[1] || match[2]).toLowerCase()
+      const packageName = FEATURE_NAME_TO_PACKAGE.get(featureName)
+
+      if (packageName) packages.add(packageName)
+    }
+  }
+
+  return [...packages]
+}
+
 export const migrateConfigToV3 = (
   content: string,
   mode: 'full' | 'lean'
 ): { changes: string[], content: string, featurePackages: string[] } => {
   const changes: string[] = []
-  const featurePackages = new Set<string>()
+  const featurePackages = new Set(getExplicitFeaturePackages(content))
   let migrated = content
 
   if (migrated.includes(LITE_PACKAGE)) {

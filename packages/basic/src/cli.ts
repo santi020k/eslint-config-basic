@@ -81,9 +81,14 @@ const FRAMEWORK_PACKAGE_TO_KEY: Record<string, string> = {
   '@santi020k/eslint-config-vue': 'vue'
 }
 
-const FRAMEWORK_KEY_TO_PACKAGE = Object.fromEntries(
-  Object.entries(FRAMEWORK_PACKAGE_TO_KEY).map(([packageName, framework]) => [framework, packageName])
-) as Record<string, string>
+const FRAMEWORK_KEY_TO_PACKAGE = {
+  ...Object.fromEntries(
+    Object.entries(FRAMEWORK_PACKAGE_TO_KEY)
+      .filter(([packageName]) => packageName !== '@santi020k/eslint-config-remix')
+      .map(([packageName, framework]) => [framework, packageName])
+  ),
+  'react-router': '@santi020k/eslint-config-react-router'
+} as Record<string, string>
 
 const LITE_PACKAGE_NAME = '@santi020k/eslint-config-lite'
 const INTEGRATIONS_PACKAGE_NAME = '@santi020k/eslint-config-integrations'
@@ -429,7 +434,7 @@ const getProjectSummary = (cwd: string) => {
 const getInstallProjectSummary = (cwd: string): ReturnType<typeof getProjectSummary> => {
   const rootSummary = getProjectSummary(cwd)
 
-  const projectSummaries = rootSummary.workspaceProjects.map(projectPath => (
+  const projectSummaries = rootSummary.detectedProjects.map(projectPath => (
     getProjectSummary(join(cwd, projectPath))
   ))
 
