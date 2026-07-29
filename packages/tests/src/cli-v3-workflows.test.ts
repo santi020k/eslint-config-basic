@@ -642,10 +642,10 @@ describe('preset adoption', () => {
       type: 'module'
     })
 
-    writeFakeEslint(cwd, { 'react-hooks/rules-of-hooks': 'error' })
+    writeFakeEslint(cwd, { '@eslint-react/exhaustive-deps': 'warn' })
     const report = await createPresetReport(cwd, 'app', 'src/index.tsx')
 
-    expect(report.removed).not.toHaveProperty('react-hooks/rules-of-hooks')
+    expect(report.removed).not.toHaveProperty('@eslint-react/exhaustive-deps')
   })
 
   test('rejects unknown preset names', async () => {
