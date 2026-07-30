@@ -1,6 +1,12 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalEnv": ["DOCS_ROOT", "ESLINT_BASIC_DEBUG", "VITEST"],
+  "globalEnv": [
+    "CI_BASE_SHA",
+    "DOCS_ROOT",
+    "ESLINT_BASIC_DEBUG",
+    "TURBO_SCM_BASE",
+    "VITEST"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
@@ -15,10 +21,12 @@
     },
     "lint": {
       "dependsOn": ["^build", "@santi020k/eslint-config-basic#build"],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/eslint.config.js"],
       "outputLogs": "errors-only"
     },
     "lint:fix": {
       "dependsOn": ["^build", "@santi020k/eslint-config-basic#build"],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/eslint.config.js"],
       "outputLogs": "errors-only"
     },
     "typecheck": {

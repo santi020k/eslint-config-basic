@@ -1,6 +1,8 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
+const frozenDocDirectories = new Set(['v1', 'v2'])
+
 export const getDocUrls = (dir: string, baseDir = dir): string[] => {
   const urls: string[] = []
 
@@ -12,7 +14,12 @@ export const getDocUrls = (dir: string, baseDir = dir): string[] => {
     const resolvedPath = path.resolve(dir, file.name)
 
     if (file.isDirectory()) {
-      urls.push(...getDocUrls(resolvedPath, baseDir))
+      const relativeDirectory = path.relative(baseDir, resolvedPath)
+      const topLevelDirectory = relativeDirectory.split(path.sep)[0]
+
+      if (!frozenDocDirectories.has(topLevelDirectory)) {
+        urls.push(...getDocUrls(resolvedPath, baseDir))
+      }
 
       continue
     }

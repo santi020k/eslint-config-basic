@@ -6,3 +6,13 @@ find the full documentation for it [in our repository](https://github.com/change
 
 We have a quick list of common questions to get you started engaging with this project in
 [our documentation](https://github.com/changesets/changesets/blob/main/docs/common-questions.md).
+
+## Repository versioning policy
+
+Public `@santi020k/eslint-config-*` packages share a compatibility major but
+release minor and patch versions independently. Select only packages with
+meaningful changes when creating a changeset. Coordinate major releases for
+packages affected by a breaking family-wide contract, and express narrower
+compatibility requirements through internal dependency and peer ranges. Run
+`pnpm run check:internal-compatibility` to validate the shared major and require
+`workspace:^` for production references between public packages.

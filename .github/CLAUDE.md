@@ -121,7 +121,7 @@ For tasks that involve cross-cutting changes, large context reads, or code gener
 
 Do **not** edit `packages/*/CHANGELOG.md` by hand for routine work. This repo uses [Changesets](https://github.com/changesets/changesets): run `pnpm run changeset`, choose affected packages and semver level, write the summary, and commit the generated file under `.changeset/`. Release automation updates package changelogs when the Version Packages PR merges. See `.claude/skills/release/SKILL.md`.
 
-Meaningful docs-site updates belong in the same release notes when `@santi020k/eslint-config-docs` is included in that changeset (packages share fixed versioning—see `.changeset/config.json`).
+Public packages share a compatibility major but release minor and patch versions independently. Include only packages with meaningful user-facing changes in a changeset; the private `@santi020k/eslint-config-docs` workspace does not drive package releases.
 
 ### Documentation
 

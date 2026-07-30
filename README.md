@@ -164,6 +164,12 @@ profiling, and effective-rule change review.
 - TypeScript: `>=5.0.0` when enabled
 - Package managers: npm, pnpm, Yarn, and Bun
 
+Packages in the `@santi020k/eslint-config-*` family use independent minor and
+patch versions. Packages with the same major version are designed to work
+together; use the latest release of each package within that major. Internal
+dependency and peer ranges provide the exact machine-readable compatibility
+requirements.
+
 See the [v2 → v3 migration guide](https://eslint.santi020k.com/guide/migration-v2-to-v3/)
 for package moves and copy-paste commands. The
 [planned v4 removals](https://eslint.santi020k.com/guide/v4-removals/) page

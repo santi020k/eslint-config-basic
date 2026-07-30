@@ -228,6 +228,14 @@ const FACTORY_ALIAS_REPLACEMENTS = new Set([
   'gitignore'
 ])
 
+const PARAMETER_PROPERTY_MODIFIERS = new Set([
+  'override',
+  'private',
+  'protected',
+  'public',
+  'readonly'
+])
+
 const dependencyFields = [
   'dependencies',
   'devDependencies',
@@ -478,23 +486,7 @@ const getShadowedRanges = (content: string, name: string): SourceRange[] => {
     searchable = `${searchable.slice(0, range.start)}${' '.repeat(range.end - range.start)}${searchable.slice(range.end)}`
   }
 
-  // eslint-disable-next-line security/detect-non-literal-regexp -- binding names come from parsed import specifiers
-  const parameterPattern = new RegExp([
-    `\\b${name}\\b\\s*=>`,
-    `\\([^)]*\\b${name}\\b[^)]*\\)\\s*=>`,
-    `(?:\\bfunction\\b[^()]*|\\bcatch)\\s*\\([^)]*\\b${name}\\b[^)]*\\)\\s*\\{`,
-    `\\b(?:constructor|[a-zA-Z_$][\\w$]*)\\s*\\([^)]*\\b${name}\\b[^)]*\\)\\s*\\{`
-  ].join('|'), 'gm')
-
-  const ranges = [...searchable.matchAll(parameterPattern)].map(match => {
-    const start = match.index
-    const matchedBodyStart = start + match[0].length - 1
-
-    if (searchable[matchedBodyStart] === '{') {
-      return { end: findClosingDelimiter(searchable, matchedBodyStart, '{', '}'), start }
-    }
-
-    const arrowIndex = searchable.indexOf('=>', start)
+  const getArrowRange = (start: number, arrowIndex: number): SourceRange => {
     const relativeBodyStart = searchable.slice(arrowIndex + 2).search(/\S/)
     const bodyStart = relativeBodyStart === -1 ? searchable.length : arrowIndex + 2 + relativeBodyStart
     const bodyDelimiter = searchable[bodyStart]
@@ -514,7 +506,104 @@ const getShadowedRanges = (content: string, name: string): SourceRange[] => {
     const lineEnd = searchable.indexOf('\n', arrowIndex + 2)
 
     return { end: lineEnd === -1 ? searchable.length : lineEnd, start }
-  })
+  }
+
+  // eslint-disable-next-line security/detect-non-literal-regexp -- binding names come from parsed import specifiers
+  const unparenthesizedArrowPattern = new RegExp(`\\b${name}\\b\\s*=>`, 'gm')
+
+  const ranges = [...searchable.matchAll(unparenthesizedArrowPattern)].map(match => (
+    getArrowRange(match.index, searchable.indexOf('=>', match.index))
+  ))
+
+  const splitAtTopLevel = (value: string, separator: string): string[] => {
+    const parts: string[] = []
+    const closers: Record<string, string> = { '(': ')', '[': ']', '{': '}' }
+    const expectedClosers: string[] = []
+    let partStart = 0
+
+    for (let index = 0; index < value.length; index++) {
+      const character = value[index]
+      const closer = closers[character]
+
+      if (closer) expectedClosers.push(closer)
+      else if (character === expectedClosers.at(-1)) expectedClosers.pop()
+      else if (character === separator && expectedClosers.length === 0) {
+        parts.push(value.slice(partStart, index))
+
+        partStart = index + 1
+      }
+    }
+
+    parts.push(value.slice(partStart))
+
+    return parts
+  }
+
+  const hasBindingName = (value: string): boolean => {
+    let binding = splitAtTopLevel(value, '=')[0].trim()
+
+    if (binding.startsWith('...')) binding = binding.slice(3).trim()
+
+    binding = splitAtTopLevel(binding, ':')[0].trim()
+
+    const bindingParts = binding.split(/\s+/)
+
+    while (PARAMETER_PROPERTY_MODIFIERS.has(bindingParts[0])) bindingParts.shift()
+
+    binding = bindingParts.join(' ')
+
+    if (binding.startsWith('{') && binding.endsWith('}')) {
+      return splitAtTopLevel(binding.slice(1, -1), ',').some(property => {
+        const propertyParts = splitAtTopLevel(property, ':')
+
+        return hasBindingName(propertyParts.length > 1 ? propertyParts.slice(1).join(':') : property)
+      })
+    }
+
+    if (binding.startsWith('[') && binding.endsWith(']')) {
+      return splitAtTopLevel(binding.slice(1, -1), ',').some(hasBindingName)
+    }
+
+    return binding.replace(/\?$/, '') === name
+  }
+
+  const hasParameterBinding = (parameters: string): boolean => (
+    splitAtTopLevel(parameters, ',').some(hasBindingName)
+  )
+
+  const parameterOwnerPattern = /(?:\bfunction\b[^()]*|\bcatch|\b(?:constructor|[a-zA-Z_$][\w$]*))\s*$/
+
+  for (let parameterStart = 0; parameterStart < searchable.length; parameterStart++) {
+    if (searchable[parameterStart] !== '(') continue
+
+    const parameterEnd = findClosingDelimiter(searchable, parameterStart, '(', ')')
+
+    if (searchable[parameterEnd - 1] !== ')') continue
+
+    const parameters = searchable.slice(parameterStart + 1, parameterEnd - 1)
+
+    if (!hasParameterBinding(parameters)) continue
+
+    const relativeBodyStart = searchable.slice(parameterEnd).search(/\S/)
+    const bodyStart = relativeBodyStart === -1 ? searchable.length : parameterEnd + relativeBodyStart
+
+    if (searchable.startsWith('=>', bodyStart)) {
+      ranges.push(getArrowRange(parameterStart, bodyStart))
+
+      continue
+    }
+
+    if (searchable[bodyStart] !== '{') continue
+
+    const ownerMatch = parameterOwnerPattern.exec(searchable.slice(0, parameterStart))
+
+    if (!ownerMatch) continue
+
+    ranges.push({
+      end: findClosingDelimiter(searchable, bodyStart, '{', '}'),
+      start: ownerMatch.index
+    })
+  }
 
   // eslint-disable-next-line security/detect-non-literal-regexp -- binding names come from parsed import specifiers
   const blockBindingPattern = new RegExp(`\\b(?:const|let|var|function|class)\\s+${name}\\b`, 'g')

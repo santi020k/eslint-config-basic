@@ -2454,7 +2454,7 @@ importers:
   packages/typescript:
     dependencies:
       '@santi020k/eslint-config-core':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../core
       '@typescript-eslint/parser':
         specifier: 'catalog:'
