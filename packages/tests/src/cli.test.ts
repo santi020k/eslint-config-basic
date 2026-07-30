@@ -926,6 +926,95 @@ describe('CLI command UX', () => {
     process.exitCode = undefined
   })
 
+  test('should report per-project activation details in JSON and verbose output', async () => {
+    const cwd = createTempProject({
+      name: 'tmp-project',
+      type: 'module',
+      workspaces: ['packages/*']
+    })
+    const projectRoot = join(cwd, 'packages', 'site')
+
+    mkdirSync(projectRoot, { recursive: true })
+    writeFileSync(join(projectRoot, 'package.json'), JSON.stringify({
+      dependencies: { astro: '7.0.0', tailwindcss: '4.0.0' },
+      name: 'site'
+    }))
+    writeFileSync(join(projectRoot, 'README.md'), '# Site\n')
+    writeFileSync(join(projectRoot, 'tsconfig.json'), '{}\n')
+    writeFileSync(join(cwd, 'eslint.config.js'), `export default [
+      { name: 'eslint-config-astro/recommended', ignores: ['dist/**'], rules: {} },
+      { name: 'integrations/markdown', rules: {} },
+      { name: 'santi020k/tailwind/recommended', rules: {} },
+      { name: 'eslint-config-typescript/recommended', rules: {} }
+    ]`)
+    writeFakePackage(cwd, '@santi020k/eslint-config-astro', '3.2.0')
+    writeFakePackage(cwd, '@santi020k/eslint-config-formats', '3.2.0')
+    writeFakePackage(cwd, '@santi020k/eslint-config-libraries', '3.2.0')
+    writeFakePackage(cwd, '@santi020k/eslint-config-react', '3.2.0')
+    writeFakePackage(cwd, 'typescript', '6.0.0')
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+
+    await handleDoctor(cwd, true)
+
+    const payload = JSON.parse(String(logSpy.mock.calls.at(-1)?.[0])) as {
+      projects: {
+        formats: { detected: boolean, enabled: boolean, installed: boolean, name: string }[]
+        frameworks: { detected: boolean, enabled: boolean, installed: boolean, name: string }[]
+        ignores: string[]
+        inactivePackages: { package: string, reason: string }[]
+        libraries: { detected: boolean, enabled: boolean, installed: boolean, name: string }[]
+        path: string
+        typescript: { mode: string, tsconfig: null | string }
+      }[]
+    }
+    const site = payload.projects.find(project => project.path === 'packages/site')
+
+    expect(site?.frameworks).toContainEqual(expect.objectContaining({
+      detected: true,
+      enabled: true,
+      installed: true,
+      name: 'astro'
+    }))
+    expect(site?.formats).toContainEqual(expect.objectContaining({
+      detected: true,
+      enabled: true,
+      installed: true,
+      name: 'markdown'
+    }))
+    expect(site?.libraries).toContainEqual(expect.objectContaining({
+      detected: true,
+      enabled: true,
+      installed: true,
+      name: 'tailwind'
+    }))
+    expect(site?.typescript).toEqual(expect.objectContaining({
+      mode: 'type-aware',
+      tsconfig: 'tsconfig.json'
+    }))
+    expect(site?.ignores).toContain('dist/**')
+    const inactiveReact = site?.inactivePackages.find(
+      item => item.package === '@santi020k/eslint-config-react'
+    )
+
+    expect(inactiveReact?.reason).toContain('no matching framework signal')
+
+    logSpy.mockClear()
+    runCli(['node', 'basic-eslint', 'doctor', '--verbose'], cwd)
+    await vi.waitFor(() => {
+      expect(logSpy).toHaveBeenCalled()
+    })
+
+    const verboseOutput = logSpy.mock.calls.flat().join('\n')
+
+    expect(verboseOutput).toContain('Per-project activation (I=installed, D=detected, E=enabled):')
+    expect(verboseOutput).toContain('packages/site | browser | type-aware:tsconfig.json[IDE]')
+    expect(verboseOutput).toContain('astro[IDE]')
+    expect(verboseOutput).toContain('tailwind[IDE]')
+    expect(verboseOutput).toContain('@santi020k/eslint-config-react: Installed, but no matching framework signal')
+    logSpy.mockRestore()
+    process.exitCode = undefined
+  })
+
   test('should warn when lite config packages are not declared', async () => {
     const cwd = createTempProject({
       dependencies: {
@@ -1122,6 +1211,7 @@ const makeFeatures = (
   extensions: [],
   formats: [],
   frameworks: [],
+  ignores: [],
   libraries: [],
   lintCommand: 'npm run lint',
   source: 'detection-fallback',

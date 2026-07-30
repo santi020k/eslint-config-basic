@@ -120,6 +120,39 @@ const CATEGORY_PACKAGES = {
   tools: '@santi020k/eslint-config-tools'
 } as const
 
+type DoctorFeatureCategory = keyof typeof CATEGORY_PACKAGES | 'frameworks'
+
+interface DoctorFeatureActivation {
+  detected: boolean
+  enabled: boolean
+  installed: boolean
+  name: string
+  package: string
+  reason?: string
+}
+
+interface DoctorProjectActivation {
+  extensions: DoctorFeatureActivation[]
+  formats: DoctorFeatureActivation[]
+  frameworks: DoctorFeatureActivation[]
+  ignores: string[]
+  inactivePackages: { package: string, reason: string }[]
+  libraries: DoctorFeatureActivation[]
+  path: string
+  runtime: string
+  testing: DoctorFeatureActivation[]
+  tools: DoctorFeatureActivation[]
+  typescript: {
+    detected: boolean
+    enabled: boolean
+    installed: boolean
+    mode: 'off' | 'syntax' | 'type-aware'
+    package: string
+    reason?: string
+    tsconfig: null | string
+  }
+}
+
 const getConfigPathIfPresent = (cwd: string): null | string => {
   const configPath = ESLINT_CONFIG_FILENAMES
     .map(filename => join(cwd, filename))
@@ -781,6 +814,7 @@ const printUsage = () => {
     '  --prune         baseline: remove suppressions for resolved violations',
     '  --snapshot-path snapshot/diff: override .eslint-config-snapshot.json',
     '  --to            migrate: target version (v2 or v3)',
+    '  --verbose       doctor: print per-project activation details',
     '  --with-eslint-mcp generate-skill: scaffold the official ESLint MCP server',
     '  --write         Apply safe migrations for commands that support it',
     '  --help, -h      Show this help message',
@@ -793,7 +827,7 @@ const COMMAND_OPTIONS: Partial<Record<string, string[]>> = {
   compatibility: ['--json'],
   diff: ['--file', '--json', '--snapshot-path'],
   docs: [],
-  doctor: ['--fix', '--json', '--lite-install'],
+  doctor: ['--fix', '--json', '--lite-install', '--verbose'],
   explain: ['--file', '--json'],
   'explain-preset': ['--analyze-source', '--compatibility', '--file', '--json', '--output'],
   'generate-skill': ['--check', '--create', '--force', '--with-eslint-mcp'],
@@ -1468,8 +1502,260 @@ const buildDoctorDiagnosis = (
   return { issues, warnings }
 }
 
+const DOCTOR_FEATURE_ALIASES: Record<string, string> = {
+  'astro-doctor': 'Astro Doctor',
+  'best-practices': 'Best Practices',
+  compat: 'Browser Compat',
+  nest: 'NestJS',
+  next: 'Next.js',
+  node: 'Node.js',
+  solid: 'SolidJS',
+  'tanstack-start': 'TanStack Start',
+  tailwind: 'Tailwind CSS'
+}
+
+const normalizeDoctorFeature = (value: string): string => {
+  const comparableValue = DOCTOR_FEATURE_ALIASES[value] ?? value
+
+  return comparableValue.toLowerCase().replaceAll(/[^a-z0-9]/g, '')
+}
+
+const isDoctorFeatureEnabled = (name: string, enabled: string[]): boolean => {
+  const normalizedName = normalizeDoctorFeature(name)
+
+  return enabled.some(value => normalizeDoctorFeature(value) === normalizedName)
+}
+
+const getTypeScriptConfig = (cwd: string): null | string => [
+  'tsconfig.json',
+  'tsconfig.base.json',
+  'tsconfig.app.json',
+  'tsconfig.node.json',
+  'tsconfig.eslint.json'
+].find(fileName => existsSync(join(cwd, fileName))) ?? null
+
+const getCategoryPackageInstalled = (
+  cwd: string,
+  packageName: string
+): boolean => [
+  packageName,
+  INTEGRATIONS_PACKAGE_NAME,
+  FULL_PACKAGE_NAME
+].some(candidate => resolvePackageMetadata(cwd, candidate) !== null)
+
+const createDoctorFeatureActivations = (
+  cwd: string,
+  category: DoctorFeatureCategory,
+  detected: string[],
+  enabled: string[]
+): DoctorFeatureActivation[] => detected.map(name => {
+  const packageName = category === 'frameworks' ?
+    FRAMEWORK_KEY_TO_PACKAGE[name] :
+    CATEGORY_PACKAGES[category]
+
+  const installed = getCategoryPackageInstalled(cwd, packageName)
+  const isEnabled = installed && isDoctorFeatureEnabled(name, enabled)
+  let reason: string | undefined
+
+  if (!installed) {
+    reason = `Detected, but ${packageName} is not installed.`
+  } else if (!isEnabled) {
+    reason = 'Detected and installed, but the active config did not load this pack.'
+  }
+
+  return {
+    detected: true,
+    enabled: isEnabled,
+    installed,
+    name,
+    package: packageName,
+    ...(reason ? { reason } : {})
+  }
+})
+
+const getInactiveDoctorPackages = (
+  cwd: string,
+  detectedFrameworks: string[],
+  summary: ReturnType<typeof getProjectSummary>
+): DoctorProjectActivation['inactivePackages'] => {
+  const inactivePackages = Object.entries(FRAMEWORK_KEY_TO_PACKAGE)
+    .filter(([framework, packageName]) => (
+      !detectedFrameworks.includes(framework) &&
+      resolvePackageMetadata(cwd, packageName) !== null
+    ))
+    .map(([, packageName]) => ({
+      package: packageName,
+      reason: 'Installed, but no matching framework signal was detected in this project.'
+    }))
+
+  for (const [category, packageName] of Object.entries(CATEGORY_PACKAGES)) {
+    if (
+      summary[category as keyof typeof CATEGORY_PACKAGES].length === 0 &&
+      resolvePackageMetadata(cwd, packageName) !== null
+    ) {
+      inactivePackages.push({
+        package: packageName,
+        reason: `Installed, but no ${category} signals were detected in this project.`
+      })
+    }
+  }
+
+  return inactivePackages
+}
+
+const getDoctorProjectActivations = (
+  cwd: string,
+  activeConfig: Awaited<ReturnType<typeof analyzeEslintConfig>>
+): DoctorProjectActivation[] => {
+  const rootSummary = getProjectSummary(cwd)
+
+  const projectPaths = [...new Set([
+    '.',
+    ...rootSummary.detectedProjects,
+    ...rootSummary.workspaceProjects
+  ])].sort((left, right) => {
+    if (left === '.') return -1
+
+    if (right === '.') return 1
+
+    return left.localeCompare(right)
+  })
+
+  return projectPaths.map(projectPath => {
+    const projectRoot = projectPath === '.' ? cwd : join(cwd, projectPath)
+    const summary = getProjectSummary(projectRoot)
+    const tsconfig = getTypeScriptConfig(projectRoot)
+    const typescriptInstalled = resolvePackageMetadata(projectRoot, TYPESCRIPT_PACKAGE_NAME) !== null
+    const typescriptEnabled = summary.typescript && Boolean(activeConfig?.typescript)
+    let typescriptMode: DoctorProjectActivation['typescript']['mode'] = 'off'
+    let typescriptReason: string | undefined
+
+    if (typescriptEnabled) {
+      typescriptMode = tsconfig ? 'type-aware' : 'syntax'
+    }
+
+    if (!typescriptInstalled && summary.typescript) {
+      typescriptReason = 'A tsconfig was detected, but TypeScript is not installed.'
+    } else if (typescriptInstalled && !summary.typescript) {
+      typescriptReason = 'Installed, but no supported tsconfig was detected in this project.'
+    } else if (typescriptInstalled && summary.typescript && !typescriptEnabled) {
+      typescriptReason = 'Detected and installed, but the active config did not enable TypeScript.'
+    }
+
+    return {
+      extensions: createDoctorFeatureActivations(
+        projectRoot,
+        'extensions',
+        summary.extensions,
+        activeConfig?.extensions ?? []
+      ),
+      formats: createDoctorFeatureActivations(
+        projectRoot,
+        'formats',
+        summary.formats,
+        activeConfig?.formats ?? []
+      ),
+      frameworks: createDoctorFeatureActivations(
+        projectRoot,
+        'frameworks',
+        summary.frameworks,
+        activeConfig?.frameworks ?? []
+      ),
+      ignores: activeConfig?.ignores ?? [],
+      inactivePackages: getInactiveDoctorPackages(projectRoot, summary.frameworks, summary),
+      libraries: createDoctorFeatureActivations(
+        projectRoot,
+        'libraries',
+        summary.libraries,
+        activeConfig?.libraries ?? []
+      ),
+      path: projectPath,
+      runtime: summary.runtime,
+      testing: createDoctorFeatureActivations(
+        projectRoot,
+        'testing',
+        summary.testing,
+        activeConfig?.testing ?? []
+      ),
+      tools: createDoctorFeatureActivations(
+        projectRoot,
+        'tools',
+        summary.tools,
+        activeConfig?.tools ?? []
+      ),
+      typescript: {
+        detected: summary.typescript,
+        enabled: typescriptEnabled,
+        installed: typescriptInstalled,
+        mode: typescriptMode,
+        package: TYPESCRIPT_PACKAGE_NAME,
+        ...(typescriptReason ? { reason: typescriptReason } : {}),
+        tsconfig
+      }
+    }
+  })
+}
+
+const formatDoctorActivation = (features: DoctorFeatureActivation[]): string => (
+  features.length === 0 ?
+    'none' :
+    features.map(feature => {
+      const states = [
+        feature.installed ? 'I' : '-',
+        feature.detected ? 'D' : '-',
+        feature.enabled ? 'E' : '-'
+      ].join('')
+
+      return `${feature.name}[${states}]`
+    }).join(',')
+)
+
+const formatDoctorProjectTable = (projects: DoctorProjectActivation[]): string[] => [
+  '',
+  'Per-project activation (I=installed, D=detected, E=enabled):',
+  'Project | Runtime | TypeScript | Frameworks | Formats | Libraries | Extensions | Testing | Tools | Ignores',
+  '--- | --- | --- | --- | --- | --- | --- | --- | --- | ---',
+  ...projects.flatMap(project => {
+    const typescriptStates = [
+      project.typescript.installed ? 'I' : '-',
+      project.typescript.detected ? 'D' : '-',
+      project.typescript.enabled ? 'E' : '-'
+    ].join('')
+
+    const row = [
+      project.path,
+      project.runtime,
+      `${project.typescript.mode}:${project.typescript.tsconfig ?? 'none'}[${typescriptStates}]`,
+      formatDoctorActivation(project.frameworks),
+      formatDoctorActivation(project.formats),
+      formatDoctorActivation(project.libraries),
+      formatDoctorActivation(project.extensions),
+      formatDoctorActivation(project.testing),
+      formatDoctorActivation(project.tools),
+      formatList(project.ignores)
+    ].join(' | ')
+
+    const explanations = [
+      project.typescript.reason,
+      ...project.frameworks.map(feature => feature.reason),
+      ...project.formats.map(feature => feature.reason),
+      ...project.libraries.map(feature => feature.reason),
+      ...project.extensions.map(feature => feature.reason),
+      ...project.testing.map(feature => feature.reason),
+      ...project.tools.map(feature => feature.reason),
+      ...project.inactivePackages.map(item => `${item.package}: ${item.reason}`)
+    ].filter((reason): reason is string => Boolean(reason))
+
+    return [
+      row,
+      ...explanations.map(reason => `  ${project.path}: ${reason}`)
+    ]
+  })
+]
+
 const outputDoctorResult = (
   json: boolean,
+  verbose: boolean,
   configPath: null | string,
   packageManager: string,
   summary: ReturnType<typeof getProjectSummary>,
@@ -1477,6 +1763,7 @@ const outputDoctorResult = (
   requiredPackages: string[],
   issues: string[],
   warnings: string[],
+  projects: DoctorProjectActivation[],
   fixes: string[] = []
 ): void => {
   let status = 'passed'
@@ -1493,6 +1780,7 @@ const outputDoctorResult = (
     ...(installCommand ? { installCommand } : {}),
     issues,
     packageManager,
+    projects,
     requiredPackages,
     status,
     warnings,
@@ -1514,6 +1802,7 @@ const outputDoctorResult = (
     `- Workspace projects: ${formatList(summary.workspaceProjects)}`,
     `- Required packages: ${formatList(requiredPackages)}`,
     ...(installCommand ? [`- Install command: ${installCommand}`] : []),
+    ...(verbose ? formatDoctorProjectTable(projects) : []),
     ...(fixes.length > 0 ? ['', 'Fixes applied:', ...fixes.map(fix => `- ${fix}`)] : []),
     ...(issues.length > 0 ? ['', 'Issues:', ...issues.map(issue => `- ${issue}`)] : []),
     ...(warnings.length > 0 ? ['', 'Warnings:', ...warnings.map(warning => `- ${warning}`)] : [])
@@ -1660,7 +1949,8 @@ export const handleDoctor = async (
   cwd: string = process.cwd(),
   json = false,
   liteInstall = false,
-  fix = false
+  fix = false,
+  verbose = false
 ) => {
   const pnpmWorkspaceRoot = findPnpmWorkspaceRoot(cwd)
   const projectRoot = pnpmWorkspaceRoot ?? cwd
@@ -1748,8 +2038,11 @@ export const handleDoctor = async (
     summary
   )
 
+  const projects = getDoctorProjectActivations(projectRoot, activeConfig)
+
   outputDoctorResult(
     json,
+    verbose,
     configPath,
     packageManager,
     summary,
@@ -1757,6 +2050,7 @@ export const handleDoctor = async (
     requiredPackages,
     issues,
     warnings,
+    projects,
     fixes
   )
 }
@@ -2001,6 +2295,7 @@ const dispatchCommand = (
     hasJson: boolean
     hasLiteInstall: boolean
     hasPrune: boolean
+    hasVerbose: boolean
     hasWrite: boolean
     hasWithEslintMcp: boolean
     maxDurationMs?: number
@@ -2058,11 +2353,12 @@ const dispatchCommand = (
     }
 
     case 'doctor': {
-      handleDoctor(cwd, flags.hasJson, flags.hasLiteInstall, flags.hasFix).catch((error: unknown) => {
-        console.error(`❌ Failed to run doctor: ${String(error)}`)
+      handleDoctor(cwd, flags.hasJson, flags.hasLiteInstall, flags.hasFix, flags.hasVerbose)
+        .catch((error: unknown) => {
+          console.error(`❌ Failed to run doctor: ${String(error)}`)
 
-        process.exitCode = 1
-      })
+          process.exitCode = 1
+        })
 
       break
     }
@@ -2287,6 +2583,7 @@ export const runCli = (argv: string[] = process.argv, cwd: string = process.cwd(
     hasJson: argv.includes('--json'),
     hasLiteInstall: argv.includes('--lite-install'),
     hasPrune: argv.includes('--prune'),
+    hasVerbose: argv.includes('--verbose'),
     hasWithEslintMcp: argv.includes('--with-eslint-mcp'),
     hasWrite: argv.includes('--write'),
     maxDurationMs: getNumericFlagValue(argv, '--max-duration'),

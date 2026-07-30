@@ -54,6 +54,39 @@ const hasFileMatching = (
   }
 }
 
+const DECLARATION_FILE_PATTERN = /\.d\.(?:c|m)?ts$/
+
+const PROJECT_SCAN_IGNORES = new Set([
+  '.git',
+  '.turbo',
+  'build',
+  'coverage',
+  'dist',
+  'node_modules'
+])
+
+const hasProjectFile = (
+  rootDir: string,
+  predicate: (fileName: string) => boolean,
+  depth = 0
+): boolean => {
+  try {
+    return readdirSync(rootDir, { withFileTypes: true }).some(entry => {
+      if (entry.isFile()) return predicate(entry.name)
+
+      if (!entry.isDirectory() || depth >= 4 || PROJECT_SCAN_IGNORES.has(entry.name)) return false
+
+      return hasProjectFile(join(rootDir, entry.name), predicate, depth + 1)
+    })
+  } catch {
+    return false
+  }
+}
+
+const hasDeclarationFile = (rootDir: string): boolean => (
+  hasProjectFile(rootDir, fileName => DECLARATION_FILE_PATTERN.test(fileName))
+)
+
 const collectAllDependencies = (pkg: PackageJson): DependencyMap => ({
   ...(pkg.dependencies ?? {}),
   ...(pkg.devDependencies ?? {}),
@@ -167,6 +200,23 @@ const isViteStandalone = (
   Boolean(allDeps.vite) && !detected.some(fw => VITE_EXCLUSION_FRAMEWORKS.includes(fw))
 )
 
+const detectAstroFromFiles = (
+  detected: DetectedFrameworkName[],
+  detectRootDir: string,
+  setRuntime: (runtime: Runtime) => void
+): void => {
+  if (
+    detected.includes('astro') ||
+    !hasProjectFile(detectRootDir, fileName => fileName.endsWith('.astro'))
+  ) {
+    return
+  }
+
+  detected.push('astro')
+
+  setRuntime(Runtime.Browser)
+}
+
 const detectFrameworks = (
   allDeps: DependencyMap,
   detectRootDir: string,
@@ -181,6 +231,8 @@ const detectFrameworks = (
       if (runtime !== undefined) setRuntime(runtime)
     }
   }
+
+  detectAstroFromFiles(detected, detectRootDir, setRuntime)
 
   if (isReactStandalone(allDeps)) {
     detected.push('react')
@@ -217,13 +269,21 @@ const detectNextMode = (allDeps: DependencyMap, detectRootDir: string): NextMode
   return NextMode.Pages
 }
 
-const detectTypescript = (detectRootDir: string): boolean => [
-  'tsconfig.json',
-  'tsconfig.base.json',
-  'tsconfig.app.json',
-  'tsconfig.node.json',
-  'tsconfig.eslint.json'
-].some(fileName => pathExists(join(detectRootDir, fileName)))
+const detectTypescript = (
+  detectRootDir: string
+): EslintConfigOptions['typescript'] => {
+  const hasTypeScriptProject = [
+    'tsconfig.json',
+    'tsconfig.base.json',
+    'tsconfig.app.json',
+    'tsconfig.node.json',
+    'tsconfig.eslint.json'
+  ].some(fileName => pathExists(join(detectRootDir, fileName)))
+
+  if (hasTypeScriptProject) return true
+
+  return hasDeclarationFile(detectRootDir) ? 'syntax' : false
+}
 
 const LIBRARY_DEP_MAPPINGS: [string[], Library][] = [
   [['ai', '@ai-sdk/anthropic', '@ai-sdk/azure', '@ai-sdk/google', '@ai-sdk/openai', '@ai-sdk/react', '@ai-sdk/vue', '@ai-sdk/svelte'], Library.AiSdk],

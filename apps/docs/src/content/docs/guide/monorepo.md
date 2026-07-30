@@ -158,6 +158,12 @@ This should not happen in v3: root framework and library detection is
 suppressed for workspaces, then recomputed per package. Run `doctor` to inspect
 the detected package roots if a package is scoped incorrectly.
 
+Framework detection can also use source evidence when a package manifest is
+intentionally neutral. A workspace package containing `.astro` files receives
+the Astro parser and processor even when it does not declare `astro`. This
+supports shared component and theme packages without adding a runtime
+dependency solely for lint configuration.
+
 **TypeScript parser rejects files from another package**
 
 Each package needs its own `tsconfig.json` that covers its source. Mark tooling,

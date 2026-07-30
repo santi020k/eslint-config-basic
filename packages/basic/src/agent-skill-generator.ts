@@ -45,6 +45,7 @@ export interface EslintConfigFeatures {
   extensions: string[]
   formats: string[]
   frameworks: string[]
+  ignores: string[]
   libraries: string[]
 
   /** The lint command found in the project's package.json scripts, or a sensible default */
@@ -305,6 +306,7 @@ const FEATURE_MAP: readonly [pattern: string, category: FeatureCategory, label: 
 ]
 
 interface RawFlatConfigEntry {
+  ignores?: unknown
   name?: unknown
   plugins?: unknown
   rules?: unknown
@@ -406,6 +408,14 @@ const collectTokens = (configs: unknown[]): string[] => {
   return tokens
 }
 
+const collectIgnores = (configs: unknown[]): string[] => [...new Set(configs.flatMap(entry => {
+  if (!entry || typeof entry !== 'object') return []
+
+  const ignores = (entry as RawFlatConfigEntry).ignores
+
+  return Array.isArray(ignores) ? ignores.filter((value): value is string => typeof value === 'string') : []
+}))]
+
 const recordFeature = (features: EslintConfigFeatures, category: string, label: string): void => {
   if (category === 'typescript') {
     features.typescript = true
@@ -462,6 +472,7 @@ const extractFeatures = (
     extensions: [],
     formats: [],
     frameworks: [],
+    ignores: collectIgnores(configs),
     libraries: [],
     lintCommand,
     source: 'config-file',
@@ -585,12 +596,13 @@ const featuresFromDetection = (cwd: string): EslintConfigFeatures => {
     extensions: (opts.extensions ?? []).map(toFeatureLabel),
     formats: (opts.formats ?? []).map(toFeatureLabel),
     frameworks,
+    ignores: opts.ignores ?? [],
     libraries: (opts.libraries ?? []).map(toFeatureLabel),
     lintCommand,
     source: 'detection-fallback',
     testing: (opts.testing ?? []).map(toFeatureLabel),
     tools: (opts.tools ?? []).map(toFeatureLabel),
-    typescript: opts.typescript === true
+    typescript: Boolean(opts.typescript)
   }
 }
 

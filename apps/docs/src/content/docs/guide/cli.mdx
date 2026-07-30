@@ -157,6 +157,22 @@ For Astro projects, `doctor` also reports mismatched Astro Doctor configuration,
 npx @santi020k/eslint-config-basic doctor
 ```
 
+Add `--verbose` in a workspace to print a compact row for the root and every
+detected project. Each row includes the selected runtime, TypeScript mode and
+tsconfig, framework processors, formats, libraries, extensions, testing packs,
+tools, and ignore patterns. Feature markers distinguish installed (`I`),
+detected (`D`), and enabled (`E`) state:
+
+```sh
+npx @santi020k/eslint-config-basic doctor --verbose
+```
+
+When a supporting optional package is installed but not activated, the verbose
+report explains whether the project lacked a matching detection signal or the
+active config did not load the detected pack. `doctor --json` always includes
+the same structured data in its `projects` array, including inactive-package
+reasons, without requiring `--verbose`.
+
 Use `--fix` to create a missing generated config, add a lint script, declare
 detected v3 packages, and rewrite straightforward v1 framework imports.
 `package.json` and rewritten configs receive numbered `.doctor.bak` backups.

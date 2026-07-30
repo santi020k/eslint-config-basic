@@ -65,6 +65,9 @@ export const getRules = (options?: AstroOptions): TSESLint.Linter.RulesRecord =>
     '@stylistic/jsx-indent-props': 'off',
     '@stylistic/jsx-one-expression-per-line': 'off',
     '@stylistic/jsx-tag-spacing': 'off',
+    // Declarative tags, SVG path data, and embedded previews cannot be safely
+    // wrapped by a JavaScript-oriented line-length rule.
+    '@stylistic/max-len': 'off',
     '@stylistic/quote-props': ['warn', 'as-needed'],
     // Astro template expressions can confuse this rule in otherwise valid markup.
     '@typescript-eslint/no-unsafe-return': 'off',

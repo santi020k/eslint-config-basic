@@ -9,6 +9,7 @@ describe('Type Exports', () => {
       extensions: [],
       formats: [],
       frameworks: [],
+      ignores: [],
       libraries: [],
       lintCommand: 'eslint .',
       source: 'detection-fallback',

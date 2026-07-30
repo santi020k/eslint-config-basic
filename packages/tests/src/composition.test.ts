@@ -657,6 +657,80 @@ describe('defineConfig Function', () => {
     }
   })
 
+  test('should syntax-lint declaration-only workspace packages without a tsconfig', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'eslint-config-declarations-'))
+
+    try {
+      mkdirSync(join(root, 'packages/theme/src'), { recursive: true })
+      writeFileSync(join(root, 'package.json'), JSON.stringify({ name: 'workspace-root' }))
+      writeFileSync(join(root, 'pnpm-workspace.yaml'), 'packages:\n  - \'packages/*\'\n')
+      writeFileSync(join(root, 'packages/theme/package.json'), JSON.stringify({ name: 'theme' }))
+      writeFileSync(join(root, 'packages/theme/src/index.js'), 'export const theme = {}\n')
+      writeFileSync(
+        join(root, 'packages/theme/src/index.d.ts'),
+        'export declare const theme: Record<string, string>\n'
+      )
+
+      const config = await defineConfig({
+        root,
+        settings: [Setting.NoGitignore],
+        tools: []
+      })
+      const syntaxFallback = config.find(
+        entry => entry.name?.includes('disable-type-checked')
+      )
+
+      expect(syntaxFallback?.files?.every(
+        pattern => typeof pattern === 'string' && pattern.startsWith('packages/theme/')
+      )).toBe(true)
+    } finally {
+      rmSync(root, { force: true, recursive: true })
+    }
+  })
+
+  test('should apply Astro processing to neutral workspace packages containing Astro files', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'eslint-config-shared-astro-'))
+
+    try {
+      mkdirSync(join(root, 'apps/site/src'), { recursive: true })
+      mkdirSync(join(root, 'packages/theme/components'), { recursive: true })
+      writeFileSync(join(root, 'package.json'), JSON.stringify({ name: 'workspace-root' }))
+      writeFileSync(
+        join(root, 'pnpm-workspace.yaml'),
+        'packages:\n  - \'apps/*\'\n  - \'packages/*\'\n'
+      )
+      writeFileSync(join(root, 'apps/site/package.json'), JSON.stringify({
+        dependencies: { astro: 'latest' },
+        name: 'site'
+      }))
+      writeFileSync(
+        join(root, 'apps/site/src/page.astro'),
+        '---\nimport AppleIcon from "../../../packages/theme/components/AppleIcon.astro"\n---\n<AppleIcon />\n'
+      )
+      writeFileSync(join(root, 'packages/theme/package.json'), JSON.stringify({ name: 'theme' }))
+      writeFileSync(
+        join(root, 'packages/theme/components/AppleIcon.astro'),
+        '<svg aria-hidden="true"></svg>\n'
+      )
+
+      const config = await defineConfig({
+        root,
+        settings: [Setting.NoGitignore],
+        tools: []
+      })
+      const astroConfigs = config.filter(entry => entry.name === 'astro/recommended')
+
+      expect(astroConfigs.some(entry => entry.files?.some(
+        pattern => typeof pattern === 'string' && pattern.startsWith('apps/site/')
+      ))).toBe(true)
+      expect(astroConfigs.some(entry => entry.files?.some(
+        pattern => typeof pattern === 'string' && pattern.startsWith('packages/theme/')
+      ))).toBe(true)
+    } finally {
+      rmSync(root, { force: true, recursive: true })
+    }
+  })
+
   test('should preserve root detections when workspace project detection is disabled', async () => {
     const root = mkdtempSync(join(tmpdir(), 'eslint-config-monorepo-opt-out-'))
 

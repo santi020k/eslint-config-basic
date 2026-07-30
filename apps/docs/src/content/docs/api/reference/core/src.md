@@ -1490,7 +1490,7 @@ Defined in: [core/src/types.ts:322](https://github.com/santi020k/eslint-config-b
 
 > `const` **\_\_detectionInternals**: `object`
 
-Defined in: [core/src/utils/detection.ts:585](https://github.com/santi020k/eslint-config-basic/blob/main/packages/core/src/utils/detection.ts#L585)
+Defined in: [core/src/utils/detection.ts:645](https://github.com/santi020k/eslint-config-basic/blob/main/packages/core/src/utils/detection.ts#L645)
 
 Internal detection helpers exposed for focused unit tests.
 Do not use these in application code.
@@ -1729,7 +1729,7 @@ Do not use these in application code.
 
 ##### detectTypescript
 
-> **detectTypescript**: (`detectRootDir`) => `boolean`
+> **detectTypescript**: (`detectRootDir`) => `boolean` \| [`TypeScriptMode`](#typescriptmode) \| [`TypeScriptOptions`](#typescriptoptions) \| `undefined`
 
 ###### Parameters
 
@@ -1739,7 +1739,7 @@ Do not use these in application code.
 
 ###### Returns
 
-`boolean`
+`boolean` \| [`TypeScriptMode`](#typescriptmode) \| [`TypeScriptOptions`](#typescriptoptions) \| `undefined`
 
 ##### parsePnpmWorkspacePatterns
 
@@ -2246,7 +2246,7 @@ Defined in: [core/src/lazy.ts:8](https://github.com/santi020k/eslint-config-basi
 
 > **detectProjectOptions**(`detectRootDir?`): [`EslintConfigOptions`](#eslintconfigoptions)
 
-Defined in: [core/src/utils/detection.ts:613](https://github.com/santi020k/eslint-config-basic/blob/main/packages/core/src/utils/detection.ts#L613)
+Defined in: [core/src/utils/detection.ts:673](https://github.com/santi020k/eslint-config-basic/blob/main/packages/core/src/utils/detection.ts#L673)
 
 Automatically detects project settings based on package.json content
 

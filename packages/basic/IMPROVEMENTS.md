@@ -59,7 +59,7 @@ fixable rules as potential fix conflicts. Compatibility output explicitly states
 that it preserves effective configuration rather than existing source
 violations.
 
-### Make the default stylistic rule set internally satisfiable
+### Completed — Make the default stylistic rule set internally satisfiable
 
 The combination of
 `@stylistic/function-call-argument-newline: ['warn', 'never']` and
@@ -221,7 +221,7 @@ The shared `camelcase` rule now ignores property names while continuing to
 report snake-case local bindings. Coverage includes object literals, TypeScript
 property declarations, computed access, quoted keys, and aliased destructuring.
 
-### Keep plugin attachment automatic for consumer overrides
+### Completed — Keep plugin attachment automatic for consumer overrides
 
 The 3.2.0 plugin-attachment change worked as intended. Dep Beacon could pass its
 Astro Tailwind exception directly as an extra config:

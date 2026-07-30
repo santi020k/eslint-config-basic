@@ -15,7 +15,7 @@ import { slidev as slidevConfig } from '@santi020k/eslint-config-slidev'
 import { svelteConfig } from '@santi020k/eslint-config-svelte'
 import { vite as viteConfig } from '@santi020k/eslint-config-vite'
 import { vueConfig } from '@santi020k/eslint-config-vue'
-import { describe, expect, test } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 
 import { lintFile, lintText, lintTextWithFix } from './test-utils.js'
 
@@ -23,6 +23,20 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 const FIXTURES_DIR = join(__dirname, '../fixtures')
 const astroConfig = astro()
+const isCircularFixWarning = (call: unknown[]): boolean => call.some(value => {
+  if (typeof value === 'string') return value.includes('ESLintCircularFixesWarning')
+
+  if (value instanceof Error) {
+    return value.name === 'ESLintCircularFixesWarning' ||
+      value.message.includes('Circular fixes detected')
+  }
+
+  if (!value || typeof value !== 'object') return false
+
+  return Object.values(value).some(
+    property => property === 'ESLintCircularFixesWarning'
+  )
+})
 
 describe('Integration Tests', () => {
   describe('JavaScript', () => {
@@ -175,12 +189,18 @@ describe('Integration Tests', () => {
         'interface ApiResponse {',
         '  database_specific: string',
         '  \'ecosystem_specific\': string',
+        '  font_style: string',
+        '  ntp_background_repeat: string',
+        '  theme_ntp_background: string',
         '}',
         '',
         'const fieldName = \'database_specific\'',
         'const response: ApiResponse = {',
         '  database_specific: \'database\',',
-        '  \'ecosystem_specific\': \'ecosystem\'',
+        '  \'ecosystem_specific\': \'ecosystem\',',
+        '  font_style: \'bold\',',
+        '  ntp_background_repeat: \'no-repeat\',',
+        '  theme_ntp_background: \'#000\'',
         '}',
         'const { database_specific: databaseSpecific } = response',
         'const computedValue = response[fieldName]',
@@ -283,8 +303,44 @@ describe('Integration Tests', () => {
           '</script>',
           ''
         ].join('\n')
+      },
+      {
+        name: 'fragments with nested ternaries',
+        source: [
+          '---',
+          'const state = \'ready\'',
+          'const fallback = false',
+          '---',
+          '<>',
+          '  {state === \'ready\' ? <strong>Ready</strong> : fallback ? <em>Waiting</em> : <span>Idle</span>}',
+          '</>',
+          ''
+        ].join('\n')
+      },
+      {
+        name: 'same-line imports in client scripts',
+        source: [
+          '<script>import state from \'./state.js\'; console.log(state)</script>',
+          '<main>Ready</main>',
+          ''
+        ].join('\n')
+      },
+      {
+        name: 'multiple virtual script blocks',
+        source: [
+          '<script is:inline>',
+          '  document.documentElement.dataset.theme = \'dark\'',
+          '</script>',
+          '<section>Theme</section>',
+          '<script>',
+          '  const section = document.querySelector(\'section\')',
+          '  section?.setAttribute(\'data-ready\', \'true\')',
+          '</script>',
+          ''
+        ].join('\n')
       }
     ])('should reach a stable result for $name', async ({ source }) => {
+      const warningSpy = vi.spyOn(process, 'emitWarning')
       const config = await defineConfig({
         detection: false,
         frameworks: { astro: true },
@@ -295,9 +351,17 @@ describe('Integration Tests', () => {
       const [firstPass] = await lintTextWithFix(source, config, fileName)
       const stableSource = firstPass.output ?? source
       const [secondPass] = await lintTextWithFix(stableSource, config, fileName)
+      const secondPassRuleIds = secondPass.messages.map(message => message.ruleId)
 
       expect(secondPass.output).toBeUndefined()
-      expect(secondPass.messages.map(message => message.ruleId)).not.toContain('@stylistic/indent')
+      expect(secondPassRuleIds).not.toContain('@stylistic/indent')
+      expect(secondPassRuleIds).not.toEqual(expect.arrayContaining([
+        '@stylistic/eol-last',
+        '@stylistic/no-multiple-empty-lines',
+        '@stylistic/no-trailing-spaces'
+      ]))
+      expect(warningSpy.mock.calls.some(call => isCircularFixWarning(call))).toBe(false)
+      warningSpy.mockRestore()
     })
   })
 
@@ -404,6 +468,58 @@ describe('Integration Tests', () => {
 
       expect(ruleIds).not.toContain('@typescript-eslint/no-unsafe-return')
       expect(ruleIds).not.toContain(null)
+    })
+
+    test('should not apply JavaScript line length to declarative Astro markup', async () => {
+      const config = await defineConfig({
+        detection: false,
+        frameworks: { astro: true },
+        tools: [],
+        typescript: false
+      })
+      const source = [
+        '<svg viewBox="0 0 120 20" aria-label="A deliberately descriptive accessible icon label that should remain readable as markup">',
+        '  <path d="M0 10 C 10 0, 20 0, 30 10 S 50 20, 60 10 S 80 0, 90 10 S 110 20, 120 10" fill="currentColor" />',
+        '</svg>',
+        ''
+      ].join('\n')
+      const results = await lintText(source, config, join(FIXTURES_DIR, 'long-markup.astro'))
+
+      expect(results[0].messages.map(message => message.ruleId)).not.toContain('@stylistic/max-len')
+    })
+  })
+
+  describe('GitHub Actions YAML', () => {
+    test('should allow empty event keys while retaining other empty-value checks', async () => {
+      const config = await defineConfig({
+        detection: false,
+        formats: [Format.Yaml],
+        tools: [],
+        typescript: false
+      })
+      const workflowPath = join(FIXTURES_DIR, '.github/workflows/ci.yml')
+      const validWorkflow = [
+        'on:',
+        '  workflow_dispatch:',
+        '  pull_request:',
+        '  push:',
+        'jobs: {}',
+        ''
+      ].join('\n')
+      const invalidWorkflow = [
+        'on:',
+        '  workflow_dispatch:',
+        'jobs:',
+        '  build:',
+        ''
+      ].join('\n')
+      const validResults = await lintText(validWorkflow, config, workflowPath)
+      const invalidResults = await lintText(invalidWorkflow, config, workflowPath)
+
+      expect(validResults[0].messages.map(message => message.ruleId))
+        .not.toContain('no-restricted-syntax')
+      expect(invalidResults[0].messages.map(message => message.ruleId))
+        .toContain('no-restricted-syntax')
     })
   })
 

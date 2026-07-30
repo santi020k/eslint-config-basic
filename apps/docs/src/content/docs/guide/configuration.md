@@ -297,6 +297,60 @@ Set `untypedFiles: false` to require type information for every TypeScript
 file. `projectService` also accepts the native options object when
 `allowDefaultProject` or `defaultProject` is genuinely needed.
 
+Workspace packages that contain `.d.ts`, `.d.mts`, or `.d.cts` declarations but
+no supported tsconfig are detected as syntax-only TypeScript projects. This
+keeps handwritten public declarations lintable without sending them to the
+project service. Add a package-local tsconfig when type-aware linting is useful;
+for JavaScript packages, enable `allowJs` and include both the JavaScript source
+and declaration files. Prefer explicit public declarations, Astro `Props`
+interfaces, and JSDoc parameter types over suppressing unsafe-type rules.
+
+The shared line-length rule ignores URLs, strings, and template literals.
+Astro disables the JavaScript-oriented rule for `.astro` documents because
+wrapping declarative tags, SVG path data, or embedded previews can change or
+obscure their output. For other generated templates, keep the exception
+file-scoped:
+
+```js
+export default await defineConfig(
+  {},
+  {
+    files: ['generated/**/*.{js,html}'],
+    rules: {
+      '@stylistic/max-len': 'off'
+    }
+  }
+)
+```
+
+External schemas may keep their published property spelling. Object properties,
+quoted keys, computed access, TypeScript property declarations, and destructured
+keys renamed to a local camel-case binding do not trigger the `camelcase` rule.
+Local variables and functions are still checked, so prefer:
+
+```ts
+const { theme_ntp_background: themeBackground } = manifest
+```
+
+over introducing a snake-case local identifier. If an external adapter requires
+an exceptional local binding too, use a source-level directive with a short
+schema-specific justification instead of disabling the rule project-wide.
+
+When an arrow function's concise body is too long for one line, wrap the
+expression in parentheses rather than changing it to a return-only block:
+
+```js
+const result = value => (
+  createLongResult(value, {
+    enabled: true
+  })
+)
+```
+
+This form satisfies `func-style`, `arrow-body-style`,
+`implicit-arrow-linebreak`, and `max-len` together and remains stable under
+autofix.
+
 ## Tailwind Options
 
 Tailwind is auto-detected when the project depends on Tailwind packages. Use `tailwind` when the entry point or project-specific class ignores need to be explicit:

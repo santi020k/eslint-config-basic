@@ -680,7 +680,7 @@ Provides linting rules for Vitest test files with best practices
 
 > `const` **yaml**: () => `Promise`\<`TSESLint.FlatConfig.ConfigArray`\>
 
-Defined in: [formats/src/yaml.ts:10](https://github.com/santi020k/eslint-config-basic/blob/main/packages/formats/src/yaml.ts#L10)
+Defined in: [formats/src/yaml.ts:53](https://github.com/santi020k/eslint-config-basic/blob/main/packages/formats/src/yaml.ts#L53)
 
 YAML ESLint configuration
 Provides rules for YAML file linting
