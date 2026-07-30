@@ -507,8 +507,56 @@ const getShadowedRanges = (content: string, name: string): SourceRange[] => {
     getArrowRange(match.index, searchable.indexOf('=>', match.index))
   ))
 
-  // eslint-disable-next-line security/detect-non-literal-regexp -- binding names come from parsed import specifiers
-  const parameterNamePattern = new RegExp(`\\b${name}\\b`)
+  const splitAtTopLevel = (value: string, separator: string): string[] => {
+    const parts: string[] = []
+    const closers: Record<string, string> = { '(': ')', '[': ']', '{': '}' }
+    const expectedClosers: string[] = []
+    let partStart = 0
+
+    for (let index = 0; index < value.length; index++) {
+      const character = value[index]
+      const closer = closers[character]
+
+      if (closer) expectedClosers.push(closer)
+      else if (character === expectedClosers.at(-1)) expectedClosers.pop()
+      else if (character === separator && expectedClosers.length === 0) {
+        parts.push(value.slice(partStart, index))
+
+        partStart = index + 1
+      }
+    }
+
+    parts.push(value.slice(partStart))
+
+    return parts
+  }
+
+  const hasBindingName = (value: string): boolean => {
+    let binding = splitAtTopLevel(value, '=')[0].trim()
+
+    if (binding.startsWith('...')) binding = binding.slice(3).trim()
+
+    binding = splitAtTopLevel(binding, ':')[0].trim()
+
+    if (binding.startsWith('{') && binding.endsWith('}')) {
+      return splitAtTopLevel(binding.slice(1, -1), ',').some(property => {
+        const propertyParts = splitAtTopLevel(property, ':')
+
+        return hasBindingName(propertyParts.length > 1 ? propertyParts.slice(1).join(':') : property)
+      })
+    }
+
+    if (binding.startsWith('[') && binding.endsWith(']')) {
+      return splitAtTopLevel(binding.slice(1, -1), ',').some(hasBindingName)
+    }
+
+    return binding.replace(/\?$/, '') === name
+  }
+
+  const hasParameterBinding = (parameters: string): boolean => (
+    splitAtTopLevel(parameters, ',').some(hasBindingName)
+  )
+
   const parameterOwnerPattern = /(?:\bfunction\b[^()]*|\bcatch|\b(?:constructor|[a-zA-Z_$][\w$]*))\s*$/
 
   for (let parameterStart = 0; parameterStart < searchable.length; parameterStart++) {
@@ -520,7 +568,7 @@ const getShadowedRanges = (content: string, name: string): SourceRange[] => {
 
     const parameters = searchable.slice(parameterStart + 1, parameterEnd - 1)
 
-    if (!parameterNamePattern.test(parameters)) continue
+    if (!hasParameterBinding(parameters)) continue
 
     const relativeBodyStart = searchable.slice(parameterEnd).search(/\S/)
     const bodyStart = relativeBodyStart === -1 ? searchable.length : parameterEnd + relativeBodyStart

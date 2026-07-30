@@ -101,9 +101,15 @@ jobs:
       - name: Enforce test coverage thresholds (Node 22.x)
         if: matrix.node-version == '22.x'
         run: pnpm run test:coverage
+      - name: Run tests (Node 24.x)
+        if: matrix.node-version == '24.x'
+        run: pnpm exec turbo run test --concurrency=50%
       - name: Run repository checks (Node 22.x)
         if: matrix.node-version == '22.x'
         run: pnpm run lint:changed && pnpm run check:internal-compatibility
+      - name: Check package READMEs are in sync
+        if: matrix.node-version == '22.x'
+        run: pnpm run docs:sync-readmes && git diff --exit-code -- 'packages/*/README.md' || (echo 'Package READMEs are stale. Run `pnpm run docs:sync-readmes` and commit the result.' && exit 1)
       - name: Package metrics
         if: matrix.node-version == '22.x'
         run: pnpm run check:package-metrics
