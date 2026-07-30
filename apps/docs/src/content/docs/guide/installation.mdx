@@ -100,7 +100,7 @@ Install "@santi020k/eslint-config-react" or disable that framework.
 ```
 
 Run `basic-eslint explain` to see why a feature was detected and
-`basic-eslint doctor` to check dependency and peer alignment.
+`basic-eslint doctor` to check project setup and required package presence.
 
 ## Compatibility
 
@@ -118,7 +118,9 @@ are designed to work together, so a setup can safely combine versions such as
 `eslint-config-basic@3.4.0` and `eslint-config-react@3.2.1`.
 
 Use the latest version of each package within the chosen major. Internal
-`dependencies` and `peerDependencies` declare any more specific minimum version,
-and `basic-eslint doctor` reports incompatible installed ranges.
+`dependencies` install compatible package versions, and package managers report
+unmet `peerDependencies` during installation. Re-run your package manager's
+install command to validate the dependency tree; npm users can also run `npm ls`
+to check the installed tree.
 
 For existing projects, continue with [Migrate from v2](/guide/migration-v2-to-v3/).
