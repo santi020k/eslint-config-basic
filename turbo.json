@@ -21,10 +21,12 @@
     },
     "lint": {
       "dependsOn": ["^build", "@santi020k/eslint-config-basic#build"],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/eslint.config.js"],
       "outputLogs": "errors-only"
     },
     "lint:fix": {
       "dependsOn": ["^build", "@santi020k/eslint-config-basic#build"],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/eslint.config.js"],
       "outputLogs": "errors-only"
     },
     "typecheck": {

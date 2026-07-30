@@ -228,6 +228,14 @@ const FACTORY_ALIAS_REPLACEMENTS = new Set([
   'gitignore'
 ])
 
+const PARAMETER_PROPERTY_MODIFIERS = new Set([
+  'override',
+  'private',
+  'protected',
+  'public',
+  'readonly'
+])
+
 const dependencyFields = [
   'dependencies',
   'devDependencies',
@@ -537,6 +545,12 @@ const getShadowedRanges = (content: string, name: string): SourceRange[] => {
     if (binding.startsWith('...')) binding = binding.slice(3).trim()
 
     binding = splitAtTopLevel(binding, ':')[0].trim()
+
+    const bindingParts = binding.split(/\s+/)
+
+    while (PARAMETER_PROPERTY_MODIFIERS.has(bindingParts[0])) bindingParts.shift()
+
+    binding = bindingParts.join(' ')
 
     if (binding.startsWith('{') && binding.endsWith('}')) {
       return splitAtTopLevel(binding.slice(1, -1), ',').some(property => {

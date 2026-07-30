@@ -399,6 +399,26 @@ describe('v2 to v3 migration', () => {
     expect(result.content).not.toContain('value = gitignore()')
   })
 
+  test('preserves removed aliases shadowed by TypeScript parameter properties', () => {
+    const input = [
+      'import { gitignore } from \'@santi020k/eslint-config-basic\'',
+      '',
+      'class ConfigBuilder {',
+      '  constructor(private readonly gitignore: Config) {',
+      '    consume(gitignore)',
+      '  }',
+      '}',
+      'export default [...gitignore]',
+      'void ConfigBuilder'
+    ].join('\n')
+
+    const result = migrateConfigToV3(input, 'lean')
+
+    expect(result.content).toContain('constructor(private readonly gitignore: Config)')
+    expect(result.content).toContain('consume(gitignore)')
+    expect(result.content).toContain('export default [...createGitignoreConfig()]')
+  })
+
   test('preserves removed alias references in block-bodied arrow scopes', () => {
     const input = [
       'import { gitignore } from \'@santi020k/eslint-config-basic\'',
