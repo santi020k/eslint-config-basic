@@ -48,8 +48,8 @@ jobs:
             ${{ runner.os }}-turbo-22.x-
             ${{ runner.os }}-turbo-
       - run: pnpm install --frozen-lockfile
-      - name: Build affected packages
-        run: pnpm exec turbo run build --affected --concurrency=50%
+      - name: Build integration test dependencies
+        run: pnpm exec turbo run build --filter=@santi020k/eslint-config-tests... --concurrency=50%
       - name: Run affected tests and integration contracts
         run: pnpm run test:affected
 
