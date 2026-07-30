@@ -1,5 +1,4 @@
 import { GLOB_JS_TS_ALL, GLOB_VUE } from '@santi020k/eslint-config-core'
-
 import type { TSESLint } from '@typescript-eslint/utils'
 import type PluginJsxA11y from 'eslint-plugin-jsx-a11y'
 import type PluginVueA11y from 'eslint-plugin-vuejs-accessibility'
@@ -23,10 +22,15 @@ export const a11y: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyCo
       },
       rules: pluginJsxA11y.configs.recommended.rules
     },
-    ...pluginVueA11y.configs['flat/recommended'].map((config: TSESLint.FlatConfig.Config) => ({
-      ...config,
-      files: GLOB_VUE,
-      name: `eslint-config-integrations/a11y/vue${config.name ? `/${config.name}` : ''}`
-    }))
+    ...pluginVueA11y.configs['flat/recommended'].map((config: TSESLint.FlatConfig.Config) => {
+      const configSuffix = config.name ? `/${config.name}` : ''
+      const name = `eslint-config-integrations/a11y/vue${configSuffix}`
+
+      return {
+        ...config,
+        files: GLOB_VUE,
+        name
+      }
+    })
   ]
 })

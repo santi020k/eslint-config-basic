@@ -1,3 +1,4 @@
+/* eslint-disable no-console -- this module owns the generate-skill CLI output */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
@@ -991,7 +992,8 @@ export const generateAgentSkills = async (
   const skipped: string[] = []
   const stale: string[] = []
   // Primary: load the real eslint.config.js; fallback: package.json detection
-  const features = (await analyzeEslintConfig(cwd)) ?? featuresFromDetection(cwd)
+  const detectedFeatures = await analyzeEslintConfig(cwd)
+  const features = detectedFeatures ?? featuresFromDetection(cwd)
   const plainBody = generateSkillContent(features, 'plain')
 
   const recordGuardedResult = (filePath: string, result: GuardedSectionResult): void => {

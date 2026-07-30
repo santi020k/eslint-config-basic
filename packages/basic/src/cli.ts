@@ -1,3 +1,5 @@
+/* eslint-disable complexity -- CLI planners and dispatchers intentionally cover many validated command branches */
+/* eslint-disable no-console -- CLI handlers own user-facing terminal output */
 import { spawnSync } from 'node:child_process'
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
@@ -149,7 +151,6 @@ const getDeclaredDependencyNames = (packageJson: null | Record<string, unknown>)
   const names = new Set<string>()
 
   for (const field of dependencyFields) {
-    // eslint-disable-next-line security/detect-object-injection -- field is restricted to dependencyFields above
     const dependencies = packageJson?.[field]
 
     if (!dependencies || typeof dependencies !== 'object' || Array.isArray(dependencies)) continue
@@ -187,7 +188,6 @@ const getLiteInstallPackages = (
   ])
 
   for (const framework of summary.frameworks) {
-    // eslint-disable-next-line security/detect-object-injection -- framework values come from known detection keys
     const packageName = FRAMEWORK_KEY_TO_PACKAGE[framework]
 
     if (packageName) packages.add(packageName)
@@ -216,7 +216,6 @@ const getInstallPackages = (
 
   if (!usesFullPackage) {
     for (const framework of summary.frameworks) {
-      // eslint-disable-next-line security/detect-object-injection -- framework values come from known detection keys
       const packageName = FRAMEWORK_KEY_TO_PACKAGE[framework]
 
       if (packageName) packages.add(packageName)
@@ -336,7 +335,6 @@ const getCatalogPreference = (
   }
 
   for (const field of dependencyFields) {
-    // eslint-disable-next-line security/detect-object-injection -- field is constrained to known dependency records
     const dependencies = packageJson?.[field]
 
     if (!dependencies || typeof dependencies !== 'object' || Array.isArray(dependencies)) continue
@@ -452,7 +450,6 @@ const getCompatibleConfigVersion = (
   let basicSpec: string | undefined
 
   for (const field of dependencyFields) {
-    // eslint-disable-next-line security/detect-object-injection -- field is constrained to known dependency records
     const dependencies = packageJson?.[field]
 
     if (!dependencies || typeof dependencies !== 'object' || Array.isArray(dependencies)) continue
@@ -467,9 +464,9 @@ const getCompatibleConfigVersion = (
     }
   }
 
-  const catalogName = basicSpec?.startsWith('catalog:')
-    ? basicSpec.slice('catalog:'.length)
-    : undefined
+  const catalogName = basicSpec?.startsWith('catalog:') ?
+    basicSpec.slice('catalog:'.length) :
+    undefined
 
   let selectedCatalog: string | true | undefined
 
@@ -477,10 +474,12 @@ const getCompatibleConfigVersion = (
     selectedCatalog = catalogName && catalogName !== 'default' ? catalogName : true
   }
 
-  const resolvedSpec = selectedCatalog && workspaceRoot
-    ? getCatalogVersion(workspaceRoot, BASIC_PACKAGE_NAME, selectedCatalog)
-    : basicSpec
+  const resolvedSpec = selectedCatalog && workspaceRoot ?
+    getCatalogVersion(workspaceRoot, BASIC_PACKAGE_NAME, selectedCatalog) :
+    basicSpec
 
+  // CLI version loading is declared later with the rest of the package metadata helpers.
+  // eslint-disable-next-line no-use-before-define
   const match = /(\d+)\.(\d+)\.(\d+)/.exec(resolvedSpec ?? getCliVersion())
 
   return match ? `^${match[1]}.${match[2]}.${match[3]}` : '^3.1.0'
@@ -493,13 +492,11 @@ const addCompatibleConfigVersions = (
   const major = /\d+/.exec(version)?.[0]
   const companionVersion = major ? `^${major}.0.0` : version
 
-  return packages.map(packageName =>
-    packageName.startsWith('@santi020k/eslint-config-') &&
+  return packages.map(packageName => packageName.startsWith('@santi020k/eslint-config-') &&
     packageName !== LITE_PACKAGE_NAME &&
-    packageName !== INTEGRATIONS_PACKAGE_NAME
-      ? `${packageName}@${packageName === BASIC_PACKAGE_NAME ? version : companionVersion}`
-      : packageName
-  )
+    packageName !== INTEGRATIONS_PACKAGE_NAME ?
+    `${packageName}@${packageName === BASIC_PACKAGE_NAME ? version : companionVersion}` :
+    packageName)
 }
 
 const hasLintScript = (cwd: string): boolean => {
@@ -574,6 +571,8 @@ const detectWorkspaceProjects = (cwd: string): string[] => {
 }
 
 const createExplicitOptions = (cwd: string): string[] => {
+  // Project summarization is declared later beside the doctor workflow that also consumes it.
+  // eslint-disable-next-line no-use-before-define
   const summary = getProjectSummary(cwd)
   const options: string[] = []
 
@@ -761,13 +760,14 @@ const printUsage = () => {
     '  generate-skill  Generate AI agent standards files',
     '',
     'Options:',
+    '  --analyze-source explain-preset: lint source and preview autofix without writing',
     '  --force         Overwrite existing generated skill sections/files',
     '  --check         Verify generated files, migrations, or snapshots without writing',
     '  --concurrency   profile: off, auto, or a worker count',
     '  --create        generate-skill: scaffold a root AGENTS.md when missing',
     '  --dry-run       install: print the detected install command without running it',
     '  --explicit      init: write detected settings explicitly',
-    '  --file          explain/profile/snapshot/diff: representative file or lint target (repeatable)',
+    '  --file          explain/explain-preset/profile/snapshot/diff: file or lint target (repeatable)',
     '  --fix           doctor: safely repair generated config and package metadata',
     '  --full          migrate --to v3: choose the batteries-included package',
     '  --json          Print JSON for commands that support it',
@@ -795,7 +795,7 @@ const COMMAND_OPTIONS: Partial<Record<string, string[]>> = {
   docs: [],
   doctor: ['--fix', '--json', '--lite-install'],
   explain: ['--file', '--json'],
-  'explain-preset': ['--compatibility', '--file', '--json', '--output'],
+  'explain-preset': ['--analyze-source', '--compatibility', '--file', '--json', '--output'],
   'generate-skill': ['--check', '--create', '--force', '--with-eslint-mcp'],
   init: ['--check', '--explicit'],
   inspect: ['--json'],
@@ -818,7 +818,6 @@ const VALUE_OPTIONS = new Set([
   '--to'
 ])
 
-/* eslint-disable security/detect-object-injection -- command and option keys are validated against the registry */
 const printCommandUsage = (command: string): void => {
   let positional = ''
 
@@ -878,9 +877,9 @@ const validateCommandArguments = (
 
       if (!value || value.startsWith('-')) {
         console.error(
-          ['--max-duration', '--max-rule-time', '--max-warnings'].includes(option)
-            ? `${option} must be a non-negative number.`
-            : `Option ${option} requires a value.`
+          ['--max-duration', '--max-rule-time', '--max-warnings'].includes(option) ?
+            `${option} must be a non-negative number.` :
+            `Option ${option} requires a value.`
         )
 
         process.exitCode = 1
@@ -891,9 +890,9 @@ const validateCommandArguments = (
       index++
     } else if (VALUE_OPTIONS.has(option) && argument.endsWith('=')) {
       console.error(
-        ['--max-duration', '--max-rule-time', '--max-warnings'].includes(option)
-          ? `${option} must be a non-negative number.`
-          : `Option ${option} requires a value.`
+        ['--max-duration', '--max-rule-time', '--max-warnings'].includes(option) ?
+          `${option} must be a non-negative number.` :
+          `Option ${option} requires a value.`
       )
 
       process.exitCode = 1
@@ -914,7 +913,6 @@ const validateCommandArguments = (
 
   return { ok: true, positional: positionals[0] }
 }
-/* eslint-enable security/detect-object-injection */
 
 export const handleInit = (cwd: string = process.cwd(), check = false, explicit = false) => {
   const configPath = resolveConfigPath(cwd)
@@ -1181,7 +1179,6 @@ const validateConfigContent = (
 
   if (configContent.includes(LITE_PACKAGE_NAME)) {
     const missingFrameworkPackages = summary.frameworks
-      // eslint-disable-next-line security/detect-object-injection -- framework values come from known detection keys
       .map(framework => FRAMEWORK_KEY_TO_PACKAGE[framework])
       .filter((packageName): packageName is string => Boolean(packageName))
       .filter(packageName => !declaredDependencies.has(packageName))
@@ -1430,9 +1427,9 @@ const applyDoctorFixes = (
 
     const declared = getDeclaredDependencyNames(packageJson)
 
-    const explicitFeaturePackages = configContent
-      ? getExplicitConfigFeaturePackages(configContent)
-      : []
+    const explicitFeaturePackages = configContent ?
+      getExplicitConfigFeaturePackages(configContent) :
+      []
 
     const missingPackages = getInstallPackages(summary, declared, explicitFeaturePackages)
 
@@ -1473,6 +1470,8 @@ const applyDoctorFixes = (
     configContent &&
     Object.keys(FRAMEWORK_PACKAGE_TO_KEY).some(packageName => configContent.includes(packageName))
   ) {
+    // The migration parser is declared later as a public helper and is safe to call after module initialization.
+    // eslint-disable-next-line no-use-before-define
     const result = migrateConfigContent(configContent)
 
     if (result.changed) {
@@ -1527,7 +1526,11 @@ export const handleDoctor = async (
     )
 
     if (json) {
-      console.log(JSON.stringify({ command: liteInstallCommand, packageManager, packages: liteInstallPackages }, null, 2))
+      console.log(JSON.stringify({
+        command: liteInstallCommand,
+        packageManager,
+        packages: liteInstallPackages
+      }, null, 2))
     } else {
       console.log(liteInstallCommand)
     }
@@ -1553,14 +1556,14 @@ export const handleDoctor = async (
     hasV1FrameworkImports = hasV1FrameworkPackageImports(configContent)
   }
 
-  const explicitFeaturePackages = configContent
-    ? getExplicitConfigFeaturePackages(configContent)
-    : []
+  const explicitFeaturePackages = configContent ?
+    getExplicitConfigFeaturePackages(configContent) :
+    []
 
   const requiredPackages = getInstallPackages(summary, declaredDependencies, explicitFeaturePackages)
 
-  const installCommand = requiredPackages.length > 0
-    ? createInstallCommand(
+  const installCommand = requiredPackages.length > 0 ?
+    createInstallCommand(
       packageManager,
       addCompatibleConfigVersions(
         requiredPackages,
@@ -1568,8 +1571,8 @@ export const handleDoctor = async (
       ),
       workspaceRoot,
       catalog
-    )
-    : undefined
+    ) :
+    undefined
 
   const { issues, warnings } = buildDoctorDiagnosis(
     projectRoot, configPath, configContent, hasV1FrameworkImports, activeConfig, declaredDependencies, summary
@@ -1614,9 +1617,9 @@ export const handleInstall = (
   const packageManager = detectPackageManager(projectRoot)
   const configPath = getConfigPathIfPresent(projectRoot)
 
-  const explicitFeaturePackages = configPath
-    ? getExplicitConfigFeaturePackages(readFileSync(configPath, 'utf8'))
-    : []
+  const explicitFeaturePackages = configPath ?
+    getExplicitConfigFeaturePackages(readFileSync(configPath, 'utf8')) :
+    []
 
   const packages = getInstallPackages(
     getInstallProjectSummary(projectRoot),
@@ -1816,6 +1819,7 @@ const dispatchCommand = (
   flags: {
     concurrency?: string
     files: string[]
+    hasAnalyzeSource: boolean
     hasCheck: boolean
     hasCompatibility: boolean
     hasCreate: boolean
@@ -1921,8 +1925,10 @@ const dispatchCommand = (
       }
 
       handleExplainPreset(cwd, flags.positional, {
+        analyzeSource: flags.hasAnalyzeSource,
         compatibility: flags.hasCompatibility,
         file: flags.files[0],
+        files: flags.files,
         json: flags.hasJson,
         output: flags.output
       }).catch((error: unknown) => {
@@ -2063,7 +2069,6 @@ const getNumericFlagValue = (argv: string[], flag: string): number | undefined =
 
   if (!present) return undefined
 
-
   if (value === undefined || value.trim() === '' || value.startsWith('--')) return Number.NaN
 
   return Number(value)
@@ -2087,7 +2092,6 @@ export const runCli = (argv: string[] = process.argv, cwd: string = process.cwd(
   }
 
   if (isHelp) {
-    // eslint-disable-next-line security/detect-object-injection -- command is used only to test registry membership
     if (COMMAND_OPTIONS[command]) printCommandUsage(command)
     else printUsage()
 
@@ -2101,6 +2105,7 @@ export const runCli = (argv: string[] = process.argv, cwd: string = process.cwd(
   dispatchCommand(command, cwd, {
     concurrency: getFlagValue(argv, '--concurrency'),
     files: getFlagValues(argv, '--file'),
+    hasAnalyzeSource: argv.includes('--analyze-source'),
     hasCheck: argv.includes('--check'),
     hasCompatibility: argv.includes('--compatibility'),
     hasCreate: argv.includes('--create'),

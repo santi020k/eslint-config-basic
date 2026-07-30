@@ -210,10 +210,9 @@ const BIOME_RULE_NAMES = [
   'vue/mustache-interpolation-spacing',
   'vue/no-multi-spaces',
   'vue/no-spaces-around-equal-signs-in-attribute',
-  'vue/singleline-html-element-content-newline',
+  'vue/singleline-html-element-content-newline'
 ] as const
 
 export const BIOME_RULES = Object.fromEntries(
   BIOME_RULE_NAMES.map(ruleName => [ruleName, 'off'] as const)
 ) as TSESLint.FlatConfig.Rules
-

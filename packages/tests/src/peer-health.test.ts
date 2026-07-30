@@ -4,8 +4,6 @@ import { join } from 'node:path'
 
 import { afterEach, describe, expect, test } from 'vitest'
 
-// @ts-expect-error -- the JavaScript release script intentionally has no TypeScript declaration
-// eslint-disable-next-line import/no-relative-packages -- release script behavior is exercised from the test package
 import { createPeerHealthReport } from '../../../scripts/check-peer-health.mjs'
 
 const tempDirs: string[] = []

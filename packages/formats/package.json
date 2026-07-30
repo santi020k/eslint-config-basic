@@ -6,6 +6,7 @@
     "provenance": true
   },
   "description": "Non-JavaScript format configs for eslint-config-basic",
+  "author": "Santi020k",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -78,5 +79,6 @@
     "directory": "packages/formats"
   },
   "homepage": "https://eslint.santi020k.com/tooling/formats",
+  "author": "santi020k",
   "license": "MIT"
 }

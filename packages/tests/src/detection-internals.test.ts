@@ -4,7 +4,6 @@ import { join, sep } from 'node:path'
 
 import { Runtime } from '@santi020k/eslint-config-basic'
 import { __detectionInternals } from '@santi020k/eslint-config-core'
-
 import { afterEach, beforeEach, describe, expect, test } from 'vitest'
 
 describe('detection internals', () => {

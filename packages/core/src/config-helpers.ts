@@ -32,6 +32,8 @@ export const DEFAULT_IGNORES = [
   '**/.wrangler/**',
   '**/playwright-report/**',
   '**/test-results/**',
+  // Fixtures commonly contain intentionally invalid source and legacy configs.
+  '**/fixtures/**',
   '**/node_modules/**',
   '**/tsconfig.tsbuildinfo',
   // Package manager lock files (machine-generated, slow to lint)
@@ -88,7 +90,12 @@ export const OPTIONAL_BUCKETS = {
   tools: Object.values(Tool)
 } as const
 
-export type ConfigInput = false | null | TSESLint.FlatConfig.Config | TSESLint.FlatConfig.ConfigArray | undefined
+export type ConfigInput =
+  | false |
+  null |
+  TSESLint.FlatConfig.Config |
+  TSESLint.FlatConfig.ConfigArray |
+  undefined
 
 export const flattenConfigInputs = (configs: ConfigInput[]): TSESLint.FlatConfig.ConfigArray => configs.flatMap(config => {
   if (!config) return []
@@ -120,7 +127,6 @@ export const mergeArrayOption = <T>(
 export const isOptionalBucketValue = (
   bucket: OptionalBucket,
   value: string
-// eslint-disable-next-line security/detect-object-injection -- bucket is constrained to OptionalBucket union; all keys are statically known
 ): boolean => (OPTIONAL_BUCKETS[bucket] as readonly string[]).includes(value)
 
 export const getFeatureEntries = (
@@ -328,7 +334,6 @@ export const hasTsconfig = (rootDir: string): boolean => [
   'tsconfig.base.json',
   'tsconfig.app.json',
   'tsconfig.node.json'
-  // eslint-disable-next-line security/detect-non-literal-fs-filename -- config root is user-selected project context
 ].some(fileName => existsSync(join(rootDir, fileName)))
 
 export const resolveTypescriptOptions = (
@@ -358,10 +363,7 @@ export const resolveTsconfigRootDir = (
   return resolveTypescriptOptions(typescript) && hasTsconfig(rootDir) ? rootDir : undefined
 }
 
-export const findTailwindEntryPoint = (rootDir: string): string | undefined => TAILWIND_ENTRYPOINT_CANDIDATES.find(
-  // eslint-disable-next-line security/detect-non-literal-fs-filename -- probes known stylesheet candidates under project root
-  candidate => existsSync(join(rootDir, candidate))
-)
+export const findTailwindEntryPoint = (rootDir: string): string | undefined => TAILWIND_ENTRYPOINT_CANDIDATES.find(candidate => existsSync(join(rootDir, candidate)))
 
 export const scopeFilePattern = (projectPath: string, pattern: unknown): unknown => {
   if (typeof pattern === 'string') {
@@ -420,7 +422,14 @@ export const patchImportGroupsConfig = (
       ...config.rules,
       'simple-import-sort/imports': [
         rule[0],
-        { ...ruleOpts, groups: [...existingGroups.slice(0, insertAt), workspacePatterns, ...existingGroups.slice(insertAt)] }
+        {
+          ...ruleOpts,
+          groups: [
+            ...existingGroups.slice(0, insertAt),
+            workspacePatterns,
+            ...existingGroups.slice(insertAt)
+          ]
+        }
       ] as TSESLint.FlatConfig.RuleEntry
     }
   }

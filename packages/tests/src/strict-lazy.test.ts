@@ -1,5 +1,4 @@
 import { defineConfig } from '@santi020k/eslint-config-basic'
-
 import { describe, expect, test, vi } from 'vitest'
 
 import { isMissingRequestedPackage } from '../../basic/src/optional-package-errors.js'
@@ -49,8 +48,7 @@ describe('lazy framework loading', () => {
       throw new Error('Module not found: @santi020k/eslint-config-vite')
     })
 
-    const litePackage = '@santi020k/eslint-config-lite'
-    const { defineConfig: defineLiteConfig } = await import(litePackage)
+    const { defineConfig: defineLiteConfig } = await import('@santi020k/eslint-config-lite')
 
     let error: unknown
 

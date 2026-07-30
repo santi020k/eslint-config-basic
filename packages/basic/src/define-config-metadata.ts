@@ -26,6 +26,5 @@ export const attachDefineConfigMetadata = (
 }
 
 export const getDefineConfigMetadata = (config: unknown): DefineConfigMetadata | undefined => (
-  // eslint-disable-next-line security/detect-object-injection -- shared symbol is an internal fixed metadata key
   Array.isArray(config) ? (config as ConfigWithMetadata)[DEFINE_CONFIG_METADATA] : undefined
 )

@@ -20,7 +20,7 @@ resolved without changing rule options or addressing non-formatting project
 issues. The final consumer passes repository and package lint with
 `--max-warnings=0`, typechecking, tests, and a frozen pnpm install.
 
-### Improve adoption reports with source-level lint debt
+### Completed — Improve adoption reports with source-level lint debt
 
 `basic-eslint explain-preset monorepo --compatibility` reported five newly
 enabled formatting rules and one changed import-sort option. Its generated
@@ -50,6 +50,14 @@ Acceptance criteria:
 - A dry autofix preview identifies changed files without mutating the consumer.
 - Compatibility output explains whether it preserves effective configuration,
   current source behavior, or both.
+
+`explain-preset --analyze-source` now runs the selected preset against source
+without writing files, groups findings by rule, category, severity, file type,
+and fixability, and calls out non-formatting errors. A second in-memory ESLint
+run previews changed files and estimated changed lines, then reports remaining
+fixable rules as potential fix conflicts. Compatibility output explicitly states
+that it preserves effective configuration rather than existing source
+violations.
 
 ### Make the default stylistic rule set internally satisfiable
 
@@ -306,6 +314,8 @@ already-formatted fixtures cannot expose.
 - `init --explicit` now generates the v3 `features` map.
 - Preset adoption reports compare effective rules by category and can write a
   temporary compatibility override.
+- Preset adoption reports can analyze real source debt and preview autofix
+  without mutating consumer files.
 - CLI subcommands now have strict, side-effect-free help and flag validation.
 - Minimum-release-age failures receive a dedicated compatible-range diagnostic.
 - Release checks enforce peer health with owned, conditional exceptions.

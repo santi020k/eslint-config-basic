@@ -1,8 +1,5 @@
 /* eslint-disable complexity -- workflow handlers intentionally cover CLI output and compatibility branches */
 /* eslint-disable no-console -- CLI handlers own user-facing terminal output */
-/* eslint-disable security/detect-non-literal-fs-filename -- all paths are scoped to the caller-selected project root */
-/* eslint-disable security/detect-non-literal-regexp -- strict preset names are validated against an internal allowlist */
-/* eslint-disable security/detect-object-injection -- snapshot keys come from enumerated file and rule names */
 import { spawnSync } from 'node:child_process'
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
@@ -375,7 +372,6 @@ export const handleProfile = (
 
   const budgetRun = successfulRuns.toSorted((a, b) => a.durationMs - b.durationMs)[0] ?? runs[0]
 
-
   const violations: string[] = successfulRuns.length === 0 ?
     ['ESLint profiling did not produce a successful run.'] :
     []
@@ -559,15 +555,17 @@ const getObjectKeys = (value: unknown): string[] => {
 }
 
 const normalizeConfig = (config: unknown): EslintSnapshotFile => {
-  const resolved = config && typeof config === 'object' ? config as {
-    languageOptions?: {
-      ecmaVersion?: unknown
-      globals?: unknown
-      sourceType?: unknown
-    }
-    plugins?: unknown
-    rules?: unknown
-  } : {}
+  const resolved = config && typeof config === 'object' ?
+    config as {
+      languageOptions?: {
+        ecmaVersion?: unknown
+        globals?: unknown
+        sourceType?: unknown
+      }
+      plugins?: unknown
+      rules?: unknown
+    } :
+    {}
 
   return {
     globals: normalizeSerializableObject(resolved.languageOptions?.globals),

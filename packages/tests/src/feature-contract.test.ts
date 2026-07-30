@@ -1,5 +1,4 @@
-import { type ConfigFeature,resolveConfigFeatures } from '@santi020k/eslint-config-core'
-
+import { type ConfigFeature, resolveConfigFeatures } from '@santi020k/eslint-config-core'
 import { describe, expect, test } from 'vitest'
 
 describe('feature adapter contract', () => {
@@ -12,7 +11,7 @@ describe('feature adapter contract', () => {
     },
     {
       category: 'library',
-      create: async () => [{ name: 'early' }],
+      create: () => Promise.resolve([{ name: 'early' }]),
       id: 'early',
       order: 10
     },

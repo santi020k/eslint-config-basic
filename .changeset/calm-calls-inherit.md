@@ -12,4 +12,5 @@ indentation fixes and variable-rule false positives in Astro virtual scripts,
 and permit external snake-case schema properties without weakening checks on
 local bindings. Keep declaration-attached JSDoc and intentional fire-and-forget
 promises compatible with the surrounding formatting and promise rules, and
-clarify Full package activation and version semantics.
+clarify Full package activation and version semantics. Add source-aware preset
+adoption reports with grouped lint debt and a non-writing autofix preview.

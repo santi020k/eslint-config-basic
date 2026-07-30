@@ -3,7 +3,6 @@ import { join } from 'node:path'
 
 import astro from '@santi020k/eslint-config-astro'
 import { defineConfig, Extension, Format, Library, NextMode, Testing, Tool } from '@santi020k/eslint-config-basic'
-
 import { describe, expect, test } from 'vitest'
 
 import { extractConfigNames, extractRuleNames, getEffectiveRuleValue } from './test-utils.js'
@@ -230,8 +229,10 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
     )
 
     expect(override).toBeDefined()
-    expect((override?.rules as Record<string, unknown>)?.['n/no-unpublished-import']).toBe('off')
-    expect((override?.files as string[])?.some(f => f.includes('eslint.config'))).toBe(true)
+    if (!override) throw new Error('Expected an eslint.config file override')
+
+    expect((override.rules as Record<string, unknown>)['n/no-unpublished-import']).toBe('off')
+    expect((override.files as string[]).some(f => f.includes('eslint.config'))).toBe(true)
   })
 
   test('should include best-practices rules when Extension.BestPractices is requested', async () => {

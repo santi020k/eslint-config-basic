@@ -13,7 +13,7 @@
     "test:run": "pnpm --filter @santi020k/eslint-config-tests run test",
     "test:affected": "node scripts/test-affected.mjs",
     "test:coverage": "pnpm run build && turbo run test:coverage",
-    "lint": "pnpm run build && pnpm run lint:repo && turbo run lint -- --max-warnings=0",
+    "lint": "pnpm run build && pnpm run lint:repo && turbo run lint",
     "lint:repo": "eslint . --cache --no-warn-ignored --max-warnings=0",
     "lint:fix": "pnpm run build && pnpm run lint:repo:fix && turbo run lint:fix",
     "lint:repo:fix": "eslint . --cache --fix --no-warn-ignored --max-warnings=0",

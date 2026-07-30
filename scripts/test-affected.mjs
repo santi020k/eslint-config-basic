@@ -1,4 +1,3 @@
-/* eslint-disable turbo/no-undeclared-env-vars -- Git comparison refs configure this CI orchestration script */
 import { execFileSync } from 'node:child_process'
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { basename, join, relative } from 'node:path'
@@ -70,7 +69,6 @@ const dependentsByPackage = new Map()
 
 for (const { manifest } of workspacePackages) {
   for (const field of dependencyFields) {
-    // eslint-disable-next-line security/detect-object-injection -- field is constrained to known dependency records
     for (const dependencyName of Object.keys(manifest[field] ?? {})) {
       if (!workspacePackageNames.has(dependencyName)) continue
 

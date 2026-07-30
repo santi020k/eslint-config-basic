@@ -1,4 +1,5 @@
 import { defineConfig } from 'tsup'
+
 export default defineConfig({
   entry: ['src/index.ts'],
   bundle: false,
@@ -13,4 +14,4 @@ export default defineConfig({
   clean: true,
   sourcemap: true,
   target: 'es2022',
-  external: [/^node:/, /^@santi020k\//]})
+  external: [/^node:/, /^@santi020k\//] })

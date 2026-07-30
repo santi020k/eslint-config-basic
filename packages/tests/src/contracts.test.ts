@@ -12,7 +12,6 @@ import {
   defineConfig as defineLiteConfig,
   type EslintConfigOptions as LiteEslintConfigOptions
 } from '@santi020k/eslint-config-lite'
-
 import { describe, expect, test } from 'vitest'
 
 const noDetectRootDir = '/__eslint-config-basic_contract_tests_no_detect__'
@@ -72,7 +71,6 @@ describe('defineConfig enum contracts', () => {
         if (!pluginName) continue
 
         expect(
-          // eslint-disable-next-line security/detect-object-injection -- name is selected from registered plugin keys
           entry.plugins?.[pluginName],
           `${entry.name ?? '<anonymous>'} references ${ruleName} without registering ${pluginName}`
         ).toBeDefined()

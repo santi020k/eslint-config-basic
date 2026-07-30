@@ -40,7 +40,6 @@ import {
   type TypeScriptOptions
 } from '@santi020k/eslint-config-core'
 import { createTypescriptConfig } from '@santi020k/eslint-config-typescript'
-
 import type { TSESLint } from '@typescript-eslint/utils'
 
 import { attachDefineConfigMetadata } from './define-config-metadata.js'
@@ -339,7 +338,12 @@ const resolveRuntimeValue = (
   presetDefaults: Partial<EslintConfigOptions>,
   detected: EslintConfigOptions,
   usePresetRuntime: boolean
-): Runtime => (options?.runtime ?? (usePresetRuntime ? presetDefaults.runtime : undefined) ?? detected.runtime ?? Runtime.Universal) as Runtime
+): Runtime => (
+  options?.runtime ??
+  (usePresetRuntime ? presetDefaults.runtime : undefined) ??
+  detected.runtime ??
+  Runtime.Universal
+) as Runtime
 
 const resolveSettingsValue = (
   options: EslintConfigOptions | undefined,
@@ -426,9 +430,8 @@ const resolveEnabledFrameworks = async (
   const entries = await Promise.all(
     (Object.entries(frameworks) as [DetectedFrameworkName, ImportedFramework][])
       .filter((entry): entry is [DetectedFrameworkName, ImportedFramework] => Boolean(entry[1]))
-      .map(([name, value]) =>
-        // eslint-disable-next-line security/detect-object-injection
-        resolveFramework(name, value, FRAMEWORK_EXTRA_OPTS[name]?.(ctx)).then(config => [name, config] as const))
+      .map(([name, value]) => resolveFramework(name, value, FRAMEWORK_EXTRA_OPTS[name]?.(ctx))
+        .then(config => [name, config] as const))
   )
 
   return Object.fromEntries(entries)
@@ -469,7 +472,6 @@ const buildEslintConfigs = async (params: BuildConfigsParams): Promise<FlatConfi
     resolvedFrameworks, { hasReact, hasSolid, hasSvelte, hasVue, runtime, tsconfigRootDir }
   )
 
-  // eslint-disable-next-line security/detect-object-injection
   const get = (name: string): FlatConfigArray => fw[name] ?? []
 
   const typescriptConfigs = resolvedTypescript ?
@@ -539,8 +541,22 @@ const buildEslintConfigs = async (params: BuildConfigsParams): Promise<FlatConfi
       } as TSESLint.FlatConfig.Config] :
       []),
     ...applyTestingFileOverrides(
-      await getIntegrationConfigs(uniqueLibraries, uniqueTools, uniqueTesting, uniqueFormats, uniqueExtensions), testingFiles
+      await getIntegrationConfigs(
+        uniqueLibraries, uniqueTools, uniqueTesting, uniqueFormats, uniqueExtensions
+      ),
+      testingFiles
     ),
+    {
+      files: [
+        '**/*.{test,spec}.{js,mjs,cjs,jsx,ts,mts,cts,tsx}',
+        '**/{test,tests,__tests__}/**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx}'
+      ],
+      name: 'eslint-config-basic/test-file-overrides',
+      rules: {
+        '@typescript-eslint/no-empty-function': 'off',
+        'no-use-before-define': 'off'
+      }
+    },
     {
       files: ['**/scripts/**/*.{js,mjs,cjs,ts,mts,cts}'],
       name: 'eslint-config-basic/scripts-overrides',
@@ -640,8 +656,7 @@ const resolveProjectConfigs = async (
       root: inheritedOptions.root ?? inheritedOptions.detectRootDir ?? projectRoot
     })
 
-    return scopedConfigs.map(config =>
-      config.name === 'eslint-config/gitignore' ? config : scopeConfigToProject(config, projectPath))
+    return scopedConfigs.map(config => config.name === 'eslint-config/gitignore' ? config : scopeConfigToProject(config, projectPath))
   })
 )
 
@@ -672,9 +687,9 @@ const getPluginNameFromRule = (
 
   if (registeredPrefix) return registeredPrefix
 
-  return ruleName.startsWith('@') && segments.length > 2
-    ? segments.slice(0, 2).join('/')
-    : segments[0]
+  return ruleName.startsWith('@') && segments.length > 2 ?
+    segments.slice(0, 2).join('/') :
+    segments[0]
 }
 
 /**
@@ -700,19 +715,19 @@ export const attachReferencedPlugins = (configs: FlatConfigArray): FlatConfigArr
     }
   }
 
-  return configs.map((config) => {
+  return configs.map(config => {
     const requiredPlugins = new Set(
       Object.keys(config.rules ?? {})
         .map(ruleName => getPluginNameFromRule(ruleName, availablePlugins.keys()))
         .filter((pluginName): pluginName is string => pluginName !== undefined)
     )
 
-    const missingPluginEntries = [...requiredPlugins].flatMap((pluginName) => {
+    const missingPluginEntries = [...requiredPlugins].flatMap(pluginName => {
       const plugin = availablePlugins.get(pluginName)
 
-      return !Object.hasOwn(config.plugins ?? {}, pluginName) && plugin
-        ? [[pluginName, plugin] as const]
-        : []
+      return !Object.hasOwn(config.plugins ?? {}, pluginName) && plugin ?
+        [[pluginName, plugin] as const] :
+        []
     })
 
     if (missingPluginEntries.length === 0) return config
@@ -771,10 +786,10 @@ const getConfigsParams = (
  * @param {ConfigInput[]} extraConfigs - Local flat-config overrides appended after generated config
  * @returns {FlatConfigArray} The final ESLint configuration array
  */
-export const defineConfig = async (
+export async function defineConfig(
   options?: EslintConfigOptions,
   ...extraConfigs: ConfigInput[]
-): Promise<FlatConfigArray> => {
+): Promise<FlatConfigArray> {
   const {
     detection,
     extensions: optExtensions,
@@ -792,7 +807,14 @@ export const defineConfig = async (
   const detected = resolveDetectedOptions(detectRootDir, detection, requestedPreset)
   const { frameworkDefaults, preset, presetDefaults } = resolvePresetMeta(requestedPreset, detected, autoFrameworks)
   const configuredProjects = resolveConfiguredProjects(detected, options)
-  const { detectedExtensions, detectedFormats, detectedLibraries, detectedTesting, detectedTools } = resolveBucketDefaults(detected)
+
+  const {
+    detectedExtensions,
+    detectedFormats,
+    detectedLibraries,
+    detectedTesting,
+    detectedTools
+  } = resolveBucketDefaults(detected)
 
   // NOTE: these must be computed unconditionally (not via destructuring defaults)
   // so that `optionMergeStrategy: 'merge'` actually unions explicit values with
@@ -806,7 +828,9 @@ export const defineConfig = async (
     'formats', detectedFormats, presetDefaults.formats, optFormats, options, optionMergeStrategy
   ) as Format[]
 
-  const frameworks = mergeFrameworkOption(frameworkDefaults, presetDefaults.frameworks, optFrameworks, optionMergeStrategy)
+  const frameworks = mergeFrameworkOption(
+    frameworkDefaults, presetDefaults.frameworks, optFrameworks, optionMergeStrategy
+  )
 
   const libraries = mergeOptionalBucket(
     'libraries', detectedLibraries, presetDefaults.libraries, optLibraries, options, optionMergeStrategy

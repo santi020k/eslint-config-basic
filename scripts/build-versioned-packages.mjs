@@ -1,4 +1,3 @@
-/* eslint-disable turbo/no-undeclared-env-vars -- release refs configure this CI orchestration script */
 import { execFileSync } from 'node:child_process'
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'

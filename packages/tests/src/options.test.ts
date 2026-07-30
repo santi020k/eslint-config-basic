@@ -4,7 +4,6 @@ import qwik from '@santi020k/eslint-config-qwik'
 import react from '@santi020k/eslint-config-react'
 import svelte from '@santi020k/eslint-config-svelte'
 import vue from '@santi020k/eslint-config-vue'
-
 import { describe, expect, test, vi } from 'vitest'
 
 import { extractConfigNames, extractRuleNames, getEffectiveRuleValue } from './test-utils.js'

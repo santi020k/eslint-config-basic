@@ -81,9 +81,9 @@ const loadFrameworkConfigInput = (frameworkName: FrameworkName): Promise<Framewo
 
     const specifier = `@santi020k/eslint-config-${frameworkName}`
 
-    const remediation = isMissingRequestedPackage(error, specifier)
-      ? `Install "${specifier}" or remove that framework from your defineConfig options.`
-      : `The installed package "${specifier}" failed while evaluating. Inspect this error's cause for the original dependency or runtime failure.`
+    const remediation = isMissingRequestedPackage(error, specifier) ?
+      `Install "${specifier}" or remove that framework from your defineConfig options.` :
+      `The installed package "${specifier}" failed while evaluating. Inspect this error's cause for the original dependency or runtime failure.`
 
     throw new Error(
       `Unable to load optional framework config "${frameworkName}". ` +

@@ -1,5 +1,4 @@
 import { groups } from '@santi020k/eslint-config-core'
-
 import type { TSESLint } from '@typescript-eslint/utils'
 
 /**

@@ -14,8 +14,13 @@ interface OxlintPlugin {
 export const oxlint: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyConfig('oxlint', async () => {
   const pluginOxlint = await loadDefault<OxlintPlugin>('eslint-plugin-oxlint')
 
-  return pluginOxlint.configs['flat/recommended'].map(config => ({
-    ...config,
-    name: `integrations/oxlint${config.name ? `/${config.name}` : ''}`
-  }))
+  return pluginOxlint.configs['flat/recommended'].map(config => {
+    const configSuffix = config.name ? `/${config.name}` : ''
+    const name = `integrations/oxlint${configSuffix}`
+
+    return {
+      ...config,
+      name
+    }
+  })
 })

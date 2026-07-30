@@ -1,5 +1,4 @@
 import type { TailwindOptions } from '@santi020k/eslint-config-core'
-
 import type { TSESLint } from '@typescript-eslint/utils'
 
 export const buildTailwindSettingsConfig = (

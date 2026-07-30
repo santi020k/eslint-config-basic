@@ -40,9 +40,9 @@ const loadFeaturePack = async (specifier: string): Promise<ConfigFeature[]> => {
   } catch (error) {
     packCache.delete(specifier)
 
-    const remediation = isMissingRequestedPackage(error, specifier)
-      ? 'Install it for the selected options, or remove those options from defineConfig().'
-      : 'The installed feature pack failed while evaluating. Inspect this error\'s cause for the original dependency or runtime failure.'
+    const remediation = isMissingRequestedPackage(error, specifier) ?
+      'Install it for the selected options, or remove those options from defineConfig().' :
+      'The installed feature pack failed while evaluating. Inspect this error\'s cause for the original dependency or runtime failure.'
 
     throw new Error(
       `Unable to load optional feature pack "${specifier}". ` +

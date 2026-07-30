@@ -14,7 +14,6 @@ import {
   Testing,
   Tool
 } from '@santi020k/eslint-config-basic'
-
 import { describe, expect, test } from 'vitest'
 
 import { extractConfigNames, extractRuleNames } from './test-utils.js'
@@ -216,8 +215,7 @@ describe('defineConfig Function', () => {
         projects: { 'apps/web': {} },
         root
       })
-      const gitignoreEntry = config.find(entry =>
-        entry.name === 'eslint-config/gitignore' && entry.ignores?.some(pattern => pattern.includes('generated.js')))
+      const gitignoreEntry = config.find(entry => entry.name === 'eslint-config/gitignore' && entry.ignores?.some(pattern => pattern.includes('generated.js')))
 
       expect(gitignoreEntry?.basePath).toBe(projectRoot)
       expect(gitignoreEntry?.ignores).toContain('generated.js')
@@ -270,6 +268,7 @@ describe('defineConfig Function', () => {
     expect(defaultIgnoreEntry?.ignores).toContain('**/.clinerules/**')
     expect(defaultIgnoreEntry?.ignores).toContain('**/.kiro/**')
     expect(defaultIgnoreEntry?.ignores).toContain('**/.windsurf/**')
+    expect(defaultIgnoreEntry?.ignores).toContain('**/fixtures/**')
   })
 
   test('should exclude default ignores when NoDefaultIgnores setting is specified', async () => {
@@ -311,6 +310,16 @@ describe('defineConfig Function', () => {
     expect(Array.isArray(config)).toBe(true)
 
     expect(config.length).toBeGreaterThan(0)
+  })
+
+  test('should allow intentional test doubles and helper declaration order', async () => {
+    const config = await defineConfig({ detection: false, typescript: true })
+    const testOverride = config.find(entry => entry.name === 'eslint-config-basic/test-file-overrides')
+
+    expect(testOverride?.rules).toMatchObject({
+      '@typescript-eslint/no-empty-function': 'off',
+      'no-use-before-define': 'off'
+    })
   })
 
   test('should handle all framework configs combined', async () => {
@@ -607,7 +616,7 @@ describe('defineConfig Function', () => {
         devDependencies: { react: 'latest' },
         name: 'workspace-root'
       }))
-      writeFileSync(join(root, 'pnpm-workspace.yaml'), "packages:\n  - 'apps/*'\n")
+      writeFileSync(join(root, 'pnpm-workspace.yaml'), 'packages:\n  - \'apps/*\'\n')
       writeFileSync(join(root, 'apps/web/package.json'), JSON.stringify({
         dependencies: { astro: 'latest' },
         name: 'web'
@@ -642,7 +651,7 @@ describe('defineConfig Function', () => {
         dependencies: { react: 'latest' },
         name: 'workspace-root'
       }))
-      writeFileSync(join(root, 'pnpm-workspace.yaml'), "packages:\n  - 'apps/*'\n")
+      writeFileSync(join(root, 'pnpm-workspace.yaml'), 'packages:\n  - \'apps/*\'\n')
       writeFileSync(join(root, 'apps/web/package.json'), JSON.stringify({
         dependencies: { astro: 'latest' },
         name: 'web'
@@ -710,7 +719,7 @@ describe('defineConfig Function', () => {
         devDependencies: { typescript: 'latest' },
         name: 'workspace-root'
       }))
-      writeFileSync(join(root, 'pnpm-workspace.yaml'), "packages:\n  - 'apps/*'\n")
+      writeFileSync(join(root, 'pnpm-workspace.yaml'), 'packages:\n  - \'apps/*\'\n')
       writeFileSync(join(root, 'tsconfig.json'), '{}')
       writeFileSync(join(root, 'apps/web/package.json'), JSON.stringify({
         devDependencies: { typescript: 'latest' },
@@ -724,18 +733,12 @@ describe('defineConfig Function', () => {
           untypedFiles: ['tests/**/*.ts']
         }
       })
-      const projectUntypedIndex = config.findLastIndex(entry =>
-        entry.name === 'eslint-config-typescript/untyped-files' &&
-        entry.files?.includes('apps/web/tests/**/*.ts')
-      )
-      const projectUntyped = config.findLast(entry =>
-        entry.name === 'eslint-config-typescript/untyped-files' &&
-        entry.files?.includes('apps/web/tests/**/*.ts')
-      )
-      const projectParserIndex = config.findLastIndex(entry =>
-        entry.name === 'eslint-config-typescript/parser-setup' &&
-        entry.files?.some(pattern => typeof pattern === 'string' && pattern.startsWith('apps/web/'))
-      )
+      const projectUntypedIndex = config.findLastIndex(entry => entry.name === 'eslint-config-typescript/untyped-files' &&
+        entry.files?.includes('apps/web/tests/**/*.ts'))
+      const projectUntyped = config.findLast(entry => entry.name === 'eslint-config-typescript/untyped-files' &&
+        entry.files?.includes('apps/web/tests/**/*.ts'))
+      const projectParserIndex = config.findLastIndex(entry => entry.name === 'eslint-config-typescript/parser-setup' &&
+        entry.files?.some(pattern => typeof pattern === 'string' && pattern.startsWith('apps/web/')))
 
       expect(projectParserIndex).toBeGreaterThanOrEqual(0)
       expect(projectUntypedIndex).toBeGreaterThan(projectParserIndex)
@@ -1028,8 +1031,7 @@ describe('Monorepo project scoping', () => {
         noUnknownClasses: false
       }
     })
-    const tailwindSettings = config.find(entry =>
-      entry.name === 'eslint-config-basic/tailwind-settings' &&
+    const tailwindSettings = config.find(entry => entry.name === 'eslint-config-basic/tailwind-settings' &&
       entry.files?.some(pattern => pattern === 'apps/docs/**/*'))
 
     expect(tailwindSettings?.rules?.['better-tailwindcss/no-unknown-classes']).toBe('off')
@@ -1119,7 +1121,7 @@ describe('Monorepo project scoping', () => {
       }
     })
 
-    const entry = config.find((e: any) => e?.name === 'mock-ignore-only')
+    const entry = config.find(configEntry => configEntry.name === 'mock-ignore-only')
     // Ignores must be prefixed with the project path — not global
     expect(entry?.ignores).toEqual(['apps/web/dist/**', 'apps/web/tmp/**'])
   })
@@ -1137,7 +1139,7 @@ describe('Monorepo project scoping', () => {
       }
     })
 
-    const entry = config.find((e: any) => e?.name === 'mock-negated-ignore')
+    const entry = config.find(configEntry => configEntry.name === 'mock-negated-ignore')
     expect(entry?.ignores).toEqual(['!packages/lib/src/**'])
   })
 
@@ -1154,7 +1156,7 @@ describe('Monorepo project scoping', () => {
       }
     })
 
-    const entry = config.find((e: any) => e?.name === 'mock-files')
+    const entry = config.find(configEntry => configEntry.name === 'mock-files')
     expect(entry?.files).toContain('apps/web/**/*.tsx')
     expect(entry?.files).not.toContain('**/*.tsx')
   })

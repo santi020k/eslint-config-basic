@@ -1,7 +1,6 @@
 import { coreConfig, createImportGroups, groups, rules } from '@santi020k/eslint-config-core'
 import { reactConfig } from '@santi020k/eslint-config-react'
 import { typescriptConfig } from '@santi020k/eslint-config-typescript'
-
 import type { Linter } from 'eslint'
 import { ESLint } from 'eslint'
 import { describe, expect, test } from 'vitest'

@@ -12,7 +12,6 @@ export const createGitignoreConfig = (
 ): TSESLint.FlatConfig.ConfigArray => {
   const gitignorePath = path.resolve(rootDir, '.gitignore')
 
-  // eslint-disable-next-line security/detect-non-literal-fs-filename -- caller-selected root plus a fixed .gitignore basename
   return fs.existsSync(gitignorePath) ?
     [includeIgnoreFile(gitignorePath, {
       gitignoreResolution: true,

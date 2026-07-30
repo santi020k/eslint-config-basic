@@ -19,7 +19,7 @@ const shared = {
   watch: env === 'development',
   target: 'es2022' as const,
   outDir: 'dist',
-  external: [/^node:/, /^@santi020k\//],
+  external: [/^node:/, /^@santi020k\//]
 }
 
 export default defineConfig([
@@ -38,12 +38,12 @@ export default defineConfig([
       'src/optional-package-errors.ts',
       'src/recommended.ts',
       'src/resolvers.ts',
-      'src/tailwind.ts',
-    ],
+      'src/tailwind.ts'
+    ]
   },
   {
     ...shared,
     entry: ['src/cli.ts'],
-    banner: { js: '#!/usr/bin/env node' },
-  },
+    banner: { js: '#!/usr/bin/env node' }
+  }
 ])

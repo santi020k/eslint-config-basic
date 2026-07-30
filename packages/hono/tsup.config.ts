@@ -1,7 +1,7 @@
 import { defineConfig } from 'tsup'
 
 export default defineConfig({
-  entry: ["src/index.ts"],
+  entry: ['src/index.ts'],
   bundle: false,
   format: ['esm'],
   // TODO(tsup): remove this once tsup's DTS pipeline supports TypeScript 6
@@ -15,4 +15,4 @@ export default defineConfig({
   sourcemap: true,
   clean: true,
   target: 'es2022',
-  external: [/^node:/, /^@santi020k\//]})
+  external: [/^node:/, /^@santi020k\//] })

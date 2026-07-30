@@ -1,7 +1,5 @@
 /* eslint-disable no-console -- CLI handlers own user-facing terminal output */
 /* eslint-disable complexity -- report builders intentionally cover compatibility and config-source branches */
-/* eslint-disable security/detect-non-literal-fs-filename -- paths are scoped to the caller-selected project root */
-/* eslint-disable security/detect-object-injection -- keys come from package manifests and loaded ESLint configs */
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { basename, dirname, join } from 'node:path'
@@ -53,7 +51,7 @@ const RULE_PACKAGE_HINTS: Partial<Record<string, string>> = {
   astro: '@santi020k/eslint-config-astro',
   cypress: '@santi020k/eslint-config-testing',
   jest: '@santi020k/eslint-config-testing',
-  'jsonc': '@santi020k/eslint-config-formats',
+  jsonc: '@santi020k/eslint-config-formats',
   playwright: '@santi020k/eslint-config-testing',
   react: '@santi020k/eslint-config-react',
   'testing-library': '@santi020k/eslint-config-testing',
