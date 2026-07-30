@@ -118,9 +118,10 @@ are designed to work together, so a setup can safely combine versions such as
 `eslint-config-basic@3.4.0` and `eslint-config-react@3.2.1`.
 
 Use the latest version of each package within the chosen major. Internal
-`dependencies` install compatible package versions, and package managers report
-unmet `peerDependencies` during installation. Re-run your package manager's
-install command to validate the dependency tree; npm users can also run `npm ls`
-to check the installed tree.
+`dependencies` and `peerDependencies` declare compatible package ranges. Package
+managers install matching versions and report unmet peers during installation.
+Re-run your package manager's install command to validate the dependency tree;
+`basic-eslint doctor` reports incompatible installed ranges, and npm users can
+also run `npm ls` to inspect the installed tree.
 
 For existing projects, continue with [Migrate from v2](/guide/migration-v2-to-v3/).
