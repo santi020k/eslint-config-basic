@@ -26,6 +26,11 @@ import {
 } from '../../basic/src/cli.js'
 
 const tempDirs: string[] = []
+const basicPackageVersion = (
+  JSON.parse(
+    readFileSync(join(import.meta.dirname, '../../basic/package.json'), 'utf8')
+  ) as { version: string }
+).version
 
 const createTempProject = (packageJson: Record<string, unknown>): string => {
   const cwd = mkdtempSync(resolve(tmpdir(), 'eslint-config-basic-cli-'))
@@ -469,7 +474,7 @@ describe('CLI command UX', () => {
     handleInstall(cwd, true)
 
     expect(logSpy).toHaveBeenCalledWith(
-      'pnpm add -D --workspace-root eslint @santi020k/eslint-config-basic@^3.1.0'
+      `pnpm add -D --workspace-root eslint @santi020k/eslint-config-basic@^${basicPackageVersion}`
     )
     logSpy.mockRestore()
   })
