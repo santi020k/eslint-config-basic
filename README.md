@@ -108,6 +108,24 @@ export default await defineConfig({}, {
 })
 ```
 
+Pass overrides that reference optional plugin rules directly to `defineConfig()`
+whenever possible. The composer attaches each already-loaded plugin to the rule
+block that needs it. An entry appended after `defineConfig()` has returned is
+outside that attachment pass; wrap a dynamically assembled final array with
+`attachReferencedPlugins()`:
+
+```js
+import {
+  attachReferencedPlugins,
+  defineConfig
+} from '@santi020k/eslint-config-basic'
+
+const generated = await defineConfig()
+const lateOverrides = await loadProjectOverrides()
+
+export default attachReferencedPlugins([...generated, ...lateOverrides])
+```
+
 Direct calls from `eslint.config.*` automatically anchor dependency detection,
 TypeScript, Tailwind, workspace packages, and `.gitignore` to that file. Set
 `root` only when the intended project root differs from the config directory.

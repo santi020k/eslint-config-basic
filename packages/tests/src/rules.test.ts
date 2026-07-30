@@ -2,6 +2,8 @@ import { coreConfig, createImportGroups, groups, rules } from '@santi020k/eslint
 import { reactConfig } from '@santi020k/eslint-config-react'
 import { typescriptConfig } from '@santi020k/eslint-config-typescript'
 
+import type { Linter } from 'eslint'
+import { ESLint } from 'eslint'
 import { describe, expect, test } from 'vitest'
 
 import { getEffectiveRuleValue } from './test-utils.js'
@@ -32,7 +34,108 @@ describe('Core Rules', () => {
   test('should have correct effective values for core rules', () => {
     expect(getEffectiveRuleValue(coreConfig, '@stylistic/semi')).toEqual(['warn', 'never'])
     expect(getEffectiveRuleValue(coreConfig, '@stylistic/quotes')).toEqual(['warn', 'single'])
+    expect(getEffectiveRuleValue(coreConfig, '@stylistic/function-call-argument-newline'))
+      .toEqual(['warn', 'consistent'])
+    expect(getEffectiveRuleValue(coreConfig, '@stylistic/lines-around-comment')).toEqual([
+      'warn',
+      {
+        allowBlockStart: true,
+        allowClassStart: true,
+        ignorePattern: '^\\*'
+      }
+    ])
+    expect(getEffectiveRuleValue(coreConfig, '@stylistic/max-len')).toEqual([
+      'warn',
+      {
+        code: 120,
+        comments: 200,
+        ignoreStrings: true,
+        ignoreTemplateLiterals: true,
+        ignoreUrls: true,
+        tabWidth: 2
+      }
+    ])
+    expect(getEffectiveRuleValue(coreConfig, 'camelcase')).toEqual([
+      'warn',
+      { properties: 'never' }
+    ])
+    expect(getEffectiveRuleValue(coreConfig, 'no-void')).toEqual([
+      'warn',
+      { allowAsStatement: true }
+    ])
     expect(getEffectiveRuleValue(coreConfig, 'no-unused-vars')).toBeDefined()
+  })
+
+  test.each([
+    {
+      name: 'long function calls',
+      source: [
+        'invoke(',
+        '  firstArgumentWithADescriptiveName,',
+        '  secondArgumentWithADescriptiveName',
+        ')'
+      ].join('\n')
+    },
+    {
+      name: 'long constructor calls',
+      source: [
+        'new Example(',
+        '  firstArgumentWithADescriptiveName,',
+        '  secondArgumentWithADescriptiveName',
+        ')'
+      ].join('\n')
+    },
+    {
+      name: 'long arrow predicates',
+      source: [
+        'items.find(item => (',
+        '  firstConditionWithADescriptiveName(item) ||',
+        '  secondConditionWithADescriptiveName(item)',
+        '))'
+      ].join('\n')
+    },
+    {
+      name: 'long ternaries',
+      source: [
+        'const result = conditionWithADescriptiveName ?',
+        '  firstResultWithADescriptiveName :',
+        '  secondResultWithADescriptiveName'
+      ].join('\n')
+    },
+    {
+      name: 'long nullish-coalescing expressions',
+      source: [
+        'const result = firstValueWithADescriptiveName ??',
+        '  secondValueWithADescriptiveName ??',
+        '  fallbackValueWithADescriptiveName'
+      ].join('\n')
+    }
+  ])('should converge after one autofix pass for $name', async ({ source }) => {
+    const stylisticPlugins = coreConfig.find(config => config.plugins?.['@stylistic'])?.plugins
+    const convergenceConfig: Linter.Config[] = [{
+      files: ['**/*.js'],
+      plugins: stylisticPlugins as unknown as Linter.Config['plugins'],
+      rules: {
+        '@stylistic/function-call-argument-newline': ['warn', 'consistent'],
+        '@stylistic/implicit-arrow-linebreak': ['warn', 'beside'],
+        '@stylistic/indent': ['warn', 2],
+        '@stylistic/indent-binary-ops': ['warn', 2],
+        '@stylistic/max-len': ['warn', { code: 120 }],
+        '@stylistic/operator-linebreak': ['warn', 'after'],
+        'arrow-body-style': ['warn', 'as-needed']
+      }
+    }]
+    const eslint = new ESLint({
+      fix: true,
+      overrideConfig: convergenceConfig,
+      overrideConfigFile: true
+    })
+    const [firstPass] = await eslint.lintText(source, { filePath: 'convergence.js' })
+    const stableSource = firstPass.output ?? source
+    const [secondPass] = await eslint.lintText(stableSource, { filePath: 'convergence.js' })
+
+    expect(secondPass.output).toBeUndefined()
+    expect(secondPass.messages.map(message => message.ruleId)).not.toContain('@stylistic/max-len')
   })
 
   test('should have config with stylistic rules', () => {

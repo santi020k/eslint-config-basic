@@ -650,7 +650,10 @@ const resolveInheritedProjectDefaults = (
 ): EslintConfigOptions['projectDefaults'] => mergeProjectOptions(
   {
     ...(options?.detection === undefined ? {} : { detection: options.detection }),
-    ...(options?.tailwind === undefined ? {} : { tailwind: options.tailwind })
+    ...(options?.tailwind === undefined ? {} : { tailwind: options.tailwind }),
+    ...(typeof options?.typescript === 'object' && options.typescript.untypedFiles !== undefined ?
+      { typescript: { untypedFiles: options.typescript.untypedFiles } } :
+      {})
   },
   options?.projectDefaults ?? {}
 )

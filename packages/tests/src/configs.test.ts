@@ -109,6 +109,19 @@ describe('Astro Config', () => {
   test('should have at least one config entry', () => {
     expect(astroConfig.length).toBeGreaterThan(0)
   })
+
+  test('should avoid generic indentation fixes and virtual-script variable false positives', () => {
+    const customConfig = astroConfig.find(config => config.name === 'eslint-config-astro/custom')
+    const virtualConfig = astroConfig.find(config => config.name === 'eslint-config-astro/virtual-scripts')
+    const customRules = customConfig?.rules ?? {}
+    const virtualRules = virtualConfig?.rules ?? {}
+
+    expect(customRules['@stylistic/indent']).toBe('off')
+    expect(virtualRules['@stylistic/indent']).toBe('off')
+    expect(virtualRules['@typescript-eslint/no-unused-vars']).toBe('off')
+    expect(virtualRules['no-undef']).toBe('off')
+    expect(virtualRules['no-unused-vars']).toBe('off')
+  })
 })
 
 describe('Expo Config', () => {

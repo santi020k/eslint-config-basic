@@ -133,6 +133,22 @@ Detection precedence (highest wins): `Cloudflare > Bun/Deno > Worker > Node > Br
 
 Use `detection: { runtime: false }` to disable runtime auto-detection and rely solely on your explicit `runtime` option.
 
+## Intentional background promises
+
+Use a standalone `void` expression when an event handler intentionally starts a
+promise without returning or awaiting it. Terminate the chain with a rejection
+handler unless the called function already owns its error handling:
+
+```js
+button.addEventListener('click', () => {
+  void refreshSearchIndex().catch(reportError)
+})
+```
+
+The default `no-void` configuration permits this statement form while still
+rejecting `void` in values and larger expressions. This makes the
+fire-and-forget decision visible without conflicting with the promise rules.
+
 ## Runtime in Monorepos
 
 Use the `projects` option to assign different runtimes to different workspace packages:

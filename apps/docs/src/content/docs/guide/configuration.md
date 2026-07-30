@@ -233,6 +233,31 @@ export default await defineConfig(
 )
 ```
 
+`defineConfig()` automatically attaches already-loaded plugin objects to every
+override passed as an argument when that override references a plugin rule. This
+keeps each emitted rule block independently valid in ESLint 10. Prefer this form
+for all overrides known while the config is being built.
+
+An override appended after the promise resolves is outside the composer's
+attachment pass. For overrides discovered dynamically, wrap the completed array
+with `attachReferencedPlugins()`:
+
+```js
+import {
+  attachReferencedPlugins,
+  defineConfig
+} from '@santi020k/eslint-config-basic'
+
+const generated = await defineConfig()
+const lateOverrides = await loadProjectOverrides()
+
+export default attachReferencedPlugins([...generated, ...lateOverrides])
+```
+
+The helper can attach only plugins already registered somewhere in the supplied
+array. Import and register a genuinely new plugin in the normal ESLint flat
+config form.
+
 ### Default ignores
 
 The composed config ships a default ignore block (`dist`, `build`, `coverage`, framework output folders, `node_modules`, and similar). It also ignores common generated-code folders and files such as `__generated__`, `generated`, `codegen`, `*.generated.*`, `*.gen.*`, GraphQL generated output, and `.prisma`. AI coding-assistant artifact folders — `.agent`, `.agents`, `.aider*`, `.claude`, `.clinerules`, `.codex`, `.copilot`, `.cursor`, `.gemini`, `.kiro`, `.opencode`, `.roo`, and `.windsurf` — are ignored too. Disable the whole block with `settings: [Setting.NoDefaultIgnores]`, or disable only generated-code ignores with `settings: [Setting.NoGeneratedCodeIgnores]`.

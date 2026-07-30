@@ -7,7 +7,7 @@
   },
   "type": "module",
   "scripts": {
-    "lint": "eslint .",
+    "lint": "eslint . --max-warnings=0",
     "clean": "rm -rf dist node_modules",
     "check:exports": "echo \"No exports to check\"",
     "typecheck": "tsc --noEmit"

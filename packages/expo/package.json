@@ -26,8 +26,8 @@
     "clean": "rm -rf dist",
     "check:exports": "publint",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint . --no-warn-ignored --pass-on-no-patterns",
-    "lint:fix": "eslint . --fix --no-warn-ignored --pass-on-no-patterns"
+    "lint": "eslint . --no-warn-ignored --pass-on-no-patterns --max-warnings=0",
+    "lint:fix": "eslint . --fix --no-warn-ignored --pass-on-no-patterns --max-warnings=0"
   },
   "dependencies": {
     "eslint-config-expo": "catalog:",

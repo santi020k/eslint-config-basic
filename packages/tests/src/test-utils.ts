@@ -66,6 +66,23 @@ export const lintText = async (
 }
 
 /**
+ * Helper: autofix a string of code with a given config
+ */
+export const lintTextWithFix = async (
+  code: string,
+  config: readonly TSESLint.FlatConfig.Config[],
+  fileName = 'test.ts'
+): Promise<ESLint.LintResult[]> => {
+  const eslint = new ESLint({
+    fix: true,
+    overrideConfig: config as Linter.Config[],
+    overrideConfigFile: true
+  })
+
+  return await eslint.lintText(code, { filePath: fileName })
+}
+
+/**
  * Helper: lint a file with a given config
  */
 export const lintFile = async (

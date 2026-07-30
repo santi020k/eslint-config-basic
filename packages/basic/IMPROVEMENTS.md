@@ -5,6 +5,286 @@ Astro, Tailwind, and Vitest monorepo to the modular v3 packages. They are
 ordered by how directly they affect whether a consumer can install and lint
 successfully.
 
+## Dep Beacon follow-up after adopting 3.2.0
+
+<!-- cspell:words database_specific ecosystem_specific fixability frontmatter heredocs lintable -->
+
+The Dep Beacon migration removed a blanket `@stylistic` compatibility override,
+ran ESLint autofix over the complete monorepo, and resolved every remaining
+finding. This exposed several interactions that a config-level comparison did
+not predict.
+
+The first unsuppressed run reported 729 findings: 8 errors and 721 warnings.
+Autofix reduced that to 81 findings, but some remaining cases could not be
+resolved without changing rule options or addressing non-formatting project
+issues. The final consumer passes repository and package lint with
+`--max-warnings=0`, typechecking, tests, and a frozen pnpm install.
+
+### Improve adoption reports with source-level lint debt
+
+`basic-eslint explain-preset monorepo --compatibility` reported five newly
+enabled formatting rules and one changed import-sort option. Its generated
+compatibility fragment was much narrower than the consumer's actual migration
+debt: replacing the existing broad compatibility block with that fragment
+exposed 729 findings.
+
+The report correctly compared effective configurations, but that comparison
+cannot show how many existing source lines violate unchanged or differently
+configured rules. Consumers can therefore interpret a small config diff as a
+small migration when the source rewrite is actually repository-wide.
+
+Future adoption tooling should optionally execute ESLint without writing files
+and report both dimensions:
+
+- effective rule changes grouped by category;
+- current source findings grouped by rule, severity, file type, and fixability;
+- the estimated number of files and lines changed by autofix;
+- rules that enter fix loops or remain after an autofix preview;
+- non-formatting errors that should be handled before a formatting migration.
+
+Acceptance criteria:
+
+- A `--lint` or `--analyze-source` mode reports the real finding count for the
+  selected preset.
+- The report distinguishes config changes from pre-existing source violations.
+- A dry autofix preview identifies changed files without mutating the consumer.
+- Compatibility output explains whether it preserves effective configuration,
+  current source behavior, or both.
+
+### Make the default stylistic rule set internally satisfiable
+
+The combination of
+`@stylistic/function-call-argument-newline: ['warn', 'never']` and
+`@stylistic/max-len` at 120 columns made long function calls impossible to
+satisfy. Autofix collapsed multiline arguments onto one line, after which
+`max-len` failed. Manually wrapping the call caused the newline rule to fail or
+collapse it again.
+
+The consumer changed the argument-newline option to `consistent`, which permits
+both a compact one-line call and a fully multiline call:
+
+```js
+{
+  '@stylistic/function-call-argument-newline': ['error', 'consistent']
+}
+```
+
+Similar pressure appeared around long arrow predicates:
+
+- `@stylistic/implicit-arrow-linebreak: 'beside'`;
+- `arrow-body-style` preferring an expression body;
+- `@stylistic/operator-linebreak: 'after'`;
+- `@stylistic/indent-binary-ops`;
+- `@stylistic/max-len`.
+
+A block body made the line wrap cleanly but violated `arrow-body-style`. A
+newline immediately after `=>` violated `implicit-arrow-linebreak`. The
+satisfiable form required an opening parenthesis immediately after the arrow,
+followed by carefully aligned binary operands:
+
+```js
+items.find(item => (
+  firstCondition(item) ||
+  secondCondition(item)
+))
+```
+
+This is valid, but the config should not require consumers to discover a narrow
+format through repeated lint cycles.
+
+Acceptance criteria:
+
+- Add convergence fixtures for long function calls, constructor calls, arrow
+  predicates, ternaries, and nullish-coalescing expressions.
+- Run autofix twice and assert that the second pass produces no changes.
+- No recommended rule combination should force a line past `max-len`.
+- Prefer `consistent` for function-call argument newlines, or document why a
+  stricter option is safe.
+
+Implemented:
+
+- `function-call-argument-newline` now uses `consistent`.
+- Convergence coverage runs autofix twice for all five expression shapes and
+  asserts that the second pass is stable.
+
+### Completed — Prevent Astro circular autofixes
+
+Astro inline scripts exposed a circular fix between `@stylistic/indent` and
+`@stylistic/jsx-closing-tag-location`. One rule moved the closing `</script>` to
+the JavaScript indentation expected for the virtual script; the other moved it
+back to align with the opening Astro tag. ESLint emitted
+`ESLintCircularFixesWarning` for an inline theme script and for nested
+`<pre><code>` examples.
+
+The consumer ultimately kept stylistic rules enabled globally and disabled only
+`@stylistic/indent` for `**/*.astro`. This is much narrower than suppressing the
+entire stylistic plugin, but it shows that the shared indentation rule is not
+processor-aware enough for mixed Astro documents.
+
+Future Astro behavior should:
+
+- avoid applying generic JavaScript indentation to template tag boundaries;
+- define which layer owns inline-script indentation;
+- cover `<script is:inline>`, frontmatter, template expressions, and nested
+  `<pre><code>` blocks;
+- verify autofix convergence, not only lint validity.
+
+Acceptance criteria:
+
+- Representative Astro fixtures reach a stable result after one autofix pass.
+- Inline script closing tags do not alternate between two indentation levels.
+- Consumers do not need to disable all indentation enforcement for Astro.
+
+The Astro source and virtual-client-script scopes now disable only the generic
+JavaScript indentation rule, leaving Astro-aware formatting rules in place.
+Inline scripts, typed client scripts, JSDoc declarations, and nested
+`<pre><code>` examples have second-pass convergence coverage.
+
+### Make `max-len` practical across code, prose, and workflows
+
+The 120-column rule found useful code readability issues, but it also blocked
+Astro prose, long URLs, template-literal diagnostics, YAML workflow commands,
+and shell or Python snippets embedded in GitHub Actions. Because the consumer
+uses `--max-warnings=0`, a warning-level formatting preference is still a hard
+failure.
+
+The practical consumer settings were:
+
+```js
+{
+  '@stylistic/max-len': ['warn', {
+    code: 120,
+    comments: 200,
+    ignoreStrings: true,
+    ignoreTemplateLiterals: true,
+    ignoreUrls: true,
+    tabWidth: 2
+  }]
+}
+```
+
+Even with those exceptions, source expressions and normal prose were wrapped.
+Workflow commands were rewritten into heredocs or multiline scripts, which is a
+larger behavioral risk than ordinary JavaScript formatting.
+
+Potential improvements:
+
+- provide format-specific defaults for Markdown, Astro, YAML, and generated
+  files;
+- ignore URLs and template literals by default;
+- avoid enforcing code-oriented line length on embedded shell scripts unless a
+  shell-aware formatter owns the rewrite;
+- have adoption reports call out that warning rules block projects using
+  `--max-warnings=0`.
+
+Implemented so far:
+
+- URLs and template literals are ignored by the shared default, alongside
+  ordinary strings.
+
+### Completed — Handle external schema names without project-wide camel-case exceptions
+
+OSV response fixtures legitimately use `database_specific` and
+`ecosystem_specific`. The default `camelcase` configuration treated those wire
+format keys as project naming violations.
+
+The consumer added an explicit allowlist while retaining checks for local
+identifiers. This works, but every API with snake-case JSON can require another
+project-specific list.
+
+Consider one of these defaults:
+
+1. do not check object-literal property names;
+2. ignore quoted properties and destructured keys that are renamed locally; or
+3. replace the legacy camel-case rule with a naming-convention setup that
+   distinguishes local symbols from external wire formats.
+
+Acceptance criteria:
+
+- Snake-case JSON fields can be represented without disabling checks for local
+  variables and functions.
+- Destructuring with a local alias remains lintable.
+- Tests cover API fixtures, computed keys, quoted keys, and type declarations.
+
+The shared `camelcase` rule now ignores property names while continuing to
+report snake-case local bindings. Coverage includes object literals, TypeScript
+property declarations, computed access, quoted keys, and aliased destructuring.
+
+### Keep plugin attachment automatic for consumer overrides
+
+The 3.2.0 plugin-attachment change worked as intended. Dep Beacon could pass its
+Astro Tailwind exception directly as an extra config:
+
+```js
+export default defineConfig(options, {
+  files: ['**/*.astro'],
+  rules: {
+    'better-tailwindcss/no-unknown-classes': 'off'
+  }
+})
+```
+
+The returned rule block received `better-tailwindcss` automatically, eliminating
+the previous consumer workaround that searched generated config objects and
+copied the plugin manually.
+
+One ergonomic boundary remains: fragments appended after `defineConfig()` has
+resolved are outside that automatic pass. A dynamically generated late override
+must either be supplied to `defineConfig()` or wrapped with
+`attachReferencedPlugins()`. Documentation should make this ordering explicit,
+and examples should prefer passing all known overrides into `defineConfig()`.
+
+Implemented:
+
+- The README and configuration guide document the ordering boundary and show
+  the late-override wrapper.
+- A lifecycle test verifies attachment after `defineConfig()` resolves.
+
+### Surface unresolved TypeScript modules as one root problem
+
+After formatting findings were reduced, type-aware linting produced a large
+cascade of `no-unsafe-*` findings and `no-redundant-type-constituents` errors in
+the language server. The root cause was not unsafe consumer code:
+`vscode-languageserver` had resolved to v10, whose exported subpath is
+`vscode-languageserver/node`; the source still imported the removed
+`vscode-languageserver/node.js` path.
+
+TypeScript reported the useful root diagnostic immediately. ESLint instead
+reported many downstream values as error-typed or `any`, making the dependency
+resolution failure look like hundreds of rule violations.
+
+Potential improvements:
+
+- have doctor or adoption analysis run the configured TypeScript project before
+  type-aware ESLint;
+- detect parser diagnostics or error-typed imports and summarize the root module
+  resolution failure;
+- recommend fixing typechecking before reviewing unsafe-rule findings;
+- avoid presenting cascading unsafe findings as independent migration debt.
+
+This case also confirms that strict lint adoption can reveal genuine dependency
+API changes. The tooling should preserve that value while making the root cause
+prominent.
+
+### Add an end-to-end autofix adoption fixture
+
+Packed-consumer fixtures currently prove that generated configs load and lint
+known-good source. Add a deliberately old-style monorepo fixture that exercises
+the migration workflow itself:
+
+- TypeScript packages and tests;
+- Astro pages with inline scripts and code examples;
+- YAML GitHub workflows with embedded shell;
+- long function calls and binary arrow predicates;
+- external snake-case API fields;
+- Tailwind rules overridden in an Astro file scope;
+- `--max-warnings=0`.
+
+The test should capture the initial report, run autofix, resolve only explicitly
+documented manual findings, rerun autofix to prove convergence, then run lint,
+typecheck, and tests. This would catch rule conflicts that config snapshots and
+already-formatted fixtures cannot expose.
+
 ## Implemented for the next release
 
 - Every generated rule block now receives the plugin objects it references,
@@ -17,6 +297,12 @@ successfully.
   `projectDefaults` and project options remain the more specific layers.
 - TypeScript `untypedFiles` overrides are composed after framework parser
   configs, including Astro projects.
+- Root `typescript.untypedFiles` patterns remain effective in detected child
+  workspaces.
+- Astro files avoid generic indentation fix loops, and virtual scripts suppress
+  variable-rule false positives.
+- External snake-case schema properties remain lintable while local binding
+  names still require camel case.
 - `init --explicit` now generates the v3 `features` map.
 - Preset adoption reports compare effective rules by category and can write a
   temporary compatibility override.

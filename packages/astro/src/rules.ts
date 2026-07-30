@@ -59,6 +59,9 @@ export const getRules = (options?: AstroOptions): TSESLint.Linter.RulesRecord =>
 
   const baseRules: TSESLint.Linter.RulesRecord = {
     '@stylistic/comma-dangle': ['warn', 'never'],
+    // The generic indent fixer treats Astro template boundaries as JavaScript
+    // and can alternate closing tags with jsx-closing-tag-location.
+    '@stylistic/indent': 'off',
     '@stylistic/jsx-indent': 'off',
     '@stylistic/jsx-indent-props': 'off',
     '@stylistic/jsx-one-expression-per-line': 'off',

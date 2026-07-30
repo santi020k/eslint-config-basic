@@ -152,17 +152,25 @@ export const rules: TSESLint.Linter.RulesRecord = {
   '@stylistic/brace-style': ['warn', '1tbs'],
   '@stylistic/comma-dangle': ['warn', 'never'],
   '@stylistic/dot-location': ['warn', 'property'],
-  '@stylistic/function-call-argument-newline': ['warn', 'never'],
+  '@stylistic/function-call-argument-newline': ['warn', 'consistent'],
   '@stylistic/function-paren-newline': ['warn', 'consistent'],
   '@stylistic/implicit-arrow-linebreak': 'warn',
   '@stylistic/indent': ['warn', 2],
-  '@stylistic/lines-around-comment': ['warn', { allowBlockStart: true, allowClassStart: true }],
+  '@stylistic/lines-around-comment': ['warn', {
+    allowBlockStart: true,
+    allowClassStart: true,
+    // JSDoc belongs to the declaration immediately following it. Requiring a
+    // blank line can conflict with variable-declaration padding rules.
+    ignorePattern: '^\\*'
+  }],
   '@stylistic/max-len': [
     'warn',
     {
       code: 120,
       comments: 200,
       ignoreStrings: true,
+      ignoreTemplateLiterals: true,
+      ignoreUrls: true,
       tabWidth: 2
     }
   ],
@@ -222,7 +230,9 @@ export const rules: TSESLint.Linter.RulesRecord = {
   'array-callback-return': 'warn',
   'arrow-body-style': ['warn', 'as-needed'],
   'brace-style': 'off',
-  camelcase: 'warn',
+  // External wire formats commonly use snake_case property names. Keep
+  // enforcing camelCase for local bindings while leaving property keys alone.
+  camelcase: ['warn', { properties: 'never' }],
   'comma-dangle': 'off',
   eqeqeq: 'warn',
   'func-style': ['warn', 'expression'],
@@ -253,7 +263,9 @@ export const rules: TSESLint.Linter.RulesRecord = {
   'no-useless-constructor': 'warn',
   'no-useless-escape': 'warn',
   'no-useless-return': 'warn',
-  'no-void': 'warn',
+  // A standalone `void promise` is an explicit fire-and-forget marker. Other
+  // uses of void remain disallowed.
+  'no-void': ['warn', { allowAsStatement: true }],
   'operator-linebreak': 'off',
   'prefer-arrow-callback': ['warn', { allowNamedFunctions: true }],
   'prefer-promise-reject-errors': 'warn',

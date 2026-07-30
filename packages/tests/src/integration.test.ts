@@ -18,7 +18,7 @@ import { vueConfig } from '@santi020k/eslint-config-vue'
 
 import { describe, expect, test } from 'vitest'
 
-import { lintFile, lintText } from './test-utils.js'
+import { lintFile, lintText, lintTextWithFix } from './test-utils.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -47,6 +47,36 @@ describe('Integration Tests', () => {
 
       expect(results[0].errorCount).toBe(0)
       expect(results[0].warningCount).toBe(0)
+    })
+
+    test('should allow an explicitly ignored promise in an event handler', async () => {
+      const config = await defineConfig({
+        detection: false,
+        tools: [],
+        typescript: false
+      })
+      const code = [
+        'const reportError = error => console.error(error)',
+        'const refresh = () => Promise.resolve()',
+        'const button = document.querySelector(\'button\')',
+        '',
+        'button?.addEventListener(\'click\', () => {',
+        '  void refresh().catch(reportError)',
+        '})',
+        ''
+      ].join('\n')
+      const results = await lintText(code, config, 'event-handler.js')
+      const ruleIds = results[0].messages.map(message => message.ruleId)
+      const valueResults = await lintText(
+        'const ignored = void Promise.resolve()\n\nconsole.log(ignored)\n',
+        config,
+        'void-value.js'
+      )
+
+      expect(ruleIds).not.toContain('no-void')
+      expect(ruleIds).not.toContain('promise/always-return')
+      expect(ruleIds).not.toContain('promise/catch-or-return')
+      expect(valueResults[0].messages.map(message => message.ruleId)).toContain('no-void')
     })
   })
 
@@ -135,6 +165,40 @@ describe('Integration Tests', () => {
       expect(ruleIds).not.toContain('@stylistic/quotes')
       expect(ruleIds).not.toContain('no-unused-vars')
     })
+
+    test('should allow external snake-case schema properties but reject local snake-case bindings', async () => {
+      const config = await defineConfig({
+        detection: false,
+        tools: [],
+        typescript: 'syntax'
+      })
+      const externalSchema = [
+        'interface ApiResponse {',
+        '  database_specific: string',
+        '  \'ecosystem_specific\': string',
+        '}',
+        '',
+        'const fieldName = \'database_specific\'',
+        'const response: ApiResponse = {',
+        '  database_specific: \'database\',',
+        '  \'ecosystem_specific\': \'ecosystem\'',
+        '}',
+        'const { database_specific: databaseSpecific } = response',
+        'const computedValue = response[fieldName]',
+        '',
+        'console.log(databaseSpecific, computedValue)',
+        ''
+      ].join('\n')
+      const allowedResults = await lintText(externalSchema, config, 'external-schema.ts')
+      const rejectedResults = await lintText(
+        'const local_name = \'value\'\n\nconsole.log(local_name)\n',
+        config,
+        'local-binding.ts'
+      )
+
+      expect(allowedResults[0].messages.map(message => message.ruleId)).not.toContain('camelcase')
+      expect(rejectedResults[0].messages.map(message => message.ruleId)).toContain('camelcase')
+    })
   })
 
   describe('Astro Doctor', () => {
@@ -153,6 +217,88 @@ describe('Integration Tests', () => {
       expect(results[0].fatalErrorCount).toBe(0)
       expect(ruleIds).toContain('astro-doctor/no-missing-lang')
       expect(ruleIds).toContain('astro-doctor/no-missing-alt')
+    })
+  })
+
+  describe('Astro autofix convergence', () => {
+    test.each([
+      {
+        name: 'inline scripts',
+        source: [
+          '---',
+          'const title = \'Theme\'',
+          '---',
+          '<section>',
+          '  <h1>{title}</h1>',
+          '  <script is:inline>',
+          '    const theme = localStorage.getItem(\'theme\')',
+          '    document.documentElement.dataset.theme = theme ?? \'system\'',
+          '  </script>',
+          '</section>',
+          ''
+        ].join('\n')
+      },
+      {
+        name: 'nested pre and code examples',
+        source: [
+          '---',
+          'const example = \'<button>Example</button>\'',
+          '---',
+          '<pre>',
+          '  <code>{example}</code>',
+          '</pre>',
+          ''
+        ].join('\n')
+      },
+      {
+        name: 'typed client scripts',
+        source: [
+          '<button type="button" data-search>Search</button>',
+          '<script>',
+          '  type SearchState = \'idle\' | \'loading\' | \'ready\' | \'error\'',
+          '  const button = document.querySelector(\'[data-search]\')',
+          '  let state: SearchState = \'idle\'',
+          '',
+          '  button?.addEventListener(\'click\', () => {',
+          '    state = \'loading\'',
+          '    button.dataset.state = state',
+          '  })',
+          '</script>',
+          ''
+        ].join('\n')
+      },
+      {
+        name: 'consecutive JSDoc declarations',
+        source: [
+          '<script is:inline>',
+          '  /** @type {\'idle\' | \'loading\' | \'ready\' | \'error\'} */',
+          '  let state = \'idle\'',
+          '  /** @type {Promise<boolean> | null} */',
+          '  let promise = null',
+          '',
+          '  window.addEventListener(\'load\', () => {',
+          '    state = \'ready\'',
+          '    promise = Promise.resolve(true)',
+          '    console.log(state, promise)',
+          '  })',
+          '</script>',
+          ''
+        ].join('\n')
+      }
+    ])('should reach a stable result for $name', async ({ source }) => {
+      const config = await defineConfig({
+        detection: false,
+        frameworks: { astro: true },
+        tools: [],
+        typescript: false
+      })
+      const fileName = join(FIXTURES_DIR, 'convergence.astro')
+      const [firstPass] = await lintTextWithFix(source, config, fileName)
+      const stableSource = firstPass.output ?? source
+      const [secondPass] = await lintTextWithFix(stableSource, config, fileName)
+
+      expect(secondPass.output).toBeUndefined()
+      expect(secondPass.messages.map(message => message.ruleId)).not.toContain('@stylistic/indent')
     })
   })
 

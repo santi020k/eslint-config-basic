@@ -3,8 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "lint": "eslint . --no-warn-ignored",
-    "lint:fix": "eslint . --fix --no-warn-ignored",
+    "lint": "eslint . --no-warn-ignored --max-warnings=0",
+    "lint:fix": "eslint . --fix --no-warn-ignored --max-warnings=0",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

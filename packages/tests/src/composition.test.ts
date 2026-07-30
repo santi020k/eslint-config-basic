@@ -36,6 +36,28 @@ describe('defineConfig Function', () => {
     expect(config[1]?.plugins?.example).toBe(plugin)
   })
 
+  test('can attach plugins to overrides appended after defineConfig resolves', async () => {
+    const plugin = { rules: { example: { create: () => ({}), meta: { schema: [] } } } }
+    const generated = await defineConfig(
+      { detection: false },
+      {
+        name: 'dynamic-plugin-registration',
+        plugins: { dynamic: plugin }
+      }
+    )
+    const lateOverride = {
+      name: 'late-dynamic-override',
+      rules: { 'dynamic/example': 'off' as const }
+    }
+
+    expect(lateOverride).not.toHaveProperty('plugins')
+
+    const attached = attachReferencedPlugins([...generated, lateOverride])
+    const attachedOverride = attached.find(config => config.name === 'late-dynamic-override')
+
+    expect(attachedOverride?.plugins?.dynamic).toBe(plugin)
+  })
+
   test('does not attach an ambiguous plugin implementation across disjoint scopes', () => {
     const appPlugin = { rules: { example: { create: () => ({}), meta: { schema: [] } } } }
     const docsPlugin = { rules: { example: { create: () => ({}), meta: { schema: [] } } } }
@@ -677,6 +699,50 @@ describe('defineConfig Function', () => {
 
     expect(astroIndex).toBeGreaterThanOrEqual(0)
     expect(untypedIndex).toBeGreaterThan(astroIndex)
+  })
+
+  test('should keep root untyped TypeScript files effective in detected workspace projects', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'eslint-config-monorepo-untyped-'))
+
+    try {
+      mkdirSync(join(root, 'apps/web/tests'), { recursive: true })
+      writeFileSync(join(root, 'package.json'), JSON.stringify({
+        devDependencies: { typescript: 'latest' },
+        name: 'workspace-root'
+      }))
+      writeFileSync(join(root, 'pnpm-workspace.yaml'), "packages:\n  - 'apps/*'\n")
+      writeFileSync(join(root, 'tsconfig.json'), '{}')
+      writeFileSync(join(root, 'apps/web/package.json'), JSON.stringify({
+        devDependencies: { typescript: 'latest' },
+        name: 'web'
+      }))
+      writeFileSync(join(root, 'apps/web/tsconfig.json'), '{}')
+
+      const config = await defineConfig({
+        root,
+        typescript: {
+          untypedFiles: ['tests/**/*.ts']
+        }
+      })
+      const projectUntypedIndex = config.findLastIndex(entry =>
+        entry.name === 'eslint-config-typescript/untyped-files' &&
+        entry.files?.includes('apps/web/tests/**/*.ts')
+      )
+      const projectUntyped = config.findLast(entry =>
+        entry.name === 'eslint-config-typescript/untyped-files' &&
+        entry.files?.includes('apps/web/tests/**/*.ts')
+      )
+      const projectParserIndex = config.findLastIndex(entry =>
+        entry.name === 'eslint-config-typescript/parser-setup' &&
+        entry.files?.some(pattern => typeof pattern === 'string' && pattern.startsWith('apps/web/'))
+      )
+
+      expect(projectParserIndex).toBeGreaterThanOrEqual(0)
+      expect(projectUntypedIndex).toBeGreaterThan(projectParserIndex)
+      expect(projectUntyped?.languageOptions?.parserOptions?.projectService).toBe(false)
+    } finally {
+      rmSync(root, { force: true, recursive: true })
+    }
   })
 
   test('should use detectRootDir independently from tsconfigRootDir', async () => {

@@ -16,7 +16,7 @@
     "lint": "pnpm run build && pnpm run lint:repo && turbo run lint -- --max-warnings=0",
     "lint:repo": "eslint . --cache --no-warn-ignored --max-warnings=0",
     "lint:fix": "pnpm run build && pnpm run lint:repo:fix && turbo run lint:fix",
-    "lint:repo:fix": "eslint . --cache --fix --no-warn-ignored",
+    "lint:repo:fix": "eslint . --cache --fix --no-warn-ignored --max-warnings=0",
     "lint:changed": "node scripts/lint-changed-files.mjs",
     "lint:changed:fix": "node scripts/lint-changed-files.mjs --fix",
     "lint:spell": "cspell \"**\" --gitignore --cache --show-suggestions --show-context",
