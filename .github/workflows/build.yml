@@ -100,7 +100,7 @@ jobs:
         run: pnpm exec turbo run build typecheck lint --affected --concurrency=50%
       - name: Enforce test coverage thresholds (Node 22.x)
         if: matrix.node-version == '22.x'
-        run: pnpm run test:coverage
+        run: pnpm exec turbo run test:coverage --concurrency=50%
       - name: Run tests (Node 24.x)
         if: matrix.node-version == '24.x'
         run: pnpm exec turbo run test --concurrency=50%

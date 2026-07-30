@@ -2,45 +2,48 @@
 // publint (check:exports) validates the manifest; attw validates what
 // TypeScript actually resolves from the packed tarball. The esm-only profile
 // matches this repo's ESM-only exports.
-import { execFileSync } from 'node:child_process'
-import { existsSync, readdirSync, readFileSync } from 'node:fs'
-import { join } from 'node:path'
+import { spawn } from 'node:child_process'
+import { availableParallelism } from 'node:os'
 import process from 'node:process'
 
+import { getBuiltPublishablePackages } from './publishable-packages.mjs'
+
 const rootDir = process.cwd()
-const packagesDir = join(rootDir, 'packages')
 const allowEmpty = process.argv.includes('--allow-empty')
-
-const publishablePackages = readdirSync(packagesDir, { withFileTypes: true })
-  .filter(entry => entry.isDirectory())
-  .map(entry => join(packagesDir, entry.name))
-  .filter(packageDir => {
-    const manifestPath = join(packageDir, 'package.json')
-
-    if (!existsSync(manifestPath)) return false
-
-    const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'))
-
-    return manifest.private !== true && existsSync(join(packageDir, 'dist'))
-  })
+const publishablePackages = getBuiltPublishablePackages()
 
 if (publishablePackages.length === 0 && !allowEmpty) {
   throw new Error('No built publishable packages found. Run `pnpm run build` first.')
 }
 
-let failed = false
-
-for (const packageDir of publishablePackages) {
+const runAttw = packageDir => new Promise(resolve => {
   process.stdout.write(`\nattw --pack ${packageDir}\n`)
 
-  try {
-    execFileSync('pnpm', ['exec', 'attw', '--pack', packageDir, '--profile', 'esm-only'], {
-      cwd: rootDir,
-      stdio: 'inherit'
-    })
-  } catch {
-    failed = true
+  const child = spawn(
+    'pnpm',
+    ['exec', 'attw', '--pack', packageDir, '--profile', 'esm-only'],
+    { cwd: rootDir, stdio: 'inherit' }
+  )
+
+  child.once('error', () => resolve(false))
+
+  child.once('exit', code => resolve(code === 0))
+})
+
+let failed = false
+let nextPackageIndex = 0
+const concurrency = Math.min(publishablePackages.length, availableParallelism(), 4)
+
+const worker = async () => {
+  while (nextPackageIndex < publishablePackages.length) {
+    const packageDir = publishablePackages.at(nextPackageIndex)
+
+    nextPackageIndex += 1
+
+    if (!await runAttw(packageDir)) failed = true
   }
 }
+
+await Promise.all(Array.from({ length: concurrency }, worker))
 
 process.exitCode = failed ? 1 : 0
