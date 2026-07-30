@@ -43,6 +43,22 @@
     {
       "kind": "incompatible",
       "peer": "@emnapi/core",
+      "introducedBy": "@santi020k/eslint-config-astro",
+      "wantedRange": "^2.0.0-alpha.3",
+      "owner": "packages/astro",
+      "removalCondition": "Remove when the transitive native resolver aligns its emnapi peer family."
+    },
+    {
+      "kind": "incompatible",
+      "peer": "@emnapi/runtime",
+      "introducedBy": "@santi020k/eslint-config-astro",
+      "wantedRange": "^2.0.0-alpha.3",
+      "owner": "packages/astro",
+      "removalCondition": "Remove when the transitive native resolver aligns its emnapi peer family."
+    },
+    {
+      "kind": "incompatible",
+      "peer": "@emnapi/core",
       "introducedBy": "@santi020k/eslint-config-core",
       "wantedRange": "^2.0.0-alpha.3",
       "owner": "packages/core",

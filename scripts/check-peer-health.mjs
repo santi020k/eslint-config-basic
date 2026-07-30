@@ -11,6 +11,12 @@ const dependencyNames = manifest => Object.keys({
   ...(manifest.optionalDependencies ?? {})
 })
 
+const ownerForIntroducer = packageName => {
+  const prefix = '@santi020k/eslint-config-'
+
+  return packageName.startsWith(prefix) ? `packages/${packageName.slice(prefix.length)}` : null
+}
+
 const findDirectIntroducer = (cwd, manifest, parentName) => {
   const direct = dependencyNames(manifest)
 
@@ -86,7 +92,9 @@ export const createPeerHealthReport = (cwd, rawReport, policy) => {
       entry.peer === issue.peer &&
       entry.introducedBy === issue.introducedBy &&
       entry.wantedRange === issue.wantedRange &&
-      entry.owner === issue.project
+      (entry.owner === issue.project || (
+        issue.project === '.' && entry.owner === ownerForIntroducer(issue.introducedBy)
+      ))
     ))
 
     if (exception) accepted.push({ ...issue, owner: exception.owner, removalCondition: exception.removalCondition })

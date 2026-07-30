@@ -64,6 +64,35 @@ describe('peer health policy', () => {
     expect(report.healthy).toBe(false)
   })
 
+  test('accepts a config package exception in an external consumer project', () => {
+    const cwd = createTempProject()
+    const report = createPeerHealthReport(cwd, {
+      '.': {
+        bad: {
+          eslint: [{
+            foundVersion: '10.8.0',
+            parents: [{ name: '@santi020k/eslint-config-astro' }],
+            wantedRange: '^8 || ^9'
+          }]
+        }
+      }
+    }, {
+      accepted: [{
+        introducedBy: '@santi020k/eslint-config-astro',
+        kind: 'incompatible',
+        owner: 'packages/astro',
+        peer: 'eslint',
+        removalCondition: 'Remove after upstream support.',
+        wantedRange: '^8 || ^9'
+      }]
+    })
+
+    expect(report.actionable).toEqual([])
+    expect(report.accepted).toHaveLength(1)
+    expect(report.accepted[0]?.project).toBe('.')
+    expect(report.accepted[0]?.owner).toBe('packages/astro')
+  })
+
   test('does not accept an exception owned by another workspace project', () => {
     const cwd = createTempProject()
     const report = createPeerHealthReport(cwd, {
