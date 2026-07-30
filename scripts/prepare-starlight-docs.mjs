@@ -105,9 +105,32 @@ function normalizeMarkdown(path, content) {
     .replaceAll(/^::::\s*$/gmu, '')
     .replaceAll(/^---(?=#)/gmu, '---\n\n')
     .replaceAll(/^```(\w+)\s+\[([^\]]+)\]\s*$/gmu, '```$1 title="$2"')
+    // Prevent linked array types from being parsed as reversed image syntax.
+    .replaceAll(/\]\(([^)\s]+)\)\[\]/gu, ']($1)\\[\\]')
+    // TypeDoc can retain a duplicate suffix even when only one target heading is emitted.
+    .replaceAll(/\]\(#(configfeature(?:category|phase))-1\)/gu, '](#$1)')
     .replaceAll('<HomePageSections />', '')
 
   return normalized
+}
+
+function splitFrontmatter(content) {
+  if (!content.startsWith('---\n')) {
+    return
+  }
+
+  const endIndex = content.indexOf('\n---', 4)
+
+  if (endIndex === -1) {
+    return
+  }
+
+  const blockEnd = endIndex + '\n---'.length
+
+  return {
+    body: content.slice(blockEnd).replace(/^\s*\n/u, ''),
+    frontmatter: content.slice(0, blockEnd)
+  }
 }
 
 function removeDuplicateTitle(content) {
@@ -133,25 +156,6 @@ function removeDuplicateTitle(content) {
   body = body.replace(/^#\s+(.+?)\s*\n+/u, (match, heading) => normalizeTitle(heading.replace(/\s*[{]#[^}]+[}]$/u, '')) === normalizedTitle ? '' : match)
 
   return `${parts.frontmatter}\n\n${body}`
-}
-
-function splitFrontmatter(content) {
-  if (!content.startsWith('---\n')) {
-    return
-  }
-
-  const endIndex = content.indexOf('\n---', 4)
-
-  if (endIndex === -1) {
-    return
-  }
-
-  const blockEnd = endIndex + '\n---'.length
-
-  return {
-    body: content.slice(blockEnd).replace(/^\s*\n/u, ''),
-    frontmatter: content.slice(0, blockEnd)
-  }
 }
 
 function withV1Banner(path, content) {

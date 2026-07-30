@@ -6,7 +6,6 @@
     "provenance": true
   },
   "description": "Non-JavaScript format configs for eslint-config-basic",
-  "author": "Santi020k",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",

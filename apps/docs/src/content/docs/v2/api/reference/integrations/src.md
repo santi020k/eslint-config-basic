@@ -751,31 +751,31 @@ This function maintains the recommended ordering (e.g. Prettier last).
 
 ##### libraries
 
-[`Library`](../core/src.md#library)[]
+[`Library`](../core/src.md#library)\[\]
 
 List of libraries to configure
 
 ##### tools
 
-[`Tool`](../core/src.md#tool)[]
+[`Tool`](../core/src.md#tool)\[\]
 
 List of tools to configure
 
 ##### testing
 
-[`Testing`](../core/src.md#testing)[]
+[`Testing`](../core/src.md#testing)\[\]
 
 List of testing frameworks to configure
 
 ##### formats
 
-[`Format`](../core/src.md#format)[]
+[`Format`](../core/src.md#format)\[\]
 
 List of file formats to configure
 
 ##### extensions
 
-[`Extension`](../core/src.md#extension)[]
+[`Extension`](../core/src.md#extension)\[\]
 
 List of extensions to configure
 
@@ -799,7 +799,7 @@ Returns the Prettier configuration if selected.
 
 ##### tools
 
-[`Tool`](../core/src.md#tool)[]
+[`Tool`](../core/src.md#tool)\[\]
 
 The tools to configure
 

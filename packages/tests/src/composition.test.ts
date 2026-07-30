@@ -268,7 +268,22 @@ describe('defineConfig Function', () => {
     expect(defaultIgnoreEntry?.ignores).toContain('**/.clinerules/**')
     expect(defaultIgnoreEntry?.ignores).toContain('**/.kiro/**')
     expect(defaultIgnoreEntry?.ignores).toContain('**/.windsurf/**')
-    expect(defaultIgnoreEntry?.ignores).toContain('**/fixtures/**')
+  })
+
+  test('should ignore workspace fixtures without hiding standalone fixture projects', async () => {
+    const workspaceConfig = await defineConfig({
+      detection: false,
+      projects: { 'packages/example': { typescript: false } }
+    })
+    const standaloneConfig = await defineConfig({ detection: false })
+    const workspaceFixtureIgnoreName = 'eslint-config-basic/workspace-fixture-ignores'
+    const workspaceIgnore = workspaceConfig.find(entry => entry.name === workspaceFixtureIgnoreName)
+
+    expect(workspaceIgnore?.ignores).toEqual([
+      'apps/*/fixtures/**',
+      'packages/*/fixtures/**'
+    ])
+    expect(standaloneConfig.some(entry => entry.name === workspaceFixtureIgnoreName)).toBe(false)
   })
 
   test('should exclude default ignores when NoDefaultIgnores setting is specified', async () => {

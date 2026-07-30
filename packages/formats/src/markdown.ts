@@ -61,6 +61,9 @@ export const markdown: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLa
       },
       name: 'integrations/markdown-code-blocks',
       rules: {
+        '@stylistic/comma-dangle': 'off',
+        '@stylistic/quotes': 'off',
+        '@stylistic/semi': 'off',
         '@typescript-eslint/await-thenable': 'off',
         '@typescript-eslint/no-floating-promises': 'off',
         '@typescript-eslint/no-misused-promises': 'off',

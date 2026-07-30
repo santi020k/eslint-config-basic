@@ -32,8 +32,6 @@ export const DEFAULT_IGNORES = [
   '**/.wrangler/**',
   '**/playwright-report/**',
   '**/test-results/**',
-  // Fixtures commonly contain intentionally invalid source and legacy configs.
-  '**/fixtures/**',
   '**/node_modules/**',
   '**/tsconfig.tsbuildinfo',
   // Package manager lock files (machine-generated, slow to lint)
@@ -97,7 +95,9 @@ export type ConfigInput =
   TSESLint.FlatConfig.ConfigArray |
   undefined
 
-export const flattenConfigInputs = (configs: ConfigInput[]): TSESLint.FlatConfig.ConfigArray => configs.flatMap(config => {
+export const flattenConfigInputs = (
+  configs: ConfigInput[]
+): TSESLint.FlatConfig.ConfigArray => configs.flatMap(config => {
   if (!config) return []
 
   return Array.isArray(config) ? config : [config]
@@ -363,7 +363,9 @@ export const resolveTsconfigRootDir = (
   return resolveTypescriptOptions(typescript) && hasTsconfig(rootDir) ? rootDir : undefined
 }
 
-export const findTailwindEntryPoint = (rootDir: string): string | undefined => TAILWIND_ENTRYPOINT_CANDIDATES.find(candidate => existsSync(join(rootDir, candidate)))
+export const findTailwindEntryPoint = (rootDir: string): string | undefined => (
+  TAILWIND_ENTRYPOINT_CANDIDATES.find(candidate => existsSync(join(rootDir, candidate)))
+)
 
 export const scopeFilePattern = (projectPath: string, pattern: unknown): unknown => {
   if (typeof pattern === 'string') {

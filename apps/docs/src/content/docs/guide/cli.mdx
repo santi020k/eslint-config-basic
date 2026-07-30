@@ -183,15 +183,26 @@ npx @santi020k/eslint-config-basic init --check
 ## Check Compatibility
 
 `compatibility` resolves every declared `@santi020k/eslint-config-*` package
-and checks its Node engine plus ESLint and TypeScript peer ranges:
+through Node package resolution, including dependencies declared with default
+or named pnpm `catalog:` specifiers. It reports each declaration, resolved
+manifest path, and version; checks the current Node runtime plus the consumer's
+declared `engines.node` range; and verifies ESLint and TypeScript peer ranges:
 
 ```sh
 npx @santi020k/eslint-config-basic compatibility
 npx @santi020k/eslint-config-basic compatibility --json
 ```
 
-It exits with code 1 for missing or incompatible declared packages, making it
-suitable for dependency-update pull requests.
+It exits with code 1 for missing or incompatible declared packages, or when the
+consumer Node range permits versions unsupported by an installed config
+package. This makes it suitable for dependency-update pull requests.
+
+`doctor` reports the same consumer Node-range mismatch. Use `doctor --fix` to
+update `engines.node`; the fixer computes the intersection of the existing
+consumer range and all resolved config-package requirements, so supported union
+branches are retained and the manifest is never broadened accidentally. As with
+other doctor writes, the original manifest is saved as
+`package.json.doctor.bak`.
 
 ## Generate Team Standards
 

@@ -7,6 +7,8 @@ import { pathToFileURL } from 'node:url'
 
 interface SemverApi {
   satisfies: (version: string, range: string) => boolean
+  subset: (subRange: string, superRange: string) => boolean
+  validRange: (range: string) => null | string
 }
 
 interface PackageManifest {
@@ -14,6 +16,11 @@ interface PackageManifest {
   name?: string
   peerDependencies?: Record<string, string>
   version?: string
+}
+
+interface ResolvedPackageManifest {
+  manifest: PackageManifest
+  path: string
 }
 
 interface FlatConfigEntry {
@@ -203,7 +210,7 @@ const getDependencyVersions = (manifest: null | Record<string, unknown>): Record
 const readResolvedManifest = (
   projectRequire: NodeJS.Require,
   packageName: string
-): null | PackageManifest => {
+): null | ResolvedPackageManifest => {
   try {
     let directory = dirname(projectRequire.resolve(packageName))
 
@@ -211,7 +218,7 @@ const readResolvedManifest = (
       const manifestPath = join(directory, 'package.json')
       const manifest = readJson(manifestPath) as null | PackageManifest
 
-      if (manifest?.name === packageName) return manifest
+      if (manifest?.name === packageName) return { manifest, path: manifestPath }
 
       directory = dirname(directory)
     }
@@ -222,7 +229,7 @@ const readResolvedManifest = (
   return null
 }
 
-const readWorkspaceManifest = (cwd: string, packageName: string): null | PackageManifest => {
+const readWorkspaceManifest = (cwd: string, packageName: string): null | ResolvedPackageManifest => {
   const packagesPath = join(cwd, 'packages')
 
   if (!existsSync(packagesPath)) return null
@@ -230,9 +237,10 @@ const readWorkspaceManifest = (cwd: string, packageName: string): null | Package
   for (const entry of readdirSync(packagesPath, { withFileTypes: true })) {
     if (!entry.isDirectory()) continue
 
-    const manifest = readJson(join(packagesPath, entry.name, 'package.json')) as null | PackageManifest
+    const manifestPath = join(packagesPath, entry.name, 'package.json')
+    const manifest = readJson(manifestPath) as null | PackageManifest
 
-    if (manifest?.name === packageName) return manifest
+    if (manifest?.name === packageName) return { manifest, path: manifestPath }
   }
 
   return null
@@ -242,19 +250,22 @@ export const createCompatibilityReport = (cwd: string = process.cwd()) => {
   const rootManifest = readJson(join(cwd, 'package.json'))
   const declared = getDependencyVersions(rootManifest)
   const projectRequire = createRequire(join(cwd, 'package.json'))
+  const consumerNodeRange = (rootManifest as null | PackageManifest)?.engines?.node ?? null
 
   const configPackages = Object.keys(declared)
     .filter(name => name.startsWith('@santi020k/eslint-config-'))
     .sort()
 
   const runtimeVersions = {
-    eslint: readResolvedManifest(projectRequire, 'eslint')?.version ?? null,
+    consumerNodeRange,
+    eslint: readResolvedManifest(projectRequire, 'eslint')?.manifest.version ?? null,
     node: process.versions.node,
-    typescript: readResolvedManifest(projectRequire, 'typescript')?.version ?? null
+    typescript: readResolvedManifest(projectRequire, 'typescript')?.manifest.version ?? null
   }
 
   const packages = configPackages.map(name => {
-    const manifest = readResolvedManifest(projectRequire, name) ?? readWorkspaceManifest(cwd, name)
+    const resolvedPackage = readResolvedManifest(projectRequire, name) ?? readWorkspaceManifest(cwd, name)
+    const manifest = resolvedPackage?.manifest
     const issues: string[] = []
 
     if (!manifest) {
@@ -264,6 +275,16 @@ export const createCompatibilityReport = (cwd: string = process.cwd()) => {
 
       if (nodeRange && !semver.satisfies(runtimeVersions.node, nodeRange)) {
         issues.push(`requires Node ${nodeRange}`)
+      }
+
+      if (nodeRange && consumerNodeRange) {
+        if (!semver.validRange(consumerNodeRange)) {
+          issues.push(`consumer engines.node ${consumerNodeRange} is not a valid semver range`)
+        } else if (!semver.subset(consumerNodeRange, nodeRange)) {
+          issues.push(
+            `consumer engines.node ${consumerNodeRange} permits unsupported runtimes; requires ${nodeRange}`
+          )
+        }
       }
 
       for (const peer of ['eslint', 'typescript']) {
@@ -280,7 +301,8 @@ export const createCompatibilityReport = (cwd: string = process.cwd()) => {
       declared: declared[name],
       issues,
       name,
-      resolved: manifest?.version ?? null
+      resolved: manifest?.version ?? null,
+      resolvedPath: resolvedPackage?.path ?? null
     }
   })
 
@@ -303,6 +325,7 @@ export const handleCompatibility = (
     console.log([
       `ESLint compatibility: ${report.compatible ? 'compatible' : 'issues found'}`,
       `- Node: ${report.runtime.node}`,
+      `- Consumer Node range: ${report.runtime.consumerNodeRange ?? 'not declared'}`,
       `- ESLint: ${report.runtime.eslint ?? 'not installed'}`,
       `- TypeScript: ${report.runtime.typescript ?? 'not installed'}`
     ].join('\n'))
@@ -310,6 +333,7 @@ export const handleCompatibility = (
     for (const item of report.packages) {
       console.log(
         `- ${item.name}: ${item.resolved ?? 'not installed'}` +
+        (item.resolvedPath ? ` at ${item.resolvedPath}` : '') +
         (item.issues.length > 0 ? ` (${item.issues.join('; ')})` : '')
       )
     }

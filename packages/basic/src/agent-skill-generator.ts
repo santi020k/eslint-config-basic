@@ -984,6 +984,33 @@ const handleEslintMcpConfig = (
  * process.stdout.write(`Written to: ${result.written}\n`)
  * ```
  */
+const processAgentTarget = (
+  target: AgentTarget,
+  cwd: string,
+  features: EslintConfigFeatures,
+  force: boolean,
+  check: boolean
+): { filePath: string, result: GuardedSectionResult } | undefined => {
+  const agentFolder = join(cwd, target.markerFolder)
+
+  if (!existsSync(agentFolder)) return undefined
+
+  const subdir = target.skillSubdir === '.' ? agentFolder : join(agentFolder, target.skillSubdir)
+  const filePath = join(subdir, target.skillFile)
+  const content = generateSkillContent(features, target.format)
+
+  if (check) {
+    const upToDate = existsSync(filePath) && readFileSync(filePath, 'utf-8') === content
+
+    return { filePath, result: upToDate ? 'skipped' : 'stale' }
+  }
+
+  return {
+    filePath,
+    result: writeSkillFile(filePath, content, force) ? 'written' : 'skipped'
+  }
+}
+
 export const generateAgentSkills = async (
   opts: GenerateSkillOptions = {}
 ): Promise<GenerateSkillResult> => {
@@ -1033,27 +1060,9 @@ export const generateAgentSkills = async (
 
   // ── Standard agent targets ─────────────────────────────────────────────────
   for (const target of AGENT_TARGETS) {
-    const agentFolder = join(cwd, target.markerFolder)
+    const processed = processAgentTarget(target, cwd, features, force, check)
 
-    if (!existsSync(agentFolder)) continue
-
-    const subdir = target.skillSubdir === '.' ? agentFolder : join(agentFolder, target.skillSubdir)
-    const filePath = join(subdir, target.skillFile)
-    const content = generateSkillContent(features, target.format)
-
-    if (check) {
-      const upToDate = existsSync(filePath) && readFileSync(filePath, 'utf-8') === content
-
-      if (upToDate) skipped.push(filePath)
-      else stale.push(filePath)
-
-      continue
-    }
-
-    const didWrite = writeSkillFile(filePath, content, force)
-
-    if (didWrite) written.push(filePath)
-    else skipped.push(filePath)
+    if (processed) recordGuardedResult(processed.filePath, processed.result)
   }
 
   return { skipped, stale, written }

@@ -17,8 +17,12 @@ const remapPath = (options: TSParserOptions): TSParserOptions => {
   return options
 }
 
-export const parseForESLint: typeof tsParser.parseForESLint = (code, options) =>
-  tsParser.parseForESLint(code, remapPath(options))
+export const parseForESLint: typeof tsParser.parseForESLint = (
+  code,
+  options
+) => tsParser.parseForESLint(code, remapPath(options))
 
-export const parse: typeof tsParser.parse = (code, options) =>
-  tsParser.parse(code, remapPath(options) as Parameters<typeof tsParser.parse>[1])
+export const parse: typeof tsParser.parse = (
+  code,
+  options
+) => tsParser.parse(code, remapPath(options) as Parameters<typeof tsParser.parse>[1])

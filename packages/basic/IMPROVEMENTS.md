@@ -189,6 +189,9 @@ Implemented so far:
 
 - URLs and template literals are ignored by the shared default, alongside
   ordinary strings.
+- Fenced Markdown examples are not rewritten to the current JavaScript quote,
+  semicolon, or trailing-comma style, preserving generated changelogs and
+  historical migration examples while Markdown syntax rules remain active.
 
 ### Completed — Handle external schema names without project-wide camel-case exceptions
 

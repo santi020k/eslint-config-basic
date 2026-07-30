@@ -75,6 +75,25 @@ const writeFakeEslint = (
   )
 }
 
+const writeFakePackage = (
+  cwd: string,
+  name: string,
+  manifest: Record<string, unknown>
+): string => {
+  const packageDir = join(cwd, 'node_modules', ...name.split('/'))
+  const manifestPath = join(packageDir, 'package.json')
+
+  mkdirSync(packageDir, { recursive: true })
+  writeFileSync(join(packageDir, 'index.js'), 'module.exports = {}\n')
+  writeFileSync(manifestPath, JSON.stringify({
+    main: './index.js',
+    name,
+    ...manifest
+  }))
+
+  return manifestPath
+}
+
 const migrationContext = (
   overrides: Partial<V3MigrationContext> = {}
 ): V3MigrationContext => ({
@@ -1746,6 +1765,114 @@ describe('v3 project assistance', () => {
     expect(report.compatible).toBe(false)
     expect(report.packages[0]?.issues).toContain('declared but not installed')
   })
+
+  test('resolves catalog config packages and checks the declared consumer Node range', () => {
+    const cwd = createTempProject({
+      devDependencies: {
+        '@santi020k/eslint-config-basic': 'catalog:lint'
+      },
+      engines: { node: '>=22.18.0' },
+      name: 'test-project',
+      type: 'module'
+    })
+    writeFakePackage(cwd, '@santi020k/eslint-config-basic', {
+      engines: { node: '>=22.19.0' },
+      version: '3.2.0'
+    })
+
+    const report = createCompatibilityReport(cwd)
+
+    expect(report.runtime.consumerNodeRange).toBe('>=22.18.0')
+    expect(report.packages[0]).toMatchObject({
+      declared: 'catalog:lint',
+      issues: [
+        'consumer engines.node >=22.18.0 permits unsupported runtimes; requires >=22.19.0'
+      ],
+      resolved: '3.2.0'
+    })
+    expect(report.packages[0]?.resolvedPath).toContain(
+      join('node_modules', '@santi020k', 'eslint-config-basic', 'package.json')
+    )
+    expect(report.packages[0]?.issues).not.toContain('declared but not installed')
+    expect(report.compatible).toBe(false)
+
+    writeFileSync(join(cwd, 'package.json'), JSON.stringify({
+      devDependencies: {
+        '@santi020k/eslint-config-basic': 'catalog:lint'
+      },
+      engines: { node: '>=22.19.0' },
+      name: 'test-project',
+      type: 'module'
+    }))
+
+    expect(createCompatibilityReport(cwd).compatible).toBe(true)
+  })
+
+  test.each([
+    ['>=22.18.0', '>=22.19.0', '>=22.19.0'],
+    [
+      '^20.18.0 || >=22.18.0',
+      '^20.19.0 || >=22.19.0',
+      '^20.19.0 || >=22.19.0'
+    ],
+    [
+      '>=22.18.0 <23',
+      '>=22.19.0',
+      '>=22.18.0 <23.0.0-0 >=22.19.0'
+    ]
+  ])(
+    'doctor safely narrows consumer Node range %s to installed requirement %s',
+    async (consumerRange, requiredRange, expectedRange) => {
+      const cwd = createTempProject({
+        devDependencies: {
+          '@santi020k/eslint-config-basic': 'catalog:lint',
+          eslint: '^10.0.0'
+        },
+        engines: { node: consumerRange },
+        name: 'test-project',
+        type: 'module'
+      })
+
+      writeFakeEslint(cwd)
+      writeFakePackage(cwd, '@santi020k/eslint-config-basic', {
+        engines: { node: requiredRange },
+        version: '3.2.0'
+      })
+      writeFileSync(join(cwd, 'eslint.config.js'), 'export default []\n')
+      const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+
+      await handleDoctor(cwd, true)
+
+      const diagnosis = JSON.parse(String(logSpy.mock.calls.at(-1)?.[0])) as {
+        warnings: string[]
+      }
+
+      expect(diagnosis.warnings).toContain(
+        `package.json engines.node ${consumerRange} permits unsupported runtimes; ` +
+        `installed config packages require ${requiredRange}.`
+      )
+
+      logSpy.mockClear()
+      await handleDoctor(cwd, true, false, true)
+
+      const updated = JSON.parse(readFileSync(join(cwd, 'package.json'), 'utf8')) as {
+        engines: { node: string }
+      }
+      const fixedDiagnosis = JSON.parse(String(logSpy.mock.calls.at(-1)?.[0])) as {
+        fixes: string[]
+        warnings: string[]
+      }
+
+      expect(updated.engines.node).toBe(expectedRange)
+      expect(fixedDiagnosis.fixes).toContain(
+        `Changed engines.node from ${consumerRange} to ${expectedRange}.`
+      )
+      expect(fixedDiagnosis.warnings).not.toEqual(expect.arrayContaining([
+        expect.stringContaining('permits unsupported runtimes')
+      ]))
+      expect(existsSync(join(cwd, 'package.json.doctor.bak'))).toBe(true)
+    }
+  )
 
   test('checks workspace package engines and peer ranges and prints both output modes', () => {
     const cwd = createTempProject({

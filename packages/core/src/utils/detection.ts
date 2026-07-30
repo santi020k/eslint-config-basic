@@ -136,15 +136,36 @@ const FRAMEWORK_ENTRIES: FrameworkEntry[] = [
   { deps: ['@tanstack/solid-start'], frameworks: ['tanstack-start', 'solid'], runtime: Runtime.Universal }
 ]
 
-const CLOUDFLARE_DEPS = ['wrangler', '@cloudflare/workers-types', '@cloudflare/vitest-pool-workers']
+const CLOUDFLARE_DEPS = [
+  'wrangler',
+  '@cloudflare/workers-types',
+  '@cloudflare/vitest-pool-workers'
+]
+
 const REACT_EXCLUSIONS = [
   'next', 'expo', 'react-native', '@react-router/dev', '@remix-run/react', '@tanstack/react-start'
 ]
-const VITE_EXCLUSION_FRAMEWORKS = ['astro', 'next', 'nuxt', 'qwik', 'react-router', 'slidev', 'tanstack-start']
-const isReactStandalone = (allDeps: DependencyMap): boolean =>
+
+const VITE_EXCLUSION_FRAMEWORKS = [
+  'astro',
+  'next',
+  'nuxt',
+  'qwik',
+  'react-router',
+  'slidev',
+  'tanstack-start'
+]
+
+const isReactStandalone = (allDeps: DependencyMap): boolean => (
   Boolean(allDeps.react) && !hasAnyDependency(allDeps, REACT_EXCLUSIONS)
-const isViteStandalone = (allDeps: DependencyMap, detected: DetectedFrameworkName[]): boolean =>
+)
+
+const isViteStandalone = (
+  allDeps: DependencyMap,
+  detected: DetectedFrameworkName[]
+): boolean => (
   Boolean(allDeps.vite) && !detected.some(fw => VITE_EXCLUSION_FRAMEWORKS.includes(fw))
+)
 
 const detectFrameworks = (
   allDeps: DependencyMap,
@@ -264,22 +285,38 @@ const detectExtensions = (allDeps: DependencyMap): Extension[] => dedupe(
     .map(([, extension]) => extension)
 )
 
-const GRAPHQL_DEPS = ['graphql', '@apollo/client', 'relay-runtime', 'urql', 'graphql-tag', '@graphql-typed-document-node/core']
+const GRAPHQL_DEPS = [
+  'graphql',
+  '@apollo/client',
+  'relay-runtime',
+  'urql',
+  'graphql-tag',
+  '@graphql-typed-document-node/core'
+]
+
 const MDX_DEPS = ['@mdx-js/react', '@mdx-js/mdx', '@astrojs/mdx']
 const MARKDOWN_DEPS = ['markdown', 'react-markdown', 'remark-gfm', 'markdownlint-cli2']
-const YAML_SIGNALS = ['pnpm-workspace.yaml', 'cspell.config.yaml', 'cspell.config.yml', '.github/workflows']
 
-const hasGraphqlSignal = (allDeps: DependencyMap, detectRootDir: string): boolean =>
+const YAML_SIGNALS = [
+  'pnpm-workspace.yaml',
+  'cspell.config.yaml',
+  'cspell.config.yml',
+  '.github/workflows'
+]
+
+const hasGraphqlSignal = (allDeps: DependencyMap, detectRootDir: string): boolean => (
   hasAnyDependency(allDeps, GRAPHQL_DEPS) ||
-    ['schema.graphql', 'schema.gql'].some(f => pathExists(join(detectRootDir, f)))
+  ['schema.graphql', 'schema.gql'].some(f => pathExists(join(detectRootDir, f)))
+)
 
 const hasMdxSignal = (allDeps: DependencyMap, detectRootDir: string): boolean => hasAnyDependency(allDeps, MDX_DEPS) ||
   hasFileMatching(detectRootDir, f => f.endsWith('.mdx'))
 
-const hasMarkdownSignal = (allDeps: DependencyMap, detectRootDir: string): boolean =>
+const hasMarkdownSignal = (allDeps: DependencyMap, detectRootDir: string): boolean => (
   hasAnyDependency(allDeps, MARKDOWN_DEPS) ||
-    ['.markdownlint.json', '.markdownlint.yaml'].some(f => pathExists(join(detectRootDir, f))) ||
-    hasFileMatching(detectRootDir, f => f.endsWith('.md'))
+  ['.markdownlint.json', '.markdownlint.yaml'].some(f => pathExists(join(detectRootDir, f))) ||
+  hasFileMatching(detectRootDir, f => f.endsWith('.md'))
+)
 
 const hasJsoncSignal = (allDeps: DependencyMap, detectRootDir: string): boolean => hasAnyDependency(allDeps, ['eslint-plugin-jsonc']) ||
   hasFileMatching(detectRootDir, f => f.endsWith('.jsonc'))

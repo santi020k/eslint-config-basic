@@ -1040,10 +1040,58 @@ interface PackageMetadata {
 }
 
 interface SemverApi {
+  Range: new(range: string) => {
+    range: string
+    set: { value: string }[][]
+  }
+  minVersion: (range: string) => null | { version: string }
   satisfies: (version: string, range: string) => boolean
+  subset: (subRange: string, superRange: string) => boolean
+  validRange: (range: string) => null | string
 }
 
 const semver = createRequire(import.meta.url)('semver') as SemverApi
+
+const intersectTwoSemverRanges = (left: string, right: string): null | string => {
+  if (semver.subset(left, right)) return left
+
+  if (semver.subset(right, left)) return right
+
+  const intersections = new Set<string>()
+  const leftRange = new semver.Range(left)
+  const rightRange = new semver.Range(right)
+
+  for (const leftComparators of leftRange.set) {
+    for (const rightComparators of rightRange.set) {
+      const candidate = [...leftComparators, ...rightComparators]
+        .map(comparator => comparator.value)
+        .filter(Boolean)
+        .join(' ')
+
+      const normalized = new semver.Range(candidate || '*').range || '*'
+
+      if (semver.minVersion(normalized)) intersections.add(normalized)
+    }
+  }
+
+  return intersections.size > 0 ? [...intersections].join(' || ') : null
+}
+
+const intersectSemverRanges = (ranges: string[]): null | string => {
+  const validRanges = ranges.filter(range => semver.validRange(range) !== null)
+
+  if (validRanges.length !== ranges.length || validRanges.length === 0) return null
+
+  let intersection = validRanges[0]
+
+  for (const range of validRanges.slice(1)) {
+    intersection = intersectTwoSemverRanges(intersection, range) ?? ''
+
+    if (!intersection) return null
+  }
+
+  return intersection
+}
 
 const readPackageMetadataFromMain = (mainPath: string, packageName: string): null | PackageMetadata => {
   let directory = dirname(mainPath)
@@ -1078,6 +1126,99 @@ const resolvePackageMetadata = (cwd: string, packageName: string): null | Packag
   } catch {
     return null
   }
+}
+
+interface NodeEngineAssessment {
+  compatible: boolean
+  consumerRange: null | string
+  requiredRange: null | string
+  targetRange: null | string
+}
+
+const assessConsumerNodeEngine = (
+  cwd: string,
+  packageJson: null | Record<string, unknown>
+): NodeEngineAssessment => {
+  const declaredConfigPackages = [...getDeclaredDependencyNames(packageJson)]
+    .filter(packageName => packageName.startsWith('@santi020k/eslint-config-'))
+
+  const requiredRanges = declaredConfigPackages.flatMap(packageName => {
+    const range = resolvePackageMetadata(cwd, packageName)?.engines?.node
+
+    return range ? [range] : []
+  })
+
+  const requiredRange = intersectSemverRanges(requiredRanges)
+  const engines = packageJson?.engines
+
+  const consumerRange = engines && typeof engines === 'object' && !Array.isArray(engines) ?
+    (engines as Record<string, unknown>).node :
+    null
+
+  const normalizedConsumerRange = typeof consumerRange === 'string' ? consumerRange : null
+
+  if (requiredRanges.length === 0) {
+    return {
+      compatible: true,
+      consumerRange: normalizedConsumerRange,
+      requiredRange: null,
+      targetRange: null
+    }
+  }
+
+  if (!requiredRange) {
+    return {
+      compatible: false,
+      consumerRange: normalizedConsumerRange,
+      requiredRange: null,
+      targetRange: null
+    }
+  }
+
+  if (!normalizedConsumerRange || !semver.validRange(normalizedConsumerRange)) {
+    return {
+      compatible: false,
+      consumerRange: normalizedConsumerRange,
+      requiredRange,
+      targetRange: requiredRange
+    }
+  }
+
+  const compatible = requiredRanges.every(range => semver.subset(normalizedConsumerRange, range))
+
+  return {
+    compatible,
+    consumerRange: normalizedConsumerRange,
+    requiredRange,
+    targetRange: compatible ?
+      null :
+      intersectSemverRanges([normalizedConsumerRange, ...requiredRanges])
+  }
+}
+
+const getConsumerNodeEngineWarning = (
+  cwd: string,
+  packageJson: null | Record<string, unknown>
+): null | string => {
+  const assessment = assessConsumerNodeEngine(cwd, packageJson)
+
+  if (assessment.compatible) return null
+
+  if (!assessment.requiredRange) {
+    return 'Installed config packages do not share a compatible Node engine range.'
+  }
+
+  if (!assessment.consumerRange) {
+    return `package.json does not declare engines.node; installed config packages require ${assessment.requiredRange}.`
+  }
+
+  if (!semver.validRange(assessment.consumerRange)) {
+    return `package.json engines.node ${assessment.consumerRange} is invalid; ` +
+      `installed config packages require ${assessment.requiredRange}.`
+  }
+
+  return `package.json engines.node ${assessment.consumerRange} permits unsupported runtimes; ` +
+    `installed config packages require ${assessment.requiredRange}.`
 }
 
 const getAstroDoctorNodeWarning = (metadata: PackageMetadata): null | string => {
@@ -1300,6 +1441,7 @@ const checkDuplicateEslint = (cwd: string, warnings: string[]) => {
 
 const buildDoctorDiagnosis = (
   cwd: string,
+  packageJson: null | Record<string, unknown>,
   configPath: null | string,
   configContent: null | string,
   hasV1FrameworkImports: boolean,
@@ -1318,6 +1460,10 @@ const buildDoctorDiagnosis = (
   warnings.push(...getAstroDoctorCompatibilityWarnings(cwd, astroDoctorEnabled))
 
   checkDuplicateEslint(cwd, warnings)
+
+  const nodeEngineWarning = getConsumerNodeEngineWarning(cwd, packageJson)
+
+  if (nodeEngineWarning) warnings.push(nodeEngineWarning)
 
   return { issues, warnings }
 }
@@ -1408,6 +1554,7 @@ const applyDoctorFixes = (
   if (packageJson) {
     const updated = structuredClone(packageJson) as {
       devDependencies?: Record<string, string>
+      engines?: Record<string, string>
       scripts?: Record<string, string>
     }
 
@@ -1446,6 +1593,22 @@ const applyDoctorFixes = (
       fixes.push(`Declared ${packageName}.`)
 
       packageChanged = true
+    }
+
+    const nodeEngine = assessConsumerNodeEngine(cwd, packageJson)
+
+    if (!nodeEngine.compatible && nodeEngine.targetRange) {
+      updated.engines ??= {}
+
+      updated.engines.node = nodeEngine.targetRange
+
+      packageChanged = true
+
+      fixes.push(
+        nodeEngine.consumerRange ?
+          `Changed engines.node from ${nodeEngine.consumerRange} to ${nodeEngine.targetRange}.` :
+          `Declared engines.node as ${nodeEngine.targetRange}.`
+      )
     }
 
     if (packageChanged) {
@@ -1575,7 +1738,14 @@ export const handleDoctor = async (
     undefined
 
   const { issues, warnings } = buildDoctorDiagnosis(
-    projectRoot, configPath, configContent, hasV1FrameworkImports, activeConfig, declaredDependencies, summary
+    projectRoot,
+    packageJson,
+    configPath,
+    configContent,
+    hasV1FrameworkImports,
+    activeConfig,
+    declaredDependencies,
+    summary
   )
 
   outputDoctorResult(

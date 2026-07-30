@@ -88,14 +88,22 @@ const flattenConfigs = (configs: TSESLint.FlatConfig.ConfigArray): FlatConfig[] 
   configs.flat(Infinity)
 )
 
+const isStringMatrix = (value: unknown): value is string[][] => Array.isArray(value) &&
+  value.every(group => Array.isArray(group) && group.every(pattern => typeof pattern === 'string'))
+
 const getImportSortGroups = (config: FlatConfig): string[][] => {
   const rule = config.rules?.['simple-import-sort/imports']
 
-  if (!Array.isArray(rule) || typeof rule[1] !== 'object' || rule[1] === null) return []
+  if (
+    !Array.isArray(rule) ||
+    typeof rule[1] !== 'object' ||
+    rule[1] === null ||
+    !('groups' in rule[1])
+  ) return []
 
-  const groups = (rule[1] as { groups?: unknown }).groups
+  const { groups } = rule[1]
 
-  return Array.isArray(groups) ? groups as string[][] : []
+  return isStringMatrix(groups) ? groups : []
 }
 
 describe('Public API Re-exports', () => {

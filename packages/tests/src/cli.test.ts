@@ -143,6 +143,7 @@ describe('CLI command UX', () => {
 
     expect(output).toContain('Usage: basic-eslint explain-preset <preset> [options]')
     expect(output).toContain('--analyze-source')
+    logSpy.mockRestore()
   })
 
   test('should print version for --version', () => {

@@ -14,3 +14,7 @@ local bindings. Keep declaration-attached JSDoc and intentional fire-and-forget
 promises compatible with the surrounding formatting and promise rules, and
 clarify Full package activation and version semantics. Add source-aware preset
 adoption reports with grouped lint debt and a non-writing autofix preview.
+Make compatibility reports resolve pnpm catalog declarations through installed
+package manifests, expose resolved paths, and validate consumer Node engine
+ranges against config package requirements. Let doctor diagnose and safely fix
+those range mismatches by intersecting consumer and package constraints.

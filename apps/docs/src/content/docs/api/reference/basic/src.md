@@ -9,7 +9,7 @@ description: "@santi020k/eslint-config-basic"
 
 > `const` **angular**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:106](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L106)
+Defined in: [basic/src/frameworks.ts:119](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L119)
 
 #### Parameters
 
@@ -27,7 +27,7 @@ Defined in: [basic/src/frameworks.ts:106](https://github.com/santi020k/eslint-co
 
 > `const` **astro**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:107](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L107)
+Defined in: [basic/src/frameworks.ts:120](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L120)
 
 #### Parameters
 
@@ -41,11 +41,38 @@ Defined in: [basic/src/frameworks.ts:107](https://github.com/santi020k/eslint-co
 
 ***
 
+### defineConfig
+
+> `const` **defineConfig**: `ConfigComposer`
+
+Defined in: [basic/src/index.ts:804](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L804)
+
+Generates the ESLint configuration array, applying configurations
+and integration settings based on the input configuration.
+
+#### Param
+
+**options**
+
+Configuration and integration settings
+
+#### Param
+
+**extraConfigs**
+
+Local flat-config overrides appended after generated config
+
+#### Returns
+
+The final ESLint configuration array
+
+***
+
 ### expo
 
 > `const` **expo**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:108](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L108)
+Defined in: [basic/src/frameworks.ts:121](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L121)
 
 #### Parameters
 
@@ -63,7 +90,7 @@ Defined in: [basic/src/frameworks.ts:108](https://github.com/santi020k/eslint-co
 
 > `const` **hono**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:109](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L109)
+Defined in: [basic/src/frameworks.ts:122](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L122)
 
 #### Parameters
 
@@ -81,7 +108,7 @@ Defined in: [basic/src/frameworks.ts:109](https://github.com/santi020k/eslint-co
 
 > `const` **lit**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:110](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L110)
+Defined in: [basic/src/frameworks.ts:123](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L123)
 
 #### Parameters
 
@@ -99,7 +126,7 @@ Defined in: [basic/src/frameworks.ts:110](https://github.com/santi020k/eslint-co
 
 > `const` **nest**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:111](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L111)
+Defined in: [basic/src/frameworks.ts:124](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L124)
 
 #### Parameters
 
@@ -117,7 +144,7 @@ Defined in: [basic/src/frameworks.ts:111](https://github.com/santi020k/eslint-co
 
 > `const` **next**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:112](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L112)
+Defined in: [basic/src/frameworks.ts:125](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L125)
 
 #### Parameters
 
@@ -135,7 +162,7 @@ Defined in: [basic/src/frameworks.ts:112](https://github.com/santi020k/eslint-co
 
 > `const` **nuxt**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:113](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L113)
+Defined in: [basic/src/frameworks.ts:126](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L126)
 
 #### Parameters
 
@@ -153,7 +180,7 @@ Defined in: [basic/src/frameworks.ts:113](https://github.com/santi020k/eslint-co
 
 > `const` **preact**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:114](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L114)
+Defined in: [basic/src/frameworks.ts:127](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L127)
 
 #### Parameters
 
@@ -171,7 +198,7 @@ Defined in: [basic/src/frameworks.ts:114](https://github.com/santi020k/eslint-co
 
 > `const` **qwik**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:115](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L115)
+Defined in: [basic/src/frameworks.ts:128](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L128)
 
 #### Parameters
 
@@ -189,7 +216,7 @@ Defined in: [basic/src/frameworks.ts:115](https://github.com/santi020k/eslint-co
 
 > `const` **react**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:116](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L116)
+Defined in: [basic/src/frameworks.ts:129](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L129)
 
 #### Parameters
 
@@ -207,7 +234,7 @@ Defined in: [basic/src/frameworks.ts:116](https://github.com/santi020k/eslint-co
 
 > `const` **reactRouter**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:117](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L117)
+Defined in: [basic/src/frameworks.ts:130](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L130)
 
 #### Parameters
 
@@ -225,7 +252,7 @@ Defined in: [basic/src/frameworks.ts:117](https://github.com/santi020k/eslint-co
 
 > `const` **slidev**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:118](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L118)
+Defined in: [basic/src/frameworks.ts:131](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L131)
 
 #### Parameters
 
@@ -243,7 +270,7 @@ Defined in: [basic/src/frameworks.ts:118](https://github.com/santi020k/eslint-co
 
 > `const` **solid**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:119](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L119)
+Defined in: [basic/src/frameworks.ts:132](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L132)
 
 #### Parameters
 
@@ -261,7 +288,7 @@ Defined in: [basic/src/frameworks.ts:119](https://github.com/santi020k/eslint-co
 
 > `const` **svelte**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:120](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L120)
+Defined in: [basic/src/frameworks.ts:133](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L133)
 
 #### Parameters
 
@@ -279,7 +306,7 @@ Defined in: [basic/src/frameworks.ts:120](https://github.com/santi020k/eslint-co
 
 > `const` **tanstackStart**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:121](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L121)
+Defined in: [basic/src/frameworks.ts:134](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L134)
 
 #### Parameters
 
@@ -297,7 +324,7 @@ Defined in: [basic/src/frameworks.ts:121](https://github.com/santi020k/eslint-co
 
 > `const` **vite**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:122](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L122)
+Defined in: [basic/src/frameworks.ts:135](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L135)
 
 #### Parameters
 
@@ -315,7 +342,7 @@ Defined in: [basic/src/frameworks.ts:122](https://github.com/santi020k/eslint-co
 
 > `const` **vue**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [basic/src/frameworks.ts:123](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L123)
+Defined in: [basic/src/frameworks.ts:136](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L136)
 
 #### Parameters
 
@@ -333,7 +360,7 @@ Defined in: [basic/src/frameworks.ts:123](https://github.com/santi020k/eslint-co
 
 > **attachReferencedPlugins**(`configs`): `ConfigArray`
 
-Defined in: [basic/src/index.ts:681](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L681)
+Defined in: [basic/src/index.ts:715](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L715)
 
 Copies already-loaded plugin objects onto rule blocks that reference them.
 ESLint 10 validates plugin availability per effective config object, while
@@ -348,37 +375,6 @@ feature packs often keep plugin setup and consumer overrides separate.
 #### Returns
 
 `ConfigArray`
-
-***
-
-### defineConfig()
-
-> **defineConfig**(`options?`, ...`extraConfigs`): `Promise`\<`ConfigArray`\>
-
-Defined in: [basic/src/index.ts:761](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L761)
-
-Generates the ESLint configuration array, applying configurations
-and integration settings based on the input configuration.
-
-#### Parameters
-
-##### options?
-
-[`EslintConfigOptions`](../core/src.md#eslintconfigoptions)
-
-Configuration and integration settings
-
-##### extraConfigs
-
-...[`ConfigInput`](../core/src.md#configinput)[]
-
-Local flat-config overrides appended after generated config
-
-#### Returns
-
-`Promise`\<`ConfigArray`\>
-
-The final ESLint configuration array
 
 ## References
 

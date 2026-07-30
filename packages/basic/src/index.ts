@@ -638,17 +638,23 @@ const emitAstroDoctorWarning = (
   )
 }
 
+type ConfigComposer = (
+  options?: EslintConfigOptions,
+  ...extraConfigs: ConfigInput[]
+) => Promise<FlatConfigArray>
+
 const resolveProjectConfigs = async (
   configuredProjects: Record<string, EslintConfigOptions>,
   projectDefaults: EslintConfigOptions['projectDefaults'],
   detectRootDir: string | undefined,
-  autoFrameworks: boolean | undefined
+  autoFrameworks: boolean | undefined,
+  composeConfig: ConfigComposer
 ) => Promise.all(
   Object.entries(configuredProjects).map(async ([projectPath, projectOptions]) => {
     const projectRoot = join(detectRootDir ?? process.cwd(), projectPath)
     const inheritedOptions = mergeProjectOptions(projectDefaults ?? {}, projectOptions)
 
-    const scopedConfigs = await defineConfig({
+    const scopedConfigs = await composeConfig({
       autoFrameworks,
       ...inheritedOptions,
       projectDefaults: undefined,
@@ -672,6 +678,15 @@ const resolveInheritedProjectDefaults = (
   },
   options?.projectDefaults ?? {}
 )
+
+const createWorkspaceFixtureIgnores = (
+  configuredProjects: Record<string, EslintConfigOptions>
+): FlatConfigArray => Object.keys(configuredProjects).length > 0 ?
+  [{
+    ignores: ['apps/*/fixtures/**', 'packages/*/fixtures/**'],
+    name: 'eslint-config-basic/workspace-fixture-ignores'
+  }] :
+  []
 
 const getPluginNameFromRule = (
   ruleName: string,
@@ -786,7 +801,7 @@ const getConfigsParams = (
  * @param {ConfigInput[]} extraConfigs - Local flat-config overrides appended after generated config
  * @returns {FlatConfigArray} The final ESLint configuration array
  */
-export async function defineConfig(
+export const defineConfig: ConfigComposer = async function defineConfig(
   options?: EslintConfigOptions,
   ...extraConfigs: ConfigInput[]
 ): Promise<FlatConfigArray> {
@@ -905,12 +920,21 @@ export async function defineConfig(
   })
 
   const projectConfigs = await resolveProjectConfigs(
-    configuredProjects, resolveInheritedProjectDefaults(options), detectRootDir, options?.autoFrameworks
+    configuredProjects,
+    resolveInheritedProjectDefaults(options),
+    detectRootDir,
+    options?.autoFrameworks,
+    defineConfig
   )
 
   // Merge workspace import group into any existing simple-import-sort/imports rules
   // so framework-specific group ordering (e.g. React-first) is preserved.
-  const allConfigs = [...configs, ...projectConfigs.flat(), ...flattenConfigInputs(extraConfigs)]
+  const allConfigs = [
+    ...createWorkspaceFixtureIgnores(configuredProjects),
+    ...configs,
+    ...projectConfigs.flat(),
+    ...flattenConfigInputs(extraConfigs)
+  ]
 
   const patchedConfigs = workspacePrefixes?.length ?
     patchImportGroups(allConfigs, workspacePrefixes) :

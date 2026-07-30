@@ -54,8 +54,9 @@ export const loadDefault = async <T = unknown>(specifier: string): Promise<T> =>
   return module as T
 }
 
-export const loadModule = async <T = unknown>(specifier: string): Promise<T> =>
+export const loadModule = async <T = unknown>(specifier: string): Promise<T> => (
   await dynamicImport(resolveSpecifier(specifier)) as T
+)
 
 /**
  * Keeps optional integrations import-safe for consumers that do not enable them.

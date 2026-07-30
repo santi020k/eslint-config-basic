@@ -532,6 +532,28 @@ describe('Integration Tests', () => {
   })
 
   describe('Slidev', () => {
+    test('should preserve historical formatting inside fenced Markdown code', async () => {
+      const config = await defineConfig({
+        detection: false,
+        formats: [Format.Markdown],
+        tools: [],
+        typescript: false
+      })
+      const source = [
+        '```js',
+        'const options = {',
+        '  message: "historical style",',
+        '};',
+        '```'
+      ].join('\n')
+      const results = await lintText(source, config, 'CHANGELOG.md')
+      const ruleIds = results[0].messages.map(message => message.ruleId)
+
+      expect(ruleIds).not.toContain('@stylistic/comma-dangle')
+      expect(ruleIds).not.toContain('@stylistic/quotes')
+      expect(ruleIds).not.toContain('@stylistic/semi')
+    })
+
     test('should include Slidev-specific config entries', async () => {
       const config = await defineConfig({
         detection: false,

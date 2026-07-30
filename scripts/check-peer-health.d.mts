@@ -20,14 +20,14 @@ export function createPeerHealthReport(
   cwd: string,
   rawReport: Record<string, unknown>,
   policy: {
-    accepted: Array<{
+    accepted: {
       introducedBy: string
       kind: string
       owner: string
       peer: string
       removalCondition: string
       wantedRange: null | string
-    }>
+    }[]
   }
 ): PeerHealthReport
 

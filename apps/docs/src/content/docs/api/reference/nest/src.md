@@ -20,7 +20,7 @@ Includes NestJS plugin with recommended rules
 
 > `const` **rules**: `TSESLint.Linter.RulesRecord`
 
-Defined in: [nest/src/rules.ts:5](https://github.com/santi020k/eslint-config-basic/blob/main/packages/nest/src/rules.ts#L5)
+Defined in: [nest/src/rules.ts:4](https://github.com/santi020k/eslint-config-basic/blob/main/packages/nest/src/rules.ts#L4)
 
 ## References
 

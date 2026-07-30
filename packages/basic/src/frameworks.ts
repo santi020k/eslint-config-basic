@@ -108,7 +108,11 @@ export const getBundledFrameworkConfig = async (
 
 const createBundledFramework = (
   frameworkName: FrameworkName
-): ((options?: FrameworkOptions) => Promise<FlatConfigArray>) => async (options?: FrameworkOptions): Promise<FlatConfigArray> => getBundledFrameworkConfig(frameworkName, options)
+): ((options?: FrameworkOptions) => Promise<FlatConfigArray>) => (
+  async (options?: FrameworkOptions): Promise<FlatConfigArray> => (
+    getBundledFrameworkConfig(frameworkName, options)
+  )
+)
 
 // Public framework factories (bare framework names).
 // Each lazily imports its framework package on first call.
