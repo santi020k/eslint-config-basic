@@ -87,6 +87,9 @@ catalogs:
     '@resvg/resvg-js':
       specifier: ^2.6.2
       version: 2.6.2
+    '@santi020k/commitprompt':
+      specifier: ^1.0.0
+      version: 1.0.0
     '@santi020k/eslint-plugin-astro-doctor':
       specifier: ^1.2.2
       version: 1.2.2
@@ -422,6 +425,9 @@ importers:
       '@eslint/config-inspector':
         specifier: 'catalog:'
         version: 3.1.0(@modelcontextprotocol/sdk@1.30.0(zod@4.4.3))(eslint@10.8.0(jiti@2.7.0)(supports-color@8.1.1))(srvx@0.12.4)(typescript@6.0.3)
+      '@santi020k/commitprompt':
+        specifier: 'catalog:'
+        version: 1.0.0(@types/node@26.1.2)(typescript@6.0.3)
       '@santi020k/eslint-config-basic':
         specifier: workspace:^
         version: link:packages/basic
@@ -497,7 +503,7 @@ importers:
         version: 1.2.1(supports-color@8.1.1)
       lighthouse:
         specifier: 'catalog:'
-        version: 13.4.1(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(yauzl@3.4.0)
+        version: 13.4.1(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(supports-color@8.1.1)(yauzl@3.4.0)
       satori:
         specifier: 'catalog:'
         version: 0.29.0
@@ -2517,7 +2523,7 @@ importers:
         version: 10.10.0(@stylistic/eslint-plugin@5.10.0(eslint@10.8.0(jiti@2.7.0)))(@typescript-eslint/parser@8.65.0(eslint@10.8.0(jiti@2.7.0))(typescript@6.0.3))(eslint@10.8.0(jiti@2.7.0))(vue-eslint-parser@10.4.1(eslint@10.8.0(jiti@2.7.0)))
       vue-eslint-parser:
         specifier: 'catalog:'
-        version: 10.4.1(eslint@10.8.0(jiti@2.7.0))
+        version: 10.4.1(eslint@10.8.0(jiti@2.7.0))(supports-color@8.1.1)
     devDependencies:
       publint:
         specifier: 'catalog:'
@@ -6441,6 +6447,11 @@ packages:
 
   '@rviscomi/capo.js@2.2.0':
     resolution: {integrity: sha512-bf3EFPKV4uQQ+66MkolrYh0axOgSn6XHq8kZbu/aoiI/OFjk6Rcz6N48l822vhvNcOQpI8Pfe2sa0AUd+3PjMQ==}
+
+  '@santi020k/commitprompt@1.0.0':
+    resolution: {integrity: sha512-ci8n20p2RCASU+HWMYD6WTWsvoKoliZALJkOHz7Ur5GfxRWCP/hWkfGwsFiBNNTqJYzkOHv5CPpxoXbkSblJVA==}
+    engines: {node: '>=22.18.0'}
+    hasBin: true
 
   '@santi020k/eslint-plugin-astro-doctor@1.2.2':
     resolution: {integrity: sha512-560JGJTFtUS0CQkAph60cmQ3VCqCao5G2gOTIu7IC/rd0jrLBDJ5PEIbgPIPLKP9SF156XOitGiuMF17DfkQJQ==}
@@ -16018,7 +16029,7 @@ snapshots:
       semifies: 1.0.0
       source-map: 0.6.1
 
-  '@apm-js-collab/tracing-hooks@0.13.0':
+  '@apm-js-collab/tracing-hooks@0.13.0(supports-color@8.1.1)':
     dependencies:
       '@apm-js-collab/code-transformer': 0.18.1
       debug: 4.4.3(supports-color@8.1.1)
@@ -19114,12 +19125,12 @@ snapshots:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/semantic-conventions': 1.43.0
 
-  '@opentelemetry/instrumentation@0.220.0(@opentelemetry/api@1.9.1)':
+  '@opentelemetry/instrumentation@0.220.0(@opentelemetry/api@1.9.1)(supports-color@8.1.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/api-logs': 0.220.0
       import-in-the-middle: 3.3.2
-      require-in-the-middle: 8.0.1
+      require-in-the-middle: 8.0.1(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -20091,6 +20102,17 @@ snapshots:
 
   '@rviscomi/capo.js@2.2.0': {}
 
+  '@santi020k/commitprompt@1.0.0(@types/node@26.1.2)(typescript@6.0.3)':
+    dependencies:
+      '@commitlint/config-conventional': 21.2.0
+      '@commitlint/lint': 21.2.0
+      '@commitlint/load': 21.2.0(@types/node@26.1.2)(typescript@6.0.3)
+      '@commitlint/types': 21.2.0
+      jsonc-parser: 3.3.1
+    transitivePeerDependencies:
+      - '@types/node'
+      - typescript
+
   '@santi020k/eslint-plugin-astro-doctor@1.2.2(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)(@typescript-eslint/parser@8.65.0(eslint@10.8.0(jiti@2.7.0))(typescript@6.0.3))(eslint-plugin-jsx-a11y@6.10.2(eslint@10.8.0(jiti@2.7.0)))(eslint@10.8.0(jiti@2.7.0))':
     dependencies:
       astro-eslint-parser: 3.0.0(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)(supports-color@8.1.1)
@@ -20134,7 +20156,7 @@ snapshots:
     dependencies:
       '@sentry/conventions': 0.16.0
 
-  '@sentry/node-core@10.68.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(@opentelemetry/instrumentation@0.220.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.10.0(@opentelemetry/api@1.9.1))':
+  '@sentry/node-core@10.68.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(@opentelemetry/instrumentation@0.220.0(@opentelemetry/api@1.9.1)(supports-color@8.1.1))(@opentelemetry/sdk-trace-base@2.10.0(@opentelemetry/api@1.9.1))':
     dependencies:
       '@sentry/conventions': 0.16.0
       '@sentry/core': 10.68.0
@@ -20143,19 +20165,19 @@ snapshots:
     optionalDependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/core': 2.10.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/instrumentation': 0.220.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/instrumentation': 0.220.0(@opentelemetry/api@1.9.1)(supports-color@8.1.1)
       '@opentelemetry/sdk-trace-base': 2.10.0(@opentelemetry/api@1.9.1)
 
-  '@sentry/node@10.68.0(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))':
+  '@sentry/node@10.68.0(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(supports-color@8.1.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/instrumentation': 0.220.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/instrumentation': 0.220.0(@opentelemetry/api@1.9.1)(supports-color@8.1.1)
       '@opentelemetry/sdk-trace-base': 2.10.0(@opentelemetry/api@1.9.1)
       '@sentry/conventions': 0.16.0
       '@sentry/core': 10.68.0
-      '@sentry/node-core': 10.68.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(@opentelemetry/instrumentation@0.220.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.10.0(@opentelemetry/api@1.9.1))
+      '@sentry/node-core': 10.68.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(@opentelemetry/instrumentation@0.220.0(@opentelemetry/api@1.9.1)(supports-color@8.1.1))(@opentelemetry/sdk-trace-base@2.10.0(@opentelemetry/api@1.9.1))
       '@sentry/opentelemetry': 10.68.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.10.0(@opentelemetry/api@1.9.1))
-      '@sentry/server-utils': 10.68.0
+      '@sentry/server-utils': 10.68.0(supports-color@8.1.1)
       import-in-the-middle: 3.3.2
     transitivePeerDependencies:
       - '@opentelemetry/core'
@@ -20170,10 +20192,10 @@ snapshots:
       '@sentry/conventions': 0.16.0
       '@sentry/core': 10.68.0
 
-  '@sentry/server-utils@10.68.0':
+  '@sentry/server-utils@10.68.0(supports-color@8.1.1)':
     dependencies:
       '@apm-js-collab/code-transformer-bundler-plugins': 0.7.1
-      '@apm-js-collab/tracing-hooks': 0.13.0
+      '@apm-js-collab/tracing-hooks': 0.13.0(supports-color@8.1.1)
       '@sentry/conventions': 0.16.0
       '@sentry/core': 10.68.0
       meriyah: 6.1.4
@@ -24681,7 +24703,7 @@ snapshots:
       nth-check: 2.1.1
       postcss-selector-parser: 7.1.4
       semver: 7.8.5
-      vue-eslint-parser: 10.4.1(eslint@10.8.0(jiti@2.7.0))
+      vue-eslint-parser: 10.4.1(eslint@10.8.0(jiti@2.7.0))(supports-color@8.1.1)
       xml-name-validator: 5.0.0
     optionalDependencies:
       '@stylistic/eslint-plugin': 5.10.0(eslint@10.8.0(jiti@2.7.0))
@@ -24692,7 +24714,7 @@ snapshots:
       aria-query: 5.3.2
       eslint: 10.8.0(jiti@2.7.0)
       globals: 17.8.0
-      vue-eslint-parser: 10.4.1(eslint@10.8.0(jiti@2.7.0))
+      vue-eslint-parser: 10.4.1(eslint@10.8.0(jiti@2.7.0))(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -26642,10 +26664,10 @@ snapshots:
 
   lighthouse-stack-packs@1.12.3: {}
 
-  lighthouse@13.4.1(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(yauzl@3.4.0):
+  lighthouse@13.4.1(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(supports-color@8.1.1)(yauzl@3.4.0):
     dependencies:
       '@paulirish/trace_engine': 0.0.65
-      '@sentry/node': 10.68.0(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))
+      '@sentry/node': 10.68.0(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(supports-color@8.1.1)
       axe-core: 4.12.1
       chrome-launcher: 1.2.1(supports-color@8.1.1)
       configstore: 7.1.0
@@ -29526,7 +29548,7 @@ snapshots:
 
   require-from-string@2.0.2: {}
 
-  require-in-the-middle@8.0.1:
+  require-in-the-middle@8.0.1(supports-color@8.1.1):
     dependencies:
       debug: 4.4.3(supports-color@8.1.1)
       module-details-from-path: 1.0.4
@@ -31684,7 +31706,7 @@ snapshots:
 
   vue-devtools-stub@0.1.0: {}
 
-  vue-eslint-parser@10.4.1(eslint@10.8.0(jiti@2.7.0)):
+  vue-eslint-parser@10.4.1(eslint@10.8.0(jiti@2.7.0))(supports-color@8.1.1):
     dependencies:
       debug: 4.4.3(supports-color@8.1.1)
       eslint: 10.8.0(jiti@2.7.0)

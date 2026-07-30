@@ -240,7 +240,11 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
       extensions: [Extension.BestPractices]
     })
 
-    const noConsoleValue = getEffectiveRuleValue(config, 'no-console')
+    const noConsoleValue = getEffectiveRuleValue(
+      config,
+      'no-console',
+      ['eslint-config-basic/scripts-overrides']
+    )
 
     expect(noConsoleValue).toBe('warn')
 

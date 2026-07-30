@@ -1,7 +1,7 @@
 /* eslint-disable no-console -- CLI handlers own user-facing terminal output */
 /* eslint-disable complexity -- report builders intentionally cover compatibility and config-source branches */
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
-import { createRequire } from 'node:module'
+import { createRequire, findPackageJSON } from 'node:module'
 import { basename, dirname, join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 
@@ -31,6 +31,28 @@ interface FlatConfigEntry {
 
 interface ProjectEslint {
   calculateConfigForFile: (filePath: string) => Promise<unknown>
+  lintFiles: (patterns: string[]) => Promise<LintResult[]>
+}
+
+interface LintResult {
+  filePath: string
+  messages: {
+    column?: number
+    endColumn?: number
+    endLine?: number
+    line?: number
+    message: string
+    ruleId: null | string
+  }[]
+}
+
+interface RuleDiagnostic {
+  column: null | number
+  endColumn: null | number
+  endLine: null | number
+  file: string
+  line: null | number
+  message: string
 }
 
 type ProjectEslintConstructor = new(options: { cwd: string }) => ProjectEslint
@@ -49,6 +71,9 @@ const CONFIG_FILENAMES = [
   'eslint.config.mts',
   'eslint.config.cts'
 ]
+
+const BASIC_PACKAGE_NAME = '@santi020k/eslint-config-basic'
+const FULL_PACKAGE_NAME = '@santi020k/eslint-config-full'
 
 const RULE_PACKAGE_HINTS: Partial<Record<string, string>> = {
   '@angular-eslint': '@santi020k/eslint-config-angular',
@@ -136,6 +161,31 @@ const getPackageHint = (rule: string): null | string => {
   return RULE_PACKAGE_HINTS[scopedPrefix] ?? RULE_PACKAGE_HINTS[prefix] ?? null
 }
 
+const getRuleDiagnostics = async (
+  eslint: ProjectEslint,
+  file: string,
+  rule: string
+): Promise<RuleDiagnostic[]> => {
+  if (rule !== 'complexity') return []
+
+  try {
+    const results = await eslint.lintFiles([file])
+
+    return results.flatMap(result => result.messages
+      .filter(message => message.ruleId === rule)
+      .map(message => ({
+        column: message.column ?? null,
+        endColumn: message.endColumn ?? null,
+        endLine: message.endLine ?? null,
+        file: result.filePath,
+        line: message.line ?? null,
+        message: message.message
+      })))
+  } catch {
+    return []
+  }
+}
+
 export const handleExplainRule = async (
   cwd: string = process.cwd(),
   options: ExplainRuleOptions
@@ -146,6 +196,7 @@ export const handleExplainRule = async (
   const effective = await eslint.calculateConfigForFile(file) as null | { rules?: Record<string, unknown> }
   const effectiveValue = effective?.rules?.[options.rule]
   const entries = await loadConfigEntries(configPath)
+  const diagnostics = await getRuleDiagnostics(eslint, file, options.rule)
 
   const sources = entries.flatMap((entry, index) => {
     if (!entry.rules || !Object.hasOwn(entry.rules, options.rule)) return []
@@ -160,6 +211,7 @@ export const handleExplainRule = async (
 
   const payload = {
     configFile: configPath ? basename(configPath) : null,
+    diagnostics,
     effective: effectiveValue ?? null,
     enabled: effectiveValue !== undefined && isRuleEnabled(effectiveValue),
     file,
@@ -179,11 +231,21 @@ export const handleExplainRule = async (
       `- Effective value: ${JSON.stringify(payload.effective)}`,
       `- Enabled: ${payload.enabled ? 'yes' : 'no'}`,
       `- Likely package: ${payload.packageHint ?? 'core or custom config'}`,
-      `- Defining entries: ${payload.sources.length}`
+      `- Defining entries: ${payload.sources.length}`,
+      ...(payload.diagnostics.length > 0 ?
+        [`- Current findings: ${payload.diagnostics.length}`] :
+        [])
     ].join('\n'))
 
     for (const source of payload.sources) {
       console.log(`  - ${source.name}: ${JSON.stringify(source.value)}`)
+    }
+
+    for (const diagnostic of payload.diagnostics) {
+      console.log(
+        `  - ${diagnostic.file}:${diagnostic.line ?? '?'}:${diagnostic.column ?? '?'} ` +
+        diagnostic.message
+      )
     }
   }
 
@@ -208,11 +270,23 @@ const getDependencyVersions = (manifest: null | Record<string, unknown>): Record
 }
 
 const readResolvedManifest = (
-  projectRequire: NodeJS.Require,
+  basePath: string,
   packageName: string
 ): null | ResolvedPackageManifest => {
   try {
-    let directory = dirname(projectRequire.resolve(packageName))
+    const manifestPath = findPackageJSON(packageName, pathToFileURL(basePath))
+
+    const manifest = manifestPath ?
+      readJson(manifestPath) as null | PackageManifest :
+      null
+
+    if (manifestPath && manifest?.name === packageName) return { manifest, path: manifestPath }
+  } catch {
+    // Fall through for runtimes where package-JSON resolution is unavailable.
+  }
+
+  try {
+    let directory = dirname(createRequire(basePath).resolve(packageName))
 
     for (let depth = 0; depth < 6; depth++) {
       const manifestPath = join(directory, 'package.json')
@@ -247,9 +321,9 @@ const readWorkspaceManifest = (cwd: string, packageName: string): null | Resolve
 }
 
 export const createCompatibilityReport = (cwd: string = process.cwd()) => {
-  const rootManifest = readJson(join(cwd, 'package.json'))
+  const rootManifestPath = join(cwd, 'package.json')
+  const rootManifest = readJson(rootManifestPath)
   const declared = getDependencyVersions(rootManifest)
-  const projectRequire = createRequire(join(cwd, 'package.json'))
   const consumerNodeRange = (rootManifest as null | PackageManifest)?.engines?.node ?? null
 
   const configPackages = Object.keys(declared)
@@ -258,15 +332,19 @@ export const createCompatibilityReport = (cwd: string = process.cwd()) => {
 
   const runtimeVersions = {
     consumerNodeRange,
-    eslint: readResolvedManifest(projectRequire, 'eslint')?.manifest.version ?? null,
+    eslint: readResolvedManifest(rootManifestPath, 'eslint')?.manifest.version ?? null,
     node: process.versions.node,
-    typescript: readResolvedManifest(projectRequire, 'typescript')?.manifest.version ?? null
+    typescript: readResolvedManifest(rootManifestPath, 'typescript')?.manifest.version ?? null
   }
 
   const packages = configPackages.map(name => {
-    const resolvedPackage = readResolvedManifest(projectRequire, name) ?? readWorkspaceManifest(cwd, name)
+    const resolvedPackage = readResolvedManifest(rootManifestPath, name) ?? readWorkspaceManifest(cwd, name)
     const manifest = resolvedPackage?.manifest
     const issues: string[] = []
+
+    const aggregatedBasic = name === FULL_PACKAGE_NAME && resolvedPackage ?
+      readResolvedManifest(resolvedPackage.path, BASIC_PACKAGE_NAME) :
+      null
 
     if (!manifest) {
       issues.push('declared but not installed')
@@ -298,6 +376,13 @@ export const createCompatibilityReport = (cwd: string = process.cwd()) => {
     }
 
     return {
+      aggregatedBasic: name === FULL_PACKAGE_NAME ?
+        {
+          name: BASIC_PACKAGE_NAME,
+          resolved: aggregatedBasic?.manifest.version ?? null,
+          resolvedPath: aggregatedBasic?.path ?? null
+        } :
+        null,
       declared: declared[name],
       issues,
       name,
@@ -336,6 +421,14 @@ export const handleCompatibility = (
         (item.resolvedPath ? ` at ${item.resolvedPath}` : '') +
         (item.issues.length > 0 ? ` (${item.issues.join('; ')})` : '')
       )
+
+      if (item.aggregatedBasic) {
+        console.log(
+          `  - Composer ${item.aggregatedBasic.name}: ` +
+          (item.aggregatedBasic.resolved ?? 'not resolved') +
+          (item.aggregatedBasic.resolvedPath ? ` at ${item.aggregatedBasic.resolvedPath}` : '')
+        )
+      }
     }
   }
 

@@ -51,6 +51,7 @@ catalog:
   '@nuxt/eslint-plugin': ^1.16.0
   '@playwright/test': ^1.62.0
   '@resvg/resvg-js': ^2.6.2
+  '@santi020k/commitprompt': ^1.0.0
   '@santi020k/eslint-plugin-astro-doctor': ^1.2.2
   '@stencil/eslint-plugin': ^1.4.0
   '@stylistic/eslint-plugin': ^5.10.0
@@ -195,6 +196,7 @@ minimumReleaseAgeExclude:
   - '@devframes/hub@0.7.14'
   - '@devframes/json-render@0.7.14'
   - devframe@0.7.14
+  - '@santi020k/commitprompt@1.0.0'
 
 patchedDependencies:
   brace-expansion@5.0.8: patches/brace-expansion@5.0.8.patch

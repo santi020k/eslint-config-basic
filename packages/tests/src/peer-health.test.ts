@@ -1,4 +1,4 @@
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs'
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
@@ -88,6 +88,50 @@ describe('peer health policy', () => {
     expect(report.actionable).toEqual([])
     expect(report.accepted).toHaveLength(1)
     expect(report.accepted[0]?.project).toBe('.')
+    expect(report.accepted[0]?.owner).toBe('packages/astro')
+  })
+
+  test('attributes Full transitive peer warnings to the owning config package', () => {
+    const cwd = createTempProject()
+    const fullPackageDir = join(cwd, 'node_modules', '@santi020k', 'eslint-config-full')
+
+    mkdirSync(fullPackageDir, { recursive: true })
+    writeFileSync(join(cwd, 'package.json'), JSON.stringify({
+      dependencies: {
+        '@santi020k/eslint-config-full': '^3.2.0'
+      },
+      name: 'full-peer-health-test'
+    }))
+    writeFileSync(join(fullPackageDir, 'package.json'), JSON.stringify({
+      dependencies: {
+        '@santi020k/eslint-config-astro': '^3.2.0'
+      },
+      name: '@santi020k/eslint-config-full'
+    }))
+
+    const report = createPeerHealthReport(cwd, {
+      '.': {
+        bad: {
+          eslint: [{
+            foundVersion: '10.8.0',
+            parents: [{ name: '@santi020k/eslint-config-astro' }],
+            wantedRange: '^8 || ^9'
+          }]
+        }
+      }
+    }, {
+      accepted: [{
+        introducedBy: '@santi020k/eslint-config-astro',
+        kind: 'incompatible',
+        owner: 'packages/astro',
+        peer: 'eslint',
+        removalCondition: 'Remove after upstream support.',
+        wantedRange: '^8 || ^9'
+      }]
+    })
+
+    expect(report.actionable).toEqual([])
+    expect(report.accepted[0]?.introducedBy).toBe('@santi020k/eslint-config-astro')
     expect(report.accepted[0]?.owner).toBe('packages/astro')
   })
 

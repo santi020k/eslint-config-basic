@@ -34,11 +34,14 @@ export const extractConfigNames = (config: readonly TSESLint.FlatConfig.Config[]
  */
 export const getEffectiveRuleValue = (
   config: readonly TSESLint.FlatConfig.Config[],
-  ruleName: string
+  ruleName: string,
+  excludedConfigNames: string[] = []
 ): unknown => {
   let value: unknown
 
   for (const entry of config) {
+    if (entry.name && excludedConfigNames.includes(entry.name)) continue
+
     const rules = entry.rules as Record<string, unknown> | undefined
 
     if (rules && ruleName in rules) {

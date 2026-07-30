@@ -351,6 +351,24 @@ This form satisfies `func-style`, `arrow-body-style`,
 `implicit-arrow-linebreak`, and `max-len` together and remains stable under
 autofix.
 
+Setup functions that return cleanup callbacks should use an explicit no-op
+result when setup cannot proceed:
+
+```ts
+const setup = (element: HTMLElement | null) => {
+  if (!element) return () => undefined
+
+  const listener = () => element.removeAttribute('data-active')
+
+  element.addEventListener('click', listener)
+
+  return () => element.removeEventListener('click', listener)
+}
+```
+
+This preserves the cleanup contract without an empty callback and keeps the
+setup function in the preferred expression style.
+
 ## Tailwind Options
 
 Tailwind is auto-detected when the project depends on Tailwind packages. Use `tailwind` when the entry point or project-specific class ignores need to be explicit:

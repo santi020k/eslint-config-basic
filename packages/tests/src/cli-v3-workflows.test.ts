@@ -75,6 +75,29 @@ const writeFakeEslint = (
   )
 }
 
+const writeFakeTypeScript = (
+  cwd: string,
+  diagnostics: string[],
+  status = 2
+): void => {
+  const packageDir = join(cwd, 'node_modules', 'typescript')
+
+  mkdirSync(join(packageDir, 'bin'), { recursive: true })
+  writeFileSync(
+    join(packageDir, 'package.json'),
+    JSON.stringify({
+      bin: { tsc: './bin/tsc.js' },
+      name: 'typescript',
+      version: '6.0.3'
+    })
+  )
+  writeFileSync(
+    join(packageDir, 'bin', 'tsc.js'),
+    `process.stdout.write(${JSON.stringify(`${diagnostics.join('\n')}\n`)})\n` +
+    `process.exitCode = ${status}\n`
+  )
+}
+
 const writeFakePackage = (
   cwd: string,
   name: string,
@@ -954,6 +977,34 @@ describe('preset adoption', () => {
     expect(output).toContain('Compatibility output preserves effective configuration, not current source behavior.')
   })
 
+  test('elevates TypeScript module-resolution failures before unsafe lint debt', async () => {
+    const cwd = createTempProject()
+
+    writeFakeEslint(cwd, { '@typescript-eslint/no-unsafe-assignment': 'error' })
+    writeFakeTypeScript(cwd, [
+      'src/server.ts(2,24): error TS2307: Cannot find module \'vscode-languageserver/node.js\' or its corresponding type declarations.',
+      'src/server.ts(4,7): error TS2322: Type \'string\' is not assignable to type \'number\'.'
+    ])
+    writeFileSync(join(cwd, 'tsconfig.json'), '{}\n')
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+
+    await handleExplainPreset(cwd, 'app', {
+      analyzeSource: true,
+      files: ['src/**/*.ts']
+    })
+
+    const output = logSpy.mock.calls.flat().join('\n')
+
+    expect(output).toContain('TypeScript preflight: failed with 2 diagnostics')
+    expect(output).toContain(
+      'tsconfig.json TS2307: Cannot find module \'vscode-languageserver/node.js\''
+    )
+    expect(output).not.toContain('TS2322: Type')
+    expect(output).toContain(
+      'Fix TypeScript compiler errors before reviewing cascading type-aware unsafe-rule findings.'
+    )
+  })
+
   test('retains explicit config overrides in the preset adoption target', async () => {
     const cwd = createTempProject()
 
@@ -1713,6 +1764,61 @@ describe('v3 project assistance', () => {
     ]))
   })
 
+  test('includes ESLint complexity counts for the requested file', async () => {
+    const cwd = createTempProject()
+    const diagnostic = {
+      column: 1,
+      endColumn: 2,
+      endLine: 18,
+      filePath: join(cwd, 'src', 'validator.ts'),
+      line: 3,
+      message: 'Function \'validate\' has a complexity of 12. Maximum allowed is 10.',
+      ruleId: 'complexity',
+      severity: 1
+    }
+
+    writeFakeEslint(cwd, { complexity: ['warn', 10] }, {
+      beforeFix: [{
+        errorCount: 0,
+        filePath: diagnostic.filePath,
+        messages: [
+          diagnostic,
+          { ...diagnostic, message: 'Unrelated finding', ruleId: 'max-depth' }
+        ],
+        warningCount: 2
+      }]
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+
+    await handleExplainRule(cwd, {
+      file: 'src/validator.ts',
+      json: true,
+      rule: 'complexity'
+    })
+
+    const payload = JSON.parse(String(logSpy.mock.calls[0]?.[0])) as {
+      diagnostics: {
+        line: number
+        message: string
+      }[]
+    }
+
+    expect(payload.diagnostics).toHaveLength(1)
+    expect(payload.diagnostics[0]?.line).toBe(3)
+    expect(payload.diagnostics[0]?.message).toContain('complexity of 12')
+
+    logSpy.mockClear()
+    await handleExplainRule(cwd, {
+      file: 'src/validator.ts',
+      rule: 'complexity'
+    })
+
+    expect(logSpy.mock.calls.flat().join('\n')).toContain(
+      'Current findings: 1\n  - ' +
+      `${diagnostic.filePath}:3:1 Function 'validate' has a complexity of 12`
+    )
+  })
+
   test('explains a missing core rule in text mode without a project config', async () => {
     const cwd = createTempProject()
 
@@ -1806,6 +1912,50 @@ describe('v3 project assistance', () => {
     }))
 
     expect(createCompatibilityReport(cwd).compatible).toBe(true)
+  })
+
+  test('reports the aggregate Full version and its resolved Basic composer version', () => {
+    const cwd = createTempProject({
+      devDependencies: {
+        '@santi020k/eslint-config-full': '^3.1.0'
+      },
+      name: 'test-project',
+      type: 'module'
+    })
+
+    writeFakePackage(cwd, '@santi020k/eslint-config-basic', { version: '3.2.0' })
+    writeFakePackage(cwd, '@santi020k/eslint-config-full', {
+      dependencies: {
+        '@santi020k/eslint-config-basic': '^3.1.0'
+      },
+      exports: {
+        '.': {
+          import: './index.js'
+        }
+      },
+      version: '3.1.0'
+    })
+
+    const report = createCompatibilityReport(cwd)
+    const fullPackage = report.packages.find(
+      item => item.name === '@santi020k/eslint-config-full'
+    )
+
+    expect(fullPackage).toMatchObject({
+      aggregatedBasic: {
+        name: '@santi020k/eslint-config-basic',
+        resolved: '3.2.0'
+      },
+      resolved: '3.1.0'
+    })
+
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+
+    handleCompatibility(cwd)
+
+    expect(logSpy.mock.calls.flat().join('\n')).toContain(
+      'Composer @santi020k/eslint-config-basic: 3.2.0'
+    )
   })
 
   test.each([

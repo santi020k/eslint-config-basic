@@ -1077,6 +1077,30 @@ describe('scripts-overrides block', () => {
 
     expect(scriptsBlock).toBeDefined()
     expect(scriptsBlock?.rules?.['n/no-unpublished-import']).toBe('off')
+    expect(scriptsBlock?.rules?.['n/no-process-exit']).toBe('off')
+    expect(scriptsBlock?.rules?.['no-console']).toBe('off')
+  })
+
+  test('includes manifest bin files without treating normal source as CLI code', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'eslint-config-cli-context-'))
+
+    try {
+      writeFileSync(join(root, 'package.json'), JSON.stringify({
+        bin: {
+          example: './bin/example.mjs'
+        },
+        name: 'cli-package'
+      }))
+
+      const config = await defineConfig({ detection: false, root })
+      const scriptsBlock = config.find(c => c.name === 'eslint-config-basic/scripts-overrides')
+
+      expect(scriptsBlock?.files).toContain('bin/example.mjs')
+      expect(scriptsBlock?.files).toContain('**/scripts/**/*.{js,mjs,cjs,ts,mts,cts}')
+      expect(scriptsBlock?.files).not.toContain('src/**/*.mjs')
+    } finally {
+      rmSync(root, { force: true, recursive: true })
+    }
   })
 
   test('includes security rule when Security extension is enabled', async () => {

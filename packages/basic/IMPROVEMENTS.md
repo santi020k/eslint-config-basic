@@ -251,7 +251,7 @@ Implemented:
   the late-override wrapper.
 - A lifecycle test verifies attachment after `defineConfig()` resolves.
 
-### Surface unresolved TypeScript modules as one root problem
+### Completed — Surface unresolved TypeScript modules as one root problem
 
 After formatting findings were reduced, type-aware linting produced a large
 cascade of `no-unsafe-*` findings and `no-redundant-type-constituents` errors in
@@ -277,7 +277,16 @@ This case also confirms that strict lint adoption can reveal genuine dependency
 API changes. The tooling should preserve that value while making the root cause
 prominent.
 
-### Add an end-to-end autofix adoption fixture
+`explain-preset --analyze-source` now runs the consumer-resolved TypeScript
+compiler with `--noEmit` for the root and detected/configured workspace
+tsconfigs. Its structured report records every checked config and promotes
+module, type-definition, and source-file resolution diagnostics ahead of the
+ESLint summary. Text output explicitly recommends fixing compiler errors before
+reviewing cascading type-aware unsafe-rule findings. Regression coverage uses a
+real child-process preflight and verifies that the root TS2307 diagnostic is
+prioritized over an unrelated downstream type error.
+
+### Completed — Add an end-to-end autofix adoption fixture
 
 Packed-consumer fixtures currently prove that generated configs load and lint
 known-good source. Add a deliberately old-style monorepo fixture that exercises
@@ -295,6 +304,19 @@ The test should capture the initial report, run autofix, resolve only explicitly
 documented manual findings, rerun autofix to prove convergence, then run lint,
 typecheck, and tests. This would catch rule conflicts that config snapshots and
 already-formatted fixtures cannot expose.
+
+The packed modular-consumer release check now includes deliberately old-style
+TypeScript application and Vitest sources, external snake-case schema fields,
+an Astro page with an inline script and generated code example, Tailwind classes
+under a scoped override, and a GitHub Actions workflow with empty event keys and
+embedded shell. It captures the initial `explain-preset --analyze-source`
+finding and autofix estimates, applies autofix once, requires a second
+`--fix-dry-run` pass to produce no output, then runs strict zero-warning lint,
+source and config typechecks, Vitest, peer health, and a frozen reinstall.
+The fixture performs one explicit manual adoption edit between analysis and
+autofix: an inline Astro client script stops using debug `console` output,
+demonstrating that correctness/context findings are reviewed instead of hidden
+by the formatting pass.
 
 ## Implemented for the next release
 

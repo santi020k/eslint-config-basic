@@ -52,13 +52,16 @@
     "prepare": "husky",
     "pre-commit": "lint-staged",
     "pre-push": "pnpm run lint && pnpm run lint:spell && pnpm run typecheck && turbo run test",
-    "commit": "node scripts/commit.mjs"
+    "commit": "commitprompt"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "catalog:",
     "@changesets/changelog-github": "catalog:",
     "@changesets/cli": "catalog:",
+    "@commitlint/cli": "catalog:",
+    "@commitlint/config-conventional": "catalog:",
     "@eslint/config-inspector": "catalog:",
+    "@santi020k/commitprompt": "catalog:",
     "@santi020k/eslint-config-basic": "workspace:^",
     "@types/node": "catalog:",
     "cspell": "catalog:",
@@ -71,9 +74,7 @@
     "turbo": "catalog:",
     "typedoc": "catalog:",
     "typedoc-plugin-markdown": "catalog:",
-    "typescript": "catalog:",
-    "@commitlint/cli": "catalog:",
-    "@commitlint/config-conventional": "catalog:"
+    "typescript": "catalog:"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,md,mdx,json,yaml,yml,toml,vue,svelte,astro}": [

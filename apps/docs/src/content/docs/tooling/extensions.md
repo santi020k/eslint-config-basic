@@ -49,6 +49,23 @@ The `Extension.BestPractices` pack adds four quality rules that don't require an
 - `complexity` (warn, max 10) — flags overly complex functions
 - `max-depth` (warn, max 4) — flags deeply nested blocks
 
+Refactor a complexity finding when branches describe separable work, repeated
+decisions, or deeply nested control flow. A validator or release transaction
+that deliberately runs independent checks to return one complete report can
+merit a narrow source-level directive instead. Keep that directive on the
+smallest function and explain why preserving the complete transaction is more
+useful than splitting it.
+
+To see the complexity ESLint counted for a file, run:
+
+```sh
+basic-eslint explain complexity --file src/validator.ts
+```
+
+The explanation includes each current `complexity` diagnostic and its source
+location. ESLint's diagnostic reports the calculated complexity and configured
+maximum.
+
 ### Boundaries
 
 The `Extension.Boundaries` pack adds dependency-free import guardrails:

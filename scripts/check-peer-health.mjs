@@ -22,6 +22,8 @@ const findDirectIntroducer = (cwd, manifest, parentName) => {
 
   if (direct.includes(parentName)) return parentName
 
+  if (ownerForIntroducer(parentName)) return parentName
+
   for (const packageName of direct.filter(name => name.startsWith('@santi020k/eslint-config-'))) {
     const packageManifestPath = join(cwd, 'node_modules', packageName, 'package.json')
 

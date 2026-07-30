@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url'
 
 import { angularConfig } from '@santi020k/eslint-config-angular'
 import astro from '@santi020k/eslint-config-astro'
-import { defineConfig, Format } from '@santi020k/eslint-config-basic'
+import { defineConfig, Format, Tool } from '@santi020k/eslint-config-basic'
 import { expoConfig } from '@santi020k/eslint-config-expo'
 import { honoConfig } from '@santi020k/eslint-config-hono'
 import { nestConfig } from '@santi020k/eslint-config-nest'
@@ -217,6 +217,33 @@ describe('Integration Tests', () => {
 
       expect(allowedResults[0].messages.map(message => message.ruleId)).not.toContain('camelcase')
       expect(rejectedResults[0].messages.map(message => message.ruleId)).toContain('camelcase')
+    })
+
+    test('should support explicit no-op cleanup factories without empty functions', async () => {
+      const config = await defineConfig({
+        detection: false,
+        tools: [],
+        typescript: 'syntax'
+      })
+      const source = [
+        'const setup = (element: HTMLElement | null) => {',
+        '  if (!element) return () => undefined',
+        '',
+        '  const listener = () => element.removeAttribute(\'data-active\')',
+        '',
+        '  element.addEventListener(\'click\', listener)',
+        '',
+        '  return () => element.removeEventListener(\'click\', listener)',
+        '}',
+        '',
+        'console.log(setup(document.querySelector(\'main\')))',
+        ''
+      ].join('\n')
+      const results = await lintText(source, config, 'cleanup-factory.ts')
+      const ruleIds = results[0].messages.map(message => message.ruleId)
+
+      expect(ruleIds).not.toContain('func-style')
+      expect(ruleIds).not.toContain('@typescript-eslint/no-empty-function')
     })
   })
 
@@ -490,11 +517,19 @@ describe('Integration Tests', () => {
   })
 
   describe('GitHub Actions YAML', () => {
-    test('should allow empty event keys while retaining other empty-value checks', async () => {
+    test.each([
+      {
+        label: 'YAML format',
+        options: { formats: [Format.Yaml], tools: [] }
+      },
+      {
+        label: 'GitHub Actions tool',
+        options: { formats: [], tools: [Tool.GithubActions] }
+      }
+    ])('should allow empty event keys with the $label', async ({ options }) => {
       const config = await defineConfig({
         detection: false,
-        formats: [Format.Yaml],
-        tools: [],
+        ...options,
         typescript: false
       })
       const workflowPath = join(FIXTURES_DIR, '.github/workflows/ci.yml')

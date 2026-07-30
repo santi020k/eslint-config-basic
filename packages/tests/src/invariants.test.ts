@@ -46,6 +46,10 @@ describe('Configuration invariants', () => {
       strict: true
     })
 
-    expect(getEffectiveRuleValue(config, 'no-console')).toBe('error')
+    expect(getEffectiveRuleValue(
+      config,
+      'no-console',
+      ['eslint-config-basic/scripts-overrides']
+    )).toBe('error')
   })
 })

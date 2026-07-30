@@ -1,3 +1,4 @@
+import { existsSync, readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -47,6 +48,31 @@ import { createDetectedFrameworkFlags, type FrameworkOptions } from './framework
 import { getIntegrationConfigs, getPrettierConfig } from './integrations.js'
 import { resolveFramework, resolvePreset } from './resolvers.js'
 import { buildTailwindSettingsConfig } from './tailwind.js'
+
+const SCRIPT_FILE_GLOBS = ['**/scripts/**/*.{js,mjs,cjs,ts,mts,cts}']
+
+const getCliEntryFiles = (rootDir: string): string[] => {
+  const manifestPath = join(rootDir, 'package.json')
+
+  if (!existsSync(manifestPath)) return SCRIPT_FILE_GLOBS
+
+  try {
+    const manifest = JSON.parse(readFileSync(manifestPath, 'utf8')) as {
+      bin?: Record<string, string> | string
+    }
+
+    const binFiles = typeof manifest.bin === 'string' ?
+      [manifest.bin] :
+      Object.values(manifest.bin ?? {})
+
+    return [...new Set([
+      ...SCRIPT_FILE_GLOBS,
+      ...binFiles.map(file => file.replace(/^\.\//, ''))
+    ])]
+  } catch {
+    return SCRIPT_FILE_GLOBS
+  }
+}
 
 // Lazy framework factories.
 export {
@@ -461,7 +487,7 @@ interface BuildConfigsParams {
 const buildEslintConfigs = async (params: BuildConfigsParams): Promise<FlatConfigArray> => {
   const {
     astroOptions, defaultIgnores, gitignoreConfig, nextMode, resolvedFrameworks,
-    resolvedTypescript, rootDir: _rootDir, runtime, runtimeCoreConfig, tailwindOptions,
+    resolvedTypescript, rootDir, runtime, runtimeCoreConfig, tailwindOptions,
     testingFiles, tsconfigRootDir, uniqueExtensions, uniqueFormats, uniqueLibraries,
     uniqueTesting, uniqueTools, userIgnores
   } = params
@@ -558,10 +584,12 @@ const buildEslintConfigs = async (params: BuildConfigsParams): Promise<FlatConfi
       }
     },
     {
-      files: ['**/scripts/**/*.{js,mjs,cjs,ts,mts,cts}'],
+      files: getCliEntryFiles(rootDir),
       name: 'eslint-config-basic/scripts-overrides',
       rules: {
         'n/no-unpublished-import': 'off',
+        'n/no-process-exit': 'off',
+        'no-console': 'off',
         ...(uniqueExtensions.includes(Extension.Security) ? { 'security/detect-non-literal-fs-filename': 'off' } : {})
       }
     },

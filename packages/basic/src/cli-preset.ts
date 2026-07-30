@@ -2,7 +2,7 @@
 /* eslint-disable complexity -- report comparison and formatting intentionally cover multiple result branches */
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { createRequire, findPackageJSON } from 'node:module'
-import { extname, join, relative } from 'node:path'
+import { dirname, extname, join, relative } from 'node:path'
 import { pathToFileURL } from 'node:url'
 
 import {
@@ -12,6 +12,7 @@ import {
   Preset
 } from '@santi020k/eslint-config-core'
 
+import { type CommandRunner, defaultCommandRunner } from './cli-workflows.js'
 import { type DefineConfigMetadata, getDefineConfigMetadata } from './define-config-metadata.js'
 import { defineConfig } from './index.js'
 import { isMissingRequestedPackage } from './optional-package-errors.js'
@@ -60,6 +61,7 @@ export interface ExplainPresetOptions {
 interface CreatePresetReportOptions {
   analyzeSource?: boolean
   sourceFiles?: string[]
+  typescriptRunner?: CommandRunner
 }
 
 const PRESETS = new Set<string>(Object.values(Preset))
@@ -389,10 +391,140 @@ const readOriginalSource = (filePath: string): string | undefined => {
   }
 }
 
+const TYPESCRIPT_CONFIG_FILENAMES = [
+  'tsconfig.json',
+  'tsconfig.base.json',
+  'tsconfig.app.json',
+  'tsconfig.node.json',
+  'tsconfig.eslint.json'
+]
+
+const TYPESCRIPT_ROOT_DIAGNOSTIC_CODES = new Set([
+  'TS2307',
+  'TS2688',
+  'TS2792',
+  'TS6053'
+])
+
+const resolveTypeScriptCli = (cwd: string): null | string => {
+  try {
+    const projectRequire = createRequire(join(cwd, 'package.json'))
+    const packagePath = projectRequire.resolve('typescript/package.json')
+
+    const manifest = JSON.parse(readFileSync(packagePath, 'utf8')) as {
+      bin?: Record<string, string> | string
+    }
+
+    const bin = typeof manifest.bin === 'string' ? manifest.bin : manifest.bin?.tsc
+
+    return bin ? join(dirname(packagePath), bin) : null
+  } catch {
+    return null
+  }
+}
+
+const getTypeScriptConfigs = (
+  cwd: string,
+  configuredProjects: string[]
+): string[] => {
+  const detectedProjects = Object.keys(detectProjectOptions(cwd).projects ?? {})
+  const projectRoots = [...new Set([...detectedProjects, ...configuredProjects])]
+
+  const roots = [
+    cwd,
+    ...projectRoots.map(project => join(cwd, project))
+  ]
+
+  return [...new Set(roots.flatMap(root => {
+    const config = TYPESCRIPT_CONFIG_FILENAMES.find(file => existsSync(join(root, file)))
+
+    return config ? [join(root, config)] : []
+  }))]
+}
+
+interface TypeScriptDiagnostic {
+  code: string
+  config: string
+  message: string
+}
+
+const parseTypeScriptDiagnostics = (
+  cwd: string,
+  config: string,
+  output: string
+): TypeScriptDiagnostic[] => output
+  .split(/\r?\n/)
+  .flatMap(line => {
+    const match = /\berror (TS\d+):\s*(.+)$/.exec(line)
+
+    if (!match) return []
+
+    return [{
+      code: match[1],
+      config: relative(cwd, config),
+      message: match[2]
+    }]
+  })
+
+export const createTypeScriptPreflight = (
+  cwd: string,
+  configuredProjects: string[] = [],
+  runner: CommandRunner = defaultCommandRunner
+) => {
+  const executable = resolveTypeScriptCli(cwd)
+  const configs = getTypeScriptConfigs(cwd, configuredProjects)
+
+  if (!executable || configs.length === 0) {
+    return {
+      configs: [],
+      diagnosticCount: 0,
+      rootDiagnostics: [] as TypeScriptDiagnostic[],
+      status: 'skipped' as const
+    }
+  }
+
+  const diagnostics: TypeScriptDiagnostic[] = []
+
+  const results = configs.map(config => {
+    const result = runner(process.execPath, [
+      executable,
+      '--noEmit',
+      '--pretty',
+      'false',
+      '--project',
+      config
+    ], cwd)
+
+    diagnostics.push(...parseTypeScriptDiagnostics(
+      cwd,
+      config,
+      `${result.stdout}\n${result.stderr}`
+    ))
+
+    return {
+      config: relative(cwd, config),
+      status: result.status
+    }
+  })
+
+  const rootDiagnostics = diagnostics.filter(
+    diagnostic => TYPESCRIPT_ROOT_DIAGNOSTIC_CODES.has(diagnostic.code)
+  )
+
+  return {
+    configs: results,
+    diagnosticCount: diagnostics.length,
+    rootDiagnostics: (rootDiagnostics.length > 0 ? rootDiagnostics : diagnostics).slice(0, 20),
+    status: results.some(result => result.status !== 0) ? 'failed' as const : 'passed' as const
+  }
+}
+
 const analyzePresetSource = async (
   cwd: string,
   selectedConfig: unknown,
-  sourceFiles: string[]
+  sourceFiles: string[],
+  configuredProjects: string[],
+  typescriptRunner: CommandRunner
 ) => {
   const lintTargets = sourceFiles.length > 0 ? sourceFiles : ['.']
   const lintResults = await loadProjectEslint(cwd, selectedConfig).lintFiles(lintTargets)
@@ -465,6 +597,7 @@ const analyzePresetSource = async (
       count: nonFormattingErrors,
       rules: [...nonFormattingErrorRules].sort()
     },
+    typescriptPreflight: createTypeScriptPreflight(cwd, configuredProjects, typescriptRunner),
     totals: {
       errors: lintResults.reduce((total, result) => total + result.errorCount, 0),
       files: lintResults.length,
@@ -497,6 +630,21 @@ const formatSourceAnalysis = (
     analysis.autofixPreview.remainingFixableRules.join(', ') :
     'none'
 
+  const typescriptLines = analysis.typescriptPreflight.status === 'failed' ?
+    [
+      `- TypeScript preflight: failed with ${analysis.typescriptPreflight.diagnosticCount} diagnostics`,
+      ...analysis.typescriptPreflight.rootDiagnostics.map(diagnostic => (
+        `  - ${diagnostic.config} ${diagnostic.code}: ${diagnostic.message}`
+      )),
+      '- Fix TypeScript compiler errors before reviewing cascading type-aware unsafe-rule findings.'
+    ] :
+    [
+      `- TypeScript preflight: ${analysis.typescriptPreflight.status}` +
+      (analysis.typescriptPreflight.status === 'passed' ?
+        ` (${analysis.typescriptPreflight.configs.length} configs)` :
+        ' (TypeScript or a supported tsconfig was not found)')
+    ]
+
   return [
     '',
     'Source analysis (selected preset, no files written):',
@@ -509,7 +657,8 @@ const formatSourceAnalysis = (
     `about ${analysis.autofixPreview.estimatedChangedLines} changed lines`,
     `- Findings remaining after preview: ${analysis.autofixPreview.remainingErrors} errors, ` +
     `${analysis.autofixPreview.remainingWarnings} warnings`,
-    `- Fixable rules still remaining: ${remainingFixableRules}`
+    `- Fixable rules still remaining: ${remainingFixableRules}`,
+    ...typescriptLines
   ]
 }
 
@@ -615,7 +764,13 @@ export const createPresetReport = async (
   )
 
   const sourceAnalysis = options.analyzeSource ?
-    await analyzePresetSource(cwd, selectedConfig, options.sourceFiles ?? []) :
+    await analyzePresetSource(
+      cwd,
+      selectedConfig,
+      options.sourceFiles ?? [],
+      Object.keys(resolvablePresetOptions.projects ?? {}),
+      options.typescriptRunner ?? defaultCommandRunner
+    ) :
     null
 
   return {

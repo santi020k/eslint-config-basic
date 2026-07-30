@@ -33,3 +33,20 @@ Keep the JavaScript-oriented line-length rule out of Astro documents so
 declarative tags, SVG path data, and embedded previews remain intact.
 Allow GitHub Actions event keys to use their valid null mapping shorthand while
 continuing to report unrelated empty values in workflow YAML.
+Show Full's resolved Basic composer version in compatibility output and require
+a Full changeset whenever an aggregated config package is released.
+Treat conventional `scripts/` files and manifest `bin` entries as scoped CLI
+entry points, allowing intentional terminal output and process termination
+without weakening reusable source modules.
+Enhance `basic-eslint explain complexity --file ...` with current
+rule-specific ESLint diagnostics, including the calculated complexity and
+source locations in text and JSON output.
+Run a non-writing TypeScript compiler preflight during preset source analysis,
+prioritizing root module-resolution failures before cascading unsafe-rule lint
+debt.
+Exercise packed-consumer adoption with deliberately old-style TypeScript,
+Astro, YAML, and test sources, requiring source analysis, autofix convergence,
+strict lint, typechecking, tests, peer health, and a frozen reinstall.
+Verify Full against minimum and latest ESLint/TypeScript support-matrix edges,
+retain companion-package ownership for transitive peer warnings, and document
+which aggregate dependencies are installed versus activated.

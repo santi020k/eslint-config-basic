@@ -37,6 +37,21 @@ family. The resolved Basic version is authoritative for composer behavior, even
 when Full has a different minor version; compatible v3 dependency ranges keep
 the aggregate working.
 
+## Support matrix
+
+| Dependency | Supported range | Packed-consumer release check |
+| :--- | :--- | :--- |
+| ESLint | `^10.0.0` | Exact `10.0.0` and the latest matching release |
+| TypeScript | `>=5.0.0` (optional) | Earliest published 5.x release (`5.0.2`) and the latest matching release |
+| Node.js | `>=22.19.0` | Package engines plus `compatibility` range validation |
+
+Both ESLint/TypeScript matrix edges must install Full, load the one-line
+recommended config, lint detected React source, resolve the actual Basic
+composer in `compatibility`, and pass peer health without unowned warnings.
+Peer warnings from dependencies that Full installs but detection does not
+activate are attributed to their owning companion package and tracked with an
+explicit removal condition; they are not presented as active framework support.
+
 Use it when the simplest install is more valuable than a smaller dependency
 tree. Use [`@santi020k/eslint-config-basic`](/packages/basic/) when audit
 surface, install time, or dependency ownership matters.

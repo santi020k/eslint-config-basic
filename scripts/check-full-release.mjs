@@ -37,7 +37,6 @@ export const checkFullRelease = cwd => {
   )
 
   const fullDependencies = Object.keys(fullManifest.dependencies ?? {})
-
   const changesetDir = join(cwd, '.changeset')
 
   const changesets = readdirSync(changesetDir)
