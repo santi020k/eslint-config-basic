@@ -96,8 +96,12 @@ jobs:
             ${{ runner.os }}-turbo-${{ matrix.node-version }}-
             ${{ runner.os }}-turbo-
       - run: pnpm install --frozen-lockfile
-      - name: Run affected package checks
+      - name: Run affected package checks (Node 22.x)
+        if: matrix.node-version == '22.x'
         run: pnpm exec turbo run build typecheck lint --affected --concurrency=50%
+      - name: Build affected packages (Node 24.x)
+        if: matrix.node-version == '24.x'
+        run: pnpm exec turbo run build --affected --concurrency=50%
       - name: Enforce test coverage thresholds (Node 22.x)
         if: matrix.node-version == '22.x'
         run: pnpm exec turbo run test:coverage --concurrency=50%
@@ -113,11 +117,48 @@ jobs:
       - name: Package metrics
         if: matrix.node-version == '22.x'
         run: pnpm run check:package-metrics
+
+  package-validation:
+    name: Affected package artifacts (Node 22.x)
+    if: github.event_name != 'pull_request' || github.head_ref != 'changeset-release/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    env:
+      CI_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+      CI_HEAD_SHA: ${{ github.sha }}
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+      TURBO_SCM_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+      TURBO_SCM_HEAD: ${{ github.sha }}
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Install pnpm
+        uses: pnpm/action-setup@v5
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22.x
+          cache: 'pnpm'
+      - name: Turborepo Cache
+        uses: actions/cache@v5
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-package-validation-22.x-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-22.x-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}
+            ${{ runner.os }}-turbo-package-validation-22.x-
+            ${{ runner.os }}-turbo-22.x-
+            ${{ runner.os }}-turbo-
+      - run: pnpm install --frozen-lockfile
+      - name: Build affected publishable packages
+        run: pnpm exec turbo run build --affected --concurrency=50%
       - name: Dry-run affected publish artifacts
-        if: matrix.node-version == '22.x'
         run: pnpm run check:publish-dry-run -- --allow-empty
       - name: Check affected published types (attw)
-        if: matrix.node-version == '22.x'
         run: pnpm run check:attw -- --allow-empty
 
   release-candidate:
