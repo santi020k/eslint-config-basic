@@ -12,7 +12,7 @@ export default defineConfig({
     timeout: 10_000
   },
   forbidOnly: isGithubCi,
-  fullyParallel: !isGithubCi,
+  fullyParallel: true,
   projects: [
     {
       name: 'chromium',
@@ -33,5 +33,5 @@ export default defineConfig({
     timeout: 120_000,
     url: previewURL
   },
-  workers: isGithubCi ? 1 : '50%'
+  workers: isGithubCi ? 2 : '50%'
 })
