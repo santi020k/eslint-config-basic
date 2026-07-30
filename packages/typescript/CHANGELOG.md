@@ -1,5 +1,11 @@
 # @santi020k/eslint-config-typescript
 
+## 3.1.1
+
+### Patch Changes
+
+- [#106](https://github.com/santi020k/eslint-config-basic/pull/106) [`a93a940`](https://github.com/santi020k/eslint-config-basic/commit/a93a9406d4e69d53f0e177c65b9aceeeec6ae1ba) Thanks [@santi020k](https://github.com/santi020k)! - Allow compatible `@santi020k/eslint-config-core` minor and patch releases instead of pinning TypeScript support to one exact core version.
+
 ## 3.1.0
 
 ### Minor Changes
