@@ -69,7 +69,10 @@ describe('peer health policy', () => {
         bad: {
           eslint: [{
             foundVersion: '10.8.0',
-            parents: [{ name: '@santi020k/eslint-config-astro' }],
+            parents: [
+              { name: '@santi020k/eslint-config-full' },
+              { name: '@santi020k/eslint-config-astro' }
+            ],
             wantedRange: '^8 || ^9'
           }]
         }

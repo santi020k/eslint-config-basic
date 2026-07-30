@@ -1958,6 +1958,40 @@ describe('v3 project assistance', () => {
     )
   })
 
+  test('rejects TypeScript versions outside an installed config package peer range', () => {
+    const cwd = createTempProject({
+      devDependencies: {
+        '@santi020k/eslint-config-full': '^3.2.0',
+        typescript: '^7.0.0'
+      },
+      name: 'test-project',
+      type: 'module'
+    })
+
+    writeFakePackage(cwd, '@santi020k/eslint-config-basic', { version: '3.2.0' })
+    writeFakePackage(cwd, '@santi020k/eslint-config-full', {
+      dependencies: {
+        '@santi020k/eslint-config-basic': '^3.2.0'
+      },
+      peerDependencies: {
+        eslint: '^10.0.0',
+        typescript: '>=5.0.0 <7.0.0'
+      },
+      version: '3.2.0'
+    })
+    writeFakePackage(cwd, 'typescript', { version: '7.0.2' })
+
+    const report = createCompatibilityReport(cwd)
+    const fullPackage = report.packages.find(
+      item => item.name === '@santi020k/eslint-config-full'
+    )
+
+    expect(report.compatible).toBe(false)
+    expect(fullPackage?.issues).toContain(
+      'requires typescript >=5.0.0 <7.0.0, resolved 7.0.2'
+    )
+  })
+
   test.each([
     ['>=22.18.0', '>=22.19.0', '>=22.19.0'],
     [

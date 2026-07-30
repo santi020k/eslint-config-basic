@@ -23,7 +23,7 @@ even when the Full package has a different minor version.
 | Dependency | Supported range | Release verification |
 | --- | --- | --- |
 | ESLint | `^10.0.0` | Exact `10.0.0` and the latest matching release |
-| TypeScript | `>=5.0.0` (optional) | Earliest published 5.x release (`5.0.2`) and the latest matching release |
+| TypeScript | `>=5.0.0 <7.0.0` (optional) | Earliest published 5.x release (`5.0.2`) and the latest matching release |
 | Node.js | `>=22.19.0` | Enforced by package engines and compatibility checks |
 
 The packed-consumer release gate installs both ESLint/TypeScript matrix edges,

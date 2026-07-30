@@ -4,6 +4,12 @@
 '@santi020k/eslint-config-core': patch
 '@santi020k/eslint-config-formats': patch
 '@santi020k/eslint-config-full': patch
+'@santi020k/eslint-config-extensions': patch
+'@santi020k/eslint-config-integrations': patch
+'@santi020k/eslint-config-libraries': patch
+'@santi020k/eslint-config-testing': patch
+'@santi020k/eslint-config-tools': patch
+'@santi020k/eslint-config-typescript': patch
 ---
 
 Keep root untyped TypeScript file patterns effective in detected workspace
@@ -50,3 +56,5 @@ strict lint, typechecking, tests, peer health, and a frozen reinstall.
 Verify Full against minimum and latest ESLint/TypeScript support-matrix edges,
 retain companion-package ownership for transitive peer warnings, and document
 which aggregate dependencies are installed versus activated.
+Reject TypeScript 7 during compatibility resolution because the current
+typescript-eslint parser supports TypeScript 5 and 6.

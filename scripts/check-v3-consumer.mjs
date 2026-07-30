@@ -136,7 +136,7 @@ try {
 
   const fullSupportMatrix = [
     { eslint: '10.0.0', name: 'minimum', typescript: '5.0.2' },
-    { eslint: '^10.0.0', name: 'latest', typescript: '>=5.0.0' }
+    { eslint: '^10.0.0', name: 'latest', typescript: '>=5.0.0 <7.0.0' }
   ]
 
   for (const support of fullSupportMatrix) {

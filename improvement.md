@@ -659,7 +659,7 @@ Possible improvements:
   validators, and CLI transactions.
 - Have `explain complexity --file ...` show the counted branches.
 
-The extensions guide now distinguishes refactorable branching from deliberate
+The extensions guide now distinguishes branching that can be refactored from deliberate
 complete-report validators and documents how to keep any exception narrow and
 reasoned. `basic-eslint explain complexity --file ...` also lints the requested
 file and reports ESLint's calculated complexity findings with their source
@@ -772,6 +772,100 @@ The JSON/package-script linting also strengthened root and package lint commands
 with `--max-warnings=0`. This is desirable for CI consistency, but it is a
 surprising semantic autofix and should be called out explicitly in dry-run or
 migration output.
+
+## Observatory migration follow-up (2026-07-30)
+
+- Consumer: `../observatory`
+- Stack: Astro 7.1.3, Hono 4.12.32, TypeScript 6.0.3, ESLint 10.7.0
+- Composer: `@santi020k/eslint-config-basic@3.2.0`
+- Companion Astro config: `@santi020k/eslint-config-astro@3.1.0`
+- Final consumer config:
+
+  ```ts
+  import { defineConfig } from '@santi020k/eslint-config-basic'
+
+  export default await defineConfig()
+  ```
+
+### Open — Astro top-level redirects crash `no-misused-promises`
+
+Astro pages legitimately terminate front matter with statements such as:
+
+```ts
+if (response.status === 401) return Astro.redirect('/login/')
+```
+
+With the zero-argument auto-detected configuration, ESLint aborted instead of
+reporting a diagnostic:
+
+```text
+Non-null Assertion Failed: Expected node to have a parent.
+Rule: "@typescript-eslint/no-misused-promises"
+```
+
+The failure reproduced on every page containing a top-level Astro redirect,
+including a page whose entire front matter was one return statement. It blocks
+both lint and autofix. The consumer uses a pnpm patch that disables only
+`@typescript-eslint/no-misused-promises` for real `**/*.astro` source files.
+
+Possible improvements:
+
+- Disable this rule for Astro source until the parser and TypeScript rule agree
+  on parent pointers for Astro's top-level return nodes.
+- Add fixtures for conditional and unconditional `return Astro.redirect(...)`.
+- Assert that both normal lint and `--fix` complete without throwing.
+- Keep the rule enabled for ordinary TypeScript and Astro virtual client scripts.
+
+### Open — The published Astro package lacks current virtual-script safeguards
+
+The 3.1.0 package installed from npm did not include the current source
+configuration's `@stylistic/indent`, unused-variable, and `no-undef` safeguards
+for Astro virtual scripts. Autofix consequently emitted circular-fix warnings
+and unstable indentation in inline scripts. Applying the current source rules
+as a package patch made autofix converge.
+
+Possible improvements:
+
+- Publish the current Astro package changes and add packed-artifact assertions
+  for every virtual-script safeguard.
+- Run repeated autofix tests against the packed npm artifact, not only workspace
+  source imports.
+- Have `compatibility` identify when Basic is newer than an installed companion
+  package whose fixes it expects.
+
+### Open — `/recommended` is valid but `doctor` misdiagnoses project scoping
+
+This supported zero-config form loaded and linted the monorepo:
+
+```ts
+export { default } from '@santi020k/eslint-config-basic/recommended'
+```
+
+However, `basic-eslint doctor --json` warned:
+
+```text
+Workspace packages were detected, but the root config does not use `projects` scoping.
+```
+
+Switching to an explicit zero-argument `defineConfig()` call removed the warning
+without changing consumer settings. The validation logic recognizes composer
+calls syntactically but not the recommended re-export.
+
+Possible improvements:
+
+- Treat the `/recommended` entry point as a composer-backed, auto-scoped config.
+- Add doctor fixtures for JavaScript and TypeScript re-export-only configs.
+- Resolve and inspect the active config rather than relying only on source-text
+  patterns when determining project scope.
+
+### Reconfirmed — Catalog compatibility output needs packed-release coverage
+
+All config packages resolved through pnpm and `pnpm list`, but the published
+3.2.0 `compatibility` command reported each `catalog:` dependency as “declared
+but not installed”. The parent workspace already contains a source fix and
+regression coverage for this behavior. Add a packed-CLI consumer check so the
+fix cannot be marked complete until the exact publish artifact reports the
+installed paths and versions correctly.
 
 ## Recommended migration sequence for large monorepos
 

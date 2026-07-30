@@ -37,6 +37,17 @@ const findDirectIntroducer = (cwd, manifest, parentName) => {
   return parentName
 }
 
+const findIssueIntroducer = (cwd, manifest, parents = []) => {
+  const configOwner = parents
+    .map(parent => parent.name)
+    .filter(name => ownerForIntroducer(name) && name !== '@santi020k/eslint-config-full')
+    .at(-1)
+
+  if (configOwner) return configOwner
+
+  return findDirectIntroducer(cwd, manifest, parents.at(-1)?.name ?? 'unknown')
+}
+
 export const createPeerHealthReport = (cwd, rawReport, policy) => {
   const manifest = readJson(join(cwd, 'package.json'))
   const issues = []
@@ -44,8 +55,7 @@ export const createPeerHealthReport = (cwd, rawReport, policy) => {
   for (const [project, result] of Object.entries(rawReport)) {
     for (const [peer, occurrences] of Object.entries(result.bad ?? {})) {
       for (const occurrence of occurrences) {
-        const parent = occurrence.parents?.[0]?.name ?? 'unknown'
-        const introducedBy = findDirectIntroducer(cwd, manifest, parent)
+        const introducedBy = findIssueIntroducer(cwd, manifest, occurrence.parents)
 
         issues.push({
           foundVersion: occurrence.foundVersion ?? null,
@@ -60,11 +70,9 @@ export const createPeerHealthReport = (cwd, rawReport, policy) => {
 
     for (const [peer, occurrences] of Object.entries(result.missing ?? {})) {
       for (const occurrence of occurrences) {
-        const parent = occurrence.parents?.[0]?.name ?? 'unknown'
-
         issues.push({
           foundVersion: null,
-          introducedBy: findDirectIntroducer(cwd, manifest, parent),
+          introducedBy: findIssueIntroducer(cwd, manifest, occurrence.parents),
           kind: 'missing',
           peer,
           project,
