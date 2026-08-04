@@ -56,6 +56,9 @@ This integration adds Astro Doctor's proprietary rules and its recommended offic
 ## Notes
 
 - This framework package is a public, optional dependency in v3; the basic composer loads it only when enabled.
+- Type-aware unnecessary-condition checks stay enabled for ordinary TypeScript,
+  but are disabled for `.astro` files because generated props and frontmatter
+  boundaries can make valid template fallbacks appear statically unnecessary.
 - For the archived v1 setup, see the [v1 Astro guide](/v1/frameworks/astro).
 
 ## Related Pages

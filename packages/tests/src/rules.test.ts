@@ -56,7 +56,7 @@ describe('Core Rules', () => {
     ])
     expect(getEffectiveRuleValue(coreConfig, 'camelcase')).toEqual([
       'warn',
-      { properties: 'never' }
+      { allow: ['database_specific', 'ecosystem_specific'], properties: 'never' }
     ])
     expect(getEffectiveRuleValue(coreConfig, 'no-void')).toEqual([
       'warn',
@@ -162,6 +162,7 @@ describe('TypeScript Rules', () => {
   test('should have correct effective values for TS rules', () => {
     // Note: Since we are using typescriptConfig directly, we can check its rules
     expect(getEffectiveRuleValue(typescriptConfig, '@typescript-eslint/no-explicit-any')).toBeDefined()
+    expect(getEffectiveRuleValue(typescriptConfig, '@typescript-eslint/no-unnecessary-condition')).toBeDefined()
   })
 })
 

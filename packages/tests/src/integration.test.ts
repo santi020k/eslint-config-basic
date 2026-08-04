@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url'
 
 import { angularConfig } from '@santi020k/eslint-config-angular'
 import astro from '@santi020k/eslint-config-astro'
-import { defineConfig, Format, Tool } from '@santi020k/eslint-config-basic'
+import { defineConfig, Format, Library, Tool } from '@santi020k/eslint-config-basic'
 import { expoConfig } from '@santi020k/eslint-config-expo'
 import { honoConfig } from '@santi020k/eslint-config-hono'
 import { nestConfig } from '@santi020k/eslint-config-nest'
@@ -39,6 +39,38 @@ const isCircularFixWarning = (call: unknown[]): boolean => call.some(value => {
 })
 
 describe('Integration Tests', () => {
+  describe('Tailwind CSS', () => {
+    test('should allow declared semantic CSS classes while rejecting nearby typos', async () => {
+      const tailwindRoot = join(FIXTURES_DIR, 'tailwind')
+      const config = await defineConfig({
+        detection: false,
+        libraries: [Library.Tailwind],
+        root: tailwindRoot,
+        tailwind: { entryPoint: 'global.css' },
+        tools: [],
+        typescript: false
+      })
+      const declaredResults = await lintText(
+        'export const className = \'ui-button lumen-template__panel message-card\'\n',
+        config,
+        join(tailwindRoot, 'declared.js')
+      )
+      const typoResults = await lintText(
+        'export const className = \'ui-unknown\'\n',
+        config,
+        join(tailwindRoot, 'typo.js')
+      )
+      const getUnknownClassMessages = (results: typeof declaredResults): string[] => (
+        results.flatMap(result => result.messages)
+          .filter(message => message.ruleId === 'better-tailwindcss/no-unknown-classes')
+          .map(message => message.message)
+      )
+
+      expect(getUnknownClassMessages(declaredResults)).toEqual([])
+      expect(getUnknownClassMessages(typoResults)).toContain('Unknown class detected: ui-unknown')
+    })
+  })
+
   describe('JavaScript', () => {
     test('should report warnings for stylistic issues in javascript.js', async () => {
       const config = await defineConfig({ detection: false, tools: [] })
@@ -365,6 +397,28 @@ describe('Integration Tests', () => {
           '</script>',
           ''
         ].join('\n')
+      },
+      {
+        name: 'multiline component attributes with adjacent text',
+        source: [
+          '<button',
+          '  aria-controls="theme-generate-panel"',
+          '  aria-selected="true"',
+          '  id="theme-generate-tab"',
+          '  type="button"',
+          '>Generate',
+          '</button>',
+          ''
+        ].join('\n')
+      },
+      {
+        name: 'dense nested component markup',
+        source: [
+          '<section class="lumen-template__metrics">',
+          '  <Card class="lumen-template__metric"><Stat label="Workspace members" value="248" /><Badge variant="success">+24</Badge></Card>',
+          '</section>',
+          ''
+        ].join('\n')
       }
     ])('should reach a stable result for $name', async ({ source }) => {
       const warningSpy = vi.spyOn(process, 'emitWarning')
@@ -514,6 +568,45 @@ describe('Integration Tests', () => {
 
       expect(results[0].messages.map(message => message.ruleId)).not.toContain('@stylistic/max-len')
     })
+
+    test.each([
+      {
+        name: 'conditional redirect',
+        source: [
+          '---',
+          'const unauthorized = true',
+          'if (unauthorized) return Astro.redirect(\'/login/\')',
+          '---',
+          '<main>Authorized</main>',
+          ''
+        ].join('\n')
+      },
+      {
+        name: 'unconditional redirect',
+        source: [
+          '---',
+          'return Astro.redirect(\'/login/\')',
+          '---',
+          ''
+        ].join('\n')
+      }
+    ])('should lint and autofix an Astro $name without crashing', async ({ source }) => {
+      const config = await defineConfig({
+        detection: false,
+        frameworks: { astro: true },
+        tools: [],
+        tsconfigRootDir: FIXTURES_DIR,
+        typescript: true
+      })
+      const filePath = join(FIXTURES_DIR, 'redirect.astro')
+      const lintResults = await lintText(source, config, filePath)
+      const fixResults = await lintTextWithFix(source, config, filePath)
+
+      expect(lintResults[0].fatalErrorCount).toBe(0)
+      expect(fixResults[0].fatalErrorCount).toBe(0)
+      expect(lintResults[0].messages.map(message => message.ruleId))
+        .not.toContain('@typescript-eslint/no-misused-promises')
+    })
   })
 
   describe('GitHub Actions YAML', () => {
@@ -611,6 +704,24 @@ describe('Integration Tests', () => {
       const names = config.flatMap(c => (c.name ? [c.name] : []))
 
       expect(names).toContain('eslint-config-next/custom')
+    })
+
+    test('should accept the generated next-env declaration after a build', async () => {
+      const config = await defineConfig({
+        detection: false,
+        frameworks: { next: true },
+        tools: [],
+        typescript: 'syntax'
+      })
+      const results = await lintText(
+        '/// <reference types="next" />\nimport "./.next/types/routes.d.ts";\n',
+        config,
+        'next-env.d.ts'
+      )
+      const ruleIds = results[0].messages.map(message => message.ruleId)
+
+      expect(ruleIds).not.toContain('@stylistic/quotes')
+      expect(ruleIds).not.toContain('@stylistic/semi')
     })
   })
 

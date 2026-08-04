@@ -2,9 +2,11 @@
 /* eslint-disable no-console -- CLI handlers own user-facing terminal output */
 import { spawnSync } from 'node:child_process'
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
-import { createRequire } from 'node:module'
+import { createRequire, findPackageJSON } from 'node:module'
 import { basename, dirname, join } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
+
+import { findTailwindEntryPoint } from '@santi020k/eslint-config-core'
 
 import {
   analyzeEslintConfig,
@@ -21,6 +23,7 @@ import {
   handleSnapshotDiff
 } from './cli-workflows.js'
 import { detectProjectOptions } from './index.js'
+import { findCssComponentClasses } from './tailwind.js'
 
 interface InstallResult {
   error?: Error
@@ -120,6 +123,14 @@ const CATEGORY_PACKAGES = {
   tools: '@santi020k/eslint-config-tools'
 } as const
 
+const PRESET_INSTALL_PACKAGES: Record<string, string[]> = {
+  all: Object.values(CATEGORY_PACKAGES),
+  app: [CATEGORY_PACKAGES.testing, CATEGORY_PACKAGES.tools],
+  ci: [CATEGORY_PACKAGES.extensions, CATEGORY_PACKAGES.tools],
+  library: [CATEGORY_PACKAGES.extensions, CATEGORY_PACKAGES.tools],
+  monorepo: [CATEGORY_PACKAGES.extensions, CATEGORY_PACKAGES.tools]
+}
+
 type DoctorFeatureCategory = keyof typeof CATEGORY_PACKAGES | 'frameworks'
 
 interface DoctorFeatureActivation {
@@ -140,6 +151,12 @@ interface DoctorProjectActivation {
   libraries: DoctorFeatureActivation[]
   path: string
   runtime: string
+  tailwind: {
+    componentClasses: number
+    detected: boolean
+    entryPoint: null | string
+    unknownClassPolicy: 'fallback-off' | 'off' | 'strict' | 'strict-with-css-components'
+  }
   testing: DoctorFeatureActivation[]
   tools: DoctorFeatureActivation[]
   typescript: {
@@ -267,6 +284,10 @@ const getInstallPackages = (
     }
 
     for (const packageName of explicitFeaturePackages) {
+      packages.add(packageName)
+    }
+
+    for (const packageName of PRESET_INSTALL_PACKAGES[summary.preset] ?? []) {
       packages.add(packageName)
     }
   }
@@ -667,6 +688,11 @@ const formatList = (values: undefined | unknown[]): string => {
 const getProjectSummary = (cwd: string) => {
   const options = detectProjectOptions(cwd)
   const workspaceProjects = detectWorkspaceProjects(cwd)
+  let typescriptMode: DoctorProjectActivation['typescript']['mode'] = 'off'
+
+  if (options.typescript) {
+    typescriptMode = options.typescript === 'syntax' ? 'syntax' : 'type-aware'
+  }
 
   return {
     detectedProjects: Object.keys(options.projects ?? {}).sort(),
@@ -680,9 +706,66 @@ const getProjectSummary = (cwd: string) => {
     testing: options.testing ?? [],
     tools: options.tools ?? [],
     typescript: Boolean(options.typescript),
+    typescriptMode,
     workspaceProjects
   }
 }
+
+const getDetectedProjectPaths = (cwd: string): string[] => {
+  const summary = getProjectSummary(cwd)
+
+  return summary.workspaceProjects.length > 0 ?
+    [...new Set([...summary.detectedProjects, ...summary.workspaceProjects])] :
+    ['.']
+}
+
+const getTailwindUnknownClassPolicy = (
+  detected: boolean,
+  entryPoint: null | string,
+  componentClasses = 0
+): DoctorProjectActivation['tailwind']['unknownClassPolicy'] => {
+  if (!detected) return 'off'
+
+  if (!entryPoint) return 'fallback-off'
+
+  return componentClasses > 0 ? 'strict-with-css-components' : 'strict'
+}
+
+const getTailwindEntryPoints = (cwd: string) => getDetectedProjectPaths(cwd).flatMap(projectPath => {
+  const projectRoot = projectPath === '.' ? cwd : join(cwd, projectPath)
+  const summary = getProjectSummary(projectRoot)
+
+  if (!summary.libraries.includes('tailwind')) return []
+
+  const entryPoint = findTailwindEntryPoint(projectRoot) ?? null
+  const componentClasses = entryPoint ? findCssComponentClasses(projectRoot, entryPoint).length : 0
+
+  return [{
+    componentClasses,
+    entryPoint,
+    path: projectPath,
+    unknownClassPolicy: getTailwindUnknownClassPolicy(true, entryPoint, componentClasses)
+  }]
+})
+
+const getDeclarationProjectWarnings = (cwd: string): string[] => (
+  getDetectedProjectPaths(cwd).flatMap(projectPath => {
+    const projectRoot = projectPath === '.' ? cwd : join(cwd, projectPath)
+    const summary = getProjectSummary(projectRoot)
+
+    if (summary.typescriptMode !== 'syntax') return []
+
+    const packageName = readPackageJson(projectRoot)?.name
+    const packageLabel = typeof packageName === 'string' ? `${projectPath} (${packageName})` : projectPath
+
+    return [
+      `TypeScript declarations were detected in ${packageLabel}, but no supported package-local tsconfig was found. ` +
+      'The package uses syntax-only linting to avoid a project-service parse failure. Add a tsconfig.json that includes ' +
+      'the declarations for type-aware linting, or add their patterns to `typescript.untypedFiles` when a parent ' +
+      'type-aware project intentionally owns them.'
+    ]
+  })
+)
 
 const getInstallProjectSummary = (cwd: string): ReturnType<typeof getProjectSummary> => {
   const rootSummary = getProjectSummary(cwd)
@@ -697,6 +780,13 @@ const getInstallProjectSummary = (cwd: string): ReturnType<typeof getProjectSumm
   ))
 
   const summaries = [rootSummary, ...projectSummaries]
+  let typescriptMode: DoctorProjectActivation['typescript']['mode'] = 'off'
+
+  if (summaries.some(summary => summary.typescriptMode === 'type-aware')) {
+    typescriptMode = 'type-aware'
+  } else if (summaries.some(summary => summary.typescriptMode === 'syntax')) {
+    typescriptMode = 'syntax'
+  }
 
   return {
     ...rootSummary,
@@ -706,7 +796,8 @@ const getInstallProjectSummary = (cwd: string): ReturnType<typeof getProjectSumm
     libraries: [...new Set(summaries.flatMap(summary => summary.libraries))],
     testing: [...new Set(summaries.flatMap(summary => summary.testing))],
     tools: [...new Set(summaries.flatMap(summary => summary.tools))],
-    typescript: summaries.some(summary => summary.typescript)
+    typescript: summaries.some(summary => summary.typescript),
+    typescriptMode
   }
 }
 
@@ -1034,7 +1125,8 @@ export const handleInspect = async (cwd: string = process.cwd(), json = false) =
   const payload = {
     activeConfig,
     detected: summary,
-    packageManager: detectPackageManager(cwd)
+    packageManager: detectPackageManager(cwd),
+    tailwindEntryPoints: getTailwindEntryPoints(cwd)
   }
 
   if (json) {
@@ -1127,7 +1219,7 @@ const intersectSemverRanges = (ranges: string[]): null | string => {
   return intersection
 }
 
-const readPackageMetadataFromMain = (mainPath: string, packageName: string): null | PackageMetadata => {
+const readPackageMetadataFromMain = (mainPath: string): null | PackageMetadata => {
   let directory = dirname(mainPath)
 
   for (let depth = 0; depth < 4; depth++) {
@@ -1136,7 +1228,10 @@ const readPackageMetadataFromMain = (mainPath: string, packageName: string): nul
     if (existsSync(packagePath)) {
       const metadata = JSON.parse(readFileSync(packagePath, 'utf8')) as PackageMetadata
 
-      if (metadata.name === packageName) return metadata
+      // Resolution by the requested specifier is authoritative. npm aliases
+      // such as `typescript: npm:@typescript/typescript6@...` intentionally
+      // expose a manifest whose real name differs from the installed key.
+      if (metadata.name && metadata.version) return metadata
     }
 
     directory = dirname(directory)
@@ -1146,20 +1241,53 @@ const readPackageMetadataFromMain = (mainPath: string, packageName: string): nul
 }
 
 const resolvePackageMetadata = (cwd: string, packageName: string): null | PackageMetadata => {
-  try {
-    const projectRequire = createRequire(join(cwd, 'package.json'))
+  const candidateRoots = [...new Set([
+    cwd,
+    findPnpmWorkspaceRoot(cwd)
+  ].filter((root): root is string => Boolean(root)))]
+
+  for (const candidateRoot of candidateRoots) {
+    try {
+      const manifestPath = findPackageJSON(
+        packageName,
+        pathToFileURL(join(candidateRoot, 'package.json'))
+      )
+
+      if (manifestPath) {
+        const metadata = JSON.parse(readFileSync(manifestPath, 'utf8')) as PackageMetadata
+
+        return metadata
+      }
+    } catch {
+      // Fall through to main-entry and aggregate-package resolution.
+    }
 
     try {
-      return readPackageMetadataFromMain(projectRequire.resolve(packageName), packageName)
-    } catch {
-      const integrationsMain = projectRequire.resolve(INTEGRATIONS_PACKAGE_NAME)
-      const integrationsRequire = createRequire(integrationsMain)
+      const projectRequire = createRequire(join(candidateRoot, 'package.json'))
 
-      return readPackageMetadataFromMain(integrationsRequire.resolve(packageName), packageName)
+      try {
+        const metadata = readPackageMetadataFromMain(projectRequire.resolve(packageName))
+
+        if (metadata) return metadata
+      } catch {
+        const integrationsMain = projectRequire.resolve(INTEGRATIONS_PACKAGE_NAME)
+        const integrationsRequire = createRequire(integrationsMain)
+        const metadata = readPackageMetadataFromMain(integrationsRequire.resolve(packageName))
+
+        if (metadata) return metadata
+      }
+    } catch {
+      // Try a sibling workspace package below.
     }
-  } catch {
-    return null
+
+    for (const projectPath of detectWorkspaceProjects(candidateRoot)) {
+      const metadata = readPackageJson(join(candidateRoot, projectPath)) as null | PackageMetadata
+
+      if (metadata?.name === packageName) return metadata
+    }
   }
+
+  return null
 }
 
 interface NodeEngineAssessment {
@@ -1337,8 +1465,14 @@ const validateConfigContent = (
     warnings.push('Config still imports v1 framework packages. Run `basic-eslint migrate --write` or switch to framework booleans.')
   }
 
-  const usesBasicComposer = /from\s*['"]@santi020k\/eslint-config-(?:basic|full|lite)['"]/.test(configContent) &&
+  const usesComposerCall = /from\s*['"]@santi020k\/eslint-config-(?:basic|full|lite)['"]/.test(configContent) &&
     /\b(?:defineConfig|eslintConfig)\s*\(/.test(configContent)
+
+  const usesRecommendedComposer = /from\s*['"]@santi020k\/eslint-config-(?:basic|full)\/recommended['"]/.test(
+    configContent
+  )
+
+  const usesBasicComposer = usesComposerCall || usesRecommendedComposer
 
   const hasDetectedProjectScopes = summary.workspaceProjects.every(project => (
     summary.detectedProjects.includes(project)
@@ -1473,6 +1607,18 @@ const checkDuplicateEslint = (cwd: string, warnings: string[]) => {
   }
 }
 
+const getTailwindEntryPointWarnings = (cwd: string): string[] => (
+  getTailwindEntryPoints(cwd).flatMap(({ entryPoint, path: projectPath }) => {
+    if (entryPoint) return []
+
+    return [
+      `Tailwind CSS was detected in ${projectPath}, but no conventional CSS entry point was found. ` +
+      '`better-tailwindcss/no-unknown-classes` falls back to off; set `tailwind.entryPoint` ' +
+      'to enable strict validation or `tailwind.noUnknownClasses: false` to document a mixed CSS system.'
+    ]
+  })
+)
+
 const buildDoctorDiagnosis = (
   cwd: string,
   packageJson: null | Record<string, unknown>,
@@ -1494,6 +1640,10 @@ const buildDoctorDiagnosis = (
   warnings.push(...getAstroDoctorCompatibilityWarnings(cwd, astroDoctorEnabled))
 
   checkDuplicateEslint(cwd, warnings)
+
+  warnings.push(...getDeclarationProjectWarnings(cwd))
+
+  warnings.push(...getTailwindEntryPointWarnings(cwd))
 
   const nodeEngineWarning = getConsumerNodeEngineWarning(cwd, packageJson)
 
@@ -1547,40 +1697,59 @@ const createDoctorFeatureActivations = (
   cwd: string,
   category: DoctorFeatureCategory,
   detected: string[],
-  enabled: string[]
-): DoctorFeatureActivation[] => detected.map(name => {
-  const packageName = category === 'frameworks' ?
-    FRAMEWORK_KEY_TO_PACKAGE[name] :
-    CATEGORY_PACKAGES[category]
+  enabled: string[],
+  includeEnabled = false
+): DoctorFeatureActivation[] => {
+  const names = [...detected]
 
-  const installed = getCategoryPackageInstalled(cwd, packageName)
-  const isEnabled = installed && isDoctorFeatureEnabled(name, enabled)
-  let reason: string | undefined
-
-  if (!installed) {
-    reason = `Detected, but ${packageName} is not installed.`
-  } else if (!isEnabled) {
-    reason = 'Detected and installed, but the active config did not load this pack.'
+  if (includeEnabled) {
+    for (const enabledName of enabled) {
+      if (!isDoctorFeatureEnabled(enabledName, names)) names.push(enabledName)
+    }
   }
 
-  return {
-    detected: true,
-    enabled: isEnabled,
-    installed,
-    name,
-    package: packageName,
-    ...(reason ? { reason } : {})
-  }
-})
+  return names.map(name => {
+    const packageName = category === 'frameworks' ?
+      Object.entries(FRAMEWORK_KEY_TO_PACKAGE)
+        .find(([framework]) => isDoctorFeatureEnabled(name, [framework]))?.[1] :
+      CATEGORY_PACKAGES[category]
+
+    if (!packageName) throw new Error(`Unknown doctor ${category} feature: ${name}`)
+
+    const installed = getCategoryPackageInstalled(cwd, packageName)
+    const isDetected = isDoctorFeatureEnabled(name, detected)
+    const isEnabled = installed && isDoctorFeatureEnabled(name, enabled)
+    let reason: string | undefined
+
+    if (!installed) {
+      reason = isDetected ?
+        `Detected, but ${packageName} is not installed.` :
+        `Enabled in the active config, but ${packageName} is not installed.`
+    } else if (!isEnabled) {
+      reason = 'Detected and installed, but the active config did not load this pack.'
+    }
+
+    return {
+      detected: isDetected,
+      enabled: isEnabled,
+      installed,
+      name,
+      package: packageName,
+      ...(reason ? { reason } : {})
+    }
+  })
+}
 
 const getInactiveDoctorPackages = (
   cwd: string,
   detectedFrameworks: string[],
-  summary: ReturnType<typeof getProjectSummary>
+  summary: ReturnType<typeof getProjectSummary>,
+  activeConfig?: NonNullable<Awaited<ReturnType<typeof analyzeEslintConfig>>>
 ): DoctorProjectActivation['inactivePackages'] => {
   const inactivePackages = Object.entries(FRAMEWORK_KEY_TO_PACKAGE)
     .filter(([framework, packageName]) => (
       !detectedFrameworks.includes(framework) &&
+      !isDoctorFeatureEnabled(framework, activeConfig?.frameworks ?? []) &&
       resolvePackageMetadata(cwd, packageName) !== null
     ))
     .map(([, packageName]) => ({
@@ -1591,6 +1760,7 @@ const getInactiveDoctorPackages = (
   for (const [category, packageName] of Object.entries(CATEGORY_PACKAGES)) {
     if (
       summary[category as keyof typeof CATEGORY_PACKAGES].length === 0 &&
+      (activeConfig?.[category as keyof typeof CATEGORY_PACKAGES]?.length ?? 0) === 0 &&
       resolvePackageMetadata(cwd, packageName) !== null
     ) {
       inactivePackages.push({
@@ -1624,18 +1794,28 @@ const getDoctorProjectActivations = (
   return projectPaths.map(projectPath => {
     const projectRoot = projectPath === '.' ? cwd : join(cwd, projectPath)
     const summary = getProjectSummary(projectRoot)
+    const rootActiveConfig = projectPath === '.' ? activeConfig ?? undefined : undefined
     const tsconfig = getTypeScriptConfig(projectRoot)
     const typescriptInstalled = resolvePackageMetadata(projectRoot, TYPESCRIPT_PACKAGE_NAME) !== null
     const typescriptEnabled = summary.typescript && Boolean(activeConfig?.typescript)
+    const tailwindDetected = summary.libraries.includes('tailwind')
+    const tailwindEntryPoint = tailwindDetected ? findTailwindEntryPoint(projectRoot) ?? null : null
+
+    const tailwindComponentClasses = tailwindEntryPoint ?
+      findCssComponentClasses(projectRoot, tailwindEntryPoint).length :
+      0
+
     let typescriptMode: DoctorProjectActivation['typescript']['mode'] = 'off'
     let typescriptReason: string | undefined
 
     if (typescriptEnabled) {
-      typescriptMode = tsconfig ? 'type-aware' : 'syntax'
+      typescriptMode = summary.typescriptMode
     }
 
     if (!typescriptInstalled && summary.typescript) {
-      typescriptReason = 'A tsconfig was detected, but TypeScript is not installed.'
+      typescriptReason = summary.typescriptMode === 'syntax' ?
+        'TypeScript declarations were detected, but TypeScript is not installed.' :
+        'A tsconfig was detected, but TypeScript is not installed.'
     } else if (typescriptInstalled && !summary.typescript) {
       typescriptReason = 'Installed, but no supported tsconfig was detected in this project.'
     } else if (typescriptInstalled && summary.typescript && !typescriptEnabled) {
@@ -1647,41 +1827,57 @@ const getDoctorProjectActivations = (
         projectRoot,
         'extensions',
         summary.extensions,
-        activeConfig?.extensions ?? []
+        activeConfig?.extensions ?? [],
+        projectPath === '.'
       ),
       formats: createDoctorFeatureActivations(
         projectRoot,
         'formats',
         summary.formats,
-        activeConfig?.formats ?? []
+        activeConfig?.formats ?? [],
+        projectPath === '.'
       ),
       frameworks: createDoctorFeatureActivations(
         projectRoot,
         'frameworks',
         summary.frameworks,
-        activeConfig?.frameworks ?? []
+        activeConfig?.frameworks ?? [],
+        projectPath === '.'
       ),
       ignores: activeConfig?.ignores ?? [],
-      inactivePackages: getInactiveDoctorPackages(projectRoot, summary.frameworks, summary),
+      inactivePackages: getInactiveDoctorPackages(projectRoot, summary.frameworks, summary, rootActiveConfig),
       libraries: createDoctorFeatureActivations(
         projectRoot,
         'libraries',
         summary.libraries,
-        activeConfig?.libraries ?? []
+        activeConfig?.libraries ?? [],
+        projectPath === '.'
       ),
       path: projectPath,
       runtime: summary.runtime,
+      tailwind: {
+        componentClasses: tailwindComponentClasses,
+        detected: tailwindDetected,
+        entryPoint: tailwindEntryPoint,
+        unknownClassPolicy: getTailwindUnknownClassPolicy(
+          tailwindDetected,
+          tailwindEntryPoint,
+          tailwindComponentClasses
+        )
+      },
       testing: createDoctorFeatureActivations(
         projectRoot,
         'testing',
         summary.testing,
-        activeConfig?.testing ?? []
+        activeConfig?.testing ?? [],
+        projectPath === '.'
       ),
       tools: createDoctorFeatureActivations(
         projectRoot,
         'tools',
         summary.tools,
-        activeConfig?.tools ?? []
+        activeConfig?.tools ?? [],
+        projectPath === '.'
       ),
       typescript: {
         detected: summary.typescript,
@@ -1713,8 +1909,8 @@ const formatDoctorActivation = (features: DoctorFeatureActivation[]): string => 
 const formatDoctorProjectTable = (projects: DoctorProjectActivation[]): string[] => [
   '',
   'Per-project activation (I=installed, D=detected, E=enabled):',
-  'Project | Runtime | TypeScript | Frameworks | Formats | Libraries | Extensions | Testing | Tools | Ignores',
-  '--- | --- | --- | --- | --- | --- | --- | --- | --- | ---',
+  'Project | Runtime | TypeScript | Tailwind entry | Frameworks | Formats | Libraries | Extensions | Testing | Tools | Ignores',
+  '--- | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---',
   ...projects.flatMap(project => {
     const typescriptStates = [
       project.typescript.installed ? 'I' : '-',
@@ -1726,6 +1922,9 @@ const formatDoctorProjectTable = (projects: DoctorProjectActivation[]): string[]
       project.path,
       project.runtime,
       `${project.typescript.mode}:${project.typescript.tsconfig ?? 'none'}[${typescriptStates}]`,
+      project.tailwind.componentClasses > 0 ?
+        `${project.tailwind.entryPoint ?? 'none'} (${project.tailwind.componentClasses} CSS classes)` :
+        project.tailwind.entryPoint ?? 'none',
       formatDoctorActivation(project.frameworks),
       formatDoctorActivation(project.formats),
       formatDoctorActivation(project.libraries),

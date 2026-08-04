@@ -1,4 +1,4 @@
-# Improvements learned from the website migration
+# Improvements learned from consumer migrations
 
 ## Test project
 
@@ -448,7 +448,7 @@ nontrivial unions; simple and Node 20/22 union ranges have regression coverage.
 
 ## TypeScript project discovery
 
-### In progress — Declaration-only packages were not covered automatically
+### Completed — Declaration-only packages were not covered automatically
 
 Root-level declaration files in `packages/theme` and `packages/theme-core`
 failed with:
@@ -479,8 +479,12 @@ dependency, build, and generated output folders). A package with `.d.ts`,
 `.d.mts`, or `.d.cts` files but no supported tsconfig selects syntax-only
 TypeScript mode, while a package with a tsconfig keeps type-aware mode.
 Monorepo and detection fixtures cover declaration-only, JavaScript-plus-
-declaration, and plain JavaScript packages. A dedicated nearest-package parse
-error with a minimal-tsconfig suggestion remains open.
+declaration, and plain JavaScript packages. Doctor now preserves the detected
+TypeScript mode instead of reducing it to a boolean, names the nearest workspace
+path and package, and explains the automatic syntax fallback, package-local
+minimal-tsconfig route, and `typescript.untypedFiles` option. This prevents the
+project-service parse failure in zero-config composition while retaining an
+actionable package-specific diagnostic for intentional type-aware adoption.
 
 ### Completed — A shared Astro component was parsed as plain JavaScript
 
@@ -622,7 +626,9 @@ scope allows terminal output, deliberate process termination, and unpublished
 build dependencies while ordinary `src/` modules retain the application rules.
 Workspace project composition recomputes bin entries per package. Runtime
 documentation recommends keeping reusable logic outside these entry points, and
-coverage verifies that unrelated source globs are not included.
+coverage verifies that unrelated source globs are not included. Security rules
+remain enabled because command entry points still process external paths and
+arguments.
 
 ### Completed — External schemas legitimately use snake_case
 
@@ -787,7 +793,7 @@ migration output.
   export default await defineConfig()
   ```
 
-### Open — Astro top-level redirects crash `no-misused-promises`
+### Completed — Astro top-level redirects crash `no-misused-promises`
 
 Astro pages legitimately terminate front matter with statements such as:
 
@@ -816,7 +822,13 @@ Possible improvements:
 - Assert that both normal lint and `--fix` complete without throwing.
 - Keep the rule enabled for ordinary TypeScript and Astro virtual client scripts.
 
-### Open — The published Astro package lacks current virtual-script safeguards
+The Astro source scope now disables only
+`@typescript-eslint/no-misused-promises`, leaving it enabled for ordinary
+TypeScript and client-script virtual files. Type-aware integration fixtures
+exercise both conditional and unconditional top-level redirects and require
+normal lint plus autofix to complete without fatal diagnostics.
+
+### Completed — The published Astro package lacks current virtual-script safeguards
 
 The 3.1.0 package installed from npm did not include the current source
 configuration's `@stylistic/indent`, unused-variable, and `no-undef` safeguards
@@ -833,7 +845,14 @@ Possible improvements:
 - Have `compatibility` identify when Basic is newer than an installed companion
   package whose fixes it expects.
 
-### Open — `/recommended` is valid but `doctor` misdiagnoses project scoping
+Astro has a release changeset for the virtual-script and convergence fixes. The
+packed modular-consumer gate installs the generated Astro tarball, runs an
+inline-script fixture through autofix, and requires the second dry-run pass to
+produce no output. The broader repeated-fix workspace suite continues to cover
+typed scripts, JSDoc, nested code examples, fragments, and multiple virtual
+blocks.
+
+### Completed — `/recommended` is valid but `doctor` misdiagnoses project scoping
 
 This supported zero-config form loaded and linted the monorepo:
 
@@ -858,7 +877,12 @@ Possible improvements:
 - Resolve and inspect the active config rather than relying only on source-text
   patterns when determining project scope.
 
-### Reconfirmed — Catalog compatibility output needs packed-release coverage
+Doctor now recognizes Basic and Full `/recommended` re-exports as composer-
+backed auto-scoped configurations. JavaScript-config fixtures for both entries
+verify that detected workspace projects no longer produce the false unscoped
+warning.
+
+### Completed — Catalog compatibility output needs packed-release coverage
 
 All config packages resolved through pnpm and `pnpm list`, but the published
 3.2.0 `compatibility` command reported each `catalog:` dependency as “declared
@@ -866,6 +890,13 @@ but not installed”. The parent workspace already contains a source fix and
 regression coverage for this behavior. Add a packed-CLI consumer check so the
 fix cannot be marked complete until the exact publish artifact reports the
 installed paths and versions correctly.
+
+The packed modular-consumer gate now declares every local config tarball through
+a named pnpm `catalog:configs`, executes the packed Basic CLI's
+`compatibility --json`, and requires every catalog declaration to have an
+installed version and manifest path with no missing-package issue. The Full
+support matrix separately verifies that import-only aggregate packages and
+their resolved Basic composer are found through the packed CLI.
 
 ## Recommended migration sequence for large monorepos
 
@@ -889,3 +920,1209 @@ installed paths and versions correctly.
     pipeline.
 12. Check that validation scripts do not depend on formatting that autofix is
     allowed to change.
+
+## Lumen follow-up findings with 3.2.0 zero-config auto-detection
+
+### Completed — Tailwind entry-point discovery is workspace-scoped
+
+`defineConfig()` correctly detected Tailwind from the workspace dependency
+graph, but `findTailwindEntryPoint(rootDir)` only checked conventional paths
+under the repository root. Lumen's real entry is
+`apps/docs/src/styles/global.css`, so the generated Better Tailwind settings
+had no `entryPoint` and reported hundreds of diagnostics with the plugin's
+“No tailwind css entry point found at undefined” warning.
+
+Possible improvements:
+
+- Search detected workspace projects for conventional Tailwind entry points.
+- Scope each discovered entry point to its owning workspace instead of applying
+  a single root entry to the entire monorepo.
+- Have `doctor` report a detected Tailwind library with no usable entry point;
+  it currently passes with only the unrelated Astro Doctor advisory.
+- Expose the selected entry points in `inspect --json`.
+
+Zero-config workspace composition now keeps root-only Tailwind development
+dependencies from leaking into every package, recursively composes each detected
+workspace from its own root, and resolves conventional CSS entry points there.
+The monorepo regression reproduces Lumen's `apps/docs/src/styles/global.css`
+layout: only the docs scope receives that entry point and strict unknown-class
+validation, while unrelated workspaces receive neither setting. `doctor` and
+`inspect --json` expose the selected conventional entry point per project;
+`doctor` also explains the safe fallback when a detected Tailwind project has
+none.
+
+### Completed — Autodetected `no-unknown-classes` and mixed CSS systems
+
+Even with a valid entry point, `better-tailwindcss/no-unknown-classes` rejects
+ordinary BEM and component-library selectors. Lumen intentionally combines
+Tailwind utilities with standalone semantic classes such as `ui-button`,
+`docs-site-header`, and `lumen-template__panel`. Version 3.2.0 enables the rule
+at error severity automatically, leaving `tailwind.noUnknownClasses: false` as
+the only local setting required by an otherwise zero-config migration.
+
+Possible improvements:
+
+- Default this rule to off when Tailwind is detected but no entry point is
+  found.
+- Add an auto-detection policy for mixed Tailwind plus standalone component CSS,
+  or make unknown-class enforcement an opt-in strict feature.
+- In monorepos, apply unknown-class validation only to workspaces whose class
+  system can be compiled by the selected Tailwind entry point.
+- Explain the supported `tailwind.noUnknownClasses` escape hatch in `doctor`
+  output when the rule produces a large false-positive set.
+
+When Tailwind is enabled but no usable CSS entry point is
+available, the composer now disables only `no-unknown-classes` instead of
+running it with incomplete settings. Workspace scoping prevents a Tailwind app's
+strict rule from leaking into sibling component packages. With a usable entry
+point, the composer recursively follows local CSS imports and converts declared
+standalone selectors and static Tailwind v4 `@utility` declarations into exact
+anchored ignore patterns. This recognizes BEM, component-library, and custom
+utility classes without globally disabling validation; a nearby undeclared typo
+remains an error. Dynamic `@utility name-*` declarations, package imports, and
+remote imports are deliberately left to the Tailwind compiler or explicit
+consumer patterns rather than guessed.
+`detectComponentClasses: false` opts out, and explicit `tailwind.ignore`
+patterns merge with the detected classes. Doctor and inspect report the
+`strict-with-css-components` policy and detected selector count.
+
+### Completed — Astro closing-tag autofix converges
+
+Repeated 3.2.0 autofix passes emitted `ESLintCircularFixesWarning` for
+`apps/docs/src/pages/docs/theme-playground.astro` and
+`packages/lumen/templates/astro/saas-admin/src/lumen/saas-admin.astro`.
+The conflict involved Astro JSX closing-bracket/closing-tag placement and
+indentation, requiring a final manual formatting pass.
+
+Possible improvements:
+
+- Add these two shapes as repeated-fix regression fixtures.
+- Require two consecutive packed-artifact autofix passes to be byte-identical.
+- Resolve precedence between the Astro processor's indentation output and the
+  stylistic JSX closing-location rules.
+
+The Astro source scope now disables the generic JSX closing-tag-location fixer,
+which cannot safely map all of its edits through Astro templates. Repeated-fix
+fixtures reproduce both Lumen shapes: multiline component attributes with text
+adjacent to the opening bracket, and dense nested component markup. Two
+consecutive passes are byte-stable and emit no circular-fix warning.
+
+### Completed — Nested Astro templates are detected inside mixed packages
+
+`packages/lumen` declares Astro and React development dependencies and contains
+installer sources under `templates/astro/**`. The published 3.2.0 detector
+reported only React for that package, and its scoped config parsed every
+`.astro` template as plain TypeScript. A local
+`projects["packages/lumen"].frameworks.astro` declaration was required.
+
+Possible improvements:
+
+- Treat a declared `astro` dependency as authoritative for package-scoped
+  detection, even when React is also present.
+- Make the `.astro` file probe recursive through conventional nested source and
+  template directories.
+- Add a mixed React package with nested Astro templates to packed zero-config
+  monorepo coverage.
+
+Framework detection now treats the declared Astro dependency independently of
+React and recursively probes project trees for `.astro` files while excluding
+dependency and generated-output directories. The fixture matrix reproduces
+Lumen's mixed React/Astro package and deeply nested
+`templates/astro/saas-admin/src/lumen/*.astro` layout, verifying that both
+framework scopes are activated.
+
+### Completed — Generated Next.js declarations remain lint-clean after a build
+
+The Next.js build regenerated `apps/next-smoke/next-env.d.ts` with double
+quotes and semicolons. The recommended stylistic rules then reported
+`@stylistic/quotes` and `@stylistic/semi`, so a repository that was clean before
+`next build` was dirty again afterward.
+
+Possible improvements:
+
+- Treat `next-env.d.ts` as generated Next.js output and exclude it from
+  stylistic source-formatting rules.
+- Add a convergence fixture that runs `next build` before ESLint and requires
+  the generated declaration to pass without being rewritten.
+- Have `doctor` identify generated framework files that are currently included
+  in conflicting autofix rules.
+
+The composed Next.js configuration now treats `next-env.d.ts` as generated
+framework output and disables only the quote and semicolon formatting rules for
+that file. A regression fixture uses the declaration text emitted by current
+Next.js builds, and the complete 789-test package suite verifies both the rule
+behavior and the composed-config snapshot.
+
+<!-- consolidated-improvement-history -->
+
+## Basic package consumer-driven improvements
+
+These opportunities came from migrating a real ESLint 10, pnpm, TypeScript,
+Astro, Tailwind, and Vitest monorepo to the modular v3 packages. They are
+ordered by how directly they affect whether a consumer can install and lint
+successfully.
+
+### Dep Beacon follow-up after adopting 3.2.0
+
+<!-- cspell:words database_specific ecosystem_specific fixability frontmatter heredocs lintable -->
+
+The Dep Beacon migration removed a blanket `@stylistic` compatibility override,
+ran ESLint autofix over the complete monorepo, and resolved every remaining
+finding. This exposed several interactions that a config-level comparison did
+not predict.
+
+The first unsuppressed run reported 729 findings: 8 errors and 721 warnings.
+Autofix reduced that to 81 findings, but some remaining cases could not be
+resolved without changing rule options or addressing non-formatting project
+issues. The final consumer passes repository and package lint with
+`--max-warnings=0`, typechecking, tests, and a frozen pnpm install.
+
+#### Completed — Improve adoption reports with source-level lint debt
+
+`basic-eslint explain-preset monorepo --compatibility` reported five newly
+enabled formatting rules and one changed import-sort option. Its generated
+compatibility fragment was much narrower than the consumer's actual migration
+debt: replacing the existing broad compatibility block with that fragment
+exposed 729 findings.
+
+The report correctly compared effective configurations, but that comparison
+cannot show how many existing source lines violate unchanged or differently
+configured rules. Consumers can therefore interpret a small config diff as a
+small migration when the source rewrite is actually repository-wide.
+
+Future adoption tooling should optionally execute ESLint without writing files
+and report both dimensions:
+
+- effective rule changes grouped by category;
+- current source findings grouped by rule, severity, file type, and fixability;
+- the estimated number of files and lines changed by autofix;
+- rules that enter fix loops or remain after an autofix preview;
+- non-formatting errors that should be handled before a formatting migration.
+
+Acceptance criteria:
+
+- A `--lint` or `--analyze-source` mode reports the real finding count for the
+  selected preset.
+- The report distinguishes config changes from pre-existing source violations.
+- A dry autofix preview identifies changed files without mutating the consumer.
+- Compatibility output explains whether it preserves effective configuration,
+  current source behavior, or both.
+
+`explain-preset --analyze-source` now runs the selected preset against source
+without writing files, groups findings by rule, category, severity, file type,
+and fixability, and calls out non-formatting errors. A second in-memory ESLint
+run previews changed files and estimated changed lines, then reports remaining
+fixable rules as potential fix conflicts. Compatibility output explicitly states
+that it preserves effective configuration rather than existing source
+violations.
+
+#### Completed — Make the default stylistic rule set internally satisfiable
+
+The combination of
+`@stylistic/function-call-argument-newline: ['warn', 'never']` and
+`@stylistic/max-len` at 120 columns made long function calls impossible to
+satisfy. Autofix collapsed multiline arguments onto one line, after which
+`max-len` failed. Manually wrapping the call caused the newline rule to fail or
+collapse it again.
+
+The consumer changed the argument-newline option to `consistent`, which permits
+both a compact one-line call and a fully multiline call:
+
+```js
+{
+  '@stylistic/function-call-argument-newline': ['error', 'consistent']
+}
+```
+
+Similar pressure appeared around long arrow predicates:
+
+- `@stylistic/implicit-arrow-linebreak: 'beside'`;
+- `arrow-body-style` preferring an expression body;
+- `@stylistic/operator-linebreak: 'after'`;
+- `@stylistic/indent-binary-ops`;
+- `@stylistic/max-len`.
+
+A block body made the line wrap cleanly but violated `arrow-body-style`. A
+newline immediately after `=>` violated `implicit-arrow-linebreak`. The
+satisfiable form required an opening parenthesis immediately after the arrow,
+followed by carefully aligned binary operands:
+
+```js
+items.find(item => (
+  firstCondition(item) ||
+  secondCondition(item)
+))
+```
+
+This is valid, but the config should not require consumers to discover a narrow
+format through repeated lint cycles.
+
+Acceptance criteria:
+
+- Add convergence fixtures for long function calls, constructor calls, arrow
+  predicates, ternaries, and nullish-coalescing expressions.
+- Run autofix twice and assert that the second pass produces no changes.
+- No recommended rule combination should force a line past `max-len`.
+- Prefer `consistent` for function-call argument newlines, or document why a
+  stricter option is safe.
+
+Implemented:
+
+- `function-call-argument-newline` now uses `consistent`.
+- Convergence coverage runs autofix twice for all five expression shapes and
+  asserts that the second pass is stable.
+
+#### Completed — Prevent Astro circular autofixes
+
+Astro inline scripts exposed a circular fix between `@stylistic/indent` and
+`@stylistic/jsx-closing-tag-location`. One rule moved the closing `</script>` to
+the JavaScript indentation expected for the virtual script; the other moved it
+back to align with the opening Astro tag. ESLint emitted
+`ESLintCircularFixesWarning` for an inline theme script and for nested
+`<pre><code>` examples.
+
+The consumer ultimately kept stylistic rules enabled globally and disabled only
+`@stylistic/indent` for `**/*.astro`. This is much narrower than suppressing the
+entire stylistic plugin, but it shows that the shared indentation rule is not
+processor-aware enough for mixed Astro documents.
+
+Future Astro behavior should:
+
+- avoid applying generic JavaScript indentation to template tag boundaries;
+- define which layer owns inline-script indentation;
+- cover `<script is:inline>`, frontmatter, template expressions, and nested
+  `<pre><code>` blocks;
+- verify autofix convergence, not only lint validity.
+
+Acceptance criteria:
+
+- Representative Astro fixtures reach a stable result after one autofix pass.
+- Inline script closing tags do not alternate between two indentation levels.
+- Consumers do not need to disable all indentation enforcement for Astro.
+
+The Astro source and virtual-client-script scopes now disable only the generic
+JavaScript indentation rule, leaving Astro-aware formatting rules in place.
+Inline scripts, typed client scripts, JSDoc declarations, and nested
+`<pre><code>` examples have second-pass convergence coverage.
+
+#### Completed — Make `max-len` practical across code, prose, and workflows
+
+The 120-column rule found useful code readability issues, but it also blocked
+Astro prose, long URLs, template-literal diagnostics, YAML workflow commands,
+and shell or Python snippets embedded in GitHub Actions. Because the consumer
+uses `--max-warnings=0`, a warning-level formatting preference is still a hard
+failure.
+
+The practical consumer settings were:
+
+```js
+{
+  '@stylistic/max-len': ['warn', {
+    code: 120,
+    comments: 200,
+    ignoreStrings: true,
+    ignoreTemplateLiterals: true,
+    ignoreUrls: true,
+    tabWidth: 2
+  }]
+}
+```
+
+Even with those exceptions, source expressions and normal prose were wrapped.
+Workflow commands were rewritten into heredocs or multiline scripts, which is a
+larger behavioral risk than ordinary JavaScript formatting.
+
+Potential improvements:
+
+- provide format-specific defaults for Markdown, Astro, YAML, and generated
+  files;
+- ignore URLs and template literals by default;
+- avoid enforcing code-oriented line length on embedded shell scripts unless a
+  shell-aware formatter owns the rewrite;
+- have adoption reports call out that warning rules block projects using
+  `--max-warnings=0`.
+
+Implemented so far:
+
+- URLs and template literals are ignored by the shared default, alongside
+  ordinary strings.
+- Fenced Markdown examples are not rewritten to the current JavaScript quote,
+  semicolon, or trailing-comma style, preserving generated changelogs and
+  historical migration examples while Markdown syntax rules remain active.
+- Astro documents no longer receive the JavaScript-oriented line-length rule;
+  coverage preserves long accessible markup and SVG path data. YAML and
+  Markdown use their format-specific parsers rather than the JavaScript rule,
+  and generated templates have a documented narrow override. Source-adoption
+  reports count warnings separately and therefore make the effect of
+  `--max-warnings=0` visible before migration.
+
+#### Completed — Handle external schema names without project-wide camel-case exceptions
+
+OSV response fixtures legitimately use `database_specific` and
+`ecosystem_specific`. The default `camelcase` configuration treated those wire
+format keys as project naming violations.
+
+The consumer added an explicit allowlist while retaining checks for local
+identifiers. This works, but every API with snake-case JSON can require another
+project-specific list.
+
+Consider one of these defaults:
+
+1. do not check object-literal property names;
+2. ignore quoted properties and destructured keys that are renamed locally; or
+3. replace the legacy camel-case rule with a naming-convention setup that
+   distinguishes local symbols from external wire formats.
+
+Acceptance criteria:
+
+- Snake-case JSON fields can be represented without disabling checks for local
+  variables and functions.
+- Destructuring with a local alias remains lintable.
+- Tests cover API fixtures, computed keys, quoted keys, and type declarations.
+
+The shared `camelcase` rule now ignores property names while continuing to
+report snake-case local bindings. Coverage includes object literals, TypeScript
+property declarations, computed access, quoted keys, and aliased destructuring.
+
+#### Completed — Keep plugin attachment automatic for consumer overrides
+
+The 3.2.0 plugin-attachment change worked as intended. Dep Beacon could pass its
+Astro Tailwind exception directly as an extra config:
+
+```js
+export default defineConfig(options, {
+  files: ['**/*.astro'],
+  rules: {
+    'better-tailwindcss/no-unknown-classes': 'off'
+  }
+})
+```
+
+The returned rule block received `better-tailwindcss` automatically, eliminating
+the previous consumer workaround that searched generated config objects and
+copied the plugin manually.
+
+One ergonomic boundary remains: fragments appended after `defineConfig()` has
+resolved are outside that automatic pass. A dynamically generated late override
+must either be supplied to `defineConfig()` or wrapped with
+`attachReferencedPlugins()`. Documentation should make this ordering explicit,
+and examples should prefer passing all known overrides into `defineConfig()`.
+
+Implemented:
+
+- The README and configuration guide document the ordering boundary and show
+  the late-override wrapper.
+- A lifecycle test verifies attachment after `defineConfig()` resolves.
+
+#### Completed — Surface unresolved TypeScript modules as one root problem
+
+After formatting findings were reduced, type-aware linting produced a large
+cascade of `no-unsafe-*` findings and `no-redundant-type-constituents` errors in
+the language server. The root cause was not unsafe consumer code:
+`vscode-languageserver` had resolved to v10, whose exported subpath is
+`vscode-languageserver/node`; the source still imported the removed
+`vscode-languageserver/node.js` path.
+
+TypeScript reported the useful root diagnostic immediately. ESLint instead
+reported many downstream values as error-typed or `any`, making the dependency
+resolution failure look like hundreds of rule violations.
+
+Potential improvements:
+
+- have doctor or adoption analysis run the configured TypeScript project before
+  type-aware ESLint;
+- detect parser diagnostics or error-typed imports and summarize the root module
+  resolution failure;
+- recommend fixing typechecking before reviewing unsafe-rule findings;
+- avoid presenting cascading unsafe findings as independent migration debt.
+
+This case also confirms that strict lint adoption can reveal genuine dependency
+API changes. The tooling should preserve that value while making the root cause
+prominent.
+
+`explain-preset --analyze-source` now runs the consumer-resolved TypeScript
+compiler with `--noEmit` for the root and detected/configured workspace
+tsconfigs. Its structured report records every checked config and promotes
+module, type-definition, and source-file resolution diagnostics ahead of the
+ESLint summary. Text output explicitly recommends fixing compiler errors before
+reviewing cascading type-aware unsafe-rule findings. Regression coverage uses a
+real child-process preflight and verifies that the root TS2307 diagnostic is
+prioritized over an unrelated downstream type error.
+
+#### Completed — Add an end-to-end autofix adoption fixture
+
+Packed-consumer fixtures currently prove that generated configs load and lint
+known-good source. Add a deliberately old-style monorepo fixture that exercises
+the migration workflow itself:
+
+- TypeScript packages and tests;
+- Astro pages with inline scripts and code examples;
+- YAML GitHub workflows with embedded shell;
+- long function calls and binary arrow predicates;
+- external snake-case API fields;
+- Tailwind rules overridden in an Astro file scope;
+- `--max-warnings=0`.
+
+The test should capture the initial report, run autofix, resolve only explicitly
+documented manual findings, rerun autofix to prove convergence, then run lint,
+typecheck, and tests. This would catch rule conflicts that config snapshots and
+already-formatted fixtures cannot expose.
+
+The packed modular-consumer release check now includes deliberately old-style
+TypeScript application and Vitest sources, external snake-case schema fields,
+an Astro page with an inline script and generated code example, Tailwind classes
+under a scoped override, and a GitHub Actions workflow with empty event keys and
+embedded shell. It captures the initial `explain-preset --analyze-source`
+finding and autofix estimates, applies autofix once, requires a second
+`--fix-dry-run` pass to produce no output, then runs strict zero-warning lint,
+source and config type checks, Vitest, peer health, and a frozen reinstall.
+The fixture performs one explicit manual adoption edit between analysis and
+autofix: an inline Astro client script stops using debug `console` output,
+demonstrating that correctness/context findings are reviewed instead of hidden
+by the formatting pass.
+
+### Implemented for the next release
+
+- Every generated rule block now receives the plugin objects it references,
+  with a contract test covering the complete optional-feature registry.
+- Doctor and install planning now inspect every pnpm workspace project and
+  explicit `features` selection.
+- Normal doctor output reports modular v3 packages and no longer recommends
+  deprecated Lite packages unless `--lite-install` is requested.
+- Scoped projects inherit root detection and Tailwind defaults, while
+  `projectDefaults` and project options remain the more specific layers.
+- TypeScript `untypedFiles` overrides are composed after framework parser
+  configs, including Astro projects.
+- Root `typescript.untypedFiles` patterns remain effective in detected child
+  workspaces.
+- Astro files avoid generic indentation fix loops, and virtual scripts suppress
+  variable-rule false positives.
+- External snake-case schema properties remain lintable while local binding
+  names still require camel case.
+- `init --explicit` now generates the v3 `features` map.
+- Preset adoption reports compare effective rules by category and can write a
+  temporary compatibility override.
+- Preset adoption reports can analyze real source debt and preview autofix
+  without mutating consumer files.
+- CLI subcommands now have strict, side-effect-free help and flag validation.
+- Minimum-release-age failures receive a dedicated compatible-range diagnostic.
+- Release checks enforce peer health with owned, conditional exceptions.
+- Safe migration rewrites prefer `features` and `root`, while dynamic cases
+  receive explicit manual-action guidance.
+- The release check now installs a packed pnpm monorepo consumer with Astro,
+  Tailwind, TypeScript, Vitest, format, tool, and extension packs; it runs
+  doctor, ESLint 10, config typechecking, and a frozen-lockfile reinstall.
+
+### Completed — Make every emitted config independently valid in ESLint 10
+
+The Tailwind settings config can reference
+`better-tailwindcss/no-unknown-classes` while the
+`better-tailwindcss` plugin is registered on another config object. ESLint 10
+then reports that it cannot find the plugin, especially when a consumer adds a
+later file-scoped override for the rule.
+
+Improve the composer so every emitted config object that references a plugin
+rule also carries that plugin registration. This should be guaranteed for all
+framework and feature-pack configs, not only Tailwind.
+
+Acceptance criteria:
+
+- `defineConfig()` output can be passed directly to ESLint 10 without a
+  consumer-side plugin-copying workaround.
+- A later `{ files, rules }` override can disable a feature-pack rule without
+  manually importing or locating the plugin.
+- A contract test checks every emitted `plugin/rule` entry against the plugins
+  available to that config object.
+
+### Completed — Make the install planner project-aware
+
+A monorepo can disable root-level library detection and still enable a
+library-backed feature inside a scoped project. For example, an Astro docs
+project can detect Tailwind and require
+`@santi020k/eslint-config-libraries`, even when the root has
+`detection: { libraries: false }`.
+
+The doctor and install commands should resolve the same project scopes,
+detection controls, and feature graph as `defineConfig()`. They should report
+all required category packages before ESLint is started.
+
+Acceptance criteria:
+
+- `basic-eslint doctor` reports a missing category package required by any
+  configured project.
+- `basic-eslint install --dry-run` returns the exact modular packages required
+  by root and project-scoped features.
+- Detection disabled at one scope does not suppress requirements discovered in
+  another scope.
+
+### Completed — Replace deprecated Lite advice in normal doctor output
+
+The JSON doctor result currently includes a `liteInstallCommand` that recommends
+`@santi020k/eslint-config-lite` and
+`@santi020k/eslint-config-integrations`, even when the consumer uses the v3
+basic package and did not request `--lite-install`.
+
+Normal doctor output should recommend the lean v3 package set. Deprecated Lite
+advice should only be produced when `--lite-install` is explicitly requested
+and should be labeled as a compatibility workflow.
+
+Acceptance criteria:
+
+- Default JSON output exposes a modular `installCommand` or structured
+  `requiredPackages` result.
+- `liteInstallCommand` is omitted unless `--lite-install` is present.
+- The suggested command uses the detected framework and category packages.
+
+### Completed — Clarify root versus project option inheritance
+
+Settings such as `tailwind.noUnknownClasses` may need to be repeated inside a
+project scope to affect that project's generated config. Consumers need a clear
+way to express shared defaults without learning this through lint failures.
+
+Prefer one of these approaches:
+
+1. inherit safe root options into projects consistently; or
+2. require `projectDefaults`, document it prominently, and have doctor suggest
+   moving misplaced root options there.
+
+Acceptance criteria:
+
+- The monorepo guide shows how root options, `projectDefaults`, and project
+  overrides compose.
+- Doctor warns when a root option has no effect on scoped projects.
+- Tests cover Tailwind, TypeScript, detection controls, and runtime defaults.
+
+### Completed — Add a realistic modular-consumer release fixture
+
+Add a packed-package fixture matching a production monorepo:
+
+- pnpm workspace with multiple package projects;
+- Astro and Tailwind in one app only;
+- TypeScript project service;
+- Vitest, JSONC, Markdown, YAML, pnpm, CSpell, boundaries, and Unicorn;
+- explicit `features` configuration;
+- ESLint 10 with `--max-warnings=0`.
+
+The fixture should install from packed tarballs, run doctor, lint, typecheck,
+and verify that the lockfile is frozen-installable. This catches package
+boundary and resolver errors that workspace symlinks can hide.
+
+### Completed — Preserve pnpm workspace catalogs during installation
+
+`basic-eslint install` currently writes a direct semver range into the nearest
+`package.json`. In catalog-managed workspaces this immediately violates
+`pnpm/json-enforce-catalog` and forces the consumer to move every dependency by
+hand.
+
+The installer should discover `pnpm-workspace.yaml`, update the appropriate
+catalog entry, and write `catalog:` in the package manifest. It should also
+detect the workspace package manager from the root instead of falling back to
+npm when invoked from a nested package.
+
+Acceptance criteria:
+
+- Existing `catalog:`, `catalog:default`, and named-catalog conventions are
+  preserved.
+- `--dry-run` shows both manifest and workspace-catalog changes.
+- Running from a nested workspace package still uses the root package manager.
+- A second installation is idempotent.
+
+The installer now resolves the pnpm workspace root even when invoked from a
+nested package and asks pnpm to save new dependencies into the existing
+default or named catalog. Dry runs print the exact catalog-aware command.
+Idempotency is delegated to pnpm's catalog-aware `add` operation.
+
+### Completed — Keep `untypedFiles` last enough to be effective
+
+In Astro consumers, the generated `eslint-config-typescript/untyped-files`
+entry can appear before a later framework entry re-enables typed parser
+options. Consumers then receive a parser error saying that `project` and
+`projectService` are enabled together, and must find and append the generated
+entry manually.
+
+Compose untyped-file overrides after framework and project configs, or merge
+parser options with a deterministic precedence model.
+
+Acceptance criteria:
+
+- `typescript.untypedFiles: ['**/*.astro']` works with the Astro framework.
+- The same behavior works inside a scoped monorepo project.
+- Consumers never need to inspect config names and reorder generated entries.
+
+### Completed — Preserve nested import failures
+
+When an optional framework package exists but fails while importing one of its
+own dependencies, the current error can say only that the optional framework
+could not be loaded. During migration, a React integration failure caused by a
+Zod compatibility mismatch looked like a missing React package.
+
+Error handling should distinguish:
+
+- package not installed;
+- installed package failed to evaluate;
+- incompatible peer or transitive dependency.
+
+Always retain the original error as `cause`, show the failing package path, and
+include the one-command remediation only when the package is genuinely absent.
+
+### Completed — Make preset expansion visible and adoption-friendly
+
+`Preset.App`, `Preset.Worker`, and `Preset.Library` can activate substantially
+more rules than an existing default config. That is useful for new projects,
+but a migration can unexpectedly introduce hundreds of formatting or
+domain-specific findings.
+
+Add `basic-eslint explain-preset <preset>` and a migration mode that compares
+the current effective config with the selected preset. Group the output into
+formatting, correctness, security, framework, and domain rules, and generate a
+temporary compatibility override when requested.
+
+### Completed — Make CLI help side-effect free
+
+`basic-eslint install --help` should print subcommand help and exit without
+installing packages. Add command-level parsing tests for `--help`, `--dry-run`,
+and invalid flags so documentation discovery can never mutate a workspace.
+
+Help flags are intercepted before command dispatch, dedicated subcommand help
+lists only supported flags, and strict parsing rejects unknown or incomplete
+options before any handler can mutate the workspace.
+
+### Completed — Respect release compatibility under minimum-age policies
+
+With pnpm's `minimumReleaseAge`, requesting an unversioned companion package can
+resolve an older major while Basic itself is already pinned to 3.1. The install
+planner should derive companion ranges from the installed Basic major/minor
+instead of asking the package manager for an unconstrained latest version.
+
+For Basic 3.1, generated install requests should use a compatible 3.1 range and
+produce a clear message when workspace supply-chain policy temporarily blocks
+that release.
+
+Install and doctor commands derive a compatible caret range from the installed
+Basic dependency, including catalog-backed versions, and use that range for
+modular companion packages. Install also recognizes pnpm minimum-release-age
+failures and explains the wait-or-exclude policy without suggesting an
+incompatible release.
+
+### Completed — Treat peer health as a release signal
+
+The modular consumer installed and linted successfully but `pnpm peers check`
+still reported stale ESLint and TypeScript peer ranges from transitive plugins.
+These warnings make genuine missing-peer failures harder to notice.
+
+Add a release report that:
+
+- runs the package manager's peer checker in packed consumer fixtures;
+- identifies which direct package introduces each warning;
+- fails for newly introduced actionable warnings;
+- records explicitly accepted upstream range gaps with an owner and removal
+  condition.
+
+### Completed — Generate modern configuration during migration
+
+Migration output should prefer the v3 `features` map and `root` option over
+legacy category arrays and root-directory aliases. When custom classes are
+detected, it should offer the supported project-scoped Tailwind option instead
+of generating a raw rule override.
+
+`init --explicit` emits `features`. The v3 migration rewrites literal category
+arrays, the deprecated `integrations` alias, and unambiguous root aliases.
+Expressions, spreads, comments inside dynamic selections, conflicting root
+aliases, and raw Tailwind rule overrides are preserved and reported as manual
+actions so migration never changes behavior it cannot prove safe.
+
+An ideal generated result is concise and self-explanatory:
+
+```js
+export default await defineConfig({
+  features: {
+    boundaries: true,
+    jsonc: true,
+    markdown: true,
+    pnpm: true,
+    unicorn: true,
+    vitest: true,
+    yaml: true
+  },
+  projects: {
+    'apps/docs': {
+      tailwind: { noUnknownClasses: false }
+    }
+  },
+  root: import.meta.dirname
+})
+```
+
+### Completed — Resolve npm aliases by their installed dependency key
+
+Doctor previously required a resolved package manifest's `name` field to match
+the requested dependency key. Valid npm aliases such as
+`typescript: npm:@typescript/typescript6@...` therefore appeared uninstalled in
+every child workspace even though Node resolution and TypeScript both worked.
+
+Resolution by the requested specifier is now authoritative, while the real
+aliased manifest metadata remains available for version and engine checks. A
+workspace regression covers the TypeScript 6 development alias.
+
+### Completed — Reconcile detected and active doctor state
+
+Preset-created config entries can activate a category pack without a matching
+dependency signal in the project summary. Doctor previously omitted that active
+feature and simultaneously described its installed package as inactive, making
+feature-pack pruning unsafe.
+
+The root activation row now includes active-config-only features with
+`detected: false` and `enabled: true`. Matching packages are removed from the
+inactive list, while child rows continue to describe their own dependency
+detection. Regression coverage verifies both states.
+
+---
+
+## Parent-project adoption after ESLint Config Basic 3.2.0
+
+<!-- cspell:words aaronmgz commitprompt difftale lintable memudo postlens -->
+
+Date: 2026-07-30
+
+### Scope
+
+The 3.2.0 upgrade was applied to these direct consumers:
+
+- `aaronmgz`
+- `astro-doctor`
+- `commitprompt`
+- `dep-beacon`
+- `difftale`
+- `lumen`
+- `memudo.ai`
+- `observatory`
+- `postlens`
+- `santi020k-theme`
+- `website`
+- `workspace-organizer`
+
+All projects now resolve `@santi020k/eslint-config-basic` 3.2.0 and use automatic
+root, workspace project, framework, runtime, TypeScript, format, testing, library,
+and tool detection wherever the detected result is sufficient. Explicit settings
+remain only for behavior that detection cannot infer or for compatibility with
+established project code.
+
+### Recommended follow-up improvements
+
+#### 1. Completed — Retire the temporary formatting compatibility layer
+
+Several established projects do not yet match the default `@stylistic` rules.
+Their configs temporarily disable formatting rules while leaving correctness,
+security, framework, testing, and domain rules active.
+
+Adopt formatting one repository at a time:
+
+1. Run `basic-eslint explain-preset monorepo` (or the detected application/library
+   preset).
+2. Apply formatting-only fixes in a dedicated change.
+3. Remove `temporary-formatting-compatibility` after the repository passes with
+   `--max-warnings=0`.
+
+Highest-value candidates are `astro-doctor`, `commitprompt`, `dep-beacon`,
+`difftale`, `lumen`, and `website`.
+
+The generated all-stylistic compatibility layers are now retired:
+
+- Difftale and Astro Doctor removed `temporary-formatting-compatibility`,
+  adopted the preset autofix, wrapped their remaining overlong implementation
+  lines, and pass uncached lint plus canonical lint, typecheck, test, and build.
+- Aaronmgz removed its generated disable for every `@stylistic` rule and its
+  project-wide padding exception. Default formatting now applies across the
+  monorepo; remaining exceptions are named exact-file boundaries for localized
+  content, generated component call layout, and grouped switch cases. Uncached
+  lint and all 11 lint, 12 typecheck, and 5 test tasks pass.
+- Commitprompt and Website already had no formatting compatibility override.
+  Dep Beacon's two Astro virtual-layout exceptions and Lumen's generated
+  `next-env.d.ts` quote/semicolon exceptions are narrow parser/generated-file
+  boundaries rather than project-wide layers.
+
+#### 2. Completed — Add a monorepo regression test for inherited untyped files
+
+`aaronmgz` has Playwright/Astro test files outside the package TypeScript project.
+The root untyped-files config is generated correctly, but project-scoped configs
+later re-enable type-aware rules. The consumer currently re-appends the generated
+`eslint-config-typescript/untyped-files` entry.
+
+Add a Basic test fixture where a root `typescript.untypedFiles` pattern targets a
+detected child workspace. The final effective config should keep type-aware rules
+disabled without consumer-side composition.
+
+Root `typescript.untypedFiles` is now inherited as a child-project default
+without inheriting unrelated root TypeScript parser settings. The regression
+fixture verifies that the scoped untyped-files entry follows the child parser
+setup and disables its project service.
+
+#### 3. Completed — Improve Astro virtual-script defaults
+
+Lumen's large generated `UIPrimitives.astro` file exposes `no-unused-vars`,
+`no-undef`, and type-safety false positives on Astro virtual script paths. Its
+template source is also intentionally not part of the lintable product source.
+
+Potential improvements:
+
+- extend the Astro package's virtual-file handling to cover the generated
+  `*.astro/**` paths consistently;
+- disable core variable rules in favor of Astro/parser-aware equivalents where
+  appropriate;
+- offer a documented generated-template ignore convention.
+
+Implemented so far:
+
+- Astro virtual JavaScript and TypeScript paths disable core and
+  TypeScript-specific unused-variable rules plus `no-undef`.
+- Type-aware rules remain disabled by the TypeScript virtual-file layer.
+- Generic indentation is disabled only for Astro source and virtual scripts,
+  repeated autofix fixtures must converge, and the packed-consumer release gate
+  exercises an inline Astro script from the generated package artifact.
+- Generated templates have a documented narrow ignore convention.
+
+#### 4. Completed — Replace broad Tailwind exceptions with focused adoption
+
+Some consumers still disable unknown-class or formatting checks broadly because
+they use semantic classes, generated classes, or existing class order:
+
+- `aaronmgz`
+- `lumen`
+- `memudo.ai`
+- `website`
+
+Move toward per-project Tailwind entry points and small `ignore` patterns. Then
+enable class-order, canonical-class, deprecated-class, and unknown-class checks
+individually. The 3.2.0 project inheritance fixes should make this practical
+without plugin reattachment workarounds.
+
+Completed so far:
+
+- `dep-beacon` now points its detected docs project at
+  `apps/docs/src/styles/global.css`, keeps `no-unknown-classes` enabled, and
+  ignores only grouped names for the semantic classes defined by its local CSS.
+  An uncached repository-wide ESLint pass succeeds with zero warnings.
+- `website` already uses the Full recommended config without a Tailwind rule
+  override. An uncached repository-wide ESLint pass confirms that its default
+  Tailwind checks pass with zero warnings, so no compatibility exception remains
+  to retire there.
+- `lumen` now scopes Tailwind unknown-class enforcement to its Docs workspace
+  with the package-relative `src/styles/global.css` entry point. Two compact
+  ignore expressions cover its documented semantic BEM families while utility
+  classes remain checked. Uncached Docs lint, all 18 canonical lint and
+  typecheck tasks, and all 365 tests pass. Component-library workspaces retain
+  their semantic-class setting because they do not own a Tailwind entry point.
+- `memudo.ai` now enables unknown-class enforcement in all seven Tailwind
+  workspaces. Admin, Broker, Docs, and Ops need no ignores; Deck and Web use
+  app-scoped semantic-class family patterns, and UI ignores only its
+  animation-plugin/arbitrary-variant parser boundary. Every package passes an
+  uncached ESLint run, followed by all 11 canonical lint and typecheck tasks.
+- The next Basic patch now discovers exact standalone selectors from each
+  workspace's local Tailwind CSS import graph. This keeps typo detection strict
+  while allowing declared BEM, component-library, and static Tailwind v4
+  `@utility` classes automatically. Dynamic utilities remain explicit because
+  their wildcard expansion belongs to Tailwind's compiler.
+<!-- cspell:ignore blackst -->
+
+- `aaronmgz` now enables unknown-class enforcement in Admin, Baby Shower, Web,
+  and UI. The audit fixed the real `font-blackst` typo and invalid
+  `origin-top-center` class, installed the missing `tw-animate-css` provider,
+  and retained only project-scoped patterns for semantic/external classes.
+  A direct strict Tailwind sweep reports zero unknown classes, followed by all
+  11 canonical lint, 12 typecheck, and 5 test tasks passing.
+
+#### 5. Completed — Finish pnpm catalog adoption
+
+`postlens` and `workspace-organizer` keep automatic pnpm detection enabled but
+temporarily exempt existing package manifests from `pnpm/json-enforce-catalog`
+and `jsonc/sort-keys`.
+
+Move remaining direct version specifiers into the root catalog, sort the manifests,
+and remove those two compatibility rules. This retains the benefit of automatic
+pnpm policy enforcement instead of disabling pnpm detection.
+
+`postlens` now catalogs Playwright, Husky, and lint-staged.
+`workspace-organizer` now catalogs Playwright, Axe Playwright, Wrangler, and
+Sharp. Both repositories removed their package-manifest rule override, accepted
+the config's deterministic key ordering, regenerated their lockfile importers,
+and pass frozen installation, uncached ESLint with zero warnings, canonical
+lint, and canonical typecheck.
+
+#### 6. Completed — Consolidate repeated MeMudo compatibility rules
+
+The MeMudo apps now rely on automatic Next.js, Hono, React, runtime, TypeScript,
+and Tailwind detection. Several Next.js apps still repeat the same established
+formatting and Tailwind exceptions.
+
+Create one local flat-config fragment for shared Next.js compatibility, import it
+after `defineConfig()`, and keep only app-specific differences in each config.
+This reduces drift while preserving package-local auto-detection.
+
+MeMudo now owns `eslint/next-compatibility.mjs`, a named flat-config fragment
+containing the nine rules shared exactly by `admin`, `broker`, `docs`, and
+`ops`. Each app composes it after `defineConfig()`, while the docs config retains
+only its seven additional rules. `web` and `deck` remain separate because their
+compatibility requirements are materially different. Effective-config
+inspection confirms the shared rules remain disabled for representative files,
+and the repository passes all 11 canonical lint and typecheck tasks.
+
+#### 7. Completed — Reduce rule exceptions by category
+
+The upgrade revealed established exceptions for React hooks, unsafe TypeScript
+operations, import sorting, complexity, console usage, and generated code.
+Review them in this order:
+
+1. correctness and unsafe TypeScript rules;
+2. React hooks/compiler rules;
+3. security rules;
+4. complexity limits;
+5. formatting and import order.
+
+Prefer narrow file patterns and comments that state why an exception exists.
+Avoid project-wide disables when a generated folder or integration boundary is
+the actual source.
+
+Completed so far:
+
+- MeMudo's API re-enabled `no-non-null-assertion`,
+  `no-unnecessary-type-assertion`, `no-unsafe-member-access`,
+  `no-unsafe-return`, and `require-await` across its full source scope.
+- Redundant typed-array assertions were removed, synchronous secret lookup no
+  longer has an async contract, and Hono's CORS environment type without
+  parameters is converted to `unknown` and runtime-validated instead of accessed
+  as `any`.
+- Uncached API lint and typecheck pass, followed by all 11 canonical repository
+  lint and typecheck tasks.
+- Astro Doctor's docs app re-enabled `no-unsafe-assignment` and
+  `no-unsafe-member-access` across the Astro source scope. The code-block
+  component now uses public Astro types, dynamic rule slugs are guarded before
+  lookup, and only the homepage's parser-generated inline SVG assignments retain
+  a documented file-scoped exception. The full repository lint, typecheck, and
+  test gates pass.
+- Difftale removed its complete VS Code API compatibility block after uncached
+  lint proved that all five unsafe rules and
+  `no-redundant-type-constituents` pass without source changes. Its canonical
+  lint, typecheck, test, and build gates all pass.
+- Aaronmgz removed its remaining production and test unsafe exceptions. The
+  chart component required no changes; the API now validates Hono's CORS
+  bindings without type parameters from `unknown`, and Playwright cookie helpers
+  use runtime guards instead of non-null assertions. All 11 lint tasks, 12
+  typecheck tasks, and 5 test tasks pass.
+
+The unsafe-TypeScript phase is complete.
+
+React hooks/compiler progress:
+
+- MeMudo re-enabled React purity and immutability in its web app. Copyright-year
+  calculation moved outside render and session loaders are declared before the
+  mounting effect. All 11 lint and typecheck tasks pass.
+- Aaronmgz re-enabled React Compiler, exhaustive dependencies, static-component,
+  immutability, and incompatible-library checks across the monorepo. Nested JSX
+  components became render helpers, React Hook Form subscriptions use
+  `useWatch`, locale-cookie mutation moved outside the component, and the RSVP
+  submission callback now has explicit hook dependencies.
+- `set-state-in-effect` is narrowed from every JavaScript and TypeScript file to
+  six named components/hooks that intentionally synchronize opened-record or
+  browser state. Aaronmgz passes all 11 lint tasks, 12 typecheck tasks, and 5
+  test tasks.
+
+The React hooks/compiler phase is complete.
+
+Security progress:
+
+- MeMudo removed its stale project-wide `security/detect-object-injection`
+  exception. All 11 canonical lint and typecheck tasks pass.
+- Aaronmgz re-enabled `security/detect-object-injection` across its API and UI
+  code. Password byte comparison now traverses paired typed-array iterators,
+  OTP slots use a bounded search, and chart configuration lookups use typed
+  entry helpers instead of dynamic object indexing.
+<!-- cspell:ignore innerhtml -->
+
+- Aaronmgz narrowed `@eslint-react/dom-no-dangerously-set-innerhtml` to the
+  chart component that serializes developer-owned theme configuration into
+  generated CSS. Its full canonical validation passes all 11 lint tasks, 12
+  typecheck tasks, and 5 test tasks.
+
+The security phase is complete.
+
+Complexity progress:
+
+- MeMudo Core and Workspace Organizer removed their package- and script-wide
+  complexity disables. Workspace Organizer retains one named exception for the
+  Lemon sandbox command router, narrowed to its exact integration script. Its
+  canonical lint and typecheck tasks pass.
+- PostLens removed its all-scripts complexity exception. Its agent check runner
+  now separates plan execution and summary reporting, and the repository passes
+  uncached ESLint plus canonical lint and typecheck.
+- Aaronmgz replaced its project-wide `complexity` and `max-depth` disables with
+  named regression ceilings: complexity 55 for 31 exact legacy files and nesting
+  depth 6 for four exact files. The defaults remain active everywhere else, an
+  uncached full-code lint pass succeeds, and all 11 lint tasks, 12 typecheck
+  tasks, and 5 test tasks pass.
+
+The complexity phase is complete.
+
+Import-order progress:
+
+- MeMudo re-enabled import sorting in its API, Deck, and Web apps and applied
+  the deterministic autofix to 14 affected config/source files. All 11
+  canonical lint and typecheck tasks pass.
+- Aaronmgz removed its monorepo-wide import- and export-sorting exceptions and
+  applied the deterministic autofix across the existing codebase. Its canonical
+  11 lint, 12 typecheck, and 5 test tasks pass.
+- No upgraded consumer now disables `simple-import-sort/imports`,
+  `simple-import-sort/exports`, or an equivalent import-order rule.
+
+Import-order adoption is complete. The broader formatting work is tracked in
+recommendation 1, which is now complete.
+
+#### 8. In progress — Use adoption commands in maintenance workflows
+
+Add lightweight, non-mutating checks to each repository:
+
+```sh
+basic-eslint doctor
+basic-eslint compatibility
+basic-eslint snapshot
+basic-eslint diff
+basic-eslint profile --max-warnings 0
+```
+
+Use `explain-preset` when adopting stricter presets and `baseline` only for a
+temporary, reviewed migration. Effective-rule snapshots are especially useful
+for dependency-update pull requests because companion config packages release
+independently within the same major.
+
+The Dep Beacon pilot produced a deterministic single-file effective-rule
+snapshot: `snapshot --check` and `diff` both passed against `src/index.ts`.
+However, its installed Basic 3.2.0 `compatibility` command still reports pnpm
+catalog dependencies as missing. That false negative is fixed and covered in
+this workspace but is not yet available to consumers. The pilot snapshot was
+removed rather than committing a maintenance workflow that necessarily fails;
+rollout remains queued behind the patched Basic release.
+
+The patched CLI has now run `inspect`, `doctor`, `compatibility`, and
+`install --dry-run` without making mutations across all 12 consumers.
+Compatibility also identified seven real consumer engine-range mismatches:
+Aaronmgz, Commitprompt,
+Lumen, MeMudo, PostLens, Website, and Workspace Organizer promised Node versions
+below the config packages' `>=22.19.0` minimum. Their root `engines.node` ranges
+now match that minimum, every compatibility report passes, and all seven frozen
+installs pass with their declared pnpm versions. Committed snapshots and the
+maintenance workflow rollout remain queued until consumers can run the patched
+CLI from a published package rather than this workspace build.
+
+#### 9. Completed — Remove temporary supply-chain exclusions
+
+The new Basic and TypeScript config releases were published inside the consumers'
+minimum-release-age windows, so pnpm added explicit exclusions for the trusted
+release. Remove version-specific exclusions after the configured age has elapsed.
+Where frequent first-party releases are expected, prefer one documented package
+name exclusion over accumulating version entries.
+
+The version-specific Basic 3.2.0 exclusion is now removed from Astro Doctor,
+Commitprompt, Dep Beacon, Difftale, Lumen, MeMudo, PostLens, Santi020k Theme,
+Website, and Workspace Organizer. Observatory already used the preferred Basic
+package-name exclusion; its accumulated version-specific companion-config and
+Commitprompt entries were consolidated into package-name policy. All 12
+repositories pass a frozen lockfile-only install with their declared pnpm
+version, and the 10 standalone workspace YAML files pass uncached ESLint;
+MeMudo's root YAML is validated by pnpm because that repository intentionally
+has only package-local ESLint configs.
+
+Aaronmgz removed the obsolete version-specific Santi config and Commitprompt
+entries once its workspace file became available, retained its intentional
+package-name policies, and passes installation with pnpm 11.3.0 and
+`--frozen-lockfile`. All 12 repositories have now completed this cleanup.
+
+#### 10. Completed — Prune unused feature packs after observing detection
+
+The consumers currently retain the granular framework and feature packs installed
+during the v3 migration. After the configs have been stable for a release cycle,
+use `basic-eslint inspect`, `doctor`, and `install --dry-run` to compare detected
+features with installed packs. Remove packs that no workspace can activate, while
+keeping independently versioned companion packages on compatible v3 ranges.
+
+The first aggregate audit exposed two upstream reliability gaps before any
+dependency removal could be retained. Doctor used CommonJS main-entry
+resolution for ESM-only companion packages, so real pnpm workspaces falsely
+reported installed packs as missing; Basic now resolves their package manifests
+through Node's export-map-aware lookup and falls back through the workspace
+root, with an import-only package regression fixture.
+
+After that fix, a trial prune showed that `install --dry-run` can still omit
+category packs activated by composed preset or explicit config state: Dep
+Beacon's planner reported no missing packages, but canonical lint immediately
+failed while loading the Extensions registry. Every trial feature-pack removal
+was restored, the known-clean Dep Beacon lockfile was restored byte-for-byte,
+and its frozen install plus canonical lint and typecheck pass again. The install
+planner now adds category packs implied by automatic `app`, `ci`, `library`,
+`monorepo`, and `all` presets; workspace and named-catalog regressions cover the
+corrected plan. No consumer pack removal is retained yet, so pruning remains
+open for a fresh post-release audit using the corrected diagnostics.
+
+A fresh patched-CLI audit then exposed a third diagnostic edge in Dep Beacon:
+its `typescript` dependency is an npm alias to `@typescript/typescript6`, so the
+resolved manifest name differs from the requested dependency key. Doctor marked
+TypeScript uninstalled in every child workspace despite successful resolution.
+Package metadata checks now treat resolution by the requested specifier as
+authoritative and retain the aliased manifest metadata; a workspace regression
+covers the TypeScript 6 alias before the aggregate pruning audit continues.
+
+The aggregate matrix also showed preset-activated packs in `inspect` while
+doctor labeled the same packages inactive because its project rows contained
+only dependency-detected features. Doctor now includes active-config-only
+features in the root activation row with `detected: false` and `enabled: true`,
+and removes the contradictory inactive-package explanation. This preserves
+project detection detail while making repository-level pruning decisions reflect
+the configuration that ESLint actually loaded.
+
+The corrected audit then compared every declared granular package against both
+detected and enabled state across all project rows, followed by a physical
+removal trial, patched `install --dry-run`, frozen installation, canonical lint,
+and typecheck for each remaining candidate. Two packages were proven unused and
+removed:
+
+- MeMudo removed `@santi020k/eslint-config-testing`; all 11 lint and 11
+  typecheck tasks pass, the frozen pnpm 11.1.2 install passes, and the planner
+  requests no replacement. Its apparently inactive Extensions pack was retained
+  because the corrected preset planner requires it.
+- Santi020k Theme removed `@santi020k/eslint-config-vite`; uncached lint passes,
+  all five Astro applications report zero typecheck diagnostics, the frozen pnpm
+  10.32.1 install passes, and the planner requests no replacement.
+
+All other declared granular packs are detected, enabled, required by preset
+planning, or supplied intentionally by the Full aggregate. No further safe
+pruning candidate remains in the 12-repository matrix.
+
+#### 11. Completed — Review Astro Doctor adoption and CLI diagnostics
+
+The 3.2.0 doctor reports Astro projects that do not enable the optional Astro
+Doctor plugin. Decide per repository whether the additional diagnostics justify
+the dependency and adoption work; enable it deliberately instead of silently
+adding new rules to every Astro consumer.
+
+Two doctor diagnostics also deserve upstream coverage:
+
+- an implicitly detected monorepo can be reported as not using `projects`
+  scoping even though `defineConfig()` generated the project configs;
+- a repository that owns the Astro Doctor plugin can report the plugin as
+  unresolved when it is a sibling workspace package rather than a root
+  dependency.
+
+Doctor now reports structured installed/detected/enabled activation per
+workspace project. It recognizes Basic and Full `/recommended` re-exports as
+composer-backed auto-scoped configs and resolves Astro Doctor metadata from a
+sibling workspace package when normal Node resolution is intentionally absent.
+Regression fixtures cover both diagnostic cases; plugin activation remains an
+explicit per-repository choice.
+
+### Verification completed
+
+- Every lockfile resolves `@santi020k/eslint-config-basic` 3.2.0.
+- Frozen lockfile validation passes in all 12 repositories.
+- Every ESLint config loads successfully under ESLint 10.
+- A full direct ESLint sweep with `--max-warnings=0` passes in all 12 repositories.
+- Follow-up strict-adoption changes are recorded above; they include focused
+  consumer source migrations where newly enabled correctness rules exposed
+  real issues.

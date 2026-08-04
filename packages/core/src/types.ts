@@ -305,6 +305,11 @@ export interface TailwindOptions {
    * Defaults to `detectRootDir`, which keeps package-scoped monorepo configs stable.
    */
   cwd?: string
+
+  /**
+   * Detect component classes declared by Tailwind and exact standalone selectors
+   * reachable through the local CSS entry-point import graph. Defaults to true.
+   */
   detectComponentClasses?: boolean
   entryPoint?: string
   ignore?: string[]
@@ -528,7 +533,10 @@ export interface EslintConfigOptions {
    * File globs for test integrations when the defaults do not match your project.
    *
    * For example, set `testingFiles.playwright` to the folder that contains
-   * your Playwright specs when it differs from the built-in defaults.
+   * your Playwright specs when it differs from the built-in e2e, functional,
+   * Playwright-named, and Playwright-config defaults. Generic `tests/**` files
+   * are intentionally not treated as Playwright-owned because they may belong
+   * to Vitest or Jest.
    */
   testingFiles?: Partial<Record<TestingName, string[]>>
 

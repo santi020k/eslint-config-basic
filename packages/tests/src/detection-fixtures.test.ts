@@ -125,6 +125,27 @@ describe('detectProjectOptions fixture matrix', () => {
     expect(options.runtime).toBe(Runtime.Browser)
   })
 
+  test('detects Astro in a mixed React package with deeply nested templates', () => {
+    const dir = createFixtureProject(
+      {
+        devDependencies: {
+          astro: 'latest',
+          react: 'latest'
+        },
+        name: 'mixed-component-library'
+      },
+      ['templates/astro/saas-admin/src/lumen'],
+      {
+        'templates/astro/saas-admin/src/lumen/saas-admin.astro': '<main>Admin</main>\n'
+      }
+    )
+
+    const options = detectProjectOptions(dir)
+
+    expect(options.detectedFrameworks).toContain('astro')
+    expect(options.detectedFrameworks).toContain('react')
+  })
+
   test('detects Vite fixtures with Tailwind adapter packages and config files', () => {
     const pkgJson = { devDependencies: { '@tailwindcss/vite': 'latest', vite: 'latest' } }
     const extraFiles = {

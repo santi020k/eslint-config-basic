@@ -96,6 +96,8 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
     })
 
     expect(getEffectiveRuleValue(config as Record<string, unknown>[], '@typescript-eslint/no-unsafe-return')).toBe('off')
+    expect(getEffectiveRuleValue(config as Record<string, unknown>[], '@typescript-eslint/no-unnecessary-condition'))
+      .toBe('off')
     expect(getEffectiveRuleValue(config as Record<string, unknown>[], '@stylistic/jsx-indent-props')).toBe('off')
   })
 

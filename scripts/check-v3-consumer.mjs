@@ -284,7 +284,9 @@ try {
     private: true,
     type: 'module',
     devDependencies: {
-      ...modularTarballRefs,
+      ...Object.fromEntries(
+        Object.keys(modularTarballRefs).map(packageName => [packageName, 'catalog:configs'])
+      ),
       astro: 'catalog:',
       eslint: 'catalog:',
       tailwindcss: 'catalog:',
@@ -314,6 +316,11 @@ try {
       '  tailwindcss: ^4.1.0',
       '  typescript: ^5.9.0',
       '  vitest: ^4.0.0',
+      'catalogs:',
+      '  configs:',
+      ...Object.entries(modularTarballRefs).map(
+        ([name, tarball]) => `    ${JSON.stringify(name)}: ${JSON.stringify(tarball)}`
+      ),
       'overrides:',
       ...Object.entries(modularTarballRefs).map(
         ([name, tarball]) => `  ${JSON.stringify(name)}: ${JSON.stringify(tarball)}`
@@ -445,6 +452,27 @@ try {
     )
   }
 
+  const modularCompatibility = JSON.parse(execFileSync(
+    join(modularConsumerDir, 'node_modules', '.bin', 'basic-eslint'),
+    ['compatibility', '--json'],
+    { cwd: modularConsumerDir, encoding: 'utf8', stdio: 'pipe' }
+  ))
+
+  const unresolvedCatalogPackages = modularCompatibility.packages.filter(
+    item => item.declared === 'catalog:configs' && (
+      item.resolved === null ||
+      item.resolvedPath === null ||
+      item.issues.includes('declared but not installed')
+    )
+  )
+
+  if (!modularCompatibility.compatible || unresolvedCatalogPackages.length > 0) {
+    throw new Error(
+      `Packed compatibility did not resolve catalog packages: ` +
+      unresolvedCatalogPackages.map(item => item.name).join(', ')
+    )
+  }
+
   const adoptionReport = JSON.parse(execFileSync(
     join(modularConsumerDir, 'node_modules', '.bin', 'basic-eslint'),
     ['explain-preset', 'monorepo', '--file', 'index.ts', '--analyze-source', '--json'],
@@ -532,7 +560,8 @@ try {
 
   process.stdout.write(
     'V3 modular monorepo verified: packed feature and framework packages install, ' +
-    'doctor resolves every project dependency, adoption analysis finds real source debt, ' +
+    'doctor resolves every project dependency, compatibility resolves catalog packages, ' +
+    'adoption analysis finds real source debt, ' +
     'autofix converges, ESLint 10 lints cleanly, source and config typecheck, tests pass, ' +
     `the generated lockfile supports a frozen install, and peer health has ` +
     `${peerReport.accepted.length} accepted and zero actionable warnings.\n`

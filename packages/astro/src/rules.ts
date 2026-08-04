@@ -61,6 +61,7 @@ export const getRules = (options?: AstroOptions): TSESLint.Linter.RulesRecord =>
     // The generic indent fixer treats Astro template boundaries as JavaScript
     // and can alternate closing tags with jsx-closing-tag-location.
     '@stylistic/indent': 'off',
+    '@stylistic/jsx-closing-tag-location': 'off',
     '@stylistic/jsx-indent': 'off',
     '@stylistic/jsx-indent-props': 'off',
     '@stylistic/jsx-one-expression-per-line': 'off',
@@ -69,6 +70,12 @@ export const getRules = (options?: AstroOptions): TSESLint.Linter.RulesRecord =>
     // wrapped by a JavaScript-oriented line-length rule.
     '@stylistic/max-len': 'off',
     '@stylistic/quote-props': ['warn', 'as-needed'],
+    // Astro top-level redirects use return statements whose parser nodes can
+    // lack the parent pointer expected by this type-aware rule.
+    '@typescript-eslint/no-misused-promises': 'off',
+    // Props, frontmatter values, and template fallbacks cross Astro's generated
+    // module boundary, where TypeScript can incorrectly prove them unnecessary.
+    '@typescript-eslint/no-unnecessary-condition': 'off',
     // Astro template expressions can confuse this rule in otherwise valid markup.
     '@typescript-eslint/no-unsafe-return': 'off',
     // Disable rules that conflict with Astro's template syntax or are handled by the parser

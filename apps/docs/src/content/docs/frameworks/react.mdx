@@ -37,6 +37,20 @@ With the required config packages installed, the one-line recommended entry auto
 ## Notes
 
 - This framework package is a public, optional dependency in v3; the basic composer loads it only when enabled.
+- `@eslint-react/no-nested-component-definitions` has no component-slot option.
+  Hoist a slot component when it does not need owner state. If a library API
+  requires an inline component map that intentionally captures that state,
+  keep the exception to the adapter file instead of disabling the rule for the
+  application:
+
+  ```js
+  export default await defineConfig({}, {
+    files: ['src/components/ui/calendar.tsx'],
+    rules: {
+      '@eslint-react/no-nested-component-definitions': 'off'
+    }
+  })
+  ```
 - For the archived v1 setup, see the [v1 React guide](/v1/frameworks/react).
 
 ## Related Pages

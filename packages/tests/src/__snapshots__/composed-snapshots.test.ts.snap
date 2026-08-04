@@ -25,6 +25,7 @@ exports[`composed config snapshots > snapshots Next.js app router overrides 1`] 
     "eslint-config-next/custom",
     "eslint-config-next/ignores",
     "eslint-config-next/app-router-overrides",
+    "eslint-config-next/generated-declaration",
     "eslint-config-basic/test-file-overrides",
     "eslint-config-basic/scripts-overrides",
   ],
@@ -143,6 +144,7 @@ exports[`composed config snapshots > snapshots React app integrations 1`] = `
     "eslint-config-integrations/import-boundaries",
     "eslint-config-basic/test-file-overrides",
     "eslint-config-basic/scripts-overrides",
+    "eslint-config-basic/tailwind-settings",
     "eslint-config/prettier",
   ],
   "rules": {

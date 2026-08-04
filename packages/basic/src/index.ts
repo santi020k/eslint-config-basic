@@ -174,13 +174,11 @@ const resolveTailwindOptions = (
   const options = tailwind ?? {}
   const entryPoint = options.entryPoint ?? findTailwindEntryPoint(rootDir)
 
-  if (!entryPoint &&
-    options.cwd === undefined &&
-    options.detectComponentClasses === undefined &&
-    !options.ignore?.length &&
-    options.noUnknownClasses === undefined) return undefined
+  const resolvedOptions: TailwindOptions = !entryPoint && options.noUnknownClasses === undefined ?
+    { ...options, noUnknownClasses: false } :
+    options
 
-  return buildTailwindResult(options, entryPoint, rootDir)
+  return buildTailwindResult(resolvedOptions, entryPoint, rootDir)
 }
 
 const TESTING_CONFIG_NAMES: Partial<Record<Testing, string[]>> = {
@@ -572,6 +570,16 @@ const buildEslintConfigs = async (params: BuildConfigsParams): Promise<FlatConfi
       ),
       testingFiles
     ),
+    ...(resolvedFrameworks.next ?
+      [{
+        files: ['next-env.d.ts'],
+        name: 'eslint-config-next/generated-declaration',
+        rules: {
+          '@stylistic/quotes': 'off',
+          '@stylistic/semi': 'off'
+        }
+      } as TSESLint.FlatConfig.Config] :
+      []),
     {
       files: [
         '**/*.{test,spec}.{js,mjs,cjs,jsx,ts,mts,cts,tsx}',
@@ -589,8 +597,7 @@ const buildEslintConfigs = async (params: BuildConfigsParams): Promise<FlatConfi
       rules: {
         'n/no-unpublished-import': 'off',
         'n/no-process-exit': 'off',
-        'no-console': 'off',
-        ...(uniqueExtensions.includes(Extension.Security) ? { 'security/detect-non-literal-fs-filename': 'off' } : {})
+        'no-console': 'off'
       }
     },
     ...(tailwindOptions ? [buildTailwindSettingsConfig(tailwindOptions)] : []),

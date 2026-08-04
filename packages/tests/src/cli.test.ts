@@ -54,6 +54,17 @@ const writeFakePackage = (
   writeFileSync(join(packageDir, 'index.js'), 'module.exports = {}')
 }
 
+const getProjectByPath = <Project extends { path: string }>(
+  projects: Project[],
+  path: string
+): Project => {
+  const project = projects.find(candidate => candidate.path === path)
+
+  if (!project) throw new Error(`Expected doctor project activation for ${path}`)
+
+  return project
+}
+
 afterEach(() => {
   for (const dir of tempDirs.splice(0)) {
     rmSync(dir, { force: true, recursive: true })
@@ -381,7 +392,10 @@ describe('CLI command UX', () => {
 
     handleInstall(cwd, true)
 
-    expect(logSpy).toHaveBeenCalledWith('npm install -D @santi020k/eslint-config-react@^3.0.0')
+    expect(logSpy).toHaveBeenCalledWith(
+      'npm install -D @santi020k/eslint-config-react@^3.0.0 ' +
+      '@santi020k/eslint-config-extensions@^3.0.0 @santi020k/eslint-config-tools@^3.0.0'
+    )
     logSpy.mockRestore()
   })
 
@@ -479,7 +493,10 @@ describe('CLI command UX', () => {
 
     handleInstall(cwd, true)
 
-    expect(logSpy).toHaveBeenCalledWith('npm install -D @santi020k/eslint-config-react@^3.0.0')
+    expect(logSpy).toHaveBeenCalledWith(
+      'npm install -D @santi020k/eslint-config-react@^3.0.0 ' +
+      '@santi020k/eslint-config-extensions@^3.0.0 @santi020k/eslint-config-tools@^3.0.0'
+    )
     logSpy.mockRestore()
   })
 
@@ -570,7 +587,8 @@ describe('CLI command UX', () => {
       'pnpm add -D --workspace-root --save-catalog-name=lint ' +
       '@santi020k/eslint-config-react@^3.0.0 ' +
       '@santi020k/eslint-config-formats@^3.0.0 ' +
-      '@santi020k/eslint-config-tools@^3.0.0'
+      '@santi020k/eslint-config-tools@^3.0.0 ' +
+      '@santi020k/eslint-config-extensions@^3.0.0'
     )
     logSpy.mockRestore()
   })
@@ -850,6 +868,39 @@ describe('CLI command UX', () => {
     logSpy.mockRestore()
   })
 
+  test('should expose detected Tailwind entry points in inspect JSON', async () => {
+    const cwd = createTempProject({
+      dependencies: { tailwindcss: '4.0.0' },
+      name: 'tailwind-project'
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+
+    mkdirSync(join(cwd, 'src', 'styles'), { recursive: true })
+    writeFileSync(
+      join(cwd, 'src', 'styles', 'global.css'),
+      '@import "tailwindcss";\n.semantic-card { display: block; }\n'
+    )
+
+    await handleInspect(cwd, true)
+
+    const payload = JSON.parse(String(logSpy.mock.calls[0]?.[0])) as {
+      tailwindEntryPoints?: {
+        componentClasses: number
+        entryPoint: null | string
+        path: string
+        unknownClassPolicy: string
+      }[]
+    }
+
+    expect(payload.tailwindEntryPoints).toEqual([{
+      componentClasses: 1,
+      entryPoint: 'src/styles/global.css',
+      path: '.',
+      unknownClassPolicy: 'strict-with-css-components'
+    }])
+    logSpy.mockRestore()
+  })
+
   test('should report doctor warnings for v1 imports and unscoped workspaces', async () => {
     const cwd = createTempProject({
       name: 'tmp-project',
@@ -906,6 +957,33 @@ describe('CLI command UX', () => {
     process.exitCode = undefined
   })
 
+  test.each([
+    'export { default } from \'@santi020k/eslint-config-basic/recommended\'\n',
+    'export { default } from \'@santi020k/eslint-config-full/recommended\'\n'
+  ])('should recognize recommended re-exports as auto-scoped configs', async configSource => {
+    const cwd = createTempProject({
+      name: 'tmp-project',
+      scripts: {
+        lint: 'eslint .'
+      },
+      type: 'module',
+      workspaces: ['packages/*']
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+
+    mkdirSync(join(cwd, 'packages', 'app'), { recursive: true })
+    writeFileSync(join(cwd, 'packages', 'app', 'package.json'), JSON.stringify({ name: 'app' }))
+    writeFileSync(join(cwd, 'eslint.config.js'), configSource)
+
+    await handleDoctor(cwd)
+
+    expect(logSpy.mock.calls.flat().join('\n')).not.toContain(
+      'Workspace packages were detected, but the root config does not use `projects` scoping.'
+    )
+    logSpy.mockRestore()
+    process.exitCode = undefined
+  })
+
   test('should print doctor data as JSON', async () => {
     const cwd = createTempProject({
       name: 'tmp-project',
@@ -926,6 +1004,67 @@ describe('CLI command UX', () => {
     process.exitCode = undefined
   })
 
+  test('should explain the safe Tailwind fallback when no entry point exists', async () => {
+    const cwd = createTempProject({
+      dependencies: { tailwindcss: '4.0.0' },
+      name: 'tailwind-project',
+      scripts: { lint: 'eslint .' }
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+
+    await handleDoctor(cwd, true)
+
+    const payload = JSON.parse(String(logSpy.mock.calls.at(-1)?.[0])) as {
+      warnings?: string[]
+    }
+
+    expect(payload.warnings).toContainEqual(expect.stringContaining(
+      '`better-tailwindcss/no-unknown-classes` falls back to off'
+    ))
+    expect(payload.warnings).toContainEqual(expect.stringContaining('tailwind.entryPoint'))
+    logSpy.mockRestore()
+    process.exitCode = undefined
+  })
+
+  test('should name declaration-only packages and explain their syntax fallback', async () => {
+    const cwd = createTempProject({
+      name: 'tmp-project',
+      type: 'module',
+      workspaces: ['packages/*']
+    })
+    const declarationsRoot = join(cwd, 'packages', 'theme-contract')
+
+    mkdirSync(declarationsRoot, { recursive: true })
+    writeFileSync(join(declarationsRoot, 'package.json'), JSON.stringify({ name: '@example/theme-contract' }))
+    writeFileSync(join(declarationsRoot, 'index.d.mts'), 'export declare const theme: string\n')
+    writeFileSync(join(cwd, 'eslint.config.js'), 'export default [{ name: \'eslint-config-typescript/recommended\' }]\n')
+    writeFakePackage(cwd, 'typescript', '6.0.0')
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+
+    await handleDoctor(cwd, true)
+
+    const payload = JSON.parse(String(logSpy.mock.calls.at(-1)?.[0])) as {
+      projects: { path: string, typescript: { mode: string, tsconfig: null | string } }[]
+      warnings?: string[]
+    }
+    const warning = payload.warnings?.find(message => message.includes('@example/theme-contract'))
+    const declarationProject = payload.projects.find(project => project.path === 'packages/theme-contract')
+
+    expect(declarationProject?.typescript).toEqual({
+      detected: true,
+      enabled: true,
+      installed: true,
+      mode: 'syntax',
+      package: 'typescript',
+      tsconfig: null
+    })
+    expect(warning).toContain('packages/theme-contract')
+    expect(warning).toContain('tsconfig.json')
+    expect(warning).toContain('typescript.untypedFiles')
+    logSpy.mockRestore()
+    process.exitCode = undefined
+  })
+
   test('should report per-project activation details in JSON and verbose output', async () => {
     const cwd = createTempProject({
       name: 'tmp-project',
@@ -934,20 +1073,25 @@ describe('CLI command UX', () => {
     })
     const projectRoot = join(cwd, 'packages', 'site')
 
-    mkdirSync(projectRoot, { recursive: true })
+    mkdirSync(join(projectRoot, 'src', 'styles'), { recursive: true })
     writeFileSync(join(projectRoot, 'package.json'), JSON.stringify({
       dependencies: { astro: '7.0.0', tailwindcss: '4.0.0' },
       name: 'site'
     }))
     writeFileSync(join(projectRoot, 'README.md'), '# Site\n')
+    writeFileSync(join(projectRoot, 'src', 'styles', 'global.css'), '@import "tailwindcss";\n')
     writeFileSync(join(projectRoot, 'tsconfig.json'), '{}\n')
     writeFileSync(join(cwd, 'eslint.config.js'), `export default [
+      { name: 'eslint-config/best-practices', rules: {} },
       { name: 'eslint-config-astro/recommended', ignores: ['dist/**'], rules: {} },
       { name: 'integrations/markdown', rules: {} },
       { name: 'santi020k/tailwind/recommended', rules: {} },
       { name: 'eslint-config-typescript/recommended', rules: {} }
     ]`)
-    writeFakePackage(cwd, '@santi020k/eslint-config-astro', '3.2.0')
+    writeFakePackage(cwd, '@santi020k/eslint-config-astro', '3.2.0', {
+      exports: { import: './index.js' }
+    })
+    writeFakePackage(cwd, '@santi020k/eslint-config-extensions', '3.2.0')
     writeFakePackage(cwd, '@santi020k/eslint-config-formats', '3.2.0')
     writeFakePackage(cwd, '@santi020k/eslint-config-libraries', '3.2.0')
     writeFakePackage(cwd, '@santi020k/eslint-config-react', '3.2.0')
@@ -958,45 +1102,70 @@ describe('CLI command UX', () => {
 
     const payload = JSON.parse(String(logSpy.mock.calls.at(-1)?.[0])) as {
       projects: {
+        extensions: { detected: boolean, enabled: boolean, installed: boolean, name: string }[]
         formats: { detected: boolean, enabled: boolean, installed: boolean, name: string }[]
         frameworks: { detected: boolean, enabled: boolean, installed: boolean, name: string }[]
         ignores: string[]
         inactivePackages: { package: string, reason: string }[]
         libraries: { detected: boolean, enabled: boolean, installed: boolean, name: string }[]
         path: string
+        tailwind: { componentClasses: number, entryPoint: null | string, unknownClassPolicy: string }
         typescript: { mode: string, tsconfig: null | string }
       }[]
     }
-    const site = payload.projects.find(project => project.path === 'packages/site')
+    const root = getProjectByPath(payload.projects, '.')
+    const site = getProjectByPath(payload.projects, 'packages/site')
 
-    expect(site?.frameworks).toContainEqual(expect.objectContaining({
+    expect(payload.projects).toContainEqual(expect.objectContaining({
+      path: '.',
+      tailwind: {
+        componentClasses: 0,
+        entryPoint: null,
+        detected: false,
+        unknownClassPolicy: 'off'
+      }
+    }))
+    expect(root.extensions).toContainEqual({
+      detected: false,
+      enabled: true,
+      installed: true,
+      name: 'Best Practices',
+      package: '@santi020k/eslint-config-extensions'
+    })
+    expect(root.inactivePackages.map(item => item.package))
+      .not.toContain('@santi020k/eslint-config-extensions')
+
+    expect(site.frameworks).toContainEqual(expect.objectContaining({
       detected: true,
       enabled: true,
       installed: true,
       name: 'astro'
     }))
-    expect(site?.formats).toContainEqual(expect.objectContaining({
+    expect(site.formats).toContainEqual(expect.objectContaining({
       detected: true,
       enabled: true,
       installed: true,
       name: 'markdown'
     }))
-    expect(site?.libraries).toContainEqual(expect.objectContaining({
+    expect(site.libraries).toContainEqual(expect.objectContaining({
       detected: true,
       enabled: true,
       installed: true,
       name: 'tailwind'
     }))
-    expect(site?.typescript).toEqual(expect.objectContaining({
+    expect(site.tailwind).toEqual({
+      componentClasses: 0,
+      entryPoint: 'src/styles/global.css',
+      detected: true,
+      unknownClassPolicy: 'strict'
+    })
+    expect(site.typescript).toEqual(expect.objectContaining({
       mode: 'type-aware',
       tsconfig: 'tsconfig.json'
     }))
-    expect(site?.ignores).toContain('dist/**')
-    const inactiveReact = site?.inactivePackages.find(
-      item => item.package === '@santi020k/eslint-config-react'
-    )
-
-    expect(inactiveReact?.reason).toContain('no matching framework signal')
+    expect(site.ignores).toContain('dist/**')
+    expect(site.inactivePackages.map(item => `${item.package}: ${item.reason}`).join('\n'))
+      .toContain('@santi020k/eslint-config-react: Installed, but no matching framework signal')
 
     logSpy.mockClear()
     runCli(['node', 'basic-eslint', 'doctor', '--verbose'], cwd)
@@ -1007,10 +1176,47 @@ describe('CLI command UX', () => {
     const verboseOutput = logSpy.mock.calls.flat().join('\n')
 
     expect(verboseOutput).toContain('Per-project activation (I=installed, D=detected, E=enabled):')
-    expect(verboseOutput).toContain('packages/site | browser | type-aware:tsconfig.json[IDE]')
+    expect(verboseOutput).toContain(
+      'packages/site | browser | type-aware:tsconfig.json[IDE] | src/styles/global.css'
+    )
     expect(verboseOutput).toContain('astro[IDE]')
     expect(verboseOutput).toContain('tailwind[IDE]')
     expect(verboseOutput).toContain('@santi020k/eslint-config-react: Installed, but no matching framework signal')
+    logSpy.mockRestore()
+    process.exitCode = undefined
+  })
+
+  test('should recognize an npm-aliased TypeScript package in workspace activation details', async () => {
+    const cwd = createTempProject({
+      devDependencies: {
+        typescript: 'npm:@typescript/typescript6@6.0.0-dev.20260801'
+      },
+      name: 'tmp-project',
+      type: 'module',
+      workspaces: ['packages/*']
+    })
+    const projectRoot = join(cwd, 'packages', 'aliased-typescript')
+
+    mkdirSync(projectRoot, { recursive: true })
+    writeFileSync(join(projectRoot, 'package.json'), JSON.stringify({ name: 'aliased-typescript' }))
+    writeFileSync(join(projectRoot, 'tsconfig.json'), '{}\n')
+    writeFileSync(join(cwd, 'eslint.config.js'), `export default [
+      { name: 'eslint-config-typescript/recommended', rules: {} }
+    ]`)
+    writeFakePackage(cwd, 'typescript', '6.0.0-dev.20260801', {
+      name: '@typescript/typescript6'
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+
+    await handleDoctor(cwd, true)
+
+    const payload = JSON.parse(String(logSpy.mock.calls.at(-1)?.[0])) as {
+      projects: { path: string, typescript: { installed: boolean, reason?: string } }[]
+    }
+    const project = payload.projects.find(candidate => candidate.path === 'packages/aliased-typescript')
+
+    expect(project?.typescript.installed).toBe(true)
+    expect(project?.typescript.reason).toBeUndefined()
     logSpy.mockRestore()
     process.exitCode = undefined
   })
@@ -1110,6 +1316,38 @@ describe('CLI command UX', () => {
     expect(output).toContain('requires Node >=99')
     expect(output).toContain('requires ESLint 10.7.0')
     expect(output).toContain('resolves 10.8.0')
+    logSpy.mockRestore()
+    process.exitCode = undefined
+  })
+
+  test('should resolve an enabled Astro Doctor plugin from a sibling workspace', async () => {
+    const cwd = createTempProject({
+      name: 'tmp-project',
+      scripts: { lint: 'eslint .' },
+      type: 'module',
+      workspaces: ['packages/*']
+    })
+    const pluginDir = join(cwd, 'packages', 'astro-doctor')
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+
+    mkdirSync(pluginDir, { recursive: true })
+    writeFileSync(join(pluginDir, 'package.json'), JSON.stringify({
+      engines: { node: '>=22' },
+      name: '@santi020k/eslint-plugin-astro-doctor',
+      peerDependencies: { eslint: '^10.0.0' },
+      version: '1.0.4'
+    }))
+    writeFileSync(join(cwd, 'eslint.config.js'), `export default [
+      { name: 'eslint-config-astro/recommended', rules: {} },
+      { name: 'eslint-config-integrations/astro-doctor', rules: {} }
+    ]`)
+    writeFakePackage(cwd, 'eslint', '10.8.0')
+
+    await handleDoctor(cwd)
+
+    expect(logSpy.mock.calls.flat().join('\n')).not.toContain(
+      'Astro Doctor is enabled, but @santi020k/eslint-plugin-astro-doctor could not be resolved.'
+    )
     logSpy.mockRestore()
     process.exitCode = undefined
   })

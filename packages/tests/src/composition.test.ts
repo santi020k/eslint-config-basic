@@ -14,6 +14,8 @@ import {
   Testing,
   Tool
 } from '@santi020k/eslint-config-basic'
+import type { Linter } from 'eslint'
+import { ESLint } from 'eslint'
 import { describe, expect, test } from 'vitest'
 
 import { extractConfigNames, extractRuleNames } from './test-utils.js'
@@ -1103,32 +1105,212 @@ describe('scripts-overrides block', () => {
     }
   })
 
-  test('includes security rule when Security extension is enabled', async () => {
+  test('keeps security rules enabled in CLI entry points', async () => {
     const config = await defineConfig({
       detection: false,
-      extensions: [Extension.Security]
+      extensions: [Extension.Security],
+      typescript: false
     })
     const scriptsBlock = config.find(c => c.name === 'eslint-config-basic/scripts-overrides')
-
-    expect(scriptsBlock).toBeDefined()
-    expect(scriptsBlock?.rules?.['security/detect-non-literal-fs-filename']).toBe('off')
-  })
-
-  test('excludes security rule when Security extension is not enabled', async () => {
-    const config = await defineConfig({
-      detection: false,
-      extensions: []
+    const eslint = new ESLint({
+      overrideConfig: config as Linter.Config[],
+      overrideConfigFile: true
     })
-    const scriptsBlock = config.find(c => c.name === 'eslint-config-basic/scripts-overrides')
+    const [result] = await eslint.lintText([
+      'import { readFileSync } from \'node:fs\'',
+      '',
+      'export const load = path => readFileSync(path)',
+      ''
+    ].join('\n'), { filePath: 'scripts/example.js' })
 
     expect(scriptsBlock).toBeDefined()
-    const ruleKeys = Object.keys(scriptsBlock?.rules ?? {})
-
-    expect(ruleKeys.some(k => k.startsWith('security/'))).toBe(false)
+    expect(scriptsBlock?.rules).not.toHaveProperty('security/detect-non-literal-fs-filename')
+    expect(result.messages.map(message => message.ruleId))
+      .toContain('security/detect-non-literal-fs-filename')
   })
 })
 
 describe('Monorepo project scoping', () => {
+  test('scopes discovered Tailwind entry points to their workspace', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'eslint-config-tailwind-workspace-'))
+
+    try {
+      mkdirSync(join(root, 'apps/docs/src/styles'), { recursive: true })
+      mkdirSync(join(root, 'packages/lumen/src'), { recursive: true })
+      writeFileSync(join(root, 'package.json'), JSON.stringify({
+        devDependencies: { tailwindcss: 'latest' },
+        name: 'workspace-root'
+      }))
+      writeFileSync(
+        join(root, 'pnpm-workspace.yaml'),
+        'packages:\n  - \'apps/*\'\n  - \'packages/*\'\n'
+      )
+      writeFileSync(join(root, 'apps/docs/package.json'), JSON.stringify({
+        dependencies: { tailwindcss: 'latest' },
+        name: 'docs'
+      }))
+      writeFileSync(
+        join(root, 'apps/docs/src/styles/global.css'),
+        '@import "tailwindcss";\n'
+      )
+      writeFileSync(join(root, 'packages/lumen/package.json'), JSON.stringify({ name: 'lumen' }))
+
+      const config = await defineConfig({
+        root,
+        settings: [Setting.NoGitignore],
+        tools: []
+      })
+      const tailwindSettings = config.filter(
+        entry => entry.name === 'eslint-config-basic/tailwind-settings'
+      )
+      const rootSettings = tailwindSettings.find(entry => !entry.files)
+      const docsSettings = tailwindSettings.find(entry => entry.files?.includes('apps/docs/**/*'))
+
+      expect(rootSettings).toBeUndefined()
+      expect(docsSettings?.settings?.['better-tailwindcss']).toMatchObject({
+        cwd: join(root, 'apps/docs'),
+        entryPoint: 'src/styles/global.css'
+      })
+      expect(docsSettings?.rules?.['better-tailwindcss/no-unknown-classes']).toEqual([
+        'error',
+        { entryPoint: 'src/styles/global.css' }
+      ])
+    } finally {
+      rmSync(root, { force: true, recursive: true })
+    }
+  })
+
+  test('disables unknown-class validation when Tailwind has no usable entry point', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'eslint-config-tailwind-without-entry-'))
+
+    try {
+      writeFileSync(join(root, 'package.json'), JSON.stringify({ name: 'tailwind-app' }))
+
+      const config = await defineConfig({
+        detection: false,
+        libraries: [Library.Tailwind],
+        root,
+        settings: [Setting.NoGitignore],
+        tools: []
+      })
+      const tailwindSettings = config.find(
+        entry => entry.name === 'eslint-config-basic/tailwind-settings'
+      )
+
+      expect(tailwindSettings?.rules?.['better-tailwindcss/no-unknown-classes']).toBe('off')
+      expect(tailwindSettings?.settings?.['better-tailwindcss']).not.toHaveProperty('entryPoint')
+    } finally {
+      rmSync(root, { force: true, recursive: true })
+    }
+  })
+
+  test('recognizes exact semantic classes from the local Tailwind CSS import graph', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'eslint-config-tailwind-mixed-css-'))
+
+    try {
+      mkdirSync(join(root, 'src/styles'), { recursive: true })
+      writeFileSync(join(root, 'package.json'), JSON.stringify({ name: 'mixed-css-app' }))
+      writeFileSync(
+        join(root, 'src/styles/global.css'),
+        '@import "tailwindcss";\n@import "./components.css";\n'
+      )
+      writeFileSync(
+        join(root, 'src/styles/components.css'),
+        [
+          '.ui-button, .lumen-template__panel:hover { color: purple; }',
+          'a[href$=".pdf"] { color: black; }',
+          '@utility message-card { padding: 1rem; }',
+          '@utility dynamic-* { color: red; }',
+          ''
+        ].join('\n')
+      )
+
+      const config = await defineConfig({
+        detection: false,
+        libraries: [Library.Tailwind],
+        root,
+        settings: [Setting.NoGitignore],
+        tailwind: { entryPoint: 'src/styles/global.css', ignore: ['^external-component$'] },
+        tools: []
+      })
+      const tailwindSettings = config.find(
+        entry => entry.name === 'eslint-config-basic/tailwind-settings'
+      )
+      const rule = tailwindSettings?.rules?.['better-tailwindcss/no-unknown-classes']
+      const options = Array.isArray(rule) ? rule[1] as { ignore?: string[] } : undefined
+      const matchesIgnore = (className: string): boolean => Boolean(
+        options?.ignore?.some(pattern => new RegExp(pattern).test(className))
+      )
+
+      expect(matchesIgnore('ui-button')).toBe(true)
+      expect(matchesIgnore('lumen-template__panel')).toBe(true)
+      expect(matchesIgnore('message-card')).toBe(true)
+      expect(matchesIgnore('external-component')).toBe(true)
+      expect(matchesIgnore('dynamic-example')).toBe(false)
+      expect(matchesIgnore('pdf')).toBe(false)
+      expect(matchesIgnore('ui-unknown')).toBe(false)
+      expect(tailwindSettings?.settings?.['better-tailwindcss']).toMatchObject({
+        ignore: ['^external-component$']
+      })
+    } finally {
+      rmSync(root, { force: true, recursive: true })
+    }
+  })
+
+  test('handles nested, escaped, cyclic, queried, and malformed local CSS', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'eslint-config-tailwind-css-edges-'))
+
+    try {
+      mkdirSync(join(root, 'src/styles'), { recursive: true })
+      writeFileSync(join(root, 'package.json'), JSON.stringify({ name: 'css-edge-app' }))
+      writeFileSync(
+        join(root, 'src/styles/global.css'),
+        '@import "./components.css?source";\n'
+      )
+      writeFileSync(
+        join(root, 'src/styles/components.css'),
+        [
+          '@import "./global.css";',
+          '@layer components {',
+          '  .layer-card { color: red; }',
+          '  .escaped\\:card { color: blue; }',
+          '  @media (width > 20rem) {',
+          '    & .nested-card { color: green; }',
+          '  }',
+          '}',
+          '.malformed-card {',
+          '/* .comment-only { color: black; } */',
+          ''
+        ].join('\n')
+      )
+
+      const config = await defineConfig({
+        detection: false,
+        libraries: [Library.Tailwind],
+        root,
+        settings: [Setting.NoGitignore],
+        tailwind: { entryPoint: 'src/styles/global.css' },
+        tools: []
+      })
+      const tailwindSettings = config.find(
+        entry => entry.name === 'eslint-config-basic/tailwind-settings'
+      )
+      const rule = tailwindSettings?.rules?.['better-tailwindcss/no-unknown-classes']
+      const options = Array.isArray(rule) ? rule[1] as { ignore?: string[] } : undefined
+      const matchesIgnore = (className: string): boolean => Boolean(
+        options?.ignore?.some(pattern => new RegExp(pattern).test(className))
+      )
+
+      expect(matchesIgnore('layer-card')).toBe(true)
+      expect(matchesIgnore('escaped:card')).toBe(true)
+      expect(matchesIgnore('nested-card')).toBe(true)
+      expect(matchesIgnore('malformed-card')).toBe(true)
+      expect(matchesIgnore('comment-only')).toBe(false)
+    } finally {
+      rmSync(root, { force: true, recursive: true })
+    }
+  })
+
   test('root detection and Tailwind options are inherited by scoped projects', async () => {
     const config = await defineConfig({
       detection: { libraries: false },

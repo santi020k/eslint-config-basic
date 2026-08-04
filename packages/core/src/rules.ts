@@ -232,7 +232,11 @@ export const rules: TSESLint.Linter.RulesRecord = {
   'brace-style': 'off',
   // External wire formats commonly use snake_case property names. Keep
   // enforcing camelCase for local bindings while leaving property keys alone.
-  camelcase: ['warn', { properties: 'never' }],
+  // We explicitly allow common OSV vulnerability properties as local bindings.
+  camelcase: ['warn', {
+    allow: ['database_specific', 'ecosystem_specific'],
+    properties: 'never'
+  }],
   'comma-dangle': 'off',
   eqeqeq: 'warn',
   'func-style': ['warn', 'expression'],

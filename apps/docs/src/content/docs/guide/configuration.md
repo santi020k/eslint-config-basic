@@ -389,11 +389,23 @@ Use `noUnknownClasses: false` when a project uses many generated or framework-pr
 
 Relative entry points are resolved from `root`, so project-scoped monorepo configs work when ESLint runs from the repository root. Set `tailwind.cwd` only when Tailwind must resolve from a different directory.
 
+With a CSS entry point, the composer follows local relative imports and
+automatically allows exact standalone selectors and static Tailwind v4
+`@utility` names. It deliberately does not guess dynamic `@utility name-*`
+families, remote sources, or package-owned generated classes. Install package
+providers such as `tw-animate-css` so Tailwind can compile their imports, then
+add only any remaining project-specific classes as anchored `ignore` patterns.
+
 Set `tailwind: false` to disable auto-detected Tailwind linting for a package.
 
 ## Testing Files
 
 Testing integrations ship with default file globs. Override them only when your project stores tests somewhere unusual:
+
+Playwright defaults are limited to its config files, explicit e2e, functional,
+or Playwright folders, and `.e2e.*` or `.playwright.*` file names. Generic test
+folders and names such as `tests/unit/**` and `tests/*.spec.*` are not
+Playwright-owned by default because they may belong to Vitest or Jest.
 
 ```js
 import { defineConfig, Testing } from '@santi020k/eslint-config-basic'
