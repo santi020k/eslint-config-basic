@@ -26,6 +26,7 @@ words:
   - clinerules
   - codecov
   - codegen
+  - configfeature
   - commitlint
   - commitprompt
   - commonmark
