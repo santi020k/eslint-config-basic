@@ -29,8 +29,8 @@
     "check:exports": "publint",
     "clean": "rm -rf dist",
     "dev": "tsup --watch",
-    "lint": "eslint . --no-warn-ignored --pass-on-no-patterns",
-    "lint:fix": "eslint . --fix --no-warn-ignored --pass-on-no-patterns",
+    "lint": "eslint . --no-warn-ignored --pass-on-no-patterns --max-warnings=0",
+    "lint:fix": "eslint . --fix --no-warn-ignored --pass-on-no-patterns --max-warnings=0",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -59,7 +59,7 @@
   "peerDependencies": {
     "eslint": "^10.0.0",
     "graphql": "^16.0.0 || ^17.0.0",
-    "typescript": ">=5.0.0"
+    "typescript": ">=5.0.0 <7.0.0"
   },
   "peerDependenciesMeta": {
     "graphql": {
@@ -78,5 +78,6 @@
     "directory": "packages/formats"
   },
   "homepage": "https://eslint.santi020k.com/tooling/formats",
+  "author": "santi020k",
   "license": "MIT"
 }

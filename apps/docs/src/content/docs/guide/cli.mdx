@@ -87,9 +87,21 @@ npx @santi020k/eslint-config-basic explain-preset app --file src/index.ts
 ```
 
 The report groups newly enabled rules into formatting, correctness, security,
-framework, and domain sections. Use `--json` for migration tooling. To keep a
-migration incremental, generate a temporary override that disables only the
-newly enabled rules:
+framework, and domain sections. Add `--analyze-source` to count current findings
+and preview autofix without writing files:
+
+```sh
+npx @santi020k/eslint-config-basic explain-preset app --analyze-source
+```
+
+For TypeScript projects, source analysis first runs the consumer's own compiler
+with `--noEmit`. Module-resolution and other root compiler diagnostics are
+shown before cascading type-aware unsafe-rule findings, so dependency or import
+problems can be fixed before lint debt is classified. The structured result is
+also available through `--json`.
+
+To keep a migration incremental, generate a temporary override that disables
+only the newly enabled rules:
 
 ```sh
 npx @santi020k/eslint-config-basic explain-preset app --file src/index.ts --compatibility
@@ -157,6 +169,22 @@ For Astro projects, `doctor` also reports mismatched Astro Doctor configuration,
 npx @santi020k/eslint-config-basic doctor
 ```
 
+Add `--verbose` in a workspace to print a compact row for the root and every
+detected project. Each row includes the selected runtime, TypeScript mode and
+tsconfig, framework processors, formats, libraries, extensions, testing packs,
+tools, and ignore patterns. Feature markers distinguish installed (`I`),
+detected (`D`), and enabled (`E`) state:
+
+```sh
+npx @santi020k/eslint-config-basic doctor --verbose
+```
+
+When a supporting optional package is installed but not activated, the verbose
+report explains whether the project lacked a matching detection signal or the
+active config did not load the detected pack. `doctor --json` always includes
+the same structured data in its `projects` array, including inactive-package
+reasons, without requiring `--verbose`.
+
 Use `--fix` to create a missing generated config, add a lint script, declare
 detected v3 packages, and rewrite straightforward v1 framework imports.
 `package.json` and rewritten configs receive numbered `.doctor.bak` backups.
@@ -183,15 +211,32 @@ npx @santi020k/eslint-config-basic init --check
 ## Check Compatibility
 
 `compatibility` resolves every declared `@santi020k/eslint-config-*` package
-and checks its Node engine plus ESLint and TypeScript peer ranges:
+through Node package resolution, including dependencies declared with default
+or named pnpm `catalog:` specifiers. It reports each declaration, resolved
+manifest path, and version; checks the current Node runtime plus the consumer's
+declared `engines.node` range; and verifies ESLint and TypeScript peer ranges:
 
 ```sh
 npx @santi020k/eslint-config-basic compatibility
 npx @santi020k/eslint-config-basic compatibility --json
 ```
 
-It exits with code 1 for missing or incompatible declared packages, making it
-suitable for dependency-update pull requests.
+When Full is declared, the report shows both the installed Full version and the
+resolved Basic package that supplies composer behavior. Release CI also
+requires a Full changeset whenever one of its aggregated config packages is
+released, so batteries-included consumers receive meaningful aggregate updates
+without forcing every package to share the same minor version.
+
+It exits with code 1 for missing or incompatible declared packages, or when the
+consumer Node range permits versions unsupported by an installed config
+package. This makes it suitable for dependency-update pull requests.
+
+`doctor` reports the same consumer Node-range mismatch. Use `doctor --fix` to
+update `engines.node`; the fixer computes the intersection of the existing
+consumer range and all resolved config-package requirements, so supported union
+branches are retained and the manifest is never broadened accidentally. As with
+other doctor writes, the original manifest is saved as
+`package.json.doctor.bak`.
 
 ## Generate Team Standards
 

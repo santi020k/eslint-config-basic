@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url'
 
 import { angularConfig } from '@santi020k/eslint-config-angular'
 import astro from '@santi020k/eslint-config-astro'
-import { defineConfig, Format } from '@santi020k/eslint-config-basic'
+import { defineConfig, Format, Library, Tool } from '@santi020k/eslint-config-basic'
 import { expoConfig } from '@santi020k/eslint-config-expo'
 import { honoConfig } from '@santi020k/eslint-config-hono'
 import { nestConfig } from '@santi020k/eslint-config-nest'
@@ -15,17 +15,62 @@ import { slidev as slidevConfig } from '@santi020k/eslint-config-slidev'
 import { svelteConfig } from '@santi020k/eslint-config-svelte'
 import { vite as viteConfig } from '@santi020k/eslint-config-vite'
 import { vueConfig } from '@santi020k/eslint-config-vue'
+import { describe, expect, test, vi } from 'vitest'
 
-import { describe, expect, test } from 'vitest'
-
-import { lintFile, lintText } from './test-utils.js'
+import { lintFile, lintText, lintTextWithFix } from './test-utils.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 const FIXTURES_DIR = join(__dirname, '../fixtures')
 const astroConfig = astro()
+const isCircularFixWarning = (call: unknown[]): boolean => call.some(value => {
+  if (typeof value === 'string') return value.includes('ESLintCircularFixesWarning')
+
+  if (value instanceof Error) {
+    return value.name === 'ESLintCircularFixesWarning' ||
+      value.message.includes('Circular fixes detected')
+  }
+
+  if (!value || typeof value !== 'object') return false
+
+  return Object.values(value).some(
+    property => property === 'ESLintCircularFixesWarning'
+  )
+})
 
 describe('Integration Tests', () => {
+  describe('Tailwind CSS', () => {
+    test('should allow declared semantic CSS classes while rejecting nearby typos', async () => {
+      const tailwindRoot = join(FIXTURES_DIR, 'tailwind')
+      const config = await defineConfig({
+        detection: false,
+        libraries: [Library.Tailwind],
+        root: tailwindRoot,
+        tailwind: { entryPoint: 'global.css' },
+        tools: [],
+        typescript: false
+      })
+      const declaredResults = await lintText(
+        'export const className = \'ui-button lumen-template__panel message-card\'\n',
+        config,
+        join(tailwindRoot, 'declared.js')
+      )
+      const typoResults = await lintText(
+        'export const className = \'ui-unknown\'\n',
+        config,
+        join(tailwindRoot, 'typo.js')
+      )
+      const getUnknownClassMessages = (results: typeof declaredResults): string[] => (
+        results.flatMap(result => result.messages)
+          .filter(message => message.ruleId === 'better-tailwindcss/no-unknown-classes')
+          .map(message => message.message)
+      )
+
+      expect(getUnknownClassMessages(declaredResults)).toEqual([])
+      expect(getUnknownClassMessages(typoResults)).toContain('Unknown class detected: ui-unknown')
+    })
+  })
+
   describe('JavaScript', () => {
     test('should report warnings for stylistic issues in javascript.js', async () => {
       const config = await defineConfig({ detection: false, tools: [] })
@@ -47,6 +92,36 @@ describe('Integration Tests', () => {
 
       expect(results[0].errorCount).toBe(0)
       expect(results[0].warningCount).toBe(0)
+    })
+
+    test('should allow an explicitly ignored promise in an event handler', async () => {
+      const config = await defineConfig({
+        detection: false,
+        tools: [],
+        typescript: false
+      })
+      const code = [
+        'const reportError = error => console.error(error)',
+        'const refresh = () => Promise.resolve()',
+        'const button = document.querySelector(\'button\')',
+        '',
+        'button?.addEventListener(\'click\', () => {',
+        '  void refresh().catch(reportError)',
+        '})',
+        ''
+      ].join('\n')
+      const results = await lintText(code, config, 'event-handler.js')
+      const ruleIds = results[0].messages.map(message => message.ruleId)
+      const valueResults = await lintText(
+        'const ignored = void Promise.resolve()\n\nconsole.log(ignored)\n',
+        config,
+        'void-value.js'
+      )
+
+      expect(ruleIds).not.toContain('no-void')
+      expect(ruleIds).not.toContain('promise/always-return')
+      expect(ruleIds).not.toContain('promise/catch-or-return')
+      expect(valueResults[0].messages.map(message => message.ruleId)).toContain('no-void')
     })
   })
 
@@ -135,6 +210,73 @@ describe('Integration Tests', () => {
       expect(ruleIds).not.toContain('@stylistic/quotes')
       expect(ruleIds).not.toContain('no-unused-vars')
     })
+
+    test('should allow external snake-case schema properties but reject local snake-case bindings', async () => {
+      const config = await defineConfig({
+        detection: false,
+        tools: [],
+        typescript: 'syntax'
+      })
+      const externalSchema = [
+        'interface ApiResponse {',
+        '  database_specific: string',
+        '  \'ecosystem_specific\': string',
+        '  font_style: string',
+        '  ntp_background_repeat: string',
+        '  theme_ntp_background: string',
+        '}',
+        '',
+        'const fieldName = \'database_specific\'',
+        'const response: ApiResponse = {',
+        '  database_specific: \'database\',',
+        '  \'ecosystem_specific\': \'ecosystem\',',
+        '  font_style: \'bold\',',
+        '  ntp_background_repeat: \'no-repeat\',',
+        '  theme_ntp_background: \'#000\'',
+        '}',
+        'const { database_specific: databaseSpecific } = response',
+        'const computedValue = response[fieldName]',
+        '',
+        'console.log(databaseSpecific, computedValue)',
+        ''
+      ].join('\n')
+      const allowedResults = await lintText(externalSchema, config, 'external-schema.ts')
+      const rejectedResults = await lintText(
+        'const local_name = \'value\'\n\nconsole.log(local_name)\n',
+        config,
+        'local-binding.ts'
+      )
+
+      expect(allowedResults[0].messages.map(message => message.ruleId)).not.toContain('camelcase')
+      expect(rejectedResults[0].messages.map(message => message.ruleId)).toContain('camelcase')
+    })
+
+    test('should support explicit no-op cleanup factories without empty functions', async () => {
+      const config = await defineConfig({
+        detection: false,
+        tools: [],
+        typescript: 'syntax'
+      })
+      const source = [
+        'const setup = (element: HTMLElement | null) => {',
+        '  if (!element) return () => undefined',
+        '',
+        '  const listener = () => element.removeAttribute(\'data-active\')',
+        '',
+        '  element.addEventListener(\'click\', listener)',
+        '',
+        '  return () => element.removeEventListener(\'click\', listener)',
+        '}',
+        '',
+        'console.log(setup(document.querySelector(\'main\')))',
+        ''
+      ].join('\n')
+      const results = await lintText(source, config, 'cleanup-factory.ts')
+      const ruleIds = results[0].messages.map(message => message.ruleId)
+
+      expect(ruleIds).not.toContain('func-style')
+      expect(ruleIds).not.toContain('@typescript-eslint/no-empty-function')
+    })
   })
 
   describe('Astro Doctor', () => {
@@ -153,6 +295,154 @@ describe('Integration Tests', () => {
       expect(results[0].fatalErrorCount).toBe(0)
       expect(ruleIds).toContain('astro-doctor/no-missing-lang')
       expect(ruleIds).toContain('astro-doctor/no-missing-alt')
+    })
+  })
+
+  describe('Astro autofix convergence', () => {
+    test.each([
+      {
+        name: 'inline scripts',
+        source: [
+          '---',
+          'const title = \'Theme\'',
+          '---',
+          '<section>',
+          '  <h1>{title}</h1>',
+          '  <script is:inline>',
+          '    const theme = localStorage.getItem(\'theme\')',
+          '    document.documentElement.dataset.theme = theme ?? \'system\'',
+          '  </script>',
+          '</section>',
+          ''
+        ].join('\n')
+      },
+      {
+        name: 'nested pre and code examples',
+        source: [
+          '---',
+          'const example = \'<button>Example</button>\'',
+          '---',
+          '<pre>',
+          '  <code>{example}</code>',
+          '</pre>',
+          ''
+        ].join('\n')
+      },
+      {
+        name: 'typed client scripts',
+        source: [
+          '<button type="button" data-search>Search</button>',
+          '<script>',
+          '  type SearchState = \'idle\' | \'loading\' | \'ready\' | \'error\'',
+          '  const button = document.querySelector(\'[data-search]\')',
+          '  let state: SearchState = \'idle\'',
+          '',
+          '  button?.addEventListener(\'click\', () => {',
+          '    state = \'loading\'',
+          '    button.dataset.state = state',
+          '  })',
+          '</script>',
+          ''
+        ].join('\n')
+      },
+      {
+        name: 'consecutive JSDoc declarations',
+        source: [
+          '<script is:inline>',
+          '  /** @type {\'idle\' | \'loading\' | \'ready\' | \'error\'} */',
+          '  let state = \'idle\'',
+          '  /** @type {Promise<boolean> | null} */',
+          '  let promise = null',
+          '',
+          '  window.addEventListener(\'load\', () => {',
+          '    state = \'ready\'',
+          '    promise = Promise.resolve(true)',
+          '    console.log(state, promise)',
+          '  })',
+          '</script>',
+          ''
+        ].join('\n')
+      },
+      {
+        name: 'fragments with nested ternaries',
+        source: [
+          '---',
+          'const state = \'ready\'',
+          'const fallback = false',
+          '---',
+          '<>',
+          '  {state === \'ready\' ? <strong>Ready</strong> : fallback ? <em>Waiting</em> : <span>Idle</span>}',
+          '</>',
+          ''
+        ].join('\n')
+      },
+      {
+        name: 'same-line imports in client scripts',
+        source: [
+          '<script>import state from \'./state.js\'; console.log(state)</script>',
+          '<main>Ready</main>',
+          ''
+        ].join('\n')
+      },
+      {
+        name: 'multiple virtual script blocks',
+        source: [
+          '<script is:inline>',
+          '  document.documentElement.dataset.theme = \'dark\'',
+          '</script>',
+          '<section>Theme</section>',
+          '<script>',
+          '  const section = document.querySelector(\'section\')',
+          '  section?.setAttribute(\'data-ready\', \'true\')',
+          '</script>',
+          ''
+        ].join('\n')
+      },
+      {
+        name: 'multiline component attributes with adjacent text',
+        source: [
+          '<button',
+          '  aria-controls="theme-generate-panel"',
+          '  aria-selected="true"',
+          '  id="theme-generate-tab"',
+          '  type="button"',
+          '>Generate',
+          '</button>',
+          ''
+        ].join('\n')
+      },
+      {
+        name: 'dense nested component markup',
+        source: [
+          '<section class="lumen-template__metrics">',
+          '  <Card class="lumen-template__metric"><Stat label="Workspace members" value="248" /><Badge variant="success">+24</Badge></Card>',
+          '</section>',
+          ''
+        ].join('\n')
+      }
+    ])('should reach a stable result for $name', async ({ source }) => {
+      const warningSpy = vi.spyOn(process, 'emitWarning')
+      const config = await defineConfig({
+        detection: false,
+        frameworks: { astro: true },
+        tools: [],
+        typescript: false
+      })
+      const fileName = join(FIXTURES_DIR, 'convergence.astro')
+      const [firstPass] = await lintTextWithFix(source, config, fileName)
+      const stableSource = firstPass.output ?? source
+      const [secondPass] = await lintTextWithFix(stableSource, config, fileName)
+      const secondPassRuleIds = secondPass.messages.map(message => message.ruleId)
+
+      expect(secondPass.output).toBeUndefined()
+      expect(secondPassRuleIds).not.toContain('@stylistic/indent')
+      expect(secondPassRuleIds).not.toEqual(expect.arrayContaining([
+        '@stylistic/eol-last',
+        '@stylistic/no-multiple-empty-lines',
+        '@stylistic/no-trailing-spaces'
+      ]))
+      expect(warningSpy.mock.calls.some(call => isCircularFixWarning(call))).toBe(false)
+      warningSpy.mockRestore()
     })
   })
 
@@ -260,6 +550,105 @@ describe('Integration Tests', () => {
       expect(ruleIds).not.toContain('@typescript-eslint/no-unsafe-return')
       expect(ruleIds).not.toContain(null)
     })
+
+    test('should not apply JavaScript line length to declarative Astro markup', async () => {
+      const config = await defineConfig({
+        detection: false,
+        frameworks: { astro: true },
+        tools: [],
+        typescript: false
+      })
+      const source = [
+        '<svg viewBox="0 0 120 20" aria-label="A deliberately descriptive accessible icon label that should remain readable as markup">',
+        '  <path d="M0 10 C 10 0, 20 0, 30 10 S 50 20, 60 10 S 80 0, 90 10 S 110 20, 120 10" fill="currentColor" />',
+        '</svg>',
+        ''
+      ].join('\n')
+      const results = await lintText(source, config, join(FIXTURES_DIR, 'long-markup.astro'))
+
+      expect(results[0].messages.map(message => message.ruleId)).not.toContain('@stylistic/max-len')
+    })
+
+    test.each([
+      {
+        name: 'conditional redirect',
+        source: [
+          '---',
+          'const unauthorized = true',
+          'if (unauthorized) return Astro.redirect(\'/login/\')',
+          '---',
+          '<main>Authorized</main>',
+          ''
+        ].join('\n')
+      },
+      {
+        name: 'unconditional redirect',
+        source: [
+          '---',
+          'return Astro.redirect(\'/login/\')',
+          '---',
+          ''
+        ].join('\n')
+      }
+    ])('should lint and autofix an Astro $name without crashing', async ({ source }) => {
+      const config = await defineConfig({
+        detection: false,
+        frameworks: { astro: true },
+        tools: [],
+        tsconfigRootDir: FIXTURES_DIR,
+        typescript: true
+      })
+      const filePath = join(FIXTURES_DIR, 'redirect.astro')
+      const lintResults = await lintText(source, config, filePath)
+      const fixResults = await lintTextWithFix(source, config, filePath)
+
+      expect(lintResults[0].fatalErrorCount).toBe(0)
+      expect(fixResults[0].fatalErrorCount).toBe(0)
+      expect(lintResults[0].messages.map(message => message.ruleId))
+        .not.toContain('@typescript-eslint/no-misused-promises')
+    })
+  })
+
+  describe('GitHub Actions YAML', () => {
+    test.each([
+      {
+        label: 'YAML format',
+        options: { formats: [Format.Yaml], tools: [] }
+      },
+      {
+        label: 'GitHub Actions tool',
+        options: { formats: [], tools: [Tool.GithubActions] }
+      }
+    ])('should allow empty event keys with the $label', async ({ options }) => {
+      const config = await defineConfig({
+        detection: false,
+        ...options,
+        typescript: false
+      })
+      const workflowPath = join(FIXTURES_DIR, '.github/workflows/ci.yml')
+      const validWorkflow = [
+        'on:',
+        '  workflow_dispatch:',
+        '  pull_request:',
+        '  push:',
+        'jobs: {}',
+        ''
+      ].join('\n')
+      const invalidWorkflow = [
+        'on:',
+        '  workflow_dispatch:',
+        'jobs:',
+        '  build:',
+        ''
+      ].join('\n')
+      const validResults = await lintText(validWorkflow, config, workflowPath)
+      const invalidResults = await lintText(invalidWorkflow, config, workflowPath)
+
+      expect(validResults[0].messages.map(message => message.ruleId))
+        .not.toContain('no-restricted-syntax')
+      expect(invalidResults[0].messages.map(message => message.ruleId))
+        .toContain('no-restricted-syntax')
+    })
   })
 
   describe('Expo', () => {
@@ -315,6 +704,24 @@ describe('Integration Tests', () => {
       const names = config.flatMap(c => (c.name ? [c.name] : []))
 
       expect(names).toContain('eslint-config-next/custom')
+    })
+
+    test('should accept the generated next-env declaration after a build', async () => {
+      const config = await defineConfig({
+        detection: false,
+        frameworks: { next: true },
+        tools: [],
+        typescript: 'syntax'
+      })
+      const results = await lintText(
+        '/// <reference types="next" />\nimport "./.next/types/routes.d.ts";\n',
+        config,
+        'next-env.d.ts'
+      )
+      const ruleIds = results[0].messages.map(message => message.ruleId)
+
+      expect(ruleIds).not.toContain('@stylistic/quotes')
+      expect(ruleIds).not.toContain('@stylistic/semi')
     })
   })
 
@@ -387,6 +794,28 @@ describe('Integration Tests', () => {
   })
 
   describe('Slidev', () => {
+    test('should preserve historical formatting inside fenced Markdown code', async () => {
+      const config = await defineConfig({
+        detection: false,
+        formats: [Format.Markdown],
+        tools: [],
+        typescript: false
+      })
+      const source = [
+        '```js',
+        'const options = {',
+        '  message: "historical style",',
+        '};',
+        '```'
+      ].join('\n')
+      const results = await lintText(source, config, 'CHANGELOG.md')
+      const ruleIds = results[0].messages.map(message => message.ruleId)
+
+      expect(ruleIds).not.toContain('@stylistic/comma-dangle')
+      expect(ruleIds).not.toContain('@stylistic/quotes')
+      expect(ruleIds).not.toContain('@stylistic/semi')
+    })
+
     test('should include Slidev-specific config entries', async () => {
       const config = await defineConfig({
         detection: false,

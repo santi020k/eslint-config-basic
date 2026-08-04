@@ -4,6 +4,10 @@ import { join, relative } from 'node:path'
 const rootDir = process.cwd()
 const packagesDir = join(rootDir, 'packages')
 
+const artifactBudgets = JSON.parse(
+  readFileSync(join(rootDir, 'scripts', 'package-metrics-policy.json'), 'utf8')
+)
+
 const dependencyBudgets = new Map([
   ['@santi020k/eslint-config-basic', 4],
   ['@santi020k/eslint-config-core', 10],
@@ -100,10 +104,28 @@ process.stdout.write([fmtRow(headers), separator, ...rowValues.map(fmtRow)].join
 
 const budgetFailures = rows.flatMap(row => {
   const budget = dependencyBudgets.get(row.name)
+  const artifactBudget = artifactBudgets[row.name]
+  const failures = []
 
-  return budget !== undefined && row.dependencies > budget ?
-    [`${row.name} has ${row.dependencies} direct dependencies; budget is ${budget}.`] :
-    []
+  if (budget !== undefined && row.dependencies > budget) {
+    failures.push(`${row.name} has ${row.dependencies} direct dependencies; budget is ${budget}.`)
+  }
+
+  if (!artifactBudget) {
+    failures.push(`${row.name} has no artifact budget in scripts/package-metrics-policy.json.`)
+  } else {
+    if (row.dist > artifactBudget.maxBytes) {
+      failures.push(
+        `${row.name} produces ${formatBytes(row.dist)}; budget is ${formatBytes(artifactBudget.maxBytes)}.`
+      )
+    }
+
+    if (row.files > artifactBudget.maxFiles) {
+      failures.push(`${row.name} produces ${row.files} files; budget is ${artifactBudget.maxFiles}.`)
+    }
+  }
+
+  return failures
 })
 
 if (budgetFailures.length > 0) {

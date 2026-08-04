@@ -1,9 +1,8 @@
 /* eslint-disable no-console -- CLI handlers own user-facing terminal output */
-/* eslint-disable security/detect-non-literal-fs-filename -- output is scoped to the caller-selected project root */
-/* eslint-disable complexity, security/detect-object-injection -- report comparison indexes validated ESLint rule maps */
-import { existsSync, writeFileSync } from 'node:fs'
+/* eslint-disable complexity -- report comparison and formatting intentionally cover multiple result branches */
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { createRequire, findPackageJSON } from 'node:module'
-import { join, relative } from 'node:path'
+import { dirname, extname, join, relative } from 'node:path'
 import { pathToFileURL } from 'node:url'
 
 import {
@@ -13,6 +12,7 @@ import {
   Preset
 } from '@santi020k/eslint-config-core'
 
+import { type CommandRunner, defaultCommandRunner } from './cli-workflows.js'
 import { type DefineConfigMetadata, getDefineConfigMetadata } from './define-config-metadata.js'
 import { defineConfig } from './index.js'
 import { isMissingRequestedPackage } from './optional-package-errors.js'
@@ -22,21 +22,46 @@ interface EffectiveConfig {
   rules?: Partial<Record<string, unknown>>
 }
 
+interface ProjectLintMessage {
+  fatal?: boolean
+  fix?: unknown
+  ruleId: null | string
+  severity: number
+}
+
+interface ProjectLintResult {
+  errorCount: number
+  filePath: string
+  messages: ProjectLintMessage[]
+  output?: string
+  warningCount: number
+}
+
 interface ProjectEslint {
   calculateConfigForFile: (filePath: string) => Promise<EffectiveConfig | null>
+  lintFiles: (patterns: string[]) => Promise<ProjectLintResult[]>
 }
 
 type ProjectEslintConstructor = new(options: {
   cwd: string
+  fix?: boolean
   overrideConfig?: unknown
   overrideConfigFile?: boolean
 }) => ProjectEslint
 
 export interface ExplainPresetOptions {
+  analyzeSource?: boolean
   compatibility?: boolean
   file?: string
+  files?: string[]
   json?: boolean
   output?: string
+}
+
+interface CreatePresetReportOptions {
+  analyzeSource?: boolean
+  sourceFiles?: string[]
+  typescriptRunner?: CommandRunner
 }
 
 const PRESETS = new Set<string>(Object.values(Preset))
@@ -178,7 +203,8 @@ const normalizeRule = (value: unknown): string => JSON.stringify(value)
 
 const loadProjectEslint = (
   cwd: string,
-  overrideConfig?: unknown
+  overrideConfig?: unknown,
+  fix = false
 ): ProjectEslint => {
   const projectRequire = createRequire(join(cwd, 'package.json'))
   const eslintModule = projectRequire('eslint') as { ESLint?: ProjectEslintConstructor }
@@ -187,6 +213,7 @@ const loadProjectEslint = (
 
   return new eslintModule.ESLint({
     cwd,
+    ...(fix ? { fix: true } : {}),
     ...(overrideConfig ? { overrideConfig, overrideConfigFile: true } : {})
   })
 }
@@ -312,10 +339,352 @@ const createCompatibilityConfig = (
   ''
 ].join('\n')
 
+interface FindingSummary {
+  errors: number
+  fixable: number
+  total: number
+  warnings: number
+}
+
+const createFindingSummary = (): FindingSummary => ({
+  errors: 0,
+  fixable: 0,
+  total: 0,
+  warnings: 0
+})
+
+const addFinding = (
+  summaries: Record<string, FindingSummary>,
+  key: string,
+  message: ProjectLintMessage
+): void => {
+  const summary = summaries[key] ?? createFindingSummary()
+
+  summary.total++
+
+  if (message.severity === 2) summary.errors++
+  else summary.warnings++
+
+  if (message.fix !== undefined) summary.fixable++
+
+  summaries[key] = summary
+}
+
+const estimateChangedLines = (before: string, after: string): number => {
+  const beforeLines = before.split('\n')
+  const afterLines = after.split('\n')
+  const comparableLines = Math.min(beforeLines.length, afterLines.length)
+  let changed = Math.abs(beforeLines.length - afterLines.length)
+
+  for (let index = 0; index < comparableLines; index++) {
+    if (beforeLines[index] !== afterLines[index]) changed++
+  }
+
+  return changed
+}
+
+const readOriginalSource = (filePath: string): string | undefined => {
+  try {
+    return readFileSync(filePath, 'utf8')
+  } catch {
+    return undefined
+  }
+}
+
+const TYPESCRIPT_CONFIG_FILENAMES = [
+  'tsconfig.json',
+  'tsconfig.base.json',
+  'tsconfig.app.json',
+  'tsconfig.node.json',
+  'tsconfig.eslint.json'
+]
+
+const TYPESCRIPT_ROOT_DIAGNOSTIC_CODES = new Set([
+  'TS2307',
+  'TS2688',
+  'TS2792',
+  'TS6053'
+])
+
+const resolveTypeScriptCli = (cwd: string): null | string => {
+  try {
+    const projectRequire = createRequire(join(cwd, 'package.json'))
+    const packagePath = projectRequire.resolve('typescript/package.json')
+
+    const manifest = JSON.parse(readFileSync(packagePath, 'utf8')) as {
+      bin?: Record<string, string> | string
+    }
+
+    const bin = typeof manifest.bin === 'string' ? manifest.bin : manifest.bin?.tsc
+
+    return bin ? join(dirname(packagePath), bin) : null
+  } catch {
+    return null
+  }
+}
+
+const getTypeScriptConfigs = (
+  cwd: string,
+  configuredProjects: string[]
+): string[] => {
+  const detectedProjects = Object.keys(detectProjectOptions(cwd).projects ?? {})
+  const projectRoots = [...new Set([...detectedProjects, ...configuredProjects])]
+
+  const roots = [
+    cwd,
+    ...projectRoots.map(project => join(cwd, project))
+  ]
+
+  return [...new Set(roots.flatMap(root => {
+    const config = TYPESCRIPT_CONFIG_FILENAMES.find(file => existsSync(join(root, file)))
+
+    return config ? [join(root, config)] : []
+  }))]
+}
+
+interface TypeScriptDiagnostic {
+  code: string
+  config: string
+  message: string
+}
+
+const parseTypeScriptDiagnostics = (
+  cwd: string,
+  config: string,
+  output: string
+): TypeScriptDiagnostic[] => output
+  .split(/\r?\n/)
+  .flatMap(line => {
+    const match = /\berror (TS\d+):\s*(.+)$/.exec(line)
+
+    if (!match) return []
+
+    return [{
+      code: match[1],
+      config: relative(cwd, config),
+      message: match[2]
+    }]
+  })
+
+export const createTypeScriptPreflight = (
+  cwd: string,
+  configuredProjects: string[] = [],
+  runner: CommandRunner = defaultCommandRunner
+) => {
+  const executable = resolveTypeScriptCli(cwd)
+  const configs = getTypeScriptConfigs(cwd, configuredProjects)
+
+  if (!executable || configs.length === 0) {
+    return {
+      configs: [],
+      diagnosticCount: 0,
+      rootDiagnostics: [] as TypeScriptDiagnostic[],
+      status: 'skipped' as const
+    }
+  }
+
+  const diagnostics: TypeScriptDiagnostic[] = []
+
+  const results = configs.map(config => {
+    const result = runner(process.execPath, [
+      executable,
+      '--noEmit',
+      '--pretty',
+      'false',
+      '--project',
+      config
+    ], cwd)
+
+    diagnostics.push(...parseTypeScriptDiagnostics(
+      cwd,
+      config,
+      `${result.stdout}\n${result.stderr}`
+    ))
+
+    return {
+      config: relative(cwd, config),
+      status: result.status
+    }
+  })
+
+  const rootDiagnostics = diagnostics.filter(
+    diagnostic => TYPESCRIPT_ROOT_DIAGNOSTIC_CODES.has(diagnostic.code)
+  )
+
+  return {
+    configs: results,
+    diagnosticCount: diagnostics.length,
+    rootDiagnostics: (rootDiagnostics.length > 0 ? rootDiagnostics : diagnostics).slice(0, 20),
+    status: results.some(result => result.status !== 0) ? 'failed' as const : 'passed' as const
+  }
+}
+
+const analyzePresetSource = async (
+  cwd: string,
+  selectedConfig: unknown,
+  sourceFiles: string[],
+  configuredProjects: string[],
+  typescriptRunner: CommandRunner
+) => {
+  const lintTargets = sourceFiles.length > 0 ? sourceFiles : ['.']
+  const lintResults = await loadProjectEslint(cwd, selectedConfig).lintFiles(lintTargets)
+  const previewResults = await loadProjectEslint(cwd, selectedConfig, true).lintFiles(lintTargets)
+  const byCategory: Record<string, FindingSummary> = {}
+  const byFileType: Record<string, FindingSummary> = {}
+  const byRule: Record<string, FindingSummary> = {}
+  const nonFormattingErrorRules = new Set<string>()
+  let nonFormattingErrors = 0
+
+  for (const result of lintResults) {
+    const fileType = extname(result.filePath) || '[no extension]'
+
+    for (const message of result.messages) {
+      const rule = message.ruleId ?? (message.fatal ? '[fatal]' : '[unknown]')
+      const category = message.ruleId ? getRuleGroup(message.ruleId) : 'correctness'
+
+      addFinding(byCategory, category, message)
+
+      addFinding(byFileType, fileType, message)
+
+      addFinding(byRule, rule, message)
+
+      if (message.severity === 2 && category !== 'formatting') {
+        nonFormattingErrors++
+
+        nonFormattingErrorRules.add(rule)
+      }
+    }
+  }
+
+  const changedFiles: string[] = []
+  const remainingFixableRules = new Set<string>()
+  let estimatedChangedLines = 0
+  let remainingErrors = 0
+  let remainingWarnings = 0
+
+  for (const result of previewResults) {
+    remainingErrors += result.errorCount
+
+    remainingWarnings += result.warningCount
+
+    for (const message of result.messages) {
+      if (message.fix !== undefined) remainingFixableRules.add(message.ruleId ?? '[fatal]')
+    }
+
+    if (result.output === undefined) continue
+
+    changedFiles.push(relative(cwd, result.filePath))
+
+    const original = readOriginalSource(result.filePath)
+
+    if (original !== undefined) estimatedChangedLines += estimateChangedLines(original, result.output)
+  }
+
+  return {
+    autofixPreview: {
+      changedFileCount: changedFiles.length,
+      changedFiles: changedFiles.sort(),
+      estimatedChangedLines,
+      remainingErrors,
+      remainingFixableRules: [...remainingFixableRules].sort(),
+      remainingWarnings
+    },
+    byCategory,
+    byFileType,
+    byRule,
+    lintTargets,
+    nonFormattingErrors: {
+      count: nonFormattingErrors,
+      rules: [...nonFormattingErrorRules].sort()
+    },
+    typescriptPreflight: createTypeScriptPreflight(cwd, configuredProjects, typescriptRunner),
+    totals: {
+      errors: lintResults.reduce((total, result) => total + result.errorCount, 0),
+      files: lintResults.length,
+      findings: lintResults.reduce(
+        (total, result) => total + result.errorCount + result.warningCount,
+        0
+      ),
+      warnings: lintResults.reduce((total, result) => total + result.warningCount, 0)
+    }
+  }
+}
+
+type PresetSourceAnalysis = Awaited<ReturnType<typeof analyzePresetSource>>
+
+const formatSourceAnalysis = (
+  analysis: null | PresetSourceAnalysis
+): string[] => {
+  if (!analysis) {
+    return [
+      '',
+      'Pass --analyze-source to lint with the selected preset and preview autofix without writing files.'
+    ]
+  }
+
+  const nonFormattingRuleSuffix = analysis.nonFormattingErrors.rules.length > 0 ?
+    ` (${analysis.nonFormattingErrors.rules.join(', ')})` :
+    ''
+
+  const remainingFixableRules = analysis.autofixPreview.remainingFixableRules.length > 0 ?
+    analysis.autofixPreview.remainingFixableRules.join(', ') :
+    'none'
+
+  const typescriptLines = analysis.typescriptPreflight.status === 'failed' ?
+    [
+      `- TypeScript preflight: failed with ${analysis.typescriptPreflight.diagnosticCount} diagnostics`,
+      ...analysis.typescriptPreflight.rootDiagnostics.map(diagnostic => (
+        `  - ${diagnostic.config} ${diagnostic.code}: ${diagnostic.message}`
+      )),
+      '- Fix TypeScript compiler errors before reviewing cascading type-aware unsafe-rule findings.'
+    ] :
+    [
+      `- TypeScript preflight: ${analysis.typescriptPreflight.status}` +
+      (analysis.typescriptPreflight.status === 'passed' ?
+        ` (${analysis.typescriptPreflight.configs.length} configs)` :
+        ' (TypeScript or a supported tsconfig was not found)')
+    ]
+
+  return [
+    '',
+    'Source analysis (selected preset, no files written):',
+    `- Lint targets: ${analysis.lintTargets.join(', ')}`,
+    `- Files analyzed: ${analysis.totals.files}`,
+    `- Findings: ${analysis.totals.findings} ` +
+    `(${analysis.totals.errors} errors, ${analysis.totals.warnings} warnings)`,
+    `- Non-formatting errors to resolve first: ${analysis.nonFormattingErrors.count}${nonFormattingRuleSuffix}`,
+    `- Autofix preview: ${analysis.autofixPreview.changedFileCount} files, ` +
+    `about ${analysis.autofixPreview.estimatedChangedLines} changed lines`,
+    `- Findings remaining after preview: ${analysis.autofixPreview.remainingErrors} errors, ` +
+    `${analysis.autofixPreview.remainingWarnings} warnings`,
+    `- Fixable rules still remaining: ${remainingFixableRules}`,
+    ...typescriptLines
+  ]
+}
+
+const formatCompatibilityGuidance = (
+  compatibilityFile: null | string
+): string[] => {
+  if (compatibilityFile) {
+    return [
+      '',
+      `Compatibility override written to ${compatibilityFile}. Import it after the preset config.`,
+      'It preserves the current effective configuration, not existing source violations.'
+    ]
+  }
+
+  return [
+    '',
+    'Pass --compatibility to write a temporary override that disables newly enabled rules.',
+    'Compatibility output preserves effective configuration, not current source behavior.'
+  ]
+}
+
 export const createPresetReport = async (
   cwd: string,
   presetName: string,
-  file = 'eslint.config.js'
+  file = 'eslint.config.js',
+  options: CreatePresetReportOptions = {}
 ) => {
   const normalizedPreset = presetName.toLowerCase()
 
@@ -394,15 +763,27 @@ export const createPresetReport = async (
     ])
   )
 
+  const sourceAnalysis = options.analyzeSource ?
+    await analyzePresetSource(
+      cwd,
+      selectedConfig,
+      options.sourceFiles ?? [],
+      Object.keys(resolvablePresetOptions.projects ?? {}),
+      options.typescriptRunner ?? defaultCommandRunner
+    ) :
+    null
+
   return {
     added,
     changed,
+    compatibilityScope: 'effective-config',
     file,
     groups,
     missingPackages,
     preset: normalizedPreset,
     presetOptions,
     removed,
+    sourceAnalysis,
     totals: {
       added: Object.keys(added).length,
       changed: Object.keys(changed).length,
@@ -416,7 +797,11 @@ export const handleExplainPreset = async (
   preset: string,
   options: ExplainPresetOptions = {}
 ): Promise<void> => {
-  const report = await createPresetReport(cwd, preset, options.file)
+  const report = await createPresetReport(cwd, preset, options.file, {
+    analyzeSource: options.analyzeSource,
+    sourceFiles: options.files
+  })
+
   let compatibilityFile: null | string = null
 
   if (options.compatibility) {
@@ -443,6 +828,7 @@ export const handleExplainPreset = async (
   console.log([
     `Preset adoption report: ${report.preset}`,
     `- Representative file: ${report.file}`,
+    '- Config comparison: effective rules and options',
     `- Newly enabled rules: ${report.totals.added}`,
     `- Changed rule options: ${report.totals.changed}`,
     `- Rules no longer enabled: ${report.totals.removed}`,
@@ -451,8 +837,7 @@ export const handleExplainPreset = async (
     ...Object.entries(report.groups).map(([group, rules]) => (
       `- ${group}: ${rules.length}${rules.length > 0 ? ` (${rules.join(', ')})` : ''}`
     )),
-    ...(compatibilityFile
-      ? ['', `Compatibility override written to ${compatibilityFile}. Import it after the preset config.`]
-      : ['', 'Pass --compatibility to write a temporary override that disables newly enabled rules.'])
+    ...formatSourceAnalysis(report.sourceAnalysis),
+    ...formatCompatibilityGuidance(compatibilityFile)
   ].join('\n'))
 }

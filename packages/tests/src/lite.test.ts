@@ -1,6 +1,5 @@
 import * as basic from '@santi020k/eslint-config-basic'
 import * as lite from '@santi020k/eslint-config-lite'
-
 import { describe, expect, test } from 'vitest'
 
 describe('Lite compatibility package', () => {

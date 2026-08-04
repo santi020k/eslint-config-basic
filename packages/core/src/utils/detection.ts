@@ -54,6 +54,39 @@ const hasFileMatching = (
   }
 }
 
+const DECLARATION_FILE_PATTERN = /\.d\.(?:c|m)?ts$/
+
+const PROJECT_SCAN_IGNORES = new Set([
+  '.git',
+  '.turbo',
+  'build',
+  'coverage',
+  'dist',
+  'node_modules'
+])
+
+const hasProjectFile = (
+  rootDir: string,
+  predicate: (fileName: string) => boolean,
+  depth = 0
+): boolean => {
+  try {
+    return readdirSync(rootDir, { withFileTypes: true }).some(entry => {
+      if (entry.isFile()) return predicate(entry.name)
+
+      if (!entry.isDirectory() || depth >= 4 || PROJECT_SCAN_IGNORES.has(entry.name)) return false
+
+      return hasProjectFile(join(rootDir, entry.name), predicate, depth + 1)
+    })
+  } catch {
+    return false
+  }
+}
+
+const hasDeclarationFile = (rootDir: string): boolean => (
+  hasProjectFile(rootDir, fileName => DECLARATION_FILE_PATTERN.test(fileName))
+)
+
 const collectAllDependencies = (pkg: PackageJson): DependencyMap => ({
   ...(pkg.dependencies ?? {}),
   ...(pkg.devDependencies ?? {}),
@@ -136,11 +169,53 @@ const FRAMEWORK_ENTRIES: FrameworkEntry[] = [
   { deps: ['@tanstack/solid-start'], frameworks: ['tanstack-start', 'solid'], runtime: Runtime.Universal }
 ]
 
-const CLOUDFLARE_DEPS = ['wrangler', '@cloudflare/workers-types', '@cloudflare/vitest-pool-workers']
-const REACT_EXCLUSIONS = ['next', 'expo', 'react-native', '@react-router/dev', '@remix-run/react', '@tanstack/react-start']
-const VITE_EXCLUSION_FRAMEWORKS = ['astro', 'next', 'nuxt', 'qwik', 'react-router', 'slidev', 'tanstack-start']
-const isReactStandalone = (allDeps: DependencyMap): boolean => Boolean(allDeps.react) && !hasAnyDependency(allDeps, REACT_EXCLUSIONS)
-const isViteStandalone = (allDeps: DependencyMap, detected: DetectedFrameworkName[]): boolean => Boolean(allDeps.vite) && !detected.some(fw => VITE_EXCLUSION_FRAMEWORKS.includes(fw))
+const CLOUDFLARE_DEPS = [
+  'wrangler',
+  '@cloudflare/workers-types',
+  '@cloudflare/vitest-pool-workers'
+]
+
+const REACT_EXCLUSIONS = [
+  'next', 'expo', 'react-native', '@react-router/dev', '@remix-run/react', '@tanstack/react-start'
+]
+
+const VITE_EXCLUSION_FRAMEWORKS = [
+  'astro',
+  'next',
+  'nuxt',
+  'qwik',
+  'react-router',
+  'slidev',
+  'tanstack-start'
+]
+
+const isReactStandalone = (allDeps: DependencyMap): boolean => (
+  Boolean(allDeps.react) && !hasAnyDependency(allDeps, REACT_EXCLUSIONS)
+)
+
+const isViteStandalone = (
+  allDeps: DependencyMap,
+  detected: DetectedFrameworkName[]
+): boolean => (
+  Boolean(allDeps.vite) && !detected.some(fw => VITE_EXCLUSION_FRAMEWORKS.includes(fw))
+)
+
+const detectAstroFromFiles = (
+  detected: DetectedFrameworkName[],
+  detectRootDir: string,
+  setRuntime: (runtime: Runtime) => void
+): void => {
+  if (
+    detected.includes('astro') ||
+    !hasProjectFile(detectRootDir, fileName => fileName.endsWith('.astro'))
+  ) {
+    return
+  }
+
+  detected.push('astro')
+
+  setRuntime(Runtime.Browser)
+}
 
 const detectFrameworks = (
   allDeps: DependencyMap,
@@ -156,6 +231,8 @@ const detectFrameworks = (
       if (runtime !== undefined) setRuntime(runtime)
     }
   }
+
+  detectAstroFromFiles(detected, detectRootDir, setRuntime)
 
   if (isReactStandalone(allDeps)) {
     detected.push('react')
@@ -192,13 +269,21 @@ const detectNextMode = (allDeps: DependencyMap, detectRootDir: string): NextMode
   return NextMode.Pages
 }
 
-const detectTypescript = (detectRootDir: string): boolean => [
-  'tsconfig.json',
-  'tsconfig.base.json',
-  'tsconfig.app.json',
-  'tsconfig.node.json',
-  'tsconfig.eslint.json'
-].some(fileName => pathExists(join(detectRootDir, fileName)))
+const detectTypescript = (
+  detectRootDir: string
+): EslintConfigOptions['typescript'] => {
+  const hasTypeScriptProject = [
+    'tsconfig.json',
+    'tsconfig.base.json',
+    'tsconfig.app.json',
+    'tsconfig.node.json',
+    'tsconfig.eslint.json'
+  ].some(fileName => pathExists(join(detectRootDir, fileName)))
+
+  if (hasTypeScriptProject) return true
+
+  return hasDeclarationFile(detectRootDir) ? 'syntax' : false
+}
 
 const LIBRARY_DEP_MAPPINGS: [string[], Library][] = [
   [['ai', '@ai-sdk/anthropic', '@ai-sdk/azure', '@ai-sdk/google', '@ai-sdk/openai', '@ai-sdk/react', '@ai-sdk/vue', '@ai-sdk/svelte'], Library.AiSdk],
@@ -260,20 +345,38 @@ const detectExtensions = (allDeps: DependencyMap): Extension[] => dedupe(
     .map(([, extension]) => extension)
 )
 
-const GRAPHQL_DEPS = ['graphql', '@apollo/client', 'relay-runtime', 'urql', 'graphql-tag', '@graphql-typed-document-node/core']
+const GRAPHQL_DEPS = [
+  'graphql',
+  '@apollo/client',
+  'relay-runtime',
+  'urql',
+  'graphql-tag',
+  '@graphql-typed-document-node/core'
+]
+
 const MDX_DEPS = ['@mdx-js/react', '@mdx-js/mdx', '@astrojs/mdx']
 const MARKDOWN_DEPS = ['markdown', 'react-markdown', 'remark-gfm', 'markdownlint-cli2']
-const YAML_SIGNALS = ['pnpm-workspace.yaml', 'cspell.config.yaml', 'cspell.config.yml', '.github/workflows']
 
-const hasGraphqlSignal = (allDeps: DependencyMap, detectRootDir: string): boolean => hasAnyDependency(allDeps, GRAPHQL_DEPS) ||
+const YAML_SIGNALS = [
+  'pnpm-workspace.yaml',
+  'cspell.config.yaml',
+  'cspell.config.yml',
+  '.github/workflows'
+]
+
+const hasGraphqlSignal = (allDeps: DependencyMap, detectRootDir: string): boolean => (
+  hasAnyDependency(allDeps, GRAPHQL_DEPS) ||
   ['schema.graphql', 'schema.gql'].some(f => pathExists(join(detectRootDir, f)))
+)
 
 const hasMdxSignal = (allDeps: DependencyMap, detectRootDir: string): boolean => hasAnyDependency(allDeps, MDX_DEPS) ||
   hasFileMatching(detectRootDir, f => f.endsWith('.mdx'))
 
-const hasMarkdownSignal = (allDeps: DependencyMap, detectRootDir: string): boolean => hasAnyDependency(allDeps, MARKDOWN_DEPS) ||
+const hasMarkdownSignal = (allDeps: DependencyMap, detectRootDir: string): boolean => (
+  hasAnyDependency(allDeps, MARKDOWN_DEPS) ||
   ['.markdownlint.json', '.markdownlint.yaml'].some(f => pathExists(join(detectRootDir, f))) ||
   hasFileMatching(detectRootDir, f => f.endsWith('.md'))
+)
 
 const hasJsoncSignal = (allDeps: DependencyMap, detectRootDir: string): boolean => hasAnyDependency(allDeps, ['eslint-plugin-jsonc']) ||
   hasFileMatching(detectRootDir, f => f.endsWith('.jsonc'))
@@ -505,7 +608,6 @@ const detectProjects = (pkg: PackageJson, detectRootDir: string): NonNullable<Es
 
     if (!pathExists(join(detectRootDir, projectPath, 'package.json'))) continue
 
-    // eslint-disable-next-line security/detect-object-injection -- projectPath is a matched package directory from the workspace declaration
     projects[projectPath] = {}
   }
 

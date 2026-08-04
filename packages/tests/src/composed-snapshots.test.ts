@@ -2,7 +2,6 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import { defineConfig, Extension, Format, Library, Preset, Runtime, Setting, Testing, Tool } from '@santi020k/eslint-config-basic'
-
 import { describe, expect, test } from 'vitest'
 
 import { extractConfigNames, getEffectiveRuleValue } from './test-utils.js'
@@ -17,7 +16,11 @@ const summarizeConfig = async (options: Parameters<typeof defineConfig>[0]) => {
     rules: {
       '@next/next/no-html-link-for-pages': getEffectiveRuleValue(config, '@next/next/no-html-link-for-pages'),
       '@typescript-eslint/no-explicit-any': getEffectiveRuleValue(config, '@typescript-eslint/no-explicit-any'),
-      'no-console': getEffectiveRuleValue(config, 'no-console'),
+      'no-console': getEffectiveRuleValue(
+        config,
+        'no-console',
+        ['eslint-config-basic/scripts-overrides']
+      ),
       'prettier/prettier': getEffectiveRuleValue(config, 'prettier/prettier'),
       'simple-import-sort/imports': getEffectiveRuleValue(config, 'simple-import-sort/imports')
     }

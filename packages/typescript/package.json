@@ -26,24 +26,24 @@
     "clean": "rm -rf dist",
     "check:exports": "publint",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint . --no-warn-ignored --pass-on-no-patterns",
-    "lint:fix": "eslint . --fix --no-warn-ignored --pass-on-no-patterns"
+    "lint": "eslint . --no-warn-ignored --pass-on-no-patterns --max-warnings=0",
+    "lint:fix": "eslint . --fix --no-warn-ignored --pass-on-no-patterns --max-warnings=0"
   },
   "dependencies": {
     "@santi020k/eslint-config-core": "workspace:^",
     "@typescript-eslint/parser": "catalog:",
     "typescript-eslint": "catalog:",
-    "@typescript-eslint/utils": "catalog:"
+    "@typescript-eslint/utils": "catalog:",
+    "typescript": "catalog:conflicts_typescript_ge5_0_0_l7_0_0"
   },
   "devDependencies": {
     "@types/node": "catalog:",
     "publint": "catalog:",
-    "tsup": "catalog:",
-    "typescript": "catalog:"
+    "tsup": "catalog:"
   },
   "peerDependencies": {
     "eslint": "^10.0.0",
-    "typescript": ">=5.0.0"
+    "typescript": ">=5.0.0 <7.0.0"
   },
   "peerDependenciesMeta": {
     "typescript": {

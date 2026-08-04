@@ -43,3 +43,6 @@ jobs:
 
       - name: Assert changeset present
         run: pnpm exec changeset status --since=origin/main
+
+      - name: Keep Full releases synchronized with aggregated packages
+        run: pnpm run check:full-release

@@ -1,0 +1,14 @@
+{
+  "basic": {
+    "branches": 80,
+    "functions": 93,
+    "lines": 90,
+    "statements": 88
+  },
+  "core": {
+    "branches": 85,
+    "functions": 95,
+    "lines": 93,
+    "statements": 92
+  }
+}

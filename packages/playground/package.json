@@ -9,7 +9,7 @@
     "dev": "echo \"No dev step required\"",
     "clean": "rm -rf dist node_modules",
     "check:exports": "echo \"No exports to check\"",
-    "lint:fix": "eslint . --fix --no-warn-ignored --pass-on-no-patterns"
+    "lint:fix": "eslint . --fix --no-warn-ignored --pass-on-no-patterns --max-warnings=0"
   },
   "author": "santi020k",
   "license": "MIT",

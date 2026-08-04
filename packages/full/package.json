@@ -32,8 +32,8 @@
     "build": "tsup",
     "clean": "rm -rf dist",
     "check:exports": "publint",
-    "lint": "eslint . --no-warn-ignored --pass-on-no-patterns",
-    "lint:fix": "eslint . --fix --no-warn-ignored --pass-on-no-patterns",
+    "lint": "eslint . --no-warn-ignored --pass-on-no-patterns --max-warnings=0",
+    "lint:fix": "eslint . --fix --no-warn-ignored --pass-on-no-patterns --max-warnings=0",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -69,7 +69,7 @@
   },
   "peerDependencies": {
     "eslint": "^10.0.0",
-    "typescript": ">=5.0.0"
+    "typescript": ">=5.0.0 <7.0.0"
   },
   "peerDependenciesMeta": {
     "typescript": {

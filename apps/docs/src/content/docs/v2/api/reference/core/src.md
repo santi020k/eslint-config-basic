@@ -737,7 +737,7 @@ Disable this when you want manual framework control only.
 
 ##### detectedFrameworks?
 
-> `optional` **detectedFrameworks?**: [`DetectedFrameworkName`](#detectedframeworkname)[]
+> `optional` **detectedFrameworks?**: [`DetectedFrameworkName`](#detectedframeworkname)\[\]
 
 Defined in: [core/src/types.ts:382](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/types.ts#L382)
 
@@ -764,7 +764,7 @@ Defaults to `process.cwd()`.
 
 ##### extensions?
 
-> `optional` **extensions?**: [`ExtensionOption`](#extensionoption)[]
+> `optional` **extensions?**: [`ExtensionOption`](#extensionoption)\[\]
 
 Defined in: [core/src/types.ts:397](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/types.ts#L397)
 
@@ -782,7 +782,7 @@ string names. `integrations` is an alias for the same map.
 
 ##### formats?
 
-> `optional` **formats?**: [`FormatOption`](#formatoption)[]
+> `optional` **formats?**: [`FormatOption`](#formatoption)\[\]
 
 Defined in: [core/src/types.ts:407](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/types.ts#L407)
 
@@ -905,7 +905,7 @@ List of application-level dependencies configurations
 
 ##### libraries?
 
-> `optional` **libraries?**: [`LibraryOption`](#libraryoption)[]
+> `optional` **libraries?**: [`LibraryOption`](#libraryoption)\[\]
 
 Defined in: [core/src/types.ts:455](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/types.ts#L455)
 
@@ -964,7 +964,7 @@ Runtime environment preset (Node, Browser, Universal)
 
 ##### settings?
 
-> `optional` **settings?**: [`SettingOption`](#settingoption)[]
+> `optional` **settings?**: [`SettingOption`](#settingoption)\[\]
 
 Defined in: [core/src/types.ts:487](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/types.ts#L487)
 
@@ -992,7 +992,7 @@ integration, while `false` disables auto-detected Tailwind support.
 
 ##### testing?
 
-> `optional` **testing?**: [`TestingOption`](#testingoption)[]
+> `optional` **testing?**: [`TestingOption`](#testingoption)\[\]
 
 Defined in: [core/src/types.ts:504](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/types.ts#L504)
 
@@ -1011,7 +1011,7 @@ your Playwright specs when it differs from the built-in defaults.
 
 ##### tools?
 
-> `optional` **tools?**: [`ToolOption`](#tooloption)[]
+> `optional` **tools?**: [`ToolOption`](#tooloption)\[\]
 
 Defined in: [core/src/types.ts:515](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/types.ts#L515)
 
@@ -1483,7 +1483,7 @@ Do not use these in application code.
 
 ##### detectExtensions
 
-> **detectExtensions**: (`allDeps`) => [`Extension`](#extension)[]
+> **detectExtensions**: (`allDeps`) => [`Extension`](#extension)\[\]
 
 ###### Parameters
 
@@ -1493,11 +1493,11 @@ Do not use these in application code.
 
 ###### Returns
 
-[`Extension`](#extension)[]
+[`Extension`](#extension)\[\]
 
 ##### detectFormats
 
-> **detectFormats**: (`allDeps`, `detectRootDir`) => [`Format`](#format)[]
+> **detectFormats**: (`allDeps`, `detectRootDir`) => [`Format`](#format)\[\]
 
 ###### Parameters
 
@@ -1511,11 +1511,11 @@ Do not use these in application code.
 
 ###### Returns
 
-[`Format`](#format)[]
+[`Format`](#format)\[\]
 
 ##### detectFrameworks
 
-> **detectFrameworks**: (`allDeps`, `detectRootDir`, `setRuntime`) => [`DetectedFrameworkName`](#detectedframeworkname)[] \| `undefined`
+> **detectFrameworks**: (`allDeps`, `detectRootDir`, `setRuntime`) => [`DetectedFrameworkName`](#detectedframeworkname)\[\] \| `undefined`
 
 ###### Parameters
 
@@ -1533,11 +1533,11 @@ Do not use these in application code.
 
 ###### Returns
 
-[`DetectedFrameworkName`](#detectedframeworkname)[] \| `undefined`
+[`DetectedFrameworkName`](#detectedframeworkname)\[\] \| `undefined`
 
 ##### detectLibraries
 
-> **detectLibraries**: (`allDeps`) => [`Library`](#library)[]
+> **detectLibraries**: (`allDeps`) => [`Library`](#library)\[\]
 
 ###### Parameters
 
@@ -1547,7 +1547,7 @@ Do not use these in application code.
 
 ###### Returns
 
-[`Library`](#library)[]
+[`Library`](#library)\[\]
 
 ##### detectNextMode
 
@@ -1601,7 +1601,7 @@ Do not use these in application code.
 
 ###### \_detectedFrameworks
 
-[`DetectedFrameworkName`](#detectedframeworkname)[] \| `undefined`
+[`DetectedFrameworkName`](#detectedframeworkname)\[\] \| `undefined`
 
 ###### setRuntime
 
@@ -1617,7 +1617,7 @@ Do not use these in application code.
 
 ##### detectTesting
 
-> **detectTesting**: (`allDeps`) => [`Testing`](#testing)[]
+> **detectTesting**: (`allDeps`) => [`Testing`](#testing)\[\]
 
 ###### Parameters
 
@@ -1627,11 +1627,11 @@ Do not use these in application code.
 
 ###### Returns
 
-[`Testing`](#testing)[]
+[`Testing`](#testing)\[\]
 
 ##### detectTools
 
-> **detectTools**: (`allDeps`, `detectRootDir`) => [`Tool`](#tool)[]
+> **detectTools**: (`allDeps`, `detectRootDir`) => [`Tool`](#tool)\[\]
 
 ###### Parameters
 
@@ -1645,7 +1645,7 @@ Do not use these in application code.
 
 ###### Returns
 
-[`Tool`](#tool)[]
+[`Tool`](#tool)\[\]
 
 ##### detectTypescript
 
@@ -1835,23 +1835,23 @@ Defined in: [core/src/config-helpers.ts:83](https://github.com/santi020k/eslint-
 
 ##### extensions
 
-> `readonly` **extensions**: [`Extension`](#extension)[]
+> `readonly` **extensions**: [`Extension`](#extension)\[\]
 
 ##### formats
 
-> `readonly` **formats**: [`Format`](#format)[]
+> `readonly` **formats**: [`Format`](#format)\[\]
 
 ##### libraries
 
-> `readonly` **libraries**: [`Library`](#library)[]
+> `readonly` **libraries**: [`Library`](#library)\[\]
 
 ##### testing
 
-> `readonly` **testing**: [`Testing`](#testing)[]
+> `readonly` **testing**: [`Testing`](#testing)\[\]
 
 ##### tools
 
-> `readonly` **tools**: [`Tool`](#tool)[]
+> `readonly` **tools**: [`Tool`](#tool)\[\]
 
 ***
 
@@ -1904,27 +1904,27 @@ Defined in: [core/src/config-helpers.ts:284](https://github.com/santi020k/eslint
 
 ##### detectedFrameworks
 
-> **detectedFrameworks**: [`DetectedFrameworkName`](#detectedframeworkname)[] \| `undefined`
+> **detectedFrameworks**: [`DetectedFrameworkName`](#detectedframeworkname)\[\] \| `undefined`
 
 ##### extensions
 
-> **extensions**: [`ExtensionOption`](#extensionoption)[] \| `undefined`
+> **extensions**: [`ExtensionOption`](#extensionoption)\[\] \| `undefined`
 
 ##### formats
 
-> **formats**: [`FormatOption`](#formatoption)[] \| `undefined`
+> **formats**: [`FormatOption`](#formatoption)\[\] \| `undefined`
 
 ##### libraries
 
-> **libraries**: [`LibraryOption`](#libraryoption)[] \| `undefined`
+> **libraries**: [`LibraryOption`](#libraryoption)\[\] \| `undefined`
 
 ##### testing
 
-> **testing**: [`TestingOption`](#testingoption)[] \| `undefined`
+> **testing**: [`TestingOption`](#testingoption)\[\] \| `undefined`
 
 ##### tools
 
-> **tools**: [`ToolOption`](#tooloption)[] \| `undefined`
+> **tools**: [`ToolOption`](#tooloption)\[\] \| `undefined`
 
 ***
 
@@ -2054,7 +2054,7 @@ Applies strict mode by promoting all 'warn' rules to 'error'.
 
 ### applyStrictProfileDefaults()
 
-> **applyStrictProfileDefaults**(`extensions`, `strict`): [`Extension`](#extension)[]
+> **applyStrictProfileDefaults**(`extensions`, `strict`): [`Extension`](#extension)\[\]
 
 Defined in: [core/src/config-helpers.ts:316](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/config-helpers.ts#L316)
 
@@ -2062,7 +2062,7 @@ Defined in: [core/src/config-helpers.ts:316](https://github.com/santi020k/eslint
 
 ##### extensions
 
-[`Extension`](#extension)[]
+[`Extension`](#extension)\[\]
 
 ##### strict
 
@@ -2070,7 +2070,7 @@ Defined in: [core/src/config-helpers.ts:316](https://github.com/santi020k/eslint
 
 #### Returns
 
-[`Extension`](#extension)[]
+[`Extension`](#extension)\[\]
 
 ***
 
@@ -2202,7 +2202,7 @@ Defined in: [core/src/config-helpers.ts:93](https://github.com/santi020k/eslint-
 
 ##### configs
 
-[`ConfigInput`](#configinput)[]
+[`ConfigInput`](#configinput)\[\]
 
 #### Returns
 

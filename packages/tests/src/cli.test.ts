@@ -41,6 +41,30 @@ const createTempProject = (packageJson: Record<string, unknown>): string => {
   return cwd
 }
 
+const writeFakePackage = (
+  root: string,
+  name: string,
+  version: string,
+  metadata: Record<string, unknown> = {}
+): void => {
+  const packageDir = join(root, 'node_modules', ...name.split('/'))
+
+  mkdirSync(packageDir, { recursive: true })
+  writeFileSync(join(packageDir, 'package.json'), JSON.stringify({ main: 'index.js', name, version, ...metadata }))
+  writeFileSync(join(packageDir, 'index.js'), 'module.exports = {}')
+}
+
+const getProjectByPath = <Project extends { path: string }>(
+  projects: Project[],
+  path: string
+): Project => {
+  const project = projects.find(candidate => candidate.path === path)
+
+  if (!project) throw new Error(`Expected doctor project activation for ${path}`)
+
+  return project
+}
+
 afterEach(() => {
   for (const dir of tempDirs.splice(0)) {
     rmSync(dir, { force: true, recursive: true })
@@ -96,7 +120,7 @@ describe('CLI scaffolding', () => {
 
 describe('CLI command UX', () => {
   test('should print help text for --help', () => {
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     runCli(['node', 'basic-eslint', '--help'])
 
@@ -107,7 +131,7 @@ describe('CLI command UX', () => {
 
   test('should treat subcommand help as side-effect free', () => {
     const cwd = createTempProject({ name: 'tmp-project' })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     runCli(['node', 'basic-eslint', 'install', '--help'], cwd)
 
@@ -121,8 +145,20 @@ describe('CLI command UX', () => {
     logSpy.mockRestore()
   })
 
+  test('should advertise source analysis in explain-preset help', () => {
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+
+    runCli(['node', 'basic-eslint', 'explain-preset', '--help'])
+
+    const output = logSpy.mock.calls.flat().join('\n')
+
+    expect(output).toContain('Usage: basic-eslint explain-preset <preset> [options]')
+    expect(output).toContain('--analyze-source')
+    logSpy.mockRestore()
+  })
+
   test('should print version for --version', () => {
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     runCli(['node', 'basic-eslint', '--version'])
 
@@ -133,8 +169,8 @@ describe('CLI command UX', () => {
 
   test('should set non-zero exit code for unknown command', () => {
     process.exitCode = undefined
-    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined)
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     runCli(['node', 'basic-eslint', 'unknown-command'])
 
@@ -148,7 +184,7 @@ describe('CLI command UX', () => {
   test('should reject command flags that are not supported without mutating files', () => {
     const cwd = createTempProject({ name: 'tmp-project' })
     const before = readFileSync(join(cwd, 'package.json'), 'utf8')
-    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined)
 
     runCli(['node', 'basic-eslint', 'install', '--write'], cwd)
 
@@ -161,7 +197,7 @@ describe('CLI command UX', () => {
 
   test('should reject assigned values for boolean safety flags without mutating files', () => {
     const cwd = createTempProject({ name: 'tmp-project' })
-    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined)
 
     runCli(['node', 'basic-eslint', 'init', '--check=true'], cwd)
 
@@ -175,7 +211,7 @@ describe('CLI command UX', () => {
   })
 
   test('should print dedicated install help', () => {
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     runCli(['node', 'basic-eslint', 'install', '--help'])
 
@@ -194,7 +230,7 @@ describe('CLI command UX', () => {
       },
       name: 'tmp-project'
     })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     handleExplain(cwd)
 
@@ -219,7 +255,7 @@ describe('CLI command UX', () => {
       },
       name: 'tmp-project'
     })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     handleInstall(cwd, true)
 
@@ -242,7 +278,7 @@ describe('CLI command UX', () => {
     })
 
     writeFileSync(join(cwd, 'pnpm-workspace.yaml'), 'packages: []\n')
-    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined)
     const stderrSpy = vi.spyOn(process.stderr, 'write').mockImplementation(() => true)
 
     handleInstall(cwd, false, () => ({
@@ -272,7 +308,7 @@ describe('CLI command UX', () => {
       name: 'tmp-project',
       type: 'module'
     })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     writeFileSync(join(cwd, 'eslint.config.js'), `
       import { defineConfig, Extension, Preset } from '@santi020k/eslint-config-basic'
@@ -304,7 +340,7 @@ describe('CLI command UX', () => {
       },
       name: 'tmp-project'
     })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     handleInstall(cwd, true)
 
@@ -326,7 +362,7 @@ describe('CLI command UX', () => {
       },
       name: 'tmp-project'
     })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     handleInstall(cwd, true)
 
@@ -352,11 +388,14 @@ describe('CLI command UX', () => {
       name: 'web'
     }))
 
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     handleInstall(cwd, true)
 
-    expect(logSpy).toHaveBeenCalledWith('npm install -D @santi020k/eslint-config-react@^3.0.0')
+    expect(logSpy).toHaveBeenCalledWith(
+      'npm install -D @santi020k/eslint-config-react@^3.0.0 ' +
+      '@santi020k/eslint-config-extensions@^3.0.0 @santi020k/eslint-config-tools@^3.0.0'
+    )
     logSpy.mockRestore()
   })
 
@@ -376,7 +415,7 @@ describe('CLI command UX', () => {
       name: 'web'
     }))
 
-    vi.spyOn(console, 'log').mockImplementation(() => {})
+    vi.spyOn(console, 'log').mockImplementation(() => undefined)
     await handleDoctor(cwd, false, false, true)
 
     const packageJson = JSON.parse(readFileSync(join(cwd, 'package.json'), 'utf8')) as {
@@ -413,7 +452,7 @@ describe('CLI command UX', () => {
       'import { defineConfig } from \'@santi020k/eslint-config-basic\'\nexport default defineConfig()\n'
     )
 
-    vi.spyOn(console, 'log').mockImplementation(() => {})
+    vi.spyOn(console, 'log').mockImplementation(() => undefined)
     handleMigrate(cwd, true, false, 'v3')
 
     const packageJson = JSON.parse(readFileSync(join(cwd, 'package.json'), 'utf8')) as {
@@ -450,11 +489,14 @@ describe('CLI command UX', () => {
       name: 'web'
     }))
 
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     handleInstall(cwd, true)
 
-    expect(logSpy).toHaveBeenCalledWith('npm install -D @santi020k/eslint-config-react@^3.0.0')
+    expect(logSpy).toHaveBeenCalledWith(
+      'npm install -D @santi020k/eslint-config-react@^3.0.0 ' +
+      '@santi020k/eslint-config-extensions@^3.0.0 @santi020k/eslint-config-tools@^3.0.0'
+    )
     logSpy.mockRestore()
   })
 
@@ -469,7 +511,7 @@ describe('CLI command UX', () => {
 
     writeFileSync(join(cwd, 'pnpm-workspace.yaml'), 'packages:\n  - "apps/*"\n')
 
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     handleInstall(cwd, true)
 
@@ -497,7 +539,7 @@ describe('CLI command UX', () => {
       ''
     ].join('\n'))
 
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     handleInstall(cwd, true)
 
@@ -537,7 +579,7 @@ describe('CLI command UX', () => {
       ''
     ].join('\n'))
 
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     handleInstall(child, true)
 
@@ -545,7 +587,8 @@ describe('CLI command UX', () => {
       'pnpm add -D --workspace-root --save-catalog-name=lint ' +
       '@santi020k/eslint-config-react@^3.0.0 ' +
       '@santi020k/eslint-config-formats@^3.0.0 ' +
-      '@santi020k/eslint-config-tools@^3.0.0'
+      '@santi020k/eslint-config-tools@^3.0.0 ' +
+      '@santi020k/eslint-config-extensions@^3.0.0'
     )
     logSpy.mockRestore()
   })
@@ -572,7 +615,7 @@ describe('CLI command UX', () => {
       ''
     ].join('\n'))
 
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     handleInstall(cwd, true)
 
@@ -590,7 +633,7 @@ describe('CLI command UX', () => {
 
     writeFileSync(join(cwd, 'pnpm-workspace.yaml'), 'packages:\n  - "apps/*"\n')
 
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     await handleDoctor(cwd, false, true)
 
@@ -605,7 +648,7 @@ describe('CLI command UX', () => {
 
     writeFileSync(join(cwd, 'pnpm-workspace.yaml'), 'packages:\n  - "apps/*"\n')
 
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     await handleDoctor(cwd, true, false, true)
 
@@ -645,7 +688,7 @@ describe('CLI command UX', () => {
       'import { defineConfig } from \'@santi020k/eslint-config-basic\'\nexport default defineConfig()\n'
     )
 
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     await handleDoctor(cwd, true)
 
@@ -669,7 +712,7 @@ describe('CLI command UX', () => {
       },
       name: 'tmp-project'
     })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     handleExplain(cwd, true)
 
@@ -686,7 +729,7 @@ describe('CLI command UX', () => {
   test('should check whether init has an existing config without writing', () => {
     process.exitCode = undefined
     const cwd = createTempProject({ name: 'tmp-project' })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     handleInit(cwd, true)
 
@@ -710,7 +753,7 @@ describe('CLI command UX', () => {
       },
       name: 'tmp-project'
     })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     handleDocs(cwd)
 
@@ -724,7 +767,7 @@ describe('CLI command UX', () => {
 
   test('should report migration suggestions', () => {
     const cwd = createTempProject({ name: 'tmp-project', type: 'module' })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     writeFileSync(
       join(cwd, 'eslint.config.js'), 'import react from \'@santi020k/eslint-config-react\'\nexport default []'
@@ -741,7 +784,7 @@ describe('CLI command UX', () => {
 
   test('should print migration suggestions as JSON', () => {
     const cwd = createTempProject({ name: 'tmp-project', type: 'module' })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     const fileContent = 'import react from \'@santi020k/eslint-config-react\'\nexport default []'
     writeFileSync(join(cwd, 'eslint.config.js'), fileContent)
@@ -760,7 +803,7 @@ describe('CLI command UX', () => {
 
   test('should rewrite simple v1 framework imports when migrate --write is used', () => {
     const cwd = createTempProject({ name: 'tmp-project', type: 'module' })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     const fileContent = 'import next from \'@santi020k/eslint-config-next\'\n' +
       'import react from \'@santi020k/eslint-config-react\'\n' +
@@ -791,7 +834,7 @@ describe('CLI command UX', () => {
       name: 'tmp-project',
       type: 'module'
     })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     writeFileSync(
       join(cwd, 'eslint.config.js'), `export default [
@@ -811,7 +854,7 @@ describe('CLI command UX', () => {
 
   test('should print inspect data as JSON', async () => {
     const cwd = createTempProject({ name: 'tmp-project' })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     await handleInspect(cwd, true)
 
@@ -825,6 +868,39 @@ describe('CLI command UX', () => {
     logSpy.mockRestore()
   })
 
+  test('should expose detected Tailwind entry points in inspect JSON', async () => {
+    const cwd = createTempProject({
+      dependencies: { tailwindcss: '4.0.0' },
+      name: 'tailwind-project'
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+
+    mkdirSync(join(cwd, 'src', 'styles'), { recursive: true })
+    writeFileSync(
+      join(cwd, 'src', 'styles', 'global.css'),
+      '@import "tailwindcss";\n.semantic-card { display: block; }\n'
+    )
+
+    await handleInspect(cwd, true)
+
+    const payload = JSON.parse(String(logSpy.mock.calls[0]?.[0])) as {
+      tailwindEntryPoints?: {
+        componentClasses: number
+        entryPoint: null | string
+        path: string
+        unknownClassPolicy: string
+      }[]
+    }
+
+    expect(payload.tailwindEntryPoints).toEqual([{
+      componentClasses: 1,
+      entryPoint: 'src/styles/global.css',
+      path: '.',
+      unknownClassPolicy: 'strict-with-css-components'
+    }])
+    logSpy.mockRestore()
+  })
+
   test('should report doctor warnings for v1 imports and unscoped workspaces', async () => {
     const cwd = createTempProject({
       name: 'tmp-project',
@@ -834,7 +910,7 @@ describe('CLI command UX', () => {
       type: 'module',
       workspaces: ['packages/*']
     })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     mkdirSync(join(cwd, 'packages', 'app'), { recursive: true })
     writeFileSync(join(cwd, 'packages', 'app', 'package.json'), JSON.stringify({ name: 'app' }))
@@ -861,7 +937,7 @@ describe('CLI command UX', () => {
       type: 'module',
       workspaces: ['packages/*']
     })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     mkdirSync(join(cwd, 'packages', 'app'), { recursive: true })
     writeFileSync(join(cwd, 'packages', 'app', 'package.json'), JSON.stringify({ name: 'app' }))
@@ -881,12 +957,39 @@ describe('CLI command UX', () => {
     process.exitCode = undefined
   })
 
+  test.each([
+    'export { default } from \'@santi020k/eslint-config-basic/recommended\'\n',
+    'export { default } from \'@santi020k/eslint-config-full/recommended\'\n'
+  ])('should recognize recommended re-exports as auto-scoped configs', async configSource => {
+    const cwd = createTempProject({
+      name: 'tmp-project',
+      scripts: {
+        lint: 'eslint .'
+      },
+      type: 'module',
+      workspaces: ['packages/*']
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+
+    mkdirSync(join(cwd, 'packages', 'app'), { recursive: true })
+    writeFileSync(join(cwd, 'packages', 'app', 'package.json'), JSON.stringify({ name: 'app' }))
+    writeFileSync(join(cwd, 'eslint.config.js'), configSource)
+
+    await handleDoctor(cwd)
+
+    expect(logSpy.mock.calls.flat().join('\n')).not.toContain(
+      'Workspace packages were detected, but the root config does not use `projects` scoping.'
+    )
+    logSpy.mockRestore()
+    process.exitCode = undefined
+  })
+
   test('should print doctor data as JSON', async () => {
     const cwd = createTempProject({
       name: 'tmp-project',
       type: 'module'
     })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     await handleDoctor(cwd, true)
 
@@ -897,6 +1000,281 @@ describe('CLI command UX', () => {
 
     expect(payload.status).toBe('passed with warnings')
     expect(payload.warnings?.some(warning => warning.includes('No eslint.config'))).toBe(true)
+    logSpy.mockRestore()
+    process.exitCode = undefined
+  })
+
+  test('should explain the safe Tailwind fallback when no entry point exists', async () => {
+    const cwd = createTempProject({
+      dependencies: { tailwindcss: '4.0.0' },
+      name: 'tailwind-project',
+      scripts: { lint: 'eslint .' }
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+
+    await handleDoctor(cwd, true)
+
+    const payload = JSON.parse(String(logSpy.mock.calls.at(-1)?.[0])) as {
+      warnings?: string[]
+    }
+
+    expect(payload.warnings).toContainEqual(expect.stringContaining(
+      '`better-tailwindcss/no-unknown-classes` falls back to off'
+    ))
+    expect(payload.warnings).toContainEqual(expect.stringContaining('tailwind.entryPoint'))
+    logSpy.mockRestore()
+    process.exitCode = undefined
+  })
+
+  test('should name declaration-only packages and explain their syntax fallback', async () => {
+    const cwd = createTempProject({
+      name: 'tmp-project',
+      type: 'module',
+      workspaces: ['packages/*']
+    })
+    const declarationsRoot = join(cwd, 'packages', 'theme-contract')
+
+    mkdirSync(declarationsRoot, { recursive: true })
+    writeFileSync(join(declarationsRoot, 'package.json'), JSON.stringify({ name: '@example/theme-contract' }))
+    writeFileSync(join(declarationsRoot, 'index.d.mts'), 'export declare const theme: string\n')
+    writeFileSync(join(cwd, 'eslint.config.js'), 'export default [{ name: \'eslint-config-typescript/recommended\' }]\n')
+    writeFakePackage(cwd, 'typescript', '6.0.0')
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+
+    await handleDoctor(cwd, true)
+
+    const payload = JSON.parse(String(logSpy.mock.calls.at(-1)?.[0])) as {
+      projects: { path: string, typescript: { mode: string, tsconfig: null | string } }[]
+      warnings?: string[]
+    }
+    const warning = payload.warnings?.find(message => message.includes('@example/theme-contract'))
+    const declarationProject = payload.projects.find(project => project.path === 'packages/theme-contract')
+
+    expect(declarationProject?.typescript).toEqual({
+      detected: true,
+      enabled: true,
+      installed: true,
+      mode: 'syntax',
+      package: 'typescript',
+      tsconfig: null
+    })
+    expect(warning).toContain('packages/theme-contract')
+    expect(warning).toContain('tsconfig.json')
+    expect(warning).toContain('typescript.untypedFiles')
+    logSpy.mockRestore()
+    process.exitCode = undefined
+  })
+
+  test('should report per-project activation details in JSON and verbose output', async () => {
+    const cwd = createTempProject({
+      name: 'tmp-project',
+      type: 'module',
+      workspaces: ['packages/*']
+    })
+    const projectRoot = join(cwd, 'packages', 'site')
+
+    mkdirSync(join(projectRoot, 'src', 'styles'), { recursive: true })
+    writeFileSync(join(projectRoot, 'package.json'), JSON.stringify({
+      dependencies: { astro: '7.0.0', tailwindcss: '4.0.0' },
+      name: 'site'
+    }))
+    writeFileSync(join(projectRoot, 'README.md'), '# Site\n')
+    writeFileSync(join(projectRoot, 'src', 'styles', 'global.css'), '@import "tailwindcss";\n')
+    writeFileSync(join(projectRoot, 'tsconfig.json'), '{}\n')
+    writeFileSync(join(cwd, 'eslint.config.js'), `export default [
+      { name: 'eslint-config/best-practices', rules: {} },
+      { name: 'eslint-config-astro/recommended', ignores: ['dist/**'], rules: {} },
+      { name: 'integrations/markdown', rules: {} },
+      { name: 'santi020k/tailwind/recommended', rules: {} },
+      { name: 'eslint-config-typescript/recommended', rules: {} }
+    ]`)
+    writeFakePackage(cwd, '@santi020k/eslint-config-astro', '3.2.0', {
+      exports: { import: './index.js' }
+    })
+    writeFakePackage(cwd, '@santi020k/eslint-config-extensions', '3.2.0')
+    writeFakePackage(cwd, '@santi020k/eslint-config-formats', '3.2.0')
+    writeFakePackage(cwd, '@santi020k/eslint-config-libraries', '3.2.0')
+    writeFakePackage(cwd, '@santi020k/eslint-config-react', '3.2.0')
+    writeFakePackage(cwd, 'typescript', '6.0.0')
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+
+    await handleDoctor(cwd, true)
+
+    const payload = JSON.parse(String(logSpy.mock.calls.at(-1)?.[0])) as {
+      projects: {
+        extensions: { detected: boolean, enabled: boolean, installed: boolean, name: string }[]
+        formats: { detected: boolean, enabled: boolean, installed: boolean, name: string }[]
+        frameworks: { detected: boolean, enabled: boolean, installed: boolean, name: string }[]
+        ignores: string[]
+        inactivePackages: { package: string, reason: string }[]
+        libraries: { detected: boolean, enabled: boolean, installed: boolean, name: string }[]
+        path: string
+        tailwind: { componentClasses: number, entryPoint: null | string, unknownClassPolicy: string }
+        typescript: { mode: string, tsconfig: null | string }
+      }[]
+    }
+    const root = getProjectByPath(payload.projects, '.')
+    const site = getProjectByPath(payload.projects, 'packages/site')
+
+    expect(payload.projects).toContainEqual(expect.objectContaining({
+      path: '.',
+      tailwind: {
+        componentClasses: 0,
+        entryPoint: null,
+        detected: false,
+        unknownClassPolicy: 'off'
+      }
+    }))
+    expect(root.extensions).toContainEqual({
+      detected: false,
+      enabled: true,
+      installed: true,
+      name: 'Best Practices',
+      package: '@santi020k/eslint-config-extensions'
+    })
+    expect(root.inactivePackages.map(item => item.package))
+      .not.toContain('@santi020k/eslint-config-extensions')
+
+    expect(site.frameworks).toContainEqual(expect.objectContaining({
+      detected: true,
+      enabled: true,
+      installed: true,
+      name: 'astro'
+    }))
+    expect(site.formats).toContainEqual(expect.objectContaining({
+      detected: true,
+      enabled: true,
+      installed: true,
+      name: 'markdown'
+    }))
+    expect(site.libraries).toContainEqual(expect.objectContaining({
+      detected: true,
+      enabled: true,
+      installed: true,
+      name: 'tailwind'
+    }))
+    expect(site.tailwind).toEqual({
+      componentClasses: 0,
+      entryPoint: 'src/styles/global.css',
+      detected: true,
+      unknownClassPolicy: 'strict'
+    })
+    expect(site.typescript).toEqual(expect.objectContaining({
+      mode: 'type-aware',
+      tsconfig: 'tsconfig.json'
+    }))
+    expect(site.ignores).toContain('dist/**')
+    expect(site.inactivePackages.map(item => `${item.package}: ${item.reason}`).join('\n'))
+      .toContain('@santi020k/eslint-config-react: Installed, but no matching framework signal')
+
+    logSpy.mockClear()
+    runCli(['node', 'basic-eslint', 'doctor', '--verbose'], cwd)
+    await vi.waitFor(() => {
+      expect(logSpy).toHaveBeenCalled()
+    })
+
+    const verboseOutput = logSpy.mock.calls.flat().join('\n')
+
+    expect(verboseOutput).toContain('Per-project activation (I=installed, D=detected, E=enabled):')
+    expect(verboseOutput).toContain(
+      'packages/site | browser | type-aware:tsconfig.json[IDE] | src/styles/global.css'
+    )
+    expect(verboseOutput).toContain('astro[IDE]')
+    expect(verboseOutput).toContain('tailwind[IDE]')
+    expect(verboseOutput).toContain('@santi020k/eslint-config-react: Installed, but no matching framework signal')
+    logSpy.mockRestore()
+    process.exitCode = undefined
+  })
+
+  test('should compute active features from each project scoped config', async () => {
+    const cwd = createTempProject({
+      name: 'tmp-project',
+      type: 'module',
+      workspaces: ['packages/*']
+    })
+
+    for (const projectName of ['enabled', 'disabled']) {
+      const projectRoot = join(cwd, 'packages', projectName)
+
+      mkdirSync(projectRoot, { recursive: true })
+      writeFileSync(join(projectRoot, 'package.json'), JSON.stringify({
+        devDependencies: { vitest: '4.0.0' },
+        name: projectName
+      }))
+      writeFileSync(join(projectRoot, 'tsconfig.json'), '{}\n')
+    }
+
+    writeFileSync(join(cwd, 'eslint.config.js'), `export default [
+      {
+        files: ['packages/enabled/**/*'],
+        name: 'eslint-config-typescript/recommended',
+        rules: {}
+      },
+      {
+        files: ['packages/enabled/**/*'],
+        name: 'integrations/vitest',
+        rules: {}
+      }
+    ]`)
+    writeFakePackage(cwd, '@santi020k/eslint-config-testing', '3.2.0')
+    writeFakePackage(cwd, 'typescript', '6.0.0')
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+
+    await handleDoctor(cwd, true)
+
+    const payload = JSON.parse(String(logSpy.mock.calls.at(-1)?.[0])) as {
+      projects: {
+        path: string
+        testing: { enabled: boolean, name: string }[]
+        typescript: { enabled: boolean, mode: string, reason?: string }
+      }[]
+    }
+    const enabled = getProjectByPath(payload.projects, 'packages/enabled')
+    const disabled = getProjectByPath(payload.projects, 'packages/disabled')
+
+    expect(enabled.typescript).toEqual(expect.objectContaining({ enabled: true, mode: 'type-aware' }))
+    expect(enabled.testing).toContainEqual(expect.objectContaining({ enabled: true, name: 'vitest' }))
+    expect(disabled.typescript).toEqual(expect.objectContaining({
+      enabled: false,
+      mode: 'off',
+      reason: 'Detected and installed, but the active config did not enable TypeScript.'
+    }))
+    expect(disabled.testing).toContainEqual(expect.objectContaining({ enabled: false, name: 'vitest' }))
+    logSpy.mockRestore()
+    process.exitCode = undefined
+  })
+
+  test('should recognize an npm-aliased TypeScript package in workspace activation details', async () => {
+    const cwd = createTempProject({
+      devDependencies: {
+        typescript: 'npm:@typescript/typescript6@6.0.0-dev.20260801'
+      },
+      name: 'tmp-project',
+      type: 'module',
+      workspaces: ['packages/*']
+    })
+    const projectRoot = join(cwd, 'packages', 'aliased-typescript')
+
+    mkdirSync(projectRoot, { recursive: true })
+    writeFileSync(join(projectRoot, 'package.json'), JSON.stringify({ name: 'aliased-typescript' }))
+    writeFileSync(join(projectRoot, 'tsconfig.json'), '{}\n')
+    writeFileSync(join(cwd, 'eslint.config.js'), `export default [
+      { name: 'eslint-config-typescript/recommended', rules: {} }
+    ]`)
+    writeFakePackage(cwd, 'typescript', '6.0.0-dev.20260801', {
+      name: '@typescript/typescript6'
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+
+    await handleDoctor(cwd, true)
+
+    const payload = JSON.parse(String(logSpy.mock.calls.at(-1)?.[0])) as {
+      projects: { path: string, typescript: { installed: boolean, reason?: string } }[]
+    }
+    const project = payload.projects.find(candidate => candidate.path === 'packages/aliased-typescript')
+
+    expect(project?.typescript.installed).toBe(true)
+    expect(project?.typescript.reason).toBeUndefined()
     logSpy.mockRestore()
     process.exitCode = undefined
   })
@@ -916,7 +1294,7 @@ describe('CLI command UX', () => {
       },
       type: 'module'
     })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     const fileContent = 'import { defineConfig } from \'@santi020k/eslint-config-lite\'\nexport default await defineConfig()'
     writeFileSync(join(cwd, 'eslint.config.js'), fileContent)
@@ -937,7 +1315,7 @@ describe('CLI command UX', () => {
       scripts: { lint: 'eslint .' },
       type: 'module'
     })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     writeFileSync(join(cwd, 'eslint.config.js'), 'export default [{ name: "eslint-config-integrations/astro-doctor", rules: {} }]')
     writeFakePackage(cwd, '@santi020k/eslint-config-integrations', '1.1.0')
@@ -958,7 +1336,7 @@ describe('CLI command UX', () => {
       scripts: { lint: 'eslint .' },
       type: 'module'
     })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     writeFileSync(join(cwd, 'eslint.config.js'), 'export default []')
 
@@ -977,7 +1355,7 @@ describe('CLI command UX', () => {
       scripts: { lint: 'eslint .' },
       type: 'module'
     })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     writeFileSync(join(cwd, 'eslint.config.js'), `export default [
         { name: 'eslint-config-astro/recommended', rules: {} },
@@ -1000,6 +1378,38 @@ describe('CLI command UX', () => {
     process.exitCode = undefined
   })
 
+  test('should resolve an enabled Astro Doctor plugin from a sibling workspace', async () => {
+    const cwd = createTempProject({
+      name: 'tmp-project',
+      scripts: { lint: 'eslint .' },
+      type: 'module',
+      workspaces: ['packages/*']
+    })
+    const pluginDir = join(cwd, 'packages', 'astro-doctor')
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+
+    mkdirSync(pluginDir, { recursive: true })
+    writeFileSync(join(pluginDir, 'package.json'), JSON.stringify({
+      engines: { node: '>=22' },
+      name: '@santi020k/eslint-plugin-astro-doctor',
+      peerDependencies: { eslint: '^10.0.0' },
+      version: '1.0.4'
+    }))
+    writeFileSync(join(cwd, 'eslint.config.js'), `export default [
+      { name: 'eslint-config-astro/recommended', rules: {} },
+      { name: 'eslint-config-integrations/astro-doctor', rules: {} }
+    ]`)
+    writeFakePackage(cwd, 'eslint', '10.8.0')
+
+    await handleDoctor(cwd)
+
+    expect(logSpy.mock.calls.flat().join('\n')).not.toContain(
+      'Astro Doctor is enabled, but @santi020k/eslint-plugin-astro-doctor could not be resolved.'
+    )
+    logSpy.mockRestore()
+    process.exitCode = undefined
+  })
+
   test('should print the lite install command from detected features', async () => {
     const cwd = createTempProject({
       dependencies: {
@@ -1011,7 +1421,7 @@ describe('CLI command UX', () => {
       name: 'tmp-project',
       type: 'module'
     })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     await handleDoctor(cwd, false, true)
 
@@ -1036,7 +1446,7 @@ describe('CLI command UX', () => {
       },
       type: 'module'
     })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     const fileContent = 'import { defineConfig, Preset } from \'@santi020k/eslint-config-lite\'\n' +
       'export default await defineConfig({ preset: Preset.All })'
@@ -1059,7 +1469,7 @@ describe('CLI command UX', () => {
       },
       type: 'module'
     })
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     const fileContent = 'import missingConfig from \'missing-eslint-config-package\'\nexport default [missingConfig]'
     writeFileSync(join(cwd, 'eslint.config.js'), fileContent)
@@ -1097,6 +1507,7 @@ const makeFeatures = (
   extensions: [],
   formats: [],
   frameworks: [],
+  ignores: [],
   libraries: [],
   lintCommand: 'npm run lint',
   source: 'detection-fallback',
@@ -1448,7 +1859,7 @@ describe('generateAgentSkills', () => {
     mkdirSync(join(cwd, '.cursor'))
     writeFileSync(join(cwd, 'AGENTS.md'), '# My agents\n')
 
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     await handleGenerateSkill(cwd)
 
@@ -1467,7 +1878,7 @@ describe('generateAgentSkills', () => {
   test('should warn via the CLI handler when no agent folders or AGENTS.md exist', async () => {
     const cwd = createTempProject({ name: 'tmp-project' })
 
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     await handleGenerateSkill(cwd)
 
@@ -1541,7 +1952,7 @@ describe('generateAgentSkills', () => {
 
     mkdirSync(join(cwd, '.cursor'))
 
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
     const previousExitCode = process.exitCode
 
     await handleGenerateSkill(cwd, false, { check: true })
@@ -1567,19 +1978,6 @@ describe('generateAgentSkills', () => {
     expect(content.startsWith('---\ninclusion: always\n---')).toBe(true)
   })
 })
-
-const writeFakePackage = (
-  root: string,
-  name: string,
-  version: string,
-  metadata: Record<string, unknown> = {}
-): void => {
-  const packageDir = join(root, 'node_modules', ...name.split('/'))
-
-  mkdirSync(packageDir, { recursive: true })
-  writeFileSync(join(packageDir, 'package.json'), JSON.stringify({ main: 'index.js', name, version, ...metadata }))
-  writeFileSync(join(packageDir, 'index.js'), 'module.exports = {}')
-}
 
 describe('findDuplicateEslint', () => {
   test('should return null when eslint cannot be resolved', () => {
@@ -1619,7 +2017,7 @@ describe('findDuplicateEslint', () => {
     writeFakePackage(cwd, '@santi020k/eslint-config-core', '2.0.0')
     writeFakePackage(join(cwd, 'node_modules', '@santi020k', 'eslint-config-core'), 'eslint', '10.2.1')
 
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
     await handleDoctor(cwd)
 

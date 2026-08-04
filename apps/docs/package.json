@@ -23,8 +23,8 @@
     "test:a11y": "playwright test",
     "test:a11y:ui": "playwright test --ui",
     "lighthouse": "node scripts/run-lighthouse.mjs",
-    "lint": "eslint . --no-warn-ignored --pass-on-no-patterns",
-    "lint:fix": "eslint . --fix --no-warn-ignored --pass-on-no-patterns"
+    "lint": "eslint . --no-warn-ignored --pass-on-no-patterns --max-warnings=0",
+    "lint:fix": "eslint . --fix --no-warn-ignored --pass-on-no-patterns --max-warnings=0"
   },
   "devDependencies": {
     "@astrojs/check": "catalog:",

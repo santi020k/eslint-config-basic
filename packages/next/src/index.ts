@@ -1,6 +1,5 @@
-import { GLOB_JS_TS } from '@santi020k/eslint-config-core'
-
 import pluginNext from '@next/eslint-plugin-next'
+import { GLOB_JS_TS } from '@santi020k/eslint-config-core'
 import type { TSESLint } from '@typescript-eslint/utils'
 
 import { rules } from './rules.js'

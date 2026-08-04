@@ -35,6 +35,10 @@ export default await defineConfig({
 
 - Format integrations are always explicit.
 - Markdown and MDX are especially useful when the repository includes docs, content, or developer guides that should follow the same standards as source code.
+- GitHub Actions workflows may use null event mappings such as
+  `workflow_dispatch:`, `pull_request:`, and `push:`. These known event keys are
+  accepted inside `.github/workflows`; unrelated empty mapping values still
+  report a warning and should use `{}` or provide a mapping.
 
 ## Repository Examples
 

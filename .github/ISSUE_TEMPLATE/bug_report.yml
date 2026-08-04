@@ -27,7 +27,7 @@ body:
       placeholder: |
         1. create a new project with...
         2. install @santi020k/eslint-config-basic
-        3. run eslint .
+        3. run eslint . --max-warnings=0
     validations:
       required: true
 

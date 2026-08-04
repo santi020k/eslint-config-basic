@@ -4,6 +4,7 @@ words:
   - ACMR
   - activedescendant
   - agentchat
+  - amannn
   - analogjs
   - anthropics
   - app-router
@@ -13,6 +14,7 @@ words:
   - asyncgenerator
   - asynciterable
   - attw
+  - autorelease
   - autobuild
   - behaviour
   - better-tailwindcss
@@ -24,10 +26,13 @@ words:
   - clinerules
   - codecov
   - codegen
+  - configfeature
   - commitlint
+  - commitprompt
   - commonmark
   - cspell
   - darraghor
+  - dedupe
   - defu
   - dev-dependency
   - devframe

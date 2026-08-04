@@ -1,5 +1,4 @@
 import { GLOB_JS_TS_ALL } from '@santi020k/eslint-config-core'
-
 import type { TSESLint } from '@typescript-eslint/utils'
 
 const createOrmConfig = (

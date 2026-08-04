@@ -233,6 +233,31 @@ export default await defineConfig(
 )
 ```
 
+`defineConfig()` automatically attaches already-loaded plugin objects to every
+override passed as an argument when that override references a plugin rule. This
+keeps each emitted rule block independently valid in ESLint 10. Prefer this form
+for all overrides known while the config is being built.
+
+An override appended after the promise resolves is outside the composer's
+attachment pass. For overrides discovered dynamically, wrap the completed array
+with `attachReferencedPlugins()`:
+
+```js
+import {
+  attachReferencedPlugins,
+  defineConfig
+} from '@santi020k/eslint-config-basic'
+
+const generated = await defineConfig()
+const lateOverrides = await loadProjectOverrides()
+
+export default attachReferencedPlugins([...generated, ...lateOverrides])
+```
+
+The helper can attach only plugins already registered somewhere in the supplied
+array. Import and register a genuinely new plugin in the normal ESLint flat
+config form.
+
 ### Default ignores
 
 The composed config ships a default ignore block (`dist`, `build`, `coverage`, framework output folders, `node_modules`, and similar). It also ignores common generated-code folders and files such as `__generated__`, `generated`, `codegen`, `*.generated.*`, `*.gen.*`, GraphQL generated output, and `.prisma`. AI coding-assistant artifact folders — `.agent`, `.agents`, `.aider*`, `.claude`, `.clinerules`, `.codex`, `.copilot`, `.cursor`, `.gemini`, `.kiro`, `.opencode`, `.roo`, and `.windsurf` — are ignored too. Disable the whole block with `settings: [Setting.NoDefaultIgnores]`, or disable only generated-code ignores with `settings: [Setting.NoGeneratedCodeIgnores]`.
@@ -272,6 +297,78 @@ Set `untypedFiles: false` to require type information for every TypeScript
 file. `projectService` also accepts the native options object when
 `allowDefaultProject` or `defaultProject` is genuinely needed.
 
+Workspace packages that contain `.d.ts`, `.d.mts`, or `.d.cts` declarations but
+no supported tsconfig are detected as syntax-only TypeScript projects. This
+keeps handwritten public declarations lintable without sending them to the
+project service. Add a package-local tsconfig when type-aware linting is useful;
+for JavaScript packages, enable `allowJs` and include both the JavaScript source
+and declaration files. Prefer explicit public declarations, Astro `Props`
+interfaces, and JSDoc parameter types over suppressing unsafe-type rules.
+
+The shared line-length rule ignores URLs, strings, and template literals.
+Astro disables the JavaScript-oriented rule for `.astro` documents because
+wrapping declarative tags, SVG path data, or embedded previews can change or
+obscure their output. For other generated templates, keep the exception
+file-scoped:
+
+```js
+export default await defineConfig(
+  {},
+  {
+    files: ['generated/**/*.{js,html}'],
+    rules: {
+      '@stylistic/max-len': 'off'
+    }
+  }
+)
+```
+
+External schemas may keep their published property spelling. Object properties,
+quoted keys, computed access, TypeScript property declarations, and destructured
+keys renamed to a local camel-case binding do not trigger the `camelcase` rule.
+Local variables and functions are still checked, so prefer:
+
+```ts
+const { theme_ntp_background: themeBackground } = manifest
+```
+
+over introducing a snake-case local identifier. If an external adapter requires
+an exceptional local binding too, use a source-level directive with a short
+schema-specific justification instead of disabling the rule project-wide.
+
+When an arrow function's concise body is too long for one line, wrap the
+expression in parentheses rather than changing it to a return-only block:
+
+```js
+const result = value => (
+  createLongResult(value, {
+    enabled: true
+  })
+)
+```
+
+This form satisfies `func-style`, `arrow-body-style`,
+`implicit-arrow-linebreak`, and `max-len` together and remains stable under
+autofix.
+
+Setup functions that return cleanup callbacks should use an explicit no-op
+result when setup cannot proceed:
+
+```ts
+const setup = (element: HTMLElement | null) => {
+  if (!element) return () => undefined
+
+  const listener = () => element.removeAttribute('data-active')
+
+  element.addEventListener('click', listener)
+
+  return () => element.removeEventListener('click', listener)
+}
+```
+
+This preserves the cleanup contract without an empty callback and keeps the
+setup function in the preferred expression style.
+
 ## Tailwind Options
 
 Tailwind is auto-detected when the project depends on Tailwind packages. Use `tailwind` when the entry point or project-specific class ignores need to be explicit:
@@ -292,11 +389,23 @@ Use `noUnknownClasses: false` when a project uses many generated or framework-pr
 
 Relative entry points are resolved from `root`, so project-scoped monorepo configs work when ESLint runs from the repository root. Set `tailwind.cwd` only when Tailwind must resolve from a different directory.
 
+With a CSS entry point, the composer follows local relative imports and
+automatically allows exact standalone selectors and static Tailwind v4
+`@utility` names. It deliberately does not guess dynamic `@utility name-*`
+families, remote sources, or package-owned generated classes. Install package
+providers such as `tw-animate-css` so Tailwind can compile their imports, then
+add only any remaining project-specific classes as anchored `ignore` patterns.
+
 Set `tailwind: false` to disable auto-detected Tailwind linting for a package.
 
 ## Testing Files
 
 Testing integrations ship with default file globs. Override them only when your project stores tests somewhere unusual:
+
+Playwright defaults are limited to its config files, explicit e2e, functional,
+or Playwright folders, and `.e2e.*` or `.playwright.*` file names. Generic test
+folders and names such as `tests/unit/**` and `tests/*.spec.*` are not
+Playwright-owned by default because they may belong to Vitest or Jest.
 
 ```js
 import { defineConfig, Testing } from '@santi020k/eslint-config-basic'

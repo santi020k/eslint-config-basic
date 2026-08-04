@@ -76,6 +76,13 @@ export default await defineConfig({
 
 Use `Runtime.Node` for: Express / Fastify / Hono APIs, NestJS applications, CLI tools and scripts, and Node.js cron jobs.
 
+Executable command files receive a narrower CLI context automatically.
+JavaScript and TypeScript files under a conventional `scripts/` directory, plus
+paths declared by the package's `bin` field, may use `console` output and
+`process.exit()` and may import unpublished build dependencies. These
+exceptions do not apply to normal `src/` modules; keep reusable command logic
+there and make the detected entry point a thin terminal/process adapter.
+
 ### `Runtime.Worker`
 
 Adds service worker and Fetch API globals: `self`, `fetch`, `Request`, `Response`, `Headers`, `URL`, `URLSearchParams`, `ReadableStream`, `WritableStream`, `TransformStream`, `caches`, `crypto`, and `CryptoKey`.
@@ -132,6 +139,22 @@ When no `runtime` is set explicitly, auto-detection reads `package.json` and the
 Detection precedence (highest wins): `Cloudflare > Bun/Deno > Worker > Node > Browser > Universal`.
 
 Use `detection: { runtime: false }` to disable runtime auto-detection and rely solely on your explicit `runtime` option.
+
+## Intentional background promises
+
+Use a standalone `void` expression when an event handler intentionally starts a
+promise without returning or awaiting it. Terminate the chain with a rejection
+handler unless the called function already owns its error handling:
+
+```js
+button.addEventListener('click', () => {
+  void refreshSearchIndex().catch(reportError)
+})
+```
+
+The default `no-void` configuration permits this statement form while still
+rejecting `void` in values and larger expressions. This makes the
+fire-and-forget decision visible without conflicting with the promise rules.
 
 ## Runtime in Monorepos
 

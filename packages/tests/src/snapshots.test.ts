@@ -18,7 +18,6 @@ import { tanstackStart as tanstackStartConfig } from '@santi020k/eslint-config-t
 import { typescriptConfig } from '@santi020k/eslint-config-typescript'
 import { vite as viteConfig } from '@santi020k/eslint-config-vite'
 import { vueConfig } from '@santi020k/eslint-config-vue'
-
 import { describe, expect, test } from 'vitest'
 
 const astroConfig = createAstroConfig()

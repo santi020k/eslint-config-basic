@@ -221,7 +221,7 @@ Defined in: [basic/src/agent-skill-generator.ts:86](https://github.com/santi020k
 
 ### AGENT\_TARGETS
 
-> `const` **AGENT\_TARGETS**: [`AgentTarget`](#agenttarget)[]
+> `const` **AGENT\_TARGETS**: [`AgentTarget`](#agenttarget)\[\]
 
 Defined in: [basic/src/agent-skill-generator.ts:96](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L96)
 
@@ -310,7 +310,7 @@ Configuration and integration settings
 
 ##### extraConfigs
 
-...[`ConfigInput`](../core/src.md#configinput)[]
+...[`ConfigInput`](../core/src.md#configinput)\[\]
 
 Local flat-config overrides appended after generated config
 
@@ -829,7 +829,7 @@ Configuration and integration settings
 
 ##### extraConfigs
 
-...[`ConfigInput`](../core/src.md#configinput)[]
+...[`ConfigInput`](../core/src.md#configinput)\[\]
 
 Local flat-config overrides appended after generated config
 

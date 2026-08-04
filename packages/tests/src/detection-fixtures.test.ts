@@ -3,7 +3,6 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
 import { detectProjectOptions, Format, Library, NextMode, Preset, Runtime, Tool } from '@santi020k/eslint-config-basic'
-
 import { afterEach, describe, expect, test } from 'vitest'
 
 const tempDirs: string[] = []
@@ -40,6 +39,25 @@ afterEach(() => {
 })
 
 describe('detectProjectOptions fixture matrix', () => {
+  test.each([
+    ['index.d.ts', { 'index.d.ts': 'export interface Theme {}' }, 'syntax'],
+    ['index.d.mts', { 'index.d.mts': 'export interface Preset {}' }, 'syntax'],
+    [
+      'JavaScript plus declarations',
+      {
+        'src/index.d.ts': 'export declare const value: string',
+        'src/index.js': 'export const value = "ok"'
+      },
+      'syntax'
+    ],
+    ['package without TypeScript files', { 'index.js': 'export const value = "ok"' }, false]
+  ])('selects a safe TypeScript mode for %s without a tsconfig', (_label, files, expected) => {
+    const dirs = Object.keys(files).some(fileName => fileName.startsWith('src/')) ? ['src'] : []
+    const dir = createFixtureProject({ name: 'fixture' }, dirs, files)
+
+    expect(detectProjectOptions(dir).typescript).toBe(expected)
+  })
+
   test('resolves runtime and preset for Next + Nest + TypeScript fixtures', () => {
     const dir = createFixtureProject(
       {
@@ -91,6 +109,40 @@ describe('detectProjectOptions fixture matrix', () => {
 
     expect(options.runtime).toBe(Runtime.Universal)
     expect(options.detectedFrameworks).toContain('expo')
+    expect(options.detectedFrameworks).toContain('react')
+  })
+
+  test('detects Astro from component files without a package dependency', () => {
+    const dir = createFixtureProject(
+      { name: 'shared-theme' },
+      ['components'],
+      { 'components/AppleIcon.astro': '<svg aria-hidden="true"></svg>\n' }
+    )
+
+    const options = detectProjectOptions(dir)
+
+    expect(options.detectedFrameworks).toContain('astro')
+    expect(options.runtime).toBe(Runtime.Browser)
+  })
+
+  test('detects Astro in a mixed React package with deeply nested templates', () => {
+    const dir = createFixtureProject(
+      {
+        devDependencies: {
+          astro: 'latest',
+          react: 'latest'
+        },
+        name: 'mixed-component-library'
+      },
+      ['templates/astro/saas-admin/src/lumen'],
+      {
+        'templates/astro/saas-admin/src/lumen/saas-admin.astro': '<main>Admin</main>\n'
+      }
+    )
+
+    const options = detectProjectOptions(dir)
+
+    expect(options.detectedFrameworks).toContain('astro')
     expect(options.detectedFrameworks).toContain('react')
   })
 

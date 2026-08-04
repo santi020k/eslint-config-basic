@@ -12,9 +12,9 @@ export const playwright: () => Promise<TSESLint.FlatConfig.ConfigArray> = define
   return [
     {
       files: [
+        '**/playwright.config.{js,mjs,cjs,ts,mts,cts}',
         '**/e2e/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
-        '**/tests/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
-        '**/tests/e2e/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+        '**/tests/{e2e,functional,playwright}/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
         '**/*.e2e.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
         '**/*.e2e.spec.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
         '**/*.playwright.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',

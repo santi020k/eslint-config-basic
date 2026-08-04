@@ -14,7 +14,8 @@ import {
   Testing,
   Tool
 } from '@santi020k/eslint-config-basic'
-
+import type { Linter } from 'eslint'
+import { ESLint } from 'eslint'
 import { describe, expect, test } from 'vitest'
 
 import { extractConfigNames, extractRuleNames } from './test-utils.js'
@@ -34,6 +35,28 @@ describe('defineConfig Function', () => {
     ])
 
     expect(config[1]?.plugins?.example).toBe(plugin)
+  })
+
+  test('can attach plugins to overrides appended after defineConfig resolves', async () => {
+    const plugin = { rules: { example: { create: () => ({}), meta: { schema: [] } } } }
+    const generated = await defineConfig(
+      { detection: false },
+      {
+        name: 'dynamic-plugin-registration',
+        plugins: { dynamic: plugin }
+      }
+    )
+    const lateOverride = {
+      name: 'late-dynamic-override',
+      rules: { 'dynamic/example': 'off' as const }
+    }
+
+    expect(lateOverride).not.toHaveProperty('plugins')
+
+    const attached = attachReferencedPlugins([...generated, lateOverride])
+    const attachedOverride = attached.find(config => config.name === 'late-dynamic-override')
+
+    expect(attachedOverride?.plugins?.dynamic).toBe(plugin)
   })
 
   test('does not attach an ambiguous plugin implementation across disjoint scopes', () => {
@@ -194,8 +217,7 @@ describe('defineConfig Function', () => {
         projects: { 'apps/web': {} },
         root
       })
-      const gitignoreEntry = config.find(entry =>
-        entry.name === 'eslint-config/gitignore' && entry.ignores?.some(pattern => pattern.includes('generated.js')))
+      const gitignoreEntry = config.find(entry => entry.name === 'eslint-config/gitignore' && entry.ignores?.some(pattern => pattern.includes('generated.js')))
 
       expect(gitignoreEntry?.basePath).toBe(projectRoot)
       expect(gitignoreEntry?.ignores).toContain('generated.js')
@@ -250,6 +272,16 @@ describe('defineConfig Function', () => {
     expect(defaultIgnoreEntry?.ignores).toContain('**/.windsurf/**')
   })
 
+  test('should not inject repository-specific fixture ignores into workspace configs', async () => {
+    const config = await defineConfig({
+      detection: false,
+      projects: { 'packages/example': { typescript: false } }
+    })
+
+    expect(config.some(entry => entry.name === 'eslint-config-basic/workspace-fixture-ignores')).toBe(false)
+    expect(config.flatMap(entry => entry.ignores ?? [])).not.toContain('packages/*/fixtures/**')
+  })
+
   test('should exclude default ignores when NoDefaultIgnores setting is specified', async () => {
     const config = await defineConfig({
       settings: [Setting.NoDefaultIgnores]
@@ -289,6 +321,16 @@ describe('defineConfig Function', () => {
     expect(Array.isArray(config)).toBe(true)
 
     expect(config.length).toBeGreaterThan(0)
+  })
+
+  test('should allow intentional test doubles and helper declaration order', async () => {
+    const config = await defineConfig({ detection: false, typescript: true })
+    const testOverride = config.find(entry => entry.name === 'eslint-config-basic/test-file-overrides')
+
+    expect(testOverride?.rules).toMatchObject({
+      '@typescript-eslint/no-empty-function': 'off',
+      'no-use-before-define': 'off'
+    })
   })
 
   test('should handle all framework configs combined', async () => {
@@ -585,7 +627,7 @@ describe('defineConfig Function', () => {
         devDependencies: { react: 'latest' },
         name: 'workspace-root'
       }))
-      writeFileSync(join(root, 'pnpm-workspace.yaml'), "packages:\n  - 'apps/*'\n")
+      writeFileSync(join(root, 'pnpm-workspace.yaml'), 'packages:\n  - \'apps/*\'\n')
       writeFileSync(join(root, 'apps/web/package.json'), JSON.stringify({
         dependencies: { astro: 'latest' },
         name: 'web'
@@ -611,6 +653,80 @@ describe('defineConfig Function', () => {
     }
   })
 
+  test('should syntax-lint declaration-only workspace packages without a tsconfig', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'eslint-config-declarations-'))
+
+    try {
+      mkdirSync(join(root, 'packages/theme/src'), { recursive: true })
+      writeFileSync(join(root, 'package.json'), JSON.stringify({ name: 'workspace-root' }))
+      writeFileSync(join(root, 'pnpm-workspace.yaml'), 'packages:\n  - \'packages/*\'\n')
+      writeFileSync(join(root, 'packages/theme/package.json'), JSON.stringify({ name: 'theme' }))
+      writeFileSync(join(root, 'packages/theme/src/index.js'), 'export const theme = {}\n')
+      writeFileSync(
+        join(root, 'packages/theme/src/index.d.ts'),
+        'export declare const theme: Record<string, string>\n'
+      )
+
+      const config = await defineConfig({
+        root,
+        settings: [Setting.NoGitignore],
+        tools: []
+      })
+      const syntaxFallback = config.find(
+        entry => entry.name?.includes('disable-type-checked')
+      )
+
+      expect(syntaxFallback?.files?.every(
+        pattern => typeof pattern === 'string' && pattern.startsWith('packages/theme/')
+      )).toBe(true)
+    } finally {
+      rmSync(root, { force: true, recursive: true })
+    }
+  })
+
+  test('should apply Astro processing to neutral workspace packages containing Astro files', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'eslint-config-shared-astro-'))
+
+    try {
+      mkdirSync(join(root, 'apps/site/src'), { recursive: true })
+      mkdirSync(join(root, 'packages/theme/components'), { recursive: true })
+      writeFileSync(join(root, 'package.json'), JSON.stringify({ name: 'workspace-root' }))
+      writeFileSync(
+        join(root, 'pnpm-workspace.yaml'),
+        'packages:\n  - \'apps/*\'\n  - \'packages/*\'\n'
+      )
+      writeFileSync(join(root, 'apps/site/package.json'), JSON.stringify({
+        dependencies: { astro: 'latest' },
+        name: 'site'
+      }))
+      writeFileSync(
+        join(root, 'apps/site/src/page.astro'),
+        '---\nimport AppleIcon from "../../../packages/theme/components/AppleIcon.astro"\n---\n<AppleIcon />\n'
+      )
+      writeFileSync(join(root, 'packages/theme/package.json'), JSON.stringify({ name: 'theme' }))
+      writeFileSync(
+        join(root, 'packages/theme/components/AppleIcon.astro'),
+        '<svg aria-hidden="true"></svg>\n'
+      )
+
+      const config = await defineConfig({
+        root,
+        settings: [Setting.NoGitignore],
+        tools: []
+      })
+      const astroConfigs = config.filter(entry => entry.name === 'astro/recommended')
+
+      expect(astroConfigs.some(entry => entry.files?.some(
+        pattern => typeof pattern === 'string' && pattern.startsWith('apps/site/')
+      ))).toBe(true)
+      expect(astroConfigs.some(entry => entry.files?.some(
+        pattern => typeof pattern === 'string' && pattern.startsWith('packages/theme/')
+      ))).toBe(true)
+    } finally {
+      rmSync(root, { force: true, recursive: true })
+    }
+  })
+
   test('should preserve root detections when workspace project detection is disabled', async () => {
     const root = mkdtempSync(join(tmpdir(), 'eslint-config-monorepo-opt-out-'))
 
@@ -620,7 +736,7 @@ describe('defineConfig Function', () => {
         dependencies: { react: 'latest' },
         name: 'workspace-root'
       }))
-      writeFileSync(join(root, 'pnpm-workspace.yaml'), "packages:\n  - 'apps/*'\n")
+      writeFileSync(join(root, 'pnpm-workspace.yaml'), 'packages:\n  - \'apps/*\'\n')
       writeFileSync(join(root, 'apps/web/package.json'), JSON.stringify({
         dependencies: { astro: 'latest' },
         name: 'web'
@@ -677,6 +793,44 @@ describe('defineConfig Function', () => {
 
     expect(astroIndex).toBeGreaterThanOrEqual(0)
     expect(untypedIndex).toBeGreaterThan(astroIndex)
+  })
+
+  test('should keep root untyped TypeScript files effective in detected workspace projects', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'eslint-config-monorepo-untyped-'))
+
+    try {
+      mkdirSync(join(root, 'apps/web/tests'), { recursive: true })
+      writeFileSync(join(root, 'package.json'), JSON.stringify({
+        devDependencies: { typescript: 'latest' },
+        name: 'workspace-root'
+      }))
+      writeFileSync(join(root, 'pnpm-workspace.yaml'), 'packages:\n  - \'apps/*\'\n')
+      writeFileSync(join(root, 'tsconfig.json'), '{}')
+      writeFileSync(join(root, 'apps/web/package.json'), JSON.stringify({
+        devDependencies: { typescript: 'latest' },
+        name: 'web'
+      }))
+      writeFileSync(join(root, 'apps/web/tsconfig.json'), '{}')
+
+      const config = await defineConfig({
+        root,
+        typescript: {
+          untypedFiles: ['tests/**/*.ts']
+        }
+      })
+      const projectUntypedIndex = config.findLastIndex(entry => entry.name === 'eslint-config-typescript/untyped-files' &&
+        entry.files?.includes('apps/web/tests/**/*.ts'))
+      const projectUntyped = config.findLast(entry => entry.name === 'eslint-config-typescript/untyped-files' &&
+        entry.files?.includes('apps/web/tests/**/*.ts'))
+      const projectParserIndex = config.findLastIndex(entry => entry.name === 'eslint-config-typescript/parser-setup' &&
+        entry.files?.some(pattern => typeof pattern === 'string' && pattern.startsWith('apps/web/')))
+
+      expect(projectParserIndex).toBeGreaterThanOrEqual(0)
+      expect(projectUntypedIndex).toBeGreaterThan(projectParserIndex)
+      expect(projectUntyped?.languageOptions?.parserOptions?.projectService).toBe(false)
+    } finally {
+      rmSync(root, { force: true, recursive: true })
+    }
   })
 
   test('should use detectRootDir independently from tsconfigRootDir', async () => {
@@ -919,34 +1073,238 @@ describe('scripts-overrides block', () => {
 
     expect(scriptsBlock).toBeDefined()
     expect(scriptsBlock?.rules?.['n/no-unpublished-import']).toBe('off')
+    expect(scriptsBlock?.rules?.['n/no-process-exit']).toBe('off')
+    expect(scriptsBlock?.rules?.['no-console']).toBe('off')
   })
 
-  test('includes security rule when Security extension is enabled', async () => {
-    const config = await defineConfig({
-      detection: false,
-      extensions: [Extension.Security]
-    })
-    const scriptsBlock = config.find(c => c.name === 'eslint-config-basic/scripts-overrides')
+  test('includes manifest bin files without treating normal source as CLI code', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'eslint-config-cli-context-'))
 
-    expect(scriptsBlock).toBeDefined()
-    expect(scriptsBlock?.rules?.['security/detect-non-literal-fs-filename']).toBe('off')
+    try {
+      writeFileSync(join(root, 'package.json'), JSON.stringify({
+        bin: {
+          example: './bin/example.mjs'
+        },
+        name: 'cli-package'
+      }))
+
+      const config = await defineConfig({ detection: false, root })
+      const scriptsBlock = config.find(c => c.name === 'eslint-config-basic/scripts-overrides')
+
+      expect(scriptsBlock?.files).toContain('bin/example.mjs')
+      expect(scriptsBlock?.files).toContain('**/scripts/**/*.{js,mjs,cjs,ts,mts,cts}')
+      expect(scriptsBlock?.files).not.toContain('src/**/*.mjs')
+    } finally {
+      rmSync(root, { force: true, recursive: true })
+    }
   })
 
-  test('excludes security rule when Security extension is not enabled', async () => {
+  test('keeps security rules enabled in CLI entry points', async () => {
     const config = await defineConfig({
       detection: false,
-      extensions: []
+      extensions: [Extension.Security],
+      typescript: false
     })
     const scriptsBlock = config.find(c => c.name === 'eslint-config-basic/scripts-overrides')
+    const eslint = new ESLint({
+      overrideConfig: config as Linter.Config[],
+      overrideConfigFile: true
+    })
+    const [result] = await eslint.lintText([
+      'import { readFileSync } from \'node:fs\'',
+      '',
+      'export const load = path => readFileSync(path)',
+      ''
+    ].join('\n'), { filePath: 'scripts/example.js' })
 
     expect(scriptsBlock).toBeDefined()
-    const ruleKeys = Object.keys(scriptsBlock?.rules ?? {})
-
-    expect(ruleKeys.some(k => k.startsWith('security/'))).toBe(false)
+    expect(scriptsBlock?.rules).not.toHaveProperty('security/detect-non-literal-fs-filename')
+    expect(result.messages.map(message => message.ruleId))
+      .toContain('security/detect-non-literal-fs-filename')
   })
 })
 
 describe('Monorepo project scoping', () => {
+  test('scopes discovered Tailwind entry points to their workspace', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'eslint-config-tailwind-workspace-'))
+
+    try {
+      mkdirSync(join(root, 'apps/docs/src/styles'), { recursive: true })
+      mkdirSync(join(root, 'packages/lumen/src'), { recursive: true })
+      writeFileSync(join(root, 'package.json'), JSON.stringify({
+        devDependencies: { tailwindcss: 'latest' },
+        name: 'workspace-root'
+      }))
+      writeFileSync(
+        join(root, 'pnpm-workspace.yaml'),
+        'packages:\n  - \'apps/*\'\n  - \'packages/*\'\n'
+      )
+      writeFileSync(join(root, 'apps/docs/package.json'), JSON.stringify({
+        dependencies: { tailwindcss: 'latest' },
+        name: 'docs'
+      }))
+      writeFileSync(
+        join(root, 'apps/docs/src/styles/global.css'),
+        '@import "tailwindcss";\n'
+      )
+      writeFileSync(join(root, 'packages/lumen/package.json'), JSON.stringify({ name: 'lumen' }))
+
+      const config = await defineConfig({
+        root,
+        settings: [Setting.NoGitignore],
+        tools: []
+      })
+      const tailwindSettings = config.filter(
+        entry => entry.name === 'eslint-config-basic/tailwind-settings'
+      )
+      const rootSettings = tailwindSettings.find(entry => !entry.files)
+      const docsSettings = tailwindSettings.find(entry => entry.files?.includes('apps/docs/**/*'))
+
+      expect(rootSettings).toBeUndefined()
+      expect(docsSettings?.settings?.['better-tailwindcss']).toMatchObject({
+        cwd: join(root, 'apps/docs'),
+        entryPoint: 'src/styles/global.css'
+      })
+      expect(docsSettings?.rules?.['better-tailwindcss/no-unknown-classes']).toEqual([
+        'error',
+        { entryPoint: 'src/styles/global.css' }
+      ])
+    } finally {
+      rmSync(root, { force: true, recursive: true })
+    }
+  })
+
+  test('disables unknown-class validation when Tailwind has no usable entry point', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'eslint-config-tailwind-without-entry-'))
+
+    try {
+      writeFileSync(join(root, 'package.json'), JSON.stringify({ name: 'tailwind-app' }))
+
+      const config = await defineConfig({
+        detection: false,
+        libraries: [Library.Tailwind],
+        root,
+        settings: [Setting.NoGitignore],
+        tools: []
+      })
+      const tailwindSettings = config.find(
+        entry => entry.name === 'eslint-config-basic/tailwind-settings'
+      )
+
+      expect(tailwindSettings?.rules?.['better-tailwindcss/no-unknown-classes']).toBe('off')
+      expect(tailwindSettings?.settings?.['better-tailwindcss']).not.toHaveProperty('entryPoint')
+    } finally {
+      rmSync(root, { force: true, recursive: true })
+    }
+  })
+
+  test('recognizes exact semantic classes from the local Tailwind CSS import graph', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'eslint-config-tailwind-mixed-css-'))
+
+    try {
+      mkdirSync(join(root, 'src/styles'), { recursive: true })
+      writeFileSync(join(root, 'package.json'), JSON.stringify({ name: 'mixed-css-app' }))
+      writeFileSync(
+        join(root, 'src/styles/global.css'),
+        '@import "tailwindcss";\n@import "./components.css";\n'
+      )
+      writeFileSync(
+        join(root, 'src/styles/components.css'),
+        [
+          '.ui-button, .lumen-template__panel:hover { color: purple; }',
+          'a[href$=".pdf"] { color: black; }',
+          '@utility message-card { padding: 1rem; }',
+          '@utility dynamic-* { color: red; }',
+          ''
+        ].join('\n')
+      )
+
+      const config = await defineConfig({
+        detection: false,
+        libraries: [Library.Tailwind],
+        root,
+        settings: [Setting.NoGitignore],
+        tailwind: { entryPoint: 'src/styles/global.css', ignore: ['^external-component$'] },
+        tools: []
+      })
+      const tailwindSettings = config.find(
+        entry => entry.name === 'eslint-config-basic/tailwind-settings'
+      )
+      const rule = tailwindSettings?.rules?.['better-tailwindcss/no-unknown-classes']
+      const options = Array.isArray(rule) ? rule[1] as { ignore?: string[] } : undefined
+      const matchesIgnore = (className: string): boolean => Boolean(
+        options?.ignore?.some(pattern => new RegExp(pattern).test(className))
+      )
+
+      expect(matchesIgnore('ui-button')).toBe(true)
+      expect(matchesIgnore('lumen-template__panel')).toBe(true)
+      expect(matchesIgnore('message-card')).toBe(true)
+      expect(matchesIgnore('external-component')).toBe(true)
+      expect(matchesIgnore('dynamic-example')).toBe(false)
+      expect(matchesIgnore('pdf')).toBe(false)
+      expect(matchesIgnore('ui-unknown')).toBe(false)
+      expect(tailwindSettings?.settings?.['better-tailwindcss']).toMatchObject({
+        ignore: ['^external-component$']
+      })
+    } finally {
+      rmSync(root, { force: true, recursive: true })
+    }
+  })
+
+  test('handles nested, escaped, cyclic, queried, and malformed local CSS', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'eslint-config-tailwind-css-edges-'))
+
+    try {
+      mkdirSync(join(root, 'src/styles'), { recursive: true })
+      writeFileSync(join(root, 'package.json'), JSON.stringify({ name: 'css-edge-app' }))
+      writeFileSync(
+        join(root, 'src/styles/global.css'),
+        '@import "./components.css?source";\n'
+      )
+      writeFileSync(
+        join(root, 'src/styles/components.css'),
+        [
+          '@import "./global.css";',
+          '@layer components {',
+          '  .layer-card { color: red; }',
+          '  .escaped\\:card { color: blue; }',
+          '  @media (width > 20rem) {',
+          '    & .nested-card { color: green; }',
+          '  }',
+          '}',
+          '.malformed-card {',
+          '/* .comment-only { color: black; } */',
+          ''
+        ].join('\n')
+      )
+
+      const config = await defineConfig({
+        detection: false,
+        libraries: [Library.Tailwind],
+        root,
+        settings: [Setting.NoGitignore],
+        tailwind: { entryPoint: 'src/styles/global.css' },
+        tools: []
+      })
+      const tailwindSettings = config.find(
+        entry => entry.name === 'eslint-config-basic/tailwind-settings'
+      )
+      const rule = tailwindSettings?.rules?.['better-tailwindcss/no-unknown-classes']
+      const options = Array.isArray(rule) ? rule[1] as { ignore?: string[] } : undefined
+      const matchesIgnore = (className: string): boolean => Boolean(
+        options?.ignore?.some(pattern => new RegExp(pattern).test(className))
+      )
+
+      expect(matchesIgnore('layer-card')).toBe(true)
+      expect(matchesIgnore('escaped:card')).toBe(true)
+      expect(matchesIgnore('nested-card')).toBe(true)
+      expect(matchesIgnore('malformed-card')).toBe(true)
+      expect(matchesIgnore('comment-only')).toBe(false)
+    } finally {
+      rmSync(root, { force: true, recursive: true })
+    }
+  })
+
   test('root detection and Tailwind options are inherited by scoped projects', async () => {
     const config = await defineConfig({
       detection: { libraries: false },
@@ -962,8 +1320,7 @@ describe('Monorepo project scoping', () => {
         noUnknownClasses: false
       }
     })
-    const tailwindSettings = config.find(entry =>
-      entry.name === 'eslint-config-basic/tailwind-settings' &&
+    const tailwindSettings = config.find(entry => entry.name === 'eslint-config-basic/tailwind-settings' &&
       entry.files?.some(pattern => pattern === 'apps/docs/**/*'))
 
     expect(tailwindSettings?.rules?.['better-tailwindcss/no-unknown-classes']).toBe('off')
@@ -1053,7 +1410,7 @@ describe('Monorepo project scoping', () => {
       }
     })
 
-    const entry = config.find((e: any) => e?.name === 'mock-ignore-only')
+    const entry = config.find(configEntry => configEntry.name === 'mock-ignore-only')
     // Ignores must be prefixed with the project path — not global
     expect(entry?.ignores).toEqual(['apps/web/dist/**', 'apps/web/tmp/**'])
   })
@@ -1071,7 +1428,7 @@ describe('Monorepo project scoping', () => {
       }
     })
 
-    const entry = config.find((e: any) => e?.name === 'mock-negated-ignore')
+    const entry = config.find(configEntry => configEntry.name === 'mock-negated-ignore')
     expect(entry?.ignores).toEqual(['!packages/lib/src/**'])
   })
 
@@ -1088,7 +1445,7 @@ describe('Monorepo project scoping', () => {
       }
     })
 
-    const entry = config.find((e: any) => e?.name === 'mock-files')
+    const entry = config.find(configEntry => configEntry.name === 'mock-files')
     expect(entry?.files).toContain('apps/web/**/*.tsx')
     expect(entry?.files).not.toContain('**/*.tsx')
   })

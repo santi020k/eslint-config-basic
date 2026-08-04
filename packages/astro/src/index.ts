@@ -15,7 +15,7 @@ export const createAstroConfig = (options?: AstroOptions): TSESLint.FlatConfig.C
     files: ['**/*.astro'],
     languageOptions: {
       parserOptions: {
-        project: true,
+        project: options?.typeChecked ?? true,
         projectService: false,
         tsconfigRootDir: options?.tsconfigRootDir
       }
@@ -28,9 +28,13 @@ export const createAstroConfig = (options?: AstroOptions): TSESLint.FlatConfig.C
     languageOptions: { sourceType: 'module' },
     name: 'eslint-config-astro/virtual-scripts',
     rules: {
+      '@stylistic/indent': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/no-unused-expressions': 'off',
       // Disable rules that cause false positives in Astro virtual script blocks.
       // Type-checked rule disabling is handled by @santi020k/eslint-config-typescript.
+      'no-undef': 'off',
+      'no-unused-vars': 'off',
       'no-unused-expressions': 'off',
       'prettier/prettier': 'off'
     }

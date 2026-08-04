@@ -1,6 +1,5 @@
-import { GLOB_JS_TS_ALL } from '@santi020k/eslint-config-core'
-
 import type PluginCspell from '@cspell/eslint-plugin'
+import { GLOB_JS_TS_ALL } from '@santi020k/eslint-config-core'
 import type { TSESLint } from '@typescript-eslint/utils'
 
 import { defineLazyConfig, loadDefault } from './lazy.js'

@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-dynamic-delete, security/detect-object-injection -- migration rewrites validated package.json dependency records */
+/* eslint-disable @typescript-eslint/no-dynamic-delete -- migration rewrites validated package.json dependency records */
 /* eslint-disable complexity -- migration planners intentionally cover dry-run, write, lean, full, and compatibility branches */
 /* eslint-disable no-console -- CLI handlers own user-facing terminal output */
-/* eslint-disable security/detect-non-literal-fs-filename -- all paths are scoped to the caller-selected project root */
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { basename, join } from 'node:path'
 
@@ -508,7 +507,6 @@ const getShadowedRanges = (content: string, name: string): SourceRange[] => {
     return { end: lineEnd === -1 ? searchable.length : lineEnd, start }
   }
 
-  // eslint-disable-next-line security/detect-non-literal-regexp -- binding names come from parsed import specifiers
   const unparenthesizedArrowPattern = new RegExp(`\\b${name}\\b\\s*=>`, 'gm')
 
   const ranges = [...searchable.matchAll(unparenthesizedArrowPattern)].map(match => (
@@ -605,7 +603,6 @@ const getShadowedRanges = (content: string, name: string): SourceRange[] => {
     })
   }
 
-  // eslint-disable-next-line security/detect-non-literal-regexp -- binding names come from parsed import specifiers
   const blockBindingPattern = new RegExp(`\\b(?:const|let|var|function|class)\\s+${name}\\b`, 'g')
 
   for (const match of searchable.matchAll(blockBindingPattern)) {
@@ -630,7 +627,6 @@ const replaceBindingReferences = (
 ): string => {
   const importRanges = getImportRanges(content)
   const masked = maskNonCode(content)
-  // eslint-disable-next-line security/detect-non-literal-regexp -- binding names come from the internal migration map
   const identifierPattern = new RegExp(`\\b${from}\\b`, 'g')
   const matches = [...masked.matchAll(identifierPattern)]
   const shadowedRanges = getShadowedRanges(content, from)
@@ -683,35 +679,38 @@ const replaceImportedAlias = (
   const acceptedPackages = new Set([BASIC_PACKAGE, FULL_PACKAGE, ...(owner ? [owner] : [])])
   const importPattern = /import\s*\{([^}]*)\}\s*from\s*(['"])(@santi020k\/eslint-config-[^'"]+)\2/g
 
-  let updated = content.replace(importPattern, (statement, specifierText: string, _quote: string, packageName: string) => {
-    if (!acceptedPackages.has(packageName)) return statement
+  let updated = content.replace(
+    importPattern,
+    (statement, specifierText: string, _quote: string, packageName: string) => {
+      if (!acceptedPackages.has(packageName)) return statement
 
-    const specifiers = specifierText.split(',')
+      const specifiers = specifierText.split(',')
 
-    const rewritten = specifiers.map(specifier => {
-      const aliasMatch = /^(\s*)([a-zA-Z_$][\w$]*)\s+as\s+([a-zA-Z_$][\w$]*)(\s*)$/.exec(specifier)
+      const rewritten = specifiers.map(specifier => {
+        const aliasMatch = /^(\s*)([a-zA-Z_$][\w$]*)\s+as\s+([a-zA-Z_$][\w$]*)(\s*)$/.exec(specifier)
 
-      if (aliasMatch?.[2] === from) {
-        const localName = aliasMatch[3]
+        if (aliasMatch?.[2] === from) {
+          const localName = aliasMatch[3]
 
-        bindings.push({ from: localName, to: localName })
+          bindings.push({ from: localName, to: localName })
 
-        return `${aliasMatch[1]}${to} as ${localName}${aliasMatch[4]}`
-      }
+          return `${aliasMatch[1]}${to} as ${localName}${aliasMatch[4]}`
+        }
 
-      const directMatch = /^(\s*)([a-zA-Z_$][\w$]*)(\s*)$/.exec(specifier)
+        const directMatch = /^(\s*)([a-zA-Z_$][\w$]*)(\s*)$/.exec(specifier)
 
-      if (directMatch?.[2] !== from) return specifier
+        if (directMatch?.[2] !== from) return specifier
 
-      bindings.push({ from, to })
+        bindings.push({ from, to })
 
-      return `${directMatch[1]}${to}${directMatch[3]}`
-    })
+        return `${directMatch[1]}${to}${directMatch[3]}`
+      })
 
-    const rewrittenText = rewritten.join(',')
+      const rewrittenText = rewritten.join(',')
 
-    return rewrittenText === specifierText ? statement : statement.replace(specifierText, rewrittenText)
-  })
+      return rewrittenText === specifierText ? statement : statement.replace(specifierText, rewrittenText)
+    }
+  )
 
   for (const binding of bindings) {
     updated = replaceBindingReferences(updated, binding.from, binding.to, invokeReferences)
@@ -788,7 +787,6 @@ const replaceCodeProperty = (
   matches?: RegExpMatchArray[]
 ): string => {
   const masked = maskNonCode(content, true)
-  // eslint-disable-next-line security/detect-non-literal-regexp -- property is an internal migration key
   const pattern = new RegExp(`\\b${property}\\b(?=\\s*:)`, 'g')
   const propertyMatches = matches ?? [...masked.matchAll(pattern)]
   let updated = content
@@ -837,7 +835,6 @@ const getDefineConfigOptionOwners = (searchable: string): Set<number> => {
   )
 
   for (const optionName of optionNames) {
-    // eslint-disable-next-line security/detect-non-literal-regexp -- option names come from local identifier matches
     const bindingPattern = new RegExp(`\\b(?:const|let|var)\\s+${optionName}\\s*=\\s*\\{`, 'g')
 
     for (const match of searchable.matchAll(bindingPattern)) {
@@ -874,7 +871,6 @@ const getOwnedObjectPropertyStarts = (
   property: string,
   owners: Set<number>
 ): number[] => {
-  // eslint-disable-next-line security/detect-non-literal-regexp -- property is an internal migration key
   const pattern = new RegExp(`\\b${property}\\b\\s*:\\s*\\{`, 'g')
 
   return [...searchable.matchAll(pattern)].flatMap(match => {
@@ -884,7 +880,9 @@ const getOwnedObjectPropertyStarts = (
     return owner !== undefined &&
       owners.has(owner) &&
       hasCodePropertySeparator(structure, match) &&
-      structure[objectStart] === '{' ? [objectStart] : []
+      structure[objectStart] === '{' ?
+      [objectStart] :
+      []
   })
 }
 
@@ -928,7 +926,6 @@ const getOwnedPropertyMatches = (
   property: string,
   owners: Set<number>
 ): RegExpMatchArray[] => {
-  // eslint-disable-next-line security/detect-non-literal-regexp -- property is an internal migration key
   const pattern = new RegExp(`\\b${property}\\b\\s*:`, 'g')
 
   return [...searchable.matchAll(pattern)].flatMap(match => {
@@ -1000,9 +997,9 @@ const modernizeLiteralFeatureArrays = (
     const indent = /^\s*/.exec(content.slice(lineStart, first.start))?.[0] ?? ''
     const existingFeatures = existingFeaturesByOwner.get(owner)
 
-    const featureBlock = existingFeatures
-      ? `\n${ownedFeatures.map(feature => `${indent}  ${JSON.stringify(feature)}: true,`).join('\n')}`
-      : [
+    const featureBlock = existingFeatures ?
+      `\n${ownedFeatures.map(feature => `${indent}  ${JSON.stringify(feature)}: true,`).join('\n')}` :
+      [
         'features: {',
         ...ownedFeatures.map(feature => `${indent}  ${JSON.stringify(feature)}: true,`),
         `${indent}},`
@@ -1129,7 +1126,6 @@ export const getExplicitConfigFeaturePackages = (content: string): string[] => {
 
   for (const category of Object.keys(FEATURE_PACKAGES) as (keyof typeof FEATURE_PACKAGES)[]) {
     const categorySelections = searchableContent.matchAll(
-      // eslint-disable-next-line security/detect-non-literal-regexp -- category names come from the internal package registry
       new RegExp(`(?:\\b${category}\\b|['"]${category}['"])\\s*:\\s*\\[([\\s\\S]*?)\\]`, 'g')
     )
 
@@ -1196,7 +1192,6 @@ export const getExplicitConfigFeaturePackages = (content: string): string[] => {
 }
 
 const replacePackageSpecifiers = (content: string, from: string, to: string): string => content.replace(
-  // eslint-disable-next-line security/detect-unsafe-regex -- bounded module specifiers cannot cross quote characters
   /(\b(?:from|import|export)\s*(?:\(\s*)?|\brequire\s*\(\s*)(['"])([^'"]+)\2/g,
   (statement, prefix: string, quote: string, specifier: string) => (
     specifier === from ? `${prefix}${quote}${to}${quote}` : statement
@@ -1450,13 +1445,13 @@ const migratePackageJson = (
     originalFields.get('eslint')?.length ? originalFields.get('eslint') : ['devDependencies']
   )
 
-  const mainPackageFields = mode === 'full'
-    ? [
+  const mainPackageFields = mode === 'full' ?
+    [
       ...new Set(
         migratableConfigPackages.flatMap(packageName => originalFields.get(packageName) ?? [])
       )
-    ]
-    : [
+    ] :
+    [
       ...new Set([
         ...(originalFields.get(BASIC_PACKAGE) ?? []),
         ...(originalFields.get(FULL_PACKAGE) ?? []),
@@ -1655,9 +1650,9 @@ export const handleMigrateV3 = (
   const result: MigrationResult = {
     changes,
     configFile: configPath ? basename(configPath) : null,
-    installCommand: packageMigration.preservesRuntimeFields
-      ? createManifestInstallCommand(context.packageManager)
-      : createInstallCommand(
+    installCommand: packageMigration.preservesRuntimeFields ?
+      createManifestInstallCommand(context.packageManager) :
+      createInstallCommand(
         context.packageManager,
         packageMigration.packages,
         context.packageManager === 'pnpm' && existsSync(join(cwd, 'pnpm-workspace.yaml'))

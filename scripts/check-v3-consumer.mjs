@@ -1,7 +1,7 @@
 import { execFileSync } from 'node:child_process'
-import { cpSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { cpSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
-import { basename, isAbsolute, join } from 'node:path'
+import { basename, dirname, isAbsolute, join } from 'node:path'
 
 import { checkPeerHealth } from './check-peer-health.mjs'
 
@@ -128,77 +128,119 @@ try {
     })
   )
 
-  const fullConsumerDir = join(tempDir, 'full-consumer')
-  const fullConsumerTarballDir = join(fullConsumerDir, 'tarballs')
-
-  mkdirSync(fullConsumerTarballDir, { recursive: true })
-
-  const fullTarballRefs = Object.fromEntries(
-    Object.entries(fullTarballs).map(([packageName, tarball]) => {
-      const filename = basename(tarball)
-
-      cpSync(tarball, join(fullConsumerTarballDir, filename))
-
-      return [packageName, `file:./tarballs/${filename}`]
-    })
-  )
-
-  writeFileSync(join(fullConsumerDir, 'package.json'), JSON.stringify({
-    dependencies: {
-      '@santi020k/eslint-config-full': fullTarballRefs['@santi020k/eslint-config-full'],
-      eslint: '^10.0.0',
-      react: '^19.0.0'
-    },
-    name: 'eslint-config-v3-full-consumer-check',
-    private: true,
-    type: 'module'
-  }, null, 2))
-
-  writeFileSync(
-    join(fullConsumerDir, 'pnpm-workspace.yaml'),
-    [
-      'packages:',
-      '  - .',
-      'overrides:',
-      ...Object.entries(fullTarballRefs).map(
-        ([name, tarball]) => `  ${JSON.stringify(name)}: ${JSON.stringify(tarball)}`
-      ),
-      ''
-    ].join('\n')
-  )
-
-  writeFileSync(
-    join(fullConsumerDir, 'eslint.config.mjs'),
-    'export { default } from \'@santi020k/eslint-config-full/recommended\'\n'
-  )
-
-  writeFileSync(join(fullConsumerDir, 'index.jsx'), 'export const App = () => <main>Hello</main>\n')
-
-  execFileSync('pnpm', ['install', '--ignore-scripts'], {
-    cwd: fullConsumerDir,
-    stdio: 'pipe'
-  })
-
   const fullConfigCheck = [
     'const module = await import("@santi020k/eslint-config-full/recommended");',
     'const config = module.default;',
     'if (!Array.isArray(config) || !config.some(entry => entry.name?.includes("react"))) process.exit(1);'
   ].join('')
 
-  execFileSync(process.execPath, ['--input-type=module', '--eval', fullConfigCheck], {
-    cwd: fullConsumerDir,
-    stdio: 'pipe'
-  })
+  const fullSupportMatrix = [
+    { eslint: '10.0.0', name: 'minimum', typescript: '5.0.2' },
+    { eslint: '^10.0.0', name: 'latest', typescript: '>=5.0.0 <7.0.0' }
+  ]
 
-  execFileSync(
-    join(fullConsumerDir, 'node_modules', '.bin', 'eslint'),
-    ['index.jsx'],
-    { cwd: fullConsumerDir, stdio: 'pipe' }
-  )
+  for (const support of fullSupportMatrix) {
+    const fullConsumerDir = join(tempDir, `full-consumer-${support.name}`)
+    const fullConsumerTarballDir = join(fullConsumerDir, 'tarballs')
+
+    mkdirSync(fullConsumerTarballDir, { recursive: true })
+
+    const fullTarballRefs = Object.fromEntries(
+      Object.entries(fullTarballs).map(([packageName, tarball]) => {
+        const filename = basename(tarball)
+
+        cpSync(tarball, join(fullConsumerTarballDir, filename))
+
+        return [packageName, `file:./tarballs/${filename}`]
+      })
+    )
+
+    writeFileSync(join(fullConsumerDir, 'package.json'), JSON.stringify({
+      dependencies: {
+        '@santi020k/eslint-config-full': fullTarballRefs['@santi020k/eslint-config-full'],
+        eslint: support.eslint,
+        react: '^19.0.0',
+        typescript: support.typescript
+      },
+      name: `eslint-config-v3-full-${support.name}-consumer-check`,
+      private: true,
+      type: 'module'
+    }, null, 2))
+
+    writeFileSync(
+      join(fullConsumerDir, 'pnpm-workspace.yaml'),
+      [
+        'packages:',
+        '  - .',
+        'overrides:',
+        ...Object.entries(fullTarballRefs).map(
+          ([name, tarball]) => `  ${JSON.stringify(name)}: ${JSON.stringify(tarball)}`
+        ),
+        ''
+      ].join('\n')
+    )
+
+    writeFileSync(
+      join(fullConsumerDir, 'eslint.config.mjs'),
+      'export { default } from \'@santi020k/eslint-config-full/recommended\'\n'
+    )
+
+    writeFileSync(join(fullConsumerDir, 'index.jsx'), 'export const App = () => <main>Hello</main>\n')
+
+    execFileSync('pnpm', ['install', '--ignore-scripts'], {
+      cwd: fullConsumerDir,
+      stdio: 'pipe'
+    })
+
+    execFileSync(process.execPath, ['--input-type=module', '--eval', fullConfigCheck], {
+      cwd: fullConsumerDir,
+      stdio: 'pipe'
+    })
+
+    execFileSync(
+      join(fullConsumerDir, 'node_modules', '.bin', 'eslint'),
+      ['index.jsx'],
+      { cwd: fullConsumerDir, stdio: 'pipe' }
+    )
+
+    const fullPackageDir = realpathSync(
+      join(fullConsumerDir, 'node_modules', '@santi020k', 'eslint-config-full')
+    )
+
+    const basicCli = join(
+      realpathSync(join(
+        dirname(dirname(fullPackageDir)),
+        '@santi020k',
+        'eslint-config-basic'
+      )),
+      'dist',
+      'cli.js'
+    )
+
+    const compatibility = JSON.parse(execFileSync(
+      process.execPath,
+      [basicCli, 'compatibility', '--json'],
+      { cwd: fullConsumerDir, encoding: 'utf8', stdio: 'pipe' }
+    ))
+
+    const fullCompatibility = compatibility.packages.find(
+      item => item.name === '@santi020k/eslint-config-full'
+    )
+
+    if (!compatibility.compatible || !fullCompatibility?.aggregatedBasic?.resolved) {
+      throw new Error(`Full ${support.name} support-matrix compatibility check failed.`)
+    }
+
+    checkPeerHealth(
+      fullConsumerDir,
+      join(rootDir, 'scripts', 'peer-health-policy.json')
+    )
+  }
 
   process.stdout.write(
-    'V3 full consumer verified: the meta-package supplies optional framework peers ' +
-    'and the one-line config loads detected React rules.\n'
+    'V3 full consumer verified at the supported minimum and latest ESLint/TypeScript ranges: ' +
+    'the meta-package supplies optional framework peers, compatibility resolves its Basic composer, ' +
+    'the one-line config loads detected React rules, and peer health has no actionable warnings.\n'
   )
 
   const modularPackageNames = [
@@ -217,6 +259,8 @@ try {
   const modularTarballDir = join(modularConsumerDir, 'tarballs')
 
   mkdirSync(join(modularConsumerDir, 'apps', 'docs', 'src'), { recursive: true })
+
+  mkdirSync(join(modularConsumerDir, '.github', 'workflows'), { recursive: true })
 
   mkdirSync(modularTarballDir, { recursive: true })
 
@@ -240,7 +284,9 @@ try {
     private: true,
     type: 'module',
     devDependencies: {
-      ...modularTarballRefs,
+      ...Object.fromEntries(
+        Object.keys(modularTarballRefs).map(packageName => [packageName, 'catalog:configs'])
+      ),
       astro: 'catalog:',
       eslint: 'catalog:',
       tailwindcss: 'catalog:',
@@ -270,6 +316,11 @@ try {
       '  tailwindcss: ^4.1.0',
       '  typescript: ^5.9.0',
       '  vitest: ^4.0.0',
+      'catalogs:',
+      '  configs:',
+      ...Object.entries(modularTarballRefs).map(
+        ([name, tarball]) => `    ${JSON.stringify(name)}: ${JSON.stringify(tarball)}`
+      ),
       'overrides:',
       ...Object.entries(modularTarballRefs).map(
         ([name, tarball]) => `  ${JSON.stringify(name)}: ${JSON.stringify(tarball)}`
@@ -310,7 +361,36 @@ try {
     ].join('\n')
   )
 
-  writeFileSync(join(modularConsumerDir, 'index.ts'), 'export const answer = 42\n')
+  writeFileSync(join(modularConsumerDir, 'index.ts'), [
+    'interface ApiPayload {',
+    'database_specific: string;',
+    'ecosystem_specific: string;',
+    '}',
+    '',
+    'const joinLabels = (...values: string[]) => values.join(",");',
+    'const payload: ApiPayload = { database_specific: "database", ecosystem_specific: "ecosystem" };',
+    'export const label = joinLabels(',
+    '"alpha",',
+    '"beta"',
+    ');',
+    'export const selected = [payload.database_specific].find(value => (',
+    'value === "database" ||',
+    'value === "fallback"',
+    '));',
+    ''
+  ].join('\n'))
+
+  writeFileSync(join(modularConsumerDir, 'index.test.ts'), [
+    'import { expect, test } from "vitest";',
+    '',
+    'import { label, selected } from "./index.js";',
+    '',
+    'test("creates a stable report", () => {',
+    'expect(label).toBe("alpha,beta");',
+    'expect(selected).toBe("database");',
+    '});',
+    ''
+  ].join('\n'))
 
   writeFileSync(join(modularConsumerDir, 'tsconfig.json'), JSON.stringify({
     compilerOptions: {
@@ -319,12 +399,40 @@ try {
       noEmit: true,
       strict: true
     },
-    include: ['index.ts']
+    include: ['*.ts']
   }, null, 2))
 
   writeFileSync(
     join(modularConsumerDir, 'apps', 'docs', 'src', 'page.astro'),
-    '---\nconst title = \'Docs\'\n---\n<h1>{title}</h1>\n'
+    [
+      '---',
+      'const title = "Docs";',
+      '---',
+      '<h1 class="generated-title">{title}</h1>',
+      '<script is:inline>',
+      'const button = document.querySelector("button");',
+      'button?.addEventListener("click", () => console.log("clicked"));',
+      '</script>',
+      '<pre><code>{`const generated_value = "preserved"`}</code></pre>',
+      ''
+    ].join('\n')
+  )
+
+  writeFileSync(
+    join(modularConsumerDir, '.github', 'workflows', 'check.yml'),
+    [
+      'name: Adoption fixture',
+      'on:',
+      '  workflow_dispatch:',
+      '  pull_request:',
+      'jobs:',
+      '  verify:',
+      '    runs-on: ubuntu-latest',
+      '    steps:',
+      '      - run: |',
+      '          echo "lint fixture"',
+      ''
+    ].join('\n')
   )
 
   execFileSync('pnpm', ['install', '--ignore-scripts'], {
@@ -344,6 +452,70 @@ try {
     )
   }
 
+  const modularCompatibility = JSON.parse(execFileSync(
+    join(modularConsumerDir, 'node_modules', '.bin', 'basic-eslint'),
+    ['compatibility', '--json'],
+    { cwd: modularConsumerDir, encoding: 'utf8', stdio: 'pipe' }
+  ))
+
+  const unresolvedCatalogPackages = modularCompatibility.packages.filter(
+    item => item.declared === 'catalog:configs' && (
+      item.resolved === null ||
+      item.resolvedPath === null ||
+      item.issues.includes('declared but not installed')
+    )
+  )
+
+  if (!modularCompatibility.compatible || unresolvedCatalogPackages.length > 0) {
+    throw new Error(
+      `Packed compatibility did not resolve catalog packages: ` +
+      unresolvedCatalogPackages.map(item => item.name).join(', ')
+    )
+  }
+
+  const adoptionReport = JSON.parse(execFileSync(
+    join(modularConsumerDir, 'node_modules', '.bin', 'basic-eslint'),
+    ['explain-preset', 'monorepo', '--file', 'index.ts', '--analyze-source', '--json'],
+    { cwd: modularConsumerDir, encoding: 'utf8', stdio: 'pipe' }
+  ))
+
+  if (
+    adoptionReport.sourceAnalysis?.totals?.findings <= 0 ||
+    adoptionReport.sourceAnalysis?.autofixPreview?.changedFileCount <= 0
+  ) {
+    throw new Error('Packed adoption fixture did not report its deliberately old-style source debt.')
+  }
+
+  const astroFixturePath = join(modularConsumerDir, 'apps', 'docs', 'src', 'page.astro')
+  const astroFixture = readFileSync(astroFixturePath, 'utf8')
+
+  writeFileSync(
+    astroFixturePath,
+    astroFixture.replace('console.log("clicked")', 'button?.focus()')
+  )
+
+  execFileSync(
+    join(modularConsumerDir, 'node_modules', '.bin', 'eslint'),
+    ['.', '--fix'],
+    { cwd: modularConsumerDir, encoding: 'utf8', stdio: 'pipe' }
+  )
+
+  const convergenceResults = JSON.parse(execFileSync(
+    join(modularConsumerDir, 'node_modules', '.bin', 'eslint'),
+    ['.', '--fix-dry-run', '--format', 'json'],
+    { cwd: modularConsumerDir, encoding: 'utf8', stdio: 'pipe' }
+  ))
+
+  const unstableFiles = convergenceResults
+    .filter(result => result.output !== undefined)
+    .map(result => result.filePath)
+
+  if (unstableFiles.length > 0) {
+    throw new Error(
+      `Packed adoption fixture did not converge after one autofix pass: ${unstableFiles.join(', ')}`
+    )
+  }
+
   try {
     execFileSync(
       join(modularConsumerDir, 'node_modules', '.bin', 'eslint'),
@@ -360,7 +532,19 @@ try {
 
   execFileSync(
     join(modularConsumerDir, 'node_modules', '.bin', 'tsc'),
+    ['--noEmit'],
+    { cwd: modularConsumerDir, stdio: 'pipe' }
+  )
+
+  execFileSync(
+    join(modularConsumerDir, 'node_modules', '.bin', 'tsc'),
     ['--noEmit', '--allowJs', '--checkJs', '--module', 'NodeNext', '--moduleResolution', 'NodeNext', 'eslint.config.mjs'],
+    { cwd: modularConsumerDir, stdio: 'pipe' }
+  )
+
+  execFileSync(
+    join(modularConsumerDir, 'node_modules', '.bin', 'vitest'),
+    ['run'],
     { cwd: modularConsumerDir, stdio: 'pipe' }
   )
 
@@ -376,7 +560,9 @@ try {
 
   process.stdout.write(
     'V3 modular monorepo verified: packed feature and framework packages install, ' +
-    'doctor resolves every project dependency, ESLint 10 lints cleanly, the config typechecks, ' +
+    'doctor resolves every project dependency, compatibility resolves catalog packages, ' +
+    'adoption analysis finds real source debt, ' +
+    'autofix converges, ESLint 10 lints cleanly, source and config typecheck, tests pass, ' +
     `the generated lockfile supports a frozen install, and peer health has ` +
     `${peerReport.accepted.length} accepted and zero actionable warnings.\n`
   )

@@ -1,5 +1,4 @@
 import { defineConfig, Library, Tool } from '@santi020k/eslint-config-basic'
-
 import { describe, expect, test } from 'vitest'
 
 import { extractConfigNames, getEffectiveRuleValue } from './test-utils.js'
@@ -47,6 +46,10 @@ describe('Configuration invariants', () => {
       strict: true
     })
 
-    expect(getEffectiveRuleValue(config, 'no-console')).toBe('error')
+    expect(getEffectiveRuleValue(
+      config,
+      'no-console',
+      ['eslint-config-basic/scripts-overrides']
+    )).toBe('error')
   })
 })

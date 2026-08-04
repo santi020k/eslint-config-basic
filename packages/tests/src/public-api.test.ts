@@ -79,8 +79,32 @@ import {
   preact as litePreact
 } from '@santi020k/eslint-config-lite'
 import * as typescriptApi from '@santi020k/eslint-config-typescript'
-
+import type { TSESLint } from '@typescript-eslint/utils'
 import { describe, expect, test } from 'vitest'
+
+type FlatConfig = TSESLint.FlatConfig.Config
+
+const flattenConfigs = (configs: TSESLint.FlatConfig.ConfigArray): FlatConfig[] => (
+  configs.flat(Infinity)
+)
+
+const isStringMatrix = (value: unknown): value is string[][] => Array.isArray(value) &&
+  value.every(group => Array.isArray(group) && group.every(pattern => typeof pattern === 'string'))
+
+const getImportSortGroups = (config: FlatConfig): string[][] => {
+  const rule = config.rules?.['simple-import-sort/imports']
+
+  if (
+    !Array.isArray(rule) ||
+    typeof rule[1] !== 'object' ||
+    rule[1] === null ||
+    !('groups' in rule[1])
+  ) return []
+
+  const { groups } = rule[1]
+
+  return isStringMatrix(groups) ? groups : []
+}
 
 describe('Public API Re-exports', () => {
   test('basic keeps integrations out of the lean root API', () => {
@@ -159,15 +183,13 @@ describe('Public API Re-exports', () => {
   test('workspacePrefixes in defineConfig should inject @acme group into existing import sort rules', async () => {
     const config = await defineConfig({ detection: false, workspacePrefixes: ['@acme'] })
     // No separate override config — workspace patterns are merged into existing rules
-    const overrideEntry = config.flat(Infinity).find((c: any) => c?.name === 'eslint-config-basic/workspace-import-groups')
+    const overrideEntry = flattenConfigs(config)
+      .find(configEntry => configEntry.name === 'eslint-config-basic/workspace-import-groups')
     expect(overrideEntry).toBeUndefined()
     // @acme pattern must appear inside an existing simple-import-sort/imports rule
-    const hasAcme = config.flat(Infinity).some((c: any) => {
-      const rule = c?.rules?.['simple-import-sort/imports']
-      if (!Array.isArray(rule) || !rule[1]) return false
-      const groups: string[][] = (rule[1]).groups ?? []
-      return groups.some(g => g.some(p => p.includes('@acme')))
-    })
+    const hasAcme = flattenConfigs(config)
+      .some(configEntry => getImportSortGroups(configEntry)
+        .some(group => group.some(pattern => pattern.includes('@acme'))))
     expect(hasAcme).toBe(true)
   })
 
@@ -175,11 +197,12 @@ describe('Public API Re-exports', () => {
     const config = await defineConfig({ detection: false, workspacePrefixes: ['@acme'] })
 
     // Find a patched sort rule that contains the @acme workspace group
-    const patchedGroups = config.flat(Infinity).flatMap((c: any) => {
-      const rule = c?.rules?.['simple-import-sort/imports']
-      if (!Array.isArray(rule) || !rule[1]) return []
-      const groups: string[][] = (rule[1]).groups ?? []
-      return groups.some(g => g.some(p => p.includes('@acme'))) ? [groups] : []
+    const patchedGroups = flattenConfigs(config).flatMap(configEntry => {
+      const importGroups = getImportSortGroups(configEntry)
+
+      return importGroups.some(group => group.some(pattern => pattern.includes('@acme'))) ?
+        [importGroups] :
+        []
     })
 
     expect(patchedGroups.length).toBeGreaterThan(0)
@@ -194,7 +217,8 @@ describe('Public API Re-exports', () => {
 
   test('defineConfig without workspacePrefixes should not inject any workspace group', async () => {
     const config = await defineConfig({ detection: false })
-    const hasWorkspaceGroup = config.flat(Infinity).some((c: any) => c?.name === 'eslint-config-basic/workspace-import-groups')
+    const hasWorkspaceGroup = flattenConfigs(config)
+      .some(configEntry => configEntry.name === 'eslint-config-basic/workspace-import-groups')
     expect(hasWorkspaceGroup).toBe(false)
   })
 

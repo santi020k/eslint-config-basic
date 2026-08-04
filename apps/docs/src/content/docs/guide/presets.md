@@ -39,9 +39,24 @@ For an existing codebase, inspect the adoption delta before switching:
 basic-eslint explain-preset app --file src/index.ts
 ```
 
+Add `--analyze-source` to lint with the selected preset and run an in-memory
+autofix preview:
+
+```sh
+basic-eslint explain-preset app --analyze-source --file "src/**/*.{ts,tsx}"
+```
+
+Without `--file`, source analysis targets the whole project. The report groups
+current findings by rule, category, severity, file type, and fixability; calls
+out non-formatting errors to resolve first; and estimates which files and lines
+autofix would change. Fixable findings that remain after the preview are listed
+as potential fix conflicts. No source files are written.
+
 Add `--compatibility` to generate a temporary override for newly enabled rules.
 The report groups the delta by formatting, correctness, security, framework,
-and domain rules so migration work can be planned independently.
+and domain rules so migration work can be planned independently. Compatibility
+output preserves the current effective configuration; it does not suppress
+pre-existing source violations from rules that were already enabled.
 
 ## What Each Preset Enables
 

@@ -20,6 +20,7 @@ export interface FrameworkOptions {
   hasSvelte?: boolean
   hasVue?: boolean
   runtime?: Runtime
+  typeChecked?: boolean
 }
 
 /**
@@ -81,9 +82,9 @@ const loadFrameworkConfigInput = (frameworkName: FrameworkName): Promise<Framewo
 
     const specifier = `@santi020k/eslint-config-${frameworkName}`
 
-    const remediation = isMissingRequestedPackage(error, specifier)
-      ? `Install "${specifier}" or remove that framework from your defineConfig options.`
-      : `The installed package "${specifier}" failed while evaluating. Inspect this error's cause for the original dependency or runtime failure.`
+    const remediation = isMissingRequestedPackage(error, specifier) ?
+      `Install "${specifier}" or remove that framework from your defineConfig options.` :
+      `The installed package "${specifier}" failed while evaluating. Inspect this error's cause for the original dependency or runtime failure.`
 
     throw new Error(
       `Unable to load optional framework config "${frameworkName}". ` +
@@ -108,7 +109,11 @@ export const getBundledFrameworkConfig = async (
 
 const createBundledFramework = (
   frameworkName: FrameworkName
-): ((options?: FrameworkOptions) => Promise<FlatConfigArray>) => async (options?: FrameworkOptions): Promise<FlatConfigArray> => getBundledFrameworkConfig(frameworkName, options)
+): ((options?: FrameworkOptions) => Promise<FlatConfigArray>) => (
+  async (options?: FrameworkOptions): Promise<FlatConfigArray> => (
+    getBundledFrameworkConfig(frameworkName, options)
+  )
+)
 
 // Public framework factories (bare framework names).
 // Each lazily imports its framework package on first call.

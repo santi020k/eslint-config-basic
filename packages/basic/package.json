@@ -43,8 +43,8 @@
     "clean": "rm -rf dist",
     "check:exports": "publint",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint . --no-warn-ignored --pass-on-no-patterns",
-    "lint:fix": "eslint . --fix --no-warn-ignored --pass-on-no-patterns"
+    "lint": "eslint . --no-warn-ignored --pass-on-no-patterns --max-warnings=0",
+    "lint:fix": "eslint . --fix --no-warn-ignored --pass-on-no-patterns --max-warnings=0"
   },
   "dependencies": {
     "@santi020k/eslint-config-core": "workspace:^",
@@ -106,7 +106,7 @@
     "@santi020k/eslint-config-vite": "workspace:^",
     "@santi020k/eslint-config-vue": "workspace:^",
     "eslint": "^10.0.0",
-    "typescript": ">=5.0.0"
+    "typescript": ">=5.0.0 <7.0.0"
   },
   "peerDependenciesMeta": {
     "@santi020k/eslint-config-angular": {

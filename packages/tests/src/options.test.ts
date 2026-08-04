@@ -4,7 +4,8 @@ import qwik from '@santi020k/eslint-config-qwik'
 import react from '@santi020k/eslint-config-react'
 import svelte from '@santi020k/eslint-config-svelte'
 import vue from '@santi020k/eslint-config-vue'
-
+import type { Linter } from 'eslint'
+import { ESLint } from 'eslint'
 import { describe, expect, test, vi } from 'vitest'
 
 import { extractConfigNames, extractRuleNames, getEffectiveRuleValue } from './test-utils.js'
@@ -276,6 +277,34 @@ describe('Deep Rule Assertions (#5)', () => {
     const names = extractConfigNames(config)
 
     expect(names).toContain('integrations/playwright')
+  })
+
+  test('should apply Playwright rules only to Playwright-owned files when Vitest coexists', async () => {
+    const config = await defineConfig({
+      detection: false,
+      testing: [Testing.Playwright, Testing.Vitest],
+      typescript: false
+    })
+    const eslint = new ESLint({
+      overrideConfig: config as Linter.Config[],
+      overrideConfigFile: true
+    })
+    const source = [
+      'import { expect } from \'@playwright/test\'',
+      '',
+      'expect(true).toBe(true)',
+      ''
+    ].join('\n')
+    const [unitResult] = await eslint.lintText(source, { filePath: 'tests/unit/example.test.js' })
+    const [genericSpecResult] = await eslint.lintText(source, { filePath: 'tests/example.spec.js' })
+    const [e2eResult] = await eslint.lintText(source, { filePath: 'tests/e2e/example.spec.js' })
+
+    expect(unitResult.messages.map(message => message.ruleId))
+      .not.toContain('playwright/no-standalone-expect')
+    expect(genericSpecResult.messages.map(message => message.ruleId))
+      .not.toContain('playwright/no-standalone-expect')
+    expect(e2eResult.messages.map(message => message.ruleId))
+      .toContain('playwright/no-standalone-expect')
   })
 
   test('should append local flat-config overrides from defineConfig rest args', async () => {

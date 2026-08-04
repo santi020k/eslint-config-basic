@@ -1,7 +1,6 @@
 import { existsSync } from 'node:fs'
 
 import { GLOB_SLOT, GLOB_TS, GLOB_VIRTUAL_TS } from '@santi020k/eslint-config-core'
-
 import tsParser from '@typescript-eslint/parser'
 import type { TSESLint } from '@typescript-eslint/utils'
 import tsEslint from 'typescript-eslint'

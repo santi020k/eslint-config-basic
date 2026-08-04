@@ -11,6 +11,9 @@ export default await defineConfig({
     'src/content/docs/api/reference/**',
     'src/content/docs/v2/api/reference/**'
   ],
+  testingFiles: {
+    playwright: ['tests/**/*.ts']
+  },
   tsconfigRootDir: import.meta.dirname,
   typescript: 'syntax'
 }, {

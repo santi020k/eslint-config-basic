@@ -15,11 +15,11 @@ export interface ConfigFeature {
 }
 
 export type ConfigFeatureCategory =
-  | 'extension'
-  | 'format'
-  | 'library'
-  | 'testing'
-  | 'tool'
+  | 'extension' |
+  'format' |
+  'library' |
+  'testing' |
+  'tool'
 
 export type ConfigFeaturePhase = 'config' | 'finalizer'
 

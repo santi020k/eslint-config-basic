@@ -11,7 +11,7 @@
     {
       "kind": "incompatible",
       "peer": "graphql",
-      "introducedBy": "@graphql-eslint/eslint-plugin",
+      "introducedBy": "graphql-config",
       "wantedRange": "^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0",
       "owner": "packages/formats",
       "removalCondition": "Remove when graphql-config supports GraphQL 17."
@@ -103,6 +103,54 @@
       "wantedRange": "^4",
       "owner": "packages/libraries",
       "removalCondition": "Remove when the AI SDK dependency graph no longer mixes Zod 3 and Zod 4 peers."
+    },
+    {
+      "kind": "incompatible",
+      "peer": "eslint",
+      "introducedBy": "@santi020k/eslint-config-expo",
+      "wantedRange": "^2 || ^3 || ^4 || ^5 || ^6 || ^7.2.0 || ^8 || ^9",
+      "owner": "packages/expo",
+      "removalCondition": "Remove when Expo's eslint-plugin-import dependency declares ESLint 10 support."
+    },
+    {
+      "kind": "incompatible",
+      "peer": "eslint",
+      "introducedBy": "@santi020k/eslint-config-expo",
+      "wantedRange": "^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9.7",
+      "owner": "packages/expo",
+      "removalCondition": "Remove when Expo's eslint-plugin-react dependency declares ESLint 10 support."
+    },
+    {
+      "kind": "incompatible",
+      "peer": "eslint",
+      "introducedBy": "@santi020k/eslint-config-extensions",
+      "wantedRange": ">=10.4",
+      "owner": "packages/extensions",
+      "removalCondition": "Remove when Full raises its ESLint floor to 10.4 or no longer installs Unicorn for inactive features."
+    },
+    {
+      "kind": "incompatible",
+      "peer": "eslint",
+      "introducedBy": "@santi020k/eslint-config-solid",
+      "wantedRange": "^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0",
+      "owner": "packages/solid",
+      "removalCondition": "Remove when eslint-plugin-solid declares ESLint 10 support."
+    },
+    {
+      "kind": "incompatible",
+      "peer": "typescript",
+      "introducedBy": "@santi020k/eslint-config-libraries",
+      "wantedRange": "^5.4.0 || ^6.0.0",
+      "owner": "packages/libraries",
+      "removalCondition": "Remove when the inactive TanStack Query plugin supports the full TypeScript >=5 <7 range or the documented floor changes."
+    },
+    {
+      "kind": "incompatible",
+      "peer": "typescript",
+      "introducedBy": "@santi020k/eslint-config-tools",
+      "wantedRange": ">=4.8.4 <6.0.0",
+      "owner": "packages/tools",
+      "removalCondition": "Remove when eslint-plugin-tsdoc's typescript-eslint dependency chain declares TypeScript 6 support."
     }
   ]
 }

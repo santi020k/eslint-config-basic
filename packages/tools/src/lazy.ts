@@ -27,18 +27,9 @@ const hasDefaultExport = (module: unknown): module is { default?: unknown } => (
   'default' in module
 )
 
-// Bypass jiti/bundler transformation of import() to require().
-// Reflect.construct avoids a direct `new Function()` reference (which triggers
-// no-implied-eval) while achieving the same runtime behaviour: the string body
-// is opaque to static analyser so jiti cannot transform it to require().
-
-const isVitest = typeof process !== 'undefined' && process.env.VITEST
-
-// v8 ignore next 3 -- Reflect.construct branch only runs outside Vitest; not reachable in test suite
-const dynamicImport: (specifier: string) => Promise<unknown> = isVitest ?
-  (specifier: string) => import(/* @vite-ignore */ specifier) :
-  Reflect.construct(Function, ['specifier', 'return import(specifier)']) as (specifier: string) => Promise<unknown>
-
+// Keeping import() in this module preserves the correct package base when
+// multiple optional integrations load concurrently.
+const dynamicImport = async (specifier: string): Promise<unknown> => import(/* @vite-ignore */ specifier)
 const req = createRequire(import.meta.url)
 
 const resolveSpecifier = (specifier: string): string => {
@@ -63,7 +54,9 @@ export const loadDefault = async <T = unknown>(specifier: string): Promise<T> =>
   return module as T
 }
 
-export const loadModule = async <T = unknown>(specifier: string): Promise<T> => await dynamicImport(resolveSpecifier(specifier)) as T
+export const loadModule = async <T = unknown>(specifier: string): Promise<T> => (
+  await dynamicImport(resolveSpecifier(specifier)) as T
+)
 
 /**
  * Keeps optional integrations import-safe for consumers that do not enable them.

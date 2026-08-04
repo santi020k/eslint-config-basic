@@ -1,3 +1,4 @@
+/* eslint-disable no-console -- this module owns the generate-skill CLI output */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
@@ -44,6 +45,7 @@ export interface EslintConfigFeatures {
   extensions: string[]
   formats: string[]
   frameworks: string[]
+  ignores: string[]
   libraries: string[]
 
   /** The lint command found in the project's package.json scripts, or a sensible default */
@@ -304,6 +306,8 @@ const FEATURE_MAP: readonly [pattern: string, category: FeatureCategory, label: 
 ]
 
 interface RawFlatConfigEntry {
+  files?: unknown
+  ignores?: unknown
   name?: unknown
   plugins?: unknown
   rules?: unknown
@@ -405,6 +409,57 @@ const collectTokens = (configs: unknown[]): string[] => {
   return tokens
 }
 
+const getConfigFilePatterns = (entry: unknown): string[] => {
+  if (!entry || typeof entry !== 'object') return []
+
+  const { files, ignores } = entry as RawFlatConfigEntry
+  const filesArray = Array.isArray(files) ? (files as unknown[]) : []
+  const ignoresArray = Array.isArray(ignores) ? (ignores as unknown[]) : []
+
+  return [
+    ...filesArray,
+    ...ignoresArray
+  ].flat(Number.POSITIVE_INFINITY)
+    .filter((value): value is string => typeof value === 'string' && !value.startsWith('!'))
+}
+
+const normalizeProjectPattern = (pattern: string): string => pattern.replace(/^\.\//, '')
+
+const isProjectPattern = (pattern: string, projectPath: string): boolean => {
+  const normalizedProjectPath = projectPath.replace(/^\.\//, '').replace(/\/$/, '')
+  const normalizedPattern = normalizeProjectPattern(pattern)
+
+  return normalizedPattern === normalizedProjectPath || normalizedPattern.startsWith(`${normalizedProjectPath}/`)
+}
+
+const scopeConfigsToProject = (
+  configs: unknown[],
+  projectPath: string,
+  projectPaths: string[]
+): unknown[] => configs.filter(entry => {
+  const patterns = getConfigFilePatterns(entry)
+
+  if (patterns.length === 0) return true
+
+  const scopedProjectPaths = projectPaths
+    .filter(path => path !== '.')
+    .filter(path => patterns.some(pattern => isProjectPattern(pattern, path)))
+
+  if (scopedProjectPaths.length === 0) return true
+
+  return projectPath !== '.' && scopedProjectPaths.some(path => (
+    projectPath === path || projectPath.startsWith(`${path}/`)
+  ))
+})
+
+const collectIgnores = (configs: unknown[]): string[] => [...new Set(configs.flatMap(entry => {
+  if (!entry || typeof entry !== 'object') return []
+
+  const ignores = (entry as RawFlatConfigEntry).ignores
+
+  return Array.isArray(ignores) ? ignores.filter((value): value is string => typeof value === 'string') : []
+}))]
+
 const recordFeature = (features: EslintConfigFeatures, category: string, label: string): void => {
   if (category === 'typescript') {
     features.typescript = true
@@ -461,6 +516,7 @@ const extractFeatures = (
     extensions: [],
     formats: [],
     frameworks: [],
+    ignores: collectIgnores(configs),
     libraries: [],
     lintCommand,
     source: 'config-file',
@@ -540,7 +596,15 @@ const detectLintCommand = (cwd: string): string => {
  *
  * Returns `null` when no config file is found or it cannot be imported.
  */
-export const analyzeEslintConfig = async (cwd: string): Promise<EslintConfigFeatures | null> => {
+export interface AnalyzeEslintConfigOptions {
+  projectPath: string
+  projectPaths: string[]
+}
+
+export const analyzeEslintConfig = async (
+  cwd: string,
+  options?: AnalyzeEslintConfigOptions
+): Promise<EslintConfigFeatures | null> => {
   const configPath = findEslintConfig(cwd)
 
   if (!configPath) return null
@@ -562,7 +626,11 @@ export const analyzeEslintConfig = async (cwd: string): Promise<EslintConfigFeat
 
     if (!Array.isArray(configs)) return null
 
-    return extractFeatures(configs, lintCommand, configPath)
+    const analyzedConfigs = options ?
+      scopeConfigsToProject(configs, options.projectPath, options.projectPaths) :
+      configs
+
+    return extractFeatures(analyzedConfigs, lintCommand, configPath)
   } catch {
     return null
   }
@@ -584,12 +652,13 @@ const featuresFromDetection = (cwd: string): EslintConfigFeatures => {
     extensions: (opts.extensions ?? []).map(toFeatureLabel),
     formats: (opts.formats ?? []).map(toFeatureLabel),
     frameworks,
+    ignores: opts.ignores ?? [],
     libraries: (opts.libraries ?? []).map(toFeatureLabel),
     lintCommand,
     source: 'detection-fallback',
     testing: (opts.testing ?? []).map(toFeatureLabel),
     tools: (opts.tools ?? []).map(toFeatureLabel),
-    typescript: opts.typescript === true
+    typescript: Boolean(opts.typescript)
   }
 }
 
@@ -983,6 +1052,33 @@ const handleEslintMcpConfig = (
  * process.stdout.write(`Written to: ${result.written}\n`)
  * ```
  */
+const processAgentTarget = (
+  target: AgentTarget,
+  cwd: string,
+  features: EslintConfigFeatures,
+  force: boolean,
+  check: boolean
+): { filePath: string, result: GuardedSectionResult } | undefined => {
+  const agentFolder = join(cwd, target.markerFolder)
+
+  if (!existsSync(agentFolder)) return undefined
+
+  const subdir = target.skillSubdir === '.' ? agentFolder : join(agentFolder, target.skillSubdir)
+  const filePath = join(subdir, target.skillFile)
+  const content = generateSkillContent(features, target.format)
+
+  if (check) {
+    const upToDate = existsSync(filePath) && readFileSync(filePath, 'utf-8') === content
+
+    return { filePath, result: upToDate ? 'skipped' : 'stale' }
+  }
+
+  return {
+    filePath,
+    result: writeSkillFile(filePath, content, force) ? 'written' : 'skipped'
+  }
+}
+
 export const generateAgentSkills = async (
   opts: GenerateSkillOptions = {}
 ): Promise<GenerateSkillResult> => {
@@ -991,7 +1087,8 @@ export const generateAgentSkills = async (
   const skipped: string[] = []
   const stale: string[] = []
   // Primary: load the real eslint.config.js; fallback: package.json detection
-  const features = (await analyzeEslintConfig(cwd)) ?? featuresFromDetection(cwd)
+  const detectedFeatures = await analyzeEslintConfig(cwd)
+  const features = detectedFeatures ?? featuresFromDetection(cwd)
   const plainBody = generateSkillContent(features, 'plain')
 
   const recordGuardedResult = (filePath: string, result: GuardedSectionResult): void => {
@@ -1031,27 +1128,9 @@ export const generateAgentSkills = async (
 
   // ── Standard agent targets ─────────────────────────────────────────────────
   for (const target of AGENT_TARGETS) {
-    const agentFolder = join(cwd, target.markerFolder)
+    const processed = processAgentTarget(target, cwd, features, force, check)
 
-    if (!existsSync(agentFolder)) continue
-
-    const subdir = target.skillSubdir === '.' ? agentFolder : join(agentFolder, target.skillSubdir)
-    const filePath = join(subdir, target.skillFile)
-    const content = generateSkillContent(features, target.format)
-
-    if (check) {
-      const upToDate = existsSync(filePath) && readFileSync(filePath, 'utf-8') === content
-
-      if (upToDate) skipped.push(filePath)
-      else stale.push(filePath)
-
-      continue
-    }
-
-    const didWrite = writeSkillFile(filePath, content, force)
-
-    if (didWrite) written.push(filePath)
-    else skipped.push(filePath)
+    if (processed) recordGuardedResult(processed.filePath, processed.result)
   }
 
   return { skipped, stale, written }

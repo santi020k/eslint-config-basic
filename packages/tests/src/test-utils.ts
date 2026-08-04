@@ -34,11 +34,14 @@ export const extractConfigNames = (config: readonly TSESLint.FlatConfig.Config[]
  */
 export const getEffectiveRuleValue = (
   config: readonly TSESLint.FlatConfig.Config[],
-  ruleName: string
+  ruleName: string,
+  excludedConfigNames: string[] = []
 ): unknown => {
   let value: unknown
 
   for (const entry of config) {
+    if (entry.name && excludedConfigNames.includes(entry.name)) continue
+
     const rules = entry.rules as Record<string, unknown> | undefined
 
     if (rules && ruleName in rules) {
@@ -58,6 +61,23 @@ export const lintText = async (
   fileName = 'test.ts'
 ): Promise<ESLint.LintResult[]> => {
   const eslint = new ESLint({
+    overrideConfig: config as Linter.Config[],
+    overrideConfigFile: true
+  })
+
+  return await eslint.lintText(code, { filePath: fileName })
+}
+
+/**
+ * Helper: autofix a string of code with a given config
+ */
+export const lintTextWithFix = async (
+  code: string,
+  config: readonly TSESLint.FlatConfig.Config[],
+  fileName = 'test.ts'
+): Promise<ESLint.LintResult[]> => {
+  const eslint = new ESLint({
+    fix: true,
     overrideConfig: config as Linter.Config[],
     overrideConfigFile: true
   })

@@ -1,5 +1,4 @@
 import { GLOB_JS_TS, GLOB_JS_TS_ALL } from '@santi020k/eslint-config-core'
-
 import type { TSESLint } from '@typescript-eslint/utils'
 import type PluginTurbo from 'eslint-plugin-turbo'
 
