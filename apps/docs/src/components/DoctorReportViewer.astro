@@ -85,13 +85,13 @@ import { Alert, Badge, Button, Card, Field, Label, Textarea } from '@santi020k/l
     workspaceProjects: ['packages/app', 'packages/shared']
   }
 
-  const guidanceFor = (message: string, payload: DoctorPayload): Guidance => {
-    const normalized = message.toLowerCase()
+  const docsPath = (path: string): string => `${window.location.pathname.startsWith('/v2/') ? '/v2' : ''}${path}`
 
+  const migrationGuidanceFor = (normalized: string): Guidance | undefined => {
     if (normalized.includes('v1 framework')) {
       return {
         command: 'npx @santi020k/eslint-config-basic migrate --write',
-        href: '/guide/migration-v1-to-v2/',
+        href: docsPath('/guide/migration-v1-to-v2/'),
         label: 'Open migration guide'
       }
     }
@@ -99,36 +99,53 @@ import { Alert, Badge, Button, Card, Field, Label, Textarea } from '@santi020k/l
     if (normalized.includes('no eslint.config')) {
       return {
         command: 'npx @santi020k/eslint-config-basic init',
-        href: '/guide/cli/#usage',
+        href: docsPath('/guide/cli/#usage'),
         label: 'Create a config'
       }
     }
 
     if (normalized.includes('could not be loaded')) {
-      return { command: 'npx eslint .', href: '/guide/troubleshooting/', label: 'Troubleshoot config loading' }
+      return {
+        command: 'npx eslint .',
+        href: docsPath('/guide/troubleshooting/'),
+        label: 'Troubleshoot config loading'
+      }
     }
 
     if (normalized.includes('workspace') || normalized.includes('projects scoping')) {
-      return { href: '/guide/monorepo/', label: 'Configure the monorepo' }
+      return { href: docsPath('/guide/monorepo/'), label: 'Configure the monorepo' }
     }
+
+    return undefined
+  }
+
+  const guidanceFor = (message: string, payload: DoctorPayload): Guidance => {
+    const normalized = message.toLowerCase()
+    const migrationGuidance = migrationGuidanceFor(normalized)
+
+    if (migrationGuidance) return migrationGuidance
 
     if (normalized.includes('two eslint copies')) {
       return {
         command: `${payload.packageManager ?? 'pnpm'} dedupe`,
-        href: '/guide/troubleshooting/#two-eslint-versions-are-installed',
+        href: docsPath('/guide/troubleshooting/#two-eslint-versions-are-installed'),
         label: 'Resolve duplicate ESLint versions'
       }
     }
 
     if (normalized.includes('lite config') && payload.liteInstallCommand) {
-      return { command: payload.liteInstallCommand, href: '/guide/lite-migration/', label: 'Review Lite setup' }
+      return {
+        command: payload.liteInstallCommand,
+        href: docsPath('/guide/lite-migration/'),
+        label: 'Review Lite setup'
+      }
     }
 
     if (normalized.includes('lint script')) {
-      return { href: '/guide/installation/', label: 'Review installation steps' }
+      return { href: docsPath('/guide/installation/'), label: 'Review installation steps' }
     }
 
-    return { href: '/guide/troubleshooting/', label: 'Open troubleshooting' }
+    return { href: docsPath('/guide/troubleshooting/'), label: 'Open troubleshooting' }
   }
 
   const createFinding = (kind: 'issue' | 'warning', message: string, payload: DoctorPayload): HTMLElement => {
@@ -200,6 +217,158 @@ import { Alert, Badge, Button, Card, Field, Label, Textarea } from '@santi020k/l
     return value.filter((item): item is string => typeof item === 'string')
   }
 
+  type ReportSummary = {
+    badgeVariant: string
+    headingText: string
+    reportStatus: string
+  }
+
+  const parsePayload = (
+    input: HTMLTextAreaElement,
+    status: HTMLElement,
+    results: HTMLElement
+  ): DoctorPayload | undefined => {
+    try {
+      const parsed = JSON.parse(input.value) as unknown
+
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+        throw new TypeError('Doctor report must be a JSON object.')
+      }
+
+      return parsed as DoctorPayload
+    } catch {
+      status.textContent = 'The report is not valid JSON. Copy the complete output from doctor --json and try again.'
+
+      results.hidden = true
+
+      input.focus()
+
+      return undefined
+    }
+  }
+
+  const createReportSummary = (
+    payload: DoctorPayload,
+    issues: string[],
+    warnings: string[]
+  ): ReportSummary => {
+    let reportStatus = 'passed'
+    let badgeVariant = 'success'
+    let headingText = 'Your setup passed'
+
+    if (warnings.length > 0) {
+      reportStatus = 'passed with warnings'
+
+      badgeVariant = 'warning'
+
+      headingText = `${warnings.length} warning${warnings.length === 1 ? '' : 's'} to review`
+    }
+
+    if (issues.length > 0) {
+      reportStatus = 'failed'
+
+      badgeVariant = 'destructive'
+
+      headingText = `${issues.length} issue${issues.length === 1 ? '' : 's'} need attention`
+    }
+
+    if (typeof payload.status === 'string') reportStatus = payload.status
+
+    return { badgeVariant, headingText, reportStatus }
+  }
+
+  const renderReportSummary = (
+    root: HTMLElement,
+    payload: DoctorPayload,
+    summary: ReportSummary,
+    workspaces: string[]
+  ) => {
+    const badge = root.querySelector<HTMLElement>('[data-doctor-badge]')
+
+    if (badge) {
+      badge.textContent = summary.reportStatus
+
+      badge.dataset.variant = summary.badgeVariant
+
+      badge.className = `ui-badge ui-badge--${summary.badgeVariant}`
+    }
+
+    const heading = root.querySelector<HTMLElement>('[data-doctor-heading]')
+
+    if (heading) heading.textContent = summary.headingText
+
+    const packageManager = root.querySelector<HTMLElement>('[data-doctor-package-manager]')
+    const config = root.querySelector<HTMLElement>('[data-doctor-config]')
+    const workspaceOutput = root.querySelector<HTMLElement>('[data-doctor-workspaces]')
+
+    if (packageManager) packageManager.textContent = payload.packageManager ?? 'Unknown'
+
+    if (config) config.textContent = payload.configFile ?? 'None'
+
+    if (workspaceOutput) {
+      workspaceOutput.textContent = workspaces.length > 0 ? workspaces.join(', ') : 'None detected'
+    }
+  }
+
+  const appendPassedFinding = (findings: HTMLElement) => {
+    const passed = document.createElement('div')
+
+    passed.className = 's2k-doctor-passed'
+
+    const title = document.createElement('strong')
+
+    title.textContent = 'No issues or warnings were reported.'
+
+    const message = document.createElement('p')
+
+    message.textContent = 'The config file, package setup, and detected workspace structure look healthy.'
+
+    passed.append(title, message)
+
+    findings.append(passed)
+  }
+
+  const renderFindings = (
+    findings: HTMLElement,
+    payload: DoctorPayload,
+    issues: string[],
+    warnings: string[]
+  ) => {
+    const issueFindings = issues.map(message => createFinding('issue', message, payload))
+    const warningFindings = warnings.map(message => createFinding('warning', message, payload))
+
+    findings.replaceChildren(...issueFindings, ...warningFindings)
+
+    if (issues.length === 0 && warnings.length === 0) appendPassedFinding(findings)
+  }
+
+  const analyzeReport = (
+    root: HTMLElement,
+    input: HTMLTextAreaElement,
+    status: HTMLElement,
+    results: HTMLElement,
+    findings: HTMLElement
+  ) => {
+    const payload = parsePayload(input, status, results)
+
+    if (!payload) return
+
+    const issues = normalizeMessages(payload.issues)
+    const warnings = normalizeMessages(payload.warnings)
+    const workspaces = normalizeMessages(payload.workspaceProjects)
+    const summary = createReportSummary(payload, issues, warnings)
+
+    renderReportSummary(root, payload, summary, workspaces)
+
+    renderFindings(findings, payload, issues, warnings)
+
+    results.hidden = false
+
+    status.textContent = 'Report analyzed.'
+
+    results.focus()
+  }
+
   const initializeDoctorViewer = (root: HTMLElement) => {
     if (root.dataset.ready === 'true') return
 
@@ -239,105 +408,7 @@ import { Alert, Badge, Button, Card, Field, Label, Textarea } from '@santi020k/l
     root.querySelector('[data-doctor-analyze]')?.addEventListener('click', () => {
       if (!input || !status || !results || !findings) return
 
-      let payload: DoctorPayload
-
-      try {
-        const parsed = JSON.parse(input.value) as unknown
-
-        if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
-          throw new TypeError('Doctor report must be a JSON object.')
-        }
-
-        payload = parsed as DoctorPayload
-      } catch {
-        status.textContent = 'The report is not valid JSON. Copy the complete output from doctor --json and try again.'
-
-        results.hidden = true
-
-        input.focus()
-
-        return
-      }
-
-      const issues = normalizeMessages(payload.issues)
-      const warnings = normalizeMessages(payload.warnings)
-      const workspaces = normalizeMessages(payload.workspaceProjects)
-      let reportStatus = 'passed'
-      let badgeVariant = 'success'
-      let headingText = 'Your setup passed'
-
-      if (warnings.length > 0) {
-        reportStatus = 'passed with warnings'
-
-        badgeVariant = 'warning'
-
-        headingText = `${warnings.length} warning${warnings.length === 1 ? '' : 's'} to review`
-      }
-
-      if (issues.length > 0) {
-        reportStatus = 'failed'
-
-        badgeVariant = 'destructive'
-
-        headingText = `${issues.length} issue${issues.length === 1 ? '' : 's'} need attention`
-      }
-
-      if (typeof payload.status === 'string') reportStatus = payload.status
-
-      const badge = root.querySelector<HTMLElement>('[data-doctor-badge]')
-
-      if (badge) {
-        badge.textContent = reportStatus
-
-        badge.dataset.variant = badgeVariant
-
-        badge.className = `ui-badge ui-badge--${badgeVariant}`
-      }
-
-      const heading = root.querySelector<HTMLElement>('[data-doctor-heading]')
-
-      if (heading) heading.textContent = headingText
-
-      const packageManager = root.querySelector<HTMLElement>('[data-doctor-package-manager]')
-      const config = root.querySelector<HTMLElement>('[data-doctor-config]')
-      const workspaceOutput = root.querySelector<HTMLElement>('[data-doctor-workspaces]')
-
-      if (packageManager) packageManager.textContent = payload.packageManager ?? 'Unknown'
-
-      if (config) config.textContent = payload.configFile ?? 'None'
-
-      if (workspaceOutput) {
-        workspaceOutput.textContent = workspaces.length > 0 ? workspaces.join(', ') : 'None detected'
-      }
-
-      const issueFindings = issues.map(message => createFinding('issue', message, payload))
-      const warningFindings = warnings.map(message => createFinding('warning', message, payload))
-
-      findings.replaceChildren(...issueFindings, ...warningFindings)
-
-      if (issues.length === 0 && warnings.length === 0) {
-        const passed = document.createElement('div')
-
-        passed.className = 's2k-doctor-passed'
-
-        const title = document.createElement('strong')
-
-        title.textContent = 'No issues or warnings were reported.'
-
-        const message = document.createElement('p')
-
-        message.textContent = 'The config file, package setup, and detected workspace structure look healthy.'
-
-        passed.append(title, message)
-
-        findings.append(passed)
-      }
-
-      results.hidden = false
-
-      status.textContent = 'Report analyzed.'
-
-      results.focus()
+      analyzeReport(root, input, status, results, findings)
     })
   }
 

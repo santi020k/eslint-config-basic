@@ -5,6 +5,7 @@
     "packages/playground/**"
   ],
   "ignoreDependencies": [
+    "@commitlint/config-conventional",
     "typedoc-plugin-markdown",
     "tailwindcss"
   ],

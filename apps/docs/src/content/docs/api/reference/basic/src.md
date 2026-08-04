@@ -45,7 +45,7 @@ Defined in: [basic/src/frameworks.ts:120](https://github.com/santi020k/eslint-co
 
 > `const` **defineConfig**: `ConfigComposer`
 
-Defined in: [basic/src/index.ts:804](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L804)
+Defined in: [basic/src/index.ts:839](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L839)
 
 Generates the ESLint configuration array, applying configurations
 and integration settings based on the input configuration.
@@ -360,7 +360,7 @@ Defined in: [basic/src/frameworks.ts:136](https://github.com/santi020k/eslint-co
 
 > **attachReferencedPlugins**(`configs`): `ConfigArray`
 
-Defined in: [basic/src/index.ts:715](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L715)
+Defined in: [basic/src/index.ts:750](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L750)
 
 Copies already-loaded plugin objects onto rule blocks that reference them.
 ESLint 10 validates plugin availability per effective config object, while

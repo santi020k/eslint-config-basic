@@ -1,5 +1,25 @@
 # Improvements learned from consumer migrations
 
+This file is the evidence archive for real-world migrations. Keep completed
+findings here only when they record a reusable decision or regression scenario;
+new unresolved findings should include a minimal reproduction and graduate to a
+fixture, benchmark, or tracked issue before they are marked complete.
+
+## Active follow-ups
+
+- [Tailwind detection gaps](#tailwind-detection-gaps): custom utilities,
+  component-local classes, plugin utilities, and MDX directive guidance.
+- [Formatting and migration ergonomics](#formatting-and-migration-ergonomics):
+  separate semantic fixes from high-churn formatting and explain changed lines.
+- [Autofix changed source assumptions outside ESLint](#autofix-changed-source-assumptions-outside-eslint):
+  preserve non-ESLint validation as part of migration verification.
+- [Use adoption commands in maintenance workflows](#8-in-progress--use-adoption-commands-in-maintenance-workflows):
+  finish the remaining workflow adoption tracked by the parent-project migration.
+
+When a follow-up is implemented, add the regression test or verification command
+next to its completion note. This keeps the archive useful without turning it
+into a second issue tracker.
+
 ## Test project
 
 - Consumer: `../website`

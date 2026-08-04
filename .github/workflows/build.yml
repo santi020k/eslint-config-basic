@@ -117,6 +117,9 @@ jobs:
       - name: Package metrics
         if: matrix.node-version == '22.x'
         run: pnpm run check:package-metrics
+      - name: Core performance budget
+        if: matrix.node-version == '22.x'
+        run: pnpm run check:performance
 
   package-validation:
     name: Affected package artifacts (Node 22.x)
@@ -160,6 +163,42 @@ jobs:
         run: pnpm run check:publish-dry-run -- --allow-empty
       - name: Check affected published types (attw)
         run: pnpm run check:attw -- --allow-empty
+
+  package-manager-consumers:
+    name: ${{ matrix.manager }} packed consumer (Node ${{ matrix.node-version }})
+    if: github.event_name != 'pull_request' || github.head_ref != 'changeset-release/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    strategy:
+      fail-fast: false
+      matrix:
+        manager: [bun, npm, pnpm, yarn]
+        node-version: [22.x]
+        include:
+          - manager: npm
+            node-version: 24.x
+
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install pnpm
+        uses: pnpm/action-setup@v5
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: pnpm
+      - name: Setup Bun
+        if: matrix.manager == 'bun'
+        uses: oven-sh/setup-bun@v2
+      - name: Setup Yarn
+        if: matrix.manager == 'yarn'
+        run: corepack install --global yarn@stable
+      - run: pnpm install --frozen-lockfile
+      - name: Build lean consumer packages
+        run: pnpm exec turbo run build --filter=@santi020k/eslint-config-basic... --concurrency=50%
+      - name: Verify packed consumer
+        run: pnpm run check:package-managers -- --manager ${{ matrix.manager }}
 
   release-candidate:
     name: Full release candidate

@@ -9,7 +9,7 @@
   "type": "module",
   "scripts": {
     "test": "vitest run",
-    "test:coverage": "vitest run --coverage",
+    "test:coverage": "vitest run --coverage && node ../../scripts/check-package-coverage.mjs",
     "typecheck": "tsc --noEmit",
     "build": "echo \"No direct build step required\"",
     "dev": "echo \"No direct build step required\"",

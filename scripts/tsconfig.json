@@ -1,6 +1,7 @@
 {
   "extends": "../tsconfig.base.json",
   "include": [
-    "*.d.mts"
+    "*.d.mts",
+    "tsup-config.ts"
   ]
 }

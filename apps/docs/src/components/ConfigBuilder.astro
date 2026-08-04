@@ -11,94 +11,9 @@ import {
   NativeSelect
 } from '@santi020k/lumen-astro'
 
-const frameworks = [
-  ['angular', 'Angular'],
-  ['astro', 'Astro'],
-  ['expo', 'Expo'],
-  ['hono', 'Hono'],
-  ['lit', 'Lit'],
-  ['nest', 'NestJS'],
-  ['next', 'Next.js'],
-  ['nuxt', 'Nuxt'],
-  ['preact', 'Preact'],
-  ['qwik', 'Qwik'],
-  ['react', 'React'],
-  ['react-router', 'React Router'],
-  ['slidev', 'Slidev'],
-  ['solid', 'Solid'],
-  ['svelte', 'Svelte'],
-  ['tanstack-start', 'TanStack Start'],
-  ['vite', 'Vite'],
-  ['vue', 'Vue']
-]
+import { getConfigBuilderOptions } from './config-builder-options'
 
-const featureGroups = [
-  {
-    label: 'Testing',
-    packageName: '@santi020k/eslint-config-testing',
-    options: [
-      ['vitest', 'Vitest'],
-      ['jest', 'Jest'],
-      ['jest-dom', 'Jest DOM'],
-      ['playwright', 'Playwright'],
-      ['cypress', 'Cypress'],
-      ['testing-library', 'Testing Library']
-    ]
-  },
-  {
-    label: 'Libraries',
-    packageName: '@santi020k/eslint-config-libraries',
-    options: [
-      ['tailwind', 'Tailwind CSS'],
-      ['storybook', 'Storybook'],
-      ['zod', 'Zod'],
-      ['prisma', 'Prisma'],
-      ['drizzle', 'Drizzle'],
-      ['i18next', 'i18next']
-    ]
-  },
-  {
-    label: 'Formats',
-    packageName: '@santi020k/eslint-config-formats',
-    options: [
-      ['css', 'CSS'],
-      ['html', 'HTML'],
-      ['markdown', 'Markdown'],
-      ['mdx', 'MDX'],
-      ['package-json', 'Package JSON'],
-      ['jsonc', 'JSON / JSONC'],
-      ['yaml', 'YAML'],
-      ['toml', 'TOML'],
-      ['graphql', 'GraphQL']
-    ]
-  },
-  {
-    label: 'Tools',
-    packageName: '@santi020k/eslint-config-tools',
-    options: [
-      ['prettier', 'Prettier'],
-      ['cspell', 'CSpell'],
-      ['github-actions', 'GitHub Actions'],
-      ['docker', 'Docker'],
-      ['nx', 'Nx'],
-      ['pnpm', 'pnpm workspaces'],
-      ['jsdoc', 'JSDoc'],
-      ['swagger', 'Swagger']
-    ]
-  },
-  {
-    label: 'Rule extensions',
-    packageName: '@santi020k/eslint-config-extensions',
-    options: [
-      ['a11y', 'Accessibility'],
-      ['best-practices', 'Best practices'],
-      ['security', 'Security'],
-      ['unicorn', 'Unicorn'],
-      ['perfectionist', 'Perfectionist'],
-      ['regexp', 'Regular expressions']
-    ]
-  }
-]
+const { featureGroups, frameworks } = getConfigBuilderOptions('v3')
 ---
 
 <div class="not-content s2k-tool" data-config-builder>
@@ -309,35 +224,41 @@ const featureGroups = [
     }
   }
 
-  const createInstallCommand = (state: BuilderState): string => {
-    const packages = new Set<string>()
+  const addFrameworkPackages = (packages: Set<string>, frameworks: string[]) => {
+    const frameworkPackages = new Set(frameworks)
 
-    packages.add('eslint@^10')
+    const needsReact = ['next', 'expo', 'react-router'].some(
+      framework => frameworkPackages.has(framework)
+    ) || (frameworkPackages.has('tanstack-start') && !frameworkPackages.has('solid'))
+
+    if (needsReact) frameworkPackages.add('react')
+
+    if (frameworkPackages.has('nuxt') || frameworkPackages.has('slidev')) frameworkPackages.add('vue')
+
+    for (const framework of frameworkPackages) {
+      packages.add(`@santi020k/eslint-config-${framework}@^3`)
+    }
+  }
+
+  const addFeaturePackages = (packages: Set<string>, features: string[]) => {
+    for (const feature of features) {
+      const packageName = featurePackages[feature]
+
+      if (packageName) packages.add(`${packageName}@^3`)
+    }
+  }
+
+  const createInstallCommand = (state: BuilderState): string => {
+    const packages = new Set<string>(['eslint@^10'])
 
     if (state.distribution === 'full') {
       packages.add('@santi020k/eslint-config-full@^3')
     } else {
       packages.add('@santi020k/eslint-config-basic@^3')
 
-      const frameworkPackages = new Set(state.frameworks)
+      addFrameworkPackages(packages, state.frameworks)
 
-      const needsReact = ['next', 'expo', 'react-router'].some(
-        framework => frameworkPackages.has(framework)
-      ) || (frameworkPackages.has('tanstack-start') && !frameworkPackages.has('solid'))
-
-      if (needsReact) frameworkPackages.add('react')
-
-      if (frameworkPackages.has('nuxt') || frameworkPackages.has('slidev')) frameworkPackages.add('vue')
-
-      for (const framework of frameworkPackages) {
-        packages.add(`@santi020k/eslint-config-${framework}@^3`)
-      }
-
-      for (const feature of state.features) {
-        const packageName = featurePackages[feature]
-
-        if (packageName) packages.add(`${packageName}@^3`)
-      }
+      addFeaturePackages(packages, state.features)
     }
 
     if (state.typescript) packages.add('typescript')

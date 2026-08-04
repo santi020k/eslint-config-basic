@@ -27,9 +27,11 @@ words:
   - codecov
   - codegen
   - commitlint
+  - commitprompt
   - commonmark
   - cspell
   - darraghor
+  - dedupe
   - defu
   - dev-dependency
   - devframe

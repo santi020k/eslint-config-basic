@@ -11,6 +11,7 @@
   },
   "include": [
     "astro.config.mjs",
+    "src/**/*.astro",
     "src/**/*.ts",
     "env.d.ts",
     "playwright.config.ts",

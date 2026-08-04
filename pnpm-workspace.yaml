@@ -155,6 +155,8 @@ catalogs:
     eslint-plugin-unicorn: ^72.0.0
   vite7:
     vite: ^8.1.5
+  conflicts_typescript_ge5_0_0_l7_0_0:
+    typescript: '>=5.0.0 <7.0.0'
 
 allowBuilds:
   '@prisma/engines': true

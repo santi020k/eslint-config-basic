@@ -15,6 +15,14 @@ import {
 } from './agent-skill-generator.js'
 import { handleCompatibility, handleExplainRule } from './cli-advanced.js'
 import { getExplicitConfigFeaturePackages, handleMigrateV3 } from './cli-migration.js'
+import {
+  addCompatibleConfigVersions,
+  createInstallCommand,
+  createInstallInvocation,
+  detectPackageManager,
+  findPnpmWorkspaceRoot,
+  getCatalogPreference,
+  getCompatibleConfigVersion } from './cli-package-manager.js'
 import { handleExplainPreset } from './cli-preset.js'
 import {
   handleBaseline,
@@ -295,262 +303,6 @@ const getInstallPackages = (
   if (summary.typescript) packages.add(TYPESCRIPT_PACKAGE_NAME)
 
   return [...packages].filter(packageName => !declaredDependencies.has(packageName))
-}
-
-const createInstallCommand = (
-  packageManager: string,
-  packages: string[],
-  workspaceRoot = false,
-  catalog: false | string | true = false
-): string => {
-  const packageList = packages.join(' ')
-
-  switch (packageManager) {
-    case 'bun':
-      return `bun add -d ${packageList}`
-
-    case 'npm':
-      return `npm install -D ${packageList}`
-
-    case 'yarn':
-      return `yarn add -D ${packageList}`
-
-    default:
-      return `pnpm add -D${workspaceRoot ? ' --workspace-root' : ''}` +
-        (catalog === true ? ' --save-catalog' : '') +
-        `${typeof catalog === 'string' ? ` --save-catalog-name=${catalog}` : ''} ${packageList}`
-  }
-}
-
-const createInstallInvocation = (
-  packageManager: string,
-  packages: string[],
-  workspaceRoot = false,
-  catalog: false | string | true = false
-): [string, string[]] => {
-  switch (packageManager) {
-    case 'bun':
-      return ['bun', ['add', '-d', ...packages]]
-
-    case 'npm':
-      return ['npm', ['install', '-D', ...packages]]
-
-    case 'yarn':
-      return ['yarn', ['add', '-D', ...packages]]
-
-    default:
-      return ['pnpm', [
-        'add',
-        '-D',
-        ...(workspaceRoot ? ['--workspace-root'] : []),
-        ...(catalog === true ? ['--save-catalog'] : []),
-        ...(typeof catalog === 'string' ? [`--save-catalog-name=${catalog}`] : []),
-        ...packages
-      ]]
-  }
-}
-
-const findPnpmWorkspaceRoot = (cwd: string): string | undefined => {
-  let current = cwd
-
-  for (;;) {
-    if (existsSync(join(current, 'pnpm-workspace.yaml'))) return current
-
-    const parent = dirname(current)
-
-    if (parent === current) return undefined
-
-    current = parent
-  }
-}
-
-const detectPackageManager = (cwd: string): string => {
-  if (findPnpmWorkspaceRoot(cwd) || existsSync(join(cwd, 'pnpm-lock.yaml'))) return 'pnpm'
-
-  if (existsSync(join(cwd, 'yarn.lock'))) return 'yarn'
-
-  if (existsSync(join(cwd, 'bun.lockb')) || existsSync(join(cwd, 'bun.lock'))) return 'bun'
-
-  return 'npm'
-}
-
-const getCatalogPreference = (
-  packageJson: null | Record<string, unknown>
-): false | string | true => {
-  const dependencyFields = ['devDependencies', 'dependencies'] as const
-  const dependencyRecords: Record<string, unknown>[] = []
-
-  const parseCatalog = (value: unknown): false | string | true => {
-    if (typeof value !== 'string' || !value.startsWith('catalog:')) return false
-
-    const name = value.slice('catalog:'.length)
-
-    return name && name !== 'default' ? name : true
-  }
-
-  for (const field of dependencyFields) {
-    const dependencies = packageJson?.[field]
-
-    if (!dependencies || typeof dependencies !== 'object' || Array.isArray(dependencies)) continue
-
-    dependencyRecords.push(dependencies as Record<string, unknown>)
-  }
-
-  for (const dependencies of dependencyRecords) {
-    const basicCatalog = parseCatalog(Reflect.get(dependencies, BASIC_PACKAGE_NAME))
-
-    if (basicCatalog) return basicCatalog
-  }
-
-  for (const dependencies of dependencyRecords) {
-    for (const value of Object.values(dependencies)) {
-      const catalog = parseCatalog(value)
-
-      if (catalog) return catalog
-    }
-  }
-
-  return false
-}
-
-interface YamlMappingLine {
-  indent: number
-  key: string
-  value: string
-}
-
-const parseYamlMappingLine = (line: string): undefined | YamlMappingLine => {
-  const match = /^(\s*)(?:"([^"]+)"|'([^']+)'|([^'"].*?))\s*:\s*(.*?)\s*$/.exec(line)
-
-  if (!match) return undefined
-
-  const value = match[5].replace(/\s+#.*$/, '').trim()
-  const key = match[2] || match[3] || match[4]
-
-  return {
-    indent: match[1].length,
-    key: key.trim(),
-    value: /^(['"]).*\1$/.test(value) ? value.slice(1, -1) : value
-  }
-}
-
-const getCatalogVersion = (
-  workspaceRoot: string,
-  packageName: string,
-  catalog: string | true
-): string | undefined => {
-  const workspacePath = join(workspaceRoot, 'pnpm-workspace.yaml')
-
-  if (!existsSync(workspacePath)) return undefined
-
-  const lines = readFileSync(workspacePath, 'utf8').split(/\r?\n/)
-  let sectionIndex = -1
-  let sectionIndent = -1
-
-  if (catalog === true) {
-    sectionIndex = lines.findIndex(line => {
-      const mapping = parseYamlMappingLine(line)
-
-      return mapping?.indent === 0 && mapping.key === 'catalog' && mapping.value === ''
-    })
-
-    sectionIndent = 0
-  } else {
-    const catalogsIndex = lines.findIndex(line => {
-      const mapping = parseYamlMappingLine(line)
-
-      return mapping?.indent === 0 && mapping.key === 'catalogs' && mapping.value === ''
-    })
-
-    if (catalogsIndex >= 0) {
-      for (let index = catalogsIndex + 1; index < lines.length; index++) {
-        const mapping = parseYamlMappingLine(lines.at(index) ?? '')
-
-        if (!mapping) continue
-
-        if (mapping.indent === 0) break
-
-        if (mapping.key === catalog && mapping.value === '') {
-          sectionIndex = index
-
-          sectionIndent = mapping.indent
-
-          break
-        }
-      }
-    }
-  }
-
-  if (sectionIndex < 0) return undefined
-
-  for (let index = sectionIndex + 1; index < lines.length; index++) {
-    const mapping = parseYamlMappingLine(lines.at(index) ?? '')
-
-    if (!mapping) continue
-
-    if (mapping.indent <= sectionIndent) break
-
-    if (mapping.key === packageName) return mapping.value || undefined
-  }
-
-  return undefined
-}
-
-const getCompatibleConfigVersion = (
-  packageJson: null | Record<string, unknown>,
-  workspaceRoot?: string
-): string => {
-  const dependencyFields = ['devDependencies', 'dependencies', 'peerDependencies'] as const
-  let basicSpec: string | undefined
-
-  for (const field of dependencyFields) {
-    const dependencies = packageJson?.[field]
-
-    if (!dependencies || typeof dependencies !== 'object' || Array.isArray(dependencies)) continue
-
-    const value = Object.entries(dependencies as Record<string, unknown>)
-      .find(([packageName]) => packageName === BASIC_PACKAGE_NAME)?.[1]
-
-    if (typeof value === 'string') {
-      basicSpec = value
-
-      break
-    }
-  }
-
-  const catalogName = basicSpec?.startsWith('catalog:') ?
-    basicSpec.slice('catalog:'.length) :
-    undefined
-
-  let selectedCatalog: string | true | undefined
-
-  if (catalogName !== undefined) {
-    selectedCatalog = catalogName && catalogName !== 'default' ? catalogName : true
-  }
-
-  const resolvedSpec = selectedCatalog && workspaceRoot ?
-    getCatalogVersion(workspaceRoot, BASIC_PACKAGE_NAME, selectedCatalog) :
-    basicSpec
-
-  // CLI version loading is declared later with the rest of the package metadata helpers.
-  // eslint-disable-next-line no-use-before-define
-  const match = /(\d+)\.(\d+)\.(\d+)/.exec(resolvedSpec ?? getCliVersion())
-
-  return match ? `^${match[1]}.${match[2]}.${match[3]}` : '^3.1.0'
-}
-
-const addCompatibleConfigVersions = (
-  packages: string[],
-  version: string
-): string[] => {
-  const major = /\d+/.exec(version)?.[0]
-  const companionVersion = major ? `^${major}.0.0` : version
-
-  return packages.map(packageName => packageName.startsWith('@santi020k/eslint-config-') &&
-    packageName !== LITE_PACKAGE_NAME &&
-    packageName !== INTEGRATIONS_PACKAGE_NAME ?
-    `${packageName}@${packageName === BASIC_PACKAGE_NAME ? version : companionVersion}` :
-    packageName)
 }
 
 const hasLintScript = (cwd: string): boolean => {
@@ -2171,7 +1923,7 @@ export const handleDoctor = async (
       packageManager,
       addCompatibleConfigVersions(
         liteInstallPackages,
-        getCompatibleConfigVersion(packageJson, pnpmWorkspaceRoot)
+        getCompatibleConfigVersion(packageJson, getCliVersion(), pnpmWorkspaceRoot)
       ),
       workspaceRoot,
       catalog
@@ -2219,7 +1971,7 @@ export const handleDoctor = async (
       packageManager,
       addCompatibleConfigVersions(
         requiredPackages,
-        getCompatibleConfigVersion(packageJson, pnpmWorkspaceRoot)
+        getCompatibleConfigVersion(packageJson, getCliVersion(), pnpmWorkspaceRoot)
       ),
       workspaceRoot,
       catalog
@@ -2295,7 +2047,7 @@ export const handleInstall = (
 
   const installPackages = addCompatibleConfigVersions(
     packages,
-    getCompatibleConfigVersion(packageJson, pnpmWorkspaceRoot)
+    getCompatibleConfigVersion(packageJson, getCliVersion(), pnpmWorkspaceRoot)
   )
 
   if (packages.length === 0) {

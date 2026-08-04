@@ -33,13 +33,13 @@
     "@santi020k/eslint-config-core": "workspace:^",
     "@typescript-eslint/parser": "catalog:",
     "typescript-eslint": "catalog:",
-    "@typescript-eslint/utils": "catalog:"
+    "@typescript-eslint/utils": "catalog:",
+    "typescript": "catalog:"
   },
   "devDependencies": {
     "@types/node": "catalog:",
     "publint": "catalog:",
-    "tsup": "catalog:",
-    "typescript": "catalog:"
+    "tsup": "catalog:"
   },
   "peerDependencies": {
     "eslint": "^10.0.0",
