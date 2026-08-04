@@ -1525,10 +1525,7 @@ const getInactiveDoctorPackages = (
   return inactivePackages
 }
 
-const getDoctorProjectActivations = (
-  cwd: string,
-  activeConfig: Awaited<ReturnType<typeof analyzeEslintConfig>>
-): DoctorProjectActivation[] => {
+const getDoctorProjectActivations = async (cwd: string): Promise<DoctorProjectActivation[]> => {
   const rootSummary = getProjectSummary(cwd)
 
   const projectPaths = [...new Set([
@@ -1543,13 +1540,13 @@ const getDoctorProjectActivations = (
     return left.localeCompare(right)
   })
 
-  return projectPaths.map(projectPath => {
+  return Promise.all(projectPaths.map(async projectPath => {
     const projectRoot = projectPath === '.' ? cwd : join(cwd, projectPath)
     const summary = getProjectSummary(projectRoot)
-    const rootActiveConfig = projectPath === '.' ? activeConfig ?? undefined : undefined
+    const projectActiveConfig = await analyzeEslintConfig(cwd, { projectPath, projectPaths }) ?? undefined
     const tsconfig = getTypeScriptConfig(projectRoot)
     const typescriptInstalled = resolvePackageMetadata(projectRoot, TYPESCRIPT_PACKAGE_NAME) !== null
-    const typescriptEnabled = summary.typescript && Boolean(activeConfig?.typescript)
+    const typescriptEnabled = summary.typescript && Boolean(projectActiveConfig?.typescript)
     const tailwindDetected = summary.libraries.includes('tailwind')
     const tailwindEntryPoint = tailwindDetected ? findTailwindEntryPoint(projectRoot) ?? null : null
 
@@ -1579,31 +1576,31 @@ const getDoctorProjectActivations = (
         projectRoot,
         'extensions',
         summary.extensions,
-        activeConfig?.extensions ?? [],
-        projectPath === '.'
+        projectActiveConfig?.extensions ?? [],
+        true
       ),
       formats: createDoctorFeatureActivations(
         projectRoot,
         'formats',
         summary.formats,
-        activeConfig?.formats ?? [],
-        projectPath === '.'
+        projectActiveConfig?.formats ?? [],
+        true
       ),
       frameworks: createDoctorFeatureActivations(
         projectRoot,
         'frameworks',
         summary.frameworks,
-        activeConfig?.frameworks ?? [],
-        projectPath === '.'
+        projectActiveConfig?.frameworks ?? [],
+        true
       ),
-      ignores: activeConfig?.ignores ?? [],
-      inactivePackages: getInactiveDoctorPackages(projectRoot, summary.frameworks, summary, rootActiveConfig),
+      ignores: projectActiveConfig?.ignores ?? [],
+      inactivePackages: getInactiveDoctorPackages(projectRoot, summary.frameworks, summary, projectActiveConfig),
       libraries: createDoctorFeatureActivations(
         projectRoot,
         'libraries',
         summary.libraries,
-        activeConfig?.libraries ?? [],
-        projectPath === '.'
+        projectActiveConfig?.libraries ?? [],
+        true
       ),
       path: projectPath,
       runtime: summary.runtime,
@@ -1621,15 +1618,15 @@ const getDoctorProjectActivations = (
         projectRoot,
         'testing',
         summary.testing,
-        activeConfig?.testing ?? [],
-        projectPath === '.'
+        projectActiveConfig?.testing ?? [],
+        true
       ),
       tools: createDoctorFeatureActivations(
         projectRoot,
         'tools',
         summary.tools,
-        activeConfig?.tools ?? [],
-        projectPath === '.'
+        projectActiveConfig?.tools ?? [],
+        true
       ),
       typescript: {
         detected: summary.typescript,
@@ -1641,7 +1638,7 @@ const getDoctorProjectActivations = (
         tsconfig
       }
     }
-  })
+  }))
 }
 
 const formatDoctorActivation = (features: DoctorFeatureActivation[]): string => (
@@ -1989,7 +1986,7 @@ export const handleDoctor = async (
     summary
   )
 
-  const projects = getDoctorProjectActivations(projectRoot, activeConfig)
+  const projects = await getDoctorProjectActivations(projectRoot)
 
   outputDoctorResult(
     json,

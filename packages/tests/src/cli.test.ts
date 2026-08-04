@@ -1186,6 +1186,64 @@ describe('CLI command UX', () => {
     process.exitCode = undefined
   })
 
+  test('should compute active features from each project scoped config', async () => {
+    const cwd = createTempProject({
+      name: 'tmp-project',
+      type: 'module',
+      workspaces: ['packages/*']
+    })
+
+    for (const projectName of ['enabled', 'disabled']) {
+      const projectRoot = join(cwd, 'packages', projectName)
+
+      mkdirSync(projectRoot, { recursive: true })
+      writeFileSync(join(projectRoot, 'package.json'), JSON.stringify({
+        devDependencies: { vitest: '4.0.0' },
+        name: projectName
+      }))
+      writeFileSync(join(projectRoot, 'tsconfig.json'), '{}\n')
+    }
+
+    writeFileSync(join(cwd, 'eslint.config.js'), `export default [
+      {
+        files: ['packages/enabled/**/*'],
+        name: 'eslint-config-typescript/recommended',
+        rules: {}
+      },
+      {
+        files: ['packages/enabled/**/*'],
+        name: 'integrations/vitest',
+        rules: {}
+      }
+    ]`)
+    writeFakePackage(cwd, '@santi020k/eslint-config-testing', '3.2.0')
+    writeFakePackage(cwd, 'typescript', '6.0.0')
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+
+    await handleDoctor(cwd, true)
+
+    const payload = JSON.parse(String(logSpy.mock.calls.at(-1)?.[0])) as {
+      projects: {
+        path: string
+        testing: { enabled: boolean, name: string }[]
+        typescript: { enabled: boolean, mode: string, reason?: string }
+      }[]
+    }
+    const enabled = getProjectByPath(payload.projects, 'packages/enabled')
+    const disabled = getProjectByPath(payload.projects, 'packages/disabled')
+
+    expect(enabled.typescript).toEqual(expect.objectContaining({ enabled: true, mode: 'type-aware' }))
+    expect(enabled.testing).toContainEqual(expect.objectContaining({ enabled: true, name: 'vitest' }))
+    expect(disabled.typescript).toEqual(expect.objectContaining({
+      enabled: false,
+      mode: 'off',
+      reason: 'Detected and installed, but the active config did not enable TypeScript.'
+    }))
+    expect(disabled.testing).toContainEqual(expect.objectContaining({ enabled: false, name: 'vitest' }))
+    logSpy.mockRestore()
+    process.exitCode = undefined
+  })
+
   test('should recognize an npm-aliased TypeScript package in workspace activation details', async () => {
     const cwd = createTempProject({
       devDependencies: {

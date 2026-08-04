@@ -714,15 +714,6 @@ const resolveInheritedProjectDefaults = (
   options?.projectDefaults ?? {}
 )
 
-const createWorkspaceFixtureIgnores = (
-  configuredProjects: Record<string, EslintConfigOptions>
-): FlatConfigArray => Object.keys(configuredProjects).length > 0 ?
-  [{
-    ignores: ['apps/*/fixtures/**', 'packages/*/fixtures/**'],
-    name: 'eslint-config-basic/workspace-fixture-ignores'
-  }] :
-  []
-
 const getPluginNameFromRule = (
   ruleName: string,
   availablePluginNames: Iterable<string>
@@ -965,7 +956,6 @@ export const defineConfig: ConfigComposer = async function defineConfig(
   // Merge workspace import group into any existing simple-import-sort/imports rules
   // so framework-specific group ordering (e.g. React-first) is preserved.
   const allConfigs = [
-    ...createWorkspaceFixtureIgnores(configuredProjects),
     ...configs,
     ...projectConfigs.flat(),
     ...flattenConfigInputs(extraConfigs)

@@ -306,6 +306,7 @@ const FEATURE_MAP: readonly [pattern: string, category: FeatureCategory, label: 
 ]
 
 interface RawFlatConfigEntry {
+  files?: unknown
   ignores?: unknown
   name?: unknown
   plugins?: unknown
@@ -407,6 +408,46 @@ const collectTokens = (configs: unknown[]): string[] => {
 
   return tokens
 }
+
+const getConfigFilePatterns = (entry: unknown): string[] => {
+  if (!entry || typeof entry !== 'object') return []
+
+  const { files } = entry as RawFlatConfigEntry
+
+  return Array.isArray(files) ?
+    files.flat(Number.POSITIVE_INFINITY)
+      .filter((value): value is string => typeof value === 'string' && !value.startsWith('!')) :
+    []
+}
+
+const normalizeProjectPattern = (pattern: string): string => pattern.replace(/^\.\//, '')
+
+const isProjectPattern = (pattern: string, projectPath: string): boolean => {
+  const normalizedProjectPath = projectPath.replace(/^\.\//, '').replace(/\/$/, '')
+  const normalizedPattern = normalizeProjectPattern(pattern)
+
+  return normalizedPattern === normalizedProjectPath || normalizedPattern.startsWith(`${normalizedProjectPath}/`)
+}
+
+const scopeConfigsToProject = (
+  configs: unknown[],
+  projectPath: string,
+  projectPaths: string[]
+): unknown[] => configs.filter(entry => {
+  const patterns = getConfigFilePatterns(entry)
+
+  if (patterns.length === 0) return true
+
+  const scopedProjectPaths = projectPaths
+    .filter(path => path !== '.')
+    .filter(path => patterns.some(pattern => isProjectPattern(pattern, path)))
+
+  if (scopedProjectPaths.length === 0) return true
+
+  return projectPath !== '.' && scopedProjectPaths.some(path => (
+    projectPath === path || projectPath.startsWith(`${path}/`)
+  ))
+})
 
 const collectIgnores = (configs: unknown[]): string[] => [...new Set(configs.flatMap(entry => {
   if (!entry || typeof entry !== 'object') return []
@@ -552,7 +593,15 @@ const detectLintCommand = (cwd: string): string => {
  *
  * Returns `null` when no config file is found or it cannot be imported.
  */
-export const analyzeEslintConfig = async (cwd: string): Promise<EslintConfigFeatures | null> => {
+export interface AnalyzeEslintConfigOptions {
+  projectPath: string
+  projectPaths: string[]
+}
+
+export const analyzeEslintConfig = async (
+  cwd: string,
+  options?: AnalyzeEslintConfigOptions
+): Promise<EslintConfigFeatures | null> => {
   const configPath = findEslintConfig(cwd)
 
   if (!configPath) return null
@@ -574,7 +623,11 @@ export const analyzeEslintConfig = async (cwd: string): Promise<EslintConfigFeat
 
     if (!Array.isArray(configs)) return null
 
-    return extractFeatures(configs, lintCommand, configPath)
+    const analyzedConfigs = options ?
+      scopeConfigsToProject(configs, options.projectPath, options.projectPaths) :
+      configs
+
+    return extractFeatures(analyzedConfigs, lintCommand, configPath)
   } catch {
     return null
   }

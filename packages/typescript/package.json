@@ -34,7 +34,7 @@
     "@typescript-eslint/parser": "catalog:",
     "typescript-eslint": "catalog:",
     "@typescript-eslint/utils": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:conflicts_typescript_ge5_0_0_l7_0_0"
   },
   "devDependencies": {
     "@types/node": "catalog:",
