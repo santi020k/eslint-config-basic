@@ -432,6 +432,7 @@ interface FrameworkResolutionContext {
   hasVue: boolean
   runtime: Runtime
   tsconfigRootDir?: string
+  typeChecked?: boolean
 }
 
 const FRAMEWORK_EXTRA_OPTS: Partial<Record<string, (ctx: FrameworkResolutionContext) => FrameworkOptions>> = {
@@ -440,7 +441,8 @@ const FRAMEWORK_EXTRA_OPTS: Partial<Record<string, (ctx: FrameworkResolutionCont
     hasSolid: ctx.hasSolid,
     hasSvelte: ctx.hasSvelte,
     hasVue: ctx.hasVue,
-    tsconfigRootDir: ctx.tsconfigRootDir
+    tsconfigRootDir: ctx.tsconfigRootDir,
+    typeChecked: ctx.typeChecked
   }),
   hono: ctx => ({ runtime: ctx.runtime }),
   slidev: ctx => ({ runtime: ctx.runtime }),
@@ -462,7 +464,7 @@ const resolveEnabledFrameworks = async (
 }
 
 interface BuildConfigsParams {
-  astroOptions: { hasReact: boolean, hasSolid: boolean, hasSvelte: boolean, hasVue: boolean }
+  astroOptions: { hasReact: boolean, hasSolid: boolean, hasSvelte: boolean, hasVue: boolean, typeChecked?: boolean }
   defaultIgnores: TSESLint.FlatConfig.Config[]
   gitignoreConfig: FlatConfigArray
   nextMode: NextMode
@@ -490,10 +492,10 @@ const buildEslintConfigs = async (params: BuildConfigsParams): Promise<FlatConfi
     uniqueTesting, uniqueTools, userIgnores
   } = params
 
-  const { hasReact, hasSolid, hasSvelte, hasVue } = astroOptions
+  const { hasReact, hasSolid, hasSvelte, hasVue, typeChecked } = astroOptions
 
   const fw = await resolveEnabledFrameworks(
-    resolvedFrameworks, { hasReact, hasSolid, hasSvelte, hasVue, runtime, tsconfigRootDir }
+    resolvedFrameworks, { hasReact, hasSolid, hasSvelte, hasVue, runtime, tsconfigRootDir, typeChecked }
   )
 
   const get = (name: string): FlatConfigArray => fw[name] ?? []
@@ -908,7 +910,10 @@ export const defineConfig: ConfigComposer = async function defineConfig(
   const params = getConfigsParams(options, rootDir, runtime, uniqueLibraries, uniqueSettings, resolvedFrameworks)
 
   const configs = await buildEslintConfigs({
-    astroOptions: params.astroOptions,
+    astroOptions: {
+      ...params.astroOptions,
+      typeChecked: resolvedTypescript ? resolvedTypescript.mode !== 'syntax' : false
+    },
     defaultIgnores: params.defaultIgnores,
     gitignoreConfig: params.gitignoreConfig,
     nextMode,

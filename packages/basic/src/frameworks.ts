@@ -20,6 +20,7 @@ export interface FrameworkOptions {
   hasSvelte?: boolean
   hasVue?: boolean
   runtime?: Runtime
+  typeChecked?: boolean
 }
 
 /**

@@ -412,12 +412,15 @@ const collectTokens = (configs: unknown[]): string[] => {
 const getConfigFilePatterns = (entry: unknown): string[] => {
   if (!entry || typeof entry !== 'object') return []
 
-  const { files } = entry as RawFlatConfigEntry
+  const { files, ignores } = entry as RawFlatConfigEntry
+  const filesArray = Array.isArray(files) ? (files as unknown[]) : []
+  const ignoresArray = Array.isArray(ignores) ? (ignores as unknown[]) : []
 
-  return Array.isArray(files) ?
-    files.flat(Number.POSITIVE_INFINITY)
-      .filter((value): value is string => typeof value === 'string' && !value.startsWith('!')) :
-    []
+  return [
+    ...filesArray,
+    ...ignoresArray
+  ].flat(Number.POSITIVE_INFINITY)
+    .filter((value): value is string => typeof value === 'string' && !value.startsWith('!'))
 }
 
 const normalizeProjectPattern = (pattern: string): string => pattern.replace(/^\.\//, '')

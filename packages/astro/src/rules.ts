@@ -25,6 +25,12 @@ export interface AstroOptions {
    * This keeps Astro parser project lookup stable when projectService is disabled.
    */
   tsconfigRootDir?: string
+
+  /**
+   * Whether to enable type-aware linting for Astro files.
+   * Disabling this avoids parser crashes in Astro packages without TSConfig files.
+   */
+  typeChecked?: boolean
 }
 
 const buildFrameworkGroups = (
