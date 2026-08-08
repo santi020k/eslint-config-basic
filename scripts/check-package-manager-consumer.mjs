@@ -14,7 +14,7 @@ if (!manager || !supportedManagers.has(manager)) {
 const rootDir = process.cwd()
 const tempDir = mkdtempSync(join(tmpdir(), `eslint-config-${manager}-consumer-`))
 const tarballDir = join(tempDir, 'tarballs')
-const packageDirs = ['core', 'typescript', 'basic']
+const packageDirs = ['core', 'typescript', 'formats', 'tools', 'basic']
 
 const packPackage = packageDir => {
   const output = execFileSync(
@@ -53,18 +53,43 @@ try {
 
   const getTarballReference = packageDir => `file:./tarballs/${basename(tarballs[packageDir])}`
 
+  const transitiveInternalDependencies = {
+    '@santi020k/eslint-config-core': getTarballReference('core'),
+    '@santi020k/eslint-config-formats': getTarballReference('formats'),
+    '@santi020k/eslint-config-tools': getTarballReference('tools'),
+    '@santi020k/eslint-config-typescript': getTarballReference('typescript')
+  }
+
+  const internalDependencies = {
+    '@santi020k/eslint-config-basic': getTarballReference('basic'),
+    ...transitiveInternalDependencies
+  }
+
   writeFileSync(join(consumerDir, 'package.json'), JSON.stringify({
     dependencies: {
-      '@santi020k/eslint-config-basic': getTarballReference('basic'),
-      '@santi020k/eslint-config-core': getTarballReference('core'),
-      '@santi020k/eslint-config-typescript': getTarballReference('typescript'),
+      ...internalDependencies,
       eslint: '^10.0.0',
       typescript: '^6.0.0'
     },
     name: `eslint-config-${manager}-consumer-check`,
+    ...(['bun', 'npm'].includes(manager) && { overrides: transitiveInternalDependencies }),
     private: true,
+    ...(manager === 'yarn' && { resolutions: transitiveInternalDependencies }),
     type: 'module'
   }, null, 2))
+
+  if (manager === 'pnpm') {
+    writeFileSync(join(consumerDir, 'pnpm-workspace.yaml'), [
+      'autoInstallPeers: false',
+      'packages:',
+      '  - .',
+      'overrides:',
+      ...Object.entries(transitiveInternalDependencies).map(
+        ([name, tarball]) => `  ${JSON.stringify(name)}: ${JSON.stringify(tarball)}`
+      ),
+      ''
+    ].join('\n'))
+  }
 
   if (manager === 'yarn') {
     writeFileSync(join(consumerDir, '.yarnrc.yml'), 'nodeLinker: node-modules\n')
