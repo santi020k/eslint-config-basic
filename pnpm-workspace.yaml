@@ -136,7 +136,7 @@ catalogs:
   vite7:
     vite: ^8.1.5
   conflicts_typescript_ge5_0_0_l7_0_0:
-    typescript: '>=5.0.0 <7.0.0'
+    typescript: '>=5.0.0 <7.0.2'
 
 allowBuilds:
   '@prisma/engines': true
