@@ -15,7 +15,7 @@ catalog:
   '@commitlint/cli': ^21.2.1
   '@commitlint/config-conventional': ^21.2.0
   '@cspell/eslint-plugin': ^10.0.1
-  '@darraghor/eslint-plugin-nestjs-typed': ^7.2.9
+  '@darraghor/eslint-plugin-nestjs-typed': ^6.18.0
   '@eslint-react/eslint-plugin': ^5.18.0
   '@eslint/config-helpers': ^0.7.0
   '@eslint/config-inspector': ^3.1.0

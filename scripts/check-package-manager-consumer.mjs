@@ -74,7 +74,12 @@ try {
     name: `eslint-config-${manager}-consumer-check`,
     ...(['bun', 'npm'].includes(manager) && { overrides: transitiveInternalDependencies }),
     private: true,
-    ...(manager === 'yarn' && { resolutions: transitiveInternalDependencies }),
+    ...(manager === 'yarn' && {
+      resolutions: {
+        ...transitiveInternalDependencies,
+        '@darraghor/eslint-plugin-nestjs-typed': '^6.18.0'
+      }
+    }),
     type: 'module'
   }, null, 2))
 
