@@ -51,9 +51,11 @@ words:
   - genai
   - getentrybyslug
   - gitignore
+  - GHSA
   - hono
   - iconify
   - importscripts
+  - ignoreGhsas
   - isnan
   - istanbul
   - jsonc
@@ -161,6 +163,8 @@ words:
   - workerd
   - workspace
   - workspaces
+ignoreRegExpList:
+  - /GHSA-[\w-]+/g
 ignorePaths:
   - node_modules
   - dist
