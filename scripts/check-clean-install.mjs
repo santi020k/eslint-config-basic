@@ -78,15 +78,17 @@ try {
 
     const minimatchRequire = createRequire(minimatchManifestPath)
     const braceManifestPath = minimatchRequire.resolve('brace-expansion/package.json')
-    const minimatchVersion = JSON.parse(readFileSync(minimatchManifestPath, 'utf8')).version
+    const minimatchManifest = JSON.parse(readFileSync(minimatchManifestPath, 'utf8'))
+    const minimatchVersion = minimatchManifest.version
+    const braceRange = minimatchManifest.dependencies['brace-expansion']
     const braceVersion = JSON.parse(readFileSync(braceManifestPath, 'utf8')).version
     const braceMajor = Number.parseInt(braceVersion, 10)
-    const expectedBraceMajor = 5
+    const expectedBraceMajor = Number.parseInt(braceRange.match(/\d+/u)?.[0], 10)
 
-    if (braceMajor !== expectedBraceMajor) {
+    if (!Number.isInteger(expectedBraceMajor) || braceMajor !== expectedBraceMajor) {
       throw new Error(
         `Clean install linked minimatch@${minimatchVersion} to incompatible brace-expansion@${braceVersion}. ` +
-        `Expected brace-expansion major ${expectedBraceMajor}.`
+        `Expected a version satisfying ${braceRange}.`
       )
     }
 

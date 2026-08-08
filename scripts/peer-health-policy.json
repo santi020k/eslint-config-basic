@@ -26,6 +26,38 @@
     },
     {
       "kind": "incompatible",
+      "peer": "devframe",
+      "introducedBy": "@devframes/hub",
+      "wantedRange": "0.7.14",
+      "owner": "packages/playground/nuxt",
+      "removalCondition": "Remove when Slidev aligns @devframes/hub with devframe 0.7.16 or newer."
+    },
+    {
+      "kind": "incompatible",
+      "peer": "devframe",
+      "introducedBy": "@devframes/json-render",
+      "wantedRange": "0.7.14",
+      "owner": "packages/playground/nuxt",
+      "removalCondition": "Remove when Slidev aligns @devframes/json-render with devframe 0.7.16 or newer."
+    },
+    {
+      "kind": "incompatible",
+      "peer": "devframe",
+      "introducedBy": "@devframes/hub",
+      "wantedRange": "0.7.14",
+      "owner": "packages/playground/slidev",
+      "removalCondition": "Remove when Slidev aligns @devframes/hub with devframe 0.7.16 or newer."
+    },
+    {
+      "kind": "incompatible",
+      "peer": "devframe",
+      "introducedBy": "@devframes/json-render",
+      "wantedRange": "0.7.14",
+      "owner": "packages/playground/slidev",
+      "removalCondition": "Remove when Slidev aligns @devframes/json-render with devframe 0.7.16 or newer."
+    },
+    {
+      "kind": "incompatible",
       "peer": "eslint",
       "introducedBy": "@santi020k/eslint-config-astro",
       "wantedRange": "^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9",

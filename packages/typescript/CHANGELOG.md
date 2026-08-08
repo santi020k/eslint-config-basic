@@ -1,5 +1,19 @@
 # @santi020k/eslint-config-typescript
 
+## 3.1.2
+
+### Patch Changes
+
+- [#108](https://github.com/santi020k/eslint-config-basic/pull/108) [`66cee8e`](https://github.com/santi020k/eslint-config-basic/commit/66cee8e41ac22b14e8afa91f1f77587f08bc414f) Thanks [@santi020k](https://github.com/santi020k)! - Make packed zero-config installs behave consistently across npm, pnpm, Yarn,
+  and Bun by ensuring the eagerly loaded TypeScript parser has its runtime.
+
+- [#108](https://github.com/santi020k/eslint-config-basic/pull/108) [`66cee8e`](https://github.com/santi020k/eslint-config-basic/commit/66cee8e41ac22b14e8afa91f1f77587f08bc414f) Thanks [@santi020k](https://github.com/santi020k)! - Improve workspace source detection and TypeScript parser scoping for untyped,
+  declaration-only, and Astro virtual files. Keep multiline calls, URLs, template
+  literals, declaration-attached JSDoc, and intentional fire-and-forget promises
+  compatible with the surrounding core rules.
+- Updated dependencies [[`66cee8e`](https://github.com/santi020k/eslint-config-basic/commit/66cee8e41ac22b14e8afa91f1f77587f08bc414f)]:
+  - @santi020k/eslint-config-core@3.1.1
+
 ## 3.1.1
 
 ### Patch Changes

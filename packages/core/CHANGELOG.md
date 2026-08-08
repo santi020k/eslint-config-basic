@@ -1,5 +1,14 @@
 # @santi020k/eslint-config-core
 
+## 3.1.1
+
+### Patch Changes
+
+- [#108](https://github.com/santi020k/eslint-config-basic/pull/108) [`66cee8e`](https://github.com/santi020k/eslint-config-basic/commit/66cee8e41ac22b14e8afa91f1f77587f08bc414f) Thanks [@santi020k](https://github.com/santi020k)! - Improve workspace source detection and TypeScript parser scoping for untyped,
+  declaration-only, and Astro virtual files. Keep multiline calls, URLs, template
+  literals, declaration-attached JSDoc, and intentional fire-and-forget promises
+  compatible with the surrounding core rules.
+
 ## 3.1.0
 
 ### Minor Changes
