@@ -1,5 +1,15 @@
 # @santi020k/eslint-config-astro
 
+## 3.1.1
+
+### Patch Changes
+
+- [#108](https://github.com/santi020k/eslint-config-basic/pull/108) [`66cee8e`](https://github.com/santi020k/eslint-config-basic/commit/66cee8e41ac22b14e8afa91f1f77587f08bc414f) Thanks [@santi020k](https://github.com/santi020k)! - Prevent circular indentation and closing-tag fixes, top-level redirect crashes,
+  and generated-boundary false positives in Astro files. Keep JavaScript-oriented
+  line-length checks out of Astro documents while preserving Astro-aware rules.
+- Updated dependencies [[`66cee8e`](https://github.com/santi020k/eslint-config-basic/commit/66cee8e41ac22b14e8afa91f1f77587f08bc414f)]:
+  - @santi020k/eslint-config-core@3.1.1
+
 ## 3.1.0
 
 ### Patch Changes
