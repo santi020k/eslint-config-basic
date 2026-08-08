@@ -6,6 +6,8 @@ const protectedPackages = [
   '@santi020k/eslint-config-lite'
 ]
 
+const requiredBraceExpansionVersion = '5.0.9'
+
 const walkDependencies = (node, seen = new Set()) => {
   if (!node || typeof node !== 'object' || seen.has(node)) return []
 
@@ -34,7 +36,7 @@ for (const packageName of protectedPackages) {
 
   const vulnerableBrace = dependencies.find(dependency => (
     dependency.name === 'brace-expansion' &&
-    dependency.version !== '5.0.8'
+    dependency.version !== requiredBraceExpansionVersion
   ))
 
   if (jsxA11y) {
@@ -43,7 +45,8 @@ for (const packageName of protectedPackages) {
 
   if (vulnerableBrace) {
     failures.push(
-      `${packageName} includes brace-expansion@${vulnerableBrace.version}; the lean boundary requires 5.0.8.`
+      `${packageName} includes brace-expansion@${vulnerableBrace.version}; ` +
+      `the lean boundary requires ${requiredBraceExpansionVersion}.`
     )
   }
 }
@@ -54,5 +57,5 @@ if (failures.length > 0) {
 
 process.stdout.write(
   `Security boundary verified for ${protectedPackages.join(', ')}: ` +
-  'no jsx-a11y dependency and brace-expansion is pinned to the patched 5.0.8 line.\n'
+  `no jsx-a11y dependency and brace-expansion is pinned to the patched ${requiredBraceExpansionVersion} line.\n`
 )
