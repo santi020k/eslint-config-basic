@@ -1,5 +1,17 @@
 # @santi020k/eslint-config-tools
 
+## 3.1.1
+
+### Patch Changes
+
+- [#108](https://github.com/santi020k/eslint-config-basic/pull/108) [`66cee8e`](https://github.com/santi020k/eslint-config-basic/commit/66cee8e41ac22b14e8afa91f1f77587f08bc414f) Thanks [@santi020k](https://github.com/santi020k)! - Treat conventional scripts and manifest binary entries as scoped CLI entry
+  points, allowing intentional terminal output and process termination without
+  weakening reusable source modules. Accept valid GitHub Actions event mappings
+  and keep tool integrations compatible with the package runtime.
+- Updated dependencies [[`66cee8e`](https://github.com/santi020k/eslint-config-basic/commit/66cee8e41ac22b14e8afa91f1f77587f08bc414f), [`66cee8e`](https://github.com/santi020k/eslint-config-basic/commit/66cee8e41ac22b14e8afa91f1f77587f08bc414f)]:
+  - @santi020k/eslint-config-core@3.1.1
+  - @santi020k/eslint-config-formats@3.1.1
+
 ## 3.1.0
 
 ### Minor Changes

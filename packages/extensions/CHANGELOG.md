@@ -1,5 +1,17 @@
 # @santi020k/eslint-config-extensions
 
+## 3.1.1
+
+### Patch Changes
+
+- [#108](https://github.com/santi020k/eslint-config-basic/pull/108) [`66cee8e`](https://github.com/santi020k/eslint-config-basic/commit/66cee8e41ac22b14e8afa91f1f77587f08bc414f) Thanks [@santi020k](https://github.com/santi020k)! - Keep optional feature-pack loading and published package builds reliable across
+  supported package managers. Preserve package ownership for transitive peer
+  warnings, reject unsupported TypeScript 7 installations, and clarify which Full
+  dependencies are installed versus activated and how independent package versions
+  compose.
+- Updated dependencies [[`66cee8e`](https://github.com/santi020k/eslint-config-basic/commit/66cee8e41ac22b14e8afa91f1f77587f08bc414f)]:
+  - @santi020k/eslint-config-core@3.1.1
+
 ## 3.1.0
 
 ### Minor Changes
