@@ -216,7 +216,7 @@ const getConfigAmbientOptions = (
   configPath: string
 ): Pick<CompilerOptions, 'typeRoots' | 'types'> => {
   const content = readFileSync(configPath, 'utf8')
-  const usesNodeGlobals = /\b(?:Buffer|NodeJS|process)\b/.test(content)
+  const usesNodeGlobals = /\b(?:Buffer|NodeJS|process|require|module|__dirname|__filename)\b/.test(content)
 
   if (!usesNodeGlobals) return { types: [] }
 

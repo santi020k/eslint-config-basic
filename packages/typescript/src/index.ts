@@ -9,6 +9,7 @@ import * as astroVirtualJsParser from './astro-virtual-js-parser.js'
 import { standardRules, typeCheckedRules } from './rules.js'
 
 const typedFiles = [...GLOB_TS, ...GLOB_SLOT]
+const pluginSetupFiles = [...GLOB_TS, ...GLOB_SLOT, ...GLOB_VIRTUAL_TS]
 const parserSetupFiles = [...GLOB_TS, ...GLOB_SVELTE, ...GLOB_VUE, ...GLOB_VIRTUAL_TS]
 const parserSetupSlotFiles = [...GLOB_SVELTE, ...GLOB_VUE]
 const typeCheckedFiles = typedFiles
@@ -129,14 +130,18 @@ export const createTypescriptConfig = (
 
   return [
     {
-      files: parserSetupFiles,
-      languageOptions: {
-        parserOptions
-      },
+      files: pluginSetupFiles,
       name: 'eslint-config-typescript/setup',
       plugins: {
         '@typescript-eslint': tsEslint.plugin
       }
+    },
+    {
+      files: parserSetupFiles,
+      languageOptions: {
+        parserOptions
+      },
+      name: 'eslint-config-typescript/setup-parser-options'
     },
     ...baseConfigs.flatMap(c => mapRulesToSlots(c, `ts-${mode}`)),
     {

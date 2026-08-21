@@ -768,7 +768,7 @@ describe('defineConfig Function', () => {
       }
     })
     const untyped = config.find(entry => entry.name === 'eslint-config-typescript/untyped-files')
-    const setup = config.find(entry => entry.name === 'eslint-config-typescript/setup')
+    const setup = config.find(entry => entry.name === 'eslint-config-typescript/setup-parser-options')
 
     expect(untyped?.files).toContain('**/*.config.{ts,mts,cts}')
     expect(untyped?.files).toContain('templates/**/*.ts')

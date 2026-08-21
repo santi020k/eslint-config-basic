@@ -223,7 +223,7 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
       }
     })
 
-    const setup = config.find(entry => entry.name === 'eslint-config-typescript/setup')
+    const setup = config.find(entry => entry.name === 'eslint-config-typescript/setup-parser-options')
 
     expect(setup?.files).toContain('**/*.astro/*.ts')
     expect(setup?.languageOptions?.parserOptions).toMatchObject({
@@ -231,6 +231,21 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
       tsconfigRootDir: tmpdir()
     })
     expect(setup?.languageOptions?.parserOptions).not.toHaveProperty('projectService')
+  })
+
+  test('should register the TypeScript plugin for Astro composition without typed parser options', async () => {
+    const config = await defineConfig({
+      detection: false,
+      frameworks: { astro },
+      typescript: true
+    })
+    const setup = config.find(entry => entry.name === 'eslint-config-typescript/setup')
+    const parserOptions = config.find(entry => entry.name === 'eslint-config-typescript/setup-parser-options')
+
+    expect(setup?.files).toContain('**/*.astro')
+    expect(setup?.plugins).toHaveProperty('@typescript-eslint')
+    expect(setup?.languageOptions).toBeUndefined()
+    expect(parserOptions?.files).not.toContain('**/*.astro')
   })
 
   test('should disable n/no-unpublished-import for eslint.config.* files', async () => {

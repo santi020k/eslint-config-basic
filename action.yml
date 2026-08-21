@@ -98,7 +98,7 @@ runs:
       run: npx --no-install basic-eslint doctor --json > .eslint-config-doctor.json
 
     - name: Upload Doctor report
-      if: inputs.doctor-report == 'true'
+      if: always() && inputs.doctor-report == 'true'
       uses: actions/upload-artifact@v4
       with:
         name: ${{ inputs.doctor-artifact-name }}
