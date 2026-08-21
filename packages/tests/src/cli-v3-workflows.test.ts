@@ -1564,6 +1564,27 @@ describe('config declaration portability', () => {
     expect(report.files[0]?.issues).toEqual([])
   })
 
+  test('preserves Node ambient types for import.meta paths', () => {
+    const cwd = createTempProject()
+    const projectRequire = createRequire(import.meta.url)
+    const nodeTypesSource = dirname(projectRequire.resolve('@types/node/package.json'))
+    const nodeTypesTarget = join(cwd, 'node_modules', '@types', 'node')
+
+    linkRealTypeScript(cwd)
+    mkdirSync(dirname(nodeTypesTarget), { recursive: true })
+    symlinkSync(nodeTypesSource, nodeTypesTarget, 'dir')
+    writeFileSync(join(cwd, 'eslint.config.mts'), [
+      'const root = import.meta.dirname',
+      'export default [{ settings: { root, file: import.meta.filename } }]',
+      ''
+    ].join('\n'))
+
+    const report = createConfigTypesReport(cwd)
+
+    expect(report.portable).toBe(true)
+    expect(report.files[0]?.issues).toEqual([])
+  })
+
   test('rejects declarations that expose the transitive composer package', () => {
     const cwd = createTempProject()
     const packageDir = join(cwd, 'node_modules', 'typescript-eslint')

@@ -159,6 +159,7 @@ const FORMAT_PREFIXES = new Set([
   'jsonc',
   'markdown',
   'mdx',
+  'perfectionist',
   'prettier',
   'toml',
   'yaml'
