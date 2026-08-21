@@ -1,4 +1,4 @@
-import { execFileSync } from 'node:child_process'
+import { execFileSync, spawnSync } from 'node:child_process'
 import { cpSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { basename, dirname, isAbsolute, join } from 'node:path'
@@ -26,6 +26,58 @@ const pack = (packageDir) => {
   if (!filename) throw new Error(`Unable to determine tarball name for ${packageDir}.`)
 
   return isAbsolute(filename) ? filename : join(tempDir, filename)
+}
+
+const assertPortableDeclarations = ({ consumerDir, declarationFiles, label, sourceFiles }) => {
+  const declarationDir = join(consumerDir, 'declarations')
+
+  execFileSync(
+    join(consumerDir, 'node_modules', '.bin', 'tsc'),
+    [
+      ...sourceFiles,
+      '--allowJs',
+      '--checkJs',
+      '--declaration',
+      '--emitDeclarationOnly',
+      '--module',
+      'Node16',
+      '--moduleResolution',
+      'Node16',
+      '--target',
+      'ES2022',
+      '--outDir',
+      declarationDir,
+      '--skipLibCheck',
+      '--pretty',
+      'false'
+    ],
+    { cwd: consumerDir, stdio: 'pipe' }
+  )
+
+  const emittedDeclarations = declarationFiles
+    .map(fileName => readFileSync(join(declarationDir, fileName), 'utf8'))
+    .join('\n')
+
+  if (emittedDeclarations.includes('.pnpm/') || emittedDeclarations.includes('typescript-eslint')) {
+    throw new Error(`${label} exposed an internal dependency path.\n${emittedDeclarations}`)
+  }
+}
+
+const assertConfigTypesCommand = ({ cliPath, consumerDir, label, sourceFiles }) => {
+  const report = JSON.parse(execFileSync(
+    process.execPath,
+    [
+      cliPath,
+      'config-types',
+      '--json',
+      ...sourceFiles.flatMap(file => ['--file', file])
+    ],
+    { cwd: consumerDir, encoding: 'utf8', stdio: 'pipe' }
+  ))
+
+  if (!report.portable || report.files.length !== sourceFiles.length) {
+    throw new Error(`${label} config-types command failed.\n${JSON.stringify(report, null, 2)}`)
+  }
 }
 
 try {
@@ -97,96 +149,122 @@ try {
     'and npm reports zero high/critical production vulnerabilities.\n'
   )
 
-  const portableConsumerDir = join(tempDir, 'portable-pnpm-consumer')
+  const portableTypeScriptMatrix = [
+    { name: 'minimum', version: '5.0.2' },
+    { name: 'typescript-6', version: '6.0.3' }
+  ]
 
-  mkdirSync(portableConsumerDir, { recursive: true })
+  for (const typeScript of portableTypeScriptMatrix) {
+    const portableConsumerDir = join(tempDir, `portable-pnpm-consumer-${typeScript.name}`)
 
-  writeFileSync(join(portableConsumerDir, 'package.json'), JSON.stringify({
-    dependencies: {
-      '@santi020k/eslint-config-basic': `file:${tarballs.basic}`,
-      eslint: '^10.0.0',
-      typescript: '^6.0.0'
-    },
-    name: 'eslint-config-v3-portable-consumer-check',
-    private: true,
-    type: 'module'
-  }, null, 2))
+    mkdirSync(portableConsumerDir, { recursive: true })
 
-  writeFileSync(
-    join(portableConsumerDir, 'pnpm-workspace.yaml'),
-    [
-      'packages:',
-      '  - .',
-      'overrides:',
-      `  "@santi020k/eslint-config-core": "file:${tarballs.core}"`,
-      `  "@santi020k/eslint-config-typescript": "file:${tarballs.typescript}"`,
-      ''
-    ].join('\n')
-  )
+    writeFileSync(join(portableConsumerDir, 'package.json'), JSON.stringify({
+      dependencies: {
+        '@santi020k/eslint-config-basic': `file:${tarballs.basic}`,
+        eslint: '^10.0.0',
+        typescript: typeScript.version
+      },
+      name: `eslint-config-v3-portable-${typeScript.name}-consumer-check`,
+      private: true,
+      type: 'module'
+    }, null, 2))
 
-  writeFileSync(
-    join(portableConsumerDir, 'eslint.config.js'),
-    [
-      'import { defineConfig } from \'@santi020k/eslint-config-basic\'',
-      '',
-      'export default defineConfig()',
-      ''
-    ].join('\n')
-  )
+    writeFileSync(
+      join(portableConsumerDir, 'pnpm-workspace.yaml'),
+      [
+        'packages:',
+        '  - .',
+        'overrides:',
+        `  "@santi020k/eslint-config-core": "file:${tarballs.core}"`,
+        `  "@santi020k/eslint-config-typescript": "file:${tarballs.typescript}"`,
+        ''
+      ].join('\n')
+    )
 
-  writeFileSync(
-    join(portableConsumerDir, 'recommended.config.js'),
-    'export { default } from \'@santi020k/eslint-config-basic/recommended\'\n'
-  )
+    writeFileSync(
+      join(portableConsumerDir, 'direct.config.js'),
+      [
+        'import { defineConfig } from \'@santi020k/eslint-config-basic\'',
+        '',
+        'export default defineConfig({ ignores: [\'coverage/**\'] })',
+        ''
+      ].join('\n')
+    )
 
-  execFileSync('pnpm', ['install', '--ignore-scripts'], {
-    cwd: portableConsumerDir,
-    stdio: 'pipe'
-  })
+    writeFileSync(
+      join(portableConsumerDir, 'awaited.config.mjs'),
+      [
+        'import { defineConfig } from \'@santi020k/eslint-config-basic\'',
+        '',
+        'export default await defineConfig({ ignores: [\'dist/**\'] })',
+        ''
+      ].join('\n')
+    )
 
-  const declarationDir = join(portableConsumerDir, 'declarations')
+    writeFileSync(
+      join(portableConsumerDir, 'typescript.config.ts'),
+      [
+        'import { defineConfig } from \'@santi020k/eslint-config-basic\'',
+        '',
+        'export default await defineConfig({ ignores: [\'generated/**\'] })',
+        ''
+      ].join('\n')
+    )
 
-  execFileSync(
-    join(portableConsumerDir, 'node_modules', '.bin', 'tsc'),
-    [
-      'eslint.config.js',
-      'recommended.config.js',
-      '--ignoreConfig',
-      '--allowJs',
-      '--checkJs',
-      '--declaration',
-      '--emitDeclarationOnly',
-      '--module',
-      'Node16',
-      '--moduleResolution',
-      'Node16',
-      '--target',
-      'ES2022',
-      '--outDir',
-      declarationDir,
-      '--skipLibCheck',
-      '--pretty',
-      'false'
-    ],
-    { cwd: portableConsumerDir, stdio: 'pipe' }
-  )
+    writeFileSync(
+      join(portableConsumerDir, 'recommended.config.js'),
+      'export { default } from \'@santi020k/eslint-config-basic/recommended\'\n'
+    )
 
-  const emittedDeclarations = [
-    'eslint.config.d.ts',
-    'recommended.config.d.ts'
-  ].map(fileName => readFileSync(join(declarationDir, fileName), 'utf8')).join('\n')
+    execFileSync('pnpm', ['install', '--ignore-scripts'], {
+      cwd: portableConsumerDir,
+      stdio: 'pipe'
+    })
 
-  if (emittedDeclarations.includes('.pnpm/') || emittedDeclarations.includes('typescript-eslint')) {
-    throw new Error(
-      'TypeScript declaration emit exposed an internal pnpm or typescript-eslint path.\n' +
-      emittedDeclarations
+    assertPortableDeclarations({
+      consumerDir: portableConsumerDir,
+      declarationFiles: [
+        'awaited.config.d.mts',
+        'direct.config.d.ts',
+        'recommended.config.d.ts',
+        'typescript.config.d.ts'
+      ],
+      label: `Basic TypeScript ${typeScript.version} declaration emit`,
+      sourceFiles: [
+        'direct.config.js',
+        'awaited.config.mjs',
+        'typescript.config.ts',
+        'recommended.config.js'
+      ]
+    })
+
+    assertConfigTypesCommand({
+      cliPath: join(
+        realpathSync(join(
+          portableConsumerDir,
+          'node_modules',
+          '@santi020k',
+          'eslint-config-basic'
+        )),
+        'dist',
+        'cli.js'
+      ),
+      consumerDir: portableConsumerDir,
+      label: `Basic TypeScript ${typeScript.version}`,
+      sourceFiles: [
+        'direct.config.js',
+        'awaited.config.mjs',
+        'typescript.config.ts',
+        'recommended.config.js'
+      ]
+    })
+
+    process.stdout.write(
+      `V3 portable pnpm consumer verified: TypeScript ${typeScript.version} emits declarations for ` +
+      'direct, awaited, TypeScript, and recommended Basic configs without non-portable paths.\n'
     )
   }
-
-  process.stdout.write(
-    'V3 portable pnpm consumer verified: TypeScript 6 emits declarations for direct and recommended ' +
-    'JavaScript configs without TS2883 or implementation dependency paths.\n'
-  )
 
   const packageNameToDir = new Map(
     readdirSync(join(rootDir, 'packages'))
@@ -227,7 +305,7 @@ try {
 
   const fullSupportMatrix = [
     { eslint: '10.0.0', name: 'minimum', typescript: '5.0.2' },
-    { eslint: '^10.0.0', name: 'latest', typescript: '>=5.0.0 <7.0.0' }
+    { eslint: '^10.0.0', name: 'typescript-6', typescript: '6.0.3' }
   ]
 
   for (const support of fullSupportMatrix) {
@@ -276,11 +354,42 @@ try {
       'export { default } from \'@santi020k/eslint-config-full/recommended\'\n'
     )
 
+    writeFileSync(
+      join(fullConsumerDir, 'composed.config.js'),
+      [
+        'import { defineConfig } from \'@santi020k/eslint-config-full\'',
+        '',
+        'export default defineConfig({}, { rules: { \'no-console\': \'off\' } })',
+        ''
+      ].join('\n')
+    )
+
+    writeFileSync(
+      join(fullConsumerDir, 'typescript.config.ts'),
+      [
+        'import { defineConfig } from \'@santi020k/eslint-config-full\'',
+        '',
+        'export default await defineConfig({}, { ignores: [\'generated/**\'] })',
+        ''
+      ].join('\n')
+    )
+
     writeFileSync(join(fullConsumerDir, 'index.jsx'), 'export const App = () => <main>Hello</main>\n')
 
     execFileSync('pnpm', ['install', '--ignore-scripts'], {
       cwd: fullConsumerDir,
       stdio: 'pipe'
+    })
+
+    assertPortableDeclarations({
+      consumerDir: fullConsumerDir,
+      declarationFiles: [
+        'composed.config.d.ts',
+        'eslint.config.d.mts',
+        'typescript.config.d.ts'
+      ],
+      label: `Full TypeScript ${support.typescript} declaration emit`,
+      sourceFiles: ['eslint.config.mjs', 'composed.config.js', 'typescript.config.ts']
     })
 
     execFileSync(process.execPath, ['--input-type=module', '--eval', fullConfigCheck], {
@@ -308,6 +417,13 @@ try {
       'cli.js'
     )
 
+    assertConfigTypesCommand({
+      cliPath: basicCli,
+      consumerDir: fullConsumerDir,
+      label: `Full TypeScript ${support.typescript}`,
+      sourceFiles: ['eslint.config.mjs', 'composed.config.js', 'typescript.config.ts']
+    })
+
     const compatibility = JSON.parse(execFileSync(
       process.execPath,
       [basicCli, 'compatibility', '--json'],
@@ -329,9 +445,10 @@ try {
   }
 
   process.stdout.write(
-    'V3 full consumer verified at the supported minimum and latest ESLint/TypeScript ranges: ' +
+    'V3 full consumer verified with minimum TypeScript 5 and pinned TypeScript 6: ' +
     'the meta-package supplies optional framework peers, compatibility resolves its Basic composer, ' +
-    'the one-line config loads detected React rules, and peer health has no actionable warnings.\n'
+    'recommended and composed declarations stay portable, the config loads detected React rules, ' +
+    'and peer health has no actionable warnings.\n'
   )
 
   const modularPackageNames = [
@@ -585,11 +702,24 @@ try {
     astroFixture.replace('console.log("clicked")', 'button?.focus()')
   )
 
-  execFileSync(
+  const autofixResult = spawnSync(
     join(modularConsumerDir, 'node_modules', '.bin', 'eslint'),
     ['.', '--fix'],
     { cwd: modularConsumerDir, encoding: 'utf8', stdio: 'pipe' }
   )
+
+  if (autofixResult.status !== 0) {
+    throw new Error(
+      'Packed adoption fixture autofix failed.\n' +
+      `${autofixResult.stdout}${autofixResult.stderr}`
+    )
+  }
+
+  const autofixOutput = `${autofixResult.stdout}${autofixResult.stderr}`
+
+  if (autofixOutput.includes('does not support the `projectService` option')) {
+    throw new Error(`Packed Astro config emitted an unsupported parser option warning.\n${autofixOutput}`)
+  }
 
   const convergenceResults = JSON.parse(execFileSync(
     join(modularConsumerDir, 'node_modules', '.bin', 'eslint'),

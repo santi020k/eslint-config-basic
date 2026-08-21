@@ -247,3 +247,15 @@ jobs:
         run: pnpm exec turbo run build --filter=@santi020k/eslint-config-basic --concurrency=1 --output-logs=new-only
       - name: Run CLI and detection tests on Windows
         run: pnpm --filter @santi020k/eslint-config-tests exec vitest run src/cli.test.ts src/detection.test.ts src/detection-fixtures.test.ts src/detection-internals.test.ts --maxWorkers=1
+
+  quality-gate:
+    name: Quality gate
+    if: always()
+    needs: [contracts, build, package-validation, package-manager-consumers, release-candidate, windows-smoke]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify required jobs
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+        run: exit 1
+      - name: Confirm quality gate
+        run: echo "All required quality checks passed."

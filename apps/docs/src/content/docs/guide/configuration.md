@@ -391,10 +391,23 @@ Relative entry points are resolved from `root`, so project-scoped monorepo confi
 
 With a CSS entry point, the composer follows local relative imports and
 automatically allows exact standalone selectors and static Tailwind v4
-`@utility` names. It deliberately does not guess dynamic `@utility name-*`
-families, remote sources, or package-owned generated classes. Install package
+`@utility` names. It also discovers selectors in Astro component-local `<style>`
+blocks. Explicit `@plugin` declarations and root `tailwind.config.*` references
+enable the narrow compatibility classes provided by Tailwind Typography, Forms,
+and the legacy Aspect Ratio plugin; for example, Typography's `not-prose` is
+recognized without a consumer ignore.
+
+The detector deliberately does not guess dynamic `@utility name-*` families,
+remote sources, or arbitrary runtime-generated package classes. Install package
 providers such as `tw-animate-css` so Tailwind can compile their imports, then
 add only any remaining project-specific classes as anchored `ignore` patterns.
+
+In MDX, use a JSX comment for a narrow ESLint directive. An HTML comment is
+parsed as MDX content and can fail before ESLint applies the directive:
+
+```text
+{/* eslint-disable better-tailwindcss/no-unknown-classes -- semantic metadata classes */}
+```
 
 Set `tailwind: false` to disable auto-detected Tailwind linting for a package.
 

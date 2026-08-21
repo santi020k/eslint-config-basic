@@ -27,6 +27,22 @@ inputs:
     description: Check .eslint-config-snapshot.json when it exists.
     required: false
     default: "true"
+  config-types:
+    description: Emit ESLint config declarations and reject non-portable inferred types.
+    required: false
+    default: "false"
+  config-types-files:
+    description: Optional whitespace-separated paths for project-scoped ESLint configs.
+    required: false
+    default: ""
+  doctor-report:
+    description: Validate the project with Doctor and upload its structured report.
+    required: false
+    default: "true"
+  doctor-artifact-name:
+    description: Artifact name used for the structured Doctor report.
+    required: false
+    default: eslint-config-doctor
   max-duration:
     description: Maximum profile duration in milliseconds.
     required: false
@@ -62,6 +78,32 @@ runs:
     - name: Check config compatibility
       shell: bash
       run: npx --no-install basic-eslint compatibility
+
+    - name: Check config declaration portability
+      if: inputs.config-types == 'true'
+      shell: bash
+      env:
+        CONFIG_TYPES_FILES: ${{ inputs.config-types-files }}
+      run: |
+        args=(config-types)
+        if [[ -n "$CONFIG_TYPES_FILES" ]]; then
+          read -r -a config_files <<< "$CONFIG_TYPES_FILES"
+          for config_file in "${config_files[@]}"; do args+=(--file "$config_file"); done
+        fi
+        npx --no-install basic-eslint "${args[@]}"
+
+    - name: Create Doctor report
+      if: inputs.doctor-report == 'true'
+      shell: bash
+      run: npx --no-install basic-eslint doctor --json > .eslint-config-doctor.json
+
+    - name: Upload Doctor report
+      if: always() && inputs.doctor-report == 'true'
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.doctor-artifact-name }}
+        path: .eslint-config-doctor.json
+        if-no-files-found: error
 
     - name: Check effective-config snapshot
       if: inputs.snapshot-check == 'true'

@@ -14,6 +14,18 @@ Use explicit `features` or `frameworks` options when detection should not decide
 A disable directive for an inactive plugin rule is invalid ESLint configuration;
 remove stale directives or explicitly enable the feature that owns the rule.
 
+Compose local overrides through Full's package-owned factory so TypeScript can
+name the exported config type portably under isolated package managers:
+
+```js
+import { defineConfig } from '@santi020k/eslint-config-full'
+
+export default defineConfig({}, {
+  files: ['scripts/**/*.js'],
+  rules: { 'no-console': 'off' }
+})
+```
+
 Package minor and patch versions are independent within the v3 family. The
 resolved `@santi020k/eslint-config-basic` version determines composer behavior,
 even when the Full package has a different minor version.
@@ -23,14 +35,15 @@ even when the Full package has a different minor version.
 | Dependency | Supported range | Release verification |
 | --- | --- | --- |
 | ESLint | `^10.0.0` | Exact `10.0.0` and the latest matching release |
-| TypeScript | `>=5.0.0 <7.0.0` (optional) | Earliest published 5.x release (`5.0.2`) and the latest matching release |
+| TypeScript | `>=5.0.0 <7.0.0` (optional) | Earliest published 5.x release (`5.0.2`) and pinned TypeScript 6 (`6.0.3`) |
 | Node.js | `>=22.19.0` | Enforced by package engines and compatibility checks |
 
 The packed-consumer release gate installs both ESLint/TypeScript matrix edges,
-loads the one-line recommended config, lints a detected React file, verifies
-Full's resolved Basic composer, and applies the repository's narrowly owned
-upstream peer-warning policy. An accepted warning is not treated as active
-feature support: Full installs every companion package, while detection decides
-which configurations execute.
+emits declarations for recommended and composed configs, loads the one-line
+recommended config, lints a detected React file, verifies Full's resolved Basic
+composer, and applies the repository's narrowly owned upstream peer-warning
+policy. An accepted warning is not treated as active feature support: Full
+installs every companion package, while detection decides which configurations
+execute.
 
 Use `@santi020k/eslint-config-basic` for the lean, modular default.

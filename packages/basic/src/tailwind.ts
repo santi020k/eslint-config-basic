@@ -1,4 +1,5 @@
-import { existsSync, readFileSync } from 'node:fs'
+import type { Dirent } from 'node:fs'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { dirname, extname, isAbsolute, join, resolve } from 'node:path'
 
 import type { TailwindOptions } from '@santi020k/eslint-config-core'
@@ -13,9 +14,33 @@ const CSS_CLASS_PATTERN = new RegExp(
 
 const CSS_UTILITY_PATTERN = /@utility\s+([A-Za-z_][\w-]*)\s*\{/g
 const CSS_IMPORT_PATTERN = /@import\s+(?:url\(\s*)?["']([^"']+)["']/g
+const CSS_PLUGIN_PATTERN = /@plugin\s+["']([^"']+)["']/g
 const CSS_COMMENT_PATTERN = /\/\*[\s\S]*?\*\//g
 const CSS_STRING_PATTERN = /("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g
+const ASTRO_STYLE_PATTERN = /<style(?:\s[^>]*)?>([\s\S]*?)<\/style\s*>/gi
+const TAILWIND_CONFIG_PATTERN = /^tailwind\.config\.(?:cjs|cts|js|mjs|mts|ts)$/
 const MAX_COMPONENT_PATTERN_LENGTH = 3000
+
+const IGNORED_COMPONENT_DIRECTORIES = new Set([
+  '.astro',
+  '.git',
+  '.next',
+  '.nuxt',
+  '.output',
+  '.svelte-kit',
+  'build',
+  'coverage',
+  'dist',
+  'node_modules'
+])
+
+const PLUGIN_CLASS_PATTERNS: Readonly<Record<string, readonly string[]>> = {
+  '@tailwindcss/aspect-ratio': ['^aspect-(?:h|w)-\\d+$'],
+  '@tailwindcss/forms': [
+    '^form-(?:checkbox|input|multiselect|radio|select|textarea)$'
+  ],
+  '@tailwindcss/typography': ['^not-prose$']
+}
 
 const decodeCssIdentifier = (value: string): string => value
   .replaceAll(/\\([\dA-Fa-f]{1,6})\s?/g, (_, codePoint: string) => String.fromCodePoint(Number.parseInt(codePoint, 16)))
@@ -72,30 +97,100 @@ const getCssUtilityClasses = (content: string): string[] => (
     .flatMap(match => match[1] ? [match[1]] : [])
 )
 
+const getCssPlugins = (content: string): string[] => (
+  [...content.replaceAll(CSS_COMMENT_PATTERN, '').matchAll(CSS_PLUGIN_PATTERN)]
+    .flatMap(match => match[1] ? [match[1]] : [])
+)
+
+const readDirectory = (directory: string): Dirent[] => {
+  try {
+    return readdirSync(directory, { withFileTypes: true, encoding: 'utf8' })
+  } catch {
+    return []
+  }
+}
+
+const readTextFile = (path: string): string | undefined => {
+  try {
+    return readFileSync(path, 'utf8')
+  } catch {
+    return undefined
+  }
+}
+
 const collectCssComponentClasses = (
   filePath: string,
   visited: Set<string>,
-  classes: Set<string>
+  classes: Set<string>,
+  plugins: Set<string>
 ): void => {
   if (visited.has(filePath)) return
 
   visited.add(filePath)
 
-  let content: string
+  const content = readTextFile(filePath)
 
-  try {
-    content = readFileSync(filePath, 'utf8')
-  } catch {
-    return
-  }
+  if (content === undefined) return
 
   for (const className of getCssSelectorClasses(content)) classes.add(className)
 
   for (const className of getCssUtilityClasses(content)) classes.add(className)
 
+  for (const plugin of getCssPlugins(content)) plugins.add(plugin)
+
   for (const importedFile of getImportedCssFiles(filePath, content)) {
-    collectCssComponentClasses(importedFile, visited, classes)
+    collectCssComponentClasses(importedFile, visited, classes, plugins)
   }
+}
+
+const collectAstroComponentClasses = (cwd: string, classes: Set<string>): void => {
+  const visit = (directory: string): void => {
+    const entries = readDirectory(directory)
+
+    for (const entry of entries.filter(entry => (
+      entry.isDirectory() && !IGNORED_COMPONENT_DIRECTORIES.has(entry.name)
+    ))) visit(join(directory, entry.name))
+
+    for (const entry of entries.filter(entry => entry.isFile() && entry.name.endsWith('.astro'))) {
+      const content = readTextFile(join(directory, entry.name))
+
+      if (content === undefined) continue
+
+      for (const style of content.matchAll(ASTRO_STYLE_PATTERN)) {
+        const stylesheet = style[1]
+
+        if (!stylesheet) continue
+
+        for (const className of getCssSelectorClasses(stylesheet)) classes.add(className)
+
+        for (const className of getCssUtilityClasses(stylesheet)) classes.add(className)
+      }
+    }
+  }
+
+  visit(cwd)
+}
+
+const getConfiguredTailwindPlugins = (cwd: string): string[] => {
+  const plugins = new Set<string>()
+
+  for (const entry of readDirectory(cwd)) {
+    if (!entry.isFile() || !TAILWIND_CONFIG_PATTERN.test(entry.name)) continue
+
+    const content = readTextFile(join(cwd, entry.name))
+
+    if (content === undefined) continue
+
+    const uncommentedContent = content
+      .replaceAll(/\/\*[\s\S]*?\*\//g, '')
+      .replaceAll(/^\s*\/\/.*$/gm, '')
+
+    for (const plugin of Object.keys(PLUGIN_CLASS_PATTERNS)) {
+      if (uncommentedContent.includes(plugin)) plugins.add(plugin)
+    }
+  }
+
+  return [...plugins]
 }
 
 const escapeRegex = (value: string): string => value.replaceAll(/[.*+?^${}()|[\]\\]/g, '\\$&')
@@ -133,9 +228,26 @@ export const findCssComponentClasses = (
   const entryPath = isAbsolute(entryPoint) ? entryPoint : join(cwd, entryPoint)
   const classes = new Set<string>()
 
-  collectCssComponentClasses(entryPath, new Set(), classes)
+  collectCssComponentClasses(entryPath, new Set(), classes, new Set())
+
+  collectAstroComponentClasses(cwd, classes)
 
   return [...classes].toSorted()
+}
+
+export const findTailwindPluginClassPatterns = (
+  cwd: string,
+  entryPoint: string
+): string[] => {
+  const entryPath = isAbsolute(entryPoint) ? entryPoint : join(cwd, entryPoint)
+  const plugins = new Set(getConfiguredTailwindPlugins(cwd))
+
+  collectCssComponentClasses(entryPath, new Set(), new Set(), plugins)
+
+  return [...plugins]
+    .flatMap(plugin => PLUGIN_CLASS_PATTERNS[plugin] ?? [])
+    .filter((pattern, index, patterns) => patterns.indexOf(pattern) === index)
+    .toSorted()
 }
 
 export const findCssComponentClassPatterns = (
@@ -155,7 +267,12 @@ const getIgnoredClasses = (tailwindOptions: TailwindOptions): string[] => {
     tailwindOptions.entryPoint
   )
 
-  return [...new Set([...configuredClasses, ...detectedClasses])]
+  const pluginClasses = findTailwindPluginClassPatterns(
+    tailwindOptions.cwd ?? process.cwd(),
+    tailwindOptions.entryPoint
+  )
+
+  return [...new Set([...configuredClasses, ...detectedClasses, ...pluginClasses])]
 }
 
 const getUnknownClassRule = (

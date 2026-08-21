@@ -16,7 +16,6 @@ export const createAstroConfig = (options?: AstroOptions): TSESLint.FlatConfig.C
     languageOptions: {
       parserOptions: {
         project: options?.typeChecked ?? true,
-        projectService: false,
         tsconfigRootDir: options?.tsconfigRootDir
       }
     },

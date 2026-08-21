@@ -258,6 +258,7 @@ exports[`Config Snapshots — Entry Names > typescript config entries should mat
   "eslint-config-typescript/parser-setup",
   "eslint-config-typescript/parser-setup-slots",
   "eslint-config-typescript/setup",
+  "eslint-config-typescript/setup-parser-options",
   "eslint-config-typescript/standard-rules",
   "eslint-config-typescript/type-checked-rules",
   "eslint-config-typescript/untyped-files",

@@ -7,7 +7,7 @@ import RunnerTabs from '../../../components/RunnerTabs.astro'
 
 The main package ships a CLI that can scaffold or refresh the project config.
 
-<RunnerTabs args={['init', 'update', 'explain', 'explain-preset app', 'inspect', 'install', 'doctor', 'compatibility', 'migrate --to v3', 'baseline', 'profile', 'snapshot', 'diff', 'docs', 'generate-skill']} />
+<RunnerTabs args={['init', 'update', 'explain', 'explain-preset app', 'inspect', 'install', 'doctor', 'compatibility', 'config-types', 'migrate --to v3', 'baseline', 'profile', 'snapshot', 'diff', 'docs', 'generate-skill']} />
 
 ## What It Does
 
@@ -94,6 +94,22 @@ and preview autofix without writing files:
 npx @santi020k/eslint-config-basic explain-preset app --analyze-source
 ```
 
+Use `--semantic-only` to preview fixes from correctness, security, framework,
+and domain rules while leaving formatting fixes out of the preview. Add
+`--write` only after reviewing that report:
+
+```sh
+npx @santi020k/eslint-config-basic explain-preset app \
+  --analyze-source \
+  --semantic-only \
+  --write
+```
+
+The command refuses `--write` without `--semantic-only`. Source analysis also
+lists file-reading scripts that apply regular expressions as possible
+formatting-sensitive parsers. Review those scripts and run their validators
+after any later formatting pass.
+
 For TypeScript projects, source analysis first runs the consumer's own compiler
 with `--noEmit`. Module-resolution and other root compiler diagnostics are
 shown before cascading type-aware unsafe-rule findings, so dependency or import
@@ -125,7 +141,8 @@ For automation, use JSON output:
 npx @santi020k/eslint-config-basic inspect --json
 ```
 
-`explain`, `doctor`, `migrate`, `profile`, `snapshot`, and `diff` support
+`explain`, `doctor`, `compatibility`, `config-types`, `migrate`, `profile`,
+`snapshot`, and `diff` support
 `--json` for CI and migration tooling:
 
 ```sh
@@ -359,17 +376,52 @@ repeatable `--file` options to select explicit representatives,
 `--snapshot-path` to choose another file, or `snapshot --check` for the same
 comparison in CI.
 
+For a smaller review artifact that tracks only effective rule changes, omit
+globals, parser language options, and plugin registration metadata:
+
+```sh
+npx @santi020k/eslint-config-basic snapshot --rules-only \
+  --file src/index.ts \
+  --file src/index.test.ts
+```
+
+The snapshot records its scope, so later `snapshot --check` and `diff` commands
+automatically use the same rules-only comparison.
+
+## Check Config Declaration Portability
+
+TypeScript-powered editors infer a declaration for `eslint.config.*` even when
+the normal application typecheck excludes that file. Verify that the inferred
+type is emit-safe and does not expose pnpm internals or the transitive
+`typescript-eslint` implementation package:
+
+```sh
+npx @santi020k/eslint-config-basic config-types
+```
+
+The command uses the consumer's installed TypeScript and the closest tsconfig
+for module settings, adding the local Node ambient boundary only when a config
+uses Node globals, and emits only the selected ESLint config in memory.
+Application-only ambient types do not leak into this isolated config check.
+JavaScript configs are checked for declaration
+portability without turning unrelated `checkJs` findings into migration
+blockers; TypeScript configs retain their normal static checks. No declaration
+files are written. Use repeatable `--file` options for project-scoped configs and
+`--json` for CI reporting.
+
 ## GitHub Action
 
 The repository root publishes a composite action that installs the consumer,
-checks compatibility, verifies a committed effective-config snapshot, runs the
-normal lint command, and optionally enforces profiler budgets:
+checks compatibility, uploads a structured Doctor report, verifies a committed
+effective-config snapshot, runs the normal lint command, and optionally checks
+config declarations and profiler budgets:
 
 ```yaml
 - uses: santi020k/eslint-config-basic@v3
   with:
     install-command: pnpm install --frozen-lockfile
     lint-command: pnpm lint
+    config-types: "true"
     profile: "true"
     max-warnings: "0"
     max-duration: "15000"
@@ -377,7 +429,13 @@ normal lint command, and optionally enforces profiler budgets:
 ```
 
 Set `snapshot-check: "false"` when the project intentionally does not commit
-`.eslint-config-snapshot.json`.
+`.eslint-config-snapshot.json`. Set `doctor-report: "false"` when the workflow
+must not upload the default `eslint-config-doctor` artifact, or use
+`doctor-artifact-name` to avoid collisions in a matrix.
+
+Set `config-types: "true"` after adopting a release with the portable config
+boundary. Monorepos can provide whitespace-separated config paths through
+`config-types-files`; otherwise the root `eslint.config.*` file is checked.
 
 ## Generate Agent Standards (Beta)
 
@@ -434,6 +492,7 @@ npx @santi020k/eslint-config-basic generate-skill --with-eslint-mcp
 - Use `inspect` when you need machine-readable details or active config feature extraction.
 - Use `doctor` when a v3 setup is not behaving as expected.
 - Use `compatibility` during dependency and runtime upgrades.
+- Use `config-types` to protect editor-facing config type inference in CI.
 - Use `docs` when you want a committed standards summary.
 - Use `migrate --to v3` when upgrading a v2 consumer.
 - Use `baseline` when enabling strict rules in an established codebase.

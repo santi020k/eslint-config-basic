@@ -1,6 +1,6 @@
 import { existsSync } from 'node:fs'
 
-import { GLOB_SLOT, GLOB_TS, GLOB_VIRTUAL_TS } from '@santi020k/eslint-config-core'
+import { GLOB_SLOT, GLOB_SVELTE, GLOB_TS, GLOB_VIRTUAL_TS, GLOB_VUE } from '@santi020k/eslint-config-core'
 import tsParser from '@typescript-eslint/parser'
 import type { TSESLint } from '@typescript-eslint/utils'
 import tsEslint from 'typescript-eslint'
@@ -9,7 +9,9 @@ import * as astroVirtualJsParser from './astro-virtual-js-parser.js'
 import { standardRules, typeCheckedRules } from './rules.js'
 
 const typedFiles = [...GLOB_TS, ...GLOB_SLOT]
-const parserSetupFiles = [...typedFiles, ...GLOB_VIRTUAL_TS]
+const pluginSetupFiles = [...GLOB_TS, ...GLOB_SLOT, ...GLOB_VIRTUAL_TS]
+const parserSetupFiles = [...GLOB_TS, ...GLOB_SVELTE, ...GLOB_VUE, ...GLOB_VIRTUAL_TS]
+const parserSetupSlotFiles = [...GLOB_SVELTE, ...GLOB_VUE]
 const typeCheckedFiles = typedFiles
 const virtualTypeCheckedFiles = GLOB_VIRTUAL_TS
 const DEFAULT_UNTYPED_FILES = ['**/*.config.{ts,mts,cts}']
@@ -128,14 +130,18 @@ export const createTypescriptConfig = (
 
   return [
     {
-      files: parserSetupFiles,
-      languageOptions: {
-        parserOptions
-      },
+      files: pluginSetupFiles,
       name: 'eslint-config-typescript/setup',
       plugins: {
         '@typescript-eslint': tsEslint.plugin
       }
+    },
+    {
+      files: parserSetupFiles,
+      languageOptions: {
+        parserOptions
+      },
+      name: 'eslint-config-typescript/setup-parser-options'
     },
     ...baseConfigs.flatMap(c => mapRulesToSlots(c, `ts-${mode}`)),
     {
@@ -148,7 +154,7 @@ export const createTypescriptConfig = (
       name: 'eslint-config-typescript/parser-setup'
     },
     {
-      files: GLOB_SLOT,
+      files: parserSetupSlotFiles,
       languageOptions: {
         ecmaVersion: 'latest',
         parserOptions
