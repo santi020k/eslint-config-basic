@@ -21,6 +21,7 @@ jobs:
       }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    environment: npm
     permissions:
       contents: write
       pull-requests: write
