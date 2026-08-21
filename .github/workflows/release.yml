@@ -121,6 +121,7 @@ jobs:
           echo "Updated rolling action tag ${MAJOR_TAG}." >> "$GITHUB_STEP_SUMMARY"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HUSKY: 0
 
       # These packages remain installable throughout v3 so existing consumers
       # receive a migration message instead of a broken dependency. Do not
