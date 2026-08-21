@@ -528,7 +528,7 @@ TypeScript configuration options
 
 ##### project?
 
-> `optional` **project?**: `string` \| `boolean` \| `string`[]
+> `optional` **project?**: `string` \| `boolean` \| `string`\[\]
 
 Defined in: [core/src/types.ts:186](https://github.com/santi020k/eslint-config-basic/blob/d4aea2fe358087379afbb96b93d91deff04f5224/packages/core/src/types.ts#L186)
 
@@ -589,7 +589,7 @@ Defined in: [core/src/settings/gitignore.ts:13](https://github.com/santi020k/esl
 
 ### GLOB\_ASTRO
 
-> `const` **GLOB\_ASTRO**: `string`[]
+> `const` **GLOB\_ASTRO**: `string`\[\]
 
 Defined in: [core/src/types.ts:13](https://github.com/santi020k/eslint-config-basic/blob/d4aea2fe358087379afbb96b93d91deff04f5224/packages/core/src/types.ts#L13)
 
@@ -597,7 +597,7 @@ Defined in: [core/src/types.ts:13](https://github.com/santi020k/eslint-config-ba
 
 ### GLOB\_JS
 
-> `const` **GLOB\_JS**: `string`[]
+> `const` **GLOB\_JS**: `string`\[\]
 
 Defined in: [core/src/types.ts:6](https://github.com/santi020k/eslint-config-basic/blob/d4aea2fe358087379afbb96b93d91deff04f5224/packages/core/src/types.ts#L6)
 
@@ -607,7 +607,7 @@ Global file patterns for JavaScript-compatible files
 
 ### GLOB\_JS\_TS
 
-> `const` **GLOB\_JS\_TS**: `string`[]
+> `const` **GLOB\_JS\_TS**: `string`\[\]
 
 Defined in: [core/src/types.ts:10](https://github.com/santi020k/eslint-config-basic/blob/d4aea2fe358087379afbb96b93d91deff04f5224/packages/core/src/types.ts#L10)
 
@@ -615,7 +615,7 @@ Defined in: [core/src/types.ts:10](https://github.com/santi020k/eslint-config-ba
 
 ### GLOB\_JS\_TS\_ALL
 
-> `const` **GLOB\_JS\_TS\_ALL**: `string`[]
+> `const` **GLOB\_JS\_TS\_ALL**: `string`\[\]
 
 Defined in: [core/src/types.ts:15](https://github.com/santi020k/eslint-config-basic/blob/d4aea2fe358087379afbb96b93d91deff04f5224/packages/core/src/types.ts#L15)
 
@@ -623,7 +623,7 @@ Defined in: [core/src/types.ts:15](https://github.com/santi020k/eslint-config-ba
 
 ### GLOB\_SLOT
 
-> `const` **GLOB\_SLOT**: `string`[]
+> `const` **GLOB\_SLOT**: `string`\[\]
 
 Defined in: [core/src/types.ts:14](https://github.com/santi020k/eslint-config-basic/blob/d4aea2fe358087379afbb96b93d91deff04f5224/packages/core/src/types.ts#L14)
 
@@ -631,7 +631,7 @@ Defined in: [core/src/types.ts:14](https://github.com/santi020k/eslint-config-ba
 
 ### GLOB\_SVELTE
 
-> `const` **GLOB\_SVELTE**: `string`[]
+> `const` **GLOB\_SVELTE**: `string`\[\]
 
 Defined in: [core/src/types.ts:12](https://github.com/santi020k/eslint-config-basic/blob/d4aea2fe358087379afbb96b93d91deff04f5224/packages/core/src/types.ts#L12)
 
@@ -639,7 +639,7 @@ Defined in: [core/src/types.ts:12](https://github.com/santi020k/eslint-config-ba
 
 ### GLOB\_TS
 
-> `const` **GLOB\_TS**: `string`[]
+> `const` **GLOB\_TS**: `string`\[\]
 
 Defined in: [core/src/types.ts:8](https://github.com/santi020k/eslint-config-basic/blob/d4aea2fe358087379afbb96b93d91deff04f5224/packages/core/src/types.ts#L8)
 
@@ -647,7 +647,7 @@ Defined in: [core/src/types.ts:8](https://github.com/santi020k/eslint-config-bas
 
 ### GLOB\_VIRTUAL\_TS
 
-> `const` **GLOB\_VIRTUAL\_TS**: `string`[]
+> `const` **GLOB\_VIRTUAL\_TS**: `string`\[\]
 
 Defined in: [core/src/types.ts:17](https://github.com/santi020k/eslint-config-basic/blob/d4aea2fe358087379afbb96b93d91deff04f5224/packages/core/src/types.ts#L17)
 
@@ -655,7 +655,7 @@ Defined in: [core/src/types.ts:17](https://github.com/santi020k/eslint-config-ba
 
 ### GLOB\_VUE
 
-> `const` **GLOB\_VUE**: `string`[]
+> `const` **GLOB\_VUE**: `string`\[\]
 
 Defined in: [core/src/types.ts:11](https://github.com/santi020k/eslint-config-basic/blob/d4aea2fe358087379afbb96b93d91deff04f5224/packages/core/src/types.ts#L11)
 
@@ -663,7 +663,7 @@ Defined in: [core/src/types.ts:11](https://github.com/santi020k/eslint-config-ba
 
 ### groups
 
-> `const` **groups**: `string`[][]
+> `const` **groups**: `string`\[\][]
 
 Defined in: [core/src/rules.ts:3](https://github.com/santi020k/eslint-config-basic/blob/d4aea2fe358087379afbb96b93d91deff04f5224/packages/core/src/rules.ts#L3)
 

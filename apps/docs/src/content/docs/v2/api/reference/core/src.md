@@ -886,7 +886,7 @@ TanStack Start (React/Solid full-stack framework).
 
 ##### ignores?
 
-> `optional` **ignores?**: `string`[]
+> `optional` **ignores?**: `string`\[\]
 
 Defined in: [core/src/types.ts:450](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/types.ts#L450)
 
@@ -1000,7 +1000,7 @@ List of testing frameworks and testing environments
 
 ##### testingFiles?
 
-> `optional` **testingFiles?**: `Partial`\<`Record`\<`"cypress"` \| `"jest"` \| `"jest-dom"` \| `"playwright"` \| `"testing-library"` \| `"vitest"`, `string`[]\>\>
+> `optional` **testingFiles?**: `Partial`\<`Record`\<`"cypress"` \| `"jest"` \| `"jest-dom"` \| `"playwright"` \| `"testing-library"` \| `"vitest"`, `string`\[\]\>\>
 
 Defined in: [core/src/types.ts:512](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/types.ts#L512)
 
@@ -1036,7 +1036,7 @@ Enable TypeScript support with optional settings
 
 ##### workspacePrefixes?
 
-> `optional` **workspacePrefixes?**: `string`[]
+> `optional` **workspacePrefixes?**: `string`\[\]
 
 Defined in: [core/src/types.ts:537](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/types.ts#L537)
 
@@ -1065,7 +1065,7 @@ Options for [createImportGroups](#createimportgroups).
 
 ##### workspacePrefixes?
 
-> `optional` **workspacePrefixes?**: `string`[]
+> `optional` **workspacePrefixes?**: `string`\[\]
 
 Defined in: [core/src/rules.ts:46](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/rules.ts#L46)
 
@@ -1112,7 +1112,7 @@ Defined in: [core/src/types.ts:307](https://github.com/santi020k/eslint-config-b
 
 ##### ignore?
 
-> `optional` **ignore?**: `string`[]
+> `optional` **ignore?**: `string`\[\]
 
 Defined in: [core/src/types.ts:308](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/types.ts#L308)
 
@@ -1138,7 +1138,7 @@ Defined in: [core/src/types.ts:323](https://github.com/santi020k/eslint-config-b
 
 ##### project?
 
-> `optional` **project?**: `string` \| `boolean` \| `string`[]
+> `optional` **project?**: `string` \| `boolean` \| `string`\[\]
 
 Defined in: [core/src/types.ts:324](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/types.ts#L324)
 
@@ -1463,7 +1463,7 @@ Do not use these in application code.
 
 ##### dedupe
 
-> **dedupe**: \<`T`\>(`values`) => `T`[]
+> **dedupe**: \<`T`\>(`values`) => `T`\[\]
 
 ###### Type Parameters
 
@@ -1475,11 +1475,11 @@ Do not use these in application code.
 
 ###### values?
 
-`T`[] = `[]`
+`T`\[\] = `\[\]`
 
 ###### Returns
 
-`T`[]
+`T`\[\]
 
 ##### detectExtensions
 
@@ -1663,7 +1663,7 @@ Do not use these in application code.
 
 ##### parsePnpmWorkspacePatterns
 
-> **parsePnpmWorkspacePatterns**: (`detectRootDir`) => `string`[]
+> **parsePnpmWorkspacePatterns**: (`detectRootDir`) => `string`\[\]
 
 ###### Parameters
 
@@ -1673,7 +1673,7 @@ Do not use these in application code.
 
 ###### Returns
 
-`string`[]
+`string`\[\]
 
 ##### pathExists
 
@@ -1718,7 +1718,7 @@ This is included by default in all configurations
 
 ### DEFAULT\_IGNORES
 
-> `const` **DEFAULT\_IGNORES**: `string`[]
+> `const` **DEFAULT\_IGNORES**: `string`\[\]
 
 Defined in: [core/src/config-helpers.ts:22](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/config-helpers.ts#L22)
 
@@ -1726,7 +1726,7 @@ Defined in: [core/src/config-helpers.ts:22](https://github.com/santi020k/eslint-
 
 ### GENERATED\_CODE\_IGNORES
 
-> `const` **GENERATED\_CODE\_IGNORES**: `string`[]
+> `const` **GENERATED\_CODE\_IGNORES**: `string`\[\]
 
 Defined in: [core/src/config-helpers.ts:60](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/config-helpers.ts#L60)
 
@@ -1742,7 +1742,7 @@ Defined in: [core/src/settings/gitignore.ts:13](https://github.com/santi020k/esl
 
 ### GLOB\_ASTRO
 
-> `const` **GLOB\_ASTRO**: `string`[]
+> `const` **GLOB\_ASTRO**: `string`\[\]
 
 Defined in: [core/src/types.ts:13](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/types.ts#L13)
 
@@ -1750,7 +1750,7 @@ Defined in: [core/src/types.ts:13](https://github.com/santi020k/eslint-config-ba
 
 ### GLOB\_JS
 
-> `const` **GLOB\_JS**: `string`[]
+> `const` **GLOB\_JS**: `string`\[\]
 
 Defined in: [core/src/types.ts:6](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/types.ts#L6)
 
@@ -1760,7 +1760,7 @@ Global file patterns for JavaScript-compatible files
 
 ### GLOB\_JS\_TS
 
-> `const` **GLOB\_JS\_TS**: `string`[]
+> `const` **GLOB\_JS\_TS**: `string`\[\]
 
 Defined in: [core/src/types.ts:10](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/types.ts#L10)
 
@@ -1768,7 +1768,7 @@ Defined in: [core/src/types.ts:10](https://github.com/santi020k/eslint-config-ba
 
 ### GLOB\_JS\_TS\_ALL
 
-> `const` **GLOB\_JS\_TS\_ALL**: `string`[]
+> `const` **GLOB\_JS\_TS\_ALL**: `string`\[\]
 
 Defined in: [core/src/types.ts:15](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/types.ts#L15)
 
@@ -1776,7 +1776,7 @@ Defined in: [core/src/types.ts:15](https://github.com/santi020k/eslint-config-ba
 
 ### GLOB\_SLOT
 
-> `const` **GLOB\_SLOT**: `string`[]
+> `const` **GLOB\_SLOT**: `string`\[\]
 
 Defined in: [core/src/types.ts:14](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/types.ts#L14)
 
@@ -1784,7 +1784,7 @@ Defined in: [core/src/types.ts:14](https://github.com/santi020k/eslint-config-ba
 
 ### GLOB\_SVELTE
 
-> `const` **GLOB\_SVELTE**: `string`[]
+> `const` **GLOB\_SVELTE**: `string`\[\]
 
 Defined in: [core/src/types.ts:12](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/types.ts#L12)
 
@@ -1792,7 +1792,7 @@ Defined in: [core/src/types.ts:12](https://github.com/santi020k/eslint-config-ba
 
 ### GLOB\_TS
 
-> `const` **GLOB\_TS**: `string`[]
+> `const` **GLOB\_TS**: `string`\[\]
 
 Defined in: [core/src/types.ts:8](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/types.ts#L8)
 
@@ -1800,7 +1800,7 @@ Defined in: [core/src/types.ts:8](https://github.com/santi020k/eslint-config-bas
 
 ### GLOB\_VIRTUAL\_TS
 
-> `const` **GLOB\_VIRTUAL\_TS**: `string`[]
+> `const` **GLOB\_VIRTUAL\_TS**: `string`\[\]
 
 Defined in: [core/src/types.ts:17](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/types.ts#L17)
 
@@ -1808,7 +1808,7 @@ Defined in: [core/src/types.ts:17](https://github.com/santi020k/eslint-config-ba
 
 ### GLOB\_VUE
 
-> `const` **GLOB\_VUE**: `string`[]
+> `const` **GLOB\_VUE**: `string`\[\]
 
 Defined in: [core/src/types.ts:11](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/types.ts#L11)
 
@@ -1816,7 +1816,7 @@ Defined in: [core/src/types.ts:11](https://github.com/santi020k/eslint-config-ba
 
 ### groups
 
-> `const` **groups**: `string`[][]
+> `const` **groups**: `string`\[\][]
 
 Defined in: [core/src/rules.ts:144](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/rules.ts#L144)
 
@@ -1876,7 +1876,7 @@ Defined in: [core/src/rules.ts:148](https://github.com/santi020k/eslint-config-b
 
 ### TAILWIND\_ENTRYPOINT\_CANDIDATES
 
-> `const` **TAILWIND\_ENTRYPOINT\_CANDIDATES**: `string`[]
+> `const` **TAILWIND\_ENTRYPOINT\_CANDIDATES**: `string`\[\]
 
 Defined in: [core/src/config-helpers.ts:72](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/config-helpers.ts#L72)
 
@@ -1956,7 +1956,7 @@ Defined in: [core/src/config-helpers.ts:301](https://github.com/santi020k/eslint
 
 ### applyFeatureDisables()
 
-> **applyFeatureDisables**\<`T`\>(`values`, `options`, `bucket`): `T`[]
+> **applyFeatureDisables**\<`T`\>(`values`, `options`, `bucket`): `T`\[\]
 
 Defined in: [core/src/config-helpers.ts:137](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/config-helpers.ts#L137)
 
@@ -1970,7 +1970,7 @@ Defined in: [core/src/config-helpers.ts:137](https://github.com/santi020k/eslint
 
 ##### values
 
-`T`[]
+`T`\[\]
 
 ##### options
 
@@ -1982,7 +1982,7 @@ Defined in: [core/src/config-helpers.ts:137](https://github.com/santi020k/eslint
 
 #### Returns
 
-`T`[]
+`T`\[\]
 
 ***
 
@@ -2096,7 +2096,7 @@ Creates the core config with the specified runtime globals
 
 ### createImportGroups()
 
-> **createImportGroups**(`options?`): `string`[][]
+> **createImportGroups**(`options?`): `string`\[\][]
 
 Defined in: [core/src/rules.ts:70](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/rules.ts#L70)
 
@@ -2128,7 +2128,7 @@ through to the npm packages group.
 
 #### Returns
 
-`string`[][]
+`string`\[\][]
 
 ***
 
@@ -2212,7 +2212,7 @@ Defined in: [core/src/config-helpers.ts:93](https://github.com/santi020k/eslint-
 
 ### getFeatureEntries()
 
-> **getFeatureEntries**(`options`, `bucket`, `enabled`): `string`[]
+> **getFeatureEntries**(`options`, `bucket`, `enabled`): `string`\[\]
 
 Defined in: [core/src/config-helpers.ts:126](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/config-helpers.ts#L126)
 
@@ -2232,7 +2232,7 @@ Defined in: [core/src/config-helpers.ts:126](https://github.com/santi020k/eslint
 
 #### Returns
 
-`string`[]
+`string`\[\]
 
 ***
 
@@ -2368,7 +2368,7 @@ Defined in: [core/src/lazy.ts:48](https://github.com/santi020k/eslint-config-bas
 
 ### mergeArrayOption()
 
-> **mergeArrayOption**\<`T`\>(`detectedValues`, `presetValues`, `explicitValues`, `strategy`): `T`[]
+> **mergeArrayOption**\<`T`\>(`detectedValues`, `presetValues`, `explicitValues`, `strategy`): `T`\[\]
 
 Defined in: [core/src/config-helpers.ts:99](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/config-helpers.ts#L99)
 
@@ -2382,15 +2382,15 @@ Defined in: [core/src/config-helpers.ts:99](https://github.com/santi020k/eslint-
 
 ##### detectedValues
 
-`T`[]
+`T`\[\]
 
 ##### presetValues
 
-`T`[] \| `undefined`
+`T`\[\] \| `undefined`
 
 ##### explicitValues
 
-`T`[] \| `undefined`
+`T`\[\] \| `undefined`
 
 ##### strategy
 
@@ -2398,7 +2398,7 @@ Defined in: [core/src/config-helpers.ts:99](https://github.com/santi020k/eslint-
 
 #### Returns
 
-`T`[]
+`T`\[\]
 
 ***
 
@@ -2516,7 +2516,7 @@ TanStack Start (React/Solid full-stack framework).
 
 ### mergeOptionalBucket()
 
-> **mergeOptionalBucket**\<`T`\>(`bucket`, `detectedValues`, `presetValues`, `explicitValues`, `options`, `strategy`): `T`[]
+> **mergeOptionalBucket**\<`T`\>(`bucket`, `detectedValues`, `presetValues`, `explicitValues`, `options`, `strategy`): `T`\[\]
 
 Defined in: [core/src/config-helpers.ts:147](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/config-helpers.ts#L147)
 
@@ -2534,15 +2534,15 @@ Defined in: [core/src/config-helpers.ts:147](https://github.com/santi020k/eslint
 
 ##### detectedValues
 
-`T`[]
+`T`\[\]
 
 ##### presetValues
 
-`T`[] \| `undefined`
+`T`\[\] \| `undefined`
 
 ##### explicitValues
 
-`T`[] \| `undefined`
+`T`\[\] \| `undefined`
 
 ##### options
 
@@ -2554,7 +2554,7 @@ Defined in: [core/src/config-helpers.ts:147](https://github.com/santi020k/eslint
 
 #### Returns
 
-`T`[]
+`T`\[\]
 
 ***
 
@@ -2616,7 +2616,7 @@ Defined in: [core/src/config-helpers.ts:429](https://github.com/santi020k/eslint
 
 ##### workspacePrefixes
 
-`string`[]
+`string`\[\]
 
 #### Returns
 
@@ -2638,7 +2638,7 @@ Defined in: [core/src/config-helpers.ts:401](https://github.com/santi020k/eslint
 
 ##### workspacePatterns
 
-`string`[]
+`string`\[\]
 
 #### Returns
 
@@ -2758,7 +2758,7 @@ Defined in: [core/src/config-helpers.ts:366](https://github.com/santi020k/eslint
 
 ### toUniqueArray()
 
-> **toUniqueArray**\<`T`\>(`values`): `T`[]
+> **toUniqueArray**\<`T`\>(`values`): `T`\[\]
 
 Defined in: [core/src/config-helpers.ts:20](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/core/src/config-helpers.ts#L20)
 
@@ -2772,11 +2772,11 @@ Defined in: [core/src/config-helpers.ts:20](https://github.com/santi020k/eslint-
 
 ##### values
 
-`T`[]
+`T`\[\]
 
 #### Returns
 
-`T`[]
+`T`\[\]
 
 ## References
 
