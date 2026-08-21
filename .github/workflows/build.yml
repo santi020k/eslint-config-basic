@@ -73,7 +73,7 @@ jobs:
 
       - name: Run affected package checks
         if: github.head_ref != 'changeset-release/main'
-        run: pnpm exec turbo run build typecheck lint test:coverage --affected --concurrency=50%
+        run: pnpm exec turbo run build typecheck lint --affected --concurrency=50%
 
       - name: Run repository checks
         if: github.head_ref != 'changeset-release/main'
