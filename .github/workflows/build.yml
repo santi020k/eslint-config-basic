@@ -56,14 +56,21 @@ jobs:
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           docs=false
+          coverage=false
           while IFS= read -r file; do
             case "$file" in
               apps/docs/*|packages/*/README.md|.github/workflows/docs.yml)
                 docs=true
                 ;;
             esac
+            case "$file" in
+              packages/*/src/*|packages/tests/*|scripts/check-package-coverage.mjs)
+                coverage=true
+                ;;
+            esac
           done < <(git diff --name-only --no-renames "$BASE_SHA" "$HEAD_SHA")
           echo "docs=$docs" >> "$GITHUB_OUTPUT"
+          echo "coverage=$coverage" >> "$GITHUB_OUTPUT"
 
       - name: Run final release gate
         if: github.head_ref == 'changeset-release/main'
@@ -74,8 +81,12 @@ jobs:
         run: pnpm exec turbo run build --filter=@santi020k/eslint-config-tests... --concurrency=50%
 
       - name: Run affected tests and integration contracts
-        if: github.head_ref != 'changeset-release/main'
+        if: github.head_ref != 'changeset-release/main' && steps.changes.outputs.coverage != 'true'
         run: pnpm run test:affected
+
+      - name: Enforce test coverage thresholds
+        if: github.head_ref != 'changeset-release/main' && steps.changes.outputs.coverage == 'true'
+        run: pnpm --filter @santi020k/eslint-config-tests run test:coverage
 
       - name: Run affected package checks
         if: github.head_ref != 'changeset-release/main'
