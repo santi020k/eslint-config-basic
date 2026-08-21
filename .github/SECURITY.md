@@ -1,12 +1,20 @@
 # Security Policy
 
-I take all security vulnerabilities seriously.
-If you have a vulnerability or other security issues to disclose:
+## Supported versions
 
-- Thank you very much, please do!
-- Please send them to us by emailing `info@santi020k.me`
+Security fixes are provided for the latest published major version. Upgrade to
+the newest release before reporting an issue that only affects an older version.
 
-We appreciate your efforts and responsible disclosure and will make every effort to acknowledge your contributions.
+## Reporting a vulnerability
 
-> We also adhere to the [Tidelift security process](https://support.tidelift.com/hc/en-us/articles/4406287910036-Security-process).
-> See [https://tidelift.com/security](https://tidelift.com/security).
+Do not open a public issue for a suspected vulnerability. Use GitHub's
+**Report a vulnerability** form on the repository's Security tab so details and
+attachments stay private.
+
+Include the affected package and version, a minimal reproduction, the expected
+impact, and any suggested mitigation. You should receive an acknowledgement
+within seven days. Please allow a reasonable amount of time for a fix and
+coordinated disclosure before publishing details.
+
+For ordinary bugs and support questions, use the public issue forms or GitHub
+Discussions instead.

@@ -110,7 +110,7 @@ pnpm run changeset    # Create a changeset for your changes
 
 ## Documentation
 
-Full API documentation is available at [santi020k.github.io/eslint-config-basic](https://santi020k.github.io/eslint-config-basic/).
+Full API documentation is available at [eslint.santi020k.com](https://eslint.santi020k.com/).
 
 Documentation governance for current docs versus the `v1` archive is defined in `apps/docs/DOCS_GOVERNANCE.md`.
 
@@ -153,4 +153,4 @@ npx cz
 
 ## Questions?
 
-Open an [issue](https://github.com/santi020k/eslint-config/issues) or start a [discussion](https://github.com/santi020k/eslint-config/discussions).
+Open an [issue](https://github.com/santi020k/eslint-config-basic/issues) or start a [discussion](https://github.com/santi020k/eslint-config-basic/discussions).
