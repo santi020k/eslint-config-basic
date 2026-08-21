@@ -60,7 +60,7 @@ const resolveLocalCssImport = (filePath: string, specifier: string): string | un
 }
 
 const getImportedCssFiles = (filePath: string, content: string): string[] => (
-  [...content.matchAll(CSS_IMPORT_PATTERN)].flatMap(match => {
+  [...content.replaceAll(CSS_COMMENT_PATTERN, '').matchAll(CSS_IMPORT_PATTERN)].flatMap(match => {
     const importedFile = match[1] ? resolveLocalCssImport(filePath, match[1]) : undefined
 
     return importedFile ? [importedFile] : []
@@ -152,7 +152,8 @@ const collectAstroComponentClasses = (cwd: string, classes: Set<string>): void =
     ))) visit(join(directory, entry.name))
 
     for (const entry of entries.filter(entry => entry.isFile() && entry.name.endsWith('.astro'))) {
-      const content = readTextFile(join(directory, entry.name))
+      const astroPath = join(directory, entry.name)
+      const content = readTextFile(astroPath)
 
       if (content === undefined) continue
 
@@ -164,6 +165,10 @@ const collectAstroComponentClasses = (cwd: string, classes: Set<string>): void =
         for (const className of getCssSelectorClasses(stylesheet)) classes.add(className)
 
         for (const className of getCssUtilityClasses(stylesheet)) classes.add(className)
+
+        for (const importedFile of getImportedCssFiles(astroPath, stylesheet)) {
+          collectCssComponentClasses(importedFile, new Set(), classes, new Set())
+        }
       }
     }
   }

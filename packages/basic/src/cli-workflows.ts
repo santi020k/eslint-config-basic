@@ -216,23 +216,36 @@ const getConfigAmbientOptions = (
   configPath: string
 ): Pick<CompilerOptions, 'typeRoots' | 'types'> => {
   const content = readFileSync(configPath, 'utf8')
+  const projectRequire = createRequire(configPath)
+  const typeRoots = new Set<string>()
+  const types = new Set<string>()
 
-  const usesNodeGlobals = (
+  const addAmbientTypes = (packageName: string, typeName: string): boolean => {
+    try {
+      const manifest = projectRequire.resolve(`${packageName}/package.json`)
+
+      typeRoots.add(dirname(dirname(manifest)))
+
+      types.add(typeName)
+
+      return true
+    } catch {
+      return false
+    }
+  }
+
+  if (
     /\b(?:Buffer|NodeJS|process|require|module|__dirname|__filename)\b/.test(content) ||
     /\bimport\.meta\.(?:dirname|filename)\b/.test(content)
-  )
+  ) addAmbientTypes('@types/node', 'node')
 
-  if (!usesNodeGlobals) return { types: [] }
+  if (/\bBun\b|["']bun(?::[^"']+)?["']/.test(content)) {
+    if (!addAmbientTypes('@types/bun', 'bun')) addAmbientTypes('bun-types', 'bun-types')
+  }
 
-  try {
-    const nodeManifest = createRequire(configPath).resolve('@types/node/package.json')
-
-    return {
-      typeRoots: [dirname(dirname(nodeManifest))],
-      types: ['node']
-    }
-  } catch {
-    return { types: [] }
+  return {
+    ...(typeRoots.size > 0 ? { typeRoots: [...typeRoots] } : {}),
+    types: [...types]
   }
 }
 

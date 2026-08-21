@@ -1,4 +1,5 @@
 name: Release
+# cspell:ignore pipefail
 
 on:
   pull_request:
@@ -128,12 +129,44 @@ jobs:
       # deprecate v2, where Lite and Integrations are still supported entry points.
       - name: Mark v3 compatibility packages as deprecated
         if: steps.changesets.outputs.published == 'true'
+        shell: bash
         run: |
+          set -euo pipefail
+
+          deprecate_versions() {
+            local package_name="$1"
+            local version_range="$2"
+            local message="$3"
+            local versions
+
+            versions=$(npm view "${package_name}@${version_range}" version --json | node -e '
+              let input = ""
+              process.stdin.on("data", chunk => { input += chunk })
+              process.stdin.on("end", () => {
+                const parsed = JSON.parse(input)
+                for (const version of Array.isArray(parsed) ? parsed : [parsed]) console.log(version)
+              })
+            ')
+
+            while IFS= read -r package_version; do
+              [[ -n "$package_version" ]] || continue
+
+              local current
+              current=$(npm view "${package_name}@${package_version}" deprecated 2>/dev/null || true)
+
+              if [[ "$current" == "$message" ]]; then
+                echo "${package_name}@${package_version} already has the intended deprecation notice."
+              else
+                npm deprecate "${package_name}@${package_version}" "$message"
+              fi
+            done <<< "$versions"
+          }
+
           VERSION=$(node -p "require('./packages/basic/package.json').version")
           if [[ "$VERSION" == 3.* ]]; then
-            npm deprecate '@santi020k/eslint-config-lite@3.x' \
+            deprecate_versions '@santi020k/eslint-config-lite' '3.x' \
               'Deprecated in v3; migrate to @santi020k/eslint-config-basic. This package will be removed in v4.'
-            npm deprecate '@santi020k/eslint-config-integrations@3.x' \
+            deprecate_versions '@santi020k/eslint-config-integrations' '3.x' \
               'Deprecated in v3; install the extensions, formats, libraries, testing, or tools package directly. This package will be removed in v4.'
           fi
         env:

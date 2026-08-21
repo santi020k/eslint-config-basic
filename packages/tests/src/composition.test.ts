@@ -1328,11 +1328,21 @@ describe('Monorepo project scoping', () => {
         [
           '<article class="principle-card not-prose"></article>',
           '<style>',
+          '  @import "./card.css";',
+          '  /* @import "./commented-card.css"; */',
           '  .principle-card, .post-meta-card:hover { display: block; }',
           '  /* .comment-card { display: none; } */',
           '</style>',
           ''
         ].join('\n')
+      )
+      writeFileSync(
+        join(root, 'src/components/card.css'),
+        '.imported-card { display: grid; }\n'
+      )
+      writeFileSync(
+        join(root, 'src/components/commented-card.css'),
+        '.commented-import-card { display: none; }\n'
       )
 
       const config = await defineConfig({
@@ -1355,9 +1365,11 @@ describe('Monorepo project scoping', () => {
 
       expect(matchesIgnore('principle-card')).toBe(true)
       expect(matchesIgnore('post-meta-card')).toBe(true)
+      expect(matchesIgnore('imported-card')).toBe(true)
       expect(matchesIgnore('not-prose')).toBe(true)
       expect(matchesIgnore('form-input')).toBe(false)
       expect(matchesIgnore('comment-card')).toBe(false)
+      expect(matchesIgnore('commented-import-card')).toBe(false)
       expect(matchesIgnore('unknown-card')).toBe(false)
     } finally {
       rmSync(root, { force: true, recursive: true })

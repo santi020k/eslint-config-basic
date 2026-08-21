@@ -29,6 +29,11 @@ interface ProjectLintMessage {
   severity: number
 }
 
+interface ProjectRuleMetadata {
+  fixable?: 'code' | 'whitespace'
+  type?: 'layout' | 'problem' | 'suggestion'
+}
+
 interface ProjectLintResult {
   errorCount: number
   filePath: string
@@ -39,6 +44,7 @@ interface ProjectLintResult {
 
 interface ProjectEslint {
   calculateConfigForFile: (filePath: string) => Promise<EffectiveConfig | null>
+  getRulesMetaForResults: (results: ProjectLintResult[]) => Record<string, ProjectRuleMetadata | undefined>
   lintFiles: (patterns: string[]) => Promise<ProjectLintResult[]>
 }
 
@@ -167,6 +173,7 @@ const FORMAT_PREFIXES = new Set([
 
 const FORMAT_RULES = new Set([
   'import/first',
+  'sort-imports',
   'simple-import-sort/exports',
   'simple-import-sort/imports'
 ])
@@ -574,12 +581,20 @@ const analyzePresetSource = async (
   write = false
 ) => {
   const lintTargets = sourceFiles.length > 0 ? sourceFiles : ['.']
-  const lintResults = await loadProjectEslint(cwd, selectedConfig).lintFiles(lintTargets)
+  const analysisEslint = loadProjectEslint(cwd, selectedConfig)
+  const lintResults = await analysisEslint.lintFiles(lintTargets)
+  const rulesMeta = analysisEslint.getRulesMetaForResults(lintResults)
 
   const fix = semanticOnly ?
-    (message: ProjectLintMessage): boolean => (
-      message.ruleId === null || getRuleGroup(message.ruleId) !== 'formatting'
-    ) :
+    (message: ProjectLintMessage): boolean => {
+      if (message.ruleId === null) return false
+
+      const metadata = rulesMeta[message.ruleId]
+
+      if (metadata?.type === 'layout' || metadata?.fixable === 'whitespace') return false
+
+      return getRuleGroup(message.ruleId) !== 'formatting'
+    } :
     true
 
   const previewResults = await loadProjectEslint(cwd, selectedConfig, fix).lintFiles(lintTargets)
