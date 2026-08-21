@@ -72,25 +72,25 @@ Path to the config file that was loaded, or null when falling back to detection
 
 ##### extensions
 
-> **extensions**: `string`[]
+> **extensions**: `string`\[\]
 
 Defined in: [basic/src/agent-skill-generator.ts:35](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L35)
 
 ##### formats
 
-> **formats**: `string`[]
+> **formats**: `string`\[\]
 
 Defined in: [basic/src/agent-skill-generator.ts:36](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L36)
 
 ##### frameworks
 
-> **frameworks**: `string`[]
+> **frameworks**: `string`\[\]
 
 Defined in: [basic/src/agent-skill-generator.ts:37](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L37)
 
 ##### libraries
 
-> **libraries**: `string`[]
+> **libraries**: `string`\[\]
 
 Defined in: [basic/src/agent-skill-generator.ts:38](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L38)
 
@@ -112,13 +112,13 @@ Whether features came from the real config file or from package.json detection
 
 ##### testing
 
-> **testing**: `string`[]
+> **testing**: `string`\[\]
 
 Defined in: [basic/src/agent-skill-generator.ts:46](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L46)
 
 ##### tools
 
-> **tools**: `string`[]
+> **tools**: `string`\[\]
 
 Defined in: [basic/src/agent-skill-generator.ts:48](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L48)
 
@@ -199,13 +199,13 @@ Defined in: [basic/src/agent-skill-generator.ts:80](https://github.com/santi020k
 
 ##### skipped
 
-> **skipped**: `string`[]
+> **skipped**: `string`\[\]
 
 Defined in: [basic/src/agent-skill-generator.ts:81](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L81)
 
 ##### stale
 
-> **stale**: `string`[]
+> **stale**: `string`\[\]
 
 Defined in: [basic/src/agent-skill-generator.ts:84](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L84)
 
@@ -213,7 +213,7 @@ Files that are out of date (or missing) — only populated in check mode
 
 ##### written
 
-> **written**: `string`[]
+> **written**: `string`\[\]
 
 Defined in: [basic/src/agent-skill-generator.ts:86](https://github.com/santi020k/eslint-config-basic/blob/f4f0f4ee3ae4478dc0f5e719a9ff3ddd26583a2f/packages/basic/src/agent-skill-generator.ts#L86)
 

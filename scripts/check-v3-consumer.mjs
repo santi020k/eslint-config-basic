@@ -97,6 +97,97 @@ try {
     'and npm reports zero high/critical production vulnerabilities.\n'
   )
 
+  const portableConsumerDir = join(tempDir, 'portable-pnpm-consumer')
+
+  mkdirSync(portableConsumerDir, { recursive: true })
+
+  writeFileSync(join(portableConsumerDir, 'package.json'), JSON.stringify({
+    dependencies: {
+      '@santi020k/eslint-config-basic': `file:${tarballs.basic}`,
+      eslint: '^10.0.0',
+      typescript: '^6.0.0'
+    },
+    name: 'eslint-config-v3-portable-consumer-check',
+    private: true,
+    type: 'module'
+  }, null, 2))
+
+  writeFileSync(
+    join(portableConsumerDir, 'pnpm-workspace.yaml'),
+    [
+      'packages:',
+      '  - .',
+      'overrides:',
+      `  "@santi020k/eslint-config-core": "file:${tarballs.core}"`,
+      `  "@santi020k/eslint-config-typescript": "file:${tarballs.typescript}"`,
+      ''
+    ].join('\n')
+  )
+
+  writeFileSync(
+    join(portableConsumerDir, 'eslint.config.js'),
+    [
+      'import { defineConfig } from \'@santi020k/eslint-config-basic\'',
+      '',
+      'export default defineConfig()',
+      ''
+    ].join('\n')
+  )
+
+  writeFileSync(
+    join(portableConsumerDir, 'recommended.config.js'),
+    'export { default } from \'@santi020k/eslint-config-basic/recommended\'\n'
+  )
+
+  execFileSync('pnpm', ['install', '--ignore-scripts'], {
+    cwd: portableConsumerDir,
+    stdio: 'pipe'
+  })
+
+  const declarationDir = join(portableConsumerDir, 'declarations')
+
+  execFileSync(
+    join(portableConsumerDir, 'node_modules', '.bin', 'tsc'),
+    [
+      'eslint.config.js',
+      'recommended.config.js',
+      '--ignoreConfig',
+      '--allowJs',
+      '--checkJs',
+      '--declaration',
+      '--emitDeclarationOnly',
+      '--module',
+      'Node16',
+      '--moduleResolution',
+      'Node16',
+      '--target',
+      'ES2022',
+      '--outDir',
+      declarationDir,
+      '--skipLibCheck',
+      '--pretty',
+      'false'
+    ],
+    { cwd: portableConsumerDir, stdio: 'pipe' }
+  )
+
+  const emittedDeclarations = [
+    'eslint.config.d.ts',
+    'recommended.config.d.ts'
+  ].map(fileName => readFileSync(join(declarationDir, fileName), 'utf8')).join('\n')
+
+  if (emittedDeclarations.includes('.pnpm/') || emittedDeclarations.includes('typescript-eslint')) {
+    throw new Error(
+      'TypeScript declaration emit exposed an internal pnpm or typescript-eslint path.\n' +
+      emittedDeclarations
+    )
+  }
+
+  process.stdout.write(
+    'V3 portable pnpm consumer verified: TypeScript 6 emits declarations for direct and recommended ' +
+    'JavaScript configs without TS2883 or implementation dependency paths.\n'
+  )
+
   const packageNameToDir = new Map(
     readdirSync(join(rootDir, 'packages'))
       .filter(packageDir => {

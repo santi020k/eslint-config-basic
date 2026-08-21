@@ -3,6 +3,43 @@ title: "Changelog"
 description: "Release history for @santi020k/eslint-config-basic."
 ---
 
+## 3.4.0
+
+### Minor Changes
+
+- Keep TypeScript 6 declaration inference for JavaScript ESLint configs portable
+  under pnpm by returning a package-owned public config-array type. Annotate the
+  recommended entry point and verify packed consumers do not expose internal
+  `typescript-eslint` dependency paths or report TS2883.
+
+## 3.3.0
+
+### Minor Changes
+
+- [#108](https://github.com/santi020k/eslint-config-basic/pull/108) [`66cee8e`](https://github.com/santi020k/eslint-config-basic/commit/66cee8e41ac22b14e8afa91f1f77587f08bc414f) Thanks [@santi020k](https://github.com/santi020k)! - Add source-aware preset adoption reports with grouped lint debt, a non-writing
+  autofix preview, and a TypeScript compiler preflight that prioritizes root
+  module-resolution failures. Enhance complexity explanations with live
+  rule-specific diagnostics and source locations.
+
+  Add structured per-project Doctor activation reports covering installed,
+  detected, and enabled frameworks and feature packs, TypeScript mode, tsconfig,
+  ignores, Tailwind entry-point policy, and reasons optional packages remain
+  inactive. Improve compatibility, install, and Doctor repair flows for pnpm
+  catalogs, npm aliases, ESM-only manifests, package-manager-specific installs,
+  Node engine ranges, recommended re-exports, and preset-implied category packs.
+
+  Improve automatic project scoping for declaration-only TypeScript packages,
+  shared Astro sources, generated Next.js declarations, CLI entry points, and
+  package-local Tailwind CSS graphs, including Tailwind v4 custom utilities.
+
+### Patch Changes
+
+- [#108](https://github.com/santi020k/eslint-config-basic/pull/108) [`66cee8e`](https://github.com/santi020k/eslint-config-basic/commit/66cee8e41ac22b14e8afa91f1f77587f08bc414f) Thanks [@santi020k](https://github.com/santi020k)! - Make packed zero-config installs behave consistently across npm, pnpm, Yarn,
+  and Bun by ensuring the eagerly loaded TypeScript parser has its runtime.
+- Updated dependencies [[`66cee8e`](https://github.com/santi020k/eslint-config-basic/commit/66cee8e41ac22b14e8afa91f1f77587f08bc414f), [`66cee8e`](https://github.com/santi020k/eslint-config-basic/commit/66cee8e41ac22b14e8afa91f1f77587f08bc414f)]:
+  - @santi020k/eslint-config-typescript@3.1.2
+  - @santi020k/eslint-config-core@3.1.1
+
 ## 3.2.0
 
 ### Minor Changes

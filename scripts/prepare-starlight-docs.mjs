@@ -107,6 +107,8 @@ function normalizeMarkdown(path, content) {
     .replaceAll(/^```(\w+)\s+\[([^\]]+)\]\s*$/gmu, '```$1 title="$2"')
     // Prevent linked array types from being parsed as reversed image syntax.
     .replaceAll(/\]\(([^)\s]+)\)\[\]/gu, ']($1)\\[\\]')
+    // Prevent standalone generated array suffixes from becoming empty links.
+    .replaceAll(/([)`])\[\]/gu, '$1\\[\\]')
     // TypeDoc can retain a duplicate suffix even when only one target heading is emitted.
     .replaceAll(/\]\(#(configfeature(?:category|phase))-1\)/gu, '](#$1)')
     .replaceAll('<HomePageSections />', '')

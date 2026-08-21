@@ -1,5 +1,19 @@
 # @santi020k/eslint-config-full
 
+## 3.2.0
+
+### Minor Changes
+
+- Keep TypeScript 6 declaration inference for JavaScript ESLint configs portable
+  under pnpm by returning a package-owned public config-array type. Annotate the
+  recommended entry point and verify packed consumers do not expose internal
+  `typescript-eslint` dependency paths or report TS2883.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @santi020k/eslint-config-basic@3.4.0
+
 ## 3.1.1
 
 ### Patch Changes

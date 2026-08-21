@@ -675,10 +675,21 @@ const emitAstroDoctorWarning = (
   )
 }
 
+/**
+ * Portable public result type returned by the Basic config composer.
+ *
+ * Keeping this as a package-owned interface prevents TypeScript declaration
+ * inference from exposing pnpm-internal `typescript-eslint` paths in consumer
+ * `eslint.config.js` files.
+ */
+export interface EslintConfigArray extends FlatConfigArray {
+  length: number
+}
+
 type ConfigComposer = (
   options?: EslintConfigOptions,
   ...extraConfigs: ConfigInput[]
-) => Promise<FlatConfigArray>
+) => Promise<EslintConfigArray>
 
 const resolveProjectConfigs = async (
   configuredProjects: Record<string, EslintConfigOptions>,
@@ -832,7 +843,7 @@ const getConfigsParams = (
 export const defineConfig: ConfigComposer = async function defineConfig(
   options?: EslintConfigOptions,
   ...extraConfigs: ConfigInput[]
-): Promise<FlatConfigArray> {
+): Promise<EslintConfigArray> {
   const {
     detection,
     extensions: optExtensions,
