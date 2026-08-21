@@ -5,7 +5,7 @@
     "access": "public",
     "provenance": true
   },
-  "description": "Lean, auto-detecting ESLint 10 flat config with opt-in framework and integration packages.",
+  "description": "Lean, auto-detecting ESLint 10 flat config with opt-in framework and integration packages for modern projects.",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
