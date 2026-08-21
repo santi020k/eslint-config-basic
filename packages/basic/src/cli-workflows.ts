@@ -5,6 +5,11 @@ import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from '
 import { createRequire } from 'node:module'
 import { basename, dirname, extname, join, relative, resolve } from 'node:path'
 
+import type * as TypeScript from 'typescript'
+import type { CompilerOptions, Diagnostic, Program } from 'typescript'
+
+type TypeScriptApi = typeof TypeScript
+
 export interface CommandResult {
   status: number
   stderr: string
@@ -36,7 +41,27 @@ export interface SnapshotOptions {
   check?: boolean
   files?: string[]
   json?: boolean
+  rulesOnly?: boolean
   snapshotPath?: string
+}
+
+export interface ConfigTypesOptions {
+  files?: string[]
+  json?: boolean
+}
+
+interface ConfigTypeFileResult {
+  declarations: string[]
+  file: string
+  issues: string[]
+  portable: boolean
+  tsconfig: null | string
+}
+
+interface ConfigTypesReport {
+  files: ConfigTypeFileResult[]
+  portable: boolean
+  typescriptVersion: string
 }
 
 export interface SnapshotDiff {
@@ -58,7 +83,8 @@ interface EslintSnapshotFile {
 
 interface EslintSnapshot {
   files: Record<string, EslintSnapshotFile>
-  version: 1
+  scope?: 'rules'
+  version: 1 | 2
 }
 
 interface EslintStats {
@@ -101,6 +127,20 @@ interface ProjectEslint {
 type ProjectEslintConstructor = new(options: { cwd: string }) => ProjectEslint
 
 const SNAPSHOT_FILENAME = '.eslint-config-snapshot.json'
+
+const ESLINT_CONFIG_FILENAMES = [
+  'eslint.config.js',
+  'eslint.config.mjs',
+  'eslint.config.cjs',
+  'eslint.config.ts',
+  'eslint.config.mts',
+  'eslint.config.cts'
+]
+
+const NON_PORTABLE_DECLARATION_PATTERNS = [
+  { label: 'a pnpm-internal installation path', pattern: /(?:^|[\\/])\.pnpm(?:[\\/]|$)/m },
+  { label: 'the transitive typescript-eslint package', pattern: /["']typescript-eslint["']/m }
+]
 
 const SOURCE_EXTENSIONS = new Set([
   '.astro',
@@ -155,6 +195,210 @@ export const defaultCommandRunner: CommandRunner = (executable, args, cwd) => {
   }
 }
 
+const resolveProjectRequire = (cwd: string) => createRequire(join(cwd, 'package.json'))
+
+const formatTypeScriptDiagnostic = (
+  typescript: TypeScriptApi,
+  diagnostic: Diagnostic,
+  cwd: string
+): string => {
+  const message = typescript.flattenDiagnosticMessageText(diagnostic.messageText, '\n')
+
+  if (!diagnostic.file || diagnostic.start === undefined) return `TS${diagnostic.code}: ${message}`
+
+  const position = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start)
+
+  return `${relative(cwd, diagnostic.file.fileName)}:${position.line + 1}:${position.character + 1} ` +
+    `TS${diagnostic.code}: ${message}`
+}
+
+const getConfigAmbientOptions = (
+  configPath: string
+): Pick<CompilerOptions, 'typeRoots' | 'types'> => {
+  const content = readFileSync(configPath, 'utf8')
+  const usesNodeGlobals = /\b(?:Buffer|NodeJS|process)\b/.test(content)
+
+  if (!usesNodeGlobals) return { types: [] }
+
+  try {
+    const nodeManifest = createRequire(configPath).resolve('@types/node/package.json')
+
+    return {
+      typeRoots: [dirname(dirname(nodeManifest))],
+      types: ['node']
+    }
+  } catch {
+    return { types: [] }
+  }
+}
+
+const getConfigCompilerOptions = (
+  typescript: TypeScriptApi,
+  configPath: string
+): { diagnostics: Diagnostic[], options: CompilerOptions, tsconfig: null | string } => {
+  const tsconfig = typescript.findConfigFile(
+    dirname(configPath),
+    fileName => typescript.sys.fileExists(fileName)
+  )
+
+  const diagnostics: Diagnostic[] = []
+  let options: CompilerOptions = {}
+
+  if (tsconfig) {
+    const readResult = typescript.readConfigFile(
+      tsconfig,
+      fileName => typescript.sys.readFile(fileName)
+    )
+
+    if (readResult.error) {
+      diagnostics.push(readResult.error)
+    } else {
+      const parsed = typescript.parseJsonConfigFileContent(
+        readResult.config,
+        typescript.sys,
+        dirname(tsconfig)
+      )
+
+      diagnostics.push(...parsed.errors.filter(diagnostic => ![18002, 18003].includes(diagnostic.code)))
+
+      options = parsed.options
+    }
+  }
+
+  return {
+    diagnostics,
+    options: {
+      ...options,
+      ...getConfigAmbientOptions(configPath),
+      allowJs: true,
+      checkJs: false,
+      composite: false,
+      declaration: true,
+      declarationDir: undefined,
+      emitDeclarationOnly: true,
+      incremental: false,
+      ...(Number(typescript.versionMajorMinor.split('.')[0]) >= 6 ? { ignoreDeprecations: '6.0' } : {}),
+      module: options.module ?? typescript.ModuleKind.NodeNext,
+      moduleResolution: options.moduleResolution ?? typescript.ModuleResolutionKind.NodeNext,
+      noEmit: false,
+      noEmitOnError: false,
+      outDir: undefined,
+      rootDir: undefined,
+      skipLibCheck: true,
+      target: options.target ?? typescript.ScriptTarget.ES2022,
+      tsBuildInfoFile: undefined
+    },
+    tsconfig: tsconfig ?? null
+  }
+}
+
+const emitConfigDeclarations = (
+  typescript: TypeScriptApi,
+  cwd: string,
+  configPath: string
+): ConfigTypeFileResult => {
+  const setup = getConfigCompilerOptions(typescript, configPath)
+  const program: Program = typescript.createProgram([configPath], setup.options)
+  const outputs = new Map<string, string>()
+
+  const emitResult = program.emit(
+    undefined,
+    (fileName, content) => outputs.set(fileName, content),
+    undefined,
+    true
+  )
+
+  const diagnostics = [
+    ...setup.diagnostics,
+    ...typescript.getPreEmitDiagnostics(program),
+    ...emitResult.diagnostics
+  ].filter(diagnostic => diagnostic.category === typescript.DiagnosticCategory.Error)
+
+  const declarationStem = `${basename(configPath, extname(configPath))}.d.`
+
+  const declarations = [...outputs.entries()]
+    .filter(([fileName]) => (
+      basename(fileName).startsWith(declarationStem) && /\.d\.(?:cts|mts|ts)$/.test(fileName)
+    ))
+
+  const issues = [...new Set(
+    diagnostics.map(diagnostic => formatTypeScriptDiagnostic(typescript, diagnostic, cwd))
+  )]
+
+  if (declarations.length === 0) issues.push('TypeScript did not emit a declaration for this config.')
+
+  for (const [fileName, content] of declarations) {
+    for (const { label, pattern } of NON_PORTABLE_DECLARATION_PATTERNS) {
+      if (pattern.test(content)) issues.push(`${relative(cwd, fileName)} references ${label}.`)
+    }
+  }
+
+  return {
+    declarations: declarations.map(([fileName]) => relative(cwd, fileName)).sort(),
+    file: relative(cwd, configPath),
+    issues,
+    portable: issues.length === 0,
+    tsconfig: setup.tsconfig ? relative(cwd, setup.tsconfig) : null
+  }
+}
+
+export const createConfigTypesReport = (
+  cwd: string = process.cwd(),
+  options: ConfigTypesOptions = {}
+): ConfigTypesReport => {
+  const projectRequire = resolveProjectRequire(cwd)
+  let typescript: TypeScriptApi
+
+  try {
+    typescript = projectRequire('typescript') as TypeScriptApi
+  } catch {
+    throw new Error('TypeScript is required for config-types. Install it in the consumer project first.')
+  }
+
+  const configPaths = (options.files && options.files.length > 0 ?
+    options.files.map(file => resolve(cwd, file)) :
+    ESLINT_CONFIG_FILENAMES.map(file => join(cwd, file)).filter(file => existsSync(file)))
+
+  if (configPaths.length === 0) {
+    throw new Error('No eslint.config.* file was found. Pass --file for a project-scoped config.')
+  }
+
+  for (const configPath of configPaths) {
+    if (!existsSync(configPath)) throw new Error(`Config file does not exist: ${relative(cwd, configPath)}`)
+  }
+
+  const files = configPaths.map(configPath => emitConfigDeclarations(typescript, cwd, configPath))
+
+  return {
+    files,
+    portable: files.every(file => file.portable),
+    typescriptVersion: typescript.version
+  }
+}
+
+export const handleConfigTypes = (
+  cwd: string = process.cwd(),
+  options: ConfigTypesOptions = {}
+): void => {
+  const report = createConfigTypesReport(cwd, options)
+
+  if (options.json) {
+    console.log(JSON.stringify(report, null, 2))
+  } else {
+    console.log([
+      `ESLint config declaration portability: ${report.portable ? 'passed' : 'failed'}`,
+      `- TypeScript: ${report.typescriptVersion}`,
+      ...report.files.flatMap(file => [
+        `- ${file.file}: ${file.portable ? 'portable' : 'not portable'} ` +
+        `(tsconfig: ${file.tsconfig ?? 'compiler defaults'})`,
+        ...file.issues.map(issue => `  - ${issue}`)
+      ])
+    ].join('\n'))
+  }
+
+  if (!report.portable) process.exitCode = 1
+}
+
 const readJson = (filePath: string): unknown => {
   if (!existsSync(filePath)) return null
 
@@ -164,8 +408,6 @@ const readJson = (filePath: string): unknown => {
     return null
   }
 }
-
-const resolveProjectRequire = (cwd: string) => createRequire(join(cwd, 'package.json'))
 
 const resolveEslintCli = (cwd: string): string => {
   const projectRequire = resolveProjectRequire(cwd)
@@ -554,7 +796,10 @@ const getObjectKeys = (value: unknown): string[] => {
   return Object.keys(value).sort()
 }
 
-const normalizeConfig = (config: unknown): EslintSnapshotFile => {
+const normalizeConfig = (
+  config: unknown,
+  scope: 'all' | 'rules'
+): EslintSnapshotFile => {
   const resolved = config && typeof config === 'object' ?
     config as {
       languageOptions?: {
@@ -568,12 +813,14 @@ const normalizeConfig = (config: unknown): EslintSnapshotFile => {
     {}
 
   return {
-    globals: normalizeSerializableObject(resolved.languageOptions?.globals),
-    languageOptions: {
-      ecmaVersion: resolved.languageOptions?.ecmaVersion,
-      sourceType: resolved.languageOptions?.sourceType
-    },
-    plugins: getObjectKeys(resolved.plugins),
+    globals: scope === 'rules' ? {} : normalizeSerializableObject(resolved.languageOptions?.globals),
+    languageOptions: scope === 'rules' ?
+      {} :
+      {
+        ecmaVersion: resolved.languageOptions?.ecmaVersion,
+        sourceType: resolved.languageOptions?.sourceType
+      },
+    plugins: scope === 'rules' ? [] : getObjectKeys(resolved.plugins),
     rules: normalizeSerializableObject(resolved.rules)
   }
 }
@@ -581,7 +828,8 @@ const normalizeConfig = (config: unknown): EslintSnapshotFile => {
 export const createConfigSnapshot = async (
   cwd: string,
   files?: string[],
-  eslint: ProjectEslint = loadProjectEslint(cwd)
+  eslint: ProjectEslint = loadProjectEslint(cwd),
+  scope: 'all' | 'rules' = 'all'
 ): Promise<EslintSnapshot> => {
   const representativeFiles = files?.length ?
     files :
@@ -594,12 +842,13 @@ export const createConfigSnapshot = async (
   const entries = await Promise.all(representativeFiles.map(async filePath => {
     const config = await eslint.calculateConfigForFile(filePath)
 
-    return [filePath, normalizeConfig(config)] as const
+    return [filePath, normalizeConfig(config, scope)] as const
   }))
 
   return {
     files: Object.fromEntries(entries),
-    version: 1
+    ...(scope === 'rules' ? { scope } : {}),
+    version: scope === 'rules' ? 2 : 1
   }
 }
 
@@ -692,7 +941,7 @@ export const handleSnapshot = async (
     }
 
     const files = options.files?.length ? options.files : Object.keys(previous.files)
-    const current = await createConfigSnapshot(cwd, files, eslint)
+    const current = await createConfigSnapshot(cwd, files, eslint, previous.scope ?? 'all')
     const diffs = diffConfigSnapshots(previous, current)
 
     if (options.json) console.log(JSON.stringify({ diffs, snapshotPath }, null, 2))
@@ -703,7 +952,12 @@ export const handleSnapshot = async (
     return
   }
 
-  const current = await createConfigSnapshot(cwd, options.files, eslint)
+  const current = await createConfigSnapshot(
+    cwd,
+    options.files,
+    eslint,
+    options.rulesOnly ? 'rules' : 'all'
+  )
 
   writeFileSync(snapshotPath, `${JSON.stringify(current, null, 2)}\n`)
 
@@ -728,7 +982,7 @@ export const handleSnapshotDiff = async (
   if (!previous) throw new Error(`Snapshot is missing: ${relative(cwd, snapshotPath)}. Run basic-eslint snapshot first.`)
 
   const files = options.files?.length ? options.files : Object.keys(previous.files)
-  const current = await createConfigSnapshot(cwd, files, eslint)
+  const current = await createConfigSnapshot(cwd, files, eslint, previous.scope ?? 'all')
   const diffs = diffConfigSnapshots(previous, current)
 
   if (options.json) console.log(JSON.stringify({ diffs, snapshotPath }, null, 2))

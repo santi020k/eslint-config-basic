@@ -7,14 +7,9 @@ fixture, benchmark, or tracked issue before they are marked complete.
 
 ## Active follow-ups
 
-- [Tailwind detection gaps](#tailwind-detection-gaps): custom utilities,
-  component-local classes, plugin utilities, and MDX directive guidance.
-- [Formatting and migration ergonomics](#formatting-and-migration-ergonomics):
-  separate semantic fixes from high-churn formatting and explain changed lines.
-- [Autofix changed source assumptions outside ESLint](#autofix-changed-source-assumptions-outside-eslint):
-  preserve non-ESLint validation as part of migration verification.
-- [Use adoption commands in maintenance workflows](#8-in-progress--use-adoption-commands-in-maintenance-workflows):
-  finish the remaining workflow adoption tracked by the parent-project migration.
+No implementation or consumer-adoption follow-up remains. The current changeset
+still needs a normal patch release before capability-gated workflows can use
+`config-types`, compact rules-only snapshots, and the direct pnpm-bin fix.
 
 When a follow-up is implemented, add the regression test or verification command
 next to its completion note. This keeps the archive useful without turning it
@@ -267,7 +262,7 @@ pattern and uses `() => undefined` for an explicit no-op cleanup. Combined
 TypeScript coverage verifies that this pattern satisfies both `func-style` and
 `@typescript-eslint/no-empty-function` without weakening either rule globally.
 
-## Tailwind detection gaps
+## Completed — Tailwind detection gaps
 
 `better-tailwindcss/no-unknown-classes` correctly activated without custom
 consumer configuration, but it rejected several legitimate class categories:
@@ -302,7 +297,28 @@ directive causes an MDX preprocessing error. The valid MDX form is:
 
 This should be included in documentation and generated suggestions.
 
-## Formatting and migration ergonomics
+Implemented so far:
+
+- The composer follows the local CSS import graph and automatically allows
+  exact standalone selectors and static Tailwind v4 `@utility` names.
+- Project-scoped entry points and anchored `tailwind.ignore` patterns provide a
+  first-class narrow allowlist without disabling unknown-class validation.
+- Configuration guidance now documents the valid JSX-comment directive for
+  MDX instead of suggesting an HTML comment that fails preprocessing.
+- Astro component-local `<style>` selectors are discovered within the scoped
+  project root without scanning dependencies or build output.
+- Explicit `@plugin` declarations and root `tailwind.config.*` references add
+  narrow compatibility patterns for Tailwind Typography, Forms, and the legacy
+  Aspect Ratio plugin. Typography's `not-prose` is covered without a global
+  consumer ignore.
+- Doctor JSON includes project-scoped exception guidance: configure an entry
+  point first, use anchored `tailwind.ignore` patterns, and use JSX comments for
+  one-line MDX directives.
+
+Composition and integration coverage prove that component selectors and plugin
+utilities pass while nearby unknown and comment-only classes remain rejected.
+
+## Completed — Formatting and migration ergonomics
 
 The first full autofix touched many Astro templates, especially multiline class
 attributes and attribute ordering. Although the result passed, the diff was much
@@ -323,6 +339,26 @@ this consumer. A profile should determine whether type-aware parsing, spelling,
 Tailwind scanning, or the number of active processors dominates the runtime.
 Useful improvements would include per-rule timing in `profile`, cache guidance,
 and a documented fast editor/pre-commit mode that preserves the full CI rules.
+
+Implemented so far:
+
+- `explain-preset --analyze-source` separates effective rule changes from live
+  source debt, groups findings by category and fixability, and previews changed
+  files and lines without writing.
+- The packed adoption fixture requires autofix convergence and treats circular
+  or second-pass changes as failures.
+- `snapshot`, `snapshot --check`, and `diff` provide a reviewable effective-rule
+  contract for dependency updates.
+- `profile` reports parsing and per-rule time, compares concurrency modes, and
+  enforces warning, duration, and slow-rule budgets.
+
+`explain-preset --analyze-source --semantic-only` now previews only fixes from
+correctness, security, framework, and domain rules. Adding `--write` applies
+that reviewed subset; unrestricted preset writes are rejected so a semantic
+migration cannot silently become a formatting rewrite. Source analysis also
+reports file-reading scripts that use regular-expression parsing, with candidate
+line numbers, so their metadata and generated-file checks can be run before a
+later formatting pass.
 
 ## Successful migration sequence
 
@@ -765,7 +801,7 @@ No library change is needed: fenced-code language enforcement remains enabled,
 and historical fenced JavaScript examples retain their original formatting
 through the dedicated Markdown code-block override.
 
-## Autofix changed source assumptions outside ESLint
+## Completed — Autofix changed source assumptions outside ESLint
 
 Stylistic autofix converted JavaScript object keys and values in Astro
 front-matter from JSON-like double-quoted text to normal single-quoted
@@ -793,6 +829,13 @@ Possible improvements:
   source-text parsers.
 - A migration mode could identify scripts that regex-match source formatting.
 - Snapshot/diff output should call attention to changed machine-read source.
+
+The v2-to-v3 migration guide now requires autofix to be reviewed separately and
+warns that quote, key, attribute, and package-script rewrites can break
+source-text parsers. It directs consumers to run type checks, tests, builds,
+metadata validators, and generated-file checks after the fix pass. Automatic
+identification is now part of semantic-only preset source analysis, which lists
+file-reading scripts and the lines where they apply regular expressions.
 
 The JSON/package-script linting also strengthened root and package lint commands
 with `--max-warnings=0`. This is desirable for CI consistency, but it is a
@@ -1700,7 +1743,7 @@ detection. Regression coverage verifies both states.
 
 ## Parent-project adoption after ESLint Config Basic 3.2.0
 
-<!-- cspell:words aaronmgz commitprompt difftale lintable memudo postlens -->
+<!-- cspell:words aaronmgz commitprompt contrac difftale fenix lintable memudo postlens roadscore -->
 
 Date: 2026-07-30
 
@@ -1726,6 +1769,30 @@ root, workspace project, framework, runtime, TypeScript, format, testing, librar
 and tool detection wherever the detected result is sufficient. Explicit settings
 remain only for behavior that detection cannot infer or for compatibility with
 established project code.
+
+### Re-audit on 2026-08-21
+
+The direct-consumer fleet has grown from 12 to 16 repositories. ContracTrack,
+Cult, Fenix, and Roadscore now also consume the library. Fifteen repositories
+use Basic directly and Website uses Full's recommended entry point. Configs now
+cover JavaScript, ESM JavaScript, and TypeScript, with direct promise exports,
+awaited composition, and recommended-entry composition all represented.
+
+This broader usage initially produced four additional maintenance findings,
+all now resolved:
+
+- Lumen used TypeScript 6 with Basic 3.3.0 and needed an explicit public
+  `Promise<FlatConfigArray>` annotation to avoid non-portable config inference.
+  Basic 3.4.0 and Full 3.2.0 now publish the package-owned boundary; Lumen has
+  adopted the release and removed the annotation.
+- ContracTrack declared Basic as `latest`, allowing a routine lockfile refresh
+  to adopt new lint behavior without explicit review. It now pins Basic 3.4.0.
+- ContracTrack declared Node `>=22.0.0` and Roadscore declared `>=22.18.0`, both
+  below Basic's `>=22.19.0` supported range. Both now declare the supported
+  minimum.
+- No consumer package script or checked workflow invoked the maintenance CLI at
+  the time of the audit. Recommendation 8 records the completed 16-repository
+  workflow, Doctor, compatibility, snapshot, and lint rollout.
 
 ### Recommended follow-up improvements
 
@@ -1996,14 +2063,14 @@ Import-order progress:
 Import-order adoption is complete. The broader formatting work is tracked in
 recommendation 1, which is now complete.
 
-#### 8. In progress — Use adoption commands in maintenance workflows
+#### 8. Completed — Use adoption commands in maintenance workflows
 
 Add lightweight, non-mutating checks to each repository:
 
 ```sh
 basic-eslint doctor
 basic-eslint compatibility
-basic-eslint snapshot
+basic-eslint snapshot --rules-only
 basic-eslint diff
 basic-eslint profile --max-warnings 0
 ```
@@ -2031,6 +2098,47 @@ now match that minimum, every compatibility report passes, and all seven frozen
 installs pass with their declared pnpm versions. Committed snapshots and the
 maintenance workflow rollout remain queued until consumers can run the patched
 CLI from a published package rather than this workspace build.
+
+The 2026-08-21 fleet re-audit initially found no package script or checked
+workflow using the maintenance commands in any of the 16 consumers. The first
+rollout is now complete in the two repositories that also had new engine drift:
+
+- ContracTrack pins Basic 3.4.0 instead of `latest`, raises its Node declaration
+  to `>=22.19.0`, commits a two-file effective-rule snapshot, and runs
+  compatibility, snapshot, Doctor, and lint checks in its existing quality job.
+- Roadscore raises its Node declaration to `>=22.19.0`, commits a one-file
+  effective-rule snapshot, and adds a quality workflow using the published v3
+  composite action.
+- The composite action now uploads a structured Doctor report by default in the
+  next release, with inputs to disable or rename the artifact for matrix jobs.
+- The next CLI patch adds `snapshot --rules-only`. It records an explicit
+  snapshot scope and keeps committed contracts focused on effective rules;
+  later `snapshot --check` and `diff` calls reuse that scope automatically.
+
+Both consumers pass compatibility, Doctor, `snapshot --check`, and canonical
+lint. Each of the remaining 14 repositories now has an isolated ESLint config
+maintenance workflow that performs a frozen install, checks compatibility,
+captures Doctor JSON as an artifact, and runs `snapshot --check` against a
+committed representative-file contract. All 14 workflows pass `actionlint`;
+all 14 generated snapshots pass `snapshot --check`; repositories whose
+normal config covers YAML also pass their own zero-warning ESLint check. Cult
+and Fenix plus the ten remaining Basic 3.2.0 consumers first moved through Basic
+3.3.0 so catalog and package-scoped config dependencies resolved correctly.
+The completed rollout now has all 15 direct consumers on Basic 3.4.0 and Website
+on Full 3.2.0. All 16 compatibility checks and canonical zero-warning lint
+suites pass.
+
+All 16 full snapshots remain compatible with published Basic 3.4.0. That npm
+artifact predates the prepared rules-only implementation, so conversion remains
+a normal next-patch release task. Keep `profile` on a scheduled or
+dependency-update workflow where its runtime cost is appropriate.
+
+Website additionally exposed a pnpm hoisted-linker edge: its `.bin/basic-eslint`
+is a direct symlink, so the published entrypoint guard silently exits because the
+invoked path does not end in `cli.js`. Its workflow temporarily calls the
+published module path directly. The prepared CLI recognizes both its module
+path and the direct `basic-eslint` symlink, with regression coverage. Website
+keeps the direct module invocation until that patch is published.
 
 #### 9. Completed — Remove temporary supply-chain exclusions
 
@@ -2137,12 +2245,80 @@ sibling workspace package when normal Node resolution is intentionally absent.
 Regression fixtures cover both diagnostic cases; plugin activation remains an
 explicit per-repository choice.
 
-### Verification completed
+#### 12. Completed — Roll out the portable TypeScript config boundary
 
-- Every lockfile resolves `@santi020k/eslint-config-basic` 3.2.0.
-- Frozen lockfile validation passes in all 12 repositories.
-- Every ESLint config loads successfully under ESLint 10.
-- A full direct ESLint sweep with `--max-warnings=0` passes in all 12 repositories.
+The parent fleet validates why config declaration portability belongs in the
+release contract. Lumen reproduced the pnpm-internal `typescript-eslint` path
+under TypeScript 6, while other consumers represented direct, awaited, and
+recommended-entry composition across JavaScript and TypeScript config files.
+
+Basic 3.4.0 now returns the package-owned `EslintConfigArray` interface, Basic's
+recommended declaration names that interface, and isolated packed pnpm consumer
+gates reject `typescript-eslint` and `.pnpm/` in emitted declarations. The
+matrix covers pinned TypeScript 5.0.2 and 6.0.3; direct and awaited Basic
+composition in JavaScript, ESM JavaScript, and TypeScript; both recommended
+entries; and Full composition. Published Full 3.2.0 re-exports Basic's fixed
+composer and emits portably in Website. The workspace's next patch additionally
+owns Full's public composer result type instead of allowing that re-export to
+select a transitive implementation name.
+
+The next patch also prepares consumer CI enforcement instead of leaving the
+declaration command as a hand-written TypeScript invocation. `basic-eslint
+config-types` finds root or explicit project configs, reuses the closest
+tsconfig's module context, isolates JavaScript declaration inference from
+application-only ambient types and unrelated `checkJs` debt, and fails on
+compiler diagnostics, pnpm-internal paths, or a direct `typescript-eslint`
+reference. Packed Basic and Full fixtures invoke the command under pinned
+TypeScript 5.0.2 and 6.0.3. The shared composite action exposes the same check
+through opt-in `config-types` and `config-types-files` inputs.
+All 16 first-party maintenance workflows also include a capability-gated step:
+it skips cleanly with published Basic 3.4.0, which predates the command, and
+automatically runs `config-types` once the installed package advertises it.
+`actionlint` passes across the full workflow set.
+
+Basic 3.4.0 and Full 3.2.0 were verified from npm tarballs and adopted across
+the fleet. All 15 direct consumers now resolve Basic 3.4.0; Website resolves
+Full 3.2.0 and composes through `defineConfig()` instead of spreading the
+recommended array. Lumen's temporary annotation is removed. Aaron's intentional
+post-composition reordering uses the public `EslintConfigArray` boundary.
+
+All 26 ESLint config files emit portable declarations with the workspace
+next-patch command. All 16 repositories pass frozen install, compatibility,
+Doctor with zero issues, their committed published-CLI snapshot check, and
+canonical zero-warning lint. Published Basic 3.4.0 predates `config-types` and
+`snapshot --rules-only`, so workflows remain capability-gated and snapshots
+remain full until the normal next patch release.
+
+#### 13. Completed — Keep `projectService` out of Astro parser options
+
+Roadscore's first canonical validation after adopting the maintenance workflow
+passed but printed the same warning four times:
+
+```text
+astro-eslint-parser does not support the projectService option; it will parse it as project: true instead.
+```
+
+The Astro config already owns type-aware parsing through its supported
+`project` option. TypeScript's generic slot setup nevertheless matched
+`**/*.astro` and forwarded `projectService`, while Astro's later override kept a
+false-valued property that still triggered the parser warning.
+
+Astro parser options now omit `projectService` entirely. The TypeScript parser
+setup scopes project-service options to TypeScript, Vue, Svelte, and virtual
+TypeScript paths rather than Astro source files. A config-shape regression
+verifies that no Astro parser entry contains the unsupported option, the Astro
+playground lints without the warning, and the packed-consumer autofix gate fails
+if the warning returns.
+
+### Verification of the 2026-07-30 baseline
+
+- At that audit, every lockfile resolved `@santi020k/eslint-config-basic` 3.2.0.
+- Frozen lockfile validation passed in all 12 repositories.
+- Every ESLint config loaded successfully under ESLint 10.
+- A full direct ESLint sweep with `--max-warnings=0` passed in all 12 repositories.
 - Follow-up strict-adoption changes are recorded above; they include focused
   consumer source migrations where newly enabled correctness rules exposed
   real issues.
+
+The 2026-08-21 re-audit above supersedes this historical version and repository
+count with the current 16-repository fleet state.

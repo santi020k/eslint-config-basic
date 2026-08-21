@@ -162,6 +162,7 @@ npx @santi020k/eslint-config-basic init
 npx @santi020k/eslint-config-basic explain no-console --file src/index.ts
 npx @santi020k/eslint-config-basic doctor --fix
 npx @santi020k/eslint-config-basic compatibility
+npx @santi020k/eslint-config-basic config-types
 npx @santi020k/eslint-config-basic migrate --to v3
 npx @santi020k/eslint-config-basic baseline --preset pedantic
 npx @santi020k/eslint-config-basic profile --max-warnings 0
@@ -171,9 +172,10 @@ npx @santi020k/eslint-config-basic diff
 
 `init` creates the zero-argument config. `explain` shows detection or traces an
 effective rule, `doctor --fix` repairs safe setup issues with backups, and
-`compatibility` validates runtime and peer ranges. The remaining commands
-automate v3 migration, incremental strict-mode adoption, budgeted performance
-profiling, and effective-rule change review.
+`compatibility` validates runtime and peer ranges, while `config-types` checks
+that editor-facing ESLint config declarations stay portable. The remaining
+commands automate v3 migration, incremental strict-mode adoption, budgeted
+performance profiling, and effective-rule change review.
 
 ## Compatibility
 

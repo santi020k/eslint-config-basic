@@ -2,6 +2,7 @@ import * as astroApi from '@santi020k/eslint-config-astro'
 import * as basicApi from '@santi020k/eslint-config-basic'
 import * as agentApi from '@santi020k/eslint-config-basic/agent'
 import * as coreApi from '@santi020k/eslint-config-core'
+import * as fullApi from '@santi020k/eslint-config-full'
 import {
   a11y,
   aiSdk,
@@ -149,6 +150,12 @@ describe('Public API Re-exports', () => {
   test('should expose defineConfig as the main config factory', async () => {
     expect(defineConfig).toBeDefined()
     expect(Array.isArray(await defineConfig({ detection: false }))).toBe(true)
+  })
+
+  test('full should preserve the complete Basic runtime API', () => {
+    for (const exportName of Object.keys(basicApi)) expect(exportName in fullApi).toBe(true)
+
+    expect(fullApi.defineConfig).toBe(basicApi.defineConfig)
   })
 
   test('should expose groups as a non-empty array of arrays', () => {

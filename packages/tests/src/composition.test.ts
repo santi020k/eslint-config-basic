@@ -1305,6 +1305,60 @@ describe('Monorepo project scoping', () => {
     }
   })
 
+  test('recognizes Astro-local selectors and explicitly configured Tailwind plugin utilities', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'eslint-config-tailwind-components-'))
+
+    try {
+      mkdirSync(join(root, 'src/components'), { recursive: true })
+      mkdirSync(join(root, 'src/styles'), { recursive: true })
+      writeFileSync(join(root, 'package.json'), JSON.stringify({
+        dependencies: { '@tailwindcss/typography': 'latest', tailwindcss: 'latest' },
+        name: 'tailwind-component-app'
+      }))
+      writeFileSync(
+        join(root, 'src/styles/global.css'),
+        '@import "tailwindcss";\n@plugin "@tailwindcss/typography";\n'
+      )
+      writeFileSync(
+        join(root, 'src/components/Card.astro'),
+        [
+          '<article class="principle-card not-prose"></article>',
+          '<style>',
+          '  .principle-card, .post-meta-card:hover { display: block; }',
+          '  /* .comment-card { display: none; } */',
+          '</style>',
+          ''
+        ].join('\n')
+      )
+
+      const config = await defineConfig({
+        detection: false,
+        frameworks: { astro: true },
+        libraries: [Library.Tailwind],
+        root,
+        settings: [Setting.NoGitignore],
+        tailwind: { entryPoint: 'src/styles/global.css' },
+        tools: []
+      })
+      const tailwindSettings = config.find(
+        entry => entry.name === 'eslint-config-basic/tailwind-settings'
+      )
+      const rule = tailwindSettings?.rules?.['better-tailwindcss/no-unknown-classes']
+      const options = Array.isArray(rule) ? rule[1] as { ignore?: string[] } : undefined
+      const matchesIgnore = (className: string): boolean => Boolean(
+        options?.ignore?.some(pattern => new RegExp(pattern).test(className))
+      )
+
+      expect(matchesIgnore('principle-card')).toBe(true)
+      expect(matchesIgnore('post-meta-card')).toBe(true)
+      expect(matchesIgnore('not-prose')).toBe(true)
+      expect(matchesIgnore('comment-card')).toBe(false)
+      expect(matchesIgnore('unknown-card')).toBe(false)
+    } finally {
+      rmSync(root, { force: true, recursive: true })
+    }
+  })
+
   test('root detection and Tailwind options are inherited by scoped projects', async () => {
     const config = await defineConfig({
       detection: { libraries: false },

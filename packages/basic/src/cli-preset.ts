@@ -44,7 +44,7 @@ interface ProjectEslint {
 
 type ProjectEslintConstructor = new(options: {
   cwd: string
-  fix?: boolean
+  fix?: boolean | ((message: ProjectLintMessage) => boolean)
   overrideConfig?: unknown
   overrideConfigFile?: boolean
 }) => ProjectEslint
@@ -56,12 +56,16 @@ export interface ExplainPresetOptions {
   files?: string[]
   json?: boolean
   output?: string
+  semanticOnly?: boolean
+  write?: boolean
 }
 
 interface CreatePresetReportOptions {
   analyzeSource?: boolean
+  semanticOnly?: boolean
   sourceFiles?: string[]
   typescriptRunner?: CommandRunner
+  write?: boolean
 }
 
 const PRESETS = new Set<string>(Object.values(Preset))
@@ -204,7 +208,7 @@ const normalizeRule = (value: unknown): string => JSON.stringify(value)
 const loadProjectEslint = (
   cwd: string,
   overrideConfig?: unknown,
-  fix = false
+  fix: boolean | ((message: ProjectLintMessage) => boolean) = false
 ): ProjectEslint => {
   const projectRequire = createRequire(join(cwd, 'package.json'))
   const eslintModule = projectRequire('eslint') as { ESLint?: ProjectEslintConstructor }
@@ -213,7 +217,7 @@ const loadProjectEslint = (
 
   return new eslintModule.ESLint({
     cwd,
-    ...(fix ? { fix: true } : {}),
+    ...(fix ? { fix } : {}),
     ...(overrideConfig ? { overrideConfig, overrideConfigFile: true } : {})
   })
 }
@@ -391,6 +395,35 @@ const readOriginalSource = (filePath: string): string | undefined => {
   }
 }
 
+interface SourceFormatParserCandidate {
+  file: string
+  lines: number[]
+}
+
+const SOURCE_FILE_READ_PATTERN = /\b(?:Bun\.file|Deno\.readTextFile|readFile|readFileSync|readTextFile)\b/
+
+const SOURCE_REGEXP_PATTERN = new RegExp([
+  String.raw`\.match(?:All)?\s*\(`,
+  String.raw`\.replace(?:All)?\s*\(`,
+  String.raw`\.search\s*\(`,
+  String.raw`\bRegExp\s*\(`,
+  String.raw`\.(?:exec|test)\s*\(`
+].join('|'))
+
+const findSourceFormatParserCandidates = (
+  cwd: string,
+  filePaths: string[]
+): SourceFormatParserCandidate[] => filePaths.flatMap(filePath => {
+  const content = readOriginalSource(filePath)
+
+  if (!content || !SOURCE_FILE_READ_PATTERN.test(content)) return []
+
+  const lines = content.split('\n')
+    .flatMap((line, index) => SOURCE_REGEXP_PATTERN.test(line) ? [index + 1] : [])
+
+  return lines.length > 0 ? [{ file: relative(cwd, filePath), lines }] : []
+})
+
 const TYPESCRIPT_CONFIG_FILENAMES = [
   'tsconfig.json',
   'tsconfig.base.json',
@@ -524,11 +557,20 @@ const analyzePresetSource = async (
   selectedConfig: unknown,
   sourceFiles: string[],
   configuredProjects: string[],
-  typescriptRunner: CommandRunner
+  typescriptRunner: CommandRunner,
+  semanticOnly = false,
+  write = false
 ) => {
   const lintTargets = sourceFiles.length > 0 ? sourceFiles : ['.']
   const lintResults = await loadProjectEslint(cwd, selectedConfig).lintFiles(lintTargets)
-  const previewResults = await loadProjectEslint(cwd, selectedConfig, true).lintFiles(lintTargets)
+
+  const fix = semanticOnly ?
+    (message: ProjectLintMessage): boolean => (
+      message.ruleId === null || getRuleGroup(message.ruleId) !== 'formatting'
+    ) :
+    true
+
+  const previewResults = await loadProjectEslint(cwd, selectedConfig, fix).lintFiles(lintTargets)
   const byCategory: Record<string, FindingSummary> = {}
   const byFileType: Record<string, FindingSummary> = {}
   const byRule: Record<string, FindingSummary> = {}
@@ -561,6 +603,7 @@ const analyzePresetSource = async (
   let estimatedChangedLines = 0
   let remainingErrors = 0
   let remainingWarnings = 0
+  let writtenFileCount = 0
 
   for (const result of previewResults) {
     remainingErrors += result.errorCount
@@ -578,6 +621,12 @@ const analyzePresetSource = async (
     const original = readOriginalSource(result.filePath)
 
     if (original !== undefined) estimatedChangedLines += estimateChangedLines(original, result.output)
+
+    if (write) {
+      writeFileSync(result.filePath, result.output)
+
+      writtenFileCount++
+    }
   }
 
   return {
@@ -587,7 +636,9 @@ const analyzePresetSource = async (
       estimatedChangedLines,
       remainingErrors,
       remainingFixableRules: [...remainingFixableRules].sort(),
-      remainingWarnings
+      remainingWarnings,
+      scope: semanticOnly ? 'semantic' as const : 'all' as const,
+      writtenFileCount
     },
     byCategory,
     byFileType,
@@ -597,6 +648,10 @@ const analyzePresetSource = async (
       count: nonFormattingErrors,
       rules: [...nonFormattingErrorRules].sort()
     },
+    sourceFormatParserCandidates: findSourceFormatParserCandidates(
+      cwd,
+      [...new Set(lintResults.map(result => result.filePath))]
+    ),
     typescriptPreflight: createTypeScriptPreflight(cwd, configuredProjects, typescriptRunner),
     totals: {
       errors: lintResults.reduce((total, result) => total + result.errorCount, 0),
@@ -630,6 +685,14 @@ const formatSourceAnalysis = (
     analysis.autofixPreview.remainingFixableRules.join(', ') :
     'none'
 
+  const parserCandidates = analysis.sourceFormatParserCandidates.length > 0 ?
+    analysis.sourceFormatParserCandidates.map(candidate => (
+      `  - ${candidate.file}:${candidate.lines.join(',')}`
+    )) :
+    ['  - none']
+
+  const previewLabel = analysis.autofixPreview.scope === 'semantic' ? 'Semantic autofix' : 'Autofix'
+
   const typescriptLines = analysis.typescriptPreflight.status === 'failed' ?
     [
       `- TypeScript preflight: failed with ${analysis.typescriptPreflight.diagnosticCount} diagnostics`,
@@ -647,17 +710,21 @@ const formatSourceAnalysis = (
 
   return [
     '',
-    'Source analysis (selected preset, no files written):',
+    `Source analysis (selected preset, ${analysis.autofixPreview.writtenFileCount > 0 ?
+      `${analysis.autofixPreview.writtenFileCount} files written` :
+      'no files written'}):`,
     `- Lint targets: ${analysis.lintTargets.join(', ')}`,
     `- Files analyzed: ${analysis.totals.files}`,
     `- Findings: ${analysis.totals.findings} ` +
     `(${analysis.totals.errors} errors, ${analysis.totals.warnings} warnings)`,
     `- Non-formatting errors to resolve first: ${analysis.nonFormattingErrors.count}${nonFormattingRuleSuffix}`,
-    `- Autofix preview: ${analysis.autofixPreview.changedFileCount} files, ` +
+    `- ${previewLabel} preview: ${analysis.autofixPreview.changedFileCount} files, ` +
     `about ${analysis.autofixPreview.estimatedChangedLines} changed lines`,
     `- Findings remaining after preview: ${analysis.autofixPreview.remainingErrors} errors, ` +
     `${analysis.autofixPreview.remainingWarnings} warnings`,
     `- Fixable rules still remaining: ${remainingFixableRules}`,
+    '- Formatting-sensitive source-parser candidates:',
+    ...parserCandidates,
     ...typescriptLines
   ]
 }
@@ -686,6 +753,10 @@ export const createPresetReport = async (
   file = 'eslint.config.js',
   options: CreatePresetReportOptions = {}
 ) => {
+  if (options.write && !options.semanticOnly) {
+    throw new Error('Writing preset fixes requires semanticOnly to avoid an unchecked formatting rewrite.')
+  }
+
   const normalizedPreset = presetName.toLowerCase()
 
   if (!PRESETS.has(normalizedPreset)) {
@@ -769,7 +840,9 @@ export const createPresetReport = async (
       selectedConfig,
       options.sourceFiles ?? [],
       Object.keys(resolvablePresetOptions.projects ?? {}),
-      options.typescriptRunner ?? defaultCommandRunner
+      options.typescriptRunner ?? defaultCommandRunner,
+      options.semanticOnly,
+      options.write
     ) :
     null
 
@@ -797,9 +870,19 @@ export const handleExplainPreset = async (
   preset: string,
   options: ExplainPresetOptions = {}
 ): Promise<void> => {
+  if (options.write && !options.semanticOnly) {
+    throw new Error('explain-preset --write requires --semantic-only to avoid an unchecked formatting rewrite.')
+  }
+
+  if (options.semanticOnly && !options.analyzeSource) {
+    throw new Error('explain-preset --semantic-only requires --analyze-source.')
+  }
+
   const report = await createPresetReport(cwd, preset, options.file, {
     analyzeSource: options.analyzeSource,
-    sourceFiles: options.files
+    semanticOnly: options.semanticOnly,
+    sourceFiles: options.files,
+    write: options.write
   })
 
   let compatibilityFile: null | string = null

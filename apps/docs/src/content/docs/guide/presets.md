@@ -52,6 +52,12 @@ out non-formatting errors to resolve first; and estimates which files and lines
 autofix would change. Fixable findings that remain after the preview are listed
 as potential fix conflicts. No source files are written.
 
+Add `--semantic-only` to exclude formatting-rule fixes from the preview. Once
+that smaller report is reviewed, add `--write` to apply it. The CLI refuses
+source writes without semantic-only mode. The same analysis lists candidate
+file-reading scripts that use regular expressions, since those scripts may
+depend on quote or object-key formatting during a later formatting pass.
+
 Add `--compatibility` to generate a temporary override for newly enabled rules.
 The report groups the delta by formatting, correctness, security, framework,
 and domain rules so migration work can be planned independently. Compatibility

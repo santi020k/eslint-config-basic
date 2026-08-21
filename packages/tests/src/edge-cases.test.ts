@@ -124,9 +124,19 @@ describe('Edge-Case & Conflict Tests (#6)', () => {
     expect(astroConfig?.files).toEqual([`${projectPath}/**/*.astro`])
     expect(astroConfig?.languageOptions?.parserOptions).toMatchObject({
       project: true,
-      projectService: false,
       tsconfigRootDir
     })
+    expect(astroConfig?.languageOptions?.parserOptions).not.toHaveProperty('projectService')
+
+    const astroParserEntries = config.filter(entry => (
+      Array.isArray(entry.files) &&
+      entry.files.some(file => typeof file === 'string' && file.endsWith('**/*.astro')) &&
+      entry.languageOptions?.parserOptions
+    ))
+
+    for (const entry of astroParserEntries) {
+      expect(entry.languageOptions?.parserOptions).not.toHaveProperty('projectService')
+    }
   })
 
   test('should handle duplicate optionals without doubling', async () => {
