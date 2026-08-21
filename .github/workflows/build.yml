@@ -17,6 +17,8 @@ jobs:
     name: Quality gate
     runs-on: ubuntu-latest
     timeout-minutes: 90
+    outputs:
+      windows: ${{ steps.changes.outputs.windows }}
     env:
       CI_BASE_SHA: ${{ github.event.pull_request.base.sha }}
       CI_HEAD_SHA: ${{ github.sha }}
@@ -58,6 +60,7 @@ jobs:
           docs=false
           astro_doctor=false
           coverage=false
+          windows=false
           while IFS= read -r file; do
             case "$file" in
               apps/docs/*|packages/*/README.md|.github/workflows/docs.yml)
@@ -74,11 +77,17 @@ jobs:
                 coverage=true
                 ;;
             esac
+            case "$file" in
+              packages/basic/src/cli*|packages/basic/src/detection*|packages/tests/src/cli.test.ts|packages/tests/src/detection*.test.ts)
+                windows=true
+                ;;
+            esac
           done < <(git diff --name-only --no-renames "$BASE_SHA" "$HEAD_SHA")
           {
             echo "docs=$docs"
             echo "astro_doctor=$astro_doctor"
             echo "coverage=$coverage"
+            echo "windows=$windows"
           } >> "$GITHUB_OUTPUT"
 
       - name: Run final release gate
@@ -175,6 +184,10 @@ jobs:
         if: github.head_ref == 'changeset-release/main'
         run: pnpm exec turbo run build test --force --concurrency=50%
 
+      - name: Verify packed npm consumer on Node.js 24
+        if: github.head_ref == 'changeset-release/main'
+        run: pnpm run check:package-managers -- --manager npm
+
       - name: Restore Node.js 22
         if: github.head_ref == 'changeset-release/main'
         uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
@@ -200,7 +213,8 @@ jobs:
 
   windows-smoke:
     name: Windows smoke
-    if: github.head_ref == 'changeset-release/main'
+    needs: quality
+    if: github.head_ref == 'changeset-release/main' || needs.quality.outputs.windows == 'true'
     runs-on: windows-latest
     timeout-minutes: 25
     steps:

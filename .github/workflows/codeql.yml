@@ -1,6 +1,9 @@
 name: "CodeQL"
 
 on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
   schedule:
     - cron: '21 7 1 * *'
   workflow_dispatch: {}
@@ -17,6 +20,7 @@ concurrency:
 jobs:
   analyze:
     name: Analyze JavaScript and TypeScript
+    if: github.event_name != 'pull_request' || github.head_ref == 'changeset-release/main'
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
