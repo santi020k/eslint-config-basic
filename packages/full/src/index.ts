@@ -1,10 +1,9 @@
-/* eslint-disable import/export -- Full intentionally replaces Basic's composer result boundary. */
-
 import {
   defineConfig as basicDefineConfig,
   type EslintConfigArray as BasicEslintConfigArray
 } from '@santi020k/eslint-config-basic'
 
+// eslint-disable-next-line import/export -- Full intentionally replaces Basic's defineConfig result boundary.
 export * from '@santi020k/eslint-config-basic'
 export * from '@santi020k/eslint-config-extensions'
 export * from '@santi020k/eslint-config-formats'
@@ -21,4 +20,5 @@ type ConfigComposer = (
   ...args: Parameters<typeof basicDefineConfig>
 ) => Promise<EslintConfigArray>
 
+// eslint-disable-next-line import/export -- Full intentionally narrows Basic's composer result type.
 export const defineConfig: ConfigComposer = basicDefineConfig

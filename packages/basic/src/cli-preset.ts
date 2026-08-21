@@ -164,6 +164,12 @@ const FORMAT_PREFIXES = new Set([
   'yaml'
 ])
 
+const FORMAT_RULES = new Set([
+  'import/first',
+  'simple-import-sort/exports',
+  'simple-import-sort/imports'
+])
+
 const MULTI_SEGMENT_RULE_PREFIXES = new Set(['@next/next'])
 
 const getRulePrefix = (rule: string): string => {
@@ -190,7 +196,12 @@ const getRuleGroup = (rule: string): 'correctness' | 'domain' | 'formatting' | '
 
   if (DOMAIN_PREFIXES.has(prefix)) return 'domain'
 
-  if (FORMAT_PREFIXES.has(prefix) || rule.includes('format') || rule.includes('spacing')) return 'formatting'
+  if (
+    FORMAT_PREFIXES.has(prefix) ||
+    FORMAT_RULES.has(rule) ||
+    rule.includes('format') ||
+    rule.includes('spacing')
+  ) return 'formatting'
 
   return 'correctness'
 }

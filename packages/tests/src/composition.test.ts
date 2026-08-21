@@ -1320,6 +1320,10 @@ describe('Monorepo project scoping', () => {
         '@import "tailwindcss";\n@plugin "@tailwindcss/typography";\n'
       )
       writeFileSync(
+        join(root, 'tailwind.config.js'),
+        '// Example only: require(\'@tailwindcss/forms\')\n'
+      )
+      writeFileSync(
         join(root, 'src/components/Card.astro'),
         [
           '<article class="principle-card not-prose"></article>',
@@ -1352,6 +1356,7 @@ describe('Monorepo project scoping', () => {
       expect(matchesIgnore('principle-card')).toBe(true)
       expect(matchesIgnore('post-meta-card')).toBe(true)
       expect(matchesIgnore('not-prose')).toBe(true)
+      expect(matchesIgnore('form-input')).toBe(false)
       expect(matchesIgnore('comment-card')).toBe(false)
       expect(matchesIgnore('unknown-card')).toBe(false)
     } finally {

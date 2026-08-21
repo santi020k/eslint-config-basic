@@ -181,8 +181,12 @@ const getConfiguredTailwindPlugins = (cwd: string): string[] => {
 
     if (content === undefined) continue
 
+    const uncommentedContent = content
+      .replaceAll(/\/\*[\s\S]*?\*\//g, '')
+      .replaceAll(/^\s*\/\/.*$/gm, '')
+
     for (const plugin of Object.keys(PLUGIN_CLASS_PATTERNS)) {
-      if (content.includes(plugin)) plugins.add(plugin)
+      if (uncommentedContent.includes(plugin)) plugins.add(plugin)
     }
   }
 
