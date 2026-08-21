@@ -51,6 +51,8 @@ const writeFakeEslint = (
     afterFix?: unknown[]
     afterSemanticFix?: unknown[]
     beforeFix?: unknown[]
+    expectedSemanticFixRuleIds?: string[]
+    rulesMeta?: Record<string, unknown>
   } = {}
 ): void => {
   const packageDir = join(cwd, 'node_modules', 'eslint')
@@ -69,8 +71,13 @@ const writeFakeEslint = (
   writeFileSync(
     join(packageDir, 'index.js'),
     'module.exports = { ESLint: class { constructor(options) { this.options = options } ' +
-    'async lintFiles() { return typeof this.options.fix === ' + JSON.stringify('function') + ' ? ' +
-    `${JSON.stringify(lintScenario.afterSemanticFix ?? lintScenario.afterFix ?? [])} : ` +
+    'getRulesMetaForResults() { return ' + JSON.stringify(lintScenario.rulesMeta ?? {}) + ' } ' +
+    'async lintFiles() { if (typeof this.options.fix === ' + JSON.stringify('function') + ') { ' +
+    'const expected = ' + JSON.stringify(lintScenario.expectedSemanticFixRuleIds) + '; ' +
+    'if (expected) { const before = ' + JSON.stringify(lintScenario.beforeFix ?? []) + '; ' +
+    'const accepted = before.flatMap(result => result.messages || []).filter(message => message.fix !== undefined && this.options.fix(message)).map(message => message.ruleId); ' +
+    'if (JSON.stringify(accepted) !== JSON.stringify(expected)) throw new Error(`Unexpected semantic fixes: ${JSON.stringify(accepted)}`); } ' +
+    'return ' + JSON.stringify(lintScenario.afterSemanticFix ?? lintScenario.afterFix ?? []) + '; } return ' +
     `this.options.fix ? ${JSON.stringify(lintScenario.afterFix ?? [])} : ` +
     `${JSON.stringify(lintScenario.beforeFix ?? [])} } ` +
     'async calculateConfigForFile() { if (this.options.overrideConfig) { ' +
@@ -1027,7 +1034,8 @@ describe('preset adoption', () => {
           { fix: {}, ruleId: '@stylistic/quotes', severity: 1 }
         ],
         warningCount: 1
-      }]
+      }],
+      expectedSemanticFixRuleIds: ['@typescript-eslint/no-explicit-any']
     })
 
     const report = await createPresetReport(cwd, 'app', sourcePath, {
@@ -1047,6 +1055,43 @@ describe('preset adoption', () => {
     }])
     expect(readFileSync(sourcePath, 'utf8')).toBe(semanticSource)
     expect(readFileSync(sourcePath, 'utf8')).toContain('"softwareVersion":')
+  })
+
+  test('uses rule metadata and known sorting families to keep semantic fixes non-formatting', async () => {
+    const cwd = createTempProject()
+    const sourcePath = join(cwd, 'src/index.ts')
+
+    mkdirSync(join(cwd, 'src'), { recursive: true })
+    writeFileSync(sourcePath, 'const value = true\n')
+    writeFakeEslint(cwd, undefined, {
+      afterSemanticFix: [],
+      beforeFix: [{
+        errorCount: 5,
+        filePath: sourcePath,
+        messages: [
+          { fix: {}, ruleId: 'arrow-spacing', severity: 2 },
+          { fix: {}, ruleId: 'eqeqeq', severity: 2 },
+          { fix: {}, ruleId: 'sort-imports', severity: 2 },
+          { fix: {}, ruleId: 'perfectionist/sort-objects', severity: 2 },
+          { fix: {}, ruleId: '@typescript-eslint/no-explicit-any', severity: 2 }
+        ],
+        warningCount: 0
+      }],
+      expectedSemanticFixRuleIds: ['eqeqeq', '@typescript-eslint/no-explicit-any'],
+      rulesMeta: {
+        'arrow-spacing': { fixable: 'whitespace', type: 'layout' },
+        eqeqeq: { fixable: 'code', type: 'suggestion' },
+        'sort-imports': { fixable: 'code', type: 'suggestion' }
+      }
+    })
+
+    const report = await createPresetReport(cwd, 'app', sourcePath, {
+      analyzeSource: true,
+      semanticOnly: true,
+      sourceFiles: ['src/**/*.ts']
+    })
+
+    expect(report.sourceAnalysis?.autofixPreview.scope).toBe('semantic')
   })
 
   test('refuses source writes unless semantic-only analysis is explicit', async () => {
@@ -1576,6 +1621,38 @@ describe('config declaration portability', () => {
     writeFileSync(join(cwd, 'eslint.config.mts'), [
       'const root = import.meta.dirname',
       'export default [{ settings: { root, file: import.meta.filename } }]',
+      ''
+    ].join('\n'))
+
+    const report = createConfigTypesReport(cwd)
+
+    expect(report.portable).toBe(true)
+    expect(report.files[0]?.issues).toEqual([])
+  })
+
+  test('preserves Bun and Node ambient types when configs use both runtimes', () => {
+    const cwd = createTempProject()
+    const projectRequire = createRequire(import.meta.url)
+    const nodeTypesSource = dirname(projectRequire.resolve('@types/node/package.json'))
+    const nodeTypesTarget = join(cwd, 'node_modules', '@types', 'node')
+    const bunTypesTarget = join(cwd, 'node_modules', '@types', 'bun')
+
+    linkRealTypeScript(cwd)
+    mkdirSync(dirname(nodeTypesTarget), { recursive: true })
+    symlinkSync(nodeTypesSource, nodeTypesTarget, 'dir')
+    mkdirSync(bunTypesTarget, { recursive: true })
+    writeFileSync(join(bunTypesTarget, 'package.json'), JSON.stringify({
+      name: '@types/bun',
+      types: './index.d.ts',
+      version: '1.0.0'
+    }))
+    writeFileSync(
+      join(bunTypesTarget, 'index.d.ts'),
+      'declare const Bun: { file(path: string): { text(): Promise<string> } }\n'
+    )
+    writeFileSync(join(cwd, 'eslint.config.mts'), [
+      'const source = Bun.file(process.cwd() + \'/package.json\')',
+      'export default [{ settings: { source } }]',
       ''
     ].join('\n'))
 
