@@ -1,16 +1,11 @@
 name: Deploy Docs
 
 on:
-  # Deploy after a successful Release so docs stay in sync with what was just published to npm.
-  # The Release workflow only publishes on Version-Packages PR merges, so this fires at the right time.
-  workflow_run:
-    workflows: ["Release"]
-    types: [completed]
-  # Also deploy on doc-only commits that don't go through a release (e.g. typo fixes, new guides).
   push:
     branches: [main]
     paths:
       - 'apps/docs/**'
+      - 'packages/*/CHANGELOG.md'
       - 'packages/*/README.md'
       - '.github/workflows/docs.yml'
   workflow_dispatch:
@@ -23,31 +18,21 @@ on:
 permissions:
   contents: read
 
-# Cancel superseded PR checks, but never interrupt a release or production deploy.
 concurrency:
-  group: ${{ github.event_name == 'pull_request' && format('pages-pr-{0}', github.event.pull_request.number) || 'pages' }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  group: pages
+  cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    # Skip when triggered by a failed/cancelled Release run.
-    if: |
-      github.event_name == 'push' ||
-      github.event_name == 'pull_request' ||
-      github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
-
     env:
-      TURBO_TOKEN: ${{ github.event_name != 'pull_request' && secrets.TURBO_TOKEN || '' }}
-      TURBO_TEAM: ${{ github.event_name != 'pull_request' && secrets.TURBO_TEAM || '' }}
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
 
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
-          # workflow_run events expose the triggering commit on a different context key.
-          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
           persist-credentials: false
 
       - name: Install pnpm
@@ -105,7 +90,7 @@ jobs:
 
   report-build-failure:
     needs: build
-    if: ${{ always() && needs.build.result == 'failure' && github.event_name != 'pull_request' }}
+    if: ${{ always() && needs.build.result == 'failure' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -160,8 +145,7 @@ jobs:
       issues: write
       pages: write
       id-token: write
-    # Pull requests validate the exact build artifact but must never publish it.
-    if: ${{ github.event_name != 'pull_request' && !inputs.dry_run }}
+    if: ${{ !inputs.dry_run }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
