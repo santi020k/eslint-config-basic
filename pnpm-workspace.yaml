@@ -156,6 +156,9 @@ peerDependencyRules:
     typescript: "*"
 
 minimumReleaseAgeExclude:
+  - '@santi020k/lumen'
+  - '@santi020k/lumen-astro'
+  - '@santi020k/lumen-core'
   - '@es-joy/jsdoccomment@0.93.1'
   - comment-parser@1.4.8
   - eslint-plugin-jsdoc@64.0.1

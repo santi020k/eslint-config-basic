@@ -1,3 +1,5 @@
-import { defineConfig } from './index.js'
+import { defineConfig, type EslintConfigArray } from './index.js'
 
-export default await defineConfig()
+const config: EslintConfigArray = await defineConfig()
+
+export default config
