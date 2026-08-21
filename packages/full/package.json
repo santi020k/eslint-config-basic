@@ -5,7 +5,7 @@
     "access": "public",
     "provenance": true
   },
-  "description": "Batteries-included ESLint flat config with every supported framework and integration.",
+  "description": "Batteries-included ESLint 10 flat config with every supported framework and integration.",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
