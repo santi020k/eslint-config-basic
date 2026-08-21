@@ -64,6 +64,7 @@
     "@eslint/config-inspector": "catalog:",
     "@santi020k/commitprompt": "catalog:",
     "@santi020k/eslint-config-basic": "workspace:^",
+    "@typescript/native": "catalog:",
     "@types/node": "catalog:",
     "cspell": "catalog:",
     "eslint": "catalog:",

@@ -26,6 +26,7 @@ import {
 import { handleExplainPreset } from './cli-preset.js'
 import {
   handleBaseline,
+  handleConfigTypes,
   handleProfile,
   handleSnapshot,
   handleSnapshotDiff
@@ -163,6 +164,7 @@ interface DoctorProjectActivation {
     componentClasses: number
     detected: boolean
     entryPoint: null | string
+    exceptionGuidance?: string
     unknownClassPolicy: 'fallback-off' | 'off' | 'strict' | 'strict-with-css-components'
   }
   testing: DoctorFeatureActivation[]
@@ -627,6 +629,7 @@ const printUsage = () => {
     '  install         Install missing packages for detected v3 features',
     '  doctor          Check project setup for common v3 adoption issues',
     '  compatibility   Check runtime and config package compatibility',
+    '  config-types    Emit and verify portable ESLint config declarations',
     '  docs            Generate ESLINT_STANDARDS.md from detection',
     '  migrate         Plan or apply v1-to-v2 and v2-to-v3 migrations',
     '  baseline        Suppress existing violations for incremental adoption',
@@ -655,6 +658,8 @@ const printUsage = () => {
     '  --output        explain-preset: compatibility override path',
     '  --preset        baseline: enable ci or pedantic strict mode before suppressing',
     '  --prune         baseline: remove suppressions for resolved violations',
+    '  --rules-only    snapshot: store only effective rules for compact CI review',
+    '  --semantic-only explain-preset: preview or write only non-formatting fixes',
     '  --snapshot-path snapshot/diff: override .eslint-config-snapshot.json',
     '  --to            migrate: target version (v2 or v3)',
     '  --verbose       doctor: print per-project activation details',
@@ -668,18 +673,27 @@ const printUsage = () => {
 const COMMAND_OPTIONS: Partial<Record<string, string[]>> = {
   baseline: ['--json', '--preset', '--prune'],
   compatibility: ['--json'],
+  'config-types': ['--file', '--json'],
   diff: ['--file', '--json', '--snapshot-path'],
   docs: [],
   doctor: ['--fix', '--json', '--lite-install', '--verbose'],
   explain: ['--file', '--json'],
-  'explain-preset': ['--analyze-source', '--compatibility', '--file', '--json', '--output'],
+  'explain-preset': [
+    '--analyze-source',
+    '--compatibility',
+    '--file',
+    '--json',
+    '--output',
+    '--semantic-only',
+    '--write'
+  ],
   'generate-skill': ['--check', '--create', '--force', '--with-eslint-mcp'],
   init: ['--check', '--explicit'],
   inspect: ['--json'],
   install: ['--dry-run'],
   migrate: ['--check', '--full', '--json', '--to', '--write'],
   profile: ['--concurrency', '--file', '--json', '--max-duration', '--max-rule-time', '--max-warnings'],
-  snapshot: ['--check', '--file', '--json', '--snapshot-path'],
+  snapshot: ['--check', '--file', '--json', '--rules-only', '--snapshot-path'],
   update: []
 }
 
@@ -1608,6 +1622,14 @@ const getDoctorProjectActivations = async (cwd: string): Promise<DoctorProjectAc
         componentClasses: tailwindComponentClasses,
         detected: tailwindDetected,
         entryPoint: tailwindEntryPoint,
+        ...(tailwindDetected ?
+          {
+            exceptionGuidance: tailwindEntryPoint ?
+              'Keep unknown-class exceptions project-scoped with anchored `tailwind.ignore` patterns; ' +
+              'use a JSX comment for a one-line MDX directive.' :
+              'Set a project-scoped `tailwind.entryPoint` before adding unknown-class exceptions.'
+          } :
+          {}),
         unknownClassPolicy: getTailwindUnknownClassPolicy(
           tailwindDetected,
           tailwindEntryPoint,
@@ -2243,6 +2265,8 @@ const dispatchCommand = (
     hasJson: boolean
     hasLiteInstall: boolean
     hasPrune: boolean
+    hasRulesOnly: boolean
+    hasSemanticOnly: boolean
     hasVerbose: boolean
     hasWrite: boolean
     hasWithEslintMcp: boolean
@@ -2280,10 +2304,26 @@ const dispatchCommand = (
       break
     }
 
+    case 'config-types': {
+      try {
+        handleConfigTypes(cwd, {
+          files: flags.files,
+          json: flags.hasJson
+        })
+      } catch (error) {
+        console.error(`❌ Failed to check config declaration portability: ${String(error)}`)
+
+        process.exitCode = 1
+      }
+
+      break
+    }
+
     case 'diff': {
       handleSnapshotDiff(cwd, {
         files: flags.files,
         json: flags.hasJson,
+        rulesOnly: flags.hasRulesOnly,
         snapshotPath: flags.snapshotPath
       }).catch((error: unknown) => {
         console.error(`❌ Failed to diff ESLint configuration: ${String(error)}`)
@@ -2344,7 +2384,9 @@ const dispatchCommand = (
         file: flags.files[0],
         files: flags.files,
         json: flags.hasJson,
-        output: flags.output
+        output: flags.output,
+        semanticOnly: flags.hasSemanticOnly,
+        write: flags.hasWrite
       }).catch((error: unknown) => {
         console.error(`❌ Failed to explain preset: ${String(error)}`)
 
@@ -2433,6 +2475,7 @@ const dispatchCommand = (
         check: flags.hasCheck,
         files: flags.files,
         json: flags.hasJson,
+        rulesOnly: flags.hasRulesOnly,
         snapshotPath: flags.snapshotPath
       }).catch((error: unknown) => {
         console.error(`❌ Failed to snapshot ESLint configuration: ${String(error)}`)
@@ -2531,6 +2574,8 @@ export const runCli = (argv: string[] = process.argv, cwd: string = process.cwd(
     hasJson: argv.includes('--json'),
     hasLiteInstall: argv.includes('--lite-install'),
     hasPrune: argv.includes('--prune'),
+    hasRulesOnly: argv.includes('--rules-only'),
+    hasSemanticOnly: argv.includes('--semantic-only'),
     hasVerbose: argv.includes('--verbose'),
     hasWithEslintMcp: argv.includes('--with-eslint-mcp'),
     hasWrite: argv.includes('--write'),
@@ -2546,11 +2591,16 @@ export const runCli = (argv: string[] = process.argv, cwd: string = process.cwd(
   })
 }
 
+export const isCliEntrypoint = (
+  entryPath: string,
+  modulePath: string = fileURLToPath(import.meta.url)
+): boolean => entryPath === modulePath || [
+  'basic-eslint',
+  'cli.js',
+  'cli.ts'
+].includes(basename(entryPath))
+
 // Only run if this is the entry point
-if (process.argv[1] && (
-  process.argv[1] === fileURLToPath(import.meta.url) ||
-  process.argv[1].endsWith('cli.js') ||
-  process.argv[1].endsWith('cli.ts')
-)) {
+if (process.argv[1] && isCliEntrypoint(process.argv[1])) {
   runCli()
 }

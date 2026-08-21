@@ -307,8 +307,9 @@ export interface TailwindOptions {
   cwd?: string
 
   /**
-   * Detect component classes declared by Tailwind and exact standalone selectors
-   * reachable through the local CSS entry-point import graph. Defaults to true.
+   * Detect exact standalone selectors and static utilities reachable through
+   * the CSS import graph, Astro component-local styles, and supported utilities
+   * from explicitly configured Tailwind plugins. Defaults to true.
    */
   detectComponentClasses?: boolean
   entryPoint?: string

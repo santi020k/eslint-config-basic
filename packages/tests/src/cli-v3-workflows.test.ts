@@ -1,6 +1,7 @@
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs'
+import { createRequire } from 'node:module'
 import { tmpdir } from 'node:os'
-import { join, resolve } from 'node:path'
+import { dirname, join, resolve } from 'node:path'
 
 import { afterEach, describe, expect, test, vi } from 'vitest'
 
@@ -20,6 +21,7 @@ import { createPresetReport, handleExplainPreset } from '../../basic/src/cli-pre
 import {
   type CommandRunner,
   createConfigSnapshot,
+  createConfigTypesReport,
   diffConfigSnapshots,
   findRepresentativeFiles,
   handleBaseline,
@@ -47,7 +49,10 @@ const writeFakeEslint = (
   currentRules: null | Record<string, unknown> = { 'example/rule': [2, { allow: [] }] },
   lintScenario: {
     afterFix?: unknown[]
+    afterSemanticFix?: unknown[]
     beforeFix?: unknown[]
+    expectedSemanticFixRuleIds?: string[]
+    rulesMeta?: Record<string, unknown>
   } = {}
 ): void => {
   const packageDir = join(cwd, 'node_modules', 'eslint')
@@ -66,7 +71,14 @@ const writeFakeEslint = (
   writeFileSync(
     join(packageDir, 'index.js'),
     'module.exports = { ESLint: class { constructor(options) { this.options = options } ' +
-    `async lintFiles() { return this.options.fix ? ${JSON.stringify(lintScenario.afterFix ?? [])} : ` +
+    'getRulesMetaForResults() { return ' + JSON.stringify(lintScenario.rulesMeta ?? {}) + ' } ' +
+    'async lintFiles() { if (typeof this.options.fix === ' + JSON.stringify('function') + ') { ' +
+    'const expected = ' + JSON.stringify(lintScenario.expectedSemanticFixRuleIds) + '; ' +
+    'if (expected) { const before = ' + JSON.stringify(lintScenario.beforeFix ?? []) + '; ' +
+    'const accepted = before.flatMap(result => result.messages || []).filter(message => message.fix !== undefined && this.options.fix(message)).map(message => message.ruleId); ' +
+    'if (JSON.stringify(accepted) !== JSON.stringify(expected)) throw new Error(`Unexpected semantic fixes: ${JSON.stringify(accepted)}`); } ' +
+    'return ' + JSON.stringify(lintScenario.afterSemanticFix ?? lintScenario.afterFix ?? []) + '; } return ' +
+    `this.options.fix ? ${JSON.stringify(lintScenario.afterFix ?? [])} : ` +
     `${JSON.stringify(lintScenario.beforeFix ?? [])} } ` +
     'async calculateConfigForFile() { if (this.options.overrideConfig) { ' +
     'const entries = Array.isArray(this.options.overrideConfig) ? this.options.overrideConfig.flat(Infinity) : [this.options.overrideConfig]; ' +
@@ -96,6 +108,15 @@ const writeFakeTypeScript = (
     `process.stdout.write(${JSON.stringify(`${diagnostics.join('\n')}\n`)})\n` +
     `process.exitCode = ${status}\n`
   )
+}
+
+const linkRealTypeScript = (cwd: string): void => {
+  const projectRequire = createRequire(import.meta.url)
+  const packageDir = join(cwd, 'node_modules', 'typescript')
+  const sourceDir = dirname(projectRequire.resolve('typescript/package.json'))
+
+  mkdirSync(join(cwd, 'node_modules'), { recursive: true })
+  symlinkSync(sourceDir, packageDir, 'dir')
 }
 
 const writeFakePackage = (
@@ -977,6 +998,113 @@ describe('preset adoption', () => {
     expect(output).toContain('Compatibility output preserves effective configuration, not current source behavior.')
   })
 
+  test('writes only semantic fixes and reports formatting-sensitive source parsers', async () => {
+    const cwd = createTempProject()
+    const sourcePath = join(cwd, 'scripts/sync-version.ts')
+    const originalSource = [
+      'const source = readFileSync("src/version.ts", "utf8");',
+      'const version = source.match(/"softwareVersion": "([^"]+)"/);',
+      'const unsafe = value as any;',
+      ''
+    ].join('\n')
+    const semanticSource = originalSource.replace('value as any', 'String(value)')
+
+    mkdirSync(join(cwd, 'scripts'), { recursive: true })
+    writeFileSync(sourcePath, originalSource)
+    writeFakeEslint(cwd, undefined, {
+      afterFix: [{
+        errorCount: 0,
+        filePath: sourcePath,
+        messages: [],
+        output: semanticSource.replaceAll('"', '\''),
+        warningCount: 0
+      }],
+      afterSemanticFix: [{
+        errorCount: 0,
+        filePath: sourcePath,
+        messages: [{ ruleId: '@stylistic/quotes', severity: 1 }],
+        output: semanticSource,
+        warningCount: 1
+      }],
+      beforeFix: [{
+        errorCount: 1,
+        filePath: sourcePath,
+        messages: [
+          { fix: {}, ruleId: '@typescript-eslint/no-explicit-any', severity: 2 },
+          { fix: {}, ruleId: '@stylistic/quotes', severity: 1 }
+        ],
+        warningCount: 1
+      }],
+      expectedSemanticFixRuleIds: ['@typescript-eslint/no-explicit-any']
+    })
+
+    const report = await createPresetReport(cwd, 'app', sourcePath, {
+      analyzeSource: true,
+      semanticOnly: true,
+      sourceFiles: ['scripts/**/*.ts'],
+      write: true
+    })
+
+    expect(report.sourceAnalysis?.autofixPreview).toMatchObject({
+      scope: 'semantic',
+      writtenFileCount: 1
+    })
+    expect(report.sourceAnalysis?.sourceFormatParserCandidates).toEqual([{
+      file: 'scripts/sync-version.ts',
+      lines: [2]
+    }])
+    expect(readFileSync(sourcePath, 'utf8')).toBe(semanticSource)
+    expect(readFileSync(sourcePath, 'utf8')).toContain('"softwareVersion":')
+  })
+
+  test('uses rule metadata and known sorting families to keep semantic fixes non-formatting', async () => {
+    const cwd = createTempProject()
+    const sourcePath = join(cwd, 'src/index.ts')
+
+    mkdirSync(join(cwd, 'src'), { recursive: true })
+    writeFileSync(sourcePath, 'const value = true\n')
+    writeFakeEslint(cwd, undefined, {
+      afterSemanticFix: [],
+      beforeFix: [{
+        errorCount: 5,
+        filePath: sourcePath,
+        messages: [
+          { fix: {}, ruleId: 'arrow-spacing', severity: 2 },
+          { fix: {}, ruleId: 'eqeqeq', severity: 2 },
+          { fix: {}, ruleId: 'sort-imports', severity: 2 },
+          { fix: {}, ruleId: 'perfectionist/sort-objects', severity: 2 },
+          { fix: {}, ruleId: '@typescript-eslint/no-explicit-any', severity: 2 }
+        ],
+        warningCount: 0
+      }],
+      expectedSemanticFixRuleIds: ['eqeqeq', '@typescript-eslint/no-explicit-any'],
+      rulesMeta: {
+        'arrow-spacing': { fixable: 'whitespace', type: 'layout' },
+        eqeqeq: { fixable: 'code', type: 'suggestion' },
+        'sort-imports': { fixable: 'code', type: 'suggestion' }
+      }
+    })
+
+    const report = await createPresetReport(cwd, 'app', sourcePath, {
+      analyzeSource: true,
+      semanticOnly: true,
+      sourceFiles: ['src/**/*.ts']
+    })
+
+    expect(report.sourceAnalysis?.autofixPreview.scope).toBe('semantic')
+  })
+
+  test('refuses source writes unless semantic-only analysis is explicit', async () => {
+    const cwd = createTempProject()
+
+    writeFakeEslint(cwd)
+
+    await expect(handleExplainPreset(cwd, 'app', {
+      analyzeSource: true,
+      write: true
+    })).rejects.toThrow('--write requires --semantic-only')
+  })
+
   test('elevates TypeScript module-resolution failures before unsafe lint debt', async () => {
     const cwd = createTempProject()
 
@@ -1426,6 +1554,161 @@ describe('performance profile', () => {
   })
 })
 
+describe('config declaration portability', () => {
+  test('emits declarations in memory with the consumer TypeScript context', () => {
+    const cwd = createTempProject()
+
+    linkRealTypeScript(cwd)
+    writeFileSync(join(cwd, 'tsconfig.json'), JSON.stringify({
+      compilerOptions: {
+        module: 'NodeNext',
+        moduleResolution: 'NodeNext',
+        target: 'ES2022',
+        types: ['missing-editor-runtime']
+      }
+    }))
+    writeFileSync(join(cwd, 'eslint.config.js'), [
+      'const config = [{ rules: {} }]',
+      '',
+      'export default config',
+      ''
+    ].join('\n'))
+
+    const report = createConfigTypesReport(cwd)
+
+    expect(report.files[0]?.issues).toEqual([])
+    expect(report.portable).toBe(true)
+    expect(report.files).toEqual([expect.objectContaining({
+      declarations: ['eslint.config.d.ts'],
+      file: 'eslint.config.js',
+      issues: [],
+      portable: true,
+      tsconfig: 'tsconfig.json'
+    })])
+    expect(existsSync(join(cwd, 'eslint.config.d.ts'))).toBe(false)
+  })
+
+  test('preserves Node ambient types for CommonJS TypeScript configs', () => {
+    const cwd = createTempProject({ name: 'test-project' })
+    const projectRequire = createRequire(import.meta.url)
+    const nodeTypesSource = dirname(projectRequire.resolve('@types/node/package.json'))
+    const nodeTypesTarget = join(cwd, 'node_modules', '@types', 'node')
+
+    linkRealTypeScript(cwd)
+    mkdirSync(dirname(nodeTypesTarget), { recursive: true })
+    symlinkSync(nodeTypesSource, nodeTypesTarget, 'dir')
+    writeFileSync(join(cwd, 'eslint.config.cts'), [
+      'const { join } = require(\'node:path\')',
+      'module.exports = [{ settings: { root: join(__dirname, __filename) } }]',
+      ''
+    ].join('\n'))
+
+    const report = createConfigTypesReport(cwd)
+
+    expect(report.portable).toBe(true)
+    expect(report.files[0]?.issues).toEqual([])
+  })
+
+  test('preserves Node ambient types for import.meta paths', () => {
+    const cwd = createTempProject()
+    const projectRequire = createRequire(import.meta.url)
+    const nodeTypesSource = dirname(projectRequire.resolve('@types/node/package.json'))
+    const nodeTypesTarget = join(cwd, 'node_modules', '@types', 'node')
+
+    linkRealTypeScript(cwd)
+    mkdirSync(dirname(nodeTypesTarget), { recursive: true })
+    symlinkSync(nodeTypesSource, nodeTypesTarget, 'dir')
+    writeFileSync(join(cwd, 'eslint.config.mts'), [
+      'const root = import.meta.dirname',
+      'export default [{ settings: { root, file: import.meta.filename } }]',
+      ''
+    ].join('\n'))
+
+    const report = createConfigTypesReport(cwd)
+
+    expect(report.portable).toBe(true)
+    expect(report.files[0]?.issues).toEqual([])
+  })
+
+  test('preserves Bun and Node ambient types when configs use both runtimes', () => {
+    const cwd = createTempProject()
+    const projectRequire = createRequire(import.meta.url)
+    const nodeTypesSource = dirname(projectRequire.resolve('@types/node/package.json'))
+    const nodeTypesTarget = join(cwd, 'node_modules', '@types', 'node')
+    const bunTypesTarget = join(cwd, 'node_modules', '@types', 'bun')
+
+    linkRealTypeScript(cwd)
+    mkdirSync(dirname(nodeTypesTarget), { recursive: true })
+    symlinkSync(nodeTypesSource, nodeTypesTarget, 'dir')
+    mkdirSync(bunTypesTarget, { recursive: true })
+    writeFileSync(join(bunTypesTarget, 'package.json'), JSON.stringify({
+      name: '@types/bun',
+      types: './index.d.ts',
+      version: '1.0.0'
+    }))
+    writeFileSync(
+      join(bunTypesTarget, 'index.d.ts'),
+      'declare const Bun: { file(path: string): { text(): Promise<string> } }\n'
+    )
+    writeFileSync(join(cwd, 'eslint.config.mts'), [
+      'const source = Bun.file(process.cwd() + \'/package.json\')',
+      'export default [{ settings: { source } }]',
+      ''
+    ].join('\n'))
+
+    const report = createConfigTypesReport(cwd)
+
+    expect(report.portable).toBe(true)
+    expect(report.files[0]?.issues).toEqual([])
+  })
+
+  test('rejects declarations that expose the transitive composer package', () => {
+    const cwd = createTempProject()
+    const packageDir = join(cwd, 'node_modules', 'typescript-eslint')
+
+    linkRealTypeScript(cwd)
+    mkdirSync(packageDir, { recursive: true })
+    writeFileSync(join(packageDir, 'package.json'), JSON.stringify({
+      name: 'typescript-eslint',
+      types: './index.d.ts',
+      version: '8.0.0'
+    }))
+    writeFileSync(join(packageDir, 'index.d.ts'), 'export interface Config { rules: Record<string, unknown> }\n')
+    writeFileSync(join(cwd, 'eslint.config.js'), [
+      '/** @type {import(\'typescript-eslint\').Config} */',
+      'const config = { rules: {} }',
+      '',
+      'export default config',
+      ''
+    ].join('\n'))
+
+    const report = createConfigTypesReport(cwd)
+
+    expect(report.portable).toBe(false)
+    expect(report.files[0]?.issues).toContain(
+      'eslint.config.d.ts references the transitive typescript-eslint package.'
+    )
+  })
+
+  test('dispatches config-types with structured CI output', () => {
+    const cwd = createTempProject()
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+
+    linkRealTypeScript(cwd)
+    writeFileSync(join(cwd, 'eslint.config.mjs'), 'export default [{ rules: {} }]\n')
+
+    runCli(['node', 'basic-eslint', 'config-types', '--json'], cwd)
+
+    const report = JSON.parse(String(logSpy.mock.calls[0]?.[0])) as {
+      files: { file: string }[]
+      portable: boolean
+    }
+
+    expect(report.portable).toBe(true)
+    expect(report.files).toEqual([expect.objectContaining({ file: 'eslint.config.mjs' })])
+  })
+})
+
 describe('configuration snapshots', () => {
   const createFakeEslint = (severity: number) => ({
     calculateConfigForFile: vi.fn().mockResolvedValue({
@@ -1483,6 +1766,42 @@ describe('configuration snapshots', () => {
 
     await handleSnapshotDiff(cwd, { files: ['src/index.ts'] }, createFakeEslint(2))
     expect(process.exitCode).toBe(1)
+    logSpy.mockRestore()
+  })
+
+  test('writes a compact rules-only snapshot and preserves its scope during checks', async () => {
+    const cwd = createTempProject()
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+
+    await handleSnapshot(
+      cwd,
+      { files: ['src/index.ts'], rulesOnly: true },
+      createFakeEslint(1)
+    )
+
+    const snapshot = JSON.parse(
+      readFileSync(join(cwd, '.eslint-config-snapshot.json'), 'utf8')
+    ) as {
+      files: Record<string, {
+        globals: Record<string, unknown>
+        languageOptions: Record<string, unknown>
+        plugins: string[]
+        rules: Record<string, unknown>
+      }>
+      scope?: string
+      version?: number
+    }
+
+    expect(snapshot).toMatchObject({ scope: 'rules', version: 2 })
+    expect(snapshot.files['src/index.ts']).toEqual({
+      globals: {},
+      languageOptions: {},
+      plugins: [],
+      rules: { 'example/rule': [1] }
+    })
+
+    await handleSnapshot(cwd, { check: true }, createFakeEslint(1))
+    expect(process.exitCode).toBeUndefined()
     logSpy.mockRestore()
   })
 

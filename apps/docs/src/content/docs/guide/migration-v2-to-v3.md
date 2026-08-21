@@ -178,6 +178,31 @@ If ESLint reports a missing optional config, install the package named in the
 error. This is expected when a v2 project relied on the old transitive full
 bundle.
 
+Run autofix as a separate reviewed change. Stylistic fixes can change quote
+style, object-key quoting, attribute layout, and package scripts without
+changing runtime semantics. Source-text utilities that parse JavaScript or
+Astro with regular expressions may still depend on that exact formatting, so
+run the project's type checks, tests, builds, metadata validators, and generated
+file checks after autofix. Prefer an AST or a public data source over matching
+source formatting when a parser breaks.
+
+For a large repository, preview source debt and estimated autofix churn before
+writing:
+
+```sh
+npx basic-eslint explain-preset monorepo --analyze-source
+npx basic-eslint explain-preset monorepo --analyze-source --semantic-only
+npx basic-eslint snapshot --rules-only
+```
+
+The semantic-only preview excludes high-churn formatting fixes and reports
+file-reading scripts that use regular expressions as source-parser candidates.
+After review, repeat it with `--write`; the CLI deliberately rejects unrestricted
+preset writes.
+
+After the reviewed fix pass, `snapshot --check` or `diff` verifies that a
+dependency update did not silently change the effective rule contract.
+
 ## Package mapping
 
 | v2 usage | v3 replacement |

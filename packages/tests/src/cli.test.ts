@@ -22,6 +22,7 @@ import {
   handleInstall,
   handleMigrate,
   handleUpdate,
+  isCliEntrypoint,
   runCli
 } from '../../basic/src/cli.js'
 
@@ -119,6 +120,12 @@ describe('CLI scaffolding', () => {
 })
 
 describe('CLI command UX', () => {
+  test('should recognize direct pnpm bin symlinks as CLI entrypoints', () => {
+    expect(isCliEntrypoint('/workspace/node_modules/.bin/basic-eslint', '/package/dist/cli.js')).toBe(true)
+    expect(isCliEntrypoint('/package/dist/cli.js', '/package/dist/cli.js')).toBe(true)
+    expect(isCliEntrypoint('/workspace/scripts/basic-eslint-wrapper', '/package/dist/cli.js')).toBe(false)
+  })
+
   test('should print help text for --help', () => {
     const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
 
@@ -154,7 +161,49 @@ describe('CLI command UX', () => {
 
     expect(output).toContain('Usage: basic-eslint explain-preset <preset> [options]')
     expect(output).toContain('--analyze-source')
+    expect(output).toContain('--semantic-only')
+    expect(output).toContain('--write')
     logSpy.mockRestore()
+  })
+
+  test('should forward --rules-only through the snapshot command', async () => {
+    const cwd = createTempProject({ name: 'tmp-project' })
+
+    writeFakePackage(cwd, 'eslint', '10.0.0')
+    writeFileSync(join(cwd, 'node_modules/eslint/index.js'), [
+      'class ESLint {',
+      '  async calculateConfigForFile() {',
+      '    return { languageOptions: { ecmaVersion: 2022, globals: {}, sourceType: \'module\' }, plugins: {}, rules: { semi: [2, \'never\'] } }',
+      '  }',
+      '  async isPathIgnored() { return false }',
+      '}',
+      'module.exports = { ESLint }'
+    ].join('\n'))
+    mkdirSync(join(cwd, 'src'))
+    writeFileSync(join(cwd, 'src/index.ts'), 'export const value = 1\n')
+
+    runCli([
+      'node',
+      'basic-eslint',
+      'snapshot',
+      '--rules-only',
+      '--file',
+      'src/index.ts'
+    ], cwd)
+
+    await vi.waitFor(() => {
+      const snapshot = JSON.parse(
+        readFileSync(join(cwd, '.eslint-config-snapshot.json'), 'utf8')
+      ) as { files: Record<string, unknown>, scope?: string }
+
+      expect(snapshot.scope).toBe('rules')
+      expect(snapshot.files['src/index.ts']).toEqual({
+        globals: {},
+        languageOptions: {},
+        plugins: [],
+        rules: { semi: [2, 'never'] }
+      })
+    })
   })
 
   test('should print version for --version', () => {
@@ -1109,7 +1158,12 @@ describe('CLI command UX', () => {
         inactivePackages: { package: string, reason: string }[]
         libraries: { detected: boolean, enabled: boolean, installed: boolean, name: string }[]
         path: string
-        tailwind: { componentClasses: number, entryPoint: null | string, unknownClassPolicy: string }
+        tailwind: {
+          componentClasses: number
+          entryPoint: null | string
+          exceptionGuidance?: string
+          unknownClassPolicy: string
+        }
         typescript: { mode: string, tsconfig: null | string }
       }[]
     }
@@ -1157,6 +1211,8 @@ describe('CLI command UX', () => {
       componentClasses: 0,
       entryPoint: 'src/styles/global.css',
       detected: true,
+      exceptionGuidance: 'Keep unknown-class exceptions project-scoped with anchored `tailwind.ignore` patterns; ' +
+        'use a JSX comment for a one-line MDX directive.',
       unknownClassPolicy: 'strict'
     })
     expect(site.typescript).toEqual(expect.objectContaining({
