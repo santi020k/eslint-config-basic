@@ -64,7 +64,7 @@ jobs:
                 ;;
             esac
             case "$file" in
-              packages/*/src/*|packages/tests/*|scripts/check-package-coverage.mjs)
+              packages/*/src/*|packages/tests/*|scripts/check-package-coverage.mjs|scripts/coverage-policy.json)
                 coverage=true
                 ;;
             esac
