@@ -46,4 +46,4 @@ jobs:
           title: "chore(release): version packages"
         env:
           HUSKY: 0
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PA_TOKEN || github.token }}

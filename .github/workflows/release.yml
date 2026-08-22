@@ -64,7 +64,7 @@ jobs:
           createGithubReleases: true
         env:
           HUSKY: 0
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PA_TOKEN || github.token }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: "true"
 
@@ -121,7 +121,7 @@ jobs:
           git push --force origin "refs/tags/${MAJOR_TAG}"
           echo "Updated rolling action tag ${MAJOR_TAG}." >> "$GITHUB_STEP_SUMMARY"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PA_TOKEN || github.token }}
           HUSKY: 0
 
       # These packages remain installable throughout v3 so existing consumers
