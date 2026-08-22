@@ -461,8 +461,8 @@ importers:
   apps/docs:
     dependencies:
       '@santi020k/lumen-astro':
-        specifier: 1.2.0
-        version: 1.2.0(astro@7.1.4(@astrojs/markdown-remark@7.2.1)(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.3)(@types/node@26.1.2)(db0@0.3.4(@electric-sql/pglite@0.4.3)(drizzle-orm@0.45.2(@cloudflare/workers-types@5.20260727.1)(@electric-sql/pglite@0.4.3)(@opentelemetry/api@1.9.1)(@prisma/client@7.9.1(@typescript/typescript6@6.0.2)(prisma@7.9.1(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(@typescript/typescript6@6.0.2)(magicast@0.5.3)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)))(@types/pg@8.6.1)(mysql2@3.15.3)(postgres@3.4.7)(prisma@7.9.1(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(@typescript/typescript6@6.0.2)(magicast@0.5.3)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)))(mysql2@3.15.3))(ioredis@5.11.1)(jiti@2.7.0)(rollup@4.62.3)(terser@5.49.0)(yaml@2.9.0))
+        specifier: 1.4.0
+        version: 1.4.0(astro@7.1.4(@astrojs/markdown-remark@7.2.1)(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.3)(@types/node@26.1.2)(db0@0.3.4(@electric-sql/pglite@0.4.3)(drizzle-orm@0.45.2(@cloudflare/workers-types@5.20260727.1)(@electric-sql/pglite@0.4.3)(@opentelemetry/api@1.9.1)(@prisma/client@7.9.1(@typescript/typescript6@6.0.2)(prisma@7.9.1(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(@typescript/typescript6@6.0.2)(magicast@0.5.3)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)))(@types/pg@8.6.1)(mysql2@3.15.3)(postgres@3.4.7)(prisma@7.9.1(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(@typescript/typescript6@6.0.2)(magicast@0.5.3)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)))(mysql2@3.15.3))(ioredis@5.11.1)(jiti@2.7.0)(rollup@4.62.3)(terser@5.49.0)(yaml@2.9.0))
       '@santi020k/theme':
         specifier: 1.2.0
         version: 1.2.0
@@ -2516,7 +2516,7 @@ importers:
         version: 10.10.0(@stylistic/eslint-plugin@5.10.0(eslint@10.8.0(jiti@2.7.0)))(@typescript-eslint/parser@8.65.0(@typescript/typescript6@6.0.2)(eslint@10.8.0(jiti@2.7.0)))(eslint@10.8.0(jiti@2.7.0))(vue-eslint-parser@10.4.1(eslint@10.8.0(jiti@2.7.0)))
       vue-eslint-parser:
         specifier: 'catalog:'
-        version: 10.4.1(eslint@10.8.0(jiti@2.7.0))
+        version: 10.4.1(eslint@10.8.0(jiti@2.7.0))(supports-color@8.1.1)
     devDependencies:
       publint:
         specifier: 'catalog:'
@@ -4918,8 +4918,8 @@ packages:
   '@loaderkit/resolve@1.0.6':
     resolution: {integrity: sha512-G8FdIoF5CypfwmD9rl8BXod5HDn8JqB0CCNBXDTaRZ+yRYhARrrSToX1zg1zy9jX3zLqigsELwhT4gNtkdQAUg==}
 
-  '@lucide/icons@1.27.0':
-    resolution: {integrity: sha512-ZrVXOTLts0UPvcJ39BqsTAesvYURkZydQL966htBcCEiZ4TgDYgxxM86HjqexwX+uU5fdBT786HtW7VefpiOWQ==}
+  '@lucide/icons@1.33.0':
+    resolution: {integrity: sha512-bsWF96tciAoxzPBEA7NZcTZhPqIivX3tynCwfLYF+QxcfEtseS6sX1dJ+aFvpgLihsESLlHWOKKBaQV+SsMDlA==}
 
   '@lukeed/csprng@1.1.0':
     resolution: {integrity: sha512-Z7C/xXCiGWsg0KuKsHTKJxbWhpI3Vs5GwLfOean7MGyVFGqdRgBbAjOCh6u4bbjPc/8MJ2pZmK/0DLdCbivLDA==}
@@ -6744,18 +6744,18 @@ packages:
     peerDependencies:
       eslint: ^10.0.0
 
-  '@santi020k/lumen-astro@1.2.0':
-    resolution: {integrity: sha512-/TyBM+BjEtNhKvyiy9N5SwzJjai9n5AiZ3Tj66B12kwHCPr4UmSvQz0sXL3g5HLRPr6Bl/OHl9asHYQ/vD9yZw==}
+  '@santi020k/lumen-astro@1.4.0':
+    resolution: {integrity: sha512-bZwHKpemGjSH5cLnc19ODTGwBXW7tWe6B1Y770xMXO76rYcZJUaMeCvgspTiBDHHnKyNGXhM3uRMemmX808K3Q==}
     engines: {node: '>=22.12.0'}
     peerDependencies:
       astro: '>=5'
 
-  '@santi020k/lumen-core@1.2.0':
-    resolution: {integrity: sha512-pl+Zrdi9FILVUp1xY5zlte6+I2DMek7Msb4NTJy4CdH/kAlIwzBiJFjUZ20/sSbGnXulDhRhi5Zd0FurrZlMDQ==}
+  '@santi020k/lumen-core@1.4.0':
+    resolution: {integrity: sha512-46s3CLyCa4LpERMnygExLAGF5Hhei5vjHT8tH1cC38DCedvklrCtOUq2rS/FdflEVvNrsAHjx1vPzugwgH8Heg==}
     engines: {node: '>=22.12.0'}
 
-  '@santi020k/lumen@1.2.0':
-    resolution: {integrity: sha512-wiIBdt3LTadShASWev6Wrj+36YpqqTJ9riuvonQ/6ac0sqnf+xV11vwTgWuXDxLXiWy7JAKoUYYbqPKRKJ1zVQ==}
+  '@santi020k/lumen@1.4.0':
+    resolution: {integrity: sha512-UQloTduJzrJft0MstvYR0ne24XVqKmq+rMHegyZvU6tVHKMrgHzidO1oVOGqqzDexjpd4Qcja0dW6TdnjDypAw==}
     engines: {node: '>=22.12.0'}
     hasBin: true
 
@@ -7375,6 +7375,9 @@ packages:
 
   '@types/node@26.1.2':
     resolution: {integrity: sha512-Vu4a5UFA9rIIFJ7rB/Vaafh9lrCQszopTCx6KjFboXTGQbPNasehVR5TEiithSDGyd1DEiUByggTZsg8jukeIg==}
+
+  '@types/node@26.2.0':
+    resolution: {integrity: sha512-5IviulTZeRNp2vAJ514cc/HUlY5nZ9fCbq9DMyC52BrhFZACo3nI0R7qBxhQmo/d27NFe96ur/b7Wwxklda+kg==}
 
   '@types/pg@8.6.1':
     resolution: {integrity: sha512-1Kc4oAGzAl7uqUStZCDvaLFqZrW9qWSjXOmBfdgyBP5La7Us6Mg4GBvRlSoaZMhQF/zSj1C8CtKMBkoiT8eL8w==}
@@ -12204,8 +12207,8 @@ packages:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
     engines: {node: '>= 0.8.0'}
 
-  libphonenumber-js@1.13.9:
-    resolution: {integrity: sha512-VNS5vWMM7r0P66BYv+TQJATxExEgLxN+34hfHDVhDkUsGAE4cRg0shCNSLTXNKm7nIUscC7AfB51TjxEeF7msQ==}
+  libphonenumber-js@1.13.11:
+    resolution: {integrity: sha512-ETER2kMaIFTI/Nh1a8Gk03dUF/SL0VZqtI+CcVHZxp5WIHYwNS7S+uiYZDYCvLy3lOR4/DAD5jf0h5WkePPpqg==}
 
   lie@3.3.0:
     resolution: {integrity: sha512-UaiMJzeWRlEujzAuw5LokY1L5ecNQYZKfmyZ9L7wDHb/p5etKaxXhohBcrw0EYby+G/NA52vRSN4N39dxHAIwQ==}
@@ -13482,8 +13485,8 @@ packages:
     resolution: {integrity: sha512-WCtabS6t3c8SkpDBUlb1kjOs7l66xsGdKpIPZsg4wR+B3+u9UAum2odSsF9tnvxg80h4ZxLWMy4pRjOsFIqQpw==}
     engines: {node: '>=4.0.0'}
 
-  pg-protocol@1.15.0:
-    resolution: {integrity: sha512-cq9sECI5s0+uPUXjbz8ioyPJni6RzsRib0US67i5IoTZKw8fNeYlVE7u8F4dG7vEJJtc5wdD1K189lCCUwqWTQ==}
+  pg-protocol@1.16.0:
+    resolution: {integrity: sha512-sILXutLVjCLjcDuOmvhX5e2Z4cS5qG/6Bu3VkpFwdf/633ElGLpEh9bgmuI5I4sqKqkifQiGyiCcx1HdtrK7tg==}
 
   pg-types@2.2.0:
     resolution: {integrity: sha512-qTAAlrEsl8s4OiEQY69wDvcMIdQN6wdz5ojQiOy6YRMuynxenON0O5oCpJI6lshc6scgAY8qvJ2On/p+CXY0GA==}
@@ -19130,7 +19133,7 @@ snapshots:
     dependencies:
       '@braidai/lang': 1.1.2
 
-  '@lucide/icons@1.27.0': {}
+  '@lucide/icons@1.33.0': {}
 
   '@lukeed/csprng@1.1.0': {}
 
@@ -20853,20 +20856,20 @@ snapshots:
       - supports-color
     optional: true
 
-  '@santi020k/lumen-astro@1.2.0(astro@7.1.4(@astrojs/markdown-remark@7.2.1)(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.3)(@types/node@26.1.2)(db0@0.3.4(@electric-sql/pglite@0.4.3)(drizzle-orm@0.45.2(@cloudflare/workers-types@5.20260727.1)(@electric-sql/pglite@0.4.3)(@opentelemetry/api@1.9.1)(@prisma/client@7.9.1(@typescript/typescript6@6.0.2)(prisma@7.9.1(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(@typescript/typescript6@6.0.2)(magicast@0.5.3)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)))(@types/pg@8.6.1)(mysql2@3.15.3)(postgres@3.4.7)(prisma@7.9.1(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(@typescript/typescript6@6.0.2)(magicast@0.5.3)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)))(mysql2@3.15.3))(ioredis@5.11.1)(jiti@2.7.0)(rollup@4.62.3)(terser@5.49.0)(yaml@2.9.0))':
+  '@santi020k/lumen-astro@1.4.0(astro@7.1.4(@astrojs/markdown-remark@7.2.1)(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.3)(@types/node@26.1.2)(db0@0.3.4(@electric-sql/pglite@0.4.3)(drizzle-orm@0.45.2(@cloudflare/workers-types@5.20260727.1)(@electric-sql/pglite@0.4.3)(@opentelemetry/api@1.9.1)(@prisma/client@7.9.1(@typescript/typescript6@6.0.2)(prisma@7.9.1(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(@typescript/typescript6@6.0.2)(magicast@0.5.3)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)))(@types/pg@8.6.1)(mysql2@3.15.3)(postgres@3.4.7)(prisma@7.9.1(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(@typescript/typescript6@6.0.2)(magicast@0.5.3)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)))(mysql2@3.15.3))(ioredis@5.11.1)(jiti@2.7.0)(rollup@4.62.3)(terser@5.49.0)(yaml@2.9.0))':
     dependencies:
-      '@santi020k/lumen': 1.2.0
-      '@santi020k/lumen-core': 1.2.0
+      '@santi020k/lumen': 1.4.0
+      '@santi020k/lumen-core': 1.4.0
       astro: 7.1.4(@astrojs/markdown-remark@7.2.1)(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.3)(@types/node@26.1.2)(db0@0.3.4(@electric-sql/pglite@0.4.3)(drizzle-orm@0.45.2(@cloudflare/workers-types@5.20260727.1)(@electric-sql/pglite@0.4.3)(@opentelemetry/api@1.9.1)(@prisma/client@7.9.1(@typescript/typescript6@6.0.2)(prisma@7.9.1(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(@typescript/typescript6@6.0.2)(magicast@0.5.3)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)))(@types/pg@8.6.1)(mysql2@3.15.3)(postgres@3.4.7)(prisma@7.9.1(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(@typescript/typescript6@6.0.2)(magicast@0.5.3)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)))(mysql2@3.15.3))(ioredis@5.11.1)(jiti@2.7.0)(rollup@4.62.3)(terser@5.49.0)(yaml@2.9.0)
       uqr: 0.1.3
 
-  '@santi020k/lumen-core@1.2.0':
+  '@santi020k/lumen-core@1.4.0':
     dependencies:
-      '@lucide/icons': 1.27.0
+      '@lucide/icons': 1.33.0
 
-  '@santi020k/lumen@1.2.0':
+  '@santi020k/lumen@1.4.0':
     dependencies:
-      '@santi020k/lumen-core': 1.2.0
+      '@santi020k/lumen-core': 1.4.0
       semver: 7.8.5
 
   '@santi020k/og@0.4.0(@types/node@26.1.2)':
@@ -21780,10 +21783,15 @@ snapshots:
     dependencies:
       undici-types: 8.3.0
 
+  '@types/node@26.2.0':
+    dependencies:
+      undici-types: 8.3.0
+    optional: true
+
   '@types/pg@8.6.1':
     dependencies:
-      '@types/node': 26.1.2
-      pg-protocol: 1.15.0
+      '@types/node': 26.2.0
+      pg-protocol: 1.16.0
       pg-types: 2.2.0
     optional: true
 
@@ -23748,7 +23756,7 @@ snapshots:
   class-validator@0.15.1:
     dependencies:
       '@types/validator': 13.15.10
-      libphonenumber-js: 1.13.9
+      libphonenumber-js: 1.13.11
       validator: 13.15.35
 
   classnames@2.5.1: {}
@@ -25075,7 +25083,7 @@ snapshots:
       '@typescript-eslint/eslint-plugin': 8.65.0(@typescript-eslint/parser@8.65.0(@typescript/typescript6@6.0.2)(eslint@10.8.0(jiti@2.7.0)))(@typescript/typescript6@6.0.2)(eslint@10.8.0(jiti@2.7.0))
       '@typescript-eslint/parser': 8.65.0(@typescript/typescript6@6.0.2)(eslint@10.8.0(jiti@2.7.0))
       eslint: 10.8.0(jiti@2.7.0)
-      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import-x@4.17.1(@typescript-eslint/utils@8.65.0(@typescript/typescript6@6.0.2)(eslint@10.8.0(jiti@2.7.0)))(eslint-import-resolver-node@0.3.10)(eslint@10.8.0(jiti@2.7.0)))(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.65.0(@typescript/typescript6@6.0.2)(eslint@10.8.0(jiti@2.7.0)))(eslint@10.8.0(jiti@2.7.0))(supports-color@8.1.1))(eslint@10.8.0(jiti@2.7.0))(supports-color@8.1.1)
+      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import-x@4.17.1(@typescript-eslint/utils@8.65.0(@typescript/typescript6@6.0.2)(eslint@10.8.0(jiti@2.7.0)))(eslint-import-resolver-node@0.3.10)(eslint@10.8.0(jiti@2.7.0)))(eslint-plugin-import@2.32.0)(eslint@10.8.0(jiti@2.7.0))(supports-color@8.1.1)
       eslint-plugin-expo: 1.1.0(@typescript/typescript6@6.0.2)(eslint@10.8.0(jiti@2.7.0))
       eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.65.0(@typescript/typescript6@6.0.2)(eslint@10.8.0(jiti@2.7.0)))(eslint-import-resolver-typescript@3.10.1)(eslint@10.8.0(jiti@2.7.0))(supports-color@8.1.1)
       eslint-plugin-react: 7.37.5(eslint@10.8.0(jiti@2.7.0))
@@ -25112,7 +25120,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-import-resolver-typescript@3.10.1(eslint-plugin-import-x@4.17.1(@typescript-eslint/utils@8.65.0(@typescript/typescript6@6.0.2)(eslint@10.8.0(jiti@2.7.0)))(eslint-import-resolver-node@0.3.10)(eslint@10.8.0(jiti@2.7.0)))(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.65.0(@typescript/typescript6@6.0.2)(eslint@10.8.0(jiti@2.7.0)))(eslint@10.8.0(jiti@2.7.0))(supports-color@8.1.1))(eslint@10.8.0(jiti@2.7.0))(supports-color@8.1.1):
+  eslint-import-resolver-typescript@3.10.1(eslint-plugin-import-x@4.17.1(@typescript-eslint/utils@8.65.0(@typescript/typescript6@6.0.2)(eslint@10.8.0(jiti@2.7.0)))(eslint-import-resolver-node@0.3.10)(eslint@10.8.0(jiti@2.7.0)))(eslint-plugin-import@2.32.0)(eslint@10.8.0(jiti@2.7.0))(supports-color@8.1.1):
     dependencies:
       '@nolyfill/is-core-module': 1.0.39
       debug: 4.4.3(supports-color@8.1.1)
@@ -25169,7 +25177,7 @@ snapshots:
       '@typescript-eslint/parser': 8.65.0(@typescript/typescript6@6.0.2)(eslint@10.8.0(jiti@2.7.0))
       eslint: 10.8.0(jiti@2.7.0)
       eslint-import-resolver-node: 0.3.10
-      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import-x@4.17.1(@typescript-eslint/utils@8.65.0(@typescript/typescript6@6.0.2)(eslint@10.8.0(jiti@2.7.0)))(eslint-import-resolver-node@0.3.10)(eslint@10.8.0(jiti@2.7.0)))(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.65.0(@typescript/typescript6@6.0.2)(eslint@10.8.0(jiti@2.7.0)))(eslint@10.8.0(jiti@2.7.0))(supports-color@8.1.1))(eslint@10.8.0(jiti@2.7.0))(supports-color@8.1.1)
+      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import-x@4.17.1(@typescript-eslint/utils@8.65.0(@typescript/typescript6@6.0.2)(eslint@10.8.0(jiti@2.7.0)))(eslint-import-resolver-node@0.3.10)(eslint@10.8.0(jiti@2.7.0)))(eslint-plugin-import@2.32.0)(eslint@10.8.0(jiti@2.7.0))(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -25777,7 +25785,7 @@ snapshots:
       nth-check: 2.1.1
       postcss-selector-parser: 7.1.4
       semver: 7.8.5
-      vue-eslint-parser: 10.4.1(eslint@10.8.0(jiti@2.7.0))
+      vue-eslint-parser: 10.4.1(eslint@10.8.0(jiti@2.7.0))(supports-color@8.1.1)
       xml-name-validator: 5.0.0
     optionalDependencies:
       '@stylistic/eslint-plugin': 5.10.0(eslint@10.8.0(jiti@2.7.0))
@@ -25788,7 +25796,7 @@ snapshots:
       aria-query: 5.3.2
       eslint: 10.8.0(jiti@2.7.0)
       globals: 17.9.0
-      vue-eslint-parser: 10.4.1(eslint@10.8.0(jiti@2.7.0))
+      vue-eslint-parser: 10.4.1(eslint@10.8.0(jiti@2.7.0))(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -27759,7 +27767,7 @@ snapshots:
       prelude-ls: 1.2.1
       type-check: 0.4.0
 
-  libphonenumber-js@1.13.9: {}
+  libphonenumber-js@1.13.11: {}
 
   lie@3.3.0:
     dependencies:
@@ -29862,7 +29870,7 @@ snapshots:
   pg-int8@1.0.1:
     optional: true
 
-  pg-protocol@1.15.0:
+  pg-protocol@1.16.0:
     optional: true
 
   pg-types@2.2.0:
@@ -32997,7 +33005,7 @@ snapshots:
 
   vue-devtools-stub@0.1.0: {}
 
-  vue-eslint-parser@10.4.1(eslint@10.8.0(jiti@2.7.0)):
+  vue-eslint-parser@10.4.1(eslint@10.8.0(jiti@2.7.0))(supports-color@8.1.1):
     dependencies:
       debug: 4.4.3(supports-color@8.1.1)
       eslint: 10.8.0(jiti@2.7.0)
