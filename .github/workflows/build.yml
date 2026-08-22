@@ -113,7 +113,12 @@ jobs:
         run: pnpm run lint:changed && pnpm run check:internal-compatibility
       - name: Check package READMEs are in sync
         if: matrix.node-version == '22.x'
-        run: pnpm run docs:sync-readmes && git diff --exit-code -- 'packages/*/README.md' || (echo 'Package READMEs are stale. Run `pnpm run docs:sync-readmes` and commit the result.' && exit 1)
+        run: |
+          pnpm run docs:sync-readmes
+          if ! git diff --exit-code -- 'packages/*/README.md'; then
+            echo "Package READMEs are stale. Run 'pnpm run docs:sync-readmes' and commit the result."
+            exit 1
+          fi
       - name: Package metrics
         if: matrix.node-version == '22.x'
         run: pnpm run check:package-metrics
