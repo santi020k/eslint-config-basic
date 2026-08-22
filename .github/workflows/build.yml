@@ -1,261 +1,241 @@
 name: CI
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
-    branches: [ main ]
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review, edited, labeled, unlabeled]
 
 permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ci-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
-  contracts:
-    name: Affected integration
-    if: github.event_name != 'pull_request' || github.head_ref != 'changeset-release/main'
+  quality:
+    name: Quality gate
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-
+    timeout-minutes: 90
+    outputs:
+      windows: ${{ steps.changes.outputs.windows }}
     env:
-      CI_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+      CI_BASE_SHA: ${{ github.event.pull_request.base.sha }}
       CI_HEAD_SHA: ${{ github.sha }}
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
-      TURBO_SCM_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+      TURBO_SCM_BASE: ${{ github.event.pull_request.base.sha }}
       TURBO_SCM_HEAD: ${{ github.sha }}
-
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-      - name: Install pnpm
-        uses: pnpm/action-setup@v5
-      - name: Setup Node
-        uses: actions/setup-node@v6
-        with:
-          node-version: 22.x
-          cache: 'pnpm'
-      - name: Turborepo Cache
-        uses: actions/cache@v5
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-22.x-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-22.x-
-            ${{ runner.os }}-turbo-
-      - run: pnpm install --frozen-lockfile
-      - name: Build integration test dependencies
-        run: pnpm exec turbo run build --filter=@santi020k/eslint-config-tests... --concurrency=50%
-      - name: Run affected tests and integration contracts
-        run: pnpm run test:affected
-
-  build:
-    if: github.event_name != 'pull_request' || github.head_ref != 'changeset-release/main'
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-
-    strategy:
-      fail-fast: false
-      matrix:
-        node-version: [ 22.x, 24.x ]
-
-    # Turbo remote cache — set TURBO_TOKEN and TURBO_TEAM in repo secrets for cross-run caching
-    # See: https://turbo.build/repo/docs/ci/github-actions#remote-caching
-    env:
-      CI_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
-      CI_HEAD_SHA: ${{ github.sha }}
-      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-      TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
-      TURBO_SCM_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
-      TURBO_SCM_HEAD: ${{ github.sha }}
-      # better-tailwindcss uses Synckit workers that can exceed the default
-      # 30-second timeout while the full workspace runs concurrently.
       SYNCKIT_TIMEOUT: 120000
-
     steps:
-      - uses: actions/checkout@v6
+      - name: Check out repository
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           fetch-depth: 0
+          persist-credentials: false
+
       - name: Install pnpm
-        uses: pnpm/action-setup@v5
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: "pnpm"
-      - name: Turborepo Cache
-        uses: actions/cache@v5
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-${{ matrix.node-version }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-${{ matrix.node-version }}-
-            ${{ runner.os }}-turbo-
-      - run: pnpm install --frozen-lockfile
-      - name: Run affected package checks (Node 22.x)
-        if: matrix.node-version == '22.x'
-        run: pnpm exec turbo run build typecheck lint --affected --concurrency=50%
-      - name: Build affected packages (Node 24.x)
-        if: matrix.node-version == '24.x'
-        run: pnpm exec turbo run build --affected --concurrency=50%
-      - name: Enforce test coverage thresholds (Node 22.x)
-        if: matrix.node-version == '22.x'
-        run: pnpm exec turbo run test:coverage --concurrency=50%
-      - name: Run tests (Node 24.x)
-        if: matrix.node-version == '24.x'
-        run: pnpm exec turbo run test --concurrency=50%
-      - name: Run repository checks (Node 22.x)
-        if: matrix.node-version == '22.x'
-        run: pnpm run lint:changed && pnpm run check:internal-compatibility
-      - name: Check package READMEs are in sync
-        if: matrix.node-version == '22.x'
-        run: pnpm run docs:sync-readmes && git diff --exit-code -- 'packages/*/README.md' || (echo 'Package READMEs are stale. Run `pnpm run docs:sync-readmes` and commit the result.' && exit 1)
-      - name: Package metrics
-        if: matrix.node-version == '22.x'
-        run: pnpm run check:package-metrics
-      - name: Core performance budget
-        if: matrix.node-version == '22.x'
-        run: pnpm run check:performance
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
 
-  package-validation:
-    name: Affected package artifacts (Node 22.x)
-    if: github.event_name != 'pull_request' || github.head_ref != 'changeset-release/main'
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-
-    env:
-      CI_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
-      CI_HEAD_SHA: ${{ github.sha }}
-      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-      TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
-      TURBO_SCM_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
-      TURBO_SCM_HEAD: ${{ github.sha }}
-
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-      - name: Install pnpm
-        uses: pnpm/action-setup@v5
-      - name: Setup Node
-        uses: actions/setup-node@v6
+      - name: Setup Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: 22.x
-          cache: 'pnpm'
-      - name: Turborepo Cache
-        uses: actions/cache@v5
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-package-validation-22.x-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-22.x-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}
-            ${{ runner.os }}-turbo-package-validation-22.x-
-            ${{ runner.os }}-turbo-22.x-
-            ${{ runner.os }}-turbo-
-      - run: pnpm install --frozen-lockfile
-      - name: Build affected publishable packages
-        run: pnpm exec turbo run build --affected --concurrency=50%
-      - name: Dry-run affected publish artifacts
-        run: pnpm run check:publish-dry-run -- --allow-empty
-      - name: Check affected published types (attw)
-        run: pnpm run check:attw -- --allow-empty
-
-  package-manager-consumers:
-    name: ${{ matrix.manager }} packed consumer (Node ${{ matrix.node-version }})
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-
-    strategy:
-      fail-fast: false
-      matrix:
-        manager: [bun, npm, pnpm, yarn]
-        node-version: [22.x]
-        include:
-          - manager: npm
-            node-version: 24.x
-
-    steps:
-      - uses: actions/checkout@v6
-      - name: Install pnpm
-        uses: pnpm/action-setup@v5
-      - name: Setup Node
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ matrix.node-version }}
           cache: pnpm
-      - name: Setup Bun
-        if: matrix.manager == 'bun'
-        uses: oven-sh/setup-bun@v2
-      - name: Setup Yarn
-        if: matrix.manager == 'yarn'
-        run: corepack install --global yarn@stable
-      - run: pnpm install --frozen-lockfile
-      - name: Build lean consumer packages
-        run: pnpm exec turbo run build --filter=@santi020k/eslint-config-basic... --concurrency=50%
-      - name: Verify packed consumer
-        run: pnpm run check:package-managers -- --manager ${{ matrix.manager }}
 
-  release-candidate:
-    name: Full release candidate
-    if: github.event_name == 'pull_request' && github.head_ref == 'changeset-release/main'
-    runs-on: ubuntu-latest
-    timeout-minutes: 40
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-    env:
-      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-      TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
-      SYNCKIT_TIMEOUT: 120000
+      - name: Validate pull request title
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: printf '%s' "$PR_TITLE" | pnpm exec commitprompt validate --json --input -
 
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-      - name: Install pnpm
-        uses: pnpm/action-setup@v5
-      - name: Setup Node
-        uses: actions/setup-node@v6
-        with:
-          node-version: 22.x
-          cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile
-      - name: Run final release gate once
+      - name: Detect documentation changes
+        id: changes
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          docs=false
+          astro_doctor=false
+          coverage=false
+          windows=false
+          while IFS= read -r file; do
+            case "$file" in
+              apps/docs/*|packages/*/README.md|.github/workflows/docs.yml)
+                docs=true
+                ;;
+            esac
+            case "$file" in
+              apps/docs/*)
+                astro_doctor=true
+                ;;
+            esac
+            case "$file" in
+              packages/*/src/*|packages/tests/*|scripts/check-package-coverage.mjs|scripts/coverage-policy.json)
+                coverage=true
+                ;;
+            esac
+            case "$file" in
+              packages/basic/src/cli*|packages/basic/src/detection*|packages/tests/src/cli.test.ts|packages/tests/src/detection*.test.ts)
+                windows=true
+                ;;
+            esac
+          done < <(git diff --name-only --no-renames "$BASE_SHA" "$HEAD_SHA")
+          {
+            echo "docs=$docs"
+            echo "astro_doctor=$astro_doctor"
+            echo "coverage=$coverage"
+            echo "windows=$windows"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Run final release gate
+        if: github.head_ref == 'changeset-release/main'
         run: pnpm run release:check
 
-  windows-smoke:
-    name: Windows smoke (CLI + detection)
-    if: github.event_name != 'pull_request' || github.head_ref != 'changeset-release/main'
-    runs-on: windows-latest
-    timeout-minutes: 20
+      - name: Build integration test dependencies
+        if: github.head_ref != 'changeset-release/main'
+        run: pnpm exec turbo run build --filter=@santi020k/eslint-config-tests... --concurrency=50%
 
-    steps:
-      - uses: actions/checkout@v6
+      - name: Run affected tests and integration contracts
+        if: github.head_ref != 'changeset-release/main' && steps.changes.outputs.coverage != 'true'
+        run: pnpm run test:affected
+
+      - name: Enforce test coverage thresholds
+        if: github.head_ref != 'changeset-release/main' && steps.changes.outputs.coverage == 'true'
+        run: pnpm --filter @santi020k/eslint-config-tests run test:coverage
+
+      - name: Run affected package checks
+        if: github.head_ref != 'changeset-release/main'
+        run: pnpm exec turbo run build typecheck lint --affected --concurrency=50%
+
+      - name: Run repository checks
+        if: github.head_ref != 'changeset-release/main'
+        run: |
+          pnpm run lint:changed
+          pnpm run check:internal-compatibility
+          pnpm run check:package-metrics
+          pnpm run check:performance
+
+      - name: Check package READMEs are in sync
+        if: github.head_ref != 'changeset-release/main'
+        run: |
+          pnpm run docs:sync-readmes
+          git diff --exit-code -- 'packages/*/README.md' || {
+            echo "Package READMEs are stale. Run pnpm run docs:sync-readmes and commit the result."
+            exit 1
+          }
+
+      - name: Validate affected package artifacts
+        if: github.head_ref != 'changeset-release/main'
+        run: |
+          pnpm run check:publish-dry-run -- --allow-empty
+          pnpm run check:attw -- --allow-empty
+
+      - name: Lint affected playgrounds
+        if: github.head_ref != 'changeset-release/main'
+        run: pnpm exec turbo run lint --affected --filter="@playground/*" --filter="@santi020k/playground-*"
+
+      - name: Require a changeset
+        if: >-
+          ${{
+            github.head_ref != 'changeset-release/main' &&
+            !contains(github.event.pull_request.labels.*.name, 'skip-changelog') &&
+            !startsWith(github.event.pull_request.title, 'chore(release): version packages') &&
+            !startsWith(github.head_ref, 'release/')
+          }}
+        run: |
+          pnpm exec changeset status --since=origin/main
+          pnpm run check:full-release
+
+      - name: Audit dependencies
+        run: pnpm audit --audit-level=moderate --ignore-registry-errors
+
+      - name: Run Astro Doctor
+        if: steps.changes.outputs.astro_doctor == 'true' && github.head_ref != 'changeset-release/main'
+        run: >-
+          pnpm dlx @santi020k/astro-doctor@1.3.0 --dir apps/docs
+          --diff "$CI_BASE_SHA" --format github --fail-on error --no-telemetry
+
+      - name: Build documentation
+        if: steps.changes.outputs.docs == 'true' && github.head_ref != 'changeset-release/main'
+        run: pnpm run docs:build
+
+      - name: Install Playwright browser
+        if: steps.changes.outputs.docs == 'true' && github.head_ref != 'changeset-release/main'
+        run: pnpm exec playwright install --with-deps chromium
+        working-directory: apps/docs
+
+      - name: Test documentation accessibility and budgets
+        if: steps.changes.outputs.docs == 'true' && github.head_ref != 'changeset-release/main'
+        run: |
+          pnpm run docs:test:a11y
+          pnpm --filter @santi020k/eslint-config-docs run lighthouse
+
+      - name: Setup Node.js 24
+        if: github.head_ref == 'changeset-release/main'
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
-          fetch-depth: 0
-      - name: Install pnpm
-        uses: pnpm/action-setup@v5
-      - name: Setup Node
-        uses: actions/setup-node@v6
+          node-version: 24.x
+          cache: pnpm
+
+      - name: Test release candidate on Node.js 24
+        if: github.head_ref == 'changeset-release/main'
+        run: pnpm exec turbo run build test --force --concurrency=50%
+
+      - name: Verify packed npm consumer on Node.js 24
+        if: github.head_ref == 'changeset-release/main'
+        run: pnpm run check:package-managers -- --manager npm
+
+      - name: Restore Node.js 22
+        if: github.head_ref == 'changeset-release/main'
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: 22.x
-          cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile
-      - name: Build CLI dependencies (serialised to avoid native-binary contention on Windows)
-        run: pnpm exec turbo run build --filter=@santi020k/eslint-config-basic --concurrency=1 --output-logs=new-only
-      - name: Run CLI and detection tests on Windows
-        run: pnpm --filter @santi020k/eslint-config-tests exec vitest run src/cli.test.ts src/detection.test.ts src/detection-fixtures.test.ts src/detection-internals.test.ts --maxWorkers=1
+          cache: pnpm
 
-  quality-gate:
-    name: Quality gate
-    if: always()
-    needs: [contracts, build, package-validation, package-manager-consumers, release-candidate, windows-smoke]
-    runs-on: ubuntu-latest
+      - name: Setup Bun
+        if: github.head_ref == 'changeset-release/main'
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+
+      - name: Setup Yarn
+        if: github.head_ref == 'changeset-release/main'
+        run: corepack install --global yarn@stable
+
+      - name: Verify packed consumers
+        if: github.head_ref == 'changeset-release/main'
+        run: |
+          pnpm exec turbo run build --filter=@santi020k/eslint-config-basic... --concurrency=50%
+          for manager in bun npm pnpm yarn; do
+            pnpm run check:package-managers -- --manager "$manager"
+          done
+
+  windows-smoke:
+    name: Windows smoke
+    needs: quality
+    if: github.head_ref == 'changeset-release/main' || needs.quality.outputs.windows == 'true'
+    runs-on: windows-latest
+    timeout-minutes: 25
     steps:
-      - name: Verify required jobs
-        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
-        run: exit 1
-      - name: Confirm quality gate
-        run: echo "All required quality checks passed."
+      - name: Check out repository
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 22.x
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build CLI dependencies
+        run: pnpm exec turbo run build --filter=@santi020k/eslint-config-basic --concurrency=1 --output-logs=new-only
+
+      - name: Run CLI and detection tests
+        run: pnpm --filter @santi020k/eslint-config-tests exec vitest run src/cli.test.ts src/detection.test.ts src/detection-fixtures.test.ts src/detection-internals.test.ts --maxWorkers=1

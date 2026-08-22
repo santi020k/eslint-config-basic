@@ -1,17 +1,8 @@
 name: Security Audit
 
 on:
-  pull_request:
-    branches: [main]
-    paths:
-      - 'package.json'
-      - 'packages/*/package.json'
-      - 'apps/*/package.json'
-      - 'pnpm-lock.yaml'
-      - 'pnpm-workspace.yaml'
-      - '.github/workflows/audit.yml'
   schedule:
-    - cron: '0 9 * * 1' # Every Monday at 9am UTC
+    - cron: '0 9 1 * *' # Monthly on the first day at 9am UTC
   workflow_dispatch: {}
 
 permissions:
@@ -27,14 +18,16 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
       - name: Install pnpm
-        uses: pnpm/action-setup@v5
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
       - name: Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: 22.x
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
       - name: Run pnpm audit
-        run: pnpm audit --audit-level=high --ignore-registry-errors
+        run: pnpm audit --audit-level=moderate --ignore-registry-errors
