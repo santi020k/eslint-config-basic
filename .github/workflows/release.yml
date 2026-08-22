@@ -172,3 +172,17 @@ jobs:
           fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Request documentation deployment
+        if: steps.changesets.outputs.published == 'true'
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        with:
+          script: |
+            await github.rest.repos.createDispatchEvent({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              event_type: 'release-published',
+              client_payload: {
+                sha: context.payload.pull_request.merge_commit_sha,
+              },
+            })

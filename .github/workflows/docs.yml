@@ -5,9 +5,10 @@ on:
     branches: [main]
     paths:
       - 'apps/docs/**'
-      - 'packages/*/CHANGELOG.md'
       - 'packages/*/README.md'
       - '.github/workflows/docs.yml'
+  repository_dispatch:
+    types: [release-published]
   workflow_dispatch:
     inputs:
       dry_run:
@@ -33,6 +34,7 @@ jobs:
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
+          ref: ${{ github.event.client_payload.sha || github.sha }}
           persist-credentials: false
 
       - name: Install pnpm
@@ -101,7 +103,7 @@ jobs:
         uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
         with:
           script: |
-            const sha = context.payload.workflow_run?.head_sha ?? context.sha
+            const sha = context.payload.client_payload?.sha ?? context.sha
             const title = 'Docs build failed — site may be out of sync with latest release'
             const body = [
               `The docs **build** step failed on commit \`${sha}\`.`,
@@ -160,7 +162,7 @@ jobs:
         uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
         with:
           script: |
-            const sha = context.payload.workflow_run?.head_sha ?? context.sha
+            const sha = context.payload.client_payload?.sha ?? context.sha
             const title = 'Docs deploy to GitHub Pages failed — site may be out of sync with latest release'
             const body = [
               `The docs **deploy** step failed on commit \`${sha}\` (the artifact was built successfully but Pages rejected the deploy).`,
