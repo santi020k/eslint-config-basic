@@ -60,6 +60,7 @@ jobs:
           pnpm run check:publish-dry-run
           pnpm run check:attw
         env:
+          RELEASE_BUILD_ALL_IF_UNVERSIONED: "true"
           RELEASE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
 
       - name: Publish versioned packages

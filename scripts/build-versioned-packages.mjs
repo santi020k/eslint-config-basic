@@ -6,6 +6,7 @@ import process from 'node:process'
 const rootDir = process.cwd()
 const base = process.env.RELEASE_BASE_SHA
 const head = process.env.RELEASE_HEAD_SHA || 'HEAD'
+const buildAllIfUnversioned = process.env.RELEASE_BUILD_ALL_IF_UNVERSIONED === 'true'
 
 if (!base) {
   throw new Error('Set RELEASE_BASE_SHA to the release pull request base commit.')
@@ -28,7 +29,22 @@ const packageNames = changedFiles
   .filter(Boolean)
 
 if (packageNames.length === 0) {
-  throw new Error(`No versioned public package manifests found in ${base}...${head}.`)
+  if (!buildAllIfUnversioned) {
+    throw new Error(`No versioned public package manifests found in ${base}...${head}.`)
+  }
+
+  process.stdout.write(
+    `No versioned public package manifests found in ${base}...${head}; ` +
+    'building and checking exports for the full workspace during release recovery.\n'
+  )
+
+  execFileSync(
+    'pnpm',
+    ['exec', 'turbo', 'run', 'build', 'check:exports', '--concurrency=50%'],
+    { cwd: rootDir, stdio: 'inherit' }
+  )
+
+  process.exit(0)
 }
 
 process.stdout.write(
