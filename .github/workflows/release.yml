@@ -34,19 +34,12 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.merge_commit_sha }}
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v5
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
+      - name: Set up pnpm workspace
+        uses: santi020k/quality/actions/setup-pnpm@eec1701b98bcc0b76d36af288ee78a0369cd84cc # v1
         with:
           node-version: 22.x
           registry-url: "https://registry.npmjs.org"
-          cache: "pnpm"
-
-      # Node 22 currently bundles npm 10, while npm trusted publishing requires
-      # npm 11.5.1 or newer. Keep the release runtime on Node 22 and install the
-      # latest npm 11 release that supports it before invoking Changesets.
+          install: false
       - name: Install OIDC-capable npm
         run: npm install --global npm@11.20.0
 

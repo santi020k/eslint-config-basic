@@ -56,14 +56,11 @@ jobs:
           # workflow_run events expose the triggering commit on a different context key.
           ref: ${{ github.event.workflow_run.head_sha || github.sha }}
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v5
-
-      - name: Setup Node
-        uses: actions/setup-node@v6
+      - name: Set up pnpm workspace
+        uses: santi020k/quality/actions/setup-pnpm@eec1701b98bcc0b76d36af288ee78a0369cd84cc # v1
         with:
           node-version: 22
-          cache: 'pnpm'
+          install: false
 
       - name: Turborepo Cache
         uses: actions/cache@v5
