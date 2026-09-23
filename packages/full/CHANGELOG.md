@@ -1,5 +1,36 @@
 # @santi020k/eslint-config-full
 
+## 3.2.3
+
+### Patch Changes
+
+- [#126](https://github.com/santi020k/eslint-config-basic/pull/126) [`2bf02c3`](https://github.com/santi020k/eslint-config-basic/commit/2bf02c349c8b99671ac069a26ec7065a8233d4f2) Thanks [@santi020k](https://github.com/santi020k)! - Upgrade the supported dependency ecosystem, adopt Lumen Astro 2, and resolve all known audit findings with patched transitive versions.
+- Updated dependencies [[`2bf02c3`](https://github.com/santi020k/eslint-config-basic/commit/2bf02c349c8b99671ac069a26ec7065a8233d4f2)]:
+  - @santi020k/eslint-config-angular@3.1.1
+  - @santi020k/eslint-config-astro@3.1.3
+  - @santi020k/eslint-config-basic@3.5.2
+  - @santi020k/eslint-config-expo@3.1.1
+  - @santi020k/eslint-config-extensions@3.1.2
+  - @santi020k/eslint-config-formats@3.1.2
+  - @santi020k/eslint-config-hono@3.1.1
+  - @santi020k/eslint-config-libraries@3.1.2
+  - @santi020k/eslint-config-lit@3.1.1
+  - @santi020k/eslint-config-nest@3.1.1
+  - @santi020k/eslint-config-next@3.1.1
+  - @santi020k/eslint-config-nuxt@3.1.1
+  - @santi020k/eslint-config-preact@3.1.1
+  - @santi020k/eslint-config-qwik@3.1.1
+  - @santi020k/eslint-config-react@3.1.1
+  - @santi020k/eslint-config-react-router@3.1.1
+  - @santi020k/eslint-config-slidev@3.1.1
+  - @santi020k/eslint-config-solid@3.1.1
+  - @santi020k/eslint-config-svelte@3.1.1
+  - @santi020k/eslint-config-tanstack-start@3.1.1
+  - @santi020k/eslint-config-testing@3.1.2
+  - @santi020k/eslint-config-tools@3.1.2
+  - @santi020k/eslint-config-vite@3.1.1
+  - @santi020k/eslint-config-vue@3.1.1
+
 ## 3.2.2
 
 ### Patch Changes

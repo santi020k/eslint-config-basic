@@ -1,5 +1,11 @@
 # @santi020k/eslint-config-solid
 
+## 3.1.1
+
+### Patch Changes
+
+- [#126](https://github.com/santi020k/eslint-config-basic/pull/126) [`2bf02c3`](https://github.com/santi020k/eslint-config-basic/commit/2bf02c349c8b99671ac069a26ec7065a8233d4f2) Thanks [@santi020k](https://github.com/santi020k)! - Upgrade the supported dependency ecosystem, adopt Lumen Astro 2, and resolve all known audit findings with patched transitive versions.
+
 ## 3.1.0
 
 ## 2.1.1
