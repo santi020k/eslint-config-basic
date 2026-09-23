@@ -14,8 +14,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@angular/core": "22.0.8",
-    "@angular/router": "22.0.8",
+    "@angular/core": "22.1.7",
+    "@angular/router": "22.1.7",
     "@santi020k/eslint-config-basic": "workspace:^",
     "eslint": "catalog:",
     "rxjs": "catalog:"

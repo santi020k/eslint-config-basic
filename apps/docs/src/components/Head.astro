@@ -1,6 +1,5 @@
 ---
 import Default from '@astrojs/starlight/components/Head.astro'
-import type { Props } from '@astrojs/starlight/props'
 
 const trimOuterSlashes = (value: string) => value.replace(/^\/+|\/+$/g, '')
 
@@ -18,15 +17,30 @@ const getOgSlug = (pathname: string) => trimOuterSlashes(pathname)
   .map(segment => encodeURIComponent(safeDecodeURIComponent(segment)).replaceAll('%', '~'))
   .join('--')
 
+const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null
+
+const getPageTitle = (locals: unknown) => {
+  if (!isRecord(locals)) return 'ESLint Config'
+
+  const route = locals.starlightRoute
+
+  if (!isRecord(route) || !isRecord(route.entry) || !isRecord(route.entry.data))
+    return 'ESLint Config'
+
+  return typeof route.entry.data.title === 'string' ?
+    route.entry.data.title :
+    'ESLint Config'
+}
+
 const slug = getOgSlug(Astro.url.pathname)
 const ogImagePath = `/og/${slug || 'index'}.webp`
 const site = Astro.site ?? new URL('https://eslint.santi020k.com/')
 const ogImageURL = new URL(ogImagePath, site).href
-const pageTitle = Astro.props.entry?.data?.title ?? 'ESLint Config'
+const pageTitle = getPageTitle(Astro.locals)
 const ogImageAlt = `${pageTitle} — ESLint Config`
 ---
 
-<Default {...Astro.props}><slot /></Default>
+<Default><slot /></Default>
 <link id="s2k-theme-favicon" rel="icon" type="image/svg+xml" href="/favicon-light.svg" />
 <meta id="s2k-theme-color" name="theme-color" content="#faf9fb" />
 <script is:inline>

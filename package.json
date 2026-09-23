@@ -71,6 +71,7 @@
     "husky": "catalog:",
     "knip": "catalog:",
     "lint-staged": "catalog:",
+    "semver": "catalog:",
     "tailwindcss": "catalog:",
     "ts-json-schema-generator": "catalog:",
     "tsup": "catalog:",

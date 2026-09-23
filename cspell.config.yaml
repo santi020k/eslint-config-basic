@@ -48,6 +48,7 @@ words:
   - esmodule
   - expo
   - fetchcontent
+  - fflate
   - flat-config
   - genai
   - getentrybyslug
@@ -78,6 +79,7 @@ words:
   - minimatch
   - modelcontextprotocol
   - monorepo
+  - msgpackr
   - multilines
   - myext
   - myframework

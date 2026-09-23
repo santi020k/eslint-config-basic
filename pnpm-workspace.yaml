@@ -4,138 +4,139 @@ packages:
   - 'packages/playground/**'
 
 catalog:
-  '@angular-eslint/eslint-plugin': ^22.1.0
+  '@angular-eslint/eslint-plugin': ^22.5.0
   '@arethetypeswrong/cli': ^0.18.5
   '@astrojs/check': ^0.9.10
-  '@astrojs/markdown-remark': ^7.2.1
-  '@astrojs/starlight': ^0.41.4
-  '@axe-core/playwright': ^4.12.1
-  '@changesets/changelog-github': ^0.7.0
-  '@changesets/cli': ^2.31.1
+  '@astrojs/markdown-remark': ^7.3.1
+  '@astrojs/starlight': ^0.42.3
+  '@axe-core/playwright': ^4.13.0
+  '@changesets/changelog-github': ^1.0.1
+  '@changesets/cli': ^3.0.3
   '@commitlint/cli': ^21.2.1
-  '@commitlint/config-conventional': ^21.2.0
-  '@cspell/eslint-plugin': ^10.0.1
-  '@darraghor/eslint-plugin-nestjs-typed': ^6.18.0
-  '@eslint-react/eslint-plugin': ^5.18.0
+  '@commitlint/config-conventional': ^21.2.3
+  '@cspell/eslint-plugin': ^10.3.3
+  '@darraghor/eslint-plugin-nestjs-typed': ^7.5.6
+  '@eslint-react/eslint-plugin': ^5.20.5
   '@eslint/config-helpers': ^0.7.0
-  '@eslint/config-inspector': ^3.1.0
-  '@eslint/css': ^1.4.0
+  '@eslint/config-inspector': ^3.5.0
+  '@eslint/css': ^2.0.0
   '@eslint/js': ^10.0.1
   '@eslint/markdown': ^8.0.3
-  '@graphql-eslint/eslint-plugin': ^4.4.0
-  '@html-eslint/eslint-plugin': ^0.64.0
-  '@html-eslint/parser': ^0.64.0
-  '@next/eslint-plugin-next': ^16.2.12
-  '@nestjs/common': ^11.1.28
-  '@nestjs/swagger': ^11.4.6
-  '@nuxt/eslint-plugin': ^1.16.0
-  '@playwright/test': ^1.62.0
+  '@graphql-eslint/eslint-plugin': ^4.4.1
+  '@html-eslint/eslint-plugin': ^0.66.1
+  '@html-eslint/parser': ^0.66.1
+  '@next/eslint-plugin-next': ^16.3.6
+  '@nestjs/common': ^12.1.0
+  '@nestjs/core': ^12.1.0
+  '@nestjs/swagger': ^12.0.2
+  '@nuxt/eslint-plugin': ^1.17.0
+  '@playwright/test': ^1.63.0
   '@resvg/resvg-js': ^2.6.2
-  '@santi020k/commitprompt': ^1.0.0
-  '@santi020k/eslint-plugin-astro-doctor': ^1.2.2
+  '@santi020k/commitprompt': ^1.1.0
+  '@santi020k/eslint-plugin-astro-doctor': ^1.3.2
   '@stencil/eslint-plugin': ^1.4.0
   '@stylistic/eslint-plugin': ^5.10.0
-  '@tanstack/eslint-plugin-query': ^5.101.4
+  '@tanstack/eslint-plugin-query': ^5.103.2
   '@tanstack/eslint-plugin-router': ^1.162.0
   '@types/eslint-plugin-jsx-a11y': ^6.10.1
-  '@types/node': ^26.1.2
-  '@types/react': ^19.2.17
-  '@types/react-dom': ^19.2.3
-  '@typescript-eslint/parser': ^8.65.0
-  '@typescript-eslint/utils': ^8.65.0
+  '@types/node': ^26.6.2
+  '@types/react': ^19.3.0
+  '@types/react-dom': ^19.3.0
+  '@typescript-eslint/parser': ^8.70.1
+  '@typescript-eslint/utils': ^8.70.1
   '@typescript/native': npm:typescript@^7.0.2
-  '@vitest/coverage-v8': ^4.1.10
-  '@vitest/eslint-plugin': ^1.6.24
-  astro: ^7.1.4
-  cspell: ^10.0.1
+  '@vitest/coverage-v8': ^5.0.1
+  '@vitest/eslint-plugin': ^1.6.27
+  astro: ^7.3.4
+  cspell: ^10.3.3
   chrome-launcher: ^1.2.1
-  eslint: ^10.8.0
-  eslint-config-expo: ^57.0.0
+  eslint: ^10.11.0
+  eslint-config-expo: ^57.0.2
   eslint-config-prettier: ^10.1.8
-  eslint-plugin-astro: ^3.0.1
+  eslint-plugin-astro: ^3.2.1
   eslint-plugin-better-tailwindcss: ^4.7.0
   eslint-plugin-command: ^4.0.0
   eslint-plugin-compat: ^7.0.2
-  eslint-plugin-cypress: ^7.0.0
-  eslint-plugin-de-morgan: ^2.1.3
+  eslint-plugin-cypress: ^7.0.2
+  eslint-plugin-de-morgan: ^2.2.0
   eslint-plugin-depend: ^1.5.0
   eslint-plugin-i18next: ^6.1.5
   eslint-plugin-import-x: ^4.17.1
-  eslint-plugin-jest: ^29.16.0
-  eslint-plugin-jest-dom: ^5.5.0
-  eslint-plugin-jsdoc: ^64.0.1
-  eslint-plugin-jsonc: ^3.3.0
+  eslint-plugin-jest: ^29.16.6
+  eslint-plugin-jest-dom: ^5.10.1
+  eslint-plugin-jsdoc: ^64.5.4
+  eslint-plugin-jsonc: ^3.4.2
   eslint-plugin-jsx-a11y: ^6.10.2
   eslint-plugin-lit: ^2.3.1
   eslint-plugin-mdx: ^3.8.1
-  eslint-plugin-n: ^18.2.2
+  eslint-plugin-n: ^18.3.0
   eslint-plugin-no-only-tests: ^3.4.0
-  eslint-plugin-oxlint: ^1.76.0
-  eslint-plugin-package-json: ^1.6.2
-  eslint-plugin-perfectionist: ^5.10.0
-  eslint-plugin-playwright: ^2.11.0
-  eslint-plugin-pnpm: ^1.7.0
+  eslint-plugin-oxlint: ^1.85.0
+  eslint-plugin-package-json: ^1.10.0
+  eslint-plugin-perfectionist: ^5.12.0
+  eslint-plugin-playwright: ^2.12.0
+  eslint-plugin-pnpm: ^1.9.1
   eslint-plugin-promise: ^7.3.0
   eslint-plugin-qwik: ^1.20.0
   eslint-plugin-react-hooks: ^7.1.1
-  eslint-plugin-react-refresh: ^0.5.3
-  eslint-plugin-regexp: ^3.1.1
+  eslint-plugin-react-refresh: ^0.5.7
+  eslint-plugin-regexp: ^3.3.1
   eslint-plugin-security: ^4.0.1
   eslint-plugin-simple-import-sort: ^14.0.0
-  eslint-plugin-solid: ^0.14.5
-  eslint-plugin-sonarjs: ^4.2.0
-  eslint-plugin-storybook: ^10.5.5
-  eslint-plugin-svelte: ^3.22.0
+  eslint-plugin-solid: ^0.18.0
+  eslint-plugin-sonarjs: ^4.2.1
+  eslint-plugin-storybook: ^10.6.0
+  eslint-plugin-svelte: ^3.23.0
   eslint-plugin-testing-library: ^7.16.2
   eslint-plugin-toml: ^1.5.0
-  eslint-plugin-tsdoc: ^0.5.2
-  eslint-plugin-turbo: ^2.10.7
-  eslint-plugin-unicorn: ^73.0.0
+  eslint-plugin-tsdoc: ^0.5.3
+  eslint-plugin-turbo: ^2.11.2
+  eslint-plugin-unicorn: ^76.0.0
   eslint-plugin-unused-imports: ^4.4.1
-  eslint-plugin-vercel-ai-security: ^1.3.7
-  eslint-plugin-vue: ^10.10.0
-  eslint-plugin-vuejs-accessibility: ^2.5.0
+  eslint-plugin-vercel-ai-security: ^2.1.3
+  eslint-plugin-vue: ^10.11.0
+  eslint-plugin-vuejs-accessibility: ^2.6.0
   eslint-plugin-wc: ^3.1.0
-  eslint-plugin-yml: ^3.6.0
-  eslint-plugin-zod: ^4.9.0
-  globals: ^17.8.0
-  graphql: ^17.0.2
+  eslint-plugin-yml: ^3.8.1
+  eslint-plugin-zod: ^4.14.2
+  globals: ^17.12.0
+  graphql: ^16.11.0
   husky: ^9.1.7
-  knip: ^6.29.0
-  lint-staged: ^17.2.0
-  lighthouse: ^13.4.1
-  nuxt: ^4.5.1
-  oxlint: ^1.75.0
-  publint: ^0.3.22
-  react: 19.2.8
-  react-dom: 19.2.8
+  knip: ^6.37.0
+  lint-staged: ^17.5.1
+  lighthouse: ^13.5.0
+  nuxt: ^4.5.2
+  oxlint: ^1.85.0
+  publint: ^0.3.24
+  react: 19.3.0
+  react-dom: 19.3.0
   rxjs: ^7.8.2
-  satori: ^0.29.0
+  satori: ^0.33.5
   semver: ^7.8.5
-  sharp: ^0.35.3
-  storybook: ^10.5.5
-  svelte: ^5.56.8
+  sharp: ^0.35.4
+  storybook: ^10.6.0
+  svelte: ^5.57.1
   tailwindcss: ^4.3.3
   ts-json-schema-generator: ^2.9.0
   tsup: ^8.5.1
-  turbo: ^2.10.7
+  turbo: ^2.11.2
   typedoc: ^0.28.20
-  typedoc-plugin-markdown: ^4.12.0
+  typedoc-plugin-markdown: ^4.13.1
   typescript: npm:@typescript/typescript6@^6.0.2
-  typescript-eslint: ^8.65.0
-  vite: ^8.1.5
-  vitest: ^4.1.10
-  vue: ^3.5.40
+  typescript-eslint: ^8.70.1
+  vite: ^8.3.0
+  vitest: ^5.0.1
+  vue: ^3.5.43
   vue-eslint-parser: ^10.4.1
-  zod: ^4.4.3
+  zod: ^4.6.5
 
 catalogs:
   node25:
-    '@types/node': ^26.1.2
+    '@types/node': ^26.6.2
   unicorn65:
-    eslint-plugin-unicorn: ^73.0.0
+    eslint-plugin-unicorn: ^76.0.0
   vite7:
-    vite: ^8.1.5
+    vite: ^7.3.6
   conflicts_typescript_ge5_0_0_l7_0_0:
     typescript: '>=5.0.0 <7.0.2'
 
@@ -144,6 +145,7 @@ allowBuilds:
   '@scarf/scarf': false
   cypress: true
   esbuild: true
+  msgpackr-extract: false
   prisma: false
   sharp: true
   unrs-resolver: false
@@ -167,17 +169,26 @@ minimumReleaseAgeExclude:
   - postcss@8.5.23
   - sharp@0.35.0
   - undici@7.29.0
+  - '@nestjs/common@12.1.0'
+  - '@nestjs/core@12.1.0'
+  - '@nestjs/swagger@12.0.2'
+  - dompurify@3.4.16
 
 overrides:
   deepmerge-ts@<8.0.0: 8.0.0
+  devalue@<5.9.1: 5.9.4
+  dompurify@<3.4.16: 3.4.16
+  esbuild@>=0.27.3 <0.28.1: 0.28.2
+  fflate@<0.7.5: 0.8.3
+  hono@<4.13.8: 4.13.8
+  image-size@<2.0.3: 2.0.4
   js-yaml@>=5.0.0 <=5.2.1: 5.2.2
-  postcss@<=8.5.22: 8.5.23
-  sharp@<0.35.0: 0.35.0
+  lodash-es@<4.17.24: 4.18.1
+  mysql2@<3.23.1: 3.24.4
+  next@<16.3.3: 16.3.6
+  oxlint@<1.85.0: 1.85.0
+  postcss@<=8.5.27: 8.5.28
+  sharp@<0.35.4: 0.35.4
+  svgo@>=4.0.0 <4.1.0: 4.1.0
   undici@>=7.0.0 <7.29.0: 7.29.0
-
-auditConfig:
-  # image-size 2.0.3 is the first patched release, but it is not published yet.
-  # Remove these ignores once 2.0.3 is available from the npm registry.
-  ignoreGhsas:
-    - GHSA-w3rx-r6r6-pgpr
-    - GHSA-5p2g-fcmc-qvqq
+  uuid@<11.1.1: 11.1.1

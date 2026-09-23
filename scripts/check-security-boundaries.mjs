@@ -1,12 +1,14 @@
 import { execFileSync } from 'node:child_process'
 
+import { lt } from 'semver'
+
 const protectedPackages = [
   '@santi020k/eslint-config-basic',
   '@santi020k/eslint-config-core',
   '@santi020k/eslint-config-lite'
 ]
 
-const requiredBraceExpansionVersion = '5.0.9'
+const minimumBraceExpansionVersion = '5.0.9'
 
 const walkDependencies = (node, seen = new Set()) => {
   if (!node || typeof node !== 'object' || seen.has(node)) return []
@@ -36,7 +38,7 @@ for (const packageName of protectedPackages) {
 
   const vulnerableBrace = dependencies.find(dependency => (
     dependency.name === 'brace-expansion' &&
-    dependency.version !== requiredBraceExpansionVersion
+    lt(dependency.version, minimumBraceExpansionVersion)
   ))
 
   if (jsxA11y) {
@@ -46,7 +48,7 @@ for (const packageName of protectedPackages) {
   if (vulnerableBrace) {
     failures.push(
       `${packageName} includes brace-expansion@${vulnerableBrace.version}; ` +
-      `the lean boundary requires ${requiredBraceExpansionVersion}.`
+      `the lean boundary requires at least ${minimumBraceExpansionVersion}.`
     )
   }
 }
@@ -57,5 +59,5 @@ if (failures.length > 0) {
 
 process.stdout.write(
   `Security boundary verified for ${protectedPackages.join(', ')}: ` +
-  `no jsx-a11y dependency and brace-expansion is pinned to the patched ${requiredBraceExpansionVersion} line.\n`
+  `no jsx-a11y dependency and brace-expansion is at least the patched ${minimumBraceExpansionVersion} release.\n`
 )

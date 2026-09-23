@@ -15,7 +15,7 @@
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
     "eslint": "catalog:",
-    "typeorm": "^1.1.0"
+    "typeorm": "^1.1.1"
   },
   "devDependencies": {
     "typescript": "catalog:"
