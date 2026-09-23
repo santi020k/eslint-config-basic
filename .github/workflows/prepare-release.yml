@@ -23,21 +23,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v5
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
+      - name: Set up pnpm workspace
+        uses: santi020k/quality/actions/setup-pnpm@eec1701b98bcc0b76d36af288ee78a0369cd84cc # v1
         with:
           node-version: 22.x
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      # This action only versions packages and manages changeset-release/main.
-      # Publishing is deliberately isolated in release.yml and requires that
-      # release pull request to be merged.
       - name: Create or update Changesets release pull request
         uses: changesets/action@v2.1.2
         with:
