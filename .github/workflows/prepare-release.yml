@@ -39,11 +39,11 @@ jobs:
       # Publishing is deliberately isolated in release.yml and requires that
       # release pull request to be merged.
       - name: Create or update Changesets release pull request
-        uses: changesets/action@v1
+        uses: changesets/action@v2.1.2
         with:
-          version: pnpm run version-packages
-          commit: "chore(release): version packages"
-          title: "chore(release): version packages"
+          version-script: pnpm run version-packages
+          commit-message: "chore(release): version packages"
+          pr-title: "chore(release): version packages"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
         env:
           HUSKY: 0
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

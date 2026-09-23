@@ -44,6 +44,12 @@ jobs:
           registry-url: "https://registry.npmjs.org"
           cache: "pnpm"
 
+      # Node 22 currently bundles npm 10, while npm trusted publishing requires
+      # npm 11.5.1 or newer. Keep the release runtime on Node 22 and install the
+      # latest npm 11 release that supports it before invoking Changesets.
+      - name: Install OIDC-capable npm
+        run: npm install --global npm@11.20.0
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
@@ -58,14 +64,13 @@ jobs:
 
       - name: Publish versioned packages
         id: changesets
-        uses: changesets/action@v1
+        uses: changesets/action@v2.1.2
         with:
-          publish: pnpm run release:publish
-          createGithubReleases: true
+          publish-script: pnpm run release:publish
+          create-github-releases: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
         env:
           HUSKY: 0
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: "true"
 
       # Changesets creates one tag per published package. Only a Basic release
@@ -124,11 +129,28 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           HUSKY: 0
 
+      # npm OIDC intentionally authenticates publish commands only. Metadata
+      # updates still need a valid granular token, so detect an expired token
+      # without allowing it to invalidate an otherwise successful release.
+      - name: Check npm metadata token
+        id: npm-metadata-token
+        if: steps.changesets.outputs.published == 'true'
+        shell: bash
+        run: |
+          if npm whoami >/dev/null 2>&1; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::NPM_TOKEN cannot authenticate; skipping compatibility-package deprecation updates."
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       # These packages remain installable throughout v3 so existing consumers
       # receive a migration message instead of a broken dependency. Do not
       # deprecate v2, where Lite and Integrations are still supported entry points.
       - name: Mark v3 compatibility packages as deprecated
-        if: steps.changesets.outputs.published == 'true'
+        if: steps.npm-metadata-token.outputs.available == 'true'
         shell: bash
         run: |
           set -euo pipefail
