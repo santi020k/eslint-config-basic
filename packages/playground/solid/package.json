@@ -16,7 +16,7 @@
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
     "eslint": "catalog:",
-    "solid-js": "^1.9.14"
+    "solid-js": "^1.9.15"
   },
   "devDependencies": {
     "@types/node": "catalog:node25",

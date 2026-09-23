@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:*",
-    "@slidev/cli": "^52.18.0",
+    "@slidev/cli": "^53.0.0",
     "@slidev/theme-default": "^0.25.0",
     "eslint": "catalog:",
     "typescript": "catalog:",

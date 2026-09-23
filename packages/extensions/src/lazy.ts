@@ -47,11 +47,7 @@ const resolveSpecifier = (specifier: string): string => {
 export const loadDefault = async <T = unknown>(specifier: string): Promise<T> => {
   const module = await dynamicImport(resolveSpecifier(specifier))
 
-  if (hasDefaultExport(module)) {
-    return (module.default ?? module) as T
-  }
-
-  return module as T
+  return (hasDefaultExport(module) ? module.default ?? module : module) as T
 }
 
 export const loadModule = async <T = unknown>(specifier: string): Promise<T> => (
