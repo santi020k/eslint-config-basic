@@ -1,5 +1,11 @@
 # @santi020k/eslint-config-full
 
+## 3.2.4
+
+### Patch Changes
+
+- Synchronize the batteries-included aggregate with the package documentation and metadata updates in this release.
+
 ## 3.2.3
 
 ### Patch Changes
