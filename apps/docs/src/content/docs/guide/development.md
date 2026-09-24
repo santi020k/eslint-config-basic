@@ -13,6 +13,9 @@ corepack use pnpm@11.6.0
 # Install dependencies
 pnpm install
 
+# Install the repository-managed Git hooks
+pnpm run hooks:install
+
 # Build all packages
 pnpm run build
 
@@ -31,7 +34,27 @@ pnpm run test
 | `pnpm run test` | Run integration tests (Vitest) |
 | `pnpm run inspector` | Open ESLint config inspector UI |
 | `pnpm run docs` | Generate API docs (TypeDoc) |
+| `pnpm run hooks:install` | Install the hooks declared in `quality.yml` |
 | `pnpm run clean` | Remove all `dist/` and `node_modules/` |
+
+## Quality CLI prerequisite
+
+The Git hooks are managed by the external [`quality` CLI](https://quality.santi020k.com),
+not by a JavaScript workspace dependency. Install the checksum-verified native
+binary before running `pnpm run hooks:install`:
+
+```bash
+curl --proto '=https' --tlsv1.2 -fsSL \
+  https://raw.githubusercontent.com/santi020k/quality/main/install.sh \
+  | sh -s -- santi020k/quality v1.1.1
+
+quality --version
+pnpm run hooks:install
+quality hooks status
+```
+
+The repository's hook definitions live in `quality.yml`; rerun the install
+command after changing them.
 
 ## Project Structure
 
@@ -56,7 +79,7 @@ This is a **monorepo** using Turborepo + pnpm Workspaces. Each config lives unde
 Always validate your changes before submitting:
 
 ```bash
-pnpm run build && pnpm run lint && pnpm run test
+pnpm run ok
 ```
 
 For full contributing guidelines, see the [CONTRIBUTING.md](https://github.com/santi020k/eslint-config-basic/blob/main/.github/CONTRIBUTING.md).

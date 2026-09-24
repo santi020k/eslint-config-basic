@@ -232,7 +232,7 @@
     "guide--development.webp": {
       "baseDirectory": "public/og",
       "digest": "588f90244287d39c2f05bbbc8f760207de195edada0ea1e7f7040b2b781b8471",
-      "fingerprint": "d63bbacbc33f51dd6d5ad2b7f948c49d2b02b22b273a7c93ff340a629fdaaf0f",
+      "fingerprint": "ca87956eb38f5e7b266feb21f8842b53e623b27be9cc361a558060981e5a5999",
       "output": "guide--development.webp"
     },
     "guide--doctor-report.webp": {
