@@ -85,5 +85,8 @@
     "directory": "packages/libraries"
   },
   "homepage": "https://eslint.santi020k.com/tooling/libraries",
+  "bugs": {
+    "url": "https://github.com/santi020k/eslint-config-basic/issues"
+  },
   "license": "MIT"
 }

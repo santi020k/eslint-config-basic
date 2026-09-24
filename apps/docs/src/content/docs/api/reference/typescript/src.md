@@ -9,7 +9,7 @@ description: "@santi020k/eslint-config-basic"
 
 > `const` **standardRules**: `TSESLint.Linter.RulesRecord`
 
-Defined in: [packages/typescript/src/rules.ts:3](https://github.com/santi020k/eslint-config-basic/blob/main/packages/typescript/src/rules.ts#L3)
+Defined in: packages/typescript/src/rules.ts:3
 
 ***
 
@@ -17,7 +17,7 @@ Defined in: [packages/typescript/src/rules.ts:3](https://github.com/santi020k/es
 
 > `const` **typeCheckedRules**: `TSESLint.Linter.RulesRecord`
 
-Defined in: [packages/typescript/src/rules.ts:37](https://github.com/santi020k/eslint-config-basic/blob/main/packages/typescript/src/rules.ts#L37)
+Defined in: packages/typescript/src/rules.ts:37
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [packages/typescript/src/rules.ts:37](https://github.com/santi020k/e
 
 > `const` **typescriptConfig**: `ConfigArray`
 
-Defined in: [packages/typescript/src/index.ts:211](https://github.com/santi020k/eslint-config-basic/blob/main/packages/typescript/src/index.ts#L211)
+Defined in: packages/typescript/src/index.ts:211
 
 ## Functions
 
@@ -33,7 +33,7 @@ Defined in: [packages/typescript/src/index.ts:211](https://github.com/santi020k/
 
 > **createTypescriptConfig**(`options?`): `ConfigArray`
 
-Defined in: [packages/typescript/src/index.ts:107](https://github.com/santi020k/eslint-config-basic/blob/main/packages/typescript/src/index.ts#L107)
+Defined in: packages/typescript/src/index.ts:107
 
 TypeScript ESLint configuration factory
 Extends typescript-eslint strict + stylistic type-checked presets with custom rules

@@ -3,6 +3,21 @@ title: "Changelog"
 description: "Release history for @santi020k/eslint-config-basic."
 ---
 
+## 3.5.3
+
+### Patch Changes
+
+- [#132](https://github.com/santi020k/eslint-config-basic/pull/132) [`d92bcf4`](https://github.com/santi020k/eslint-config-basic/commit/d92bcf4e1591a18cdd1c2a84db556e8598cd293a) Thanks [@santi020k](https://github.com/santi020k)! - Create the umbrella GitHub Release and rolling major Action tag from the protected GitHub Actions release workflow, including a main-only recovery dispatch.
+
+## 3.5.2
+
+### Patch Changes
+
+- [#126](https://github.com/santi020k/eslint-config-basic/pull/126) [`2bf02c3`](https://github.com/santi020k/eslint-config-basic/commit/2bf02c349c8b99671ac069a26ec7065a8233d4f2) Thanks [@santi020k](https://github.com/santi020k)! - Upgrade the supported dependency ecosystem, adopt Lumen Astro 2, and resolve all known audit findings with patched transitive versions.
+- Updated dependencies [[`2bf02c3`](https://github.com/santi020k/eslint-config-basic/commit/2bf02c349c8b99671ac069a26ec7065a8233d4f2)]:
+  - @santi020k/eslint-config-core@3.1.2
+  - @santi020k/eslint-config-typescript@3.1.4
+
 ## 3.5.1
 
 ### Patch Changes

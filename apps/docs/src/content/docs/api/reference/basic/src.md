@@ -7,7 +7,7 @@ description: "@santi020k/eslint-config-basic"
 
 ### EslintConfigArray
 
-Defined in: [packages/basic/src/index.ts:685](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L685)
+Defined in: packages/basic/src/index.ts:685
 
 Portable public result type returned by the Basic config composer.
 
@@ -215,7 +215,7 @@ Gets or sets the length of the array. This is a number one higher than the highe
 
 > **length**: `number`
 
-Defined in: [packages/basic/src/index.ts:686](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L686)
+Defined in: packages/basic/src/index.ts:686
 
 Gets or sets the length of the array. This is a number one higher than the highest index in the array.
 
@@ -1707,7 +1707,7 @@ The copied array with the updated value.
 
 > `const` **angular**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [packages/basic/src/frameworks.ts:120](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L120)
+Defined in: packages/basic/src/frameworks.ts:120
 
 #### Parameters
 
@@ -1725,7 +1725,7 @@ Defined in: [packages/basic/src/frameworks.ts:120](https://github.com/santi020k/
 
 > `const` **astro**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [packages/basic/src/frameworks.ts:121](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L121)
+Defined in: packages/basic/src/frameworks.ts:121
 
 #### Parameters
 
@@ -1743,7 +1743,7 @@ Defined in: [packages/basic/src/frameworks.ts:121](https://github.com/santi020k/
 
 > `const` **defineConfig**: `ConfigComposer`
 
-Defined in: [packages/basic/src/index.ts:843](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L843)
+Defined in: packages/basic/src/index.ts:843
 
 Generates the ESLint configuration array, applying configurations
 and integration settings based on the input configuration.
@@ -1770,7 +1770,7 @@ The final ESLint configuration array
 
 > `const` **expo**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [packages/basic/src/frameworks.ts:122](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L122)
+Defined in: packages/basic/src/frameworks.ts:122
 
 #### Parameters
 
@@ -1788,7 +1788,7 @@ Defined in: [packages/basic/src/frameworks.ts:122](https://github.com/santi020k/
 
 > `const` **hono**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [packages/basic/src/frameworks.ts:123](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L123)
+Defined in: packages/basic/src/frameworks.ts:123
 
 #### Parameters
 
@@ -1806,7 +1806,7 @@ Defined in: [packages/basic/src/frameworks.ts:123](https://github.com/santi020k/
 
 > `const` **lit**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [packages/basic/src/frameworks.ts:124](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L124)
+Defined in: packages/basic/src/frameworks.ts:124
 
 #### Parameters
 
@@ -1824,7 +1824,7 @@ Defined in: [packages/basic/src/frameworks.ts:124](https://github.com/santi020k/
 
 > `const` **nest**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [packages/basic/src/frameworks.ts:125](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L125)
+Defined in: packages/basic/src/frameworks.ts:125
 
 #### Parameters
 
@@ -1842,7 +1842,7 @@ Defined in: [packages/basic/src/frameworks.ts:125](https://github.com/santi020k/
 
 > `const` **next**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [packages/basic/src/frameworks.ts:126](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L126)
+Defined in: packages/basic/src/frameworks.ts:126
 
 #### Parameters
 
@@ -1860,7 +1860,7 @@ Defined in: [packages/basic/src/frameworks.ts:126](https://github.com/santi020k/
 
 > `const` **nuxt**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [packages/basic/src/frameworks.ts:127](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L127)
+Defined in: packages/basic/src/frameworks.ts:127
 
 #### Parameters
 
@@ -1878,7 +1878,7 @@ Defined in: [packages/basic/src/frameworks.ts:127](https://github.com/santi020k/
 
 > `const` **preact**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [packages/basic/src/frameworks.ts:128](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L128)
+Defined in: packages/basic/src/frameworks.ts:128
 
 #### Parameters
 
@@ -1896,7 +1896,7 @@ Defined in: [packages/basic/src/frameworks.ts:128](https://github.com/santi020k/
 
 > `const` **qwik**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [packages/basic/src/frameworks.ts:129](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L129)
+Defined in: packages/basic/src/frameworks.ts:129
 
 #### Parameters
 
@@ -1914,7 +1914,7 @@ Defined in: [packages/basic/src/frameworks.ts:129](https://github.com/santi020k/
 
 > `const` **react**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [packages/basic/src/frameworks.ts:130](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L130)
+Defined in: packages/basic/src/frameworks.ts:130
 
 #### Parameters
 
@@ -1932,7 +1932,7 @@ Defined in: [packages/basic/src/frameworks.ts:130](https://github.com/santi020k/
 
 > `const` **reactRouter**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [packages/basic/src/frameworks.ts:131](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L131)
+Defined in: packages/basic/src/frameworks.ts:131
 
 #### Parameters
 
@@ -1950,7 +1950,7 @@ Defined in: [packages/basic/src/frameworks.ts:131](https://github.com/santi020k/
 
 > `const` **slidev**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [packages/basic/src/frameworks.ts:132](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L132)
+Defined in: packages/basic/src/frameworks.ts:132
 
 #### Parameters
 
@@ -1968,7 +1968,7 @@ Defined in: [packages/basic/src/frameworks.ts:132](https://github.com/santi020k/
 
 > `const` **solid**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [packages/basic/src/frameworks.ts:133](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L133)
+Defined in: packages/basic/src/frameworks.ts:133
 
 #### Parameters
 
@@ -1986,7 +1986,7 @@ Defined in: [packages/basic/src/frameworks.ts:133](https://github.com/santi020k/
 
 > `const` **svelte**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [packages/basic/src/frameworks.ts:134](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L134)
+Defined in: packages/basic/src/frameworks.ts:134
 
 #### Parameters
 
@@ -2004,7 +2004,7 @@ Defined in: [packages/basic/src/frameworks.ts:134](https://github.com/santi020k/
 
 > `const` **tanstackStart**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [packages/basic/src/frameworks.ts:135](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L135)
+Defined in: packages/basic/src/frameworks.ts:135
 
 #### Parameters
 
@@ -2022,7 +2022,7 @@ Defined in: [packages/basic/src/frameworks.ts:135](https://github.com/santi020k/
 
 > `const` **vite**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [packages/basic/src/frameworks.ts:136](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L136)
+Defined in: packages/basic/src/frameworks.ts:136
 
 #### Parameters
 
@@ -2040,7 +2040,7 @@ Defined in: [packages/basic/src/frameworks.ts:136](https://github.com/santi020k/
 
 > `const` **vue**: (`options?`) => `Promise`\<`ConfigArray`\>
 
-Defined in: [packages/basic/src/frameworks.ts:137](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/frameworks.ts#L137)
+Defined in: packages/basic/src/frameworks.ts:137
 
 #### Parameters
 
@@ -2058,7 +2058,7 @@ Defined in: [packages/basic/src/frameworks.ts:137](https://github.com/santi020k/
 
 > **attachReferencedPlugins**(`configs`): `ConfigArray`
 
-Defined in: [packages/basic/src/index.ts:754](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L754)
+Defined in: packages/basic/src/index.ts:754
 
 Copies already-loaded plugin objects onto rule blocks that reference them.
 ESLint 10 validates plugin availability per effective config object, while

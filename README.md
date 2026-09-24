@@ -7,6 +7,12 @@ and opt-in framework packages.
 [npm](https://www.npmjs.com/package/@santi020k/eslint-config-basic) ·
 [Migration to v3](https://eslint.santi020k.com/guide/migration-v2-to-v3/)
 
+[![Build](https://github.com/santi020k/eslint-config-basic/actions/workflows/build.yml/badge.svg)](https://github.com/santi020k/eslint-config-basic/actions/workflows/build.yml)
+[![CodeQL](https://github.com/santi020k/eslint-config-basic/actions/workflows/codeql.yml/badge.svg)](https://github.com/santi020k/eslint-config-basic/actions/workflows/codeql.yml)
+[![npm version](https://img.shields.io/npm/v/@santi020k/eslint-config-basic.svg)](https://www.npmjs.com/package/@santi020k/eslint-config-basic)
+[![npm downloads](https://img.shields.io/npm/dm/@santi020k/eslint-config-basic.svg)](https://www.npmjs.com/package/@santi020k/eslint-config-basic)
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 ## Quick start
 
 Install the lean package and ESLint:
@@ -195,4 +201,6 @@ for package moves and copy-paste commands. The
 [planned v4 removals](https://eslint.santi020k.com/guide/v4-removals/) page
 tracks compatibility APIs that are deprecated during v3.
 
-MIT © [santi020k](https://santi020k.com)
+## License
+
+MIT © [santi020k](https://santi020k.com). See [LICENSE](LICENSE).
