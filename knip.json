@@ -9,6 +9,7 @@
     "typedoc-plugin-markdown",
     "tailwindcss"
   ],
+  "ignoreBinaries": ["quality"],
   "ignoreExportsUsedInFile": true,
   "rules": {
     "catalog": "off",
@@ -28,6 +29,7 @@
       "project": ["src/**/*.{js,jsx,ts,tsx,vue,svelte,astro}"]
     },
     "apps/docs": {
+      "entry": ["scripts/generate-og-images.mjs"],
       "project": ["src/**/*.{ts,astro,mdx}", "tests/**/*.ts", "scripts/**/*.{js,mjs,ts}"]
     },
     "packages/tests": {

@@ -1,5 +1,13 @@
 # @santi020k/eslint-config-solid
 
+## 3.1.2
+
+### Patch Changes
+
+- [#134](https://github.com/santi020k/eslint-config-basic/pull/134) [`07cb188`](https://github.com/santi020k/eslint-config-basic/commit/07cb188c727606bf00b67928ac20e95c2201ddc6) Thanks [@santi020k](https://github.com/santi020k)! - Replace the minimal npm package READMEs with practical installation,
+  configuration, compatibility, and support guidance. The Basic package now
+  publishes the comprehensive root README instead of a short placeholder.
+
 ## 3.1.1
 
 ### Patch Changes
