@@ -5,6 +5,7 @@ on:
   pull_request:
     branches: [main]
     types: [closed]
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -14,11 +15,15 @@ concurrency:
 jobs:
   release:
     # A normal push to main can prepare a release PR, but it can never publish.
-    # Publishing requires merging the branch managed by changesets/action.
+    # Publishing requires merging the branch managed by changesets/action. A
+    # manual workflow dispatch is reserved for idempotent release recovery.
     if: >-
       ${{
-        github.event.pull_request.merged == true &&
-        github.event.pull_request.head.ref == 'changeset-release/main'
+        github.event_name == 'workflow_dispatch' ||
+        (
+          github.event.pull_request.merged == true &&
+          github.event.pull_request.head.ref == 'changeset-release/main'
+        )
       }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -32,7 +37,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
-          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.merge_commit_sha || github.sha }}
 
       - name: Set up pnpm workspace
         uses: santi020k/quality/actions/setup-pnpm@eec1701b98bcc0b76d36af288ee78a0369cd84cc # v1
@@ -54,7 +59,7 @@ jobs:
           pnpm run check:attw
         env:
           RELEASE_BUILD_ALL_IF_UNVERSIONED: "true"
-          RELEASE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          RELEASE_BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.sha }}
 
       - name: Publish versioned packages
         id: changesets
@@ -67,14 +72,15 @@ jobs:
           HUSKY: 0
           NPM_CONFIG_PROVENANCE: "true"
 
-      # Changesets creates one tag per published package. Only a Basic release
-      # updates the umbrella and rolling Action tags; independent releases for
-      # other packages must never move those tags back to an older Basic commit.
-      - name: Reconcile umbrella version tag
+      # Changesets creates one tag and GitHub Release per published package. The
+      # Basic package owns the umbrella Release and rolling Action tag. Manage
+      # both through GitHub's API so the workflow token never needs to push Git
+      # refs that contain workflow-file changes.
+      - name: Reconcile umbrella GitHub release
         if: steps.changesets.outcome == 'success'
         shell: bash
         run: |
-          set -eu
+          set -euo pipefail
 
           VERSION=$(node -p "require('./packages/basic/package.json').version")
           TAG="v${VERSION}"
@@ -91,12 +97,6 @@ jobs:
           fi
 
           RELEASE_COMMIT=$(git rev-list -n 1 "${PACKAGE_TAG}")
-          CURRENT_RELEASE_COMMIT=$(git rev-parse HEAD)
-
-          if [[ "${RELEASE_COMMIT}" != "${CURRENT_RELEASE_COMMIT}" ]]; then
-            echo "Basic package tag ${PACKAGE_TAG} does not point to the current release commit; umbrella tags remain unchanged." >> "$GITHUB_STEP_SUMMARY"
-            exit 0
-          fi
 
           if git rev-parse --verify --quiet "refs/tags/${TAG}" >/dev/null; then
             TAG_COMMIT=$(git rev-list -n 1 "${TAG}")
@@ -107,21 +107,47 @@ jobs:
 
             echo "Tag ${TAG} already points to the release commit; nothing to do."
           else
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git tag -a "${TAG}" -m "Release ${TAG}" "${RELEASE_COMMIT}"
-            git push origin "refs/tags/${TAG}"
-            echo "Created umbrella release tag ${TAG}." >> "$GITHUB_STEP_SUMMARY"
+            echo "GitHub Release creation will create tag ${TAG} at ${RELEASE_COMMIT}."
           fi
 
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -fa "${MAJOR_TAG}" -m "Release ${MAJOR_TAG}" "${RELEASE_COMMIT}"
-          git push --force origin "refs/tags/${MAJOR_TAG}"
-          echo "Updated rolling action tag ${MAJOR_TAG}." >> "$GITHUB_STEP_SUMMARY"
+          if gh release view "${TAG}" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
+            echo "GitHub Release ${TAG} already exists; nothing to do."
+          else
+            RELEASE_BODY=$(gh release view "${PACKAGE_TAG}" \
+              --repo "${GITHUB_REPOSITORY}" \
+              --json body \
+              --jq '.body')
+
+            gh api --method POST "repos/${GITHUB_REPOSITORY}/releases" \
+              -f tag_name="${TAG}" \
+              -f target_commitish="${RELEASE_COMMIT}" \
+              -f name="${TAG}" \
+              -f body="${RELEASE_BODY}" >/dev/null
+            echo "Created umbrella GitHub Release ${TAG}." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          if git rev-parse --verify --quiet "refs/tags/${MAJOR_TAG}" >/dev/null; then
+            MAJOR_TAG_COMMIT=$(git rev-list -n 1 "${MAJOR_TAG}")
+
+            if [[ "${MAJOR_TAG_COMMIT}" != "${RELEASE_COMMIT}" ]]; then
+              if ! git merge-base --is-ancestor "${MAJOR_TAG_COMMIT}" "${RELEASE_COMMIT}"; then
+                echo "::error::Refusing to move ${MAJOR_TAG} backwards from ${MAJOR_TAG_COMMIT} to ${RELEASE_COMMIT}."
+                exit 1
+              fi
+
+              gh api --method PATCH "repos/${GITHUB_REPOSITORY}/git/refs/tags/${MAJOR_TAG}" \
+                -f sha="${RELEASE_COMMIT}" \
+                -F force=true >/dev/null
+              echo "Updated rolling action tag ${MAJOR_TAG}." >> "$GITHUB_STEP_SUMMARY"
+            fi
+          else
+            gh api --method POST "repos/${GITHUB_REPOSITORY}/git/refs" \
+              -f ref="refs/tags/${MAJOR_TAG}" \
+              -f sha="${RELEASE_COMMIT}" >/dev/null
+            echo "Created rolling action tag ${MAJOR_TAG}." >> "$GITHUB_STEP_SUMMARY"
+          fi
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          HUSKY: 0
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # npm OIDC intentionally authenticates publish commands only. Metadata
       # updates still need a valid granular token, so detect an expired token
