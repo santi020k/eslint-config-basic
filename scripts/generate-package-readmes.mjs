@@ -4,6 +4,17 @@ import { join } from 'node:path'
 import { docsOrigin, packageDocs, repositoryOrigin, websiteOrigin } from './docs-packages.mjs'
 
 const basicPackageName = '@santi020k/eslint-config-basic'
+const reactPackageName = '@santi020k/eslint-config-react'
+const vuePackageName = '@santi020k/eslint-config-vue'
+
+const impliedFrameworkPackages = {
+  '@santi020k/eslint-config-expo': [reactPackageName],
+  '@santi020k/eslint-config-next': [reactPackageName],
+  '@santi020k/eslint-config-nuxt': [vuePackageName],
+  '@santi020k/eslint-config-react-router': [reactPackageName],
+  '@santi020k/eslint-config-slidev': [vuePackageName],
+  '@santi020k/eslint-config-tanstack-start': [reactPackageName]
+}
 
 const categoryExamples = {
   extensions: ['security', 'unicorn'],
@@ -22,7 +33,9 @@ const resolveInstallPackages = packageName => {
 
   if (packageName === '@santi020k/eslint-config-typescript') return `eslint typescript ${packageName}`
 
-  return `eslint ${basicPackageName} ${packageName}`
+  const impliedPackages = impliedFrameworkPackages[packageName] ?? []
+
+  return `eslint ${basicPackageName} ${packageName} ${impliedPackages.join(' ')}`.trim()
 }
 
 const generateInstall = packageName => {

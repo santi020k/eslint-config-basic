@@ -9,7 +9,7 @@ React Router v7 (framework mode) rules, successor to the Remix configuration.
 ## Installation
 
 ```sh
-npm install -D eslint @santi020k/eslint-config-basic @santi020k/eslint-config-react-router
+npm install -D eslint @santi020k/eslint-config-basic @santi020k/eslint-config-react-router @santi020k/eslint-config-react
 ```
 
 ## Usage

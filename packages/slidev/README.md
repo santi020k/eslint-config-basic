@@ -9,7 +9,7 @@ Slidev support for Vue-powered presentation decks.
 ## Installation
 
 ```sh
-npm install -D eslint @santi020k/eslint-config-basic @santi020k/eslint-config-slidev
+npm install -D eslint @santi020k/eslint-config-basic @santi020k/eslint-config-slidev @santi020k/eslint-config-vue
 ```
 
 ## Usage

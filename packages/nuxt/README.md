@@ -9,7 +9,7 @@ Nuxt-specific rules layered on top of the Vue configuration.
 ## Installation
 
 ```sh
-npm install -D eslint @santi020k/eslint-config-basic @santi020k/eslint-config-nuxt
+npm install -D eslint @santi020k/eslint-config-basic @santi020k/eslint-config-nuxt @santi020k/eslint-config-vue
 ```
 
 ## Usage

@@ -9,7 +9,7 @@ Expo and React Native support with explicit React configuration.
 ## Installation
 
 ```sh
-npm install -D eslint @santi020k/eslint-config-basic @santi020k/eslint-config-expo
+npm install -D eslint @santi020k/eslint-config-basic @santi020k/eslint-config-expo @santi020k/eslint-config-react
 ```
 
 ## Usage

@@ -9,7 +9,7 @@ Next.js rules, App Router notes, and the React dependency contract.
 ## Installation
 
 ```sh
-npm install -D eslint @santi020k/eslint-config-basic @santi020k/eslint-config-next
+npm install -D eslint @santi020k/eslint-config-basic @santi020k/eslint-config-next @santi020k/eslint-config-react
 ```
 
 ## Usage

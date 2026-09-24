@@ -9,7 +9,7 @@ TanStack Start rules bundling TanStack Router and TanStack Query support.
 ## Installation
 
 ```sh
-npm install -D eslint @santi020k/eslint-config-basic @santi020k/eslint-config-tanstack-start
+npm install -D eslint @santi020k/eslint-config-basic @santi020k/eslint-config-tanstack-start @santi020k/eslint-config-react
 ```
 
 ## Usage
