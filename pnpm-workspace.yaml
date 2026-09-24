@@ -141,7 +141,9 @@ catalogs:
 allowBuilds:
   '@prisma/engines': true
   '@scarf/scarf': false
-  cypress: true
+  # This workspace only type-checks and lints the Cypress playground. Avoid
+  # downloading the unused desktop binary during every clean install.
+  cypress: false
   esbuild: true
   prisma: false
   sharp: true
@@ -167,6 +169,7 @@ minimumReleaseAgeExclude:
   - sharp@0.35.0
   - undici@7.29.0
   - '@santi020k/og'
+  - satori@0.33.4
 
 overrides:
   deepmerge-ts@<8.0.0: 8.0.0

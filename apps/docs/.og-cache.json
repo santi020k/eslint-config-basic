@@ -1,1063 +1,1063 @@
 {
-  "cacheKey": "preset-v1",
+  "cacheKey": "preset-v4",
   "entries": {
     "api.webp": {
       "baseDirectory": "public/og",
-      "digest": "eb92c3a9a4375037b98b4482bb03d7a9d202e440507ebe7d8fbf86f412494695",
-      "fingerprint": "f4465983a9a96330078be6b9b7bd08dc49fd4094da86daef77e795ddfdb835ad",
+      "digest": "00182bd615d37a4141e5d21e637b97aaccfb00b48abca76dbcb138303d2df27b",
+      "fingerprint": "5b8ab405099463e0969f3ea49b56413ea9b84c553d23f6aec196da40d3d83d73",
       "output": "api.webp"
     },
     "api--reference--astro--src.webp": {
       "baseDirectory": "public/og",
-      "digest": "f739b2a3a2fc37fc6d3be2333c164b24604619277d8bec414b9c44d7f314f55f",
-      "fingerprint": "0a103c1bcc7c643310de44a964f3a696cdf5a739d5b54fea947d6affa677b924",
+      "digest": "3f136c01034357c6e4fe4026ce3c6ee8b55c96b6725dc61aa622a083bee0b194",
+      "fingerprint": "4a76954cd5d79f928f56625fb6c0b51683cec8a459068423e0f049ec0d0dbfe0",
       "output": "api--reference--astro--src.webp"
     },
     "api--reference--basic--src.webp": {
       "baseDirectory": "public/og",
-      "digest": "b3fd345fd9605f12ac3b393d1178e2fd273be34514e49e45c6283e86a724eca5",
-      "fingerprint": "d168710290fc698fff674b2f20ba94f3dcc97d9d8e5191ed0bf05b54d1fd3736",
+      "digest": "925d8e5a031e8ccc3c6ab1f3e238be45dac26a4c7add7342a9faaed31e90f1c4",
+      "fingerprint": "0d06826863c757dd8a9279334ab4edccff7c70d275ad4a1c17a307ec1ee2133d",
       "output": "api--reference--basic--src.webp"
     },
     "api--reference--core--src.webp": {
       "baseDirectory": "public/og",
-      "digest": "9a5a17e2ed885534b60b87bfe81ae51c76c6db2e008a089262307a3a624cfcff",
-      "fingerprint": "6ed7d9545f41b63a4ab70fcc11d2e16602b965f349a11b6ee2ee0ccc152c8c94",
+      "digest": "c250f301ad4b053f619f402466e40020dd1bf43ddb39b09bbe8d29d0c9983dad",
+      "fingerprint": "b30e257b58bb325ee1ff2c9ab1b53bf2e565d2c00bf597a0ca36767051433a13",
       "output": "api--reference--core--src.webp"
     },
     "api--reference--expo--src.webp": {
       "baseDirectory": "public/og",
-      "digest": "593cfb3f8b3dafb7ab210726ee504f14ecb495c70c90dc895b8066641efcd47a",
-      "fingerprint": "5454ffa9844e548b9001dce0c572f6cb295bf5121fa3c9e16a9db15427e20b9f",
+      "digest": "a0b263d65447dae77a85adaa66b72145cad819f3886b8de4c8e769f0c90580e8",
+      "fingerprint": "fa47646dbce5c98ccc132c54e8b407da3a499e57cf587209e5f358818f520e99",
       "output": "api--reference--expo--src.webp"
     },
     "api--reference.webp": {
       "baseDirectory": "public/og",
-      "digest": "03469d867966e890b91f521320ba3142fac5bd324d311bf4e5c6f30582cec8f1",
-      "fingerprint": "664a0b6723c6e57bd5eca2c4817e2b9bc949709269c19e98b22b6e7e42065857",
+      "digest": "55fe3cd5b246438aef4d0d4c59a3f63cc4a0501c81aeb7fdc788c7770d79acbb",
+      "fingerprint": "0fd4c035e4e0570bf70702259b67445a3f7c885ad9e4d06e6203dd4f75615d9f",
       "output": "api--reference.webp"
     },
     "api--reference--integrations--src.webp": {
       "baseDirectory": "public/og",
-      "digest": "fa8a7be457cac1c8c2d826ef1fe4c352a3d72d677fa82b1feb56d129efa370d6",
-      "fingerprint": "f2ccd3bce49f6a857e664e4d49a01dc2b48894573b1d3b10ca9b4f7aa368d29b",
+      "digest": "11c787ac2de7103d4bfa84d263a9f7a779d73fd8980dce3fa0366ab0548bd786",
+      "fingerprint": "61cdc8592001dbca01c14e65bb55336504137147f4ad8da5053f5f3370a92a93",
       "output": "api--reference--integrations--src.webp"
     },
     "api--reference--nest--src.webp": {
       "baseDirectory": "public/og",
-      "digest": "0d9d715fd38a1dd08a63f674a15b803a238bde98afbda3efe0bcbbc6919b7cc5",
-      "fingerprint": "4d46c916786443d93afa70893b7e11110b95407f8ccecb132b9b4cd980d47c54",
+      "digest": "17394a032c96d06141efe39e831e693388a9bb6b2b017ec073ef4e6950b25769",
+      "fingerprint": "b7fffb71c8643ad6b138636b93793c7724cda89ef25dd217ce51b9524f683e00",
       "output": "api--reference--nest--src.webp"
     },
     "api--reference--next--src.webp": {
       "baseDirectory": "public/og",
-      "digest": "62834b9de7c071d736e8fc05afbba549a043af060d26ecaf06168181eefbbf18",
-      "fingerprint": "aaef760a9e35766a6b6e154caf746752146c2eea71919881ae88d2ee617f924e",
+      "digest": "5629b4deccc06c484a96e16f7ba3eb8472476c6814c07805d258f19526b8026e",
+      "fingerprint": "85b9fee1b5d59e682d61bb45589293568b0ebf2d823e6a8d70c55639797c485c",
       "output": "api--reference--next--src.webp"
     },
     "api--reference--react--src.webp": {
       "baseDirectory": "public/og",
-      "digest": "9da2ed26dd5638c10b6db9630e6bd6a415a3abd5f5797a2618995bca9bbbb60f",
-      "fingerprint": "26e43f9dd7b1d2574be858f97316672f7b72ee36c20ae606188ec0784febcaed",
+      "digest": "1f1e76b4a50595abeb9a9ffbe842a2a619964092f376b30f03464dbc45c0fc13",
+      "fingerprint": "60bf16a678e0cfa149c0fdcf0670f2f285c03b3ee2cc7fbfb28b083448e78c48",
       "output": "api--reference--react--src.webp"
     },
     "api--reference--typescript--src.webp": {
       "baseDirectory": "public/og",
-      "digest": "f03a15c150a3282fae9696d4e1c65a1481a2d367472c27e8be6d6f53b265173f",
-      "fingerprint": "3cbb2cb8adb62bbce8cbf9204d188b8e90d6ce3618c5526a103812af978c242f",
+      "digest": "79b683ec23871d8a255efe64fbfc6989049f183aa174b624ada41cbaf38a042f",
+      "fingerprint": "776c04977eec3f7fbc185e27f4679e3dc3263bc4cda0b04e2ecb6f158016a869",
       "output": "api--reference--typescript--src.webp"
     },
     "frameworks--angular.webp": {
       "baseDirectory": "public/og",
-      "digest": "7d1ac40ac9851e173fee3759920bb7199f50e1539bb16fb6bd2fccd0230be0c2",
-      "fingerprint": "3ed31ee3fe92d8652479118e1983231538320aa010c712d3d600695cdbf28a03",
+      "digest": "a23b33afdad356e2259f88c84be40ea82db9bff11a3094cee1c5cf3d9ec8850c",
+      "fingerprint": "e457e26b481af4f5bce8128e7a03373c3ef2d3639fabe5f080098e41aeca80fc",
       "output": "frameworks--angular.webp"
     },
     "frameworks--astro.webp": {
       "baseDirectory": "public/og",
-      "digest": "7acf7404ebcb1f13851c2cba1a630061d7bc2ecc63192abcabd6303f122d93e4",
-      "fingerprint": "58e3ff2812c2dfc2bb3e11ab3e0d185b9b1b0a1855337b41dbeb2f2ee1d6b2eb",
+      "digest": "c77ee7a6ee1becd0fd62c28b6efb6deabffd752b4e2cd19b90976fd3d1c881e9",
+      "fingerprint": "e5bdc9f243a9d5b43858dbd06b7ee5ef63abfef08c5d47e62a268a3240895ea1",
       "output": "frameworks--astro.webp"
     },
     "frameworks--expo.webp": {
       "baseDirectory": "public/og",
-      "digest": "58cf01d58679c2b1b9b1d35076a9ae21a736a6f0e56c79d3a3bc0a96a49b9cf0",
-      "fingerprint": "4dea28c4fe1fe515f69f098ad355ec7ccb7ea0bea2ea31181f683b22470fc413",
+      "digest": "f7634f9c0051d6c5eac7ae38ac7292f10d058b1fe1377db052df651e42fad91f",
+      "fingerprint": "aa943cf3c0336b2ed22c6982f67999045801f50a95daedfda21401d639086481",
       "output": "frameworks--expo.webp"
     },
     "frameworks--hono.webp": {
       "baseDirectory": "public/og",
-      "digest": "2cbc2e38165d00c88ec0c15a43802ce5bd3d9be4df2593c45bcbdd43c4885f74",
-      "fingerprint": "e8ea8c48eef24844b7c37b6ddfe78e601ed294f2a1a489febfe568526366c740",
+      "digest": "7fed9e5338fcdad82289842c295556d094383b6d1d828094887aef27e22b2590",
+      "fingerprint": "ae42fcec4e4ab2c9139818c81dc584814525c60cf084e98cd5fe55efd3ff19ee",
       "output": "frameworks--hono.webp"
     },
     "frameworks--lit.webp": {
       "baseDirectory": "public/og",
-      "digest": "0cfd0436ae51510e095cf04c76ce1a67e576b707f379bf05cfb15a5108e0ae9f",
-      "fingerprint": "7eff5f03a551194f8e7ce25bf59851a0692d84c67ad8d01fa09708feec60b160",
+      "digest": "4da47bbb1de1c8e354c328d91c7ae79a82965e35115d503c61c18f42387039b4",
+      "fingerprint": "de1bfee9a1bf777b8f32283c99c10ba4077a972c43fb907a438b8399c88452d5",
       "output": "frameworks--lit.webp"
     },
     "frameworks--nest.webp": {
       "baseDirectory": "public/og",
-      "digest": "3ff567b03674d0effd205a74a63ac6cb22d3ab45dd69fbfa07907f2d02a4e98c",
-      "fingerprint": "450a7ba2c71d9c850282caea4d2031549f249c2c933e592d6ccae2b27c3bf567",
+      "digest": "1f447db07a16dd5aab087aa2ded573da27e8f828d4e6f06f41a99fe80f0d6610",
+      "fingerprint": "6be8e7f11becb30245594d1c7c6d288cd072cbb02f4ee56c104446c07accbd62",
       "output": "frameworks--nest.webp"
     },
     "frameworks--next.webp": {
       "baseDirectory": "public/og",
-      "digest": "6c5d02b5e159e3e92a27da73b5a5dfb97dfa6a1d79eff50cff533b7db10c23d6",
-      "fingerprint": "5c2aaff9098239209a73f2b14fe4ea1ac8bd62edfb3a0371be3566c8ec755c82",
+      "digest": "04b76b805b53a666d4f9b287a3e2ce599fbe90c40f089ad811608dfef56a6527",
+      "fingerprint": "3121dd5a4da37acc33c9301719e8eb9858aafcbebb6d802a0103bca9298d9590",
       "output": "frameworks--next.webp"
     },
     "frameworks--nuxt.webp": {
       "baseDirectory": "public/og",
-      "digest": "af9b7a62b605552cabda7205af35487d6e27c30da21e71021c877c29b72b0122",
-      "fingerprint": "96a3d95975aa74382f39815ee5d5bd590a8e2ac9a25cc751e8549c3591b0b294",
+      "digest": "8b42978f4aea5394a9971febe5f4ee5df0cf0f16bf9f1ecea3c5ffe077e13763",
+      "fingerprint": "0dcf8f4d715f468d689047aae6e9824b702a507b23fda13d8ea34694b05d1617",
       "output": "frameworks--nuxt.webp"
     },
     "frameworks--preact.webp": {
       "baseDirectory": "public/og",
-      "digest": "a279d1053bb7039265ff3718288d0def8c961010f02e833df33314d6b4ea4f78",
-      "fingerprint": "87d84fbf7275312d0e154b35efa3912209031e745634b4e06029095d802eceb6",
+      "digest": "f6e3e331869bdceb09bba2b614f0f526caa6293c9161c2ebeba92b87a714d786",
+      "fingerprint": "cb1b91bc0ec16bc95b296d68bd98fbd425004ae62f4a941992e59d7838efa24e",
       "output": "frameworks--preact.webp"
     },
     "frameworks--qwik.webp": {
       "baseDirectory": "public/og",
-      "digest": "d9e632271683e12935720d3dc8dfe327b8140c49b40e79d8015e703e2f3f4fc9",
-      "fingerprint": "76f4a0f3b15474cdab0a25af4988e43d20967f4e77a8c23d32dea80acefcd962",
+      "digest": "e3c266ff0c4e17136abd0d23242f539bbbc6a6805202ee420fe277380cf088a7",
+      "fingerprint": "4b614989b8da42bd7ae7860da71e971e58811da2621fe043b1227a668afe67d4",
       "output": "frameworks--qwik.webp"
     },
     "frameworks--react-router.webp": {
       "baseDirectory": "public/og",
-      "digest": "08c41c81b4bc27ea048ce33084b662184175610b079cb6decddd34e6f8f0a1e3",
-      "fingerprint": "76c621ef0d2901b1f832caae892af790e44b737b4190654942f6c432cd7c6715",
+      "digest": "0de5184966d553b047cd1e44bd1959cc4cfb22738bfffcc2af5495b529150728",
+      "fingerprint": "928a9b3119631056a7186cba44c7d8fcdeaab9a875bb188f9bdefb8faf14099e",
       "output": "frameworks--react-router.webp"
     },
     "frameworks--react.webp": {
       "baseDirectory": "public/og",
-      "digest": "3dbaffc26294733f56e458ea336905a8b53df1f83b6610eec46c926507e36506",
-      "fingerprint": "4962f4bbae07f19f4265dfe226709fd372552d51db618a47471f015e87ab73a9",
+      "digest": "4a8aec571ccd656a1a8c8d385c7aebb2b6f84339c4adb1ac09ea2d1ef39f807b",
+      "fingerprint": "6104db14359f407a388621b70fb5212222d7ae63efa244b4411fbf7f7e28bc38",
       "output": "frameworks--react.webp"
     },
     "frameworks--remix.webp": {
       "baseDirectory": "public/og",
-      "digest": "1d79d0bd4da7b646810d1e5c2e322c14fe14f79286a2b8210f0e2db265538218",
-      "fingerprint": "8022e741c13af2f94b612444730133eaabd3d9fb7cda2bd2a730af7a51190113",
+      "digest": "ce18b89b07cc5e27597b75f0e84c42bb37bd2b1e9e25501e3db544da2a6a8498",
+      "fingerprint": "101485c96d2a06639c11605b42fd38c09da2d78f8094fdd213086044c3cf4276",
       "output": "frameworks--remix.webp"
     },
     "frameworks--slidev.webp": {
       "baseDirectory": "public/og",
-      "digest": "74411b5a8ecd977ce1fcc603af88baed53f554dedb61eebc284b15c462c714b7",
-      "fingerprint": "4bb67131f4a44aade32af03ada87c350881d7df0a72281bfd942bc4879b8d872",
+      "digest": "3dfd6a10be7a3193a09d5ecb3b75f5196ae50be180833607766bed23b4a63696",
+      "fingerprint": "9f1580c278d32a9593a693a9c76fb3b45ba0ba039d4b95fe399136415d91cb05",
       "output": "frameworks--slidev.webp"
     },
     "frameworks--solid.webp": {
       "baseDirectory": "public/og",
-      "digest": "fb352e82a798466a96363d96c065b1dbe1138a8e832d0884c6a28a1d2f69e28b",
-      "fingerprint": "18eb5245a2afccbc00656632f2c32d42687ee470e4bad294d9f9b36552932779",
+      "digest": "a7725c641100ad7514777c25ce94b5d8d7a49c57d4714e4add64d5fee5aed712",
+      "fingerprint": "92ca80eca305af7dc64e1002320a685cb232c848645c9e679b00a4dad898b66d",
       "output": "frameworks--solid.webp"
     },
     "frameworks--svelte.webp": {
       "baseDirectory": "public/og",
-      "digest": "9b3ccf3eb6d36d2f68cee9fa08c5750e6c11bbe423b92adab04629840273f725",
-      "fingerprint": "861613a006bbd121c9a86d78233ad8985e63bcf8aea157e46e7daa363a28d544",
+      "digest": "27b098f2d435202b5c9dae2cdfb11f27acbf6ed2158d39212ad8e9c4c25a554c",
+      "fingerprint": "19fb5a15d2a764802b80ca904401137ffae640b86b77c22149dfaec381fdb817",
       "output": "frameworks--svelte.webp"
     },
     "frameworks--tanstack-start.webp": {
       "baseDirectory": "public/og",
-      "digest": "d905c9b9bcfb46895ab4e624ef3f34fbb07a20521166358b20aac453417d60a6",
-      "fingerprint": "b5c7e1deae27cecbbc0114509faba34877432763bedfb1a74105c34c827de5fd",
+      "digest": "52f19a5d4ec8a76542c7511e94c8b903f4078d7144c85cac5fb3c3bb25800d19",
+      "fingerprint": "ce34ba1c58701fe51c11298a74a311be77891ae9baa816fcef0825e3e073bad7",
       "output": "frameworks--tanstack-start.webp"
     },
     "frameworks--typescript.webp": {
       "baseDirectory": "public/og",
-      "digest": "2b53c1ae2b9485e7709938175fe58783d4810922cbe8e91cce08a7d696577ff3",
-      "fingerprint": "6dde8bbc553d1f14f09581e34a056fef8ae022bed7ef4cc3aa1cfe2e95be3fab",
+      "digest": "ac228720b1127c9bf1ae10c8abf0bb9d2f6dff610119ba295b8b243227b86371",
+      "fingerprint": "4517dca459e6fc88a0da4fcaf6b94ddf31e38245d68c05b53cf13907da561307",
       "output": "frameworks--typescript.webp"
     },
     "frameworks--vite.webp": {
       "baseDirectory": "public/og",
-      "digest": "3a0edfa7115f29472ffa126d889f8163024115d32e18c8d31c3c8fdc2b9be827",
-      "fingerprint": "39f7461db3e32d6deb205db14db88e5e8f7cb5b93cfbdfd4abaa4b2773628aeb",
+      "digest": "bbd8e76a6042efab76a9d123aac39f9e1f569b78195aff047f85318c7cc24c25",
+      "fingerprint": "ea3bdbbf97c38e18658e634b5321c96bc76b628b037b36399195cb9b7856a561",
       "output": "frameworks--vite.webp"
     },
     "frameworks--vue.webp": {
       "baseDirectory": "public/og",
-      "digest": "22e69ba54dfb756a21c778e910849237445a76dd9d1a87c6294409655cef0792",
-      "fingerprint": "f00b05b804dffdc214c5666fb0eebab7f76fa5cd3208cd08ee981c744c7458ce",
+      "digest": "1ce80896450c6651ec03545720531d75e449fe8e5a7e4ab5df1f59855b0aba06",
+      "fingerprint": "22ff4314b1c49cce781944e7cbda33774d7e773f5cf82e403dd205d2cc8d640e",
       "output": "frameworks--vue.webp"
     },
     "guide--acknowledgements.webp": {
       "baseDirectory": "public/og",
-      "digest": "1f445ce6c3ab91375ddbf4fbc3db17888d3d37fb632ab0a4449e8529b11c1590",
-      "fingerprint": "cf05bcc0aa145474b5aa8666bf9407fa4d467c8be8a0a17306cd5be7b4521118",
+      "digest": "7675536fa2abbff9f7cc3955cfeddf1a77da9aaab186a001d7c4f00ae9f535e2",
+      "fingerprint": "4cf9d60f7ac2f023e47335e3b6e3bddb82deb627b799190b6d47d4b4ef2cfd74",
       "output": "guide--acknowledgements.webp"
     },
     "guide--ai-agents.webp": {
       "baseDirectory": "public/og",
-      "digest": "14b277c33f6daeb4a5ec8fe09dcd857ff63953991f1a0a610277959dc87f8616",
-      "fingerprint": "dbc4d96fdad6147957de1ef15dfc3ca5389ff6c28f4c2b58c9b4a7925031141a",
+      "digest": "f15e77aeb4e1bb0bbcb8e309b83a46478a86c31ddbcc92c6002a54108ed94baa",
+      "fingerprint": "3eed0b014c9ec79b54b4119eb922e0e46d03a15e921ffb93c4813f008a24f106",
       "output": "guide--ai-agents.webp"
     },
     "guide--architecture.webp": {
       "baseDirectory": "public/og",
-      "digest": "b66d157720f9c15847ed293463c2b5359c37d0262d1f470ee5f68bbf319ae221",
-      "fingerprint": "b82dc3f803c27c1dd6ec8eb1bbcdf7356d69bd801a50f9e6dca562d0cd6ea230",
+      "digest": "ef0c5d330417af3e2700f1bdb08cccaeaf796e2c5a358785ed82643aa058410a",
+      "fingerprint": "4f0d9b65ed2898270f07bd323f8e11fde59160948d70f70b0bb2231a6d71d5ac",
       "output": "guide--architecture.webp"
     },
     "guide--changelog.webp": {
       "baseDirectory": "public/og",
-      "digest": "0c41edc40b39b5ce410b465f8cd6ed95c85d23bf917b27e7f09b213903ee77fe",
-      "fingerprint": "c28f261c242902d5db3c266a52284443286f343fd8b3381d3914ac59098be855",
+      "digest": "4e307153a1e15412f5f94d24e46ab7636f9866979ce798080975e190cf87c34a",
+      "fingerprint": "dce13872e917194967b8125e03901cbc39cf2bf98601157f61b80cc14e865ecd",
       "output": "guide--changelog.webp"
     },
     "guide--cli.webp": {
       "baseDirectory": "public/og",
-      "digest": "2f92596f0cba404d36b1065bf91decc3666a4055ce5c13a75efee91ce88c6358",
-      "fingerprint": "529e09de7d8e00384d4b06c4900e28cc8a31de42dce5612c018e6d91e60c70c5",
+      "digest": "b0d1f43f58de8790399cf32c2715cae9617bbeb00ae9d36297d912102fdd08cf",
+      "fingerprint": "eb567c46e4b7a98027496130987861b6774638a8a654760baa3249837610b11d",
       "output": "guide--cli.webp"
     },
     "guide--config-builder.webp": {
       "baseDirectory": "public/og",
-      "digest": "552e34b82c9952a67139292e6318d6308bec36acc2bbecbf81756276015b64cf",
-      "fingerprint": "8e4343079aebc0f17de4df4a8b29630168e244c9badd6c0f489d7fb24a8d7e75",
+      "digest": "56b6fe4712aee4ff7a9d9c0a02bd2aec97a54e010621ceb59ca0e6968d4ef0b7",
+      "fingerprint": "cad6bbfcf95abbf265bfb1cb9e00b209820da07fc434580582e76997d143d813",
       "output": "guide--config-builder.webp"
     },
     "guide--configuration.webp": {
       "baseDirectory": "public/og",
-      "digest": "be4c9f1237ffa400512bd6bb0b8c50f81d90def6c792a09f4a82c78c5911bde1",
-      "fingerprint": "bf2b7947b37821d2027e687e67ad2072b47f482a6e70b962182e43ed06b795f9",
+      "digest": "aca5ece6041d33791172b89649855bfad51d44460f4c8cbaed57502afa6bc575",
+      "fingerprint": "d4bbe5f6bee00404747950b4b23f04ddf88b731386ea952c5165e20ebc05a928",
       "output": "guide--configuration.webp"
     },
     "guide--development.webp": {
       "baseDirectory": "public/og",
-      "digest": "32b09076839bbbbf268c1d870931ceb459fba88fde2200d35b1387d19bbc2a32",
-      "fingerprint": "62cf9a86b9a4d76a1f8fab36b7afa50274d51e29968685e4d91cd57610ca27cd",
+      "digest": "588f90244287d39c2f05bbbc8f760207de195edada0ea1e7f7040b2b781b8471",
+      "fingerprint": "31a4fe15ddca9be63c4cbaa4c30f3d348c2054ef756b9556ee4ad619c534c059",
       "output": "guide--development.webp"
     },
     "guide--doctor-report.webp": {
       "baseDirectory": "public/og",
-      "digest": "0d9f7ba0a30b407fed6197037bb945483148c64db66762ac566e0299acedc738",
-      "fingerprint": "65a8d2c040e287509e5fe08445243627e8461ebb711cb3db49f037320e85374a",
+      "digest": "88ead9b96c8cb0d2844ca944b4c94decd7d7b39b1b6e341e2228f9ff0d99b876",
+      "fingerprint": "454c85824c1b5511cfcf98d41c2aa0a315172cfd1a154fceec50e6a84478b242",
       "output": "guide--doctor-report.webp"
     },
     "guide--getting-started.webp": {
       "baseDirectory": "public/og",
-      "digest": "7928dc6fb59a7e3a97545a31bfd3a7a43a041932584fb123d545fda2fda5d4cd",
-      "fingerprint": "57ccd793d51e2d671c9f932b9856981978eeefd8a223281b796925350be1631d",
+      "digest": "da66409f0b158344a53437c6c4f8d66e8feec32b6ad3305b061b543547e5c9df",
+      "fingerprint": "be59ee8cb4c77184955dc779270e8e0541b06c5318235185f2fa347023fc0521",
       "output": "guide--getting-started.webp"
     },
     "guide--inspector.webp": {
       "baseDirectory": "public/og",
-      "digest": "09005ac89e994fdce042457419c15bdcd0d20ba64ef97138deb8c719e30f94f7",
-      "fingerprint": "30f0f18c16184ce147f015529d0a107d75c91125e7c5195ebabdc4a275c31ae9",
+      "digest": "5e5a2c7cd61bc5b154af1ca5022ae57d3264e1bc5d569f255f2590ccab7c56e6",
+      "fingerprint": "1d3b3a0c4a41245e539370c18dc021849b25e7bf8d14191dd7c4e3d1773ea04f",
       "output": "guide--inspector.webp"
     },
     "guide--installation.webp": {
       "baseDirectory": "public/og",
-      "digest": "36ac86fd70c0521e3df57713c85d00809221d7ad833b52f18530a5b0a98dcdfc",
-      "fingerprint": "7d8fa59737091bd5b7b4ca7f3af5a3b469b3fc5fb979555a4203175fea2ed6f9",
+      "digest": "1be986020871eaf032040712d05ce3595aade4118f3e93046067938c92e4e20a",
+      "fingerprint": "8d71fe3899ea1b4df785f3bc4c875c7c8f21e1fbe738c181cf02223ea5a1a980",
       "output": "guide--installation.webp"
     },
     "guide--lite-migration.webp": {
       "baseDirectory": "public/og",
-      "digest": "408dc959521df87155c93ca236f6cad9385cf4cda756499d3029150cd1938369",
-      "fingerprint": "7014047bc95c241b65dead7ec780c0f0b69059baf45ad7e5016863ce3760f959",
+      "digest": "87bd8fdaa92aaba89dff675442054602aa9222a58d0855973658fe310ed7a657",
+      "fingerprint": "5c779735d479bb12eb53f80a38dca11fa9ef956ff7b088bbedb003c1573ec97e",
       "output": "guide--lite-migration.webp"
     },
     "guide--migration-v1-to-v2.webp": {
       "baseDirectory": "public/og",
-      "digest": "d35a3af51c4527fd5394f95f1dda9e070e5ca6d0e5fb7c23a124486fbc5c5208",
-      "fingerprint": "b4e16799ce1dd5ae0a6494e0320abe0ed1cb630c920c3d20368e5dc989486c90",
+      "digest": "722ab34decd27e9a345ddb50fdef0bd920c164207edf5d2f8547188c8aa24dc7",
+      "fingerprint": "89b5e56a96cd92a7c6f9be054db411931f71c1f8d62c3221ce7e3f6403b2fe22",
       "output": "guide--migration-v1-to-v2.webp"
     },
     "guide--migration-v2-to-v3.webp": {
       "baseDirectory": "public/og",
-      "digest": "a0392d3299d41d59a10a39b1d0590d1d411aed2548a4b8186069d4e894843871",
-      "fingerprint": "67d0a35e6a8cad6aaa37bf3cff801b818b7b0ca992c6d0100153b3be3792fef9",
+      "digest": "800d6868c999daf261ca78fdb92a3ba0f7b10ccac464dbcefbf259a7b4e304e8",
+      "fingerprint": "8de1f640224c295bdbd6014e7f1f6fd07223b68de550f51635a0318825c90ecf",
       "output": "guide--migration-v2-to-v3.webp"
     },
     "guide--monorepo.webp": {
       "baseDirectory": "public/og",
-      "digest": "b0bd9854a64d34cdb169f7c79335b901dcd802006f599116e3112914e186525a",
-      "fingerprint": "02e857794fb162a77d2a8b44a6897005fe4429e4da8dae7b4f46c44f3a3d07ad",
+      "digest": "a5aab261edcdec3187c0166b950929d5aa3eadd252acad670893ebe86c048705",
+      "fingerprint": "b50c4d7b7ba0ec785f4c2d97046cefb0eab537bcb2dd1c2aeae0aef18f94da4e",
       "output": "guide--monorepo.webp"
     },
     "guide--playgrounds.webp": {
       "baseDirectory": "public/og",
-      "digest": "a3fe978b22520efca7fe97d91f76fb5ac54e45eb16fd561be2f12eff4d229e22",
-      "fingerprint": "9c6477385935fc9e8a5ea131ffafc268054a37363cbf7fd3fdf393424aa1476a",
+      "digest": "83176959f838497d1e7c78f647845b7fabed66d42524b151c6835e8870544e96",
+      "fingerprint": "c9eba0bf5ff08f362ae82986b80945ffb4ff10c1ed19eb9e5541ea243744e5da",
       "output": "guide--playgrounds.webp"
     },
     "guide--presets.webp": {
       "baseDirectory": "public/og",
-      "digest": "e907e640c8902f64e92ac5f40c32cf341267a4a47453bc7a8dfd2d9422696b34",
-      "fingerprint": "1bd7fd99c05d2cb82ae8520ffe6a1892dcc3d38c76558b3be26713725c925e09",
+      "digest": "eb8eaee3ad41220c6ba958ec1c06f69de66c7e7738a20cdddf2a418238f79741",
+      "fingerprint": "a3fe9d53a9736171ae3607bf07b88dff1d39ba55a3a81b7e81bd6cfa30e2411e",
       "output": "guide--presets.webp"
     },
     "guide--releases.webp": {
       "baseDirectory": "public/og",
-      "digest": "13cd7b5f83fd532347a90ad3a56d33dfa7fea49aaef47226054e6a40ffcde738",
-      "fingerprint": "d68a6f29fa927ef7f4e05904eb5b69fd4406e784adde8b10cc654e7a4a0bc3e8",
+      "digest": "6ace80465265cd9a3cbafd20355e32e75aee0b501cbf17c3002dd272f5b1941f",
+      "fingerprint": "87fc7dafc9206bb613b872512f4cb463566cc6d59907035e5a3e8053fcd7dc2d",
       "output": "guide--releases.webp"
     },
     "guide--runtime.webp": {
       "baseDirectory": "public/og",
-      "digest": "5f0b70c5381a2404aa04b2d187149c69180a420392bb1daf88a99c0f3be95f96",
-      "fingerprint": "f0a97b4c7c33511ec859ffe09436d5d2004cdf102a0e13dc0f062827dc7495ce",
+      "digest": "1cb074086f25eb33b18f9688bcd3ca480420c04cfe8681715bfd09e4358ea5d2",
+      "fingerprint": "70052f55cdec86b882c5e4d2b7ea54f11140a1eb171ee79747529287c7cd6fca",
       "output": "guide--runtime.webp"
     },
     "guide--troubleshooting.webp": {
       "baseDirectory": "public/og",
-      "digest": "36f38222433ee0de02f72ce7dd9f2cec98baac56b8357a1447a19b9f32fced60",
-      "fingerprint": "e3028bc6c1a55d8595d3e97cdd417f8ff1594b45df5217da5211c7b1c80c37e7",
+      "digest": "948d4055175616c636b1a83a72b91562cf1b965f14203a8ee0e52bf091aa991b",
+      "fingerprint": "27fc6ab74b72c5cb13ff5551c4c5d8b8c2f25a0034fe71fbcceab5b851ca7d2d",
       "output": "guide--troubleshooting.webp"
     },
     "guide--v4-removals.webp": {
       "baseDirectory": "public/og",
-      "digest": "1c538eb5ea4d6db3bf957a9e0ca043fe9755a839cb397139dee16c5068f25bf8",
-      "fingerprint": "b43f68ac170af222ccb44c60f73c81067929113ebfb11defd3a151b8512243a2",
+      "digest": "5b6e157b5ad450d7a048b7372b5b494f8e9ea6d9c5905a1e806d9cda9d8ea52b",
+      "fingerprint": "9bc150f3b3dc012206cb4b5c128972045756e247932f59e0de960c1dfc80a0d0",
       "output": "guide--v4-removals.webp"
     },
     "index.webp": {
       "baseDirectory": "public/og",
-      "digest": "32a795f7f61ff104ca3951fef89aa089baea59789e26bbeb71d016df02c6a9b8",
-      "fingerprint": "dd79958550e170c2d10ac79c0d625cf9813d753b79d20fb1ff4987eff2652a2f",
+      "digest": "571a57cea3e28a5dbf2c30ee0abf3353ba17f65926c3bb3ebc2831a6735ff6a5",
+      "fingerprint": "0f0f661c3505b33e1845086d81fa47d3dffa9e0c2c482624b6101c3c25bdc953",
       "output": "index.webp"
     },
     "packages--basic.webp": {
       "baseDirectory": "public/og",
-      "digest": "0bdbefc2e9681235b6c2878195f4d24e0e24b847a0603f7528ee4c261961d203",
-      "fingerprint": "a68f36a6d3d6250bba5554c2e66ecc7a7f62eac8fdef9ff96581f62ff63ab044",
+      "digest": "870a42e6f55e251e69368b52d9a1078d815577696f97d650c2c18d8485903d9d",
+      "fingerprint": "5f340f0bc57ce2d952afec96e46056747f0fde1b77970fc89bcc946aeb53dfec",
       "output": "packages--basic.webp"
     },
     "packages--core.webp": {
       "baseDirectory": "public/og",
-      "digest": "d2c6c27e1b7f2ea367c6e44cf00b144fc476f374a08a3f831969b5677da1d0e8",
-      "fingerprint": "d270cd873dd9e48c70f29eeadd21ffa36ea05ff715db94805988f5cf0e0edbd6",
+      "digest": "448ed2f6447111672515147e87cc2e579e606e80b8d3c2dd7d36938155e6aa61",
+      "fingerprint": "d708238f9648ce6ac92130cfde2d74d2d57a3a3178fe180cb8194b4d1b8c8669",
       "output": "packages--core.webp"
     },
     "packages--full.webp": {
       "baseDirectory": "public/og",
-      "digest": "12dabb713eb6741092516993453c418d332f6a3b1767519a8e81af9fc054ea6a",
-      "fingerprint": "afb866cc6d0ca85b0ef3fdea27abac40cc6f1a766c9355a36c807c2a0b3fda0e",
+      "digest": "c9db254e944670119483693fa77f28c9b9dd9a518c13c4838996505374015b8c",
+      "fingerprint": "fd5c23cc2b3f1ea215d6ac398eae4f746d96eb94ee80bfe06e72cc1119245f74",
       "output": "packages--full.webp"
     },
     "packages--integrations.webp": {
       "baseDirectory": "public/og",
-      "digest": "24ddc087d2e1847769c8af640a6ba35664ef074b0a6ec3f739a4e7f74d47052f",
-      "fingerprint": "ba416956f41a46f5366eb8bf514f4c9f4c518530dee03ae12dedcb49fbd19c59",
+      "digest": "dea52c09f2e2caf13b6d00dc34163c1bc1e01cd70c7cd236420e536dec2db11a",
+      "fingerprint": "6b2f4015476ab2aa40f70b32365e480ac38d432b82ffb72d81af41b0712b7fb5",
       "output": "packages--integrations.webp"
     },
     "packages--lite.webp": {
       "baseDirectory": "public/og",
-      "digest": "8530d38b11a0bd5e95d7182b62dbdf9d4fd5dea1ba5e575107ecd174fc7e1746",
-      "fingerprint": "c6d83583981c2aeb5a09aa1af74fb4f40cf577260d06856736dce5639b9d1476",
+      "digest": "e528bd236f102980f0df7a8ce7c767174fff157d14dfe32aed899ecfd00a04ec",
+      "fingerprint": "255daa3e1e731eaf54d66cf777ad3692b48b381f14509953c70f0c10cd7d1443",
       "output": "packages--lite.webp"
     },
     "packages--playground.webp": {
       "baseDirectory": "public/og",
-      "digest": "931702aa8e95fa5bfcb22e7881a106af4bcfebe917effda470fc4df96bd24d1d",
-      "fingerprint": "2a7edb331d3b3f17c6f199c775eb660aed3285da61d862a1a63c61691cdb1751",
+      "digest": "86ad96ac968394f27c49f7637a086f01996c723bc562ec0e5e643593dde5b231",
+      "fingerprint": "83c02c6d23609195350290006500367317a002b76903abfa9b079efb3f6e10c9",
       "output": "packages--playground.webp"
     },
     "packages--tests.webp": {
       "baseDirectory": "public/og",
-      "digest": "d79b0f1e8031fc6ed8d93a940993556ad089f6e57581fccfe25cdd9b49dff8c6",
-      "fingerprint": "cc368c953d75b25c5cd6f700e869c46e4f284cdade59628417688b58c9b6e4b5",
+      "digest": "ed40b7b614d9bd6962be413e581c72cd229a759c561bdb670364ce762459ac59",
+      "fingerprint": "348bcf761181bfa40b1331c6ef25f32b938a66ba3708951cc510f107e0c8dee4",
       "output": "packages--tests.webp"
     },
     "tooling--extensions.webp": {
       "baseDirectory": "public/og",
-      "digest": "fc71c8a9ca3fb8c5be9f61535f753277fcb41003c9620947d38aecd7202afbfe",
-      "fingerprint": "acd9b0409bf56e03afbb574d92832436a80cc333f01d50c454955ce7897cbea0",
+      "digest": "ecf3e99e62f49c8d905b84dbab56624225ddd76e72bd1c1036fc2d77f6c32dea",
+      "fingerprint": "532a1e5e8e4401ef00a1b7a9f7a890cb6d2bfd69dd8fe2669f1f32283eef6bcd",
       "output": "tooling--extensions.webp"
     },
     "tooling--formats.webp": {
       "baseDirectory": "public/og",
-      "digest": "06ee01c56441a83f590d6326fde9c4fdb53db57534d9bbbdd036b4b6e5aaa752",
-      "fingerprint": "64dc9a4b744fc438c7a803bd6f85f80f846a14e21eea3faec35f76c3ad496b25",
+      "digest": "0eb6f1c845a22b9ba50fe58c404429223dbc26a77291b735388b7159173be5ad",
+      "fingerprint": "46a82b5a23906040ea26226a1d64a19f488548d07b719f8da724c4460a8e438c",
       "output": "tooling--formats.webp"
     },
     "tooling--libraries.webp": {
       "baseDirectory": "public/og",
-      "digest": "9c977b0cb7e77dae8de4e58c8dfd7f7b4906371e49777e4b16ee288fdb729064",
-      "fingerprint": "dd5c173a601e4b08cee2e8f3605eb227b6575bdfd53f85530fd34f7f946d664b",
+      "digest": "5414d01c4f18bc6c8e6e81b4f6abd7618375a4c6fc85ba0486456f021470c7e8",
+      "fingerprint": "2fce9a802c4bad6f3c40d197211f4058e8a94cefb6658b867755d74b8af88855",
       "output": "tooling--libraries.webp"
     },
     "tooling--overview.webp": {
       "baseDirectory": "public/og",
-      "digest": "d4c3448e413ed21d5fe0845d45cbc6028b0aa33af4bc4718735625afac0b89e5",
-      "fingerprint": "c39a6f6df6983ca47f6b0d8bd94e90d13be0dba0fefb3f89cc510039048d482e",
+      "digest": "48b109422cd22a7ffa60aa505c1efb636114614a264d5003f2653c52bcf2954b",
+      "fingerprint": "d651508b4f941cf07dca401734cfbebaf0a77dadfec405d68ddcaefcdabc16a2",
       "output": "tooling--overview.webp"
     },
     "tooling--testing.webp": {
       "baseDirectory": "public/og",
-      "digest": "2cd761f5ae82e733bbac3f00ce213d3aa2d126f221e1136e8da2dab0408f0d86",
-      "fingerprint": "46cd66d3b29d2a49c8f3bcf900bc2b6b0d744368acecbf23d9784f456a9fd088",
+      "digest": "780064ee5300cdc7bdc58c791c3c365ed7f6cd4ce30343aa0797230c7885b665",
+      "fingerprint": "af92c78e268b55dad9415a806070a1d090311fb8a41b2d75ccd2a0eea34bf65b",
       "output": "tooling--testing.webp"
     },
     "tooling--tools.webp": {
       "baseDirectory": "public/og",
-      "digest": "ae9b07d52c19f05884822055133b9e18a6481e747ef6450a56749f057b540909",
-      "fingerprint": "fc632b11c8eb449ee8afb15037fcd70213ad5df3f1d9bf7ad5cf240d1c48ee51",
+      "digest": "5992fb6b70f872167645cf9999b3902e4845872da823f04851bb46fa71dd07ab",
+      "fingerprint": "3d0397e49c0db14b23d0c2fe2e5983227da3194b39dedf290ab90d6df0efdabd",
       "output": "tooling--tools.webp"
     },
-    "v1--CHANGELOG.webp": {
+    "v1--changelog.webp": {
       "baseDirectory": "public/og",
-      "digest": "31bd74fc0a18a3c1820a5416e1bc77135690eaf12c4c80f4aaa009f0ccf6b3e3",
-      "fingerprint": "e28418160dc98f5892a3c7e4251da29e4c19f26209951ee062b93b051e9a2fb4",
-      "output": "v1--CHANGELOG.webp"
+      "digest": "7319be515bd635cf581f2e7ac505fefa93c2144226add724ef3b366929b711e4",
+      "fingerprint": "6d3f753e125a572c5c84596e1466b7c22d2a3f515174b247aa6238bdfed464b2",
+      "output": "v1--changelog.webp"
     },
-    "v1--README.webp": {
+    "v1--readme.webp": {
       "baseDirectory": "public/og",
-      "digest": "6ba11159dbe853737cbe81ec3a38cd31b38b22a67962bc4344b030a30defc2b5",
-      "fingerprint": "390caf1ce22fc7ccc2e75fc6ba485b65a4c5a9c8b11cd44df2f73c9a27e4c631",
-      "output": "v1--README.webp"
+      "digest": "2f54ab52defb9de98f4b435fec7086af54672f357265f302e75517434c613bed",
+      "fingerprint": "1894a63814cf2c250be66cc05b993edc4253b809d37bdd9f67ae297dc1527883",
+      "output": "v1--readme.webp"
     },
     "v1--api.webp": {
       "baseDirectory": "public/og",
-      "digest": "6cd9f49221c95eeae1b289d4293d4c2394b6dca9fe89cc602fc408d45f71a037",
-      "fingerprint": "4e378b7523f2bd056612e11bc851eed546301f08bd90c0028ab68895b4ac939b",
+      "digest": "5b3fe73a83eb655447cd8059a087140a78b0dbae89f0a32cd024b6091b300f74",
+      "fingerprint": "ea390698f1e230db48719608b00b3abab369d29accdcef04e8c0532ad74e93e7",
       "output": "v1--api.webp"
     },
     "v1--api--reference--astro--src.webp": {
       "baseDirectory": "public/og",
-      "digest": "381a63dd1c7e4a7e77b9bcfe19052ec4e8002ff07ec33d1ed86fb099f43c5ced",
-      "fingerprint": "ef4a6505b95c714957ead635521284ab7b4f3277c8c212ab51632f792a43f9eb",
+      "digest": "e14f738927c829cb97b4f5d7b0c1293d933fdae08f57e5dbba7d3f902f036eb2",
+      "fingerprint": "dd5ba7d8c3b4894577a2e543667dc30264e7b899b9cd1fced805388cc3a93fa1",
       "output": "v1--api--reference--astro--src.webp"
     },
     "v1--api--reference--basic--src.webp": {
       "baseDirectory": "public/og",
-      "digest": "258bd4d1c4f73d03ed5ebd360c882316caa542304d17d0b8017c1ab4e249c801",
-      "fingerprint": "9383c4756e5b339a9ad2ca5712b79c4e777eacd025e103d66e8cef0ba8b634c1",
+      "digest": "d35a4781f906913e53a58952161fb4bfc30cfc237f7219149d2e67975aaa84b6",
+      "fingerprint": "03503424ea5e1dee37c62f1143db462cb14c4f5fe536ade16927ea14986bdf13",
       "output": "v1--api--reference--basic--src.webp"
     },
     "v1--api--reference--core--src.webp": {
       "baseDirectory": "public/og",
-      "digest": "aa064b67e5cd9d5e6fdd0f7dcd81cfcffb8b0da779d9e1d3485e11aa6777d35a",
-      "fingerprint": "7529c12b2e7391e0d87a0fe328369db89a9755d685bea164754daff295efc35f",
+      "digest": "7d67a9445a6dd36d7ce6cf0ac9a1d9fbd3a17c7ecf6aa95361e13b6c6a61c742",
+      "fingerprint": "7a489a9146eed29dfbed038859be268f6e8a0e205f4b037ec15eaa8c122e69aa",
       "output": "v1--api--reference--core--src.webp"
     },
     "v1--api--reference--expo--src.webp": {
       "baseDirectory": "public/og",
-      "digest": "195c5cd7ad924592a95b966f12d276b5cc66e33c8f8501435bf1ac0865d70860",
-      "fingerprint": "4f6a68dc52472ff49b87ec53aed5bea504e546f7683a99a1be13abd9ecd25a42",
+      "digest": "52b58b745e92dcb067c4bd06f3bb4fe420b05bd2b55c49d6908a337cb5641b6a",
+      "fingerprint": "50e944c49d2adf65596d321fba5751fce8c816fb3aa032d1a69e89b25a6f1682",
       "output": "v1--api--reference--expo--src.webp"
     },
     "v1--api--reference.webp": {
       "baseDirectory": "public/og",
-      "digest": "8f39069138f10d8daa858d356563d026d545e59945f0123576be25251f99c0d0",
-      "fingerprint": "48acde5b80d929aa7109550d67b3db730a076948b0b8e8360f82be20dd046ba6",
+      "digest": "d6a8a02b53c9927889a3e8b8202a775a6889ab8d6dd7423aad6fc2fd7d07a376",
+      "fingerprint": "8f8394b4e78e55622e76b9121f561db0c4af26543227320996e7cc7629162ebb",
       "output": "v1--api--reference.webp"
     },
     "v1--api--reference--nest--src.webp": {
       "baseDirectory": "public/og",
-      "digest": "8d5dbd401b656dec7614aeea10b7b25796494f6caaa7937e9a7cb465756af883",
-      "fingerprint": "2e1e33b4ff339c926548851a3d65b440153b85e658cfe5fb4f54cd371eddb791",
+      "digest": "4cfa468489fde5b8e3a88f6b36209ee29defe8f74887c627ab6451e3bbe17d32",
+      "fingerprint": "dee6381d600965c80310485e6c3b4c8fb54b6d972f6a985a9d89923e12079a08",
       "output": "v1--api--reference--nest--src.webp"
     },
     "v1--api--reference--next--src.webp": {
       "baseDirectory": "public/og",
-      "digest": "db5df4834692649f8c05742613ba4430786ae1bc673af04b5ff54d950d4faf79",
-      "fingerprint": "8e810730925070dc4808c26a5ecd62c545d54800cc90231680f7702d27d7f94e",
+      "digest": "8890821da69cb1005d26e7ca179728172c6cb7c9579ef4ffc29361bbaec54755",
+      "fingerprint": "1b4d3be5864c568d8561db79f132f892310213fb5eb393b6009da5ea84234226",
       "output": "v1--api--reference--next--src.webp"
     },
     "v1--api--reference--optionals--src.webp": {
       "baseDirectory": "public/og",
-      "digest": "f2d1f63acf239fb918b50777f2474459558593b4991894902cd18c1c82d31310",
-      "fingerprint": "94bf7c9118414567e24bdb72b082555cdf44e9c55302c98c1395561ef493f3a3",
+      "digest": "17fe81c7b9689847aabc8a8d7a53134bafa4f1f1c7c6ca2bac7c887fca982830",
+      "fingerprint": "c5c23e22d04a53c262b97b07ad9d2289193228fdaa0369cf96577837d81ff81f",
       "output": "v1--api--reference--optionals--src.webp"
     },
     "v1--api--reference--react--src.webp": {
       "baseDirectory": "public/og",
-      "digest": "40b74f7bef5250476b53e7a443c353dcc4d3a7add80ef694e10cb409421019ea",
-      "fingerprint": "feb324318f022bc00228bad2b73bc4aa03b13f69ace72b7308d6afb967e4bbc9",
+      "digest": "67c7b396f22c2f6532117d6d1a69eedc33d8d3de266a7f7edadf62a3afee58eb",
+      "fingerprint": "9e467c6663af3c590febc3d83016a1fdbe8f8c57f1e9e2c209ceff13ff3d1f13",
       "output": "v1--api--reference--react--src.webp"
     },
     "v1--api--reference--typescript--src.webp": {
       "baseDirectory": "public/og",
-      "digest": "3f551963ae40c3b2fd0f6e3be7ef609f584271bac685a9857ce17c01859894e5",
-      "fingerprint": "0bead6a8a7309c6d8d7cda0c11db6c64416b6ffc70e7e4ef9d3ca542ae32faa4",
+      "digest": "38d246f2bfe312eb2dcb2affd8f9a734b89f2cc0254cb9e0768649456b2bfad1",
+      "fingerprint": "d616cf2acd50ad8e1abaec83b7ebf51c90b156c5c1eb69b9048efe92d59d88b8",
       "output": "v1--api--reference--typescript--src.webp"
     },
     "v1--frameworks--angular.webp": {
       "baseDirectory": "public/og",
-      "digest": "42b543582eec914fbc02af09e46bf6a5fb4ebb42d69c6d1d99afe07b7dd7c756",
-      "fingerprint": "114b1e26559d2e7741bae8c1afbbab8f88593f87adc367f0dd5d13cc8414e0dd",
+      "digest": "1370c90b33722733978c3d8abec9470d972d86c3ad0b9a7d808b5a22366d6b22",
+      "fingerprint": "edf479987d9900549d6d6a4b818141fc9cb8070555b9eb08ff8e7c10778e60be",
       "output": "v1--frameworks--angular.webp"
     },
     "v1--frameworks--astro.webp": {
       "baseDirectory": "public/og",
-      "digest": "6c895b45e6afdf0244077806dcf252902de92d06136831757ef231802a054d97",
-      "fingerprint": "1db63d8bceb5a8409457066d7a08ba18ac5c9cc1f5643c2368ae6bcf09267bfd",
+      "digest": "98b7db9e976619a4939d41db52ea4ac6be3e68e55c960b7ec4a65127946e1f61",
+      "fingerprint": "6692306d79f4edafc48d1befa1d6132b35f9797a820190db361fd02dd2a312d5",
       "output": "v1--frameworks--astro.webp"
     },
     "v1--frameworks--expo.webp": {
       "baseDirectory": "public/og",
-      "digest": "b9831efc5994165f2f084af0739848997073856c1d478ab94454ab19d2de0ab1",
-      "fingerprint": "798eafd32e1b6b34909df32db5ae203ef986d27e619610717aed60b62c4cc1a2",
+      "digest": "8c512a9e16dea5197e578956345f13349b8f648e42db01529b16f11c239ca414",
+      "fingerprint": "fc4f6e4c2c4b23e00d40ce11df9ac14a642396c8c1dd857de7b662fc49020ebc",
       "output": "v1--frameworks--expo.webp"
     },
     "v1--frameworks--hono.webp": {
       "baseDirectory": "public/og",
-      "digest": "943c3181ad50986b52a3771294a01b3b794c7edc51ee194357dc5434fed3a133",
-      "fingerprint": "aefba438524a4f701b9d1b15122479bbb7a077fb98f992680f3cf9aa73adafdb",
+      "digest": "236b57d2188c604c9622e7f57c426fe1bd48901d1e15fa1979157530302b96a3",
+      "fingerprint": "c2aa26f9c454a8fda2bf7f6bf8493175eb3134b25d431268ddf84473d7eda193",
       "output": "v1--frameworks--hono.webp"
     },
     "v1--frameworks--nest.webp": {
       "baseDirectory": "public/og",
-      "digest": "56aeb0187bbcf55a2175e08d4a2e2f9750c2dc30c9175fb267b0ba7ed22c00d6",
-      "fingerprint": "b34b09c6ddcbec04e77eb479b3b02d3f35f78ffb8cde9d192299d7feba89f260",
+      "digest": "0534a5baa9f870ded37ae6b37fdbcd0da10cef6d713087a4721d0cda3f965f76",
+      "fingerprint": "467ffa1691795aaa14d515d084e2dce633505dd518ba3e620cd8c99643f16949",
       "output": "v1--frameworks--nest.webp"
     },
     "v1--frameworks--next.webp": {
       "baseDirectory": "public/og",
-      "digest": "839e9f865995b8e725fa0985ac0179e8fec6eee7147af19c3191cdf2f6b02845",
-      "fingerprint": "0d6815a8c8f6aa59d0cd94357c9ca13d053509c1d4e8e88db12441845397a506",
+      "digest": "a100dab2cca7a23d17c3ec83e319555748463c1dad90ee435bff8c888a3286ac",
+      "fingerprint": "46968331013309042eed1257b0acde58f2b5c657ec70b033fcfc81e84edfd3db",
       "output": "v1--frameworks--next.webp"
     },
     "v1--frameworks--qwik.webp": {
       "baseDirectory": "public/og",
-      "digest": "b231f641495af8e8b6f61a8061bc4c52d1bb6e58f9ef1cb8e3fbb392e12f07e3",
-      "fingerprint": "3c1e9143bf71c0d600e1d6bdd82f2ab134b721ecf0a5f5ae3654c2f36dbad5f9",
+      "digest": "87728d3d76bd41afe93d9e4d0d6374f71d04eca6ac3179ee6c1464d4facdf30b",
+      "fingerprint": "a0cee408062502f7fc7b54acab7d8ebfe1f0421d206eec678ed6af17735386e4",
       "output": "v1--frameworks--qwik.webp"
     },
     "v1--frameworks--react.webp": {
       "baseDirectory": "public/og",
-      "digest": "3435d6265bb300336b7744cc35b168ae63c0dcc7d264d662ce787c64b95e1559",
-      "fingerprint": "c511a94d525f3032ca9063eecb19f33b73b6a4272d606588135c0fb22070371c",
+      "digest": "476212d754f2f7156479f8866772cc7cd9621b6980ae164b307d3e84c341b8ba",
+      "fingerprint": "91b8e0fbde5357b2dd8be221a63f75fc710a5ef060b6f3d8cbe7a6b99a8793b0",
       "output": "v1--frameworks--react.webp"
     },
     "v1--frameworks--remix.webp": {
       "baseDirectory": "public/og",
-      "digest": "d6fce34db33e31c21e7ff731cde1a002adb5c576c4283d7e162ee31c19320e4c",
-      "fingerprint": "05952f85d29be60f0e45e588510f467676d0fbb69569a3a61f899b3d8e0fa995",
+      "digest": "ac630d8b8cb0f854f5cce5a60e782d9e1f9d5021dddfaa8f9a15e632ac195f87",
+      "fingerprint": "4a33970cabc473c60ac09244908ebe60625f9f0a6635000e100f647bfe6a042c",
       "output": "v1--frameworks--remix.webp"
     },
     "v1--frameworks--solid.webp": {
       "baseDirectory": "public/og",
-      "digest": "484a4c6494709b83316cefa028eb814666632a596a124a9518353d0d69990d76",
-      "fingerprint": "4688e365d80d5c31009c59ac9556a4b70cda10f4f55100cc323f756c7ccfcbac",
+      "digest": "a9bf7f31cb56cc6f8f3935e8b426eef302de412a20d35011b61660116b5e99d4",
+      "fingerprint": "ed314177d44c3f937f7361fd928d7969b60fbded3637156589c9adfafa0f8432",
       "output": "v1--frameworks--solid.webp"
     },
     "v1--frameworks--svelte.webp": {
       "baseDirectory": "public/og",
-      "digest": "6d6d51ca1131a12caeb0d977b486a2f33586ebcf79f9a88e3b00ec60bc29f0e4",
-      "fingerprint": "e6822f6118a587d3d48d1e20e67f14bf2f216b9ca4f46f5c50a4d0595d4c0001",
+      "digest": "04529b81cf6255acb5b9900257df90a009e966e729c575e9b7b433c3bf6c4e21",
+      "fingerprint": "b75d6adcf4bead7f5c367146a761d419a451c48459317ded223bdaeb1ae22147",
       "output": "v1--frameworks--svelte.webp"
     },
     "v1--frameworks--typescript.webp": {
       "baseDirectory": "public/og",
-      "digest": "337eb351dfd07e813903354c284452dc8612832712bb80690123a8a19778c4e1",
-      "fingerprint": "78a7faddb0ce5e4214fb8716992d6c97fb5c91c53c7bc5e937b551b0d9dc39ce",
+      "digest": "6ebb9303cb71ef8b919a9088f94c725ec0bfec0e0a8e0c5ccdfb8a340a16a265",
+      "fingerprint": "0ee50c64ea4b991ed8559fe072ad2ff76d147bead691b5974c608e4290411ecf",
       "output": "v1--frameworks--typescript.webp"
     },
     "v1--frameworks--vue.webp": {
       "baseDirectory": "public/og",
-      "digest": "aa5251536a3958d93ea6575b9f46243e54d00396f4ffb2bc11c05ff042d28f2e",
-      "fingerprint": "e49ba4225f90e9a5637784e5ec9db9870290cbcf533077671dfc2df7c6fe00ea",
+      "digest": "462875852ad28a8cd14dbf092e6e75d2d31932710215e4c86f3cfc28dcc2fd54",
+      "fingerprint": "bc0e7e4e65f2e2ffadec7573093ac546211a6cbb120d2651f671a4f35017e214",
       "output": "v1--frameworks--vue.webp"
     },
     "v1--guide--changelog.webp": {
       "baseDirectory": "public/og",
-      "digest": "ee3eae5ba78373702170d386c12b3c0889e05fb6621df60361c77eb1482b6c1b",
-      "fingerprint": "75e7ded87b9e70917a6ebbeca1392c059ad7c709554e0af423842368a6115544",
+      "digest": "f50fe3f868db91ecfc7b538a5ac630845bf9eeff057bb589524b6d78e91fb106",
+      "fingerprint": "820fec9cfe193e89c04425c18f39dafd9877bc1cf2c123dc7b9ec73d954ff37b",
       "output": "v1--guide--changelog.webp"
     },
     "v1--guide--cli.webp": {
       "baseDirectory": "public/og",
-      "digest": "0fa1fbab09a3c5a90b6b888da0bc5839cace33bf6de2ab9944274f1b2f1fa385",
-      "fingerprint": "7909440c661dd5d7a99fdf71e31ddacb017419806a37a8ae900bf2302ad86311",
+      "digest": "57c85070721324cbeb0225a243e50f762bb119f9c0640149679f6c7146d5cfd3",
+      "fingerprint": "355b0e94a09f44c71aeea7e4e7312ac0d77acd4c7aea5a58f550452f831c16d8",
       "output": "v1--guide--cli.webp"
     },
     "v1--guide--configuration.webp": {
       "baseDirectory": "public/og",
-      "digest": "608a466dc236c1c6ea0e28f7f42a92671513292cc338758f865891c92fec5773",
-      "fingerprint": "efe57af5ccf7288afb805f4b590ec583a5def8ade833322e270d6d223892f650",
+      "digest": "74383cef2bf657649814fa2c1cfd2bcebf3b0a0158bdf94122e6687e1328ef35",
+      "fingerprint": "c0871be0bfe7ea26a4819c371d4b7606fcbbad471354be1f359be506bc745a67",
       "output": "v1--guide--configuration.webp"
     },
     "v1--guide--getting-started.webp": {
       "baseDirectory": "public/og",
-      "digest": "b65ea3a31e5cc9f738fefbecde4ae7ed15740602cb12f8b4b586a0c70b1d0704",
-      "fingerprint": "02bd942274664843d8e7110af3e31590d907949bea10641ad924da7dd73d17f2",
+      "digest": "2f1a06e57a217a9620fed33676d0b9f3ed5766c23bef5714fbc36a82229aa8c4",
+      "fingerprint": "8cefcf80921d2eeaed1d20a12270ade544a9b11c8ea9e8f664119e91b4773e15",
       "output": "v1--guide--getting-started.webp"
     },
     "v1--guide--inspector.webp": {
       "baseDirectory": "public/og",
-      "digest": "899565b33485024e7014b0029ccb0d5a32d500435cce5a34239f03fb9cd387ad",
-      "fingerprint": "6a9eca5d4e6f034f21b2d2f5f3ed8e7b925d0fb47086de6033e626eba03eb1cf",
+      "digest": "41cbe37fa82043c990e12e214b2bac57f7e8a016e70b0829f2a544342d7c8b4e",
+      "fingerprint": "c791acae9982315f4cdf8fb8af8665b7e40d04ea9d5055be86a505b818cc8b94",
       "output": "v1--guide--inspector.webp"
     },
     "v1--guide--installation.webp": {
       "baseDirectory": "public/og",
-      "digest": "cfc6a3e290cb023166fd643cbad525811af48a62459ea514cb213fa1c1ff0cfb",
-      "fingerprint": "5cb7eaaf894345f7f0f0f70a164a2642b5a4adadbc55b8e137828c8248d37a69",
+      "digest": "603562d69c043db75fd170749edf77d926e3890788e531d8c0488f7ec97b7908",
+      "fingerprint": "8ec9e59b9822d6ee2f233c954b9a7ea2940ce71a392506a3931156b2faad2199",
       "output": "v1--guide--installation.webp"
     },
     "v1--guide--playgrounds.webp": {
       "baseDirectory": "public/og",
-      "digest": "36446656971ee52671678428ef28990585bdd8b523b27edf656d623f7188b7d1",
-      "fingerprint": "c31b37844d0a75cd884f8db35f057d83d8ca3a8d8ba4cd42a461070438b84a48",
+      "digest": "a850e99f7213315e58d84f524876e8cf3f41cfff5941ce233eb0779a963d3d4a",
+      "fingerprint": "b9465e4735af03bd2cb8c45452334361b8b54ad527d35f8d2fa5c2f9a2a0ea70",
       "output": "v1--guide--playgrounds.webp"
     },
     "v1.webp": {
       "baseDirectory": "public/og",
-      "digest": "3a529adc715314dbd959939536543c58f0326f171c34532a2739e551d4a3c0d4",
-      "fingerprint": "be74328be33b72e9cf09174920d8d80b0a6424cbd939faf13267a72107eb7053",
+      "digest": "ffcba63df76f3a790e78704f33eacd2e5592cfc1f0dd3c2255acf506ee406931",
+      "fingerprint": "ae81ebcbffadb0f7a1d0684e2dcce3133dbcb89e6d96e3d1c7fc0f97ab6b35a2",
       "output": "v1.webp"
     },
     "v1--packages--basic.webp": {
       "baseDirectory": "public/og",
-      "digest": "ef3894c0e39b0147801c900fc5ff25267847387ff3ae3f3c4591abd4d648f8c4",
-      "fingerprint": "2f10da34adece467d5851f83528b860614928780aafc2671b5f1d8fb657b7268",
+      "digest": "16e7155fdf58b8589fb491abeda49d83946c83712d581f1e86cc7face00d716d",
+      "fingerprint": "93dd60d52dcbd99afa6b33d87b3f4da621b1524aba845d3d44c661f93848496b",
       "output": "v1--packages--basic.webp"
     },
     "v1--packages--core.webp": {
       "baseDirectory": "public/og",
-      "digest": "44a66dd0333341bf23f7d7f8b4afb249cd0bc0f29e4ee276868f22ddbbeff6ea",
-      "fingerprint": "f984d42f1602c33984933bf8cecc66bc4262931d6dfd53b1f74d97713c3f63bf",
+      "digest": "0d6661c16d53bf8421d9613addd8ca8b9855f5a84fddce2f853d8641515c75b0",
+      "fingerprint": "62df5e9c6f0e4dc24f64dc74ac9f86af5acd7237f42dfecd89fde59685315782",
       "output": "v1--packages--core.webp"
     },
     "v1--packages--integrations.webp": {
       "baseDirectory": "public/og",
-      "digest": "3f67f40668f8001a51f09f7df2e1d4e0c84a692aaf8ad00d2c944982b59b2230",
-      "fingerprint": "bc0cb369e596a205ea7227e6ef3d1fd1f5681520f3b351666566ea6f044f26e5",
+      "digest": "0eb81f16118e5bd264331495636b598670f8c7d3c92e961e2e64076b9f92b4eb",
+      "fingerprint": "8e16763fbf1fed1137eea72cd54a0f7120b49f1872852af6cca75d5ced8f018d",
       "output": "v1--packages--integrations.webp"
     },
     "v1--packages--playground.webp": {
       "baseDirectory": "public/og",
-      "digest": "6f681c9e082d89a277da11cd72253ed27201d45eaf27cf7a13c7b47da78085bd",
-      "fingerprint": "c220d698d5019ad3b6fc9442bb17c997234173a8635c0621407e3efa875b62be",
+      "digest": "21bf9adb9e2dd862775401cb247060a78aa34d81928b746780391483388d4544",
+      "fingerprint": "8b323a0cbb87e3d6f15c7e1be16710e082b3cf7a55e63ce194d01f61092541d5",
       "output": "v1--packages--playground.webp"
     },
     "v1--packages--tests.webp": {
       "baseDirectory": "public/og",
-      "digest": "e2b215ded5986cf84f71b6a5ae8fc6dd4a21d3299b06a6ae4670c83ec1296c55",
-      "fingerprint": "8ecf48cd10f0c4e3e9921c237b60d5eb27ec41c860815035beb225ad18f4864a",
+      "digest": "7f762665404dc7fcfe0ba299de30fce15367eb68b77485e76fbdf7e7f824d8ba",
+      "fingerprint": "ef415ac8f139d2cc4375832a3d762a239794f5972566b61e326bf8e090f25ffc",
       "output": "v1--packages--tests.webp"
     },
     "v1--tooling--extensions.webp": {
       "baseDirectory": "public/og",
-      "digest": "56dbc13616da0f4401d731765cf10efa1a72d8d78f9562ca50e83875c66d14e9",
-      "fingerprint": "67f8f64e853b90175df96ac8fe79f7736e1a73c9a357ab9038a817bfdc6436d5",
+      "digest": "2dc637cae2c2216df16f35b05dd1fd90222c73418a4e2f924f129bfa2e50dcf1",
+      "fingerprint": "60b9c304dabf68e845db945b5367bc818f512885165f08fbecff18edb581cfc9",
       "output": "v1--tooling--extensions.webp"
     },
     "v1--tooling--formats.webp": {
       "baseDirectory": "public/og",
-      "digest": "e50d35586292d0ac7aa81ff8f295990ec8f43335b1a18aba74965e21846d94a9",
-      "fingerprint": "dcf00905d7e7f14f8d80b31d7a8e46670133b48e73903b72ece0c861f135d419",
+      "digest": "3f67d716cc300f837b3420746f977e86fb92a49104a6d78d021bb6d5cf98e82f",
+      "fingerprint": "be5028c2efa1e9f9c82230604f7a508453aa4510a1d4179a553755a39ffdddcb",
       "output": "v1--tooling--formats.webp"
     },
     "v1--tooling--libraries.webp": {
       "baseDirectory": "public/og",
-      "digest": "a8275e5cd3341bd63566bd6c85fd8769c6832f186bb5ebe13cd4d81ad2de5738",
-      "fingerprint": "8f9c5f118bfa80393c4af66e5118a2735ad9b67c6ab5a10fbfcb9cb7a8a22c95",
+      "digest": "1d3f8ee866bb568adcbf0e0fd645a8bb2963664af5f350ff813b638f34516ae4",
+      "fingerprint": "70e3a42a37581f5fc3dcd0093cbefda7cd48278737ce14194628d8814f71e013",
       "output": "v1--tooling--libraries.webp"
     },
     "v1--tooling--overview.webp": {
       "baseDirectory": "public/og",
-      "digest": "7a05271c801333e0bd34bd183065ea5beed413935dc4bc988c819183f5400f33",
-      "fingerprint": "52b5db444b9c0e7b7f7743faf1bb1c9e3345458a3cfec8b09a4cfcaf557cdb4d",
+      "digest": "3561b6d9240f3a7d41f425a240258867ed2ee1b363901575f0f85d743746f0b5",
+      "fingerprint": "b84fb67261c2fba07b346840bbf33fac902ad27ac6c43bb508dfcab05a8bca0f",
       "output": "v1--tooling--overview.webp"
     },
     "v1--tooling--testing.webp": {
       "baseDirectory": "public/og",
-      "digest": "d2f385b9271a0578893da6ea422e5fc23ffdd010cda983ff94c5079bf91fef87",
-      "fingerprint": "d9a8f314a377c395b869da1d2daad9d372db81f0643fba9d021b0bf218476d9e",
+      "digest": "ceb55f0a8d8c34980ff8d1691dc14362e3eca661bfe600bb3325896400700aac",
+      "fingerprint": "ffae074c591370f147e03bd7ef198f509bdc73e2ff74610e53736216533706f2",
       "output": "v1--tooling--testing.webp"
     },
     "v1--tooling--tools.webp": {
       "baseDirectory": "public/og",
-      "digest": "80c2d1fe6646a6f2d90b5dbc973daf7e11e9bca325887cf22f38831ae8302f71",
-      "fingerprint": "cd03c2b6b08e901d225e36b1482280c448111633c5923eed148557f6bd132bd3",
+      "digest": "7330c9e5ec96c56becf03c69169c225318206fde6001d555d704a8ed161b5725",
+      "fingerprint": "49a63c2ebe8dfa4a8d1c0c913ec9eb1c0b497753c870b65bc25c57aaa8c54723",
       "output": "v1--tooling--tools.webp"
     },
     "v2--api.webp": {
       "baseDirectory": "public/og",
-      "digest": "bd1ed24d27e0c41d8fd140cef5d095b49f7ac88aa993c544cb190fc655b04feb",
-      "fingerprint": "bf269401a257b9930b8013c31b2f16f055520836f70c440d9719e5fe38a5cefc",
+      "digest": "2178ddd9f4e86c360fb8a870f69a446729f81b39fdb425c64b80885a74251718",
+      "fingerprint": "ee1f938c2e5d6e8cbf6690963ac0e4d64d3a4617c266c28d407922f34c3d0a55",
       "output": "v2--api.webp"
     },
     "v2--api--reference--astro--src.webp": {
       "baseDirectory": "public/og",
-      "digest": "bb42a31ec2cb52aa5725fcfe014051c59de5854757adbcc2318ad8be609f4f7c",
-      "fingerprint": "868c9670c20360836ce131c8ebd1f7fbc51113ab98125b5cf19a6c81a2238a8a",
+      "digest": "4b41bcea8d309a0abb9ace0eac37fbe5265e5221ddb221d751b6d60823a55a15",
+      "fingerprint": "c907dbfb80d9bd941aa514dc8233309b597b3575fa63fd845be387c11604dd5c",
       "output": "v2--api--reference--astro--src.webp"
     },
     "v2--api--reference--basic--src.webp": {
       "baseDirectory": "public/og",
-      "digest": "47a9cdcd017f8dd00fa988b7a6885d6f02a9b1f09f51bc6a41be1e3304dd389c",
-      "fingerprint": "ae752e1b71663168ffa17635e0da0c795b3edb56996a590d064388723446729d",
+      "digest": "6e9328f467c4ba0bad651fe1b971d9c20a07361a05a5e88ad85840985d7dce64",
+      "fingerprint": "ddbbedcc95f61d79d9ca1ba102d0e737e4bbf61b26e0431e474c6b4200d8e7d8",
       "output": "v2--api--reference--basic--src.webp"
     },
     "v2--api--reference--core--src.webp": {
       "baseDirectory": "public/og",
-      "digest": "1508189ed26a2000161d9b0ec661ed001ba73139db4555b303c573c1c19afa1b",
-      "fingerprint": "f8f33b47faa4b865174bc6dbc7cc09a0aff2df19a044461337c87d90db58383e",
+      "digest": "d5682f787caa9cb56bf4bb722e9ff73b194162a98d2f36550791e90792f6d013",
+      "fingerprint": "03a0dea600a39e095d0f5ef606c9bf1d638d62a55980953fb37aa01a442aae7d",
       "output": "v2--api--reference--core--src.webp"
     },
     "v2--api--reference--expo--src.webp": {
       "baseDirectory": "public/og",
-      "digest": "11701ac8f53057449d4f227f932a95ed93cdb3ad5412dd5891c46f6ecbe9331e",
-      "fingerprint": "fb15a4dd7f8b9c651ac6c1161563f19b7cd35fdc9da69741de755b48cd9d89b0",
+      "digest": "e96a65e3c236f84be2d17b36a4b8efac9705b5d7a608985538a743d847d2a2bb",
+      "fingerprint": "2dc7c239299e2f40574351014ded921bbef6e780887c3a3e78ce9004821e76d6",
       "output": "v2--api--reference--expo--src.webp"
     },
     "v2--api--reference.webp": {
       "baseDirectory": "public/og",
-      "digest": "cd43fabdfdb355b2fbe5a4c735582b70173662b034cafd6e6c5526a843a8d785",
-      "fingerprint": "cd7156b275dd551e8c27552ae0db5942084b913fdeb954e44c99d1e645bbd642",
+      "digest": "4a2de6c7047fa7b82a299d7ed2384f74a9db978740b098cc8bdb32368a852eca",
+      "fingerprint": "8fce937f3e4c1fcf5706cebc702a6064494887ef9efe89b538d25cb89c04c1bf",
       "output": "v2--api--reference.webp"
     },
     "v2--api--reference--integrations--src.webp": {
       "baseDirectory": "public/og",
-      "digest": "6a03fcde6b1d6bdd828fcccee5dd549013adabd7e6a0524aa5f4989b443b101b",
-      "fingerprint": "8e25842495819bd670e689a62039c92f604e7e53004b0cc5f7d138126e9a7c69",
+      "digest": "c4827df08739a0b36fe2afa77bf2ff7fd2e3a9554bdea079bd62255e45d8cabc",
+      "fingerprint": "a9e34dec71120c55ad994efb8d22f55fd1857d85fc81456701b843ea5f15bc11",
       "output": "v2--api--reference--integrations--src.webp"
     },
     "v2--api--reference--nest--src.webp": {
       "baseDirectory": "public/og",
-      "digest": "cbf8d00ba58c6da1b1e8e454815a1fdeae23e4aefada2c06a60d06c7ff9872bf",
-      "fingerprint": "2707fa1166bfdfabb638deda8c8b85e12ce17aaeac0106a6eadca5cd1a2a3033",
+      "digest": "8de78d9c071b9b230ab81cbbbbf3c4f3c8f03f7d05520a3be3bc0406b4164b1d",
+      "fingerprint": "a5f170acd784f7d98727e59f7adfbe2a2d8c71f1a451fad0d736dfc4b5cc02bd",
       "output": "v2--api--reference--nest--src.webp"
     },
     "v2--api--reference--next--src.webp": {
       "baseDirectory": "public/og",
-      "digest": "097d0f78a7878afa1030759ced038b3a032f3ad8a5c5a06fbde2d4eadc181a48",
-      "fingerprint": "4adda24549eab7d25cf95224c1bc1a1486eb94f1e44a13e5ad20f610b61d7f04",
+      "digest": "deb58c0b3db0ac278701cd59219b4aa4cb88737ef00a8c64239f71ee5e503ed0",
+      "fingerprint": "cc843fd1db708425bc1a75ce1d3cc7e670ad147e73f9aba52dc72fddf4991f72",
       "output": "v2--api--reference--next--src.webp"
     },
     "v2--api--reference--react--src.webp": {
       "baseDirectory": "public/og",
-      "digest": "8a048fca2fe52d0739554c3ffca1f4c17d8ccef36fbd5cca5c03107c473dc7ba",
-      "fingerprint": "ffa21296add81b57863b073bd0a02cf936cd6553b4868d172446de032b1ffe5c",
+      "digest": "f0a0df0305a9a2b63230e76955c476bdc8a4cdc7dfc24b877a9bce050d1c459c",
+      "fingerprint": "ce922ac03d219e5471b1f28014829902b3a7b8928334f818576ea478497111f2",
       "output": "v2--api--reference--react--src.webp"
     },
     "v2--api--reference--typescript--src.webp": {
       "baseDirectory": "public/og",
-      "digest": "ec43ab126f7ff9896937f3a6b287f0e775d316a38de3df387a09c635462eaee0",
-      "fingerprint": "7905677b530c73c62d3a8090172eaaff162ee0f6c50bf7fdd2b8041db280c4dd",
+      "digest": "0b5a53b04f548c8c3340d91efc9ba53c06bd12bf2eabc440d6709ed032f14de2",
+      "fingerprint": "a358535b21fa918163df8d48c4570c31d9365a30ae1eac291e18a6a2b6e522c6",
       "output": "v2--api--reference--typescript--src.webp"
     },
     "v2--frameworks--angular.webp": {
       "baseDirectory": "public/og",
-      "digest": "c647a0e1b2d216b07e64d4c7858cd2789e5b487605b3fa21572998e81433f1e6",
-      "fingerprint": "69e76ede661c3507fb0af5ae4b43ad671578aa61ed4277d122fe4998c64a5144",
+      "digest": "1484ecc0c6b8f0b3df71df7c63b81313e1750ce276ebc98156a7886fe88c734b",
+      "fingerprint": "61c54630f670c4ed177be597adedffd135e3018130a29ace27dc281f72660121",
       "output": "v2--frameworks--angular.webp"
     },
     "v2--frameworks--astro.webp": {
       "baseDirectory": "public/og",
-      "digest": "adcd6d02c7681d285e4994d8eb1791f9257213ad9b5f1014b49936058bea4283",
-      "fingerprint": "fa53a54db617953b2f55a79d92d89e3e13bea6ca70a182d473d53a3e891f02d4",
+      "digest": "2dc75685313146ed5dd35a6561f2454b65cbe7b5190d6af2daba5d6cae245685",
+      "fingerprint": "d9fe78a852be7d553cc89554557abe8ad983dddee11538aeef41b406618d3e82",
       "output": "v2--frameworks--astro.webp"
     },
     "v2--frameworks--expo.webp": {
       "baseDirectory": "public/og",
-      "digest": "4917b5a0e46c8aada74100307b76736a1d72658d5cfcd921007ec59af84c4154",
-      "fingerprint": "36741d26a811c292d7946c98b5b988ed287fc881db08c03b65e23407a0a8ecfb",
+      "digest": "eda7ff31b7acff91ab7efeb59931a0d79e113b7641831d3232c20dae16340373",
+      "fingerprint": "bab909b220d43a6f6e4c843ee7645aa0c9cd0de2cac2a56f12450aa424461f25",
       "output": "v2--frameworks--expo.webp"
     },
     "v2--frameworks--hono.webp": {
       "baseDirectory": "public/og",
-      "digest": "508c8eeef48d3c6493a88e627c10b002061a396da1cf920b6968bb5110e9fbc5",
-      "fingerprint": "e9cc6ada1436a7be2117c4346db11225203b35f0cdf8de49df953b21d4390254",
+      "digest": "d879d1e747169ac538d1d40141c9e7d27e65614540c4977dfb8140479b8f1cbe",
+      "fingerprint": "30143f4d6e820227b76718ffe4efcb94d649d27039b60d5b39257480289049f5",
       "output": "v2--frameworks--hono.webp"
     },
     "v2--frameworks--lit.webp": {
       "baseDirectory": "public/og",
-      "digest": "1cd7f9cac661352b1cb31073851e66633b4fc83373d8763d18d2f2c497c67322",
-      "fingerprint": "f4dd3c54012697fb4fe567a207d061d1c7ce269448c92ba7c20778e9cb0aea5c",
+      "digest": "405b17b4bf39ef6285215148c4a8475867611bfdf788aa1f404fcaee17f41da6",
+      "fingerprint": "48e356ebdb72d469133882212f5a7e70aa1290043344f4d841d0dd2c7f5ed53d",
       "output": "v2--frameworks--lit.webp"
     },
     "v2--frameworks--nest.webp": {
       "baseDirectory": "public/og",
-      "digest": "99ad24633b95728adbacf7bc42da52f7c41ac8c6f173e5dd30572d316e91131f",
-      "fingerprint": "2fbf3ab26ac2dec6eaac51d0043300389db0a8a6a6967ba58aa2ac5ce4fe4db0",
+      "digest": "185d9e73f9e5758535348c38df746f54cb1573b4731d90f410201781f765d94a",
+      "fingerprint": "57e6c278b2155553eedb7986a538a9cf6ba0ed2475799c3cf69629e0ece5c0eb",
       "output": "v2--frameworks--nest.webp"
     },
     "v2--frameworks--next.webp": {
       "baseDirectory": "public/og",
-      "digest": "9445ffc0dfe666cb86e475da040355fddeb9db21fbc82f7926b3f15540108756",
-      "fingerprint": "1d6c40bc61d51e2bc69c6f6366e0ecc4468fc004aa7a1f06a23a4c50c5fd96fc",
+      "digest": "553322db2b849f4a2a0b66f973a067cbdee33fd27f7054a060e09bde5edcc14d",
+      "fingerprint": "1385d9f0d6fd1547e826473782c04796b998ba083361642951bc4cb2e98a69c4",
       "output": "v2--frameworks--next.webp"
     },
     "v2--frameworks--nuxt.webp": {
       "baseDirectory": "public/og",
-      "digest": "38ec8615b1487c22a8f40d8c7747043ad6ea938bdf5442b63517ea52a189873e",
-      "fingerprint": "edb0a98566ff614a62f755aa9c9337e166671bb70aaaa1cf268d06b25c148713",
+      "digest": "38b51140a967355d9a6c725df3813ed4623c876f30d79842c087e09a6f440320",
+      "fingerprint": "03d443baa34458430c05b16208ce46ae60994d6be1b42913a17f0ae181b9225b",
       "output": "v2--frameworks--nuxt.webp"
     },
     "v2--frameworks--preact.webp": {
       "baseDirectory": "public/og",
-      "digest": "a54d787023fb8cb40f4aec4468778f2078a70a2ef54547d6f96ac5940f70b963",
-      "fingerprint": "455c19f1924df1ee32333a3ef605dfdccddb962b21e0c0bc73d3748279d77e40",
+      "digest": "d5d5aa737305a2f07242686a4d2919fe3957e9886b1951c6e0f7eca19ab9a9ae",
+      "fingerprint": "983ef9281a0478751bcd176dae36684c045f2f0d28ee3c7cfd01fb37c16bb5c4",
       "output": "v2--frameworks--preact.webp"
     },
     "v2--frameworks--qwik.webp": {
       "baseDirectory": "public/og",
-      "digest": "52c5d82d120db6805a6dd63332ff0a045e4e9c8fe18fc0e9a6983a3437d3cdc5",
-      "fingerprint": "1a93578430299dd7b4a5ddb4a7bda187839a8c40ad1a5a2e1e1d725376b7c2be",
+      "digest": "6cf44044188fa81d33a4a0018a54ee0274efc949a1c5d49a9ca4f5b08e1c83f5",
+      "fingerprint": "0551ab599dff6de1449ac08da372c74282132c1772fe3c02e53a2bed2f0c6495",
       "output": "v2--frameworks--qwik.webp"
     },
     "v2--frameworks--react-router.webp": {
       "baseDirectory": "public/og",
-      "digest": "637945ae571ad3ee8cadb28131dbd0be25d912df57d55bafd774ae7a1fee7c33",
-      "fingerprint": "db42e0b6a607080547894133de97c4c6d79d8d7e1a1fa17f28736c14cf6729d7",
+      "digest": "5d8360b1eef6b998b73035a69db84cf473a8c6c9c3590fb12de3c4fa21c52bb9",
+      "fingerprint": "57a5c4ea8c5dd4db2d47b51ad4d5b936e2ca8ba1fe0a76a97721e51b8ab84934",
       "output": "v2--frameworks--react-router.webp"
     },
     "v2--frameworks--react.webp": {
       "baseDirectory": "public/og",
-      "digest": "0f63bd888a2411d84979410a4b9a6fc61d989fcf2b87c85035d16ddd46a63893",
-      "fingerprint": "08624b2978df994a1da34a0cd2c2dba665becd662d35788fd00f812b711a06a3",
+      "digest": "aa335f551fce4d2742af63f2ac6ea3c1e0ebc7008cbfa463720fcd750ca1c687",
+      "fingerprint": "d6492706ec900415e3b1d367e7072f167ccc62daf32fb51631dd4d2011b3d5c1",
       "output": "v2--frameworks--react.webp"
     },
     "v2--frameworks--remix.webp": {
       "baseDirectory": "public/og",
-      "digest": "47c7cf069efdb20704fcda833b971a51a066f8afb59ff09b480f397e31ac79fa",
-      "fingerprint": "664369e5af117f9aba25e9c3c4bffc7165e0f30f2f70ba303a78e870ed641c22",
+      "digest": "751e6c53d914d17e55292d6e515e74b21ed9617ba70b26136f0c92227ad41e52",
+      "fingerprint": "b25e2a9f2a616c964d54e85910e894c2648884b8b73611f0659137b6c345c345",
       "output": "v2--frameworks--remix.webp"
     },
     "v2--frameworks--slidev.webp": {
       "baseDirectory": "public/og",
-      "digest": "8ea6628dc3ee8330a23c1f6b9b575195f1b730f8bb7fca3fd2d2f810e25c85eb",
-      "fingerprint": "5c3c52898920b7e88160045e40fa1f479d02e8abdcfcf435a7940e6c8e7900a4",
+      "digest": "196f81563f3aba1e1d8e05b14c0c88fd9731868f80f19f0d141c07818b1e785a",
+      "fingerprint": "80e4056aa4cc255cbf273b735bd64323b07168fe40ac6c19b80f203b5ccd7b35",
       "output": "v2--frameworks--slidev.webp"
     },
     "v2--frameworks--solid.webp": {
       "baseDirectory": "public/og",
-      "digest": "a638788469977e7c6331d4b91acd8a39c2184dd9d294dcd76175056a90414ade",
-      "fingerprint": "69ca2f7b38aefbad6a67eedbcee563415543c7377072a1e59df9a75996f3554f",
+      "digest": "4be70ae4e6b2108c29df68721222d9d9586255431d855f6ecb854a53c81854e0",
+      "fingerprint": "e6130794b7f51fc44fdc1af12674eead71ac33af49671acce776cb65d684eccb",
       "output": "v2--frameworks--solid.webp"
     },
     "v2--frameworks--svelte.webp": {
       "baseDirectory": "public/og",
-      "digest": "57a38aaf9e524532e21f78550b39a67d5d2a4253bab8a2d5d00014067e383995",
-      "fingerprint": "371bb8703f47901d9a8d4161105abca37870662f99c08f9d03cfda63982e25e1",
+      "digest": "6c9a2ca5ec4ae290a1f9d5992953fc550ee5642a0d7aeb44337931722a7c8ff9",
+      "fingerprint": "b7885e1946406ef27af7a570bf6b07fbea12bdea93572277e2c8dd75b62dc11f",
       "output": "v2--frameworks--svelte.webp"
     },
     "v2--frameworks--tanstack-start.webp": {
       "baseDirectory": "public/og",
-      "digest": "f18cca580dac611fc8ca4bf7e333adf721ec4b75c6be0325f7c215eadd651010",
-      "fingerprint": "6a396e39856be9498db7abb670a25da4f763df37abd97f92bb9b650f17d0bc95",
+      "digest": "5d1a66d489af563dd0cf58c5403754900ac8515d7d01401a22046f225a6d7770",
+      "fingerprint": "0bfd8da6e1cbd6d99de5fbde722d6a0af619b1e44a7ff8668992068563c4240a",
       "output": "v2--frameworks--tanstack-start.webp"
     },
     "v2--frameworks--typescript.webp": {
       "baseDirectory": "public/og",
-      "digest": "bc8d8df8fefa38c1d0e46ba5c870d6e16a8ec010dfc4f6b187d05a93ec2c1070",
-      "fingerprint": "87aa09681568cb5fc595c641acfda3e1adaf56846d6dd70d4746019e0d4f6c3e",
+      "digest": "e15ef3781dc961112792097dae9834c5e81256ea23031f83879674f50ea0e9fd",
+      "fingerprint": "ecab6641dd1623deb0717e409492c7b3640d94f365e9af98d65eebda50bc0859",
       "output": "v2--frameworks--typescript.webp"
     },
     "v2--frameworks--vite.webp": {
       "baseDirectory": "public/og",
-      "digest": "f5ec9b9eb3274398dee3f706700b9f5f04247f45a9221080cda3b94f46881f89",
-      "fingerprint": "4245be03321c1f215d74cf9ff527bed2c94257a7d7c8253b4fa4cdf458767ab9",
+      "digest": "072ce9ee4d698661ee5c0e73d4d99d2cfe1d92a22acb97acb7c23b9cecf20c07",
+      "fingerprint": "b1f22cac3c81fba76d6649ef2f90c07d77d723ab126c8731c2a3e1e50897dbff",
       "output": "v2--frameworks--vite.webp"
     },
     "v2--frameworks--vue.webp": {
       "baseDirectory": "public/og",
-      "digest": "55162f436fcc078d53e80c2308570892084912a76e3f24c1b46b89e16055785f",
-      "fingerprint": "7f8a96b992bc896654d78a82586452ce3e9b5f45eb5012f7ac507050f8d47ea3",
+      "digest": "83d1ae7ff6c4c48e6f6af00d3d78f4451208af3f0b4befcfa62514ec51ea094f",
+      "fingerprint": "47262d1a75fee937cbb902a2d88785514cb5165006eae5898234cbeb58ceed97",
       "output": "v2--frameworks--vue.webp"
     },
     "v2--guide--acknowledgements.webp": {
       "baseDirectory": "public/og",
-      "digest": "1e3a0d767a44dec1ff1c82c5850abc3e4b279fd8f8ff4f54616db98a01ce8fcf",
-      "fingerprint": "4c8d5b588e43b5d00630d8a66c68a92304e9752d29aaafcb459a53fb0232ebff",
+      "digest": "216a2594d73f084a0e89f01c86ea533f27998a1b27c22680edc79f5945d194a9",
+      "fingerprint": "46afea6fa7fd8210a7aeff8d049be48528513f711ea566bfbff311299f81d136",
       "output": "v2--guide--acknowledgements.webp"
     },
     "v2--guide--ai-agents.webp": {
       "baseDirectory": "public/og",
-      "digest": "51fc5dd3aa3e6c7c8a940a9094956005809fc64b4f4ec1a8669e08c1e9be6da5",
-      "fingerprint": "366e86a647bbc44f21e86b87f7d699aa106f97ba11215350d2ac98ecb368cbfc",
+      "digest": "d1a854509e14a796b7f502e80262dedc3bfaa9c6ac20caeb25631b1979449651",
+      "fingerprint": "efd4efea0244a1b9d45ad955a8dbdd7fd05d97c98496e5f15cf45578cc3bebc0",
       "output": "v2--guide--ai-agents.webp"
     },
     "v2--guide--architecture.webp": {
       "baseDirectory": "public/og",
-      "digest": "e07943fcafc6154e47dcbda05b7428dc836eb67faf1681a85ef5c3b7c2c488e5",
-      "fingerprint": "7ad5c20ed2ac9e42cd700ac06a4115b5a2f0754b485f5181436aa5550b51d2bd",
+      "digest": "26ff3d063b412050f3176c2822ef9dc9e2ab71962b3d5ff9a829f1b5a0960f83",
+      "fingerprint": "c6374d1a48dc36ce1ee1ea1568c402cfe800aec98cb9b02077252405566ec7fb",
       "output": "v2--guide--architecture.webp"
     },
     "v2--guide--changelog.webp": {
       "baseDirectory": "public/og",
-      "digest": "dbc79b3b4c962b071ec9ffd9b0f932f1a1cdb6b7698fa5b2089555988c3978ad",
-      "fingerprint": "8aa601805116982cd6823fdec79bcdc7b3368149a52f039cb49f9aaafec322d3",
+      "digest": "042e0e52184609d5664992bac57e457616fea3fd04525f85a3c9d19c90bb6b26",
+      "fingerprint": "d206dbb3367c024b9d7fa5e8cc4679dce84588462828b456efad8c1722bcde2e",
       "output": "v2--guide--changelog.webp"
     },
     "v2--guide--cli.webp": {
       "baseDirectory": "public/og",
-      "digest": "bcd902449628346661938e113f31660341aedcfd6f5e07ae42bacbb683c425b8",
-      "fingerprint": "ce577c0c29daa033860b2820dd36184d66fe355ec55c4cbcb577c978ce0c1440",
+      "digest": "d74bfe9ca87ae66b54e9c802d92515ba0c9015c0f4048426fa53a324a082df26",
+      "fingerprint": "29a928340e2a8eef738292d692baeb09e3b73851161972a34a53012e6f634234",
       "output": "v2--guide--cli.webp"
     },
     "v2--guide--config-builder.webp": {
       "baseDirectory": "public/og",
-      "digest": "7e6c8ef80046c4cb7e271eacaabdd9f6587f8bb32f114deb16c71ff9c5f43366",
-      "fingerprint": "38c91a5e69b02e76984d7824bc0272f2b2514af38e8e89948a70947d22b629b6",
+      "digest": "19aea7043492ee358f9ef51853d29a4ac7da01f967219dd376d756a422b06b51",
+      "fingerprint": "f52afda95bd9260af9c1d32ba82cc5ef43b3876fcfb5384fb30e67329385ef32",
       "output": "v2--guide--config-builder.webp"
     },
     "v2--guide--configuration.webp": {
       "baseDirectory": "public/og",
-      "digest": "f913b3cb35b2fe84aa0d93739bb9108dc7bb85d4af1537ae13a693aac2019240",
-      "fingerprint": "cf2d21b972acdb73f6a0e3b2bd0ef52aa5a06edfde9725af430db8a6a357f7c1",
+      "digest": "19f65c75f581a92608a30372e7d6da6da5e101861c2e0c9b7cfdc70d0d43e16d",
+      "fingerprint": "93d43a1a4a5fcf48bc22f335ff311694cf5a0debe322d1022ed2480bdee0753e",
       "output": "v2--guide--configuration.webp"
     },
     "v2--guide--development.webp": {
       "baseDirectory": "public/og",
-      "digest": "a834ea9385fd54c7293827ee72cb05eebe4d1ce1f0fa646670e9d94ff8dd5b09",
-      "fingerprint": "dbc25f313b5d950fbcafa3edb81cc67bd94727c7fee7178611dbc5911023a76f",
+      "digest": "436c7c2d78c08688e5ef54bedc5a917b0b97d4aed22ef4dfe79edda503ffa3a2",
+      "fingerprint": "6cd3237f36da531eee22db07d2f06babce704f52a27b0979de6d75d9d4b2bde5",
       "output": "v2--guide--development.webp"
     },
     "v2--guide--doctor-report.webp": {
       "baseDirectory": "public/og",
-      "digest": "57766f88e919ef3dd852588bfccd8f9fc788379211eff3b0bca2497e7652ff41",
-      "fingerprint": "ad5f7b390a60584cd0d89e65f701d44d62c8b65b0fe7fd10a8cfcf65bcdb0c44",
+      "digest": "d3ebaef1d800c4f2b672059025c30d0ce5766b2177f9fd63843b009f520318b9",
+      "fingerprint": "46d5214d48d8f28dbf9b9e5f8b25a8a561b861368e527ee46b17fc02ade4c1a7",
       "output": "v2--guide--doctor-report.webp"
     },
     "v2--guide--getting-started.webp": {
       "baseDirectory": "public/og",
-      "digest": "dbf4f6f56417cafb4d9aa71b8a65f6645f448482b530926b9c2cb390f45bca31",
-      "fingerprint": "07aef3c82c9fe84c592eb81f6c554dc66535e11f0e3e04dc005d3a6a32e07c64",
+      "digest": "a1dfaf4606b9ca17f5be4fc62eddc274d88412366fb28d90188859333a4ba6e6",
+      "fingerprint": "29da349e0fa8ea0c4dafd52192a64bdebd735020bcb133a4c3d6668bebdbe6da",
       "output": "v2--guide--getting-started.webp"
     },
     "v2--guide--inspector.webp": {
       "baseDirectory": "public/og",
-      "digest": "43b295881428942e8e4a26ca083578f65796f1f92b2009e0ef3a0f8d69d4d9b8",
-      "fingerprint": "766a68155ced4ef006eb56723e599ee817ca5684910c88c95b21ee39349231d0",
+      "digest": "ec2f9ef7e0fd9eb446c4c396f47ab03bc7202ea6f81de67c493e9b6b48b19dde",
+      "fingerprint": "5e066217aecbbce3d4de88c4720312c15a90862f8445b6479a4900c5fc2bff1f",
       "output": "v2--guide--inspector.webp"
     },
     "v2--guide--installation.webp": {
       "baseDirectory": "public/og",
-      "digest": "9e65d81b057d7e5e1095193a2b0c796f34c3569bfddb245c9de6ae7dd5bfd4f7",
-      "fingerprint": "8f387acd98d8e1652008eeaeb0db2f664c0dd7b2f36c964a48accae969de4f06",
+      "digest": "2bdfe0088b885c38a55cbab00bd8963a8ddd98f004c9b4ffd8b18d22a9ffead9",
+      "fingerprint": "312430ad37e1f61eb6c4b6b30d9c101d83fb06e3be780a18a86aeaf8244ebe5d",
       "output": "v2--guide--installation.webp"
     },
     "v2--guide--lite-migration.webp": {
       "baseDirectory": "public/og",
-      "digest": "d20a8084369f0fe9998f4e1086382023bf9f3dd7dae5e6017c270c1e6bc43d6b",
-      "fingerprint": "033de0ecb02d1e497d6c25501a2f6e7800ac995ac9cc69e8dbc8a89b2b38a624",
+      "digest": "a34f5465c9c351b17633411707a4dc829ce24409a1ff5c0acfd9b9409457aa25",
+      "fingerprint": "4cc1004558504ad37ec52a5ef3ced8c8a5a38347ed6e69432153d3065bb11fd8",
       "output": "v2--guide--lite-migration.webp"
     },
     "v2--guide--migration-v1-to-v2.webp": {
       "baseDirectory": "public/og",
-      "digest": "df9fb6cc0211cd8fe0930b67b72b218d30500376af353471de1373189c3896d7",
-      "fingerprint": "1f05cd490bcbab5984b6defd14b570d8b1b41c49bef0011f8d9408e9eed7ec02",
+      "digest": "143bd51ffd0d7aa7e17ad35ab9fdc35e6d91c70b5849d4f9156c4abc5e292893",
+      "fingerprint": "839c19b0cb448b521170a6f4516f27ab9eee286ceac28c4fe24b6ec2c6789e24",
       "output": "v2--guide--migration-v1-to-v2.webp"
     },
     "v2--guide--monorepo.webp": {
       "baseDirectory": "public/og",
-      "digest": "71e91e94f9992225c51ae1a502df198886d4b3e4d570e3c9f14ebc4f2f225bcc",
-      "fingerprint": "a8d5ea2c56095877ef60e2d40fbd245579b1e13bfac4fc39e12df8d8db737446",
+      "digest": "c70168cedae4ef0a6fae65817a481886ae81219302fb4c6bc4474109cf801c19",
+      "fingerprint": "642397ee76ef84170b61733ffbfe62ffa22e6281a21e0b2550f1313ef7b45f05",
       "output": "v2--guide--monorepo.webp"
     },
     "v2--guide--playgrounds.webp": {
       "baseDirectory": "public/og",
-      "digest": "e2283b16c6e053e722f9fc6bb3da1da160488dde21cc519a4e96e53dc78613bf",
-      "fingerprint": "4b9ed83ba3ac9b3f5b4e0628021ced69460fdde7e517e5903fc822ebe8b935ed",
+      "digest": "7b798cb0e0c2f563f681f0a95be4e55c0c0911deeed9ab1c068e781990fe9350",
+      "fingerprint": "3e3011dec487bb2215d187781bac6438e3ceb5e26747be36b5f2fddc80ad22c8",
       "output": "v2--guide--playgrounds.webp"
     },
     "v2--guide--presets.webp": {
       "baseDirectory": "public/og",
-      "digest": "fb42d3929ccb1c8ca3452e7ef4d844e773b6656b4373bafdddba9d5b88329c51",
-      "fingerprint": "b4bfbb6b02b9fd8cfd207bdb5afa2b20730903c7dbb35676f9f415684b3a324b",
+      "digest": "492978a2945144ce1f45a1bbe4e684dc0748e561d9b50b05e2faf9a687ed8042",
+      "fingerprint": "16148749ab027f743665cdccdaa9d8412cf5686d24e7913b04d7a6364663a378",
       "output": "v2--guide--presets.webp"
     },
     "v2--guide--releases.webp": {
       "baseDirectory": "public/og",
-      "digest": "7de1a56b6523864662a2f4c3383219949c12536cb8bae1cda2a5024455006021",
-      "fingerprint": "5a6ff79b4af01ec1afa20d06a62ea6ab4acdf7479fff23654f7bccdbe23c258e",
+      "digest": "a1bee65c02b85c608f209ea25905beda3e703468db902793f504bb247d64ee07",
+      "fingerprint": "0800a3c1f1f7d67d38661b7337d0a55194c39de1f741c2cdd383d2e97c919a5b",
       "output": "v2--guide--releases.webp"
     },
     "v2--guide--runtime.webp": {
       "baseDirectory": "public/og",
-      "digest": "bec3c59875cd5eab2f35ca60cd1f2defcb4b8f171c0b6a54cb5e22682c7ecba6",
-      "fingerprint": "5fae66d862eb2268bf9dab90d90c6ac4314b7eb126667764922c9c7bbde3ac4e",
+      "digest": "17a34e230f10eb9931f888744445a89efbb5470e3c760ff2d8b839b5733df6d1",
+      "fingerprint": "70fde0084190a8af12f96196af2268d5222b3fd3a22eeca8ec09127dc401a87d",
       "output": "v2--guide--runtime.webp"
     },
     "v2--guide--troubleshooting.webp": {
       "baseDirectory": "public/og",
-      "digest": "82e2c410765ae24cfbfe7837d46394dff340195c9816503b9c409b3cbf09b759",
-      "fingerprint": "ee07c6e08f4832ec29a0c3c912418f3d0b608a169880593d361002e97e28bdf0",
+      "digest": "494d707ac41236feb3f73ed7c82cfe5ec5d4d5827151ece19b6129a57b09d9e0",
+      "fingerprint": "825ece78ac749a7fb46d7d5452a241149ebc70bbe0b497b3ced24e23431aa2e3",
       "output": "v2--guide--troubleshooting.webp"
     },
     "v2.webp": {
       "baseDirectory": "public/og",
-      "digest": "f1794e56e5604069f5f23487920de3d70d66f7b18718f3fe2d4c425e80a42d21",
-      "fingerprint": "7d90030f4b2763cffa68c2cfbcb68bf843fe73c21326b74e0f732e686e6ae472",
+      "digest": "3308e190d7aa500443ade1292eeef42ccccbb8f2c322893de2b47dbbb8f036bd",
+      "fingerprint": "a6b6a12e606b5fced77fa37760c4b76750b81090e35f01e29093d3cb870e3c66",
       "output": "v2.webp"
     },
     "v2--packages--basic.webp": {
       "baseDirectory": "public/og",
-      "digest": "45e1655ad8c47918de9193d54a1b26899ed621af8f8845f9f19783a6cdd0e2a4",
-      "fingerprint": "b73ea687fd0dbcf2643136b41c755bd127b3e5ba1ae28c11075aaf9b7c36912f",
+      "digest": "9ed770427d2924d7c0886302d673838e10cf553cd7dc075ca046b5560d83bc21",
+      "fingerprint": "43cda9d835425f113095daf80ae1ec3435ee7799036f4e4fef34003abbf33e15",
       "output": "v2--packages--basic.webp"
     },
     "v2--packages--core.webp": {
       "baseDirectory": "public/og",
-      "digest": "432fe85dfce48babe96c43930986a4b554060d6441e22ac48a47c0e8c0ac5d14",
-      "fingerprint": "1d94a26799e21fc7955a3708a9d7dc9a21ffadf0347e7a8ef6a7bf755e7c6dbd",
+      "digest": "a76cba23e07b3c36e6f4a83598bed8446ae970788e72cb921df5efffd642672a",
+      "fingerprint": "257d337beaab4b0ceadfad061c9ffa5b59db226cf04f92edd98de515d5dc4046",
       "output": "v2--packages--core.webp"
     },
     "v2--packages--integrations.webp": {
       "baseDirectory": "public/og",
-      "digest": "2db7ecff39d3523fd369365673a037337ebe7131584f014c06a387ae8511fe32",
-      "fingerprint": "649c114bbd1636aee6bba59fad4d51288bc9634e7a6dc73185eaebcc69c320ed",
+      "digest": "8252a3c0264b815302741bfbd6f47687e82c7cd49b0c1ddba41142318b4efa81",
+      "fingerprint": "594fc31ae7fa08dae7aa2c9fe820f3432d0c33ac3fff2faf93c6bfe8fb90a799",
       "output": "v2--packages--integrations.webp"
     },
     "v2--packages--lite.webp": {
       "baseDirectory": "public/og",
-      "digest": "40d435dadbc9f0baa539571b6bf63b4b0896383ee96710b4b9fa2f2545161aca",
-      "fingerprint": "6809b54f3ea52f2656f023e9baaf6931007d8212a2ad2e6c23004d735d2e1993",
+      "digest": "ecf07db5a0a42451a32bac44949fe41981b30c5c7d5a8f2f7a04b93361be57f8",
+      "fingerprint": "db5d48ae0467c981af625f04a5a52bc9809293c7ba238496992763536f7c7694",
       "output": "v2--packages--lite.webp"
     },
     "v2--packages--playground.webp": {
       "baseDirectory": "public/og",
-      "digest": "9e6eae7778aee23141d00b3b9bf114fadb6c3a248603e5ae7ba82eb159e51e17",
-      "fingerprint": "65f388a150eac8a0b281eadd33d0aab34762647e715c7124e3f3a49eeb4bdfa4",
+      "digest": "f1e5e79b0277db0e64d5a611a0c7227fe799ecae486c3d17a42a796821827711",
+      "fingerprint": "39d509a9101498f8bf201b1161f8da6985d75de8b304600c6fa125360c13dce4",
       "output": "v2--packages--playground.webp"
     },
     "v2--packages--tests.webp": {
       "baseDirectory": "public/og",
-      "digest": "032040516405bc7a08c9ae58275565b58dd3a12af704a7a5120099a37cc9a3ff",
-      "fingerprint": "bb4ac7ef2cffa247987e9c23da156d7f2c155807a83189666df33e40ccd4665c",
+      "digest": "d2d0641fcc31827bbea3eef9c8ff2d76801ace2fef0955f99182e2302761eb5a",
+      "fingerprint": "7faebe7c58da96a6441a4a34a57e236f18858de064462a732f074c01f5326537",
       "output": "v2--packages--tests.webp"
     },
     "v2--tooling--extensions.webp": {
       "baseDirectory": "public/og",
-      "digest": "baf4b5ca1eeed0991b25502ce249bb6e4d17decd2a34d2d179cd0f7b00e7fd39",
-      "fingerprint": "74708101e03c17b998fb7648fc96454bf55c62c0ea53481cebf6e41f2c2ca7c7",
+      "digest": "4d4e72ba1064a073b44b9a086a19f0185e635e66a5cdea18c1f679e5c3864b6f",
+      "fingerprint": "de7c445b6025141dded26dd0baa2e843c5173c953df4035c34c76ee6747f53e5",
       "output": "v2--tooling--extensions.webp"
     },
     "v2--tooling--formats.webp": {
       "baseDirectory": "public/og",
-      "digest": "57434712e7e2a34b411fe054722602e54f5f5d840112e6fdf304dfc4d8e0cc75",
-      "fingerprint": "55130c98e26a3e4849ed4556783b28fcc56637c54f5f0cf523fd82e6b4ba70a8",
+      "digest": "d56a0259266478e5712e401f7ac17e97d088e45a9b0ae969280b8c72eabb36c0",
+      "fingerprint": "575536c0a206754da59dd1c6c5b645114874fdf8ee016675b0e238f69024eea8",
       "output": "v2--tooling--formats.webp"
     },
     "v2--tooling--libraries.webp": {
       "baseDirectory": "public/og",
-      "digest": "455284ae95711cfe553e9c988e3e7c46635396ad1440f8bfe8cd20e32968390c",
-      "fingerprint": "dc4ee6192070d2a10b3f7e6882157d4e578aa41246fdd8361a360ff0a749ddf8",
+      "digest": "a7b24cb00e3b05bb06aed462cb1f62cdc46fd8d3ded203a426f1ed9567c5434d",
+      "fingerprint": "59b6a3572c8c2a83f9c8975da8be3061f47e3d31a3f6dec0c473e86b9539c966",
       "output": "v2--tooling--libraries.webp"
     },
     "v2--tooling--overview.webp": {
       "baseDirectory": "public/og",
-      "digest": "c15b9d06871d1089bc871df31fc3fe640df3adc399742bb38e75a47854e94dd0",
-      "fingerprint": "5528f45b8aad743c26761fd78283eed3e22ecb11f0e790cd2b6ccd78f302ebb7",
+      "digest": "08436d3c92ff11cef3ae686f963d11a1e40bde93a26fab1acd0b80d9f2031f85",
+      "fingerprint": "8c6bcc403a4f4fb812e2bf344672234275366fbf42d276211aa6edfddfb09967",
       "output": "v2--tooling--overview.webp"
     },
     "v2--tooling--testing.webp": {
       "baseDirectory": "public/og",
-      "digest": "febdeffddb24bc7c48766d88cdaf0f52fa5cbcd0ce4de8fb95932e43f6b1b417",
-      "fingerprint": "10ddfbfd3f8b9bebec4b2668e5c63a652d2e542130313fedbfdfb02b9c63e2dc",
+      "digest": "f980a5e2d92294ff2fbebb34fbf184808079dac1823e75d4c9f219c839275582",
+      "fingerprint": "31b8e93054d61203fa2c798876035cfed1f25c6414c1c9abebbb88404252ed35",
       "output": "v2--tooling--testing.webp"
     },
     "v2--tooling--tools.webp": {
       "baseDirectory": "public/og",
-      "digest": "d2cd9e00f4f471e40a7af44bf67f185ee5e9c34c28568e0947955891644a2f3f",
-      "fingerprint": "4f9128822f4f58a959be31c68d57b75fc49e1d86f657d4597e0354ac2dfb3943",
+      "digest": "14eabc42107fa8bc14b94597b178389e0708cc9ad4c3a073f54abce1d51d0364",
+      "fingerprint": "1cadf8733e2958d060fe0f947610a00952ab584455f33b9b952a7e11b349a043",
       "output": "v2--tooling--tools.webp"
     }
   },
-  "generatorVersion": "0.4.0",
+  "generatorVersion": "1.1.1",
   "version": 3
 }

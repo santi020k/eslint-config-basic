@@ -1,0 +1,2294 @@
+{
+  "generatorVersion": "1.1.1",
+  "routes": {
+    "/api/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "api.webp",
+          "primary": true,
+          "url": "/og/api.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/api/"
+    },
+    "/api/reference/astro/src/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "api--reference--astro--src.webp",
+          "primary": true,
+          "url": "/og/api--reference--astro--src.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/api/reference/astro/src/"
+    },
+    "/api/reference/basic/src/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "api--reference--basic--src.webp",
+          "primary": true,
+          "url": "/og/api--reference--basic--src.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/api/reference/basic/src/"
+    },
+    "/api/reference/core/src/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "api--reference--core--src.webp",
+          "primary": true,
+          "url": "/og/api--reference--core--src.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/api/reference/core/src/"
+    },
+    "/api/reference/expo/src/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "api--reference--expo--src.webp",
+          "primary": true,
+          "url": "/og/api--reference--expo--src.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/api/reference/expo/src/"
+    },
+    "/api/reference/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "api--reference.webp",
+          "primary": true,
+          "url": "/og/api--reference.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/api/reference/"
+    },
+    "/api/reference/integrations/src/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "api--reference--integrations--src.webp",
+          "primary": true,
+          "url": "/og/api--reference--integrations--src.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/api/reference/integrations/src/"
+    },
+    "/api/reference/nest/src/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "api--reference--nest--src.webp",
+          "primary": true,
+          "url": "/og/api--reference--nest--src.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/api/reference/nest/src/"
+    },
+    "/api/reference/next/src/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "api--reference--next--src.webp",
+          "primary": true,
+          "url": "/og/api--reference--next--src.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/api/reference/next/src/"
+    },
+    "/api/reference/react/src/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "api--reference--react--src.webp",
+          "primary": true,
+          "url": "/og/api--reference--react--src.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/api/reference/react/src/"
+    },
+    "/api/reference/typescript/src/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "api--reference--typescript--src.webp",
+          "primary": true,
+          "url": "/og/api--reference--typescript--src.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/api/reference/typescript/src/"
+    },
+    "/frameworks/angular/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "frameworks--angular.webp",
+          "primary": true,
+          "url": "/og/frameworks--angular.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/frameworks/angular/"
+    },
+    "/frameworks/astro/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "frameworks--astro.webp",
+          "primary": true,
+          "url": "/og/frameworks--astro.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/frameworks/astro/"
+    },
+    "/frameworks/expo/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "frameworks--expo.webp",
+          "primary": true,
+          "url": "/og/frameworks--expo.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/frameworks/expo/"
+    },
+    "/frameworks/hono/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "frameworks--hono.webp",
+          "primary": true,
+          "url": "/og/frameworks--hono.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/frameworks/hono/"
+    },
+    "/frameworks/lit/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "frameworks--lit.webp",
+          "primary": true,
+          "url": "/og/frameworks--lit.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/frameworks/lit/"
+    },
+    "/frameworks/nest/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "frameworks--nest.webp",
+          "primary": true,
+          "url": "/og/frameworks--nest.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/frameworks/nest/"
+    },
+    "/frameworks/next/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "frameworks--next.webp",
+          "primary": true,
+          "url": "/og/frameworks--next.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/frameworks/next/"
+    },
+    "/frameworks/nuxt/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "frameworks--nuxt.webp",
+          "primary": true,
+          "url": "/og/frameworks--nuxt.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/frameworks/nuxt/"
+    },
+    "/frameworks/preact/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "frameworks--preact.webp",
+          "primary": true,
+          "url": "/og/frameworks--preact.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/frameworks/preact/"
+    },
+    "/frameworks/qwik/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "frameworks--qwik.webp",
+          "primary": true,
+          "url": "/og/frameworks--qwik.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/frameworks/qwik/"
+    },
+    "/frameworks/react-router/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "frameworks--react-router.webp",
+          "primary": true,
+          "url": "/og/frameworks--react-router.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/frameworks/react-router/"
+    },
+    "/frameworks/react/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "frameworks--react.webp",
+          "primary": true,
+          "url": "/og/frameworks--react.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/frameworks/react/"
+    },
+    "/frameworks/remix/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "frameworks--remix.webp",
+          "primary": true,
+          "url": "/og/frameworks--remix.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/frameworks/remix/"
+    },
+    "/frameworks/slidev/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "frameworks--slidev.webp",
+          "primary": true,
+          "url": "/og/frameworks--slidev.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/frameworks/slidev/"
+    },
+    "/frameworks/solid/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "frameworks--solid.webp",
+          "primary": true,
+          "url": "/og/frameworks--solid.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/frameworks/solid/"
+    },
+    "/frameworks/svelte/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "frameworks--svelte.webp",
+          "primary": true,
+          "url": "/og/frameworks--svelte.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/frameworks/svelte/"
+    },
+    "/frameworks/tanstack-start/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "frameworks--tanstack-start.webp",
+          "primary": true,
+          "url": "/og/frameworks--tanstack-start.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/frameworks/tanstack-start/"
+    },
+    "/frameworks/typescript/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "frameworks--typescript.webp",
+          "primary": true,
+          "url": "/og/frameworks--typescript.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/frameworks/typescript/"
+    },
+    "/frameworks/vite/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "frameworks--vite.webp",
+          "primary": true,
+          "url": "/og/frameworks--vite.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/frameworks/vite/"
+    },
+    "/frameworks/vue/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "frameworks--vue.webp",
+          "primary": true,
+          "url": "/og/frameworks--vue.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/frameworks/vue/"
+    },
+    "/guide/acknowledgements/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "guide--acknowledgements.webp",
+          "primary": true,
+          "url": "/og/guide--acknowledgements.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/guide/acknowledgements/"
+    },
+    "/guide/ai-agents/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "guide--ai-agents.webp",
+          "primary": true,
+          "url": "/og/guide--ai-agents.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/guide/ai-agents/"
+    },
+    "/guide/architecture/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "guide--architecture.webp",
+          "primary": true,
+          "url": "/og/guide--architecture.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/guide/architecture/"
+    },
+    "/guide/changelog/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "guide--changelog.webp",
+          "primary": true,
+          "url": "/og/guide--changelog.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/guide/changelog/"
+    },
+    "/guide/cli/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "guide--cli.webp",
+          "primary": true,
+          "url": "/og/guide--cli.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/guide/cli/"
+    },
+    "/guide/config-builder/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "guide--config-builder.webp",
+          "primary": true,
+          "url": "/og/guide--config-builder.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/guide/config-builder/"
+    },
+    "/guide/configuration/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "guide--configuration.webp",
+          "primary": true,
+          "url": "/og/guide--configuration.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/guide/configuration/"
+    },
+    "/guide/development/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "guide--development.webp",
+          "primary": true,
+          "url": "/og/guide--development.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/guide/development/"
+    },
+    "/guide/doctor-report/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "guide--doctor-report.webp",
+          "primary": true,
+          "url": "/og/guide--doctor-report.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/guide/doctor-report/"
+    },
+    "/guide/getting-started/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "guide--getting-started.webp",
+          "primary": true,
+          "url": "/og/guide--getting-started.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/guide/getting-started/"
+    },
+    "/guide/inspector/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "guide--inspector.webp",
+          "primary": true,
+          "url": "/og/guide--inspector.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/guide/inspector/"
+    },
+    "/guide/installation/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "guide--installation.webp",
+          "primary": true,
+          "url": "/og/guide--installation.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/guide/installation/"
+    },
+    "/guide/lite-migration/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "guide--lite-migration.webp",
+          "primary": true,
+          "url": "/og/guide--lite-migration.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/guide/lite-migration/"
+    },
+    "/guide/migration-v1-to-v2/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "guide--migration-v1-to-v2.webp",
+          "primary": true,
+          "url": "/og/guide--migration-v1-to-v2.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/guide/migration-v1-to-v2/"
+    },
+    "/guide/migration-v2-to-v3/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "guide--migration-v2-to-v3.webp",
+          "primary": true,
+          "url": "/og/guide--migration-v2-to-v3.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/guide/migration-v2-to-v3/"
+    },
+    "/guide/monorepo/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "guide--monorepo.webp",
+          "primary": true,
+          "url": "/og/guide--monorepo.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/guide/monorepo/"
+    },
+    "/guide/playgrounds/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "guide--playgrounds.webp",
+          "primary": true,
+          "url": "/og/guide--playgrounds.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/guide/playgrounds/"
+    },
+    "/guide/presets/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "guide--presets.webp",
+          "primary": true,
+          "url": "/og/guide--presets.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/guide/presets/"
+    },
+    "/guide/releases/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "guide--releases.webp",
+          "primary": true,
+          "url": "/og/guide--releases.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/guide/releases/"
+    },
+    "/guide/runtime/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "guide--runtime.webp",
+          "primary": true,
+          "url": "/og/guide--runtime.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/guide/runtime/"
+    },
+    "/guide/troubleshooting/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "guide--troubleshooting.webp",
+          "primary": true,
+          "url": "/og/guide--troubleshooting.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/guide/troubleshooting/"
+    },
+    "/guide/v4-removals/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "guide--v4-removals.webp",
+          "primary": true,
+          "url": "/og/guide--v4-removals.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/guide/v4-removals/"
+    },
+    "/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "index.webp",
+          "primary": true,
+          "url": "/og/index.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/"
+    },
+    "/packages/basic/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "packages--basic.webp",
+          "primary": true,
+          "url": "/og/packages--basic.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/packages/basic/"
+    },
+    "/packages/core/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "packages--core.webp",
+          "primary": true,
+          "url": "/og/packages--core.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/packages/core/"
+    },
+    "/packages/full/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "packages--full.webp",
+          "primary": true,
+          "url": "/og/packages--full.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/packages/full/"
+    },
+    "/packages/integrations/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "packages--integrations.webp",
+          "primary": true,
+          "url": "/og/packages--integrations.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/packages/integrations/"
+    },
+    "/packages/lite/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "packages--lite.webp",
+          "primary": true,
+          "url": "/og/packages--lite.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/packages/lite/"
+    },
+    "/packages/playground/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "packages--playground.webp",
+          "primary": true,
+          "url": "/og/packages--playground.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/packages/playground/"
+    },
+    "/packages/tests/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "packages--tests.webp",
+          "primary": true,
+          "url": "/og/packages--tests.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/packages/tests/"
+    },
+    "/tooling/extensions/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "tooling--extensions.webp",
+          "primary": true,
+          "url": "/og/tooling--extensions.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/tooling/extensions/"
+    },
+    "/tooling/formats/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "tooling--formats.webp",
+          "primary": true,
+          "url": "/og/tooling--formats.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/tooling/formats/"
+    },
+    "/tooling/libraries/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "tooling--libraries.webp",
+          "primary": true,
+          "url": "/og/tooling--libraries.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/tooling/libraries/"
+    },
+    "/tooling/overview/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "tooling--overview.webp",
+          "primary": true,
+          "url": "/og/tooling--overview.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/tooling/overview/"
+    },
+    "/tooling/testing/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "tooling--testing.webp",
+          "primary": true,
+          "url": "/og/tooling--testing.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/tooling/testing/"
+    },
+    "/tooling/tools/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "tooling--tools.webp",
+          "primary": true,
+          "url": "/og/tooling--tools.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/tooling/tools/"
+    },
+    "/v1/changelog/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--changelog.webp",
+          "primary": true,
+          "url": "/og/v1--changelog.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/changelog/"
+    },
+    "/v1/readme/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--readme.webp",
+          "primary": true,
+          "url": "/og/v1--readme.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/readme/"
+    },
+    "/v1/api/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--api.webp",
+          "primary": true,
+          "url": "/og/v1--api.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/api/"
+    },
+    "/v1/api/reference/astro/src/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--api--reference--astro--src.webp",
+          "primary": true,
+          "url": "/og/v1--api--reference--astro--src.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/api/reference/astro/src/"
+    },
+    "/v1/api/reference/basic/src/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--api--reference--basic--src.webp",
+          "primary": true,
+          "url": "/og/v1--api--reference--basic--src.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/api/reference/basic/src/"
+    },
+    "/v1/api/reference/core/src/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--api--reference--core--src.webp",
+          "primary": true,
+          "url": "/og/v1--api--reference--core--src.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/api/reference/core/src/"
+    },
+    "/v1/api/reference/expo/src/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--api--reference--expo--src.webp",
+          "primary": true,
+          "url": "/og/v1--api--reference--expo--src.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/api/reference/expo/src/"
+    },
+    "/v1/api/reference/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--api--reference.webp",
+          "primary": true,
+          "url": "/og/v1--api--reference.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/api/reference/"
+    },
+    "/v1/api/reference/nest/src/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--api--reference--nest--src.webp",
+          "primary": true,
+          "url": "/og/v1--api--reference--nest--src.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/api/reference/nest/src/"
+    },
+    "/v1/api/reference/next/src/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--api--reference--next--src.webp",
+          "primary": true,
+          "url": "/og/v1--api--reference--next--src.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/api/reference/next/src/"
+    },
+    "/v1/api/reference/optionals/src/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--api--reference--optionals--src.webp",
+          "primary": true,
+          "url": "/og/v1--api--reference--optionals--src.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/api/reference/optionals/src/"
+    },
+    "/v1/api/reference/react/src/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--api--reference--react--src.webp",
+          "primary": true,
+          "url": "/og/v1--api--reference--react--src.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/api/reference/react/src/"
+    },
+    "/v1/api/reference/typescript/src/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--api--reference--typescript--src.webp",
+          "primary": true,
+          "url": "/og/v1--api--reference--typescript--src.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/api/reference/typescript/src/"
+    },
+    "/v1/frameworks/angular/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--frameworks--angular.webp",
+          "primary": true,
+          "url": "/og/v1--frameworks--angular.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/frameworks/angular/"
+    },
+    "/v1/frameworks/astro/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--frameworks--astro.webp",
+          "primary": true,
+          "url": "/og/v1--frameworks--astro.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/frameworks/astro/"
+    },
+    "/v1/frameworks/expo/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--frameworks--expo.webp",
+          "primary": true,
+          "url": "/og/v1--frameworks--expo.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/frameworks/expo/"
+    },
+    "/v1/frameworks/hono/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--frameworks--hono.webp",
+          "primary": true,
+          "url": "/og/v1--frameworks--hono.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/frameworks/hono/"
+    },
+    "/v1/frameworks/nest/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--frameworks--nest.webp",
+          "primary": true,
+          "url": "/og/v1--frameworks--nest.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/frameworks/nest/"
+    },
+    "/v1/frameworks/next/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--frameworks--next.webp",
+          "primary": true,
+          "url": "/og/v1--frameworks--next.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/frameworks/next/"
+    },
+    "/v1/frameworks/qwik/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--frameworks--qwik.webp",
+          "primary": true,
+          "url": "/og/v1--frameworks--qwik.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/frameworks/qwik/"
+    },
+    "/v1/frameworks/react/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--frameworks--react.webp",
+          "primary": true,
+          "url": "/og/v1--frameworks--react.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/frameworks/react/"
+    },
+    "/v1/frameworks/remix/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--frameworks--remix.webp",
+          "primary": true,
+          "url": "/og/v1--frameworks--remix.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/frameworks/remix/"
+    },
+    "/v1/frameworks/solid/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--frameworks--solid.webp",
+          "primary": true,
+          "url": "/og/v1--frameworks--solid.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/frameworks/solid/"
+    },
+    "/v1/frameworks/svelte/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--frameworks--svelte.webp",
+          "primary": true,
+          "url": "/og/v1--frameworks--svelte.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/frameworks/svelte/"
+    },
+    "/v1/frameworks/typescript/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--frameworks--typescript.webp",
+          "primary": true,
+          "url": "/og/v1--frameworks--typescript.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/frameworks/typescript/"
+    },
+    "/v1/frameworks/vue/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--frameworks--vue.webp",
+          "primary": true,
+          "url": "/og/v1--frameworks--vue.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/frameworks/vue/"
+    },
+    "/v1/guide/changelog/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--guide--changelog.webp",
+          "primary": true,
+          "url": "/og/v1--guide--changelog.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/guide/changelog/"
+    },
+    "/v1/guide/cli/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--guide--cli.webp",
+          "primary": true,
+          "url": "/og/v1--guide--cli.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/guide/cli/"
+    },
+    "/v1/guide/configuration/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--guide--configuration.webp",
+          "primary": true,
+          "url": "/og/v1--guide--configuration.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/guide/configuration/"
+    },
+    "/v1/guide/getting-started/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--guide--getting-started.webp",
+          "primary": true,
+          "url": "/og/v1--guide--getting-started.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/guide/getting-started/"
+    },
+    "/v1/guide/inspector/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--guide--inspector.webp",
+          "primary": true,
+          "url": "/og/v1--guide--inspector.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/guide/inspector/"
+    },
+    "/v1/guide/installation/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--guide--installation.webp",
+          "primary": true,
+          "url": "/og/v1--guide--installation.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/guide/installation/"
+    },
+    "/v1/guide/playgrounds/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--guide--playgrounds.webp",
+          "primary": true,
+          "url": "/og/v1--guide--playgrounds.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/guide/playgrounds/"
+    },
+    "/v1/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1.webp",
+          "primary": true,
+          "url": "/og/v1.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/"
+    },
+    "/v1/packages/basic/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--packages--basic.webp",
+          "primary": true,
+          "url": "/og/v1--packages--basic.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/packages/basic/"
+    },
+    "/v1/packages/core/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--packages--core.webp",
+          "primary": true,
+          "url": "/og/v1--packages--core.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/packages/core/"
+    },
+    "/v1/packages/integrations/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--packages--integrations.webp",
+          "primary": true,
+          "url": "/og/v1--packages--integrations.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/packages/integrations/"
+    },
+    "/v1/packages/playground/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--packages--playground.webp",
+          "primary": true,
+          "url": "/og/v1--packages--playground.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/packages/playground/"
+    },
+    "/v1/packages/tests/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--packages--tests.webp",
+          "primary": true,
+          "url": "/og/v1--packages--tests.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/packages/tests/"
+    },
+    "/v1/tooling/extensions/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--tooling--extensions.webp",
+          "primary": true,
+          "url": "/og/v1--tooling--extensions.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/tooling/extensions/"
+    },
+    "/v1/tooling/formats/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--tooling--formats.webp",
+          "primary": true,
+          "url": "/og/v1--tooling--formats.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/tooling/formats/"
+    },
+    "/v1/tooling/libraries/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--tooling--libraries.webp",
+          "primary": true,
+          "url": "/og/v1--tooling--libraries.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/tooling/libraries/"
+    },
+    "/v1/tooling/overview/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--tooling--overview.webp",
+          "primary": true,
+          "url": "/og/v1--tooling--overview.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/tooling/overview/"
+    },
+    "/v1/tooling/testing/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--tooling--testing.webp",
+          "primary": true,
+          "url": "/og/v1--tooling--testing.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/tooling/testing/"
+    },
+    "/v1/tooling/tools/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v1--tooling--tools.webp",
+          "primary": true,
+          "url": "/og/v1--tooling--tools.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v1/tooling/tools/"
+    },
+    "/v2/api/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--api.webp",
+          "primary": true,
+          "url": "/og/v2--api.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/api/"
+    },
+    "/v2/api/reference/astro/src/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--api--reference--astro--src.webp",
+          "primary": true,
+          "url": "/og/v2--api--reference--astro--src.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/api/reference/astro/src/"
+    },
+    "/v2/api/reference/basic/src/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--api--reference--basic--src.webp",
+          "primary": true,
+          "url": "/og/v2--api--reference--basic--src.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/api/reference/basic/src/"
+    },
+    "/v2/api/reference/core/src/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--api--reference--core--src.webp",
+          "primary": true,
+          "url": "/og/v2--api--reference--core--src.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/api/reference/core/src/"
+    },
+    "/v2/api/reference/expo/src/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--api--reference--expo--src.webp",
+          "primary": true,
+          "url": "/og/v2--api--reference--expo--src.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/api/reference/expo/src/"
+    },
+    "/v2/api/reference/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--api--reference.webp",
+          "primary": true,
+          "url": "/og/v2--api--reference.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/api/reference/"
+    },
+    "/v2/api/reference/integrations/src/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--api--reference--integrations--src.webp",
+          "primary": true,
+          "url": "/og/v2--api--reference--integrations--src.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/api/reference/integrations/src/"
+    },
+    "/v2/api/reference/nest/src/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--api--reference--nest--src.webp",
+          "primary": true,
+          "url": "/og/v2--api--reference--nest--src.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/api/reference/nest/src/"
+    },
+    "/v2/api/reference/next/src/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--api--reference--next--src.webp",
+          "primary": true,
+          "url": "/og/v2--api--reference--next--src.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/api/reference/next/src/"
+    },
+    "/v2/api/reference/react/src/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--api--reference--react--src.webp",
+          "primary": true,
+          "url": "/og/v2--api--reference--react--src.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/api/reference/react/src/"
+    },
+    "/v2/api/reference/typescript/src/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--api--reference--typescript--src.webp",
+          "primary": true,
+          "url": "/og/v2--api--reference--typescript--src.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/api/reference/typescript/src/"
+    },
+    "/v2/frameworks/angular/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--frameworks--angular.webp",
+          "primary": true,
+          "url": "/og/v2--frameworks--angular.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/frameworks/angular/"
+    },
+    "/v2/frameworks/astro/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--frameworks--astro.webp",
+          "primary": true,
+          "url": "/og/v2--frameworks--astro.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/frameworks/astro/"
+    },
+    "/v2/frameworks/expo/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--frameworks--expo.webp",
+          "primary": true,
+          "url": "/og/v2--frameworks--expo.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/frameworks/expo/"
+    },
+    "/v2/frameworks/hono/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--frameworks--hono.webp",
+          "primary": true,
+          "url": "/og/v2--frameworks--hono.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/frameworks/hono/"
+    },
+    "/v2/frameworks/lit/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--frameworks--lit.webp",
+          "primary": true,
+          "url": "/og/v2--frameworks--lit.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/frameworks/lit/"
+    },
+    "/v2/frameworks/nest/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--frameworks--nest.webp",
+          "primary": true,
+          "url": "/og/v2--frameworks--nest.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/frameworks/nest/"
+    },
+    "/v2/frameworks/next/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--frameworks--next.webp",
+          "primary": true,
+          "url": "/og/v2--frameworks--next.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/frameworks/next/"
+    },
+    "/v2/frameworks/nuxt/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--frameworks--nuxt.webp",
+          "primary": true,
+          "url": "/og/v2--frameworks--nuxt.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/frameworks/nuxt/"
+    },
+    "/v2/frameworks/preact/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--frameworks--preact.webp",
+          "primary": true,
+          "url": "/og/v2--frameworks--preact.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/frameworks/preact/"
+    },
+    "/v2/frameworks/qwik/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--frameworks--qwik.webp",
+          "primary": true,
+          "url": "/og/v2--frameworks--qwik.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/frameworks/qwik/"
+    },
+    "/v2/frameworks/react-router/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--frameworks--react-router.webp",
+          "primary": true,
+          "url": "/og/v2--frameworks--react-router.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/frameworks/react-router/"
+    },
+    "/v2/frameworks/react/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--frameworks--react.webp",
+          "primary": true,
+          "url": "/og/v2--frameworks--react.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/frameworks/react/"
+    },
+    "/v2/frameworks/remix/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--frameworks--remix.webp",
+          "primary": true,
+          "url": "/og/v2--frameworks--remix.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/frameworks/remix/"
+    },
+    "/v2/frameworks/slidev/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--frameworks--slidev.webp",
+          "primary": true,
+          "url": "/og/v2--frameworks--slidev.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/frameworks/slidev/"
+    },
+    "/v2/frameworks/solid/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--frameworks--solid.webp",
+          "primary": true,
+          "url": "/og/v2--frameworks--solid.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/frameworks/solid/"
+    },
+    "/v2/frameworks/svelte/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--frameworks--svelte.webp",
+          "primary": true,
+          "url": "/og/v2--frameworks--svelte.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/frameworks/svelte/"
+    },
+    "/v2/frameworks/tanstack-start/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--frameworks--tanstack-start.webp",
+          "primary": true,
+          "url": "/og/v2--frameworks--tanstack-start.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/frameworks/tanstack-start/"
+    },
+    "/v2/frameworks/typescript/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--frameworks--typescript.webp",
+          "primary": true,
+          "url": "/og/v2--frameworks--typescript.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/frameworks/typescript/"
+    },
+    "/v2/frameworks/vite/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--frameworks--vite.webp",
+          "primary": true,
+          "url": "/og/v2--frameworks--vite.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/frameworks/vite/"
+    },
+    "/v2/frameworks/vue/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--frameworks--vue.webp",
+          "primary": true,
+          "url": "/og/v2--frameworks--vue.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/frameworks/vue/"
+    },
+    "/v2/guide/acknowledgements/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--guide--acknowledgements.webp",
+          "primary": true,
+          "url": "/og/v2--guide--acknowledgements.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/guide/acknowledgements/"
+    },
+    "/v2/guide/ai-agents/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--guide--ai-agents.webp",
+          "primary": true,
+          "url": "/og/v2--guide--ai-agents.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/guide/ai-agents/"
+    },
+    "/v2/guide/architecture/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--guide--architecture.webp",
+          "primary": true,
+          "url": "/og/v2--guide--architecture.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/guide/architecture/"
+    },
+    "/v2/guide/changelog/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--guide--changelog.webp",
+          "primary": true,
+          "url": "/og/v2--guide--changelog.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/guide/changelog/"
+    },
+    "/v2/guide/cli/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--guide--cli.webp",
+          "primary": true,
+          "url": "/og/v2--guide--cli.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/guide/cli/"
+    },
+    "/v2/guide/config-builder/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--guide--config-builder.webp",
+          "primary": true,
+          "url": "/og/v2--guide--config-builder.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/guide/config-builder/"
+    },
+    "/v2/guide/configuration/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--guide--configuration.webp",
+          "primary": true,
+          "url": "/og/v2--guide--configuration.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/guide/configuration/"
+    },
+    "/v2/guide/development/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--guide--development.webp",
+          "primary": true,
+          "url": "/og/v2--guide--development.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/guide/development/"
+    },
+    "/v2/guide/doctor-report/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--guide--doctor-report.webp",
+          "primary": true,
+          "url": "/og/v2--guide--doctor-report.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/guide/doctor-report/"
+    },
+    "/v2/guide/getting-started/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--guide--getting-started.webp",
+          "primary": true,
+          "url": "/og/v2--guide--getting-started.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/guide/getting-started/"
+    },
+    "/v2/guide/inspector/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--guide--inspector.webp",
+          "primary": true,
+          "url": "/og/v2--guide--inspector.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/guide/inspector/"
+    },
+    "/v2/guide/installation/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--guide--installation.webp",
+          "primary": true,
+          "url": "/og/v2--guide--installation.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/guide/installation/"
+    },
+    "/v2/guide/lite-migration/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--guide--lite-migration.webp",
+          "primary": true,
+          "url": "/og/v2--guide--lite-migration.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/guide/lite-migration/"
+    },
+    "/v2/guide/migration-v1-to-v2/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--guide--migration-v1-to-v2.webp",
+          "primary": true,
+          "url": "/og/v2--guide--migration-v1-to-v2.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/guide/migration-v1-to-v2/"
+    },
+    "/v2/guide/monorepo/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--guide--monorepo.webp",
+          "primary": true,
+          "url": "/og/v2--guide--monorepo.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/guide/monorepo/"
+    },
+    "/v2/guide/playgrounds/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--guide--playgrounds.webp",
+          "primary": true,
+          "url": "/og/v2--guide--playgrounds.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/guide/playgrounds/"
+    },
+    "/v2/guide/presets/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--guide--presets.webp",
+          "primary": true,
+          "url": "/og/v2--guide--presets.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/guide/presets/"
+    },
+    "/v2/guide/releases/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--guide--releases.webp",
+          "primary": true,
+          "url": "/og/v2--guide--releases.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/guide/releases/"
+    },
+    "/v2/guide/runtime/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--guide--runtime.webp",
+          "primary": true,
+          "url": "/og/v2--guide--runtime.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/guide/runtime/"
+    },
+    "/v2/guide/troubleshooting/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--guide--troubleshooting.webp",
+          "primary": true,
+          "url": "/og/v2--guide--troubleshooting.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/guide/troubleshooting/"
+    },
+    "/v2/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2.webp",
+          "primary": true,
+          "url": "/og/v2.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/"
+    },
+    "/v2/packages/basic/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--packages--basic.webp",
+          "primary": true,
+          "url": "/og/v2--packages--basic.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/packages/basic/"
+    },
+    "/v2/packages/core/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--packages--core.webp",
+          "primary": true,
+          "url": "/og/v2--packages--core.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/packages/core/"
+    },
+    "/v2/packages/integrations/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--packages--integrations.webp",
+          "primary": true,
+          "url": "/og/v2--packages--integrations.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/packages/integrations/"
+    },
+    "/v2/packages/lite/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--packages--lite.webp",
+          "primary": true,
+          "url": "/og/v2--packages--lite.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/packages/lite/"
+    },
+    "/v2/packages/playground/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--packages--playground.webp",
+          "primary": true,
+          "url": "/og/v2--packages--playground.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/packages/playground/"
+    },
+    "/v2/packages/tests/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--packages--tests.webp",
+          "primary": true,
+          "url": "/og/v2--packages--tests.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/packages/tests/"
+    },
+    "/v2/tooling/extensions/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--tooling--extensions.webp",
+          "primary": true,
+          "url": "/og/v2--tooling--extensions.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/tooling/extensions/"
+    },
+    "/v2/tooling/formats/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--tooling--formats.webp",
+          "primary": true,
+          "url": "/og/v2--tooling--formats.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/tooling/formats/"
+    },
+    "/v2/tooling/libraries/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--tooling--libraries.webp",
+          "primary": true,
+          "url": "/og/v2--tooling--libraries.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/tooling/libraries/"
+    },
+    "/v2/tooling/overview/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--tooling--overview.webp",
+          "primary": true,
+          "url": "/og/v2--tooling--overview.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/tooling/overview/"
+    },
+    "/v2/tooling/testing/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--tooling--testing.webp",
+          "primary": true,
+          "url": "/og/v2--tooling--testing.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/tooling/testing/"
+    },
+    "/v2/tooling/tools/": {
+      "images": [
+        {
+          "format": "webp",
+          "height": 630,
+          "output": "v2--tooling--tools.webp",
+          "primary": true,
+          "url": "/og/v2--tooling--tools.webp",
+          "width": 1200
+        }
+      ],
+      "pathname": "/v2/tooling/tools/"
+    }
+  },
+  "version": 1
+}
