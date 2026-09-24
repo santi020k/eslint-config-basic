@@ -88,9 +88,6 @@ catalogs:
     '@playwright/test':
       specifier: ^1.63.0
       version: 1.63.0
-    '@resvg/resvg-js':
-      specifier: ^2.6.2
-      version: 2.6.2
     '@santi020k/commitprompt':
       specifier: ^1.1.0
       version: 1.1.0
@@ -322,9 +319,6 @@ catalogs:
     rxjs:
       specifier: ^7.8.2
       version: 7.8.2
-    satori:
-      specifier: ^0.33.5
-      version: 0.33.5
     semver:
       specifier: ^7.8.5
       version: 7.8.5
@@ -500,9 +494,6 @@ importers:
       '@playwright/test':
         specifier: 'catalog:'
         version: 1.63.0
-      '@resvg/resvg-js':
-        specifier: 'catalog:'
-        version: 2.6.2
       '@santi020k/og':
         specifier: 1.1.1
         version: 1.1.1(@types/node@26.6.2)
@@ -515,9 +506,6 @@ importers:
       lighthouse:
         specifier: 'catalog:'
         version: 13.5.0(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))(supports-color@8.1.1)(yauzl@3.4.0)
-      satori:
-        specifier: 'catalog:'
-        version: 0.33.5
       sharp:
         specifier: 'catalog:'
         version: 0.35.4(@types/node@26.6.2)
