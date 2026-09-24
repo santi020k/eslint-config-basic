@@ -2,10 +2,44 @@
 
 React Router v7 (framework mode) rules, successor to the Remix configuration.
 
-This package is part of the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.
+[![npm version](https://img.shields.io/npm/v/@santi020k/eslint-config-react-router.svg)](https://www.npmjs.com/package/@santi020k/eslint-config-react-router)
+[![npm downloads](https://img.shields.io/npm/dm/@santi020k/eslint-config-react-router.svg)](https://www.npmjs.com/package/@santi020k/eslint-config-react-router)
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/santi020k/eslint-config-basic/blob/main/LICENSE)
 
-- Docs: [React Router guide](https://eslint.santi020k.com/frameworks/react-router)
-- Repository: [santi020k/eslint-config-basic](https://github.com/santi020k/eslint-config-basic)
-- Author: [santi020k](https://santi020k.com)
+## Installation
 
-The canonical documentation lives on the Starlight site, so this README intentionally stays short to avoid duplication.
+```sh
+npm install -D eslint @santi020k/eslint-config-basic @santi020k/eslint-config-react-router
+```
+
+## Usage
+
+The Basic composer can detect this framework from the project, or you can make
+the choice explicit:
+
+```js
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig({
+  frameworks: { 'react-router': true }
+})
+```
+
+Use `defineConfig()` with no options when auto-detection is enough.
+
+## Compatibility
+
+- Node.js: `>=22.19.0`
+- ESLint: `^10.0.0`
+- ESM and ESLint flat config
+
+## Documentation
+
+- [React Router guide](https://eslint.santi020k.com/frameworks/react-router)
+- [Configuration guide](https://eslint.santi020k.com/guide/configuration/)
+- [Package family and repository](https://github.com/santi020k/eslint-config-basic)
+- [Changelog](https://github.com/santi020k/eslint-config-basic/blob/main/packages/react-router/CHANGELOG.md)
+
+## License
+
+MIT © [santi020k](https://santi020k.com). See the [license](https://github.com/santi020k/eslint-config-basic/blob/main/LICENSE).

@@ -1,7 +1,8 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { collectAstroContentCards } from '@santi020k/og/astro'
+import { pathnameOutput } from '@santi020k/og'
+import { collectContentCards } from '@santi020k/og/content'
 import { definePresetConfig } from '@santi020k/og/presets'
 
 const directory = path.dirname(fileURLToPath(import.meta.url))
@@ -26,7 +27,7 @@ const sectionFor = slug => {
 }
 
 export default definePresetConfig({
-  cards: () => collectAstroContentCards({
+  cards: () => collectContentCards({
     directory: 'src/content/docs',
     map: entry => ({
       badge: sectionFor(entry.slug),
@@ -38,14 +39,27 @@ export default definePresetConfig({
         path.basename(entry.slug),
       variant: 'docs'
     }),
+    output: entry => pathnameOutput(`/${entry.slug.toLowerCase()}/`),
+    route: entry => `/${entry.slug.toLowerCase()}/`,
     root
   }),
   clean: true,
   concurrency: 'auto',
   outputDirectory: 'public/og',
+  routeManifest: { file: 'public/og/manifest.json', publicPath: '/og' },
   preset: {
-    brand: { domain: 'eslint.santi020k.com', name: 'ESLint Config' },
-    theme: { accent: '#4b32c3', background: '#10121d', panel: '#1b2032' },
+    brand: {
+      domain: 'eslint.santi020k.com',
+      logo: 'public/logo-square.svg',
+      name: 'ESLint Config'
+    },
+    theme: {
+      accent: '#a56ef7',
+      background: '#110c1d',
+      foreground: '#dfdde3',
+      muted: '#b6b2bd',
+      panel: '#1c1528'
+    },
     variant: 'docs'
   },
   root

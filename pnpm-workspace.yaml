@@ -143,7 +143,9 @@ catalogs:
 allowBuilds:
   '@prisma/engines': true
   '@scarf/scarf': false
-  cypress: true
+  # This workspace only type-checks and lints the Cypress playground. Avoid
+  # downloading the unused desktop binary during every clean install.
+  cypress: false
   esbuild: true
   msgpackr-extract: false
   prisma: false
