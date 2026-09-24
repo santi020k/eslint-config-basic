@@ -143,7 +143,9 @@ catalogs:
 allowBuilds:
   '@prisma/engines': true
   '@scarf/scarf': false
-  cypress: true
+  # This workspace only type-checks and lints the Cypress playground. Avoid
+  # downloading the unused desktop binary during every clean install.
+  cypress: false
   esbuild: true
   msgpackr-extract: false
   prisma: false
@@ -173,6 +175,7 @@ minimumReleaseAgeExclude:
   - '@nestjs/core@12.1.0'
   - '@nestjs/swagger@12.0.2'
   - dompurify@3.4.16
+  - '@santi020k/og'
 
 overrides:
   deepmerge-ts@<8.0.0: 8.0.0

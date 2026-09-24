@@ -53,7 +53,7 @@
     },
     {
       "description": "Git hooks and commit tooling",
-      "matchPackageNames": ["husky", "lint-staged"],
+      "matchPackageNames": ["lint-staged"],
       "groupName": "git hooks",
       "groupSlug": "git-hooks"
     },

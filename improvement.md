@@ -7,9 +7,9 @@ fixture, benchmark, or tracked issue before they are marked complete.
 
 ## Active follow-ups
 
-No implementation or consumer-adoption follow-up remains. The current changeset
-still needs a normal patch release before capability-gated workflows can use
-`config-types`, compact rules-only snapshots, and the direct pnpm-bin fix.
+No implementation, release, or consumer-adoption follow-up remains for the
+capabilities recorded in this archive. `config-types`, compact rules-only
+snapshots, and the direct pnpm-bin fix shipped in v3.5.3.
 
 When a follow-up is implemented, add the regression test or verification command
 next to its completion note. This keeps the archive useful without turning it

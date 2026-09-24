@@ -1,46 +1,35 @@
 ---
-import Default from '@astrojs/starlight/components/Head.astro'
+import type { StarlightRouteData } from '@astrojs/starlight/route-data'
+import StarlightMetadataHead from '@santi020k/og/astro/starlight'
+import { serializeJsonLd, webPageSchema } from '@santi020k/og/schema'
 
-const trimOuterSlashes = (value: string) => value.replace(/^\/+|\/+$/g, '')
+const route: StarlightRouteData = Astro.locals.starlightRoute
+const data = route.entry.data as Readonly<Record<string, unknown>>
+const title = typeof data.title === 'string' ? data.title : route.siteTitle
 
-const safeDecodeURIComponent = (value: string) => {
-  try {
-    return decodeURIComponent(value)
-  } catch {
-    return value
-  }
-}
+const description = typeof data.description === 'string' && data.description.trim() ?
+  data.description :
+  `${title} documentation.`
 
-const getOgSlug = (pathname: string) => trimOuterSlashes(pathname)
-  .split('/')
-  .filter(Boolean)
-  .map(segment => encodeURIComponent(safeDecodeURIComponent(segment)).replaceAll('%', '~'))
-  .join('--')
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).href
+const indexable = Astro.url.pathname !== '/404' && Astro.url.pathname !== '/404/'
 
-const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null
-
-const getPageTitle = (locals: unknown) => {
-  if (!isRecord(locals)) return 'ESLint Config'
-
-  const route = locals.starlightRoute
-
-  if (!isRecord(route) || !isRecord(route.entry) || !isRecord(route.entry.data))
-    return 'ESLint Config'
-
-  return typeof route.entry.data.title === 'string' ?
-    route.entry.data.title :
-    'ESLint Config'
-}
-
-const slug = getOgSlug(Astro.url.pathname)
-const ogImagePath = `/og/${slug || 'index'}.webp`
-const site = Astro.site ?? new URL('https://eslint.santi020k.com/')
-const ogImageURL = new URL(ogImagePath, site).href
-const pageTitle = getPageTitle(Astro.locals)
-const ogImageAlt = `${pageTitle} — ESLint Config`
+const schema = indexable ?
+serializeJsonLd(webPageSchema({
+  description,
+  inLanguage: route.lang,
+  name: title,
+  url: canonical
+})) :
+undefined
 ---
 
-<Default><slot /></Default>
+<StarlightMetadataHead {...Astro.props}><slot /></StarlightMetadataHead>
+<meta name="robots" content={indexable ? 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' : 'noindex, nofollow'} />
+<meta name="twitter:url" content={canonical} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+{schema && <script type="application/ld+json" is:inline set:html={schema} />}
 <link id="s2k-theme-favicon" rel="icon" type="image/svg+xml" href="/favicon-light.svg" />
 <meta id="s2k-theme-color" name="theme-color" content="#faf9fb" />
 <script is:inline>
@@ -77,9 +66,3 @@ const ogImageAlt = `${pageTitle} — ESLint Config`
     document.addEventListener('astro:page-load', updateThemeAssets)
   })()
 </script>
-<meta property="og:image" content={ogImageURL} />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content={ogImageAlt} />
-<meta name="twitter:image" content={ogImageURL} />
-<meta name="twitter:image:alt" content={ogImageAlt} />
