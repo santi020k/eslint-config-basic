@@ -23,7 +23,8 @@ code blocks are keyboard focusable for horizontal scrolling. Production builds f
 content sync so changes to rendering hooks apply to every cached documentation page.
 
 - `src/styles/starlight.css`: theme bridge and existing documentation/tool styles.
-- `src/styles/reading.css`: shared typography, reading surfaces, and navigation motion.
+- `src/styles/reading.css`: shared typography, reading surfaces, quiet feedback, and navigation motion.
+- `src/components/Footer.astro`: split project identity and resource links with author and license credits.
 - `src/styles/navigation.css`: sculpted header and native sidebar styling.
 - `src/styles/home.css`: editorial homepage compositions.
 

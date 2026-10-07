@@ -63,8 +63,45 @@ main h1 {
   padding-inline: 0;
 }
 
-.s2k-project-footer__heading strong {
+/* Footer and feedback stay on the reading canvas rather than separate cards. */
+.s2k-project-footer,
+.s2k-docs-feedback {
+  background: transparent;
+}
+
+.s2k-docs-feedback {
+  padding: 1.5rem 0;
+  border: 0;
+  border-block: 1px solid hsl(var(--line) / 0.7);
+  border-radius: 0;
+}
+
+.s2k-docs-feedback h2 {
   font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.s2k-docs-feedback .s2k-tool-status:empty {
+  min-height: 0;
+  margin: 0;
+}
+
+.s2k-docs-feedback__community,
+.s2k-docs-feedback__community .ui-link {
+  border: 0;
+  padding-top: 0;
+  color: hsl(var(--ink-soft));
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+:root[data-theme='dark'] .s2k-docs-feedback__community .ui-link {
+  color: hsl(var(--ink-soft));
+}
+
+.s2k-docs-feedback__community .ui-link:hover {
+  color: hsl(var(--s2k-nav-focus));
 }
 
 /* Native document transitions retain browser navigation and Starlight lifecycle. */
