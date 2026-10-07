@@ -50,6 +50,9 @@ installation token or a short-expiry fine-grained token restricted to this
 repository with Contents write and Workflows write. Do not copy a developer's
 broad CLI credential or commit a token. Remove the temporary secret after recovery.
 Normal publishing continues to use the built-in GitHub token and npm OIDC.
+The credential is available only to the mutation step on a separate clean runner.
+Artifact and consumer verification jobs use read-only built-in tokens; the
+mutation job executes only current-main code and reads historical files as data.
 The credential does not change artifact source checks or immutable tag policy.
 See [GitHub release API permissions](https://docs.github.com/en/rest/releases/releases#create-a-release).
 
