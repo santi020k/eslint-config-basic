@@ -56,7 +56,7 @@ for (const width of [320, 1440]) {
 
       expect(bounds.bottom).toBeLessThanOrEqual(900)
 
-      await input.fill('purple elephant astronaut')
+      await input.fill('x'.repeat(80))
 
       await expect(dialog.locator('.pagefind-ui__message')).toContainText(/no results/iu)
 
