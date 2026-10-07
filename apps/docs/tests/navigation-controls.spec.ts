@@ -255,18 +255,20 @@ for (const { icons, motion, properties } of [
       { expected: properties, opacity: '1', state: 'open' },
       { expected: exitProperties, opacity: '0', state: 'closed' }
     ]) {
-      const transitions = await page.locator('.sl-menu-button').evaluate(async element => {
+      const transitions = await page.locator('.sl-menu-button').evaluate(element => {
         const pane = document.querySelector('#starlight__sidebar')
 
         if (!(element instanceof HTMLButtonElement)) {
           throw new Error('Expected the native mobile menu button')
         }
 
-        element.click()
+        // Flush the previous state before changing it, then sample in the same
+        // task so a busy runner cannot finish the animation between frames.
+        element.getAnimations({ subtree: true })
 
-        await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => {
-          resolve()
-        })))
+        pane?.getAnimations()
+
+        element.click()
 
         const iconAnimations = element.getAnimations({ subtree: true })
 
