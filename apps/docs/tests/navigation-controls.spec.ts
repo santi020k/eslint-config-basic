@@ -154,6 +154,8 @@ const expectCenteredMenuIcon = async (menu: Locator, iconName: string) => {
 
   await expect(icon).toBeVisible()
 
+  await expect(icon).toHaveCSS('opacity', '1')
+
   const offset = await icon.evaluate(element => {
     const bounds = element.getBoundingClientRect()
     const buttonBounds = element.closest('button')?.getBoundingClientRect()
@@ -216,7 +218,7 @@ for (const width of [320, 390, 768]) {
 
       await expect(sidebar).toBeVisible()
 
-      await expect(menu.locator('.open-menu')).toBeHidden()
+      await expect(menu.locator('.open-menu')).toHaveCSS('opacity', '0')
 
       await expect(page.locator('body')).toHaveCSS('overflow', 'hidden')
 
@@ -233,4 +235,64 @@ for (const width of [320, 390, 768]) {
       await expect(menu.locator('.open-menu')).toBeVisible()
     })
   }
+}
+
+for (const { icons, motion, properties } of [
+  { icons: ['opacity', 'transform'], motion: 'no-preference', properties: ['filter', 'opacity', 'transform'] },
+  { icons: [], motion: 'reduce', properties: [] }
+] as const) {
+  test(`${motion} mobile drawer transitions on entry and exit`, async ({ page }) => {
+    await page.setViewportSize({ height: 844, width: 390 })
+
+    await page.emulateMedia({ reducedMotion: motion })
+
+    await page.goto('/frameworks/astro/')
+
+    const sidebar = page.locator('#starlight__sidebar')
+    const exitProperties = await page.evaluate(expected => CSS.supports('overlay', 'auto') ? expected : [], properties)
+
+    for (const { expected, opacity, state } of [
+      { expected: properties, opacity: '1', state: 'open' },
+      { expected: exitProperties, opacity: '0', state: 'closed' }
+    ]) {
+      const transitions = await page.locator('.sl-menu-button').evaluate(async element => {
+        const pane = document.querySelector('#starlight__sidebar')
+
+        if (!(element instanceof HTMLButtonElement)) {
+          throw new Error('Expected the native mobile menu button')
+        }
+
+        element.click()
+
+        await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => {
+          resolve()
+        })))
+
+        const iconAnimations = element.getAnimations({ subtree: true })
+
+        return {
+          icons: [...new Set(iconAnimations.flatMap(animation => animation instanceof CSSTransition ?
+            [animation.transitionProperty].filter(property => ['opacity', 'transform'].includes(property)) :
+            []))].sort(),
+          pane: pane?.getAnimations().flatMap(animation => animation instanceof CSSTransition ?
+            [animation.transitionProperty].filter(property => ['filter', 'opacity', 'transform'].includes(property)) :
+            []).sort()
+        }
+      })
+
+      expect(transitions.pane, state).toEqual(expected)
+
+      expect(transitions.icons, state).toEqual(icons)
+
+      await expect(sidebar).toHaveCSS('opacity', opacity)
+    }
+
+    await expect(sidebar).toBeHidden()
+
+    await page.getByRole('button', { name: 'Menu', exact: true }).press('Enter')
+
+    await expect(sidebar).toHaveCSS('filter', 'none')
+
+    await expect(sidebar).toHaveCSS('transform', 'none')
+  })
 }

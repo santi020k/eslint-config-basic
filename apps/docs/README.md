@@ -13,7 +13,7 @@ theme family: locally served Montserrat, semantic theme colors, solid reading su
 fine rules, and restrained violet accents. The header uses the website's option 2, Split
 studio: a standalone identity and a rounded navigation cluster. It composes Starlight's
 native indexed search with starting hints and no-result guidance, plus a Lumen theme toggle and GitHub icon button with matching restrained hover states; the mobile sidebar keeps its native
-popover, keyboard, and focus behavior. The compact mobile cluster groups search, theme, and menu with evenly spaced 44px controls; the centered menu/close icon uses a quiet surface and an accented open state.
+popover, keyboard, and focus behavior. The compact mobile cluster groups search, theme, and menu with evenly spaced 44px controls; the centered menu/close icon uses a quiet surface and an accented open state. Mobile menu icons crossfade with a small rotation, while the drawer fades and moves 8px with a brief 2px blur on entry and exit. Reduced motion switches states immediately without blur or movement. Browsers without discrete overlay transitions close the native drawer immediately while retaining icon motion.
 
 Lumen v4 provides the homepage's bare statistics, command tabs, and short heading reveals.
 Long sections remain visible independently of reveal thresholds. Native cross-document
