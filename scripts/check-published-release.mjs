@@ -1,5 +1,5 @@
 import { execFileSync, spawnSync } from 'node:child_process'
-import { mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { setTimeout } from 'node:timers/promises'
@@ -97,11 +97,12 @@ const waitForProvenance = async ({ name, version, commit, repository }) => {
   }
 }
 
-export const verifyPublishedConsumer = ({ basic, full }) => {
+export const verifyPublishedConsumer = ({ basic, full, packages = [] }) => {
   const consumer = mkdtempSync(join(tmpdir(), 'eslint-published-smoke-'))
 
   try {
     writeFileSync(join(consumer, 'package.json'), JSON.stringify({ private: true, type: 'module', dependencies: {
+      ...Object.fromEntries(packages.map(({ name, version }) => [name, version])),
       [basic.name]: basic.version, [full.name]: full.version, eslint: '^10.0.0', typescript: '^6.0.0'
     } }))
 
@@ -146,9 +147,10 @@ if (process.argv[1]?.endsWith('check-published-release.mjs')) {
 
   const packages = readdirSync('packages').flatMap(directory => {
     const path = `packages/${directory}/package.json`
-    let manifest
 
-    try { manifest = JSON.parse(readFileSync(path, 'utf8')) } catch { return [] }
+    if (!existsSync(path)) return []
+
+    const manifest = JSON.parse(readFileSync(path, 'utf8'))
 
     if (manifest.private) return []
 
@@ -171,7 +173,8 @@ if (process.argv[1]?.endsWith('check-published-release.mjs')) {
 
   verifyPublishedConsumer({
     basic: JSON.parse(readFileSync('packages/basic/package.json', 'utf8')),
-    full: JSON.parse(readFileSync('packages/full/package.json', 'utf8'))
+    full: JSON.parse(readFileSync('packages/full/package.json', 'utf8')),
+    packages
   })
 
   console.log(`Verified ${packages.length} published packages, provenance, release tags, and Basic/Full consumer behavior at ${commit}.`)

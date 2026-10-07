@@ -50,10 +50,16 @@ describe('published release provenance', () => {
   })
 })
 
-const fetchDocs = ({ deployedCommit = commit, status = 200, html = '<h1>Docs</h1>santi020k', search = 'export{}' } = {}): typeof fetch => input => {
+const fetchDocs = ({ deployedCommit = commit, status = 200, html = '<h1>Docs</h1>santi020k', search = 'export{}', pageCount = 1 } = {}): typeof fetch => input => {
   const path = new URL(input instanceof Request ? input.url : input).pathname
   if (path === '/release-build.json') return Promise.resolve(Response.json({ commit: deployedCommit }))
-  return Promise.resolve(new Response(path === '/pagefind/pagefind.js' ? search : html, { status }))
+  if (path === '/pagefind/pagefind-entry.json') {
+    return Promise.resolve(Response.json({ languages: { en: { hash: 'en_index', wasm: 'en', page_count: pageCount } } }))
+  }
+
+  const contentType = path.endsWith('.js') ? 'text/javascript' : 'application/octet-stream'
+
+  return Promise.resolve(new Response(path === '/pagefind/pagefind.js' ? search : html, { status, headers: { 'content-type': contentType } }))
 }
 
 describe('live documentation smoke checks', () => {
@@ -65,7 +71,8 @@ describe('live documentation smoke checks', () => {
     { deployedCommit: 'old' },
     { status: 404 },
     { html: 'not documentation' },
-    { search: '' }
+    { search: '' },
+    { pageCount: 0 }
   ])('rejects stale deployments, failed routes, broken shells, and empty search %#', options => expect(verifyLiveDocs({ baseURL: 'https://docs.example/', expectedCommit: commit, fetcher: fetchDocs(options) })).rejects.toThrow())
 })
 

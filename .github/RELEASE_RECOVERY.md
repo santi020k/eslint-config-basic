@@ -33,7 +33,8 @@ Fix an unrecoverable artifact with a new commit and version.
 After publishing, `scripts/check-published-release.mjs` verifies each versioned npm
 package's artifact integrity and provenance source/workflow, umbrella/package tags,
 and stable GitHub Releases against the merged commit. It installs registry versions
-of Basic and Full in a temporary consumer, verifies npm signatures/attestations, and
+of every versioned package plus Basic and Full in a temporary consumer, verifies npm
+signatures/attestations, and
 checks both clean linting and rejection of an unused variable. A recovery dispatch
 compares the release commit against its first parent; if `main` has advanced, rerun
 the original workflow instead. The docs deployment stamps its artifact with that

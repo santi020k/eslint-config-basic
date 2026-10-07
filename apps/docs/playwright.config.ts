@@ -27,12 +27,12 @@ export default defineConfig({
     },
     {
       name: 'firefox',
-      testMatch: ['navigation-controls.spec.ts', 'design-system.spec.ts'],
+      testMatch: ['navigation-controls.spec.ts', 'design-system.spec.ts', 'sidebar.spec.ts'],
       use: { ...devices['Desktop Firefox'] }
     },
     {
       name: 'webkit',
-      testMatch: ['navigation-controls.spec.ts', 'design-system.spec.ts'],
+      testMatch: ['navigation-controls.spec.ts', 'design-system.spec.ts', 'sidebar.spec.ts'],
       use: { ...devices['Desktop Safari'] }
     }
   ],

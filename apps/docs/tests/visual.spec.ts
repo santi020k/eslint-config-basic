@@ -18,7 +18,7 @@ for (const width of [390, 1440]) {
 
         await expect(page).toHaveScreenshot(`${name}-${width}-${colorScheme}.png`, {
           fullPage: true,
-          mask: [page.locator('.sl-flex.last-updated')]
+          mask: [page.locator('main time[datetime]')]
         })
       })
     }

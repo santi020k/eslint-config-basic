@@ -9,6 +9,7 @@ export interface PublishedProvenance {
 export function verifyProvenance(input: PublishedProvenance): void
 
 export interface PublishedConsumerOptions {
+  packages?: { name: string, version: string }[]
   basic: { name: string, version: string }
   full: { name: string, version: string }
 }
