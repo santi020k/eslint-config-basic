@@ -22,10 +22,10 @@ export const updateCommands = [
   <div>
     <Badge variant="success">Quality and documentation release</Badge>
     <h2>Reliable configuration. Clearer documentation.</h2>
-    <p>Keep Astro frontmatter linting dependable, preserve integration defaults when upgrading plugins, and explore faster documentation with contextual support.</p>
+    <p>Keep Astro frontmatter linting dependable, preserve integration defaults when upgrading plugins, and explore the sculpted documentation design with clearer search, navigation, and contextual support.</p>
   </div>
   <div class="s2k-release-version">
-    <span>Current package line</span>
+    <span>Release candidate</span>
     <strong>v{siteMetrics.packageVersion}</strong>
   </div>
 </div>
@@ -54,14 +54,14 @@ export const updateCommands = [
   <Card as="article">
     <Badge variant="secondary">Read</Badge>
     <h3>Faster accessible documentation</h3>
-    <p>Lumen 4 brings shared motion and interaction primitives. Full-character WOFF2 fonts reduce downloads, and long Doctor terminal output stays inside its mobile viewport.</p>
+    <p>The sculpted reading layout and split navigation use Lumen 4 controls with improved search and theme interactions. Tables and code blocks support keyboard scrolling, reduced motion keeps content visible, and long Doctor reports stay inside the mobile viewport.</p>
     <ButtonLink href="/guide/doctor-report/" variant="secondary" showArrow>Analyze report</ButtonLink>
   </Card>
 </div>
 
 ## Upgrade the package
 
-Choose the command for the repository's package manager:
+Use these commands after the candidate has been published. Choose the command for your repository's package manager; it updates within your declared dependency range. Moving from v2 requires the [v2-to-v3 migration guide](/guide/migration-v2-to-v3/).
 
 <CodeTabs
   ariaLabel="Choose a package manager"
@@ -72,7 +72,29 @@ Choose the command for the repository's package manager:
 
 After upgrading, run:
 
-<RunnerTabs args={['doctor', 'inspect']} />
+<RunnerTabs args={['compatibility', 'doctor', 'inspect']} />
+
+## Verify your upgrade
+
+1. Before changing dependencies, save an effective-rule snapshot with
+   `basic-eslint snapshot`. If your current version does not support snapshots,
+   record the existing lint output instead.
+2. Update Basic and the framework or feature packs your project uses. Packages
+   within the same major can have different minor and patch versions; follow
+   their declared dependency and peer ranges instead of matching every version.
+3. Run `basic-eslint compatibility` to check Node.js, ESLint, and installed
+   package ranges, then `basic-eslint doctor` and `basic-eslint inspect` to
+   diagnose setup problems and confirm detected features. Optional packs may
+   require a newer Node.js version than the lean Basic package.
+4. Run `basic-eslint diff` against the pre-upgrade snapshot, when available.
+   Exit code 1 means effective rules changed; review those changes before
+   refreshing the snapshot.
+5. Run your lint script with zero allowed warnings, plus your project's type
+   checks and tests. See the [editor and CI recipe](/guide/getting-started/#editor-and-ci)
+   for a minimal lint script and workflow.
+
+These checks validate your project after an upgrade. Maintainer release preflight
+remains a separate gate.
 
 ## Maintainer release process
 
@@ -82,8 +104,11 @@ preflight and a dependency audit before publishing from the merged main commit.
 See the [release preparation and recovery guide](https://github.com/santi020k/eslint-config-basic/blob/main/.github/RELEASE_RECOVERY.md)
 for validation, migration notes, recovery, and post-release verification.
 
-## Moving from v1
+## Moving from an older major
 
-This release does not change the major-version migration contract. Existing v1 users should follow the [v1-to-v2 migration guide](/guide/migration-v1-to-v2/) and use `migrate --write` only after reviewing the proposed framework changes.
+For v2, follow the [v2-to-v3 migration guide](/guide/migration-v2-to-v3/)
+for the lean package boundary, optional package installs, and moved imports.
+For v1, start with [v1-to-v2](/guide/migration-v1-to-v2/), then continue to
+v2-to-v3. Review migration output before using `--write`.
 
 For package-level release notes, continue to the [changelog index](/guide/changelog/).
