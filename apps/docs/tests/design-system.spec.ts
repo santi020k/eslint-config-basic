@@ -163,21 +163,19 @@ for (const colorScheme of ['light', 'dark'] as const) {
 
       await page.goto('/guide/installation/')
 
-      const brand = page.locator('.s2k-docs-dock .site-title')
       const controls = page.locator('.s2k-docs-dock__controls')
       const search = controls.locator('button[data-open-modal]')
-      const brandBox = await brand.boundingBox()
-      const controlsBox = await controls.boundingBox()
+      const brandRight = await page.locator('.s2k-docs-dock .site-title').evaluate(element => element.getBoundingClientRect().right)
 
-      expect(brandBox).not.toBeNull()
+      const controlsBox = await controls.evaluate(element => {
+        const { left, right } = element.getBoundingClientRect()
 
-      expect(controlsBox).not.toBeNull()
+        return { left, right }
+      })
 
-      if (!brandBox || !controlsBox) throw new Error('Navigation must have visible bounds')
+      expect(brandRight).toBeLessThan(controlsBox.left)
 
-      expect(brandBox.x + brandBox.width).toBeLessThan(controlsBox.x)
-
-      expect(controlsBox.x + controlsBox.width).toBeLessThanOrEqual(width)
+      expect(controlsBox.right).toBeLessThanOrEqual(width)
 
       await search.focus()
 
@@ -188,21 +186,41 @@ for (const colorScheme of ['light', 'dark'] as const) {
       await page.keyboard.press('Escape')
 
       await expect(search).toBeFocused()
-
-      if (width < 800) {
-        const menuBox = await page.locator('.sl-menu-button').boundingBox()
-        const searchBox = await search.boundingBox()
-
-        if (!menuBox || !searchBox) throw new Error('Mobile search and menu must be visible')
-
-        expect(searchBox.x + searchBox.width).toBeLessThanOrEqual(menuBox.x)
-
-        expect(menuBox.x + menuBox.width).toBeLessThanOrEqual(controlsBox.x + controlsBox.width)
-      } else {
-        await expect(controls.locator('#s2k-version-switcher select')).toBeVisible()
-
-        await expect(controls.locator('starlight-theme-select select')).toBeVisible()
-      }
     }
+  })
+
+  test(`mobile ${colorScheme} search and menu do not overlap`, async ({ page }) => {
+    await page.emulateMedia({ colorScheme })
+
+    for (const width of [320, 390]) {
+      await page.setViewportSize({ height: 900, width })
+
+      await page.goto('/guide/installation/')
+
+      const menuBox = await page.locator('.sl-menu-button').evaluate(element => {
+        const { left, right } = element.getBoundingClientRect()
+
+        return { left, right }
+      })
+
+      const controlsRight = await page.locator('.s2k-docs-dock__controls').evaluate(element => element.getBoundingClientRect().right)
+      const searchRight = await page.locator('button[data-open-modal]').evaluate(element => element.getBoundingClientRect().right)
+
+      expect(searchRight).toBeLessThanOrEqual(menuBox.left)
+
+      expect(menuBox.right).toBeLessThanOrEqual(controlsRight)
+    }
+  })
+
+  test(`desktop ${colorScheme} cluster contains version and theme controls`, async ({ page }) => {
+    await page.emulateMedia({ colorScheme })
+
+    await page.goto('/guide/installation/')
+
+    const controls = page.locator('.s2k-docs-dock__controls')
+
+    await expect(controls.locator('#s2k-version-switcher select')).toBeVisible()
+
+    await expect(controls.locator('starlight-theme-select select')).toBeVisible()
   })
 }
