@@ -12,7 +12,6 @@ catalog:
   '@axe-core/playwright': ^4.13.0
   '@changesets/changelog-github': ^1.0.1
   '@changesets/cli': ^3.0.3
-  '@commitlint/cli': ^21.2.3
   '@commitlint/config-conventional': ^21.2.3
   '@cspell/eslint-plugin': ^10.3.6
   '@darraghor/eslint-plugin-nestjs-typed': ^6.18.0
@@ -31,7 +30,6 @@ catalog:
   '@nestjs/swagger': ^12.0.2
   '@nuxt/eslint-plugin': ^1.17.0
   '@playwright/test': ^1.63.0
-  '@resvg/resvg-js': ^2.6.2
   '@santi020k/commitprompt': ^1.1.0
   '@santi020k/eslint-plugin-astro-doctor': ^1.4.0
   '@stencil/eslint-plugin': ^1.4.0
@@ -101,17 +99,13 @@ catalog:
   eslint-plugin-zod: ^5.0.0
   globals: ^17.13.0
   graphql: ^16.11.0
-  husky: ^9.1.7
   knip: ^6.39.0
   lint-staged: ^17.6.0
   lighthouse: ^13.5.0
-  nuxt: ^4.6.0
-  oxlint: ^1.87.0
   publint: ^0.3.25
   react: 19.3.0
   react-dom: 19.3.0
   rxjs: ^7.8.2
-  satori: ^0.35.0
   semver: ^7.8.5
   sharp: ^0.35.5
   storybook: ^10.6.1
@@ -155,8 +149,6 @@ allowBuilds:
 
 peerDependencyRules:
   allowedVersions:
-    # Nuxt's CLI provides cac 7, but @bomb.sh/tab still declares only cac 6.
-    '@bomb.sh/tab>cac': ^7.0.0
     eslint: "*"
     typescript: "*"
 
@@ -212,8 +204,3 @@ overrides:
   postcss-selector-parser@<7.1.6: 7.1.6
   '@graphql-tools/utils@<=12.0.0': 12.0.3
   '@modelcontextprotocol/client@>=2.0.0 <2.2.0': 2.3.1
-  # Nuxt devtools import adapter is maintained in patches/@nuxt__devtools@3.4.2.patch.
-  '@nuxt/devtools>simple-git@<4.0.1': 4.0.2
-
-patchedDependencies:
-  '@nuxt/devtools@3.4.2': patches/@nuxt__devtools@3.4.2.patch

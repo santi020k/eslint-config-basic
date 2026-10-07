@@ -63,22 +63,6 @@
       "wantedRange": "^4",
       "owner": "packages/libraries",
       "removalCondition": "Remove when the AI SDK dependency graph no longer mixes Zod 3 and Zod 4 peers."
-    },
-    {
-      "kind": "incompatible",
-      "peer": "cac",
-      "introducedBy": "devframe",
-      "wantedRange": "^7.0.0",
-      "owner": "packages/playground/nuxt",
-      "removalCondition": "Remove when Nuxt's devtools chain resolves devframe 0.8 with cac 7 instead of tsup's cac 6."
-    },
-    {
-      "kind": "incompatible",
-      "peer": "devframe",
-      "introducedBy": "@devframes/agentic",
-      "wantedRange": "1.0.0",
-      "owner": "packages/playground/slidev",
-      "removalCondition": "Remove when Slidev aligns @vitejs/devtools-kit's devframe 0.8 peer with @devframes/agentic's devframe 1 peer."
     }
   ]
 }

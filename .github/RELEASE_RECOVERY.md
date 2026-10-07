@@ -39,17 +39,31 @@ The 3.6.0 preparation upgrades the supported dependency graph and documentation 
 npm Lumen Astro 4. It must pass the canonical checks and the high-severity audit
 before remote integration or publication.
 
-The 2026-10-07 audit still reports upstream advisories with no published fix:
+The final 2026-10-07 audit reports one high finding, no moderate findings, and
+no critical findings. Removing unused Nuxt and Slidev playground runtimes removed
+525 packages and the `node-forge` and `sprintf-js` advisory paths. Their ESLint
+adapter playgrounds remain covered by lint and type checks.
 
-| Package | Severity | Affected surface | Tracking |
+| Package | Severity | Dependency paths | Tracking |
 | --- | --- | --- | --- |
-| `braces` | High | GraphQL formats and Full consumers | [GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm) |
-| `node-forge` | High | Nuxt playground development server | [GHSA-86w9-cpqp-85rv](https://github.com/advisories/GHSA-86w9-cpqp-85rv) |
-| `sprintf-js` | Moderate | Slidev playground frontmatter tooling | [GHSA-hp3w-g68c-fv3c](https://github.com/advisories/GHSA-hp3w-g68c-fv3c) |
+| `braces` 3.0.3 | High | Published Next and Formats packages, transitively Full; private Expo playground through React Native and Metro | [GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm) |
 
-Upgrade to reviewed, published fixes when available and rerun `pnpm audit` and
+Next's `settings.next.rootDir` and GraphQL configuration schema/document glob
+pointers reach the affected glob tooling. Deeply nested brace patterns can exhaust
+the JavaScript stack. This concerns glob configuration input; it does not establish
+that ordinary GraphQL source text triggers the issue. The published Expo ESLint
+package has no `braces` dependency path; its private runtime playground does.
+
+The official npm registry still publishes `braces` 3.0.3 as latest, and the advisory
+has no patched version. Upstream fixes remain unmerged, including
+[PR #82](https://github.com/micromatch/braces/pull/82). A local pnpm patch would not
+propagate into the published packages' consumer dependency graphs or clear this
+advisory. An unofficial prerelease fork requires a separate compatibility and
+maintenance decision.
+
+Upgrade to a reviewed, published fix when available and rerun `pnpm audit` and
 `pnpm run release:check`. Do not add advisory ignores or use nonexistent versions.
-The two high findings block the release workflow.
+The remaining high finding blocks the release workflow.
 
 Also resolve the advertised Node compatibility before publishing. The family
 currently advertises `>=22.19.0`, but the installed dependencies and their official
@@ -71,8 +85,8 @@ entire package would exclude otherwise supported base configurations.
 
 The complete development and release workspace requires
 `^22.22.3 || ^24.16.0 || >=26.3.0`. Additional tooling includes `lint-staged`
-17.6.0, which needs `>=22.22.1`, and the Angular 22.2.1 and Nuxt 4.6.0
-playgrounds, which need `^22.22.3 || ^24.15.0 || >=26.0.0`. Do not replace these
+17.6.0, which needs `>=22.22.1`, and the Angular 22.2.1
+playground, which needs `^22.22.3 || ^24.15.0 || >=26.0.0`. Do not replace these
 release-line ranges with a single `>=22.22.3` floor: that would advertise
 unsupported Node 23 and 25, and older Node 24 and 26 versions.
 
