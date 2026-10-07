@@ -8,7 +8,7 @@ const openMobileMenu = async (page: Page, width: number) => {
   }
 }
 
-for (const width of [320, 1440]) {
+for (const width of [320, 390, 768, 1440]) {
   for (const theme of ['light', 'dark'] as const) {
     test(`${width}px ${theme} sidebar supports disclosure and article navigation`, async ({ page }) => {
       await page.setViewportSize({ height: 900, width })
@@ -63,4 +63,52 @@ for (const width of [320, 1440]) {
       await expectNoUnexpectedAccessibilityViolations(page)
     })
   }
+}
+
+for (const width of [320, 390, 768]) {
+  test(`${width}px mobile header fits and contents bar stays in document flow`, async ({ page }) => {
+    await page.setViewportSize({ height: 740, width })
+
+    await page.goto('/frameworks/astro/')
+
+    const title = page.locator('.s2k-docs-dock .site-title')
+
+    const titleBounds = await title.evaluate(element => {
+      const label = element.querySelector('span')
+      const labelBounds = label?.getBoundingClientRect()
+      const bounds = element.getBoundingClientRect()
+
+      return { labelRight: labelBounds?.right, right: bounds.right }
+    })
+
+    const controlsLeft = await page.locator('.s2k-docs-dock__controls').evaluate(element => element.getBoundingClientRect().left)
+
+    expect(titleBounds.labelRight).toBeDefined()
+
+    expect(titleBounds.labelRight).toBeLessThanOrEqual(titleBounds.right)
+
+    expect(titleBounds.right).toBeLessThanOrEqual(controlsLeft)
+
+    const frame = await page.locator('.main-frame').evaluate(element => ({
+      padding: getComputedStyle(element).paddingTop,
+      headerHeight: document.querySelector('header.header')?.getBoundingClientRect().height
+    }))
+
+    expect(Number.parseFloat(frame.padding)).toBe(frame.headerHeight)
+
+    const contents = page.locator('#starlight__mobile-toc')
+    const summary = contents.locator('summary')
+
+    await summary.press('Enter')
+
+    await expect(contents).toHaveAttribute('open')
+
+    await contents.getByRole('link', { name: 'Install', exact: true }).press('Enter')
+
+    await expect(page).toHaveURL(/#install$/u)
+
+    await expect(contents).not.toHaveAttribute('open')
+
+    await expect(page.locator('main h1')).toBeVisible()
+  })
 }

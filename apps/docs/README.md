@@ -27,7 +27,9 @@ content sync so changes to rendering hooks apply to every cached documentation p
 - `src/components/Footer.astro`: split project identity and resource links with author and license credits.
 - `src/styles/navigation.css`: sculpted header and native sidebar styling, with compact group
   headings, a single guide rail, quiet badges, and a violet active-page marker. Mobile links
-  retain 44px touch targets and native disclosure and keyboard behavior.
+  retain 44px touch targets and native disclosure and keyboard behavior. The mobile
+  identity scales to narrow screens, and the in-flow contents bar reserves no extra
+  space below the fixed header.
 - `src/styles/home.css`: editorial homepage compositions.
 
 The shared styles cover current documentation and both frozen archives; archive content
