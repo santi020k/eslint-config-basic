@@ -259,5 +259,9 @@ for (const route of ['/guide/cli/', '/tooling/overview/']) {
     await page.keyboard.press('ArrowRight')
 
     await expect.poll(() => scrollable.evaluate(element => element.scrollLeft)).toBeGreaterThan(0)
+
+    await page.keyboard.press('ArrowLeft')
+
+    await expect.poll(() => scrollable.evaluate(element => element.scrollLeft)).toBe(0)
   })
 }
