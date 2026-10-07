@@ -1,0 +1,68 @@
+name: Recover release records
+
+on:
+  workflow_dispatch:
+    inputs:
+      release-pr:
+        description: Merged release PR whose published records need recovery
+        required: true
+        type: string
+
+concurrency:
+  group: Release-refs/heads/main
+  cancel-in-progress: false
+
+jobs:
+  recover:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.sha }}
+      - name: Resolve trusted merged release
+        id: source
+        uses: actions/github-script@v8
+        env:
+          RELEASE_PR: ${{ inputs.release-pr }}
+        with:
+          script: |
+            if (!/^[1-9]\d*$/.test(process.env.RELEASE_PR)) throw new Error('Invalid release PR number.');
+            const { data: pr } = await github.rest.pulls.get({ ...context.repo, pull_number: Number(process.env.RELEASE_PR) });
+            const { resolveRecordRecoverySource } = await import(`${process.env.GITHUB_WORKSPACE}/scripts/resolve-record-recovery.mjs`);
+            const source = resolveRecordRecoverySource({ repository: process.env.GITHUB_REPOSITORY, pullRequest: pr });
+            core.setOutput('commit', source.commit);
+            core.setOutput('version', source.version);
+      - uses: actions/checkout@v6
+        with:
+          path: source
+          ref: ${{ steps.source.outputs.commit }}
+          fetch-depth: 0
+      - uses: santi020k/quality/actions/setup-pnpm@eec1701b98bcc0b76d36af288ee78a0369cd84cc # v1
+        with:
+          node-version: 22.x
+      - name: Audit maintained recovery workspace
+        run: pnpm audit --audit-level=high
+      - name: Validate original release source
+        env:
+          RELEASE_VERSION: ${{ steps.source.outputs.version }}
+        run: |
+          git -C source merge-base --is-ancestor HEAD origin/main
+          if [[ -n "$RELEASE_VERSION" ]]; then
+            test "$(node -p "require('./source/packages/basic/package.json').version")" = "$RELEASE_VERSION"
+          fi
+          echo "RELEASE_BASE_SHA=$(git -C source rev-parse HEAD^)" >> "$GITHUB_ENV"
+      - name: Recover missing records after artifact and consumer verification
+        run: node scripts/recover-release-records.mjs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_SOURCE_PATH: source
+      - name: Verify complete original release
+        working-directory: source
+        run: node scripts/check-published-release.mjs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
