@@ -30,6 +30,14 @@ rerun the original run so recovery retains the intended SHA. Do not manually
 publish packages, recreate or move version tags, or roll versions backward.
 Fix an unrecoverable artifact with a new commit and version.
 
+If npm artifacts and immutable package tags exist but a package GitHub Release
+is missing, Changesets does not recreate it on retry. Run **Recover release
+records** on main with the original merged release PR number. It validates the
+trusted source, all npm provenance and package tags, and registry consumer
+behavior before creating only missing release records from the original
+changelogs. It does not publish npm packages or replace existing records.
+Then rerun the original Release workflow to complete its verification gate.
+
 After publishing, `scripts/check-published-release.mjs` verifies each versioned npm
 package's artifact integrity and provenance source/workflow, umbrella/package tags,
 and stable GitHub Releases against the merged commit. It installs registry versions
