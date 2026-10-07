@@ -44,7 +44,7 @@ configuration verbose.
 3. **Run ESLint**
 
     ```sh
-    npx eslint .
+    npx eslint . --max-warnings=0
     ```
 </Steps>
 
@@ -77,3 +77,71 @@ export default await defineConfig({
 
 Continue with [Installation](/guide/installation/) for package selection or the
 [v2 to v3 migration guide](/guide/migration-v2-to-v3/) for an existing project.
+
+## Editor and CI
+
+Add a shared script to `package.json` so local and CI runs allow zero warnings:
+
+```json
+{
+  "scripts": {
+    "lint": "eslint . --max-warnings=0"
+  }
+}
+```
+
+### VS Code workspace setup
+
+Install the [Microsoft ESLint extension](https://github.com/microsoft/vscode-eslint)
+and let it load ESLint from your workspace. ESLint 10 always uses flat config;
+`eslint.useFlatConfig` is unnecessary and ignored for that version.
+
+For a monorepo with package-owned configs, this setting lets the extension infer
+working directories from package manifests and config files:
+
+```json title=".vscode/settings.json"
+{
+  "eslint.workingDirectories": [{ "mode": "auto" }]
+}
+```
+
+If inference selects the wrong package, use explicit working directories for your
+workspace layout. Check the ESLint output channel and restart the ESLint server
+after changing dependencies. The config factory anchors detection to its config
+file; use [Monorepo](/guide/monorepo/) to choose root or package-owned configs.
+
+### GitHub Actions with pnpm
+
+This consumer workflow uses the repository's declared pnpm version and the
+current Node 22 release line. Declare `packageManager` in your `package.json`,
+commit `pnpm-lock.yaml`, and verify the selected Node version against the engines
+of every installed framework and feature pack.
+
+```yaml title=".github/workflows/lint.yml"
+name: Lint
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: santi020k/quality/actions/setup-pnpm@eec1701b98bcc0b76d36af288ee78a0369cd84cc # v1
+        with:
+          node-version: 22.x
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec basic-eslint compatibility
+      - run: pnpm run lint
+```
+
+The pinned [Quality setup action](https://github.com/santi020k/quality/tree/v1/actions/setup-pnpm)
+reads `packageManager` and sets up Node and pnpm. Keep your project's type checks,
+tests, and build alongside this lint job. For upgrade review, follow the
+[verification checklist](/guide/releases/#verify-your-upgrade).

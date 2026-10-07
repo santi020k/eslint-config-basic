@@ -10,6 +10,7 @@ words:
   - app-router
   - arethetypeswrong
   - astro
+  - pagefind
   - astrojs
   - asyncgenerator
   - asynciterable
@@ -30,6 +31,7 @@ words:
   - configfeature
   - commitlint
   - deepmerge
+  - describedby
   - commitprompt
   - commonmark
   - Consolas

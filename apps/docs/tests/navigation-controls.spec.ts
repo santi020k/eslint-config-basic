@@ -36,7 +36,17 @@ for (const width of [320, 1440]) {
 
       await expect(dialog).toBeVisible()
 
+      await expect(input).toBeFocused()
+
+      const hint = dialog.locator('.s2k-search-hint')
+
+      await expect(hint).toBeVisible()
+
+      await expect(input).toHaveAttribute('aria-describedby', 's2k-search-hint')
+
       await input.fill('installation')
+
+      await expect(hint).toBeHidden()
 
       await expect(dialog.locator('.pagefind-ui__result').first()).toBeVisible()
 
@@ -58,7 +68,13 @@ for (const width of [320, 1440]) {
 
       await input.fill('x'.repeat(80))
 
-      await expect(dialog.locator('.pagefind-ui__message')).toContainText(/no results/iu)
+      await expect(dialog.locator('.pagefind-ui__message')).toHaveText('No results found. Try a shorter term or a framework name.')
+
+      await expect(hint).toBeHidden()
+
+      await dialog.locator('.pagefind-ui__search-clear').click()
+
+      await expect(hint).toBeVisible()
 
       await page.keyboard.press('Escape')
 
@@ -104,3 +120,31 @@ test('GitHub mark is visible inside an accessible repository link', async ({ pag
 
   await expect(github).toBeFocused()
 })
+
+for (const theme of ['light', 'dark'] as const) {
+  test(`${theme} utility buttons share a quiet hover without movement`, async ({ page }) => {
+    await page.emulateMedia({ colorScheme: theme })
+
+    await page.goto('/')
+
+    const states = []
+
+    for (const selector of ['.s2k-nav-github', '.s2k-docs-dock .s2k-nav-theme']) {
+      const control = page.locator(selector)
+
+      await control.hover()
+
+      await expect(control).toHaveCSS('transform', 'none')
+
+      states.push(await control.evaluate(async element => {
+        await Promise.all(element.getAnimations().map(animation => animation.finished))
+
+        const style = getComputedStyle(element)
+
+        return { background: style.backgroundColor, color: style.color, transition: style.transition }
+      }))
+    }
+
+    expect(states[0]).toEqual(states[1])
+  })
+}

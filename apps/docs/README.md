@@ -12,7 +12,7 @@ The shared documentation shell follows the sculpted direction of the Santi020k w
 theme family: locally served Montserrat, semantic theme colors, solid reading surfaces,
 fine rules, and restrained violet accents. The header uses the website's option 2, Split
 studio: a standalone identity and a rounded navigation cluster. It composes Starlight's
-native indexed search and a Lumen theme toggle and GitHub icon button; the mobile sidebar keeps its native
+native indexed search with starting hints and no-result guidance, plus a Lumen theme toggle and GitHub icon button with matching restrained hover states; the mobile sidebar keeps its native
 popover, keyboard, and focus behavior. The compact mobile cluster groups search and menu.
 
 Lumen v4 provides the homepage's bare statistics, command tabs, and short heading reveals.
@@ -25,7 +25,11 @@ content sync so changes to rendering hooks apply to every cached documentation p
 - `src/styles/starlight.css`: theme bridge and existing documentation/tool styles.
 - `src/styles/reading.css`: shared typography, reading surfaces, quiet feedback, and navigation motion.
 - `src/components/Footer.astro`: split project identity and resource links with author and license credits.
-- `src/styles/navigation.css`: sculpted header and native sidebar styling.
+- `src/styles/navigation.css`: sculpted header and native sidebar styling, with compact group
+  headings, a single guide rail, quiet badges, and a violet active-page marker. Mobile links
+  retain 44px touch targets and native disclosure and keyboard behavior. The mobile
+  identity scales to narrow screens, and the in-flow contents bar reserves no extra
+  space below the fixed header.
 - `src/styles/home.css`: editorial homepage compositions.
 
 The shared styles cover current documentation and both frozen archives; archive content

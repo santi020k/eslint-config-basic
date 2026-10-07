@@ -92,19 +92,29 @@ export default await defineConfig({
 
 ### TypeScript parser rejects my file
 
-The TypeScript `projectService` rejects files not covered by any `tsconfig.json`. Solutions:
+The TypeScript `projectService` rejects files not covered by a `tsconfig.json`.
 
-1. Make sure your `tsconfig.json` includes the file (check `include`/`exclude` patterns).
-2. Set `tsconfigRootDir` explicitly:
+Make sure the file belongs in the project's `tsconfig.json` and check its
+`include`/`exclude` patterns. Detection and TypeScript roots normally follow the
+config directory; set `root` only when your project root differs.
+
+For templates or tooling files that intentionally sit outside the TypeScript
+project, use syntax-only linting for those files:
 
 ```js
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
 export default await defineConfig({
-  tsconfigRootDir: import.meta.dirname,
-  typescript: true
+  typescript: {
+    untypedFiles: ['templates/**/*.ts']
+  }
 })
 ```
 
-3. In integration tests with virtual file paths, pass `typescript: false` to skip type-aware rules.
+TypeScript config files (`**/*.config.{ts,mts,cts}`) already receive this fallback.
+Set `untypedFiles: false` when every TypeScript file must have type information.
+See [project roots and syntax-only files](/guide/configuration/#project-root)
+and [Monorepo](/guide/monorepo/) for package-specific roots.
 
 ---
 
@@ -133,7 +143,7 @@ export default [
 If timeouts persist, increase the worker timeout:
 
 ```sh
-SYNCKIT_TIMEOUT=60000 eslint .
+SYNCKIT_TIMEOUT=60000 eslint . --max-warnings=0
 ```
 
 ---
@@ -142,11 +152,17 @@ SYNCKIT_TIMEOUT=60000 eslint .
 
 ### Detection reads the wrong `package.json`
 
-Set `detectRootDir` explicitly:
+Direct calls from `eslint.config.*` anchor detection to the config directory,
+even when ESLint starts elsewhere. When the intended project root differs, set
+`root` to that directory. For a config stored one folder below the project root:
 
 ```js
+import { resolve } from 'node:path'
+
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
 export default await defineConfig({
-  detectRootDir: process.cwd()
+  root: resolve(import.meta.dirname, '..')
 })
 ```
 
@@ -172,13 +188,14 @@ Then run `pnpm install` to deduplicate.
 
 ### VS Code does not pick up flat config rules
 
-Make sure you are on ESLint extension v3.0+ and add to `.vscode/settings.json`:
+Install the [Microsoft ESLint extension](https://github.com/microsoft/vscode-eslint)
+and use the workspace's installed ESLint 10. Flat config is mandatory in
+ESLint 10; the extension ignores `eslint.useFlatConfig` for this version.
 
-```json
-{
-  "eslint.useFlatConfig": true
-}
-```
+Check the ESLint output channel for the loaded library, Node runtime, and config
+errors. In a workspace with package-owned configs, configure working directories
+as shown in the [editor and CI recipe](/guide/getting-started/#editor-and-ci).
+After installing dependencies or changing settings, restart the ESLint server.
 
 ---
 
@@ -199,6 +216,26 @@ the ESLint process's working directory. Feature factories must be imported from
 their category package, the compatibility
 `@santi020k/eslint-config-integrations` aggregate, or
 `@santi020k/eslint-config-full`—not from the lean `basic` root.
+
+### ESLint cannot find the plugin for an override rule
+
+Pass overrides to `defineConfig()` so the composer can attach already-loaded
+plugins to the rule blocks that reference them:
+
+```js
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig({}, {
+  files: ['src/**/*.ts'],
+  rules: { '@typescript-eslint/no-unused-vars': 'error' }
+})
+```
+
+The example assumes TypeScript is detected and enabled. If you append overrides
+after composition, wrap the final array with `attachReferencedPlugins()`.
+That helper reuses plugins registered in the array; a new plugin still needs an
+explicit import and `plugins` registration. See
+[local overrides](/guide/configuration/#local-overrides) for both patterns.
 
 ### A rule I disabled keeps coming back
 
