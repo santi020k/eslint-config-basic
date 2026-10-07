@@ -3,6 +3,14 @@
     {
       "kind": "incompatible",
       "peer": "eslint",
+      "introducedBy": "@santi020k/eslint-config-extensions",
+      "wantedRange": "^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9",
+      "owner": "packages/extensions",
+      "removalCondition": "Remove when eslint-plugin-jsx-a11y declares ESLint 10 support. Packed Astro Doctor missing-alt and accessible-image regressions exercise the current ESLint 10 contract."
+    },
+    {
+      "kind": "incompatible",
+      "peer": "eslint",
       "introducedBy": "@santi020k/eslint-config-astro",
       "wantedRange": "^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9",
       "owner": "packages/astro",

@@ -9,6 +9,8 @@ on:
       - 'apps/*/package.json'
       - 'pnpm-lock.yaml'
       - 'pnpm-workspace.yaml'
+      - 'vendor/braces/**'
+      - 'scripts/check-braces-guard.mjs'
       - '.github/workflows/audit.yml'
   schedule:
     - cron: '0 9 * * 1' # Every Monday at 9am UTC
@@ -34,3 +36,5 @@ jobs:
           node-version: 22.x
       - name: Run pnpm audit
         run: pnpm audit --audit-level=high
+      - name: Verify maintained braces remediation
+        run: node scripts/check-braces-guard.mjs

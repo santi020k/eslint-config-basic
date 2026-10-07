@@ -7,6 +7,8 @@ description: "Release history for @santi020k/eslint-config-basic."
 
 ### Minor Changes
 
+- Preserve Node 22.19 support with compatible stable dependencies and deliver the maintained braces recursion guard in affected adapter artifacts. ESLint, GraphQL, and TypeScript remain consumer peers.
+
 - Add optional typed formatting preferences with workspace inheritance. Restrict Testing Library import heuristics in Playwright-owned scopes while retaining actual Testing Library checks and unit-test behavior.
 
   Doctor now inventories local workspace lint declarations, reports sampled effective-config evidence for potentially redundant Astro workaround fields, and generates missing lint scripts with zero-warning enforcement. Existing scripts, defaults, and overrides remain unchanged.

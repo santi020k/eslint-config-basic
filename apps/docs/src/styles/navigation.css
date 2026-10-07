@@ -387,13 +387,20 @@ header.header,
     opacity: 1;
     transform: none;
     filter: none;
+    animation: s2k-docs-drawer-enter 220ms ease;
   }
 
-  @starting-style {
-    .sidebar-pane:popover-open {
+  @keyframes s2k-docs-drawer-enter {
+    from {
       opacity: 0;
       transform: translateY(-0.5rem);
       filter: blur(2px);
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+      filter: none;
     }
   }
 
@@ -456,6 +463,7 @@ header.header,
   .sidebar .sl-menu-button,
   .sidebar .sl-menu-button svg,
   .sidebar-pane,
+  .sidebar-pane:popover-open,
   .s2k-docs-dock :is(a, button, select) {
     animation: none;
     transition: none;
@@ -468,13 +476,6 @@ header.header,
     filter: none;
   }
 
-  @starting-style {
-    .sidebar-pane:popover-open {
-      opacity: 1;
-      transform: none;
-      filter: none;
-    }
-  }
 }
 
 @media print {

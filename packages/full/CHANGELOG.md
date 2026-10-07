@@ -4,6 +4,8 @@
 
 ### Patch Changes
 
+- Preserve Node 22.19 support with compatible stable dependencies and deliver the maintained braces recursion guard in affected adapter artifacts. ESLint, GraphQL, and TypeScript remain consumer peers.
+
 - Center the documentation mobile menu and close icons, align utility controls, and clarify the open state with a subtle accented button surface.
 
 - Animate documentation mobile menu opening and closing with subtle icon and drawer transitions, including a brief blur and immediate reduced-motion states.

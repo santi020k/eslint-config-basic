@@ -44,6 +44,10 @@ try {
     cpSync(join(rootDir, 'patches'), join(tempDir, 'patches'), { recursive: true })
   }
 
+  if (existsSync(join(rootDir, 'vendor'))) {
+    cpSync(join(rootDir, 'vendor'), join(tempDir, 'vendor'), { recursive: true })
+  }
+
   copyManifestTree(join(rootDir, 'apps'))
 
   copyManifestTree(join(rootDir, 'packages'))

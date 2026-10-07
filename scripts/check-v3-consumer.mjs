@@ -328,6 +328,7 @@ try {
       dependencies: {
         '@santi020k/eslint-config-full': fullTarballRefs['@santi020k/eslint-config-full'],
         eslint: support.eslint,
+        graphql: '^16.0.0',
         react: '^19.0.0',
         typescript: support.typescript
       },
@@ -380,6 +381,18 @@ try {
       cwd: fullConsumerDir,
       stdio: 'pipe'
     })
+
+    execFileSync(process.execPath, [join(rootDir, 'scripts/guarded-consumer-smoke.mjs')], {
+      cwd: fullConsumerDir,
+      stdio: 'inherit'
+    })
+
+    if (support.name === 'minimum') {
+      execFileSync('npm', [
+        'exec', '--yes', '--package=node@22.19.0', '--', 'node',
+        join(rootDir, 'scripts/guarded-consumer-smoke.mjs')
+      ], { cwd: fullConsumerDir, stdio: 'inherit' })
+    }
 
     assertPortableDeclarations({
       consumerDir: fullConsumerDir,

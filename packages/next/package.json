@@ -21,7 +21,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && node ../../scripts/bundle-adapter-dependencies.mjs next",
     "dev": "tsup --watch",
     "clean": "rm -rf dist",
     "check:exports": "publint",
@@ -30,14 +30,14 @@
     "lint:fix": "eslint . --fix --no-warn-ignored --pass-on-no-patterns --max-warnings=0"
   },
   "dependencies": {
-    "@next/eslint-plugin-next": "catalog:",
     "@santi020k/eslint-config-core": "workspace:^",
     "@typescript-eslint/utils": "catalog:"
   },
   "devDependencies": {
     "publint": "catalog:",
     "tsup": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "@next/eslint-plugin-next": "catalog:"
   },
   "peerDependencies": {
     "eslint": "^10.0.0",

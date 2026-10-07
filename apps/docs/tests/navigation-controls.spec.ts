@@ -270,13 +270,21 @@ for (const { icons, motion, properties } of [
 
         const iconAnimations = element.getAnimations({ subtree: true })
 
+        const paneProperties = (pane?.getAnimations() ?? []).flatMap(animation => {
+          if (animation instanceof CSSTransition) return [animation.transitionProperty]
+
+          if (animation.effect instanceof KeyframeEffect) {
+            return animation.effect.getKeyframes().flatMap(frame => Object.keys(frame))
+          }
+
+          return []
+        }).filter(property => ['filter', 'opacity', 'transform'].includes(property))
+
         return {
           icons: [...new Set(iconAnimations.flatMap(animation => animation instanceof CSSTransition ?
             [animation.transitionProperty].filter(property => ['opacity', 'transform'].includes(property)) :
             []))].sort(),
-          pane: pane?.getAnimations().flatMap(animation => animation instanceof CSSTransition ?
-            [animation.transitionProperty].filter(property => ['filter', 'opacity', 'transform'].includes(property)) :
-            []).sort()
+          pane: [...new Set(paneProperties)].sort()
         }
       })
 

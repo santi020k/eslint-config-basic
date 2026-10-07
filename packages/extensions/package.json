@@ -25,7 +25,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && node ../../scripts/bundle-adapter-dependencies.mjs extensions",
     "check:exports": "publint",
     "clean": "rm -rf dist",
     "dev": "tsup --watch",
@@ -50,16 +50,14 @@
     "eslint-plugin-unicorn": "catalog:",
     "eslint-plugin-vuejs-accessibility": "catalog:"
   },
-  "optionalDependencies": {
-    "@santi020k/eslint-plugin-astro-doctor": "catalog:"
-  },
   "devDependencies": {
     "@types/eslint-plugin-jsx-a11y": "catalog:",
     "@types/node": "catalog:",
     "eslint": "catalog:",
     "publint": "catalog:",
     "tsup": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "@santi020k/eslint-plugin-astro-doctor": "catalog:"
   },
   "peerDependencies": {
     "eslint": "^10.0.0",

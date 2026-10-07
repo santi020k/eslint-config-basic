@@ -1,7 +1,7 @@
 /* eslint-disable complexity -- CLI planners and dispatchers intentionally cover many validated command branches */
 /* eslint-disable no-console -- CLI handlers own user-facing terminal output */
 import { spawnSync } from 'node:child_process'
-import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync, realpathSync, writeFileSync } from 'node:fs'
 import { createRequire, findPackageJSON } from 'node:module'
 import { basename, dirname, join, relative } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
@@ -1173,10 +1173,36 @@ const getAstroDoctorEslintWarning = (
     `but this project resolves ${eslintVersion}.`
 }
 
+const resolveBundledAstroDoctorMetadata = (cwd: string): null | PackageMetadata => {
+  const projectBase = pathToFileURL(join(cwd, 'package.json'))
+
+  for (const parent of [null, INTEGRATIONS_PACKAGE_NAME, FULL_PACKAGE_NAME]) {
+    try {
+      const parentManifest = parent ? findPackageJSON(parent, projectBase) : null
+      const parentBase = parentManifest ? pathToFileURL(realpathSync(parentManifest)) : projectBase
+      const extensionsManifest = findPackageJSON('@santi020k/eslint-config-extensions', parentBase)
+
+      if (!extensionsManifest) continue
+
+      const bundleBase = pathToFileURL(join(dirname(realpathSync(extensionsManifest)), 'dist/vendor/package.json'))
+      const pluginManifest = findPackageJSON(ASTRO_DOCTOR_PACKAGE_NAME, bundleBase)
+
+      if (!pluginManifest) continue
+
+      return readPackageMetadataFromMain(join(dirname(pluginManifest), 'index.js'))
+    } catch {
+      // Older adapters and source workspaces resolve the plugin normally.
+    }
+  }
+
+  return null
+}
+
 const getAstroDoctorCompatibilityWarnings = (cwd: string, enabled: boolean): string[] => {
   if (!enabled) return []
 
-  const pluginMetadata = resolvePackageMetadata(cwd, ASTRO_DOCTOR_PACKAGE_NAME)
+  const pluginMetadata = resolveBundledAstroDoctorMetadata(cwd) ??
+    resolvePackageMetadata(cwd, ASTRO_DOCTOR_PACKAGE_NAME)
 
   if (!pluginMetadata) {
     return [

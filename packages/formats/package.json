@@ -25,7 +25,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && node ../../scripts/bundle-adapter-dependencies.mjs formats",
     "check:exports": "publint",
     "clean": "rm -rf dist",
     "dev": "tsup --watch",
@@ -36,7 +36,6 @@
   "dependencies": {
     "@eslint/css": "catalog:",
     "@eslint/markdown": "catalog:",
-    "@graphql-eslint/eslint-plugin": "catalog:",
     "@html-eslint/eslint-plugin": "catalog:",
     "@html-eslint/parser": "catalog:",
     "@santi020k/eslint-config-core": "workspace:^",
@@ -49,6 +48,7 @@
     "typescript-eslint": "catalog:"
   },
   "devDependencies": {
+    "@graphql-eslint/eslint-plugin": "catalog:",
     "@types/node": "catalog:",
     "eslint": "catalog:",
     "graphql": "catalog:",

@@ -45,101 +45,53 @@ tag SHAs, the GitHub Release, and the live documentation deployment. Run a packe
 consumer smoke check before retiring release branches. Delete local and remote
 release branches only after verification and explicit remote cleanup authorization.
 
-## Pending release prerequisites
+## 3.6.0 security and runtime preparation
 
-The 3.6.0 preparation upgrades the supported dependency graph and documentation to
-npm Lumen Astro 4. It must pass the canonical checks and the high-severity audit
-before remote integration or publication.
+The release keeps every public package's advertised Node `>=22.19.0` contract.
+The private development workspace requires Node `>=22.22.1` for lint-staged.
+Compatible stable dependencies are pinned deliberately: Astro plugin 1.7.0,
+Astro Doctor 1.2.0, Command 3.5.3, JSDoc 63.3.3, package-json 0.91.2, and
+Regexp 3.1.0. Reconsider these pins only with minimum-runtime consumer tests;
+newer releases require newer Node versions through their direct or transitive
+runtime dependencies. Astro uses the compatible plugin's `flat/recommended` API.
 
-The final 2026-10-07 audit reports one high finding, no moderate findings, and
-no critical findings. Removing unused Nuxt and Slidev playground runtimes removed
-525 packages and the `node-forge` and `sprintf-js` advisory paths. Their ESLint
-adapter playgrounds remain covered by lint and type checks.
+The official `braces@3.0.3` release remains affected by
+[GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm).
+Next root-directory globs and GraphQL schema/document glob pointers reach this
+code. The private Expo runtime playground also contains a dependency path.
+Ordinary GraphQL source text is not established as an attack vector.
 
-| Package | Severity | Dependency paths | Tracking |
-| --- | --- | --- | --- |
-| `braces` 3.0.3 | High | Published Next and Formats packages, transitively Full; private Expo playground through React Native and Metro | [GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm) |
+The owner approved maintaining the depth patch and the increased adapter sizes.
+`vendor/braces` retains the official tarball, npm integrity, MIT license, reviewed
+patch, deterministic generator, and private derivative archive. The derivative
+is not independently published. It bounds brace/parenthesis nesting to 100 and
+recursive AST, array, queue, and parent-chain traversal; deeper inputs throw a
+controlled RangeError. Ordinary globs and shallow AST behavior are preserved.
+This mitigates recursion, not every cardinality, wide-AST, arbitrary getter, or
+regular-expression resource-exhaustion scenario.
 
-Next's `settings.next.rootDir` and GraphQL configuration schema/document glob
-pointers reach the affected glob tooling. Deeply nested brace patterns can exhaust
-the JavaScript stack. This concerns glob configuration input; it does not establish
-that ordinary GraphQL source text triggers the issue. The published Expo ESLint
-package has no `braces` dependency path; its private runtime playground does.
+The workspace override protects the private Expo path and local tools. It is
+not relied on for published consumers. Astro, Extensions, Formats, and Next
+build private dependency trees under `dist/vendor`, including the maintained
+code and all required runtime dependencies and licenses. Their public exports
+and types are unchanged. ESLint, GraphQL, and TypeScript stay external host
+peers. Full receives the same protection through its adapter dependencies.
+This intentionally increases the affected package sizes; lean Basic and Core
+remain outside these bundles. Artifact budgets track the approved increase.
 
-The official npm registry still publishes `braces` 3.0.3 as latest, and the advisory
-has no patched version. Upstream fixes remain unmerged, including
-[PR #82](https://github.com/micromatch/braces/pull/82). A local pnpm patch would not
-propagate into the published packages' consumer dependency graphs or clear this
-advisory. An unofficial prerelease fork requires a separate compatibility and
-maintenance decision.
+Security CI runs the high-severity audit and the depth/cycle regression check,
+including an original-code negative control. The release gate additionally
+installs actual packed adapters and Full without consumer braces overrides,
+checks protected Next and GraphQL globs and shared peers, and loads the selected
+features on the minimum Node 22.19.0 runtime. The maintained source previously
+passed all 764 upstream release tests; rerun the upstream suite when changing
+the patch. A renamed dependency or clean audit alone is not remediation evidence.
 
-### Tested remediation candidates
-
-The 2026-10-07 investigation tested a third-party prerelease derivative and then
-an independently maintained patch of the official stable `braces@3.0.3` source.
-Neither candidate has been adopted into the release dependency graph.
-
-The maintained patch bounds parser nesting at 100 and bounds recursive AST,
-array, queue, and parent-chain traversal. Inputs beyond these limits throw a
-controlled `RangeError`. It retains the original package API and behavior within
-the supported limit; deeper patterns are deliberately rejected.
-
-The prototype passed all 764 upstream release tests and 63 additional checks:
-49 compatibility, depth-boundary, original-code stack-overflow negative control,
-Next root-directory globbing, and GraphQL file-loader checks, plus 14 cycle,
-mixed/unclosed nesting, escaping, quoting, and bracket regressions. The additional
-checks passed on Node 22.23.1, Node 24.21.0, and Node 22 with a 256 KiB stack.
-These checks address recursion, not every expansion-cardinality, wide-AST,
-arbitrary getter, or regular-expression resource-exhaustion scenario.
-
-A root patch protects this workspace but does not protect published consumers:
-[npm only considers root overrides](https://docs.npmjs.com/cli/v11/configuring-npm/package-json/#overrides).
-A separate temporary bundle prototype installed and linted in clean npm and pnpm
-consumers without their own overrides. Its archive was 6,583,539 bytes compressed
-and 33,539,366 bytes unpacked. ESLint and GraphQL remained external peers. This
-proves the delivery mechanism using the third-party candidate; the maintained
-patch has not yet been qualified in actual Next, Formats, or Full artifacts.
-
-The preferred direction is a small maintained patch with source provenance,
-retained licenses, deterministic generation, and packed-consumer regression tests.
-The packaging and maintenance decision is pending. Before adopting it, validate
-the actual adapter artifacts, private Expo path, declarations, package metrics,
-supported package managers, and the complete release gate. Do not treat a renamed
-package or a clean audit alone as evidence that the vulnerability is fixed.
-
-Upgrade to a reviewed, published fix when available and rerun `pnpm audit` and
-`pnpm run release:check`. Do not add advisory ignores or use nonexistent versions.
-The remaining high finding blocks the release workflow.
-
-Also resolve the advertised Node compatibility before publishing. The family
-currently advertises `>=22.19.0`, but the installed dependencies and their official
-npm metadata require these ranges:
-
-| Public package | Required Node range | Dependency imposing the range |
-| --- | --- | --- |
-| Astro | `^22.22.3 \|\| ^24.16.0 \|\| >=26.3.0` | `eslint-plugin-astro` 3.2.1 and `astro-eslint-parser` 3.2.0 |
-| Formats | `^22.22.2 \|\| >=24.15.0` | `eslint-plugin-package-json` 1.10.1 |
-| Tools | `^22.22.2 \|\| >=24.15.0` | `eslint-plugin-command` 4.0.0 and `eslint-plugin-jsdoc` 65.1.0 |
-| Extensions | `^22.22.2 \|\| >=24.15.0` | `eslint-plugin-regexp` through `jsdoc-type-pratt-parser` 9.2.2 |
-| Integrations | `^22.22.2 \|\| >=24.15.0` | Its Formats, Tools, and Extensions dependencies |
-| Full | `^22.22.3 \|\| ^24.16.0 \|\| >=26.3.0` | Its Astro dependency |
-
-Enabling optional Astro Doctor 1.4.0 in Extensions or Integrations additionally
-requires `^22.22.3 || ^24.16.0 || >=26.3.0`. Their base configurations use the
-less restrictive ranges in the table; advertising the stricter range for either
-entire package would exclude otherwise supported base configurations.
-
-The complete development and release workspace requires
-`^22.22.3 || ^24.16.0 || >=26.3.0`. Additional tooling includes `lint-staged`
-17.6.0, which needs `>=22.22.1`, and the Angular 22.2.1
-playground, which needs `^22.22.3 || ^24.15.0 || >=26.0.0`. Do not replace these
-release-line ranges with a single `>=22.22.3` floor: that would advertise
-unsupported Node 23 and 25, and older Node 24 and 26 versions.
-
-Choose accurate affected-package engine ranges with migration notes, or retain
-older compatible dependencies, before publishing. No engine declarations have
-been changed while that decision is pending. Basic, Core, TypeScript, Lite, and
-the remaining framework packages retain the lean `>=22.19.0` runtime contract.
+When a reviewed stable upstream fix exists, remove the derivative, local override,
+and adapter bundling only after clean consumer regressions and the release audit
+pass. The source and removal plan are documented in `vendor/braces/README.md`.
+For rollback, release a new fixed version through the same GitHub workflow;
+do not move published tags or silently restore vulnerable dependencies.
 
 TypeScript 7, GraphQL 17, and Nest typed 7 remain deferred because their current
 peer or runtime requirements exceed the supported contracts. Wrangler's existing

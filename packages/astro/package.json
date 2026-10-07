@@ -21,7 +21,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && node ../../scripts/bundle-adapter-dependencies.mjs astro",
     "dev": "tsup --watch",
     "clean": "rm -rf dist",
     "check:exports": "publint",
@@ -31,14 +31,14 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-core": "workspace:^",
-    "eslint-plugin-astro": "catalog:",
     "@typescript-eslint/utils": "catalog:",
     "@typescript-eslint/parser": "catalog:"
   },
   "devDependencies": {
     "publint": "catalog:",
     "tsup": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "eslint-plugin-astro": "catalog:"
   },
   "peerDependencies": {
     "eslint": "^10.0.0"

@@ -4,6 +4,8 @@
 
 ### Patch Changes
 
+- Preserve Node 22.19 support with compatible stable dependencies and deliver the maintained braces recursion guard in affected adapter artifacts. ESLint, GraphQL, and TypeScript remain consumer peers.
+
 - Refresh the supported dependency ecosystem and security overrides, preserve Zod integration defaults across the plugin upgrade, guarantee TypeScript parsing in Astro frontmatter, and improve the release gates and npm documentation.
 
     The Basic README gains light/dark artwork, package selection guidance, and published asset/support links. The documentation site uses npm Lumen Astro 4 with accessible motion, contextual GitHub issue reporting, resilient browser feedback, responsive report output, and full-glyph WOFF2 fonts that substantially reduce transfer size.

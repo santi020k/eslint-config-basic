@@ -1,5 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["scripts/tsup-config.ts", "scripts/bundle-adapter-dependencies.mjs", "vendor/braces/**"],
   "globalEnv": [
     "CI_BASE_SHA",
     "DOCS_ROOT",

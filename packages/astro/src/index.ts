@@ -11,7 +11,7 @@ import { type AstroOptions, getRules } from './rules.js'
  * @returns {TSESLint.FlatConfig.ConfigArray} The Astro configuration array
  */
 export const createAstroConfig = (options?: AstroOptions): TSESLint.FlatConfig.ConfigArray => [
-  ...pluginAstro.configs.recommended,
+  ...pluginAstro.configs['flat/recommended'],
   {
     files: ['**/*.astro'],
     languageOptions: {
