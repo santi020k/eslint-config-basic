@@ -25,7 +25,9 @@ content sync so changes to rendering hooks apply to every cached documentation p
 - `src/styles/starlight.css`: theme bridge and existing documentation/tool styles.
 - `src/styles/reading.css`: shared typography, reading surfaces, quiet feedback, and navigation motion.
 - `src/components/Footer.astro`: split project identity and resource links with author and license credits.
-- `src/styles/navigation.css`: sculpted header and native sidebar styling.
+- `src/styles/navigation.css`: sculpted header and native sidebar styling, with compact group
+  headings, a single guide rail, quiet badges, and a violet active-page marker. Mobile links
+  retain 44px touch targets and native disclosure and keyboard behavior.
 - `src/styles/home.css`: editorial homepage compositions.
 
 The shared styles cover current documentation and both frozen archives; archive content
