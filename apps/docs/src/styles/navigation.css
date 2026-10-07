@@ -263,11 +263,14 @@ header.header,
   background: transparent;
   color: hsl(var(--ink-soft));
   box-shadow: none;
+  transform: none;
+  transition: background-color 160ms ease, color 160ms ease;
 }
 
 .s2k-docs-dock :is(.s2k-nav-github, .s2k-nav-theme):hover {
   background: hsl(var(--surface-muted));
   color: hsl(var(--ink));
+  transform: none;
 }
 
 .s2k-nav-github .ui-icon,
@@ -467,5 +470,30 @@ site-search .s2k-search-label {
   site-search .s2k-search-label {
     padding-inline-end: 4rem;
     margin-bottom: 1.25rem;
+  }
+}
+
+/* Empty search stays light, with a useful next step and no extra panel. */
+site-search .s2k-search-hint {
+  margin: 1.25rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid hsl(var(--line) / 0.6);
+  color: hsl(var(--ink-soft));
+  font-size: 0.75rem;
+  line-height: 1.8;
+}
+
+site-search .s2k-search-hint[hidden] {
+  display: none;
+}
+
+#starlight__search .pagefind-ui__message {
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .s2k-docs-dock :is(.s2k-nav-github, .s2k-nav-theme) {
+    transition: none;
   }
 }

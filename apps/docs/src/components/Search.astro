@@ -16,6 +16,16 @@ import StarlightSearch from '@astrojs/starlight/components/Search.astro'
 
     frame.prepend(label)
 
+    const hint = document.createElement('p')
+
+    hint.className = 's2k-search-hint'
+
+    hint.id = 's2k-search-hint'
+
+    hint.textContent = 'Search guides, frameworks, or packages. Try “installation” or “React”.'
+
+    frame.append(hint)
+
     const connectLabel = (): boolean => {
       const input = frame.querySelector<HTMLInputElement>('input[type="text"]')
 
@@ -24,6 +34,24 @@ import StarlightSearch from '@astrojs/starlight/components/Search.astro'
       input.id ||= 's2k-docs-search-input'
 
       label.htmlFor = input.id
+
+      input.setAttribute('aria-describedby', hint.id)
+
+      const updateHint = (): void => {
+        hint.hidden = input.value.trim().length > 0
+      }
+
+      input.addEventListener('input', updateHint)
+
+      frame.addEventListener('click', event => {
+        if (event.target instanceof Element && event.target.closest('.pagefind-ui__search-clear')) {
+          queueMicrotask(updateHint)
+        }
+      })
+
+      updateHint()
+
+      if (frame.closest('dialog')?.open) input.focus()
 
       return true
     }
