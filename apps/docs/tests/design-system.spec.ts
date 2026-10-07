@@ -153,3 +153,56 @@ test.describe('Shared documentation design system', () => {
     }
   })
 })
+
+for (const colorScheme of ['light', 'dark'] as const) {
+  test(`split navigation keeps ${colorScheme} controls separate from the brand`, async ({ page }) => {
+    await page.emulateMedia({ colorScheme, reducedMotion: 'reduce' })
+
+    for (const width of [320, 390, 800, 1440]) {
+      await page.setViewportSize({ height: 900, width })
+
+      await page.goto('/guide/installation/')
+
+      const brand = page.locator('.s2k-docs-dock .site-title')
+      const controls = page.locator('.s2k-docs-dock__controls')
+      const search = controls.locator('button[data-open-modal]')
+      const brandBox = await brand.boundingBox()
+      const controlsBox = await controls.boundingBox()
+
+      expect(brandBox).not.toBeNull()
+
+      expect(controlsBox).not.toBeNull()
+
+      if (!brandBox || !controlsBox) throw new Error('Navigation must have visible bounds')
+
+      expect(brandBox.x + brandBox.width).toBeLessThan(controlsBox.x)
+
+      expect(controlsBox.x + controlsBox.width).toBeLessThanOrEqual(width)
+
+      await search.focus()
+
+      await page.keyboard.press('Enter')
+
+      await expect(page.getByRole('dialog', { name: 'Search' })).toBeVisible()
+
+      await page.keyboard.press('Escape')
+
+      await expect(search).toBeFocused()
+
+      if (width < 800) {
+        const menuBox = await page.locator('.sl-menu-button').boundingBox()
+        const searchBox = await search.boundingBox()
+
+        if (!menuBox || !searchBox) throw new Error('Mobile search and menu must be visible')
+
+        expect(searchBox.x + searchBox.width).toBeLessThanOrEqual(menuBox.x)
+
+        expect(menuBox.x + menuBox.width).toBeLessThanOrEqual(controlsBox.x + controlsBox.width)
+      } else {
+        await expect(controls.locator('#s2k-version-switcher select')).toBeVisible()
+
+        await expect(controls.locator('starlight-theme-select select')).toBeVisible()
+      }
+    }
+  })
+}

@@ -10,8 +10,10 @@ Internal Astro Starlight documentation workspace for the [`@santi020k/eslint-con
 
 The shared documentation shell follows the sculpted direction of the Santi020k website and
 theme family: locally served Montserrat, semantic theme colors, solid reading surfaces,
-fine rules, and restrained violet accents. The header wraps Starlight's native navigation
-so search, appearance selection, and the mobile sidebar retain their existing behavior.
+fine rules, and restrained violet accents. The header uses the website's option 2, Split
+studio: a standalone identity and a rounded navigation cluster. It composes Starlight's
+native search, appearance, and social controls; the mobile sidebar keeps its native
+popover, keyboard, and focus behavior. The compact mobile cluster groups search and menu.
 
 Lumen v4 provides the homepage's bare statistics, command tabs, and short heading reveals.
 Long sections remain visible independently of reveal thresholds. Native cross-document

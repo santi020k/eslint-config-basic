@@ -1,6 +1,6 @@
 /* Keep Starlight's navigation behavior and adapt its shared shell to the brand. */
 :root {
-  --sl-nav-height: 6rem;
+  --sl-nav-height: 5.5rem;
   --sl-menu-button-size: 2.75rem;
   --s2k-nav-focus: var(--brand);
 }
@@ -11,43 +11,54 @@
 
 header.header,
 :root[data-theme='dark'] header.header {
-  padding-block: 1.5rem 0.75rem;
+  padding-block: 0.85rem;
   border-bottom: 0;
   background: hsl(var(--canvas));
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
 
+/* Split studio: independent identity and one compact navigation surface. */
 .s2k-docs-dock {
-  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
   height: 100%;
-  padding-inline: 0.85rem;
-  border: 1px solid hsl(var(--line) / 0.8);
-  border-radius: 0.4rem 1.1rem 1.1rem 1.1rem;
-  background: hsl(var(--surface));
-  box-shadow: 0 6px 18px hsl(var(--s2k-shadow) / 0.05);
-}
-
-.s2k-docs-dock__signature {
-  position: absolute;
-  inset-block-end: calc(100% - 1px);
-  inset-inline-start: -1px;
-  padding: 0.28rem 0.8rem 0.24rem;
-  border: 1px solid hsl(var(--line) / 0.8);
-  border-bottom: 0;
-  border-radius: 0.65rem 0.65rem 0 0;
-  background: hsl(var(--surface));
-  color: hsl(var(--ink-soft));
-  font-size: 0.56rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  line-height: 1;
-  text-transform: uppercase;
-}
-
-.s2k-docs-dock .header {
   background: transparent;
-  gap: 0.85rem;
+}
+
+.s2k-docs-dock .title-wrapper {
+  min-width: 0;
+  padding: 0.25rem;
+  margin: -0.25rem;
+}
+
+.s2k-docs-dock__controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+  margin-inline-start: auto;
+  padding: 0.35rem 0.45rem 0.35rem 0.75rem;
+  border: 1px solid hsl(var(--line) / 0.8);
+  border-radius: 0.9rem;
+  background: hsl(var(--surface));
+  box-shadow: 0 6px 18px hsl(var(--s2k-shadow) / 0.04);
+}
+
+.s2k-docs-dock .right-group,
+.s2k-docs-dock .social-icons {
+  align-items: center;
+}
+
+.s2k-docs-dock .social-icons {
+  display: flex;
+}
+
+.s2k-docs-dock .social-icons::after {
+  content: '';
+  border-inline-end: 1px solid hsl(var(--line) / 0.65);
 }
 
 .s2k-docs-dock .site-title {
@@ -172,8 +183,11 @@ header.header,
 }
 
 @media (min-width: 50rem) {
-  .s2k-docs-dock .header {
-    grid-template-columns: auto minmax(0, 1fr) auto;
+  .s2k-docs-dock site-search button[data-open-modal] {
+    width: 12rem;
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
   }
 }
 
@@ -183,7 +197,7 @@ header.header,
   }
 
   header.header {
-    padding-block: 1.4rem 0.5rem;
+    padding-block: 0.75rem;
   }
 
   :root[data-has-sidebar] header.header {
@@ -191,16 +205,21 @@ header.header,
   }
 
   .s2k-docs-dock {
-    padding-inline: 0.6rem;
+    gap: 0.65rem;
   }
 
-  :root[data-has-sidebar] .s2k-docs-dock {
-    padding-inline-end: calc(var(--sl-menu-button-size) + 1rem);
+  .s2k-docs-dock__controls {
+    padding: 0.2rem;
+    gap: 0;
+  }
+
+  :root[data-has-sidebar] .s2k-docs-dock__controls {
+    padding-inline-end: calc(var(--sl-menu-button-size) + 0.5rem);
   }
 
   .sidebar .sl-menu-button {
-    top: calc((var(--sl-nav-height) - var(--sl-menu-button-size)) / 2 + 0.45rem);
-    inset-inline-end: calc(var(--sl-nav-pad-x) + 0.45rem);
+    top: calc((var(--sl-nav-height) - var(--sl-menu-button-size)) / 2);
+    inset-inline-end: calc(var(--sl-nav-pad-x) + 0.25rem);
     background: transparent;
     color: hsl(var(--ink));
   }
@@ -210,27 +229,8 @@ header.header,
     color: hsl(var(--ink));
   }
 
-  .s2k-docs-dock .site-title span {
-    font-size: 0.8rem;
-  }
-
-  .s2k-docs-dock .site-title {
-    gap: 0.45rem;
-  }
-
   .s2k-docs-dock .site-title img {
-    width: 1.5rem;
-    height: 1.5rem;
-  }
-}
-
-@media (max-width: 22rem) {
-  .s2k-docs-dock .site-title span {
-    font-size: 0.7rem;
-  }
-
-  .s2k-docs-dock .header {
-    gap: 0.35rem;
+    max-width: 100%;
   }
 }
 
@@ -243,11 +243,7 @@ header.header,
 }
 
 @media print {
-  .s2k-docs-dock__signature {
-    display: none;
-  }
-
-  .s2k-docs-dock {
+  .s2k-docs-dock__controls {
     border: 0;
     box-shadow: none;
   }
