@@ -2,7 +2,12 @@ import { defineConfig, devices } from '@playwright/test'
 
 const isGithubCi = Boolean(process.env.CI)
 const previewHost = '127.0.0.1'
-const previewPort = 4173
+const previewPort = Number(process.env.DOCS_TEST_PORT ?? 4173)
+
+if (!Number.isInteger(previewPort) || previewPort < 1 || previewPort > 65535) {
+  throw new Error('DOCS_TEST_PORT must be an integer between 1 and 65535.')
+}
+
 const previewURL = `http://${previewHost}:${previewPort}`
 
 // Starlight docs might need a build before preview
@@ -19,6 +24,16 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] }
+    },
+    {
+      name: 'firefox',
+      testMatch: ['navigation-controls.spec.ts', 'design-system.spec.ts', 'sidebar.spec.ts'],
+      use: { ...devices['Desktop Firefox'] }
+    },
+    {
+      name: 'webkit',
+      testMatch: ['navigation-controls.spec.ts', 'design-system.spec.ts', 'sidebar.spec.ts'],
+      use: { ...devices['Desktop Safari'] }
     }
   ],
   reporter: 'html',
@@ -31,7 +46,7 @@ export default defineConfig({
   },
   webServer: {
     command: previewServerCommand,
-    reuseExistingServer: !isGithubCi,
+    reuseExistingServer: false,
     timeout: 120_000,
     url: previewURL
   },

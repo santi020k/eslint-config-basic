@@ -1,18 +1,35 @@
 ---
-import { Button, Card } from '@santi020k/lumen-astro'
+import type { StarlightRouteData } from '@astrojs/starlight/route-data'
+import { Button, Card, Icon, Link, Stack } from '@santi020k/lumen-astro'
+
+import { communityLinks, documentationIssueUrl } from '../data/community'
+import { readDocumentMetadata } from '../data/document-metadata'
+
+const route: StarlightRouteData = Astro.locals.starlightRoute
+const { title } = readDocumentMetadata(route.entry, route.siteTitle)
+const issueURL = documentationIssueUrl(Astro.url.pathname, title)
 ---
 
 <Card as="section" class="s2k-docs-feedback" aria-labelledby="s2k-feedback-title" data-docs-feedback>
   <div>
     <h2 id="s2k-feedback-title">Did this page help?</h2>
-    <p>One click helps us spot documentation that needs another pass. No personal data is sent.</p>
+    <p>Your answer stays in this browser. Share details on GitHub to help improve the docs.</p>
   </div>
   <div class="s2k-docs-feedback__actions" data-feedback-actions>
     <Button type="button" variant="outline" size="sm" data-feedback-value="yes">Yes, it helped</Button>
     <Button type="button" variant="outline" size="sm" data-feedback-value="no">Not yet</Button>
   </div>
   <p class="s2k-tool-status" role="status" aria-live="polite" data-feedback-status></p>
-  <a class="s2k-feedback-issue" hidden data-feedback-issue>Tell us what was missing on GitHub</a>
+  <Link class="s2k-feedback-issue" href={issueURL} newTab hidden data-feedback-issue>
+    Tell us what was missing on GitHub <Icon name="external-link" decorative size="sm" />
+  </Link>
+  <Stack as="nav" class="s2k-docs-feedback__community" direction="horizontal" gap="related" wrap aria-label="Get help and contribute">
+    <Link href={issueURL} newTab><Icon name="book-open" decorative size="sm" /> Improve this page</Link>
+    <Link href={communityLinks.bugs} newTab><Icon name="bug" decorative size="sm" /> Report a bug</Link>
+    <Link href={communityLinks.ideas} newTab><Icon name="lightbulb" decorative size="sm" /> Suggest an improvement</Link>
+    <Link href={communityLinks.questions} newTab><Icon name="circle-help" decorative size="sm" /> Ask a question</Link>
+    <Link href={communityLinks.issues} newTab><Icon name="list-checks" decorative size="sm" /> Follow issues</Link>
+  </Stack>
 </Card>
 
 <script>
@@ -25,39 +42,47 @@ import { Button, Card } from '@santi020k/lumen-astro'
     const status = root.querySelector<HTMLElement>('[data-feedback-status]')
     const actions = root.querySelector<HTMLElement>('[data-feedback-actions]')
     const issue = root.querySelector<HTMLAnchorElement>('[data-feedback-issue]')
-    const previous = window.localStorage.getItem(storageKey)
+    let previous: string | null = null
 
-    if (previous && status && actions) {
+    try {
+      previous = window.localStorage.getItem(storageKey)
+    } catch {
+      // Feedback remains usable when browser privacy settings block storage.
+    }
+
+    if ((previous === 'yes' || previous === 'no') && status && actions) {
       actions.hidden = true
 
       status.textContent = 'Thanks — your feedback for this page is saved in this browser.'
+
+      if (previous === 'no' && issue) issue.hidden = false
     }
 
     for (const button of root.querySelectorAll<HTMLButtonElement>('[data-feedback-value]')) {
       button.addEventListener('click', () => {
-        const value = button.dataset.feedbackValue ?? ''
+        const value = button.dataset.feedbackValue
 
-        window.localStorage.setItem(storageKey, value)
+        if (value !== 'yes' && value !== 'no') return
+
+        let saved = true
+
+        try {
+          window.localStorage.setItem(storageKey, value)
+        } catch {
+          saved = false
+        }
 
         if (actions) actions.hidden = true
 
-        if (status) status.textContent = value === 'yes' ?
-          'Thanks — glad this page helped.' :
-          'Thanks. A little more context would help us improve it.'
+        if (status) {
+          const message = value === 'yes' ?
+            'Thanks — glad this page helped.' :
+            'Thanks. A little more context would help us improve it.'
 
-        if (value === 'no' && issue) {
-          const issueURL = new URL('https://github.com/santi020k/eslint-config-basic/issues/new')
-
-          issueURL.searchParams.set('title', `Docs feedback: ${document.title}`)
-
-          issueURL.searchParams.set('body', `Page: ${window.location.href}\n\nWhat was missing or unclear?\n`)
-
-          issueURL.searchParams.set('labels', 'documentation')
-
-          issue.href = issueURL.href
-
-          issue.hidden = false
+          status.textContent = saved ? message : `${message} Browser storage is unavailable, so your answer will not persist.`
         }
+
+        if (value === 'no' && issue) issue.hidden = false
 
         window.dispatchEvent(new CustomEvent('s2k:docs-feedback', {
           detail: { path: window.location.pathname, value }

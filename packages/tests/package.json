@@ -60,6 +60,9 @@
     "url": "git+https://github.com/santi020k/eslint-config-basic.git",
     "directory": "packages/tests"
   },
-  "author": "santi020k",
+  "author": {
+    "name": "santi020k",
+    "url": "https://santi020k.com"
+  },
   "license": "MIT"
 }

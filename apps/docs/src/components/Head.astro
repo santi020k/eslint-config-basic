@@ -3,14 +3,10 @@ import type { StarlightRouteData } from '@astrojs/starlight/route-data'
 import StarlightMetadataHead from '@santi020k/og/astro/starlight'
 import { serializeJsonLd, webPageSchema } from '@santi020k/og/schema'
 
+import { readDocumentMetadata } from '../data/document-metadata'
+
 const route: StarlightRouteData = Astro.locals.starlightRoute
-const data = route.entry.data as Readonly<Record<string, unknown>>
-const title = typeof data.title === 'string' ? data.title : route.siteTitle
-
-const description = typeof data.description === 'string' && data.description.trim() ?
-  data.description :
-  `${title} documentation.`
-
+const { description, title } = readDocumentMetadata(route.entry, route.siteTitle)
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).href
 const indexable = Astro.url.pathname !== '/404' && Astro.url.pathname !== '/404/'
 
@@ -25,6 +21,7 @@ undefined
 ---
 
 <StarlightMetadataHead {...Astro.props}><slot /></StarlightMetadataHead>
+<link rel="preload" href="/fonts/montserrat-variable-font-wght.woff2" as="font" type="font/woff2" crossorigin />
 <meta name="robots" content={indexable ? 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' : 'noindex, nofollow'} />
 <meta name="twitter:url" content={canonical} />
 <meta name="twitter:title" content={title} />

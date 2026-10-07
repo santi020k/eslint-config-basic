@@ -1,5 +1,5 @@
 import angular from '@santi020k/eslint-config-angular'
-import { defineConfig, Extension, Format, Library, Testing, Tool } from '@santi020k/eslint-config-basic'
+import { defineConfig, Extension, Format, Library, NextMode, Preset, Runtime, Setting, Testing, Tool } from '@santi020k/eslint-config-basic'
 import qwik from '@santi020k/eslint-config-qwik'
 import react from '@santi020k/eslint-config-react'
 import svelte from '@santi020k/eslint-config-svelte'
@@ -8,9 +8,44 @@ import type { Linter } from 'eslint'
 import { ESLint } from 'eslint'
 import { describe, expect, test, vi } from 'vitest'
 
-import { extractConfigNames, extractRuleNames, getEffectiveRuleValue } from './test-utils.js'
+import { extractConfigNames, extractRuleNames, getEffectiveRuleValue, lintText } from './test-utils.js'
 
 describe('Deep Rule Assertions (#5)', () => {
+  test('literal aliases preserve enum configuration and testing file overrides', async () => {
+    const aliases = await defineConfig({
+      detection: false,
+      extensions: ['best-practices'],
+      formats: ['jsonc'],
+      libraries: ['zod'],
+      nextMode: 'pages',
+      preset: 'basic',
+      runtime: 'node',
+      settings: ['no-gitignore'],
+      testing: ['vitest'],
+      testingFiles: { vitest: ['spec/**/*.ts'] },
+      tools: ['docker'],
+      typescript: false
+    })
+    const enums = await defineConfig({
+      detection: false,
+      extensions: [Extension.BestPractices],
+      formats: [Format.Jsonc],
+      libraries: [Library.Zod],
+      nextMode: NextMode.Pages,
+      preset: Preset.Basic,
+      runtime: Runtime.Node,
+      settings: [Setting.NoGitignore],
+      testing: [Testing.Vitest],
+      testingFiles: { vitest: ['spec/**/*.ts'] },
+      tools: [Tool.Docker],
+      typescript: false
+    })
+
+    expect(extractConfigNames(aliases)).toEqual(extractConfigNames(enums))
+    expect(extractRuleNames(aliases)).toEqual(extractRuleNames(enums))
+    expect(aliases.find(config => config.name === 'integrations/vitest')?.files).toEqual(['spec/**/*.ts'])
+  })
+
   test('should include React-specific rules when React is enabled', async () => {
     const config = await defineConfig({ frameworks: { react } })
     const rules = extractRuleNames(config)
@@ -613,6 +648,34 @@ describe('Integration Rule Assertions — Libraries', () => {
 
     const names = extractConfigNames(config)
     expect(names).toContain('eslint-config-integrations/zod')
+  })
+
+  test('should preserve Zod trim validation after the upstream preset split', async () => {
+    const config = await defineConfig({
+      autoFrameworks: false,
+      frameworks: {},
+      libraries: [Library.Zod],
+      typescript: false
+    })
+    const zodConfig = config.filter(entry => entry.name === 'eslint-config-integrations/zod')
+    for (const rule of [
+      'zod/array-style',
+      'zod/prefer-enum-over-literal-union',
+      'zod/prefer-loose-object',
+      'zod/prefer-meta',
+      'zod/prefer-meta-last',
+      'zod/prefer-nullish',
+      'zod/prefer-strict-object',
+      'zod/prefer-string-schema-with-trim',
+      'zod/prefer-trim-before-string-length-checks'
+    ]) {
+      expect(getEffectiveRuleValue(config, rule)).toBe('error')
+    }
+    const invalid = await lintText('import { z } from "zod"; export const schema = z.string().min(1).trim();', zodConfig, 'schema.js')
+    const valid = await lintText('import { z } from "zod"; export const schema = z.string().trim().min(1);', zodConfig, 'schema.js')
+
+    expect(invalid.flatMap(result => result.messages).map(message => message.ruleId)).toContain('zod/prefer-trim-before-string-length-checks')
+    expect(valid.flatMap(result => result.messages).map(message => message.ruleId)).not.toContain('zod/prefer-trim-before-string-length-checks')
   })
 
   test('should include tailwind config when Tailwind library is enabled', async () => {

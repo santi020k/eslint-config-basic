@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+  <title id="title">ESLint Config Basic — Less setup. Clearer feedback.</title>
+  <desc id="desc">A lean linting foundation with optional framework packages. A configuration example shows defineConfig with automatic detection.</desc>
+  <defs><pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#e4dcef"/></pattern></defs>
+  <rect width="1200" height="360" rx="24" fill="#f8f6fc"/>
+  <rect x="660" width="540" height="360" rx="24" fill="url(#grid)"/>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <rect x="44" y="38" width="42" height="42" rx="12" fill="#620ae6"/>
+    <path d="m56 61 6 6 12-16" fill="none" stroke="#f8f6fc" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="102" y="65" fill="#241b36" font-size="22" font-weight="700">ESLint Config Basic</text>
+    <text x="44" y="142" fill="#241b36" font-size="44" font-weight="700">Less setup.</text>
+    <text x="44" y="195" fill="#241b36" font-size="44" font-weight="700">Clearer feedback.</text>
+    <text x="44" y="236" fill="#62566f" font-size="20">Lean defaults. Frameworks when you need them.</text>
+    <rect x="44" y="279" width="138" height="34" rx="17" fill="#ffffff" stroke="#e4dcef"/>
+    <text x="65" y="302" fill="#620ae6" font-size="15" font-weight="700">FLAT CONFIG</text>
+    <text x="204" y="302" fill="#62566f" font-size="16">JavaScript + TypeScript</text>
+    <rect x="704" y="62" width="448" height="236" rx="16" fill="#ffffff" stroke="#e4dcef"/>
+    <circle cx="726" cy="85" r="4" fill="#62566f"/><circle cx="741" cy="85" r="4" fill="#62566f"/><circle cx="756" cy="85" r="4" fill="#62566f"/>
+    <text x="788" y="91" fill="#62566f" font-size="15">eslint.config.mjs</text>
+    <path d="M704 108h448" stroke="#e4dcef"/>
+  </g>
+  <g font-family="ui-monospace, SFMono-Regular, Consolas, monospace" font-size="17">
+    <text x="728" y="147" fill="#620ae6">import { defineConfig }</text>
+    <text x="728" y="177" fill="#241b36">  from</text>
+    <text x="728" y="207" fill="#62566f">  '@santi020k/eslint-config-basic'</text>
+    <text x="728" y="263" fill="#620ae6">export default defineConfig()</text>
+  </g>
+</svg>

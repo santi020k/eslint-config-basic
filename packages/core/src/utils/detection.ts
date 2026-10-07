@@ -15,7 +15,7 @@ interface PackageJson {
   workspaces?: string[] | { packages?: string[] }
 }
 
-const runtimePriority = new Map<Runtime, number>([
+const runtimePriority = new Map<NonNullable<EslintConfigOptions['runtime']>, number>([
   [Runtime.Browser, 1],
   [Runtime.Bun, 4],
   [Runtime.Cloudflare, 5],
@@ -99,7 +99,7 @@ const hasAnyDependency = (allDeps: DependencyMap, names: string[]): boolean => n
 )
 
 const createRuntimeSetter = (options: EslintConfigOptions) => (runtime: Runtime): void => {
-  const currentRuntime = (options.runtime ?? Runtime.Universal) as Runtime
+  const currentRuntime = (options.runtime ?? Runtime.Universal)
 
   if ((runtimePriority.get(runtime) ?? 0) > (runtimePriority.get(currentRuntime) ?? 0)) {
     options.runtime = runtime

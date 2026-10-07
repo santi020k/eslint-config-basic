@@ -11,7 +11,10 @@
     "check:exports": "echo \"No exports to check\"",
     "lint:fix": "eslint . --fix --no-warn-ignored --pass-on-no-patterns --max-warnings=0"
   },
-  "author": "santi020k",
+  "author": {
+    "name": "santi020k",
+    "url": "https://santi020k.com"
+  },
   "license": "MIT",
   "type": "module",
   "engines": {

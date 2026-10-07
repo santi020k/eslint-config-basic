@@ -1,6 +1,7 @@
 version: "0.2"
 language: en
 words:
+  - graphqlrc
   - ACMR
   - activedescendant
   - agentchat
@@ -10,6 +11,7 @@ words:
   - app-router
   - arethetypeswrong
   - astro
+  - pagefind
   - astrojs
   - asyncgenerator
   - asynciterable
@@ -19,6 +21,7 @@ words:
   - behaviour
   - better-tailwindcss
   - bunfig
+  - birpc
   - bunx
   - canonicalurl
   - changeset
@@ -29,8 +32,10 @@ words:
   - configfeature
   - commitlint
   - deepmerge
+  - describedby
   - commitprompt
   - commonmark
+  - Consolas
   - cspell
   - darraghor
   - dedupe
@@ -40,6 +45,8 @@ words:
   - devframes
   - dompurify
   - dts
+  - dsse
+  - Sigstore
   - emnapi
   - envinfo
   - esac
@@ -49,6 +56,8 @@ words:
   - expo
   - fetchcontent
   - fflate
+  - frontmatter
+  - Miniflare
   - flat-config
   - genai
   - getentrybyslug
@@ -63,8 +72,12 @@ words:
   - jsonc
   - jsx
   - kiro
+  - katex
   - knip
   - langchain
+  - labelledby
+  - linecap
+  - linejoin
   - lhci
   - lint-staged
   - linted
@@ -120,6 +133,7 @@ words:
   - sarif
   - scopedslots
   - sequelize
+  - seroval
   - serialised
   - serviceworker
   - slidev
@@ -138,6 +152,7 @@ words:
   - Tanstack
   - textnodes
   - toml
+  - tinyglobby
   - tsconfig
   - tsdoc
   - TSES
@@ -164,6 +179,9 @@ words:
   - vuejs
   - weakref
   - workerd
+  - wght
+  - noopener
+  - noreferrer
   - workspace
   - workspaces
 ignoreRegExpList:

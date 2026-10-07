@@ -1,9 +1,9 @@
 /* eslint-disable complexity -- CLI planners and dispatchers intentionally cover many validated command branches */
 /* eslint-disable no-console -- CLI handlers own user-facing terminal output */
 import { spawnSync } from 'node:child_process'
-import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync, realpathSync, writeFileSync } from 'node:fs'
 import { createRequire, findPackageJSON } from 'node:module'
-import { basename, dirname, join } from 'node:path'
+import { basename, dirname, join, relative } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
 import { findTailwindEntryPoint } from '@santi020k/eslint-config-core'
@@ -14,6 +14,7 @@ import {
   handleGenerateSkill
 } from './agent-skill-generator.js'
 import { handleCompatibility, handleExplainRule } from './cli-advanced.js'
+import { getConsumerOverrideGuidance } from './cli-consumer-guidance.js'
 import { getExplicitConfigFeaturePackages, handleMigrateV3 } from './cli-migration.js'
 import {
   addCompatibleConfigVersions,
@@ -158,6 +159,7 @@ interface DoctorProjectActivation {
   ignores: string[]
   inactivePackages: { package: string, reason: string }[]
   libraries: DoctorFeatureActivation[]
+  lintOwnership: { guidance: string, localConfig: null | string, lintScript: null | string }
   path: string
   runtime: string
   tailwind: {
@@ -1171,10 +1173,36 @@ const getAstroDoctorEslintWarning = (
     `but this project resolves ${eslintVersion}.`
 }
 
+const resolveBundledAstroDoctorMetadata = (cwd: string): null | PackageMetadata => {
+  const projectBase = pathToFileURL(join(cwd, 'package.json'))
+
+  for (const parent of [null, INTEGRATIONS_PACKAGE_NAME, FULL_PACKAGE_NAME]) {
+    try {
+      const parentManifest = parent ? findPackageJSON(parent, projectBase) : null
+      const parentBase = parentManifest ? pathToFileURL(realpathSync(parentManifest)) : projectBase
+      const extensionsManifest = findPackageJSON('@santi020k/eslint-config-extensions', parentBase)
+
+      if (!extensionsManifest) continue
+
+      const bundleBase = pathToFileURL(join(dirname(realpathSync(extensionsManifest)), 'dist/vendor/package.json'))
+      const pluginManifest = findPackageJSON(ASTRO_DOCTOR_PACKAGE_NAME, bundleBase)
+
+      if (!pluginManifest) continue
+
+      return readPackageMetadataFromMain(join(dirname(pluginManifest), 'index.js'))
+    } catch {
+      // Older adapters and source workspaces resolve the plugin normally.
+    }
+  }
+
+  return null
+}
+
 const getAstroDoctorCompatibilityWarnings = (cwd: string, enabled: boolean): string[] => {
   if (!enabled) return []
 
-  const pluginMetadata = resolvePackageMetadata(cwd, ASTRO_DOCTOR_PACKAGE_NAME)
+  const pluginMetadata = resolveBundledAstroDoctorMetadata(cwd) ??
+    resolvePackageMetadata(cwd, ASTRO_DOCTOR_PACKAGE_NAME)
 
   if (!pluginMetadata) {
     return [
@@ -1558,6 +1586,25 @@ const getDoctorProjectActivations = async (cwd: string): Promise<DoctorProjectAc
     const projectRoot = projectPath === '.' ? cwd : join(cwd, projectPath)
     const summary = getProjectSummary(projectRoot)
     const projectActiveConfig = await analyzeEslintConfig(cwd, { projectPath, projectPaths }) ?? undefined
+    const localConfig = getConfigPathIfPresent(projectRoot)
+    const manifest = readPackageJson(projectRoot)
+    const scripts = manifest?.scripts
+
+    const lintScript = scripts && typeof scripts === 'object' && 'lint' in scripts &&
+      typeof scripts.lint === 'string' ?
+      scripts.lint :
+      null
+
+    const lintOwnership = {
+      guidance: projectPath !== '.' && (localConfig || lintScript) ?
+        'This package declares a local config or lint script. Review root/package lint overlap; use `projects` ' +
+        'for root-owned scopes or explicit root ignores for independently linted apps. Keep type-aware ' +
+        'TypeScript scoped to each app instead of disabling it across the workspace.' :
+        'Use `projects` to scope framework, runtime, and TypeScript settings to this package when root lint owns it.',
+      lintScript,
+      localConfig: localConfig ? relative(projectRoot, localConfig) : null
+    }
+
     const tsconfig = getTypeScriptConfig(projectRoot)
     const typescriptInstalled = resolvePackageMetadata(projectRoot, TYPESCRIPT_PACKAGE_NAME) !== null
     const typescriptEnabled = summary.typescript && Boolean(projectActiveConfig?.typescript)
@@ -1616,6 +1663,7 @@ const getDoctorProjectActivations = async (cwd: string): Promise<DoctorProjectAc
         projectActiveConfig?.libraries ?? [],
         true
       ),
+      lintOwnership,
       path: projectPath,
       runtime: summary.runtime,
       tailwind: {
@@ -1707,6 +1755,7 @@ const formatDoctorProjectTable = (projects: DoctorProjectActivation[]): string[]
 
     const explanations = [
       project.typescript.reason,
+      ...(project.path === '.' ? [] : [project.lintOwnership.guidance]),
       ...project.frameworks.map(feature => feature.reason),
       ...project.formats.map(feature => feature.reason),
       ...project.libraries.map(feature => feature.reason),
@@ -1822,7 +1871,7 @@ const applyDoctorFixes = (
     updated.scripts ??= {}
 
     if (!updated.scripts.lint) {
-      updated.scripts.lint = 'eslint .'
+      updated.scripts.lint = 'eslint . --max-warnings=0'
 
       packageChanged = true
 
@@ -2009,6 +2058,8 @@ export const handleDoctor = async (
   )
 
   const projects = await getDoctorProjectActivations(projectRoot)
+
+  warnings.push(...await getConsumerOverrideGuidance(projectRoot, configPath))
 
   outputDoctorResult(
     json,

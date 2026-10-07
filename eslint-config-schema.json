@@ -255,6 +255,10 @@
           },
           "type": "array"
         },
+        "formatting": {
+          "$ref": "#/definitions/FormattingOptions",
+          "description": "Formatting preferences inherited by workspace projects. Prettier and local overrides take precedence."
+        },
         "frameworks": {
           "additionalProperties": false,
           "description": "Framework and library specific configurations.\n\nSet a framework to `true` to load its installed `@santi020k/eslint-config-*` package, or pass a config array/factory when you need to override the package config.",
@@ -327,7 +331,7 @@
         },
         "integrations": {
           "$ref": "#/definitions/OptionalConfigMap",
-          "description": "List of application-level dependencies configurations"
+          "deprecated": "Use `features` instead. This alias is scheduled for removal in v4."
         },
         "libraries": {
           "items": {
@@ -402,7 +406,7 @@
         },
         "testingFiles": {
           "additionalProperties": false,
-          "description": "File globs for test integrations when the defaults do not match your project.\n\nFor example, set `testingFiles.playwright` to the folder that contains your Playwright specs when it differs from the built-in defaults.",
+          "description": "File globs for test integrations when the defaults do not match your project.\n\nFor example, set `testingFiles.playwright` to the folder that contains your Playwright specs when it differs from the built-in e2e, functional, Playwright-named, and Playwright-config defaults. Generic `tests/**` files are intentionally not treated as Playwright-owned because they may belong to Vitest or Jest.",
           "properties": {
             "cypress": {
               "items": {
@@ -793,6 +797,37 @@
           "$ref": "#/definitions/FormatName"
         }
       ]
+    },
+    "FormattingOptions": {
+      "additionalProperties": false,
+      "description": "Opt-in stylistic preferences; correctness rules remain unchanged.",
+      "properties": {
+        "arrowParens": {
+          "enum": [
+            "always",
+            "as-needed"
+          ],
+          "type": "string"
+        },
+        "commaDangle": {
+          "enum": [
+            "always-multiline",
+            "never"
+          ],
+          "type": "string"
+        },
+        "quotes": {
+          "enum": [
+            "double",
+            "single"
+          ],
+          "type": "string"
+        },
+        "semi": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
     },
     "ImportedFramework": {
       "anyOf": [
@@ -1898,6 +1933,7 @@
           "type": "string"
         },
         "detectComponentClasses": {
+          "description": "Detect exact standalone selectors and static utilities reachable through the CSS import graph, Astro component-local styles, and supported utilities from explicitly configured Tailwind plugins. Defaults to true.",
           "type": "boolean"
         },
         "entryPoint": {

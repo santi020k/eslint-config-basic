@@ -1,9 +1,11 @@
 import { spawn } from 'node:child_process'
-import { readFile } from 'node:fs/promises'
+import { mkdir, readFile, writeFile } from 'node:fs/promises'
 
 import { chromium } from '@playwright/test'
 import { launch } from 'chrome-launcher'
 import lighthouse from 'lighthouse'
+
+import { assertDocumentationPreview, assertPortAvailable } from './lighthouse-server.mjs'
 
 const configUrl = new URL('../lighthouse.config.json', import.meta.url)
 const config = JSON.parse(await readFile(configUrl, 'utf8'))
@@ -94,6 +96,9 @@ const evaluateRuns = runs => {
   return failures
 }
 
+// Astro can choose a different port when occupied; never audit an unrelated server.
+await assertPortAvailable(config.url)
+
 const server = spawn(config.server.command, config.server.args, {
   cwd: new URL('..', import.meta.url),
   detached: process.platform !== 'win32',
@@ -105,10 +110,18 @@ let chrome
 try {
   await waitForServer(config.url, config.server.readyTimeoutMs)
 
+  const response = await fetch(config.url)
+
+  assertDocumentationPreview(await response.text(), new URL(new URL(config.url).pathname, config.siteOrigin).href)
+
   chrome = await launch({
     chromePath: process.env.CHROME_PATH || chromium.executablePath(),
     chromeFlags: ['--headless=new', '--no-sandbox', '--disable-dev-shm-usage']
   })
+
+  const reportDirectory = new URL('../test-results/lighthouse/', import.meta.url)
+
+  await mkdir(reportDirectory, { recursive: true })
 
   const runs = []
 
@@ -130,6 +143,8 @@ try {
         `${result.lhr.runtimeError.code}: ${result.lhr.runtimeError.message}`
       )
     }
+
+    await writeFile(new URL(`run-${index + 1}.json`, reportDirectory), JSON.stringify(result.lhr, null, 2))
 
     runs.push(result.lhr)
   }

@@ -15,7 +15,7 @@ concurrency:
 jobs:
   release:
     # A normal push to main can prepare a release PR, but it can never publish.
-    # Publishing requires merging the branch managed by changesets/action. A
+    # Publishing requires a same-repository versioned release branch. A
     # manual workflow dispatch is reserved for idempotent release recovery.
     if: >-
       ${{
@@ -25,11 +25,15 @@ jobs:
         ) ||
         (
           github.event.pull_request.merged == true &&
-          github.event.pull_request.head.ref == 'changeset-release/main'
+          github.event.pull_request.head.repo.full_name == github.repository &&
+          (
+            github.event.pull_request.head.ref == 'changeset-release/main' ||
+            startsWith(github.event.pull_request.head.ref, 'release/v')
+          )
         )
       }}
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 60
     permissions:
       contents: write
       pull-requests: write
@@ -47,6 +51,22 @@ jobs:
         with:
           node-version: 22.x
           registry-url: "https://registry.npmjs.org"
+      - name: Verify release source and version
+        shell: bash
+        run: |
+          if [[ "${GITHUB_EVENT_NAME}" == 'pull_request' ]]; then
+            RELEASE_PREVIOUS_VERSION=$(git show "${RELEASE_BASE_SHA}:packages/basic/package.json" | node -p "JSON.parse(require('fs').readFileSync(0, 'utf8')).version")
+            export RELEASE_PREVIOUS_VERSION
+          fi
+          node scripts/check-release-source.mjs
+        env:
+          RELEASE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+
+      - name: Validate merged release and dependency security
+        run: |
+          pnpm run release:check
+          pnpm audit --audit-level=high
+
       - name: Install OIDC-capable npm
         run: npm install --global npm@11.20.0
 
@@ -95,7 +115,20 @@ jobs:
             exit 0
           fi
 
+          if [[ "${GITHUB_EVENT_NAME}" == 'pull_request' ]]; then
+            PREVIOUS_VERSION=$(git show "${RELEASE_BASE_SHA}:packages/basic/package.json" | node -p "JSON.parse(require('fs').readFileSync(0, 'utf8')).version")
+            if [[ "${VERSION}" == "${PREVIOUS_VERSION}" ]]; then
+              echo "Basic was not versioned by this release; preserving its umbrella and rolling tags."
+              exit 0
+            fi
+          fi
+
           RELEASE_COMMIT=$(git rev-list -n 1 "${PACKAGE_TAG}")
+          EXPECTED_COMMIT=$(git rev-parse HEAD)
+          if [[ "${RELEASE_COMMIT}" != "${EXPECTED_COMMIT}" ]]; then
+            echo "::error::Package tag ${PACKAGE_TAG} points to ${RELEASE_COMMIT}, expected merged release ${EXPECTED_COMMIT}."
+            exit 1
+          fi
 
           if git rev-parse --verify --quiet "refs/tags/${TAG}" >/dev/null; then
             TAG_COMMIT=$(git rev-list -n 1 "${TAG}")
@@ -147,6 +180,7 @@ jobs:
           fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
 
       # npm OIDC intentionally authenticates publish commands only. Metadata
       # updates still need a valid granular token, so detect an expired token
@@ -212,3 +246,9 @@ jobs:
           fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Verify published release and consumer behavior
+        run: pnpm run check:published-release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_BASE_SHA: ${{ github.event.pull_request.base.sha }}

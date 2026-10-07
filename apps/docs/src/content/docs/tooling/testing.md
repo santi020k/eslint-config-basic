@@ -37,3 +37,25 @@ export default await defineConfig({
 
 - Testing Playgrounds: [packages/playground/testing](https://github.com/santi020k/eslint-config-basic/tree/main/packages/playground/testing)
 - Testing Package Source: [packages/testing](https://github.com/santi020k/eslint-config-basic/tree/main/packages/testing)
+
+## Playwright and Testing Library together
+
+When both integrations are enabled, Playwright-owned files set
+`testing-library/utils-module` to `off`. This restricts import heuristics that
+can mistake Playwright locators for Testing Library queries. Actual imports
+from Testing Library still receive its rules, and unit-test files keep their
+existing heuristics. Custom query and render settings remain unchanged.
+
+Use `testingFiles.playwright` when browser tests live outside the conventional
+e2e, functional, or Playwright directories:
+
+```js
+export default await defineConfig({
+  testing: ['playwright', 'testing-library'],
+  testingFiles: { playwright: ['tests/browser/**/*.spec.ts'] }
+})
+```
+
+Install `@santi020k/eslint-config-testing`. Pass a local settings override after
+the options object when a browser suite deliberately re-exports Testing Library
+utilities and needs a custom `testing-library/utils-module` value.

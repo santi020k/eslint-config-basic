@@ -1,0 +1,32 @@
+---
+import { Icon as BrandIcon } from '@astrojs/starlight/components'
+import LanguageSelect from '@astrojs/starlight/components/LanguageSelect.astro'
+import SiteTitle from '@astrojs/starlight/components/SiteTitle.astro'
+import { ButtonLink, Icon } from '@santi020k/lumen-astro'
+
+import Search from './Search.astro'
+import ThemeSelect from './ThemeSelect.astro'
+---
+
+<div class="s2k-docs-dock header">
+  <div class="title-wrapper sl-flex">
+    <SiteTitle />
+  </div>
+  <div class="s2k-docs-dock__controls print:hidden">
+    <Search />
+    <div class="sl-hidden md:sl-flex right-group">
+      <ButtonLink
+        ariaLabel="GitHub repository"
+        class="s2k-nav-github"
+        href="https://github.com/santi020k/eslint-config-basic"
+        newTab
+        shape="icon"
+        variant="ghost"
+      >
+        <Icon><BrandIcon name="github" /></Icon>
+      </ButtonLink>
+      <LanguageSelect />
+    </div>
+    <ThemeSelect />
+  </div>
+</div>

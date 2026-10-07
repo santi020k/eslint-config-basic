@@ -22,3 +22,26 @@ Use the report viewer when adoption, migration, or a workspace move leaves the a
 - Missing packages in Lite setups.
 
 For runtime rule matching and precedence, continue with the [Inspector guide](/guide/inspector/). For problems that are not represented in the doctor report, use [Troubleshooting](/guide/troubleshooting/).
+
+## Review consumer workarounds
+
+Doctor compares extra overrides supplied directly to `defineConfig()` against
+that project's installed composer. For sampled Astro files, it can report an
+explicit TypeScript parser or a known disabled Astro rule that the generated
+configuration already supplies. The report names the field and evidence file.
+It never removes a whole override block, and does not inspect overrides appended
+after the composer returns or configs without composer metadata.
+
+Review every affected glob, then rerun lint, typecheck, and autofix twice before
+removing a candidate field. A match on one file does not prove redundancy across
+all files. Doctor inspects up to 32 Astro files in nonhidden source directories
+at up to eight directory levels. If effective-config comparison fails, it reports
+the failure and retains the overrides.
+
+Each JSON project includes `lintOwnership.localConfig`, `lintScript`, and
+`guidance`. The verbose report explains root-owned versus independently linted
+app choices. This is an inventory of declarations, not an assertion about the
+configuration executed by an arbitrary lint wrapper.
+
+When `doctor --fix` adds a missing lint script, it creates
+`eslint . --max-warnings=0`. Existing scripts remain unchanged.

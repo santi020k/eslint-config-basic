@@ -1,6 +1,6 @@
 {
   "name": "@santi020k/eslint-config-astro",
-  "version": "3.1.4",
+  "version": "3.1.5",
   "publishConfig": {
     "access": "public",
     "provenance": true
@@ -21,7 +21,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && node ../../scripts/bundle-adapter-dependencies.mjs astro",
     "dev": "tsup --watch",
     "clean": "rm -rf dist",
     "check:exports": "publint",
@@ -31,13 +31,14 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-core": "workspace:^",
-    "eslint-plugin-astro": "catalog:",
-    "@typescript-eslint/utils": "catalog:"
+    "@typescript-eslint/utils": "catalog:",
+    "@typescript-eslint/parser": "catalog:"
   },
   "devDependencies": {
     "publint": "catalog:",
     "tsup": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "eslint-plugin-astro": "catalog:"
   },
   "peerDependencies": {
     "eslint": "^10.0.0"
@@ -55,6 +56,9 @@
   "bugs": {
     "url": "https://github.com/santi020k/eslint-config-basic/issues"
   },
-  "author": "santi020k",
+  "author": {
+    "name": "santi020k",
+    "url": "https://santi020k.com"
+  },
   "license": "MIT"
 }

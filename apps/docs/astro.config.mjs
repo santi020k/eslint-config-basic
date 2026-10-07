@@ -1,11 +1,15 @@
+import { fileURLToPath } from 'node:url'
+
 import { unified } from '@astrojs/markdown-remark'
 import starlight from '@astrojs/starlight'
 import { santi020kShikiThemes } from '@santi020k/theme/shiki'
 import { defineConfig } from 'astro/config'
 
-const rehypeTableFocusable = () => tree => {
+import { rewriteDocsMarkdownLinks } from '../../scripts/docs-markdown-links.mjs'
+
+const makeScrollablesFocusable = tree => {
   const visit = node => {
-    if (node.type === 'element' && node.tagName === 'table') {
+    if (node.type === 'element' && (node.tagName === 'table' || node.tagName === 'pre')) {
       node.properties = node.properties ?? {}
 
       node.properties.tabIndex = 0
@@ -19,9 +23,15 @@ const rehypeTableFocusable = () => tree => {
   visit(tree)
 }
 
+const rehypeScrollableFocusable = () => makeScrollablesFocusable
 const base = process.env.DOCS_BASE ?? '/'
 const site = process.env.DOCS_SITE_URL ?? 'https://eslint.santi020k.com'
 const siteName = 'ESLint Config'
+const docsRoot = fileURLToPath(new URL('./src/content/docs/', import.meta.url))
+
+const rehypeDocsMarkdownLinks = () => (tree, file) => {
+  if (file.path) rewriteDocsMarkdownLinks(tree, file.path, docsRoot, base)
+}
 
 const siteDescription =
   'Production-ready ESLint flat-config documentation for JavaScript and TypeScript teams using React, Next.js, Astro, Vue, Nuxt, Svelte, Solid, Angular, NestJS, Hono, Expo, Preact, Qwik, Remix, React Router, TanStack Start, Lit, and opt-in integrations.'
@@ -255,19 +265,32 @@ export default defineConfig({
   integrations: [
     starlight({
       credits: false,
-      customCss: ['./src/styles/starlight.css'],
+      customCss: [
+        './src/styles/starlight.css',
+        './src/styles/reading.css',
+        './src/styles/navigation.css',
+        './src/styles/home.css'
+      ],
       description: siteDescription,
       editLink: {
         baseUrl: 'https://github.com/santi020k/eslint-config-basic/edit/main/apps/docs/'
       },
       expressiveCode: {
+        plugins: [{
+          name: 's2k-keyboard-scroll',
+          hooks: {
+            postprocessRenderedBlockGroup: ({ renderData }) => makeScrollablesFocusable(renderData.groupAst)
+          }
+        }],
         themes: [santi020kShikiThemes.dark, santi020kShikiThemes.light]
       },
       favicon: '/favicon.svg',
       components: {
         Footer: './src/components/Footer.astro',
         Head: './src/components/Head.astro',
-        PageFrame: './src/components/PageFrame.astro'
+        Header: './src/components/Header.astro',
+        PageFrame: './src/components/PageFrame.astro',
+        ThemeSelect: './src/components/ThemeSelect.astro'
       },
       head: [
         { attrs: { content: siteName, name: 'application-name' }, tag: 'meta' },
@@ -364,9 +387,8 @@ export default defineConfig({
       lastUpdated: true,
       logo: {
         alt: 'Santi020k ESLint Config',
-        dark: './src/assets/logo-santi020k-dark.svg',
-        light: './src/assets/logo-santi020k.svg',
-        replacesTitle: true
+        src: './src/assets/logo-square.svg',
+        replacesTitle: false
       },
       sidebar,
       social: [
@@ -385,7 +407,7 @@ export default defineConfig({
   ],
   markdown: {
     processor: unified({
-      rehypePlugins: [rehypeTableFocusable]
+      rehypePlugins: [rehypeScrollableFocusable, rehypeDocsMarkdownLinks]
     })
   },
   site

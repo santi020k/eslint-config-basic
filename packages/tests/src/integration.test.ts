@@ -8,6 +8,7 @@ import { expoConfig } from '@santi020k/eslint-config-expo'
 import { honoConfig } from '@santi020k/eslint-config-hono'
 import { nestConfig } from '@santi020k/eslint-config-nest'
 import { nextConfig } from '@santi020k/eslint-config-next'
+import nuxtConfig from '@santi020k/eslint-config-nuxt'
 import { qwik as qwikConfig } from '@santi020k/eslint-config-qwik'
 import { reactConfig } from '@santi020k/eslint-config-react'
 import { reactRouter as reactRouterConfig } from '@santi020k/eslint-config-react-router'
@@ -39,6 +40,27 @@ const isCircularFixWarning = (call: unknown[]): boolean => call.some(value => {
 })
 
 describe('Integration Tests', () => {
+  describe('Nuxt', () => {
+    test('enforces Nuxt environment checks without requiring the Nuxt application runtime', async () => {
+      const config = await defineConfig({
+        detection: false,
+        frameworks: { nuxt: nuxtConfig, vue: vueConfig },
+        tools: [],
+        typescript: false
+      })
+      const legacyResults = await lintText(
+        'export const isClient = process.client\n', config, 'nuxt-environment.js'
+      )
+      const correctedResults = await lintText(
+        'export const isClient = import.meta.client\n', config, 'nuxt-environment.js'
+      )
+
+      expect(legacyResults.flatMap(result => result.messages).map(message => message.ruleId))
+        .toContain('nuxt/prefer-import-meta')
+      expect(correctedResults.flatMap(result => result.messages)).toEqual([])
+    })
+  })
+
   describe('Tailwind CSS', () => {
     test('should allow declared semantic CSS classes while rejecting nearby typos', async () => {
       const tailwindRoot = join(FIXTURES_DIR, 'tailwind')
@@ -122,6 +144,50 @@ describe('Integration Tests', () => {
       expect(ruleIds).not.toContain('promise/always-return')
       expect(ruleIds).not.toContain('promise/catch-or-return')
       expect(valueResults[0].messages.map(message => message.ruleId)).toContain('no-void')
+    })
+  })
+
+  describe('Astro frontmatter', () => {
+    test.each([false, true])('parses import types with typeChecked=%s', async typeChecked => {
+      const code = [
+        '---',
+        'import type { HTMLAttributes } from "astro/types"',
+        'const attributes: HTMLAttributes<"button"> = { type: "button" }',
+        '---',
+        '<button {...attributes}>Continue</button>',
+        ''
+      ].join('\n')
+      const config = await defineConfig({
+        detection: false,
+        frameworks: { astro: astro({ tsconfigRootDir: FIXTURES_DIR, typeChecked }) },
+        tools: [],
+        tsconfigRootDir: FIXTURES_DIR,
+        typescript: typeChecked ? 'type-aware' : 'syntax'
+      })
+      const results = await lintText(code, config, join(FIXTURES_DIR, 'astro.astro'))
+
+      expect(results.flatMap(result => result.messages).filter(message => message.fatal)).toEqual([])
+    })
+
+    test.each(['syntax', 'type-aware'] as const)('composes TypeScript frontmatter in %s mode', async typescript => {
+      const config = await defineConfig({
+        detection: false,
+        frameworks: { astro: true },
+        tools: [],
+        tsconfigRootDir: FIXTURES_DIR,
+        typescript
+      })
+      const code = [
+        '---',
+        'import type { HTMLAttributes } from "astro/types"',
+        'const attributes: HTMLAttributes<"button"> = { type: "button" }',
+        '---',
+        '<button {...attributes}>Continue</button>',
+        ''
+      ].join('\n')
+      const results = await lintText(code, config, join(FIXTURES_DIR, 'astro.astro'))
+
+      expect(results.flatMap(result => result.messages).filter(message => message.fatal)).toEqual([])
     })
   })
 

@@ -613,3 +613,28 @@ pnpm run build:schema
 ```
 
 The output file is `eslint-config-schema.json` at the repository root.
+
+## Formatting preferences
+
+Choose common style preferences without repeating individual rule names:
+
+```js
+export default await defineConfig({
+  formatting: {
+    arrowParens: 'always',
+    commaDangle: 'always-multiline',
+    quotes: 'double',
+    semi: true
+  }
+})
+```
+
+Every field is optional. `arrowParens` accepts `always` or `as-needed`,
+`commaDangle` accepts `always-multiline` or `never`, `quotes` accepts `double` or
+`single`, and `semi` is a boolean. Omitted fields retain existing defaults.
+Preferences use warning severity; `strict: 'ci'` or `strict: 'pedantic'` promotes
+them to errors. Correctness rules are unchanged. Prettier compatibility and local
+flat-config overrides take precedence. Root preferences are inherited by
+`projects`; each project can override individual fields. Use
+`optionMergeStrategy: 'replace'` in a project to replace its inherited formatting
+object instead of merging fields.

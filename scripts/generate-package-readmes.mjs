@@ -2,6 +2,7 @@ import { readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 
 import { docsOrigin, packageDocs, repositoryOrigin, websiteOrigin } from './docs-packages.mjs'
+import { resolvePublishedReadmeLinks } from './readme-links.mjs'
 
 const basicPackageName = '@santi020k/eslint-config-basic'
 const reactPackageName = '@santi020k/eslint-config-react'
@@ -146,8 +147,7 @@ const generateReadmeContent = pkg => {
   const { description, docsPath, packageName, readmeNotice, title } = pkg
 
   if (packageName === basicPackageName) {
-    return readFileSync(join(process.cwd(), 'README.md'), 'utf8')
-      .replaceAll('(LICENSE)', `(${repositoryOrigin}/blob/main/LICENSE)`)
+    return resolvePublishedReadmeLinks(readFileSync(join(process.cwd(), 'README.md'), 'utf8'))
   }
 
   const notice = readmeNotice?.length ?

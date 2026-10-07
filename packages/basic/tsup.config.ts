@@ -18,6 +18,7 @@ export default defineConfig([
     entry: [
       'src/agent-skill-generator.ts',
       'src/cli-advanced.ts',
+      'src/cli-consumer-guidance.ts',
       'src/cli-migration.ts',
       'src/cli-package-manager.ts',
       'src/cli-preset.ts',

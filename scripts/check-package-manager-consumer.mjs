@@ -14,7 +14,7 @@ if (!manager || !supportedManagers.has(manager)) {
 const rootDir = process.cwd()
 const tempDir = mkdtempSync(join(tmpdir(), `eslint-config-${manager}-consumer-`))
 const tarballDir = join(tempDir, 'tarballs')
-const packageDirs = ['core', 'typescript', 'formats', 'tools', 'basic']
+const packageDirs = ['core', 'typescript', 'formats', 'tools', 'basic', 'astro', 'extensions', 'next', 'react']
 
 const packPackage = packageDir => {
   const output = execFileSync(
@@ -54,8 +54,12 @@ try {
   const getTarballReference = packageDir => `file:./tarballs/${basename(tarballs[packageDir])}`
 
   const transitiveInternalDependencies = {
+    '@santi020k/eslint-config-astro': getTarballReference('astro'),
     '@santi020k/eslint-config-core': getTarballReference('core'),
+    '@santi020k/eslint-config-extensions': getTarballReference('extensions'),
     '@santi020k/eslint-config-formats': getTarballReference('formats'),
+    '@santi020k/eslint-config-next': getTarballReference('next'),
+    '@santi020k/eslint-config-react': getTarballReference('react'),
     '@santi020k/eslint-config-tools': getTarballReference('tools'),
     '@santi020k/eslint-config-typescript': getTarballReference('typescript')
   }
@@ -69,9 +73,13 @@ try {
     dependencies: {
       ...internalDependencies,
       eslint: '^10.0.0',
+      graphql: '^16.0.0',
       typescript: '^6.0.0'
     },
     name: `eslint-config-${manager}-consumer-check`,
+    ...(manager === 'pnpm' && {
+      packageManager: JSON.parse(readFileSync(join(rootDir, 'package.json'), 'utf8')).packageManager
+    }),
     ...(['bun', 'npm'].includes(manager) && { overrides: transitiveInternalDependencies }),
     private: true,
     ...(manager === 'yarn' && {
@@ -111,6 +119,10 @@ try {
     cwd: consumerDir,
     stdio: 'inherit'
   })
+
+  execFileSync(process.execPath, [
+    join(rootDir, 'scripts/guarded-consumer-smoke.mjs'), '@santi020k/eslint-config-basic'
+  ], { cwd: consumerDir, stdio: 'inherit' })
 
   const packageManifest = JSON.parse(
     readFileSync(join(consumerDir, 'node_modules', '@santi020k', 'eslint-config-basic', 'package.json'), 'utf8')

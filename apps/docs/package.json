@@ -9,7 +9,7 @@
   "description": "Astro Starlight documentation site for the @santi020k/eslint-config-basic monorepo",
   "type": "module",
   "scripts": {
-    "docs:build": "node ../../scripts/prepare-starlight-docs.mjs && santi-og generate --config scripts/generate-og-images.mjs && rm -rf .astro && astro build && santi-og audit",
+    "docs:build": "node ../../scripts/prepare-starlight-docs.mjs && santi-og generate --config scripts/generate-og-images.mjs && rm -rf .astro && astro sync --force && astro build && santi-og audit",
     "docs:dev": "node ../../scripts/prepare-starlight-docs.mjs && santi-og generate --config scripts/generate-og-images.mjs && rm -rf .astro && astro dev",
     "generate:og": "santi-og generate --config scripts/generate-og-images.mjs",
     "generate:og:force": "santi-og generate --config scripts/generate-og-images.mjs --force",
@@ -50,10 +50,13 @@
     "url": "git+https://github.com/santi020k/eslint-config-basic.git",
     "directory": "apps/docs"
   },
-  "author": "santi020k",
+  "author": {
+    "name": "santi020k",
+    "url": "https://santi020k.com"
+  },
   "license": "MIT",
   "dependencies": {
-    "@santi020k/lumen-astro": "2.1.0",
-    "@santi020k/theme": "1.3.0"
+    "@santi020k/lumen-astro": "4.0.0",
+    "@santi020k/theme": "2.0.1"
   }
 }

@@ -27,6 +27,7 @@ import {
   mergeOptionalBucket,
   mergeProjectOptions,
   NextMode,
+  OPTIONAL_BUCKETS,
   patchImportGroups,
   Preset,
   resolveTsconfigRootDir,
@@ -48,6 +49,14 @@ import { createDetectedFrameworkFlags, type FrameworkOptions } from './framework
 import { getIntegrationConfigs, getPrettierConfig } from './integrations.js'
 import { resolveFramework, resolvePreset } from './resolvers.js'
 import { buildTailwindSettingsConfig } from './tailwind.js'
+
+const resolveEnumValue = <T extends string>(values: readonly T[], value: string): T => {
+  const resolved = values.find(candidate => candidate === value)
+
+  if (resolved === undefined) throw new TypeError(`Unknown configuration option: ${value}`)
+
+  return resolved
+}
 
 const SCRIPT_FILE_GLOBS = ['**/scripts/**/*.{js,mjs,cjs,ts,mts,cts}']
 
@@ -106,6 +115,7 @@ export type {
   FlatConfigArray,
   FormatName,
   FormatOption,
+  FormattingOptions,
   ImportedFramework,
   ImportGroupOptions,
   LibraryName,
@@ -201,7 +211,8 @@ const applyTestingFileOverrides = (
   if (entries.length === 0) return configs
 
   return configs.map(config => {
-    const match = entries.find(([testingName]) => (TESTING_CONFIG_NAMES[testingName as Testing] ?? []).includes(config.name ?? ''))
+    const match = entries.find(([testingName]) => Object.entries(TESTING_CONFIG_NAMES)
+      .some(([name, configNames]) => name === testingName && configNames.includes(config.name ?? '')))
 
     if (!match) return config
 
@@ -212,6 +223,37 @@ const applyTestingFileOverrides = (
       files
     }
   })
+}
+
+const withTestingCoexistence = (configs: FlatConfigArray): FlatConfigArray => {
+  if (!configs.some(config => config.name === 'integrations/testing-library')) return configs
+
+  const playwrightConfigs = configs.filter(config => config.name === 'integrations/playwright')
+
+  return [
+    ...configs,
+    ...playwrightConfigs.map(config => ({
+      files: config.files,
+      ...(config.ignores ? { ignores: config.ignores } : {}),
+      name: 'eslint-config-basic/playwright-testing-library',
+      settings: { 'testing-library/utils-module': 'off' }
+    }))
+  ]
+}
+
+const createFormattingConfig = (formatting: EslintConfigOptions['formatting']): FlatConfigArray => {
+  if (!formatting) return []
+
+  return [{
+    files: ['**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx,astro,vue,svelte}'],
+    name: 'eslint-config-basic/formatting',
+    rules: {
+      ...(formatting.arrowParens ? { '@stylistic/arrow-parens': ['warn', formatting.arrowParens] } : {}),
+      ...(formatting.commaDangle ? { '@stylistic/comma-dangle': ['warn', formatting.commaDangle] } : {}),
+      ...(formatting.quotes ? { '@stylistic/quotes': ['warn', formatting.quotes, { avoidEscape: true }] } : {}),
+      ...(formatting.semi === undefined ? {} : { '@stylistic/semi': ['warn', formatting.semi ? 'always' : 'never'] })
+    }
+  }]
 }
 
 const ESLINT_CONFIG_FILENAMES = [
@@ -297,7 +339,7 @@ const resolvePresetMeta = (
   autoFrameworks: boolean
 ) => {
   const preset = requestedPreset ?? detected.preset
-  const presetDefaults = preset ? resolvePreset(preset as Preset) : {}
+  const presetDefaults = preset ? resolvePreset(resolveEnumValue(Object.values(Preset), preset)) : {}
   const frameworkDefaults = autoFrameworks ? createDetectedFrameworkFlags(detected.detectedFrameworks) : {}
 
   return { frameworkDefaults, preset, presetDefaults }
@@ -355,24 +397,26 @@ const resolveNextModeValue = (
   options: EslintConfigOptions | undefined,
   presetDefaults: Partial<EslintConfigOptions>,
   detected: EslintConfigOptions
-): NextMode => (options?.nextMode ?? presetDefaults.nextMode ?? detected.nextMode ?? NextMode.Pages) as NextMode
+): NextMode => resolveEnumValue(
+  Object.values(NextMode), options?.nextMode ?? presetDefaults.nextMode ?? detected.nextMode ?? NextMode.Pages
+)
 
 const resolveRuntimeValue = (
   options: EslintConfigOptions | undefined,
   presetDefaults: Partial<EslintConfigOptions>,
   detected: EslintConfigOptions,
   usePresetRuntime: boolean
-): Runtime => (
+): Runtime => resolveEnumValue(Object.values(Runtime),
   options?.runtime ??
   (usePresetRuntime ? presetDefaults.runtime : undefined) ??
   detected.runtime ??
-  Runtime.Universal
-) as Runtime
+  Runtime.Universal)
 
 const resolveSettingsValue = (
   options: EslintConfigOptions | undefined,
   detected: EslintConfigOptions
-): Setting[] => (options?.settings ?? detected.settings ?? []) as Setting[]
+): Setting[] => (options?.settings ?? detected.settings ?? [])
+  .map(value => resolveEnumValue(Object.values(Setting), value))
 
 const resolveTypescriptValue = (
   options: EslintConfigOptions | undefined,
@@ -474,6 +518,7 @@ interface BuildConfigsParams {
   runtime: Runtime
   runtimeCoreConfig: FlatConfigArray
   tailwindOptions: TailwindOptions | undefined
+  formatting: EslintConfigOptions['formatting']
   testingFiles: EslintConfigOptions['testingFiles']
   tsconfigRootDir: string | undefined
   uniqueExtensions: Extension[]
@@ -488,7 +533,7 @@ const buildEslintConfigs = async (params: BuildConfigsParams): Promise<FlatConfi
   const {
     astroOptions, defaultIgnores, gitignoreConfig, nextMode, resolvedFrameworks,
     resolvedTypescript, rootDir, runtime, runtimeCoreConfig, tailwindOptions,
-    testingFiles, tsconfigRootDir, uniqueExtensions, uniqueFormats, uniqueLibraries,
+    formatting, testingFiles, tsconfigRootDir, uniqueExtensions, uniqueFormats, uniqueLibraries,
     uniqueTesting, uniqueTools, userIgnores
   } = params
 
@@ -566,12 +611,12 @@ const buildEslintConfigs = async (params: BuildConfigsParams): Promise<FlatConfi
         rules: { '@next/next/no-html-link-for-pages': 'off' }
       } as TSESLint.FlatConfig.Config] :
       []),
-    ...applyTestingFileOverrides(
+    ...withTestingCoexistence(applyTestingFileOverrides(
       await getIntegrationConfigs(
         uniqueLibraries, uniqueTools, uniqueTesting, uniqueFormats, uniqueExtensions
       ),
       testingFiles
-    ),
+    )),
     ...(resolvedFrameworks.next ?
       [{
         files: ['next-env.d.ts'],
@@ -604,6 +649,7 @@ const buildEslintConfigs = async (params: BuildConfigsParams): Promise<FlatConfi
     },
     ...(tailwindOptions ? [buildTailwindSettingsConfig(tailwindOptions)] : []),
     ...untypedTypescriptConfigs,
+    ...createFormattingConfig(formatting),
     ...(await getPrettierConfig(uniqueTools))
   ]
 }
@@ -714,15 +760,20 @@ const resolveProjectConfigs = async (
   })
 )
 
+const resolveInheritedUntypedFiles = (typescript: EslintConfigOptions['typescript']): EslintConfigOptions => (
+  typeof typescript === 'object' && typescript.untypedFiles !== undefined ?
+    { typescript: { untypedFiles: typescript.untypedFiles } } :
+    {}
+)
+
 const resolveInheritedProjectDefaults = (
   options: EslintConfigOptions | undefined
 ): EslintConfigOptions['projectDefaults'] => mergeProjectOptions(
   {
     ...(options?.detection === undefined ? {} : { detection: options.detection }),
     ...(options?.tailwind === undefined ? {} : { tailwind: options.tailwind }),
-    ...(typeof options?.typescript === 'object' && options.typescript.untypedFiles !== undefined ?
-      { typescript: { untypedFiles: options.typescript.untypedFiles } } :
-      {})
+    ...(options?.formatting === undefined ? {} : { formatting: options.formatting }),
+    ...resolveInheritedUntypedFiles(options?.typescript)
   },
   options?.projectDefaults ?? {}
 )
@@ -876,11 +927,11 @@ export const defineConfig: ConfigComposer = async function defineConfig(
   // option is provided, which silently turned 'merge' into 'replace'.
   const configuredExtensions = mergeOptionalBucket(
     'extensions', detectedExtensions, presetDefaults.extensions, optExtensions, options, optionMergeStrategy
-  ) as Extension[]
+  ).map(value => resolveEnumValue(OPTIONAL_BUCKETS.extensions, value))
 
   const formats = mergeOptionalBucket(
     'formats', detectedFormats, presetDefaults.formats, optFormats, options, optionMergeStrategy
-  ) as Format[]
+  ).map(value => resolveEnumValue(OPTIONAL_BUCKETS.formats, value))
 
   const frameworks = mergeFrameworkOption(
     frameworkDefaults, presetDefaults.frameworks, optFrameworks, optionMergeStrategy
@@ -888,7 +939,7 @@ export const defineConfig: ConfigComposer = async function defineConfig(
 
   const libraries = mergeOptionalBucket(
     'libraries', detectedLibraries, presetDefaults.libraries, optLibraries, options, optionMergeStrategy
-  ) as Library[]
+  ).map(value => resolveEnumValue(OPTIONAL_BUCKETS.libraries, value))
 
   const nextMode = resolveNextModeValue(options, presetDefaults, detected)
   const runtime = resolveRuntimeValue(options, presetDefaults, detected, requestedPreset !== undefined)
@@ -897,11 +948,11 @@ export const defineConfig: ConfigComposer = async function defineConfig(
 
   const testing = mergeOptionalBucket(
     'testing', detectedTesting, presetDefaults.testing, optTesting, options, optionMergeStrategy
-  ) as Testing[]
+  ).map(value => resolveEnumValue(OPTIONAL_BUCKETS.testing, value))
 
   const tools = mergeOptionalBucket(
     'tools', detectedTools, presetDefaults.tools, optTools, options, optionMergeStrategy
-  ) as Tool[]
+  ).map(value => resolveEnumValue(OPTIONAL_BUCKETS.tools, value))
 
   const typescript = resolveTypescriptValue(options, presetDefaults, detected)
   const resolvedTypescript = resolveTypescriptOptions(typescript)
@@ -934,6 +985,7 @@ export const defineConfig: ConfigComposer = async function defineConfig(
     runtime,
     runtimeCoreConfig: params.runtimeCoreConfig,
     tailwindOptions: params.tailwindOptions,
+    formatting: options?.formatting,
     testingFiles: options?.testingFiles,
     tsconfigRootDir,
     uniqueExtensions,
@@ -983,5 +1035,5 @@ export const defineConfig: ConfigComposer = async function defineConfig(
 
   const finalConfig = attachReferencedPlugins(applyStrictMode(patchedConfigs, strict))
 
-  return attachDefineConfigMetadata(finalConfig, { extraConfigs, options })
+  return attachDefineConfigMetadata(finalConfig, { extraConfigs, options, root: rootDir })
 }

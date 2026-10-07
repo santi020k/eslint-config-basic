@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:*",
-    "@slidev/cli": "^53.0.0",
-    "@slidev/theme-default": "^0.25.0",
+    "@santi020k/eslint-config-slidev": "workspace:*",
+    "@santi020k/eslint-config-vue": "workspace:*",
     "eslint": "catalog:",
     "typescript": "catalog:",
     "vue": "catalog:"

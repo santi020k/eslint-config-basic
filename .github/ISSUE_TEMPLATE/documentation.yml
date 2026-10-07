@@ -1,0 +1,44 @@
+name: Documentation or accessibility report
+description: Report a broken example, link, documentation error, or accessibility issue.
+title: "[Docs]: "
+labels: ["documentation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Reports are public. Remove credentials, private code, and personal data.
+        Use [private reporting](https://github.com/santi020k/eslint-config-basic/security/advisories/new) for security vulnerabilities.
+  - type: input
+    id: page
+    attributes:
+      label: Documentation URL
+      placeholder: https://eslint.santi020k.com/guide/installation/
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and reproduction
+      description: Include the incorrect text, broken example, or steps to reproduce. For accessibility, include keyboard, screen reader, zoom, or reduced-motion context.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result or suggested correction
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Installed package version or documentation archive
+      placeholder: Basic 3.6.0, current docs, or v2 archive
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues for this problem.
+          required: true
+        - label: This report contains no secrets, private code, or personal information.
+          required: true

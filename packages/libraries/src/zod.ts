@@ -18,7 +18,17 @@ export const zod: () => Promise<TSESLint.FlatConfig.ConfigArray> = defineLazyCon
         zod: pluginZod
       },
       rules: {
-        ...pluginZod.configs.recommended.rules
+        ...pluginZod.configs.recommended.rules,
+        // Zod 5 split these established defaults into strict and stylistic presets.
+        'zod/array-style': 'error',
+        'zod/prefer-enum-over-literal-union': 'error',
+        'zod/prefer-loose-object': 'error',
+        'zod/prefer-meta': 'error',
+        'zod/prefer-meta-last': 'error',
+        'zod/prefer-nullish': 'error',
+        'zod/prefer-strict-object': 'error',
+        'zod/prefer-string-schema-with-trim': 'error',
+        'zod/prefer-trim-before-string-length-checks': 'error'
       }
     }
   ]

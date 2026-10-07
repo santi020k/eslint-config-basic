@@ -1,0 +1,153 @@
+/* Shared editorial direction for current guides and frozen documentation. */
+:root {
+  --sl-content-width: 48rem;
+  --s2k-radius: 1rem;
+}
+
+main h1 {
+  max-width: 24ch;
+  font-size: clamp(2rem, 4.2vw, 3.75rem);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+.sl-markdown-content :is(h2, h3, h4):not(:where(.not-content *)) {
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.25;
+}
+
+.sl-markdown-content h2:not(:where(.not-content *)) {
+  padding-top: 0;
+  border: 0;
+}
+
+.sl-markdown-content > .sl-heading-wrapper.level-h2 {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid hsl(var(--line) / 0.65);
+}
+
+.sl-markdown-content :is(p, li):not(:where(.not-content *)) {
+  line-height: 1.85;
+}
+
+.sl-markdown-content .expressive-code,
+.ui-code-tabs {
+  box-shadow: none;
+}
+
+.sl-markdown-content blockquote {
+  background: hsl(var(--surface-muted));
+}
+
+.pagination-links a,
+.s2k-project-footer,
+.s2k-docs-feedback {
+  background: hsl(var(--surface));
+  box-shadow: none;
+}
+
+.pagination-links a:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.s2k-project-footer {
+  border-inline: 0;
+  border-bottom: 0;
+  border-radius: 0;
+  padding-inline: 0;
+}
+
+/* Footer and feedback stay on the reading canvas rather than separate cards. */
+.s2k-project-footer,
+.s2k-docs-feedback {
+  background: transparent;
+}
+
+.s2k-docs-feedback {
+  padding: 1.5rem 0;
+  border: 0;
+  border-block: 1px solid hsl(var(--line) / 0.7);
+  border-radius: 0;
+}
+
+.s2k-docs-feedback h2 {
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.s2k-docs-feedback .s2k-tool-status:empty {
+  min-height: 0;
+  margin: 0;
+}
+
+.s2k-docs-feedback__community,
+.s2k-docs-feedback__community .ui-link {
+  border: 0;
+  padding-top: 0;
+  color: hsl(var(--ink-soft));
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+:root[data-theme='dark'] .s2k-docs-feedback__community .ui-link {
+  color: hsl(var(--ink-soft));
+}
+
+.s2k-docs-feedback__community .ui-link:hover {
+  color: hsl(var(--s2k-nav-focus));
+}
+
+/* Native document transitions retain browser navigation and Starlight lifecycle. */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 200ms;
+  animation-timing-function: ease-out;
+}
+
+@media (max-width: 49.99rem) {
+  main h1 {
+    font-size: clamp(2rem, 8vw, 2.8rem);
+  }
+
+  .sl-markdown-content > .sl-heading-wrapper.level-h2 {
+    margin-top: 2.25rem;
+    padding-top: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+
+:root[data-theme='dark'] .sl-markdown-content .expressive-code .title {
+  color: hsl(var(--accent));
+}

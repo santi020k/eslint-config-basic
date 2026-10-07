@@ -91,6 +91,8 @@ test.describe('Adoption tools', () => {
   test('page feedback is stored locally and reveals a follow-up for negative feedback', async ({ page }) => {
     await page.goto('/guide/releases/')
 
+    await expect(page.locator('[data-feedback-issue]')).toBeHidden()
+
     await page.locator('[data-feedback-value="no"]').click()
 
     await expect(page.locator('[data-feedback-status]')).toContainText('more context')
@@ -104,5 +106,86 @@ test.describe('Adoption tools', () => {
     )
 
     expect(storedFeedback).toBe('no')
+
+    await page.reload()
+
+    await expect(page.locator('[data-feedback-issue]')).toBeVisible()
+
+    await expect(page.locator('[data-feedback-actions]')).toBeHidden()
   })
+})
+
+test('feedback works when browser storage is unavailable', async ({ page }) => {
+  await page.addInitScript(() => {
+    Storage.prototype.getItem = () => {
+      throw new Error('Storage unavailable')
+    }
+
+    Storage.prototype.setItem = () => {
+      throw new Error('Storage unavailable')
+    }
+  })
+
+  await page.goto('/guide/releases/')
+
+  await page.locator('[data-feedback-value="no"]').click()
+
+  await expect(page.locator('[data-feedback-issue]')).toBeVisible()
+
+  await expect(page.locator('[data-feedback-status]')).toContainText('will not persist')
+})
+
+test('GitHub reports share a canonical documentation path without query or fragment', async ({ page }) => {
+  await page.goto('/guide/config-builder/?fw=react#private-context')
+
+  const report = page.getByRole('link', { name: 'Improve this page' })
+  const expectedURL = new URL('https://github.com/santi020k/eslint-config-basic/issues/new')
+
+  expectedURL.searchParams.set('template', 'documentation.yml')
+
+  expectedURL.searchParams.set('title', 'Docs: Config Builder')
+
+  expectedURL.searchParams.set('page', 'https://eslint.santi020k.com/guide/config-builder/')
+
+  await expect(report).toHaveAttribute('href', expectedURL.href)
+
+  await expect(report).toHaveAttribute('rel', 'noopener noreferrer')
+
+  await expect(page.getByRole('link', { name: 'Report a bug', exact: true })).toHaveAttribute('href', /template=bug_report.yml/)
+})
+
+test('package manager tabs support keyboard navigation and persist the selected runner', async ({ page }) => {
+  await page.goto('/')
+
+  const managers = page.getByRole('tablist', { name: 'Choose a package manager' }).first()
+
+  await managers.getByRole('tab', { name: 'pnpm', exact: true }).focus()
+
+  await page.keyboard.press('ArrowRight')
+
+  await expect(managers.getByRole('tab', { name: 'npm', exact: true })).toHaveAttribute('aria-selected', 'true')
+
+  await expect(page.locator('.s2k-quickstart [role="tabpanel"]:not([hidden])')).toContainText('npm install')
+
+  await page.reload()
+
+  await expect(managers.getByRole('tab', { name: 'npm', exact: true })).toHaveAttribute('aria-selected', 'true')
+})
+
+test('homepage content remains visible with reduced motion', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+
+  await page.goto('/')
+
+  const sections = page.locator('.s2k-home-section')
+
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
+
+  await expect(page.getByRole('link', { name: 'Build your config', exact: true }).first()).toBeVisible()
+
+  for (const section of await sections.all()) {
+    await expect(section.getByRole('heading', { level: 2 })).toBeVisible()
+
+    await expect(section.locator('[data-ui-scroll-reveal]')).toHaveCSS('opacity', '1')
+  }
 })

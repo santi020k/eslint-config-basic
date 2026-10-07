@@ -3,6 +3,14 @@
     {
       "kind": "incompatible",
       "peer": "eslint",
+      "introducedBy": "@santi020k/eslint-config-extensions",
+      "wantedRange": "^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9",
+      "owner": "packages/extensions",
+      "removalCondition": "Remove when eslint-plugin-jsx-a11y declares ESLint 10 support. Packed Astro Doctor missing-alt and accessible-image regressions exercise the current ESLint 10 contract."
+    },
+    {
+      "kind": "incompatible",
+      "peer": "eslint",
       "introducedBy": "@santi020k/eslint-config-astro",
       "wantedRange": "^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9",
       "owner": "packages/astro",
@@ -63,22 +71,6 @@
       "wantedRange": "^4",
       "owner": "packages/libraries",
       "removalCondition": "Remove when the AI SDK dependency graph no longer mixes Zod 3 and Zod 4 peers."
-    },
-    {
-      "kind": "incompatible",
-      "peer": "cac",
-      "introducedBy": "devframe",
-      "wantedRange": "^7.0.0",
-      "owner": "packages/playground/nuxt",
-      "removalCondition": "Remove when Nuxt's devtools chain resolves devframe 0.8 with cac 7 instead of tsup's cac 6."
-    },
-    {
-      "kind": "incompatible",
-      "peer": "devframe",
-      "introducedBy": "@devframes/agentic",
-      "wantedRange": "1.0.0",
-      "owner": "packages/playground/slidev",
-      "removalCondition": "Remove when Slidev aligns @vitejs/devtools-kit's devframe 0.8 peer with @devframes/agentic's devframe 1 peer."
     }
   ]
 }

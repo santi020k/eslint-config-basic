@@ -1,3 +1,4 @@
+import tsParser from '@typescript-eslint/parser'
 import type { TSESLint } from '@typescript-eslint/utils'
 import pluginAstro from 'eslint-plugin-astro'
 
@@ -10,11 +11,13 @@ import { type AstroOptions, getRules } from './rules.js'
  * @returns {TSESLint.FlatConfig.ConfigArray} The Astro configuration array
  */
 export const createAstroConfig = (options?: AstroOptions): TSESLint.FlatConfig.ConfigArray => [
-  ...pluginAstro.configs.recommended,
+  ...pluginAstro.configs['flat/recommended'],
   {
     files: ['**/*.astro'],
     languageOptions: {
       parserOptions: {
+        // Astro frontmatter and scripts accept TypeScript even without type-aware linting.
+        parser: tsParser,
         project: options?.typeChecked ?? true,
         tsconfigRootDir: options?.tsconfigRootDir
       }

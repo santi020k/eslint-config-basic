@@ -7,7 +7,7 @@ description: "@santi020k/eslint-config-basic"
 
 ### AstroOptions
 
-Defined in: packages/astro/src/rules.ts:7
+Defined in: [packages/astro/src/rules.ts:7](https://github.com/santi020k/eslint-config-basic/blob/main/packages/astro/src/rules.ts#L7)
 
 Astro-specific ESLint options
 
@@ -21,7 +21,7 @@ Astro-specific ESLint options
 
 > `optional` **hasReact?**: `boolean`
 
-Defined in: packages/astro/src/rules.ts:12
+Defined in: [packages/astro/src/rules.ts:12](https://github.com/santi020k/eslint-config-basic/blob/main/packages/astro/src/rules.ts#L12)
 
 If true, includes React-specific overrides for .astro files
 
@@ -29,7 +29,7 @@ If true, includes React-specific overrides for .astro files
 
 > `optional` **hasSolid?**: `boolean`
 
-Defined in: packages/astro/src/rules.ts:15
+Defined in: [packages/astro/src/rules.ts:15](https://github.com/santi020k/eslint-config-basic/blob/main/packages/astro/src/rules.ts#L15)
 
 If true, includes SolidJS-specific sorting groups and JSX overrides
 
@@ -37,7 +37,7 @@ If true, includes SolidJS-specific sorting groups and JSX overrides
 
 > `optional` **hasSvelte?**: `boolean`
 
-Defined in: packages/astro/src/rules.ts:18
+Defined in: [packages/astro/src/rules.ts:18](https://github.com/santi020k/eslint-config-basic/blob/main/packages/astro/src/rules.ts#L18)
 
 If true, includes Svelte-specific sorting groups
 
@@ -45,7 +45,7 @@ If true, includes Svelte-specific sorting groups
 
 > `optional` **hasVue?**: `boolean`
 
-Defined in: packages/astro/src/rules.ts:21
+Defined in: [packages/astro/src/rules.ts:21](https://github.com/santi020k/eslint-config-basic/blob/main/packages/astro/src/rules.ts#L21)
 
 If true, includes Vue-specific sorting groups
 
@@ -53,7 +53,7 @@ If true, includes Vue-specific sorting groups
 
 > `optional` **tsconfigRootDir?**: `string`
 
-Defined in: packages/astro/src/rules.ts:27
+Defined in: [packages/astro/src/rules.ts:27](https://github.com/santi020k/eslint-config-basic/blob/main/packages/astro/src/rules.ts#L27)
 
 Optional tsconfig root passed through from the main config composer.
 This keeps Astro parser project lookup stable when projectService is disabled.
@@ -62,7 +62,7 @@ This keeps Astro parser project lookup stable when projectService is disabled.
 
 > `optional` **typeChecked?**: `boolean`
 
-Defined in: packages/astro/src/rules.ts:33
+Defined in: [packages/astro/src/rules.ts:33](https://github.com/santi020k/eslint-config-basic/blob/main/packages/astro/src/rules.ts#L33)
 
 Whether to enable type-aware linting for Astro files.
 Disabling this avoids parser crashes in Astro packages without TSConfig files.
@@ -73,7 +73,7 @@ Disabling this avoids parser crashes in Astro packages without TSConfig files.
 
 > **createAstroConfig**(`options?`): `ConfigArray`
 
-Defined in: packages/astro/src/index.ts:12
+Defined in: [packages/astro/src/index.ts:13](https://github.com/santi020k/eslint-config-basic/blob/main/packages/astro/src/index.ts#L13)
 
 Creates Astro ESLint configuration based on enabled frameworks
 
@@ -97,7 +97,7 @@ The Astro configuration array
 
 > **getRules**(`options?`): `TSESLint.Linter.RulesRecord`
 
-Defined in: packages/astro/src/rules.ts:58
+Defined in: [packages/astro/src/rules.ts:58](https://github.com/santi020k/eslint-config-basic/blob/main/packages/astro/src/rules.ts#L58)
 
 Generates Astro-specific rules based on enabled frameworks
 

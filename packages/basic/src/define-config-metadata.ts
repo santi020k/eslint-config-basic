@@ -5,6 +5,7 @@ const DEFINE_CONFIG_METADATA = Symbol.for('@santi020k/eslint-config-basic/define
 export interface DefineConfigMetadata {
   extraConfigs: ConfigInput[]
   options?: EslintConfigOptions
+  root?: string
 }
 
 type ConfigWithMetadata = FlatConfigArray & {

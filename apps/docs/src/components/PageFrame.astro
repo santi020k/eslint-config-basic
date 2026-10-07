@@ -14,3 +14,27 @@ import UIPrimitives from '@santi020k/lumen-astro/runtime'
   </Fragment>
   <slot />
 </Default>
+
+<script>
+  // WebKit focuses overflow regions but does not consistently scroll them with arrows.
+  const shouldScrollCode = (event: KeyboardEvent) => {
+    if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey)
+      return false
+
+    return event.key === 'ArrowLeft' || event.key === 'ArrowRight'
+  }
+
+  document.addEventListener('keydown', event => {
+    if (!shouldScrollCode(event))
+      return
+
+    const target = event.target
+
+    if (!(target instanceof HTMLElement) || !target.matches('.expressive-code pre[tabindex="0"]') || target.scrollWidth <= target.clientWidth)
+      return
+
+    event.preventDefault()
+
+    target.scrollBy({ behavior: 'instant', left: event.key === 'ArrowRight' ? 40 : -40 })
+  })
+</script>

@@ -1434,6 +1434,39 @@ describe('CLI command UX', () => {
     process.exitCode = undefined
   })
 
+  test('should diagnose the bundled Astro Doctor instead of an unrelated root plugin', async () => {
+    const cwd = createTempProject({ name: 'tmp-project', scripts: { lint: 'eslint .' }, type: 'module' })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+
+    writeFakePackage(cwd, 'eslint', '10.8.0')
+    writeFakePackage(cwd, '@santi020k/eslint-config-extensions', '3.1.4', {
+      exports: { '.': { import: './dist/index.js' } }, type: 'module'
+    })
+    const extensionsDir = join(cwd, 'node_modules/@santi020k/eslint-config-extensions')
+    const vendorDir = join(extensionsDir, 'dist/vendor')
+
+    mkdirSync(vendorDir, { recursive: true })
+    writeFileSync(join(extensionsDir, 'dist/index.js'), 'export default []')
+    writeFileSync(join(vendorDir, 'package.json'), '{"private":true}')
+    writeFakePackage(vendorDir, '@santi020k/eslint-plugin-astro-doctor', '1.2.0', {
+      engines: { node: '>=99' }, peerDependencies: { eslint: '^10.0.0' }
+    })
+    writeFakePackage(cwd, '@santi020k/eslint-plugin-astro-doctor', '1.4.0', {
+      engines: { node: '>=22' }, peerDependencies: { eslint: '^10.0.0' }
+    })
+    writeFileSync(join(cwd, 'eslint.config.js'), `export default [
+      { name: 'eslint-config-astro/recommended', rules: {} },
+      { name: 'eslint-config-integrations/astro-doctor', rules: {} }
+    ]`)
+
+    await handleDoctor(cwd)
+
+    expect(logSpy.mock.calls.flat().join('\n')).toContain('Astro Doctor 1.2.0 requires Node >=99')
+    expect(logSpy.mock.calls.flat().join('\n')).not.toContain('could not be resolved')
+    logSpy.mockRestore()
+    process.exitCode = undefined
+  })
+
   test('should resolve an enabled Astro Doctor plugin from a sibling workspace', async () => {
     const cwd = createTempProject({
       name: 'tmp-project',
