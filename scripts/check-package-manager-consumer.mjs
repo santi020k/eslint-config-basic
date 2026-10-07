@@ -77,6 +77,9 @@ try {
       typescript: '^6.0.0'
     },
     name: `eslint-config-${manager}-consumer-check`,
+    ...(manager === 'pnpm' && {
+      packageManager: JSON.parse(readFileSync(join(rootDir, 'package.json'), 'utf8')).packageManager
+    }),
     ...(['bun', 'npm'].includes(manager) && { overrides: transitiveInternalDependencies }),
     private: true,
     ...(manager === 'yarn' && {
