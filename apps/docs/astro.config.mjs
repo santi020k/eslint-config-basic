@@ -1,7 +1,11 @@
+import { fileURLToPath } from 'node:url'
+
 import { unified } from '@astrojs/markdown-remark'
 import starlight from '@astrojs/starlight'
 import { santi020kShikiThemes } from '@santi020k/theme/shiki'
 import { defineConfig } from 'astro/config'
+
+import { rewriteDocsMarkdownLinks } from '../../scripts/docs-markdown-links.mjs'
 
 const makeScrollablesFocusable = tree => {
   const visit = node => {
@@ -23,6 +27,11 @@ const rehypeScrollableFocusable = () => makeScrollablesFocusable
 const base = process.env.DOCS_BASE ?? '/'
 const site = process.env.DOCS_SITE_URL ?? 'https://eslint.santi020k.com'
 const siteName = 'ESLint Config'
+const docsRoot = fileURLToPath(new URL('./src/content/docs/', import.meta.url))
+
+const rehypeDocsMarkdownLinks = () => (tree, file) => {
+  if (file.path) rewriteDocsMarkdownLinks(tree, file.path, docsRoot, base)
+}
 
 const siteDescription =
   'Production-ready ESLint flat-config documentation for JavaScript and TypeScript teams using React, Next.js, Astro, Vue, Nuxt, Svelte, Solid, Angular, NestJS, Hono, Expo, Preact, Qwik, Remix, React Router, TanStack Start, Lit, and opt-in integrations.'
@@ -398,7 +407,7 @@ export default defineConfig({
   ],
   markdown: {
     processor: unified({
-      rehypePlugins: [rehypeScrollableFocusable]
+      rehypePlugins: [rehypeScrollableFocusable, rehypeDocsMarkdownLinks]
     })
   },
   site
