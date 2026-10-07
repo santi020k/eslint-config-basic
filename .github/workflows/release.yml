@@ -246,3 +246,9 @@ jobs:
           fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Verify published release and consumer behavior
+        run: node scripts/check-published-release.mjs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_BASE_SHA: ${{ github.event.pull_request.base.sha }}

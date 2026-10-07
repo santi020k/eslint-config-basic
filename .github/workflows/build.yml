@@ -231,7 +231,6 @@ jobs:
 
   windows-smoke:
     name: Windows smoke (CLI + detection)
-    if: github.event_name != 'pull_request' || (github.head_ref != 'changeset-release/main' && !startsWith(github.head_ref, 'release/v'))
     runs-on: windows-latest
     timeout-minutes: 20
 
@@ -248,10 +247,26 @@ jobs:
       - name: Run CLI and detection tests on Windows
         run: pnpm --filter @santi020k/eslint-config-tests exec vitest run src/cli.test.ts src/detection.test.ts src/detection-fixtures.test.ts src/detection-internals.test.ts --maxWorkers=1
 
+  release-node24:
+    name: Release compatibility (Node 24.x)
+    if: github.event_name == 'pull_request' && (github.head_ref == 'changeset-release/main' || startsWith(github.head_ref, 'release/v'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+      - name: Set up pnpm workspace
+        uses: santi020k/quality/actions/setup-pnpm@eec1701b98bcc0b76d36af288ee78a0369cd84cc # v1
+        with:
+          node-version: 24.x
+      - name: Build test dependencies
+        run: pnpm exec turbo run build --filter=@santi020k/eslint-config-tests... --concurrency=50%
+      - name: Verify final candidate contracts
+        run: pnpm run test:run
+
   quality-gate:
     name: Quality gate
     if: always()
-    needs: [contracts, build, package-validation, package-manager-consumers, release-candidate, windows-smoke]
+    needs: [contracts, build, package-validation, package-manager-consumers, release-candidate, release-node24, windows-smoke]
     runs-on: ubuntu-latest
     steps:
       - name: Verify required jobs

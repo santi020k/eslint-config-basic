@@ -49,3 +49,21 @@ pnpm run lighthouse    # Run Lighthouse audits and enforce local budgets
 `tests/design-system.spec.ts` additionally checks narrow route families and archives, keyboard
 navigation, theme persistence, version switching, and reduced-motion visibility. Keep material
 design changes verified in light/dark themes at mobile and desktop widths.
+
+## Browser and visual release checks
+
+`pnpm run docs:test:a11y` runs the full Chromium suite, including mandatory screenshot
+comparisons, plus Firefox and WebKit navigation, search, theme, keyboard, and responsive
+checks. Playwright starts its own preview server; set `DOCS_TEST_PORT` to a free port
+when another checkout is using the default 4173.
+
+Screenshot baselines cover the home and installation pages at 390px and 1440px in both
+appearance modes. They are maintained separately for macOS and Ubuntu 24.04 ARM64;
+the docs workflow uses `ubuntu-24.04-arm` with the lockfile's Playwright browser build.
+Generate Linux baselines on that same platform, inspect the images, and then run the
+suite without `--update-snapshots` before committing them. Never generate replacements
+inside the validation workflow.
+
+After Pages deployment, the workflow checks `release-build.json` against the exact
+build commit, representative live routes, and the Pagefind search bundle. It retries
+briefly for deployment propagation and fails if the live site stays stale or broken.

@@ -1,40 +1,26 @@
 import { expect, test } from '@playwright/test'
 
-import { shouldRunVisualSnapshots, visualSnapshotSkipReason } from './helpers/visual-regression.js'
+for (const width of [390, 1440]) {
+  for (const colorScheme of ['light', 'dark'] as const) {
+    for (const { route, name } of [{ route: '/', name: 'homepage' }, { route: '/guide/installation/', name: 'installation' }]) {
+      test(`${name} ${width}px ${colorScheme} matches its baseline`, async ({ page }) => {
+        await page.setViewportSize({ height: 900, width })
 
-test.describe('Visual Regression', () => {
-  // eslint-disable-next-line playwright/no-skipped-test -- Visual snapshots are opt-in in local/CI runs.
-  test.skip(!shouldRunVisualSnapshots, visualSnapshotSkipReason)
+        await page.emulateMedia({ colorScheme, reducedMotion: 'reduce' })
 
-  test('homepage should match snapshot', async ({ page }) => {
-    await page.goto('/')
+        await page.goto(route)
 
-    await expect(page.locator('body')).toBeVisible()
+        await expect(page.locator('main h1')).toBeVisible()
 
-    // Hide dynamic elements if necessary (e.g., date-based content)
-    // await page.addStyleTag({ content: '.last-updated { display: none; }' })
+        await expect(page.locator('html')).toHaveAttribute('data-theme', colorScheme)
 
-    await expect(page).toHaveScreenshot('homepage.png', {
-      fullPage: true,
-      mask: [
-        // Mask the "Last updated" section as it changes on every commit
-        page.locator('.sl-flex.last-updated')
-      ]
-    })
-  })
+        await page.evaluate(async () => document.fonts.ready)
 
-  test('dark mode homepage should match snapshot', async ({ page }) => {
-    await page.goto('/')
-
-    await page.emulateMedia({ colorScheme: 'dark' })
-
-    await expect(page.locator('body')).toBeVisible()
-
-    await expect(page).toHaveScreenshot('homepage-dark.png', {
-      fullPage: true,
-      mask: [
-        page.locator('.sl-flex.last-updated')
-      ]
-    })
-  })
-})
+        await expect(page).toHaveScreenshot(`${name}-${width}-${colorScheme}.png`, {
+          fullPage: true,
+          mask: [page.locator('.sl-flex.last-updated')]
+        })
+      })
+    }
+  }
+}
