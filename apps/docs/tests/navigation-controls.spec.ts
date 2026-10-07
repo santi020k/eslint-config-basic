@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, type Locator, test } from '@playwright/test'
 
 import { expectNoUnexpectedAccessibilityViolations } from './helpers/accessibility.js'
 
@@ -147,4 +147,90 @@ for (const theme of ['light', 'dark'] as const) {
 
     expect(states[0]).toEqual(states[1])
   })
+}
+
+const expectCenteredMenuIcon = async (menu: Locator, iconName: string) => {
+  const icon = menu.locator(`.${iconName}`)
+
+  await expect(icon).toBeVisible()
+
+  const offset = await icon.evaluate(element => {
+    const bounds = element.getBoundingClientRect()
+    const buttonBounds = element.closest('button')?.getBoundingClientRect()
+
+    return buttonBounds ?
+      {
+        x: Math.abs(bounds.x + bounds.width / 2 - buttonBounds.x - buttonBounds.width / 2),
+        y: Math.abs(bounds.y + bounds.height / 2 - buttonBounds.y - buttonBounds.height / 2)
+      } :
+      undefined
+  })
+
+  expect(offset?.x).toBeLessThan(1)
+
+  expect(offset?.y).toBeLessThan(1)
+}
+
+for (const width of [320, 390, 768]) {
+  for (const theme of ['light', 'dark'] as const) {
+    test(`${width}px ${theme} menu icons align and keyboard dismissal restores focus`, async ({ page }) => {
+      await page.setViewportSize({ height: 844, width })
+
+      await page.emulateMedia({ colorScheme: theme, reducedMotion: 'reduce' })
+
+      await page.goto('/frameworks/astro/')
+
+      const menu = page.getByRole('button', { name: 'Menu', exact: true })
+      const sidebar = page.locator('#starlight__sidebar')
+
+      const controls = await page.locator([
+        '.s2k-docs-dock button[data-open-modal]',
+        '.s2k-docs-dock .s2k-nav-theme',
+        '.sl-menu-button'
+      ].join(', ')).evaluateAll(elements => elements.map(element => {
+        const bounds = element.getBoundingClientRect()
+
+        return {
+          height: bounds.height,
+          width: bounds.width,
+          x: bounds.x + bounds.width / 2,
+          y: bounds.y + bounds.height / 2
+        }
+      }))
+
+      expect(controls).toHaveLength(3)
+
+      for (const control of controls) {
+        expect(control.width).toBeGreaterThanOrEqual(44)
+
+        expect(control.height).toBeGreaterThanOrEqual(44)
+
+        expect(Math.abs(control.y - controls[0].y)).toBeLessThan(1)
+      }
+
+      expect(Math.abs((controls[2].x - controls[1].x) - (controls[1].x - controls[0].x))).toBeLessThan(1)
+
+      await expectCenteredMenuIcon(menu, 'open-menu')
+
+      await menu.press('Enter')
+
+      await expect(sidebar).toBeVisible()
+
+      await expect(menu.locator('.open-menu')).toBeHidden()
+
+      await expect(page.locator('body')).toHaveCSS('overflow', 'hidden')
+
+      await expectCenteredMenuIcon(menu, 'close-menu')
+
+      await expectNoUnexpectedAccessibilityViolations(page)
+
+      await menu.press('Escape')
+
+      await expect(sidebar).toBeHidden()
+
+      await expect(menu).toBeFocused()
+
+      await expect(menu.locator('.open-menu')).toBeVisible()
+    })
+  }
 }
