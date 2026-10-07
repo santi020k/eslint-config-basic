@@ -1,8 +1,10 @@
 // cspell:ignore commitish
-import { execFileSync } from 'node:child_process'
+import { execFileSync, spawnSync } from 'node:child_process'
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
+
+import { isRecoveryPackageVersioned } from './resolve-record-recovery.mjs'
 
 const source = resolve(process.env.RELEASE_SOURCE_PATH || '.')
 const repository = process.env.GITHUB_REPOSITORY
@@ -46,9 +48,13 @@ const packages = readdirSync(join(source, 'packages')).flatMap(directory => {
 
   if (pkg.private) return []
 
-  const previous = JSON.parse(execFileSync('git', ['show', `${base}:packages/${directory}/package.json`], { cwd: source, encoding: 'utf8' }))
+  const result = spawnSync('git', ['show', `${base}:packages/${directory}/package.json`], { cwd: source, encoding: 'utf8' })
 
-  return previous.version === pkg.version ? [] : [{ ...pkg, directory }]
+  if (result.error) throw result.error
+
+  const previous = result.status === 0 ? JSON.parse(result.stdout) : undefined
+
+  return isRecoveryPackageVersioned(pkg, previous) ? [{ ...pkg, directory }] : []
 })
 
 if (packages.length === 0) throw new Error('The selected source has no versioned packages.')
@@ -101,12 +107,47 @@ if (basicRecord) {
   records.push({ tag: umbrella, body: basicRecord.body, missing: !release })
 }
 
+const majorTag = `v${basic.version.split('.')[0]}`
+const majorObject = basicRecord ? tagObject(majorTag) : null
+
+const isAncestor = (ancestor, descendant) => {
+  const result = spawnSync('git', ['merge-base', '--is-ancestor', ancestor, descendant], { cwd: source })
+
+  if (result.error) throw result.error
+
+  if (result.status !== 0 && result.status !== 1) throw new Error('Cannot verify rolling tag ancestry.')
+
+  return result.status === 0
+}
+
+let advanceMajor = false
+
+if (basicRecord && majorObject && majorObject.sha !== commit) {
+  if (majorObject.type !== 'commit') throw new Error('Invalid rolling action tag target.')
+
+  advanceMajor = isAncestor(majorObject.sha, commit)
+
+  if (!advanceMajor && !isAncestor(commit, majorObject.sha)) throw new Error('Rolling action tag history diverges from the release.')
+}
+
 verifyPublishedConsumer({ basic, full: manifest('full'), packages })
 
 for (const record of records.filter(item => item.missing)) {
   console.log(`${dryRun ? 'Would create' : 'Creating'} GitHub Release ${record.tag} at ${commit}.`)
 
   if (!dryRun) api('releases', { tag_name: record.tag, target_commitish: commit, name: record.tag, body: record.body, draft: false, prerelease: false, make_latest: 'false' })
+}
+
+if (basicRecord && (!majorObject || advanceMajor)) {
+  const currentMajor = tagObject(majorTag)
+
+  if (currentMajor?.sha !== majorObject?.sha) throw new Error('Rolling action tag changed during recovery; retry after the active release completes.')
+
+  console.log(`${dryRun ? 'Would advance' : 'Advancing'} rolling action tag ${majorTag} to ${commit}.`)
+
+  if (!dryRun && !majorObject) api('git/refs', { ref: `refs/tags/${majorTag}`, sha: commit })
+
+  if (!dryRun && advanceMajor) execFileSync('gh', ['api', `repos/${repository}/git/refs/tags/${majorTag}`, '--method', 'PATCH', '--input', '-'], { input: JSON.stringify({ sha: commit, force: true }) })
 }
 
 console.log(`Verified ${packages.length} published artifacts and completed ${dryRun ? 'recovery preflight' : 'release record recovery'}.`)

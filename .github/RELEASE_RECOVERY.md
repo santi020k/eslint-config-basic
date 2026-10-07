@@ -35,8 +35,12 @@ is missing, Changesets does not recreate it on retry. Run **Recover release
 records** on main with the original merged release PR number. It validates the
 trusted source, all npm provenance and package tags, and registry consumer
 behavior before creating only missing release records from the original
-changelogs. It does not publish npm packages or replace existing records.
-Then rerun the original Release workflow to complete its verification gate.
+changelogs. It audits the maintained recovery workspace, does not publish npm packages or
+replace existing records, and moves only the documented rolling major Action tag
+forward when its history permits. The workflow verifies the complete original
+release afterward. If a newly disclosed development dependency advisory prevents
+rerunning the historical source, first merge its remediation on main and use this
+recovery workflow; do not weaken the historical audit or republish artifacts.
 
 After publishing, `scripts/check-published-release.mjs` verifies each versioned npm
 package's artifact integrity and provenance source/workflow, umbrella/package tags,
