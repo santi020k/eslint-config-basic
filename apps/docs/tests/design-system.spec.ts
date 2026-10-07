@@ -224,3 +224,21 @@ for (const colorScheme of ['light', 'dark'] as const) {
     await expect(controls.locator('starlight-theme-select select')).toBeVisible()
   })
 }
+
+for (const route of ['/guide/cli/', '/tooling/overview/']) {
+  test(`code blocks on ${route} support keyboard scrolling`, async ({ page }) => {
+    await page.goto(route)
+
+    const blocks = page.locator('.expressive-code pre')
+
+    expect(await blocks.count()).toBeGreaterThan(0)
+
+    for (const block of await blocks.all()) {
+      await expect(block).toHaveAttribute('tabindex', '0')
+    }
+
+    await blocks.first().focus()
+
+    await expect(blocks.first()).toBeFocused()
+  })
+}

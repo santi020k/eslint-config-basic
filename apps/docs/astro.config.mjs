@@ -3,9 +3,9 @@ import starlight from '@astrojs/starlight'
 import { santi020kShikiThemes } from '@santi020k/theme/shiki'
 import { defineConfig } from 'astro/config'
 
-const rehypeTableFocusable = () => tree => {
+const makeScrollablesFocusable = tree => {
   const visit = node => {
-    if (node.type === 'element' && node.tagName === 'table') {
+    if (node.type === 'element' && (node.tagName === 'table' || node.tagName === 'pre')) {
       node.properties = node.properties ?? {}
 
       node.properties.tabIndex = 0
@@ -19,6 +19,7 @@ const rehypeTableFocusable = () => tree => {
   visit(tree)
 }
 
+const rehypeScrollableFocusable = () => makeScrollablesFocusable
 const base = process.env.DOCS_BASE ?? '/'
 const site = process.env.DOCS_SITE_URL ?? 'https://eslint.santi020k.com'
 const siteName = 'ESLint Config'
@@ -266,6 +267,12 @@ export default defineConfig({
         baseUrl: 'https://github.com/santi020k/eslint-config-basic/edit/main/apps/docs/'
       },
       expressiveCode: {
+        plugins: [{
+          name: 's2k-keyboard-scroll',
+          hooks: {
+            postprocessRenderedBlockGroup: ({ renderData }) => makeScrollablesFocusable(renderData.groupAst)
+          }
+        }],
         themes: [santi020kShikiThemes.dark, santi020kShikiThemes.light]
       },
       favicon: '/favicon.svg',
@@ -390,7 +397,7 @@ export default defineConfig({
   ],
   markdown: {
     processor: unified({
-      rehypePlugins: [rehypeTableFocusable]
+      rehypePlugins: [rehypeScrollableFocusable]
     })
   },
   site
