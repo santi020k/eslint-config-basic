@@ -38,7 +38,7 @@ const verifyWorkflow = (workflow, repository) => {
 }
 
 const hasReleaseSource = (definition, commit, repository) => definition?.resolvedDependencies?.some(item => item?.digest?.gitCommit === commit && item.uri === `git+https://github.com/${repository}@refs/heads/main`)
-const hasArtifactSubject = (statement, name, version, digest) => statement?.subject?.some(item => item?.name === `pkg:npm/${encodeURIComponent(name).replace('%2F', '/')}@${version}` && item?.digest?.sha512 === digest)
+const hasArtifactSubject = (statement, name, version, digest) => statement?.subject?.some(item => item?.name === `pkg:npm/${encodeURIComponent(name).replaceAll('%2F', '/')}@${version}` && item?.digest?.sha512 === digest)
 
 export const verifyProvenance = ({ metadata, attestations, name, version, commit, repository }) => {
   const integrity = verifyRegistryMetadata(metadata, name, version)
