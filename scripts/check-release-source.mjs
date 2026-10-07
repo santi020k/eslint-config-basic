@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs'
+import { readdirSync, readFileSync } from 'node:fs'
 
 import { gt, valid } from 'semver'
 
@@ -19,6 +19,14 @@ const validateVersionedBranch = (branch, version, previousVersion) => {
 
   if (!valid(version) || !valid(previousVersion) || !gt(version, previousVersion)) {
     throw new Error(`A release must increase the Basic version (${previousVersion} → ${version}).`)
+  }
+}
+
+export const validateConsumedChangesets = fileNames => {
+  const pending = fileNames.filter(name => name.endsWith('.md') && name !== 'README.md')
+
+  if (pending.length > 0) {
+    throw new Error(`Release metadata must consume all pending changesets: ${pending.join(', ')}.`)
   }
 }
 
@@ -52,6 +60,8 @@ if (process.argv[1]?.endsWith('check-release-source.mjs')) {
     version: manifest.version,
     previousVersion: process.env.RELEASE_PREVIOUS_VERSION
   })
+
+  validateConsumedChangesets(readdirSync('.changeset'))
 
   console.log(`Validated release source for Basic ${manifest.version}.`)
 }

@@ -4,21 +4,36 @@
 
 ### Minor Changes
 
+- Add optional typed formatting preferences with workspace inheritance. Restrict Testing Library import heuristics in Playwright-owned scopes while retaining actual Testing Library checks and unit-test behavior.
+
+  Doctor now inventories local workspace lint declarations, reports sampled effective-config evidence for potentially redundant Astro workaround fields, and generates missing lint scripts with zero-warning enforcement. Existing scripts, defaults, and overrides remain unchanged.
+
+  Consumer regression fixtures cover mixed Astro/React workspaces, independently linted Expo apps with typed Astro scopes, Playwright/Testing Library coexistence, and React/Hono runtime scopes. No mandatory migration is required. For custom browser-test locations, configure `testingFiles.playwright`; review Doctor candidates across all affected globs before removing fields.
+
 - Refresh the supported dependency ecosystem and security overrides, preserve Zod integration defaults across the plugin upgrade, guarantee TypeScript parsing in Astro frontmatter, and improve the release gates and npm documentation.
 
-  The Basic README gains light/dark artwork, package selection guidance, and published asset/support links. The documentation site uses npm Lumen Astro 4 with accessible motion, contextual GitHub issue reporting, resilient browser feedback, responsive report output, and full-glyph WOFF2 fonts that substantially reduce transfer size.
+    The Basic README gains light/dark artwork, package selection guidance, and published asset/support links. The documentation site uses npm Lumen Astro 4 with accessible motion, contextual GitHub issue reporting, resilient browser feedback, responsive report output, and full-glyph WOFF2 fonts that substantially reduce transfer size.
 
-  Release preparation now accepts validated `release/v<stable-semver>` branches alongside Changesets-generated branches; both undergo source/version checks, complete preflight, and a dependency audit before publication.
+    Release preparation now accepts validated `release/v<stable-semver>` branches alongside Changesets-generated branches; both undergo source/version checks, complete preflight, and a dependency audit before publication.
 
-  Release verification now retains Node 24 and Windows compatibility checks on
-  release pull requests, runs Linux and macOS visual baselines plus Firefox/WebKit
-  navigation coverage, and verifies registry artifacts, provenance, release tags,
-  published consumer behavior, and live documentation after deployment.
+    Release verification now retains Node 24 and Windows compatibility checks on
+    release pull requests, runs Linux and macOS visual baselines plus Firefox/WebKit
+    navigation coverage, and verifies registry artifacts, provenance, release tags,
+    published consumer behavior, and live documentation after deployment.
 
 ### Patch Changes
 
-- Updated dependencies []:
-  - @santi020k/eslint-config-core@3.1.4
+- Center the documentation mobile menu and close icons, align utility controls, and clarify the open state with a subtle accented button surface.
+
+- Animate documentation mobile menu opening and closing with subtle icon and drawer transitions, including a brief blur and immediate reduced-motion states.
+
+- Fix narrow mobile header clipping, improve sidebar readability, and remove redundant spacing around the mobile table of contents.
+
+- Resolve generated Markdown reference links to published routes across current docs and frozen archives, preserving fragments and deployment base paths.
+
+- Clarify the v3.6.0 release candidate, upgrade verification, current troubleshooting, and shared editor and CI lint setup.
+- Updated dependencies [`ddaa3c8`]:
+  - @santi020k/eslint-config-core@3.2.0
   - @santi020k/eslint-config-typescript@3.1.6
 
 ## 3.5.4

@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest'
 
 import type { ReleaseSource } from '../../../scripts/check-release-source.mjs'
-import { validateReleaseSource } from '../../../scripts/check-release-source.mjs'
+import { validateConsumedChangesets, validateReleaseSource } from '../../../scripts/check-release-source.mjs'
 
 const source: ReleaseSource = {
   eventName: 'pull_request',
@@ -87,5 +87,19 @@ describe('release source authorization', () => {
     expect(() => {
       validateReleaseSource({ ...source, eventName: 'push' })
     }).toThrow('merged release pull request')
+  })
+})
+
+describe('release changeset consumption', () => {
+  test('accepts only support files after version preparation', () => {
+    expect(() => {
+      validateConsumedChangesets(['README.md', 'config.json'])
+    }).not.toThrow()
+  })
+
+  test('rejects pending public or documentation changesets', () => {
+    expect(() => {
+      validateConsumedChangesets(['README.md', 'consumer-config-improvements.md', 'docs-reference-links.md'])
+    }).toThrow('Release metadata must consume all pending changesets')
   })
 })

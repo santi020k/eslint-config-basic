@@ -13,3 +13,5 @@ export interface ReleaseSource {
 }
 
 export function validateReleaseSource(source: ReleaseSource): void
+
+export function validateConsumedChangesets(fileNames: string[]): void
