@@ -7,7 +7,7 @@ description: "@santi020k/eslint-config-basic"
 
 ### EslintConfigArray
 
-Defined in: [packages/basic/src/index.ts:697](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L697)
+Defined in: [packages/basic/src/index.ts:731](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L731)
 
 Portable public result type returned by the Basic config composer.
 
@@ -215,7 +215,7 @@ Gets or sets the length of the array. This is a number one higher than the highe
 
 > **length**: `number`
 
-Defined in: [packages/basic/src/index.ts:698](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L698)
+Defined in: [packages/basic/src/index.ts:732](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L732)
 
 Gets or sets the length of the array. This is a number one higher than the highest index in the array.
 
@@ -1743,7 +1743,7 @@ Defined in: [packages/basic/src/frameworks.ts:121](https://github.com/santi020k/
 
 > `const` **defineConfig**: `ConfigComposer`
 
-Defined in: [packages/basic/src/index.ts:855](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L855)
+Defined in: [packages/basic/src/index.ts:894](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L894)
 
 Generates the ESLint configuration array, applying configurations
 and integration settings based on the input configuration.
@@ -2058,7 +2058,7 @@ Defined in: [packages/basic/src/frameworks.ts:137](https://github.com/santi020k/
 
 > **attachReferencedPlugins**(`configs`): `ConfigArray`
 
-Defined in: [packages/basic/src/index.ts:766](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L766)
+Defined in: [packages/basic/src/index.ts:805](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L805)
 
 Copies already-loaded plugin objects onto rule blocks that reference them.
 ESLint 10 validates plugin availability per effective config object, while
@@ -2163,6 +2163,12 @@ Re-exports [FormatName](../core/src.md#formatname)
 ### FormatOption
 
 Re-exports [FormatOption](../core/src.md#formatoption)
+
+***
+
+### FormattingOptions
+
+Re-exports [FormattingOptions](../core/src.md#formattingoptions)
 
 ***
 

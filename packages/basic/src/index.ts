@@ -115,6 +115,7 @@ export type {
   FlatConfigArray,
   FormatName,
   FormatOption,
+  FormattingOptions,
   ImportedFramework,
   ImportGroupOptions,
   LibraryName,
@@ -222,6 +223,37 @@ const applyTestingFileOverrides = (
       files
     }
   })
+}
+
+const withTestingCoexistence = (configs: FlatConfigArray): FlatConfigArray => {
+  if (!configs.some(config => config.name === 'integrations/testing-library')) return configs
+
+  const playwrightConfigs = configs.filter(config => config.name === 'integrations/playwright')
+
+  return [
+    ...configs,
+    ...playwrightConfigs.map(config => ({
+      files: config.files,
+      ...(config.ignores ? { ignores: config.ignores } : {}),
+      name: 'eslint-config-basic/playwright-testing-library',
+      settings: { 'testing-library/utils-module': 'off' }
+    }))
+  ]
+}
+
+const createFormattingConfig = (formatting: EslintConfigOptions['formatting']): FlatConfigArray => {
+  if (!formatting) return []
+
+  return [{
+    files: ['**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx,astro,vue,svelte}'],
+    name: 'eslint-config-basic/formatting',
+    rules: {
+      ...(formatting.arrowParens ? { '@stylistic/arrow-parens': ['warn', formatting.arrowParens] } : {}),
+      ...(formatting.commaDangle ? { '@stylistic/comma-dangle': ['warn', formatting.commaDangle] } : {}),
+      ...(formatting.quotes ? { '@stylistic/quotes': ['warn', formatting.quotes, { avoidEscape: true }] } : {}),
+      ...(formatting.semi === undefined ? {} : { '@stylistic/semi': ['warn', formatting.semi ? 'always' : 'never'] })
+    }
+  }]
 }
 
 const ESLINT_CONFIG_FILENAMES = [
@@ -486,6 +518,7 @@ interface BuildConfigsParams {
   runtime: Runtime
   runtimeCoreConfig: FlatConfigArray
   tailwindOptions: TailwindOptions | undefined
+  formatting: EslintConfigOptions['formatting']
   testingFiles: EslintConfigOptions['testingFiles']
   tsconfigRootDir: string | undefined
   uniqueExtensions: Extension[]
@@ -500,7 +533,7 @@ const buildEslintConfigs = async (params: BuildConfigsParams): Promise<FlatConfi
   const {
     astroOptions, defaultIgnores, gitignoreConfig, nextMode, resolvedFrameworks,
     resolvedTypescript, rootDir, runtime, runtimeCoreConfig, tailwindOptions,
-    testingFiles, tsconfigRootDir, uniqueExtensions, uniqueFormats, uniqueLibraries,
+    formatting, testingFiles, tsconfigRootDir, uniqueExtensions, uniqueFormats, uniqueLibraries,
     uniqueTesting, uniqueTools, userIgnores
   } = params
 
@@ -578,12 +611,12 @@ const buildEslintConfigs = async (params: BuildConfigsParams): Promise<FlatConfi
         rules: { '@next/next/no-html-link-for-pages': 'off' }
       } as TSESLint.FlatConfig.Config] :
       []),
-    ...applyTestingFileOverrides(
+    ...withTestingCoexistence(applyTestingFileOverrides(
       await getIntegrationConfigs(
         uniqueLibraries, uniqueTools, uniqueTesting, uniqueFormats, uniqueExtensions
       ),
       testingFiles
-    ),
+    )),
     ...(resolvedFrameworks.next ?
       [{
         files: ['next-env.d.ts'],
@@ -616,6 +649,7 @@ const buildEslintConfigs = async (params: BuildConfigsParams): Promise<FlatConfi
     },
     ...(tailwindOptions ? [buildTailwindSettingsConfig(tailwindOptions)] : []),
     ...untypedTypescriptConfigs,
+    ...createFormattingConfig(formatting),
     ...(await getPrettierConfig(uniqueTools))
   ]
 }
@@ -726,15 +760,20 @@ const resolveProjectConfigs = async (
   })
 )
 
+const resolveInheritedUntypedFiles = (typescript: EslintConfigOptions['typescript']): EslintConfigOptions => (
+  typeof typescript === 'object' && typescript.untypedFiles !== undefined ?
+    { typescript: { untypedFiles: typescript.untypedFiles } } :
+    {}
+)
+
 const resolveInheritedProjectDefaults = (
   options: EslintConfigOptions | undefined
 ): EslintConfigOptions['projectDefaults'] => mergeProjectOptions(
   {
     ...(options?.detection === undefined ? {} : { detection: options.detection }),
     ...(options?.tailwind === undefined ? {} : { tailwind: options.tailwind }),
-    ...(typeof options?.typescript === 'object' && options.typescript.untypedFiles !== undefined ?
-      { typescript: { untypedFiles: options.typescript.untypedFiles } } :
-      {})
+    ...(options?.formatting === undefined ? {} : { formatting: options.formatting }),
+    ...resolveInheritedUntypedFiles(options?.typescript)
   },
   options?.projectDefaults ?? {}
 )
@@ -946,6 +985,7 @@ export const defineConfig: ConfigComposer = async function defineConfig(
     runtime,
     runtimeCoreConfig: params.runtimeCoreConfig,
     tailwindOptions: params.tailwindOptions,
+    formatting: options?.formatting,
     testingFiles: options?.testingFiles,
     tsconfigRootDir,
     uniqueExtensions,
@@ -995,5 +1035,5 @@ export const defineConfig: ConfigComposer = async function defineConfig(
 
   const finalConfig = attachReferencedPlugins(applyStrictMode(patchedConfigs, strict))
 
-  return attachDefineConfigMetadata(finalConfig, { extraConfigs, options })
+  return attachDefineConfigMetadata(finalConfig, { extraConfigs, options, root: rootDir })
 }

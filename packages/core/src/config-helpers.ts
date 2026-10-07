@@ -235,6 +235,7 @@ export const mergeProjectOptions = (
     extensions: mergeInheritedArray(defaults.extensions, project.extensions, strategy),
     features: mergeInheritedObject(defaults.features, project.features, strategy),
     formats: mergeInheritedArray(defaults.formats, project.formats, strategy),
+    formatting: mergeInheritedObject(defaults.formatting, project.formatting, strategy),
     frameworks: mergeInheritedObject(defaults.frameworks, project.frameworks, strategy),
     ignores: mergeInheritedArray(defaults.ignores, project.ignores, strategy),
     // eslint-disable-next-line @typescript-eslint/no-deprecated -- preserve the public v3 compatibility alias while merging project options

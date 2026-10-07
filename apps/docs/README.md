@@ -21,6 +21,8 @@ view transitions progressively enhance same-origin navigation without adding a c
 Reduced motion disables reveals, transitions, and smooth scrolling. Tables and rendered
 code blocks are keyboard focusable for horizontal scrolling. Production builds force a
 content sync so changes to rendering hooks apply to every cached documentation page.
+Rendered Markdown references resolve to published routes, including frozen archive links;
+code examples and archived source content remain intact.
 
 - `src/styles/starlight.css`: theme bridge and existing documentation/tool styles.
 - `src/styles/reading.css`: shared typography, reading surfaces, quiet feedback, and navigation motion.
