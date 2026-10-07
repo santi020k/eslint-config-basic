@@ -13,13 +13,15 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  recover:
+  verify:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
-      contents: write
+      contents: read
       pull-requests: read
+    outputs:
+      commit: ${{ steps.source.outputs.commit }}
     steps:
       - uses: actions/checkout@v6
         with:
@@ -56,13 +58,59 @@ jobs:
             test "$(node -p "require('./source/packages/basic/package.json').version")" = "$RELEASE_VERSION"
           fi
           echo "RELEASE_BASE_SHA=$(git -C source rev-parse HEAD^)" >> "$GITHUB_ENV"
-      - name: Recover missing records after artifact and consumer verification
-        run: node scripts/recover-release-records.mjs
+      - name: Verify original artifacts and consumer behavior
+        run: node scripts/recover-release-records.mjs --dry-run
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_SOURCE_PATH: source
-      - name: Verify complete original release
-        working-directory: source
+
+  mutate:
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+      # A clean runner prevents package verification code from modifying the
+      # mutation script or reading the elevated credential in a later step.
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/checkout@v6
+        with:
+          path: source
+          ref: ${{ needs.verify.outputs.commit }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22.x
+      - name: Resolve original release base
+        run: echo "RELEASE_BASE_SHA=$(git -C source rev-parse HEAD^)" >> "$GITHUB_ENV"
+      - name: Create missing records with isolated authority
+        run: node scripts/mutate-release-records.mjs
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
+          RELEASE_SOURCE_PATH: source
+          RELEASE_EXPECTED_COMMIT: ${{ needs.verify.outputs.commit }}
+
+  verify-published:
+    needs: [verify, mutate]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.verify.outputs.commit }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22.x
+      - name: Resolve original release base
+        run: echo "RELEASE_BASE_SHA=$(git rev-parse HEAD^)" >> "$GITHUB_ENV"
+      - name: Verify complete original release with read-only authority
         run: node scripts/check-published-release.mjs
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
