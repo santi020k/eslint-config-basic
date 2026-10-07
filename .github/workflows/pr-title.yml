@@ -2,12 +2,11 @@
 name: PR Title
 
 on:
-  pull_request_target:
+  pull_request:
     types: [opened, reopened, edited, synchronize, labeled, unlabeled]
 
 permissions:
   pull-requests: read
-  statuses: write
 
 jobs:
   lint:
@@ -15,26 +14,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: amannn/action-semantic-pull-request@v6
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/github-script@v7
         with:
-          types: |
-            feat
-            fix
-            docs
-            style
-            chore
-            refactor
-            perf
-            test
-            ci
-            build
-            revert
-          requireScope: false
-          subjectPattern: ^(?![A-Z]).+$
-          subjectPatternError: >
-            The subject must start with a lowercase letter.
-            Example: "feat: add repository-aware prompts"
-          ignoreLabels: |
-            autorelease: pending
+          script: |
+            const pullRequest = context.payload.pull_request
+            if (pullRequest.labels.some(label => label.name === 'autorelease: pending')) {
+              core.info('Skipping the automatically generated release title.')
+              return
+            }
+            const types = ['feat', 'fix', 'docs', 'style', 'chore', 'refactor', 'perf', 'test', 'ci', 'build', 'revert']
+            const match = /^([a-z]+)(?:\([^)]+\))?!?: (.+)$/.exec(pullRequest.title)
+            if (!match || !types.includes(match[1]) || !/^(?![A-Z]).+$/.test(match[2])) {
+              core.setFailed('Use a Conventional Commit title with a supported type and a lowercase subject, for example: feat: add repository-aware prompts')
+            }
