@@ -18,7 +18,9 @@ popover, keyboard, and focus behavior. The compact mobile cluster groups search 
 Lumen v4 provides the homepage's bare statistics, command tabs, and short heading reveals.
 Long sections remain visible independently of reveal thresholds. Native cross-document
 view transitions progressively enhance same-origin navigation without adding a client router.
-Reduced motion disables reveals, transitions, and smooth scrolling.
+Reduced motion disables reveals, transitions, and smooth scrolling. Tables and rendered
+code blocks are keyboard focusable for horizontal scrolling. Production builds force a
+content sync so changes to rendering hooks apply to every cached documentation page.
 
 - `src/styles/starlight.css`: theme bridge and existing documentation/tool styles.
 - `src/styles/reading.css`: shared typography, reading surfaces, and navigation motion.
