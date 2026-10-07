@@ -5,10 +5,10 @@ template: splash
 banner:
   content: 'Version 3 is the current documentation. Upgrading? Read the <a href="/guide/migration-v2-to-v3/">v2 to v3 migration guide</a>, or open the frozen <a href="/v2/">v2 archive</a>.'
 hero:
-  title: Santi020k ESLint Config v3
-  tagline: Stop wrestling with configuration. Compose intelligent, strict, and framework-aware ESLint rules across React, Next.js, Astro, Vue, Svelte, and 10+ modern frameworks instantly.
+  title: Less setup. Clearer feedback.
+  tagline: A lean ESLint 10 foundation for JavaScript and TypeScript. Detect your stack, add only what you use, and keep feedback useful in your editor and CI.
   image:
-    html: '<div class="s2k-hero-visual" aria-hidden="true"><div class="s2k-hero-visual__brand"><span class="s2k-hero-visual__mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="1.55rem" height="1.55rem" focusable="false"><polygon points="64,18 104,41 104,87 64,110 24,87 24,41" fill="none" stroke="white" stroke-width="13" stroke-linejoin="round"/><path d="M40 66.5 56.5 83 88 47" fill="none" stroke="white" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>@santi020k/eslint-config-basic</span></div><div class="s2k-hero-visual__terminal"><span class="s2k-hero-visual__line">$ pnpm lint<span class="s2k-terminal-cursor"></span></span><span class="s2k-hero-visual__line s2k-hero-visual__ok">0 errors - strict mode ready</span><span class="s2k-hero-visual__line">flat config composed in CI</span></div><div class="s2k-hero-visual__layers"><span>Base JavaScript + TypeScript</span><span>Framework guides and presets</span><span>Testing, formats, libraries, extensions</span></div></div>'
+    html: '<div class="s2k-hero-visual" aria-hidden="true"><div class="s2k-hero-visual__brand"><span class="s2k-hero-visual__mark">&gt;_</span><span>eslint.config.mjs</span></div><div class="s2k-hero-visual__terminal"><span class="s2k-hero-visual__line">import { defineConfig } from</span><span class="s2k-hero-visual__line s2k-hero-visual__ok">  &quot;@santi020k/eslint-config-basic&quot;</span><span class="s2k-hero-visual__line">&nbsp;</span><span class="s2k-hero-visual__line">export default defineConfig()</span></div><div class="s2k-hero-visual__layers"><span>01 / Detect JavaScript + TypeScript</span><span>02 / Add your framework package</span><span>03 / Keep editor and CI in sync</span></div></div>'
   actions:
     - text: Start with the guide
       link: /guide/getting-started
@@ -25,91 +25,61 @@ import { Badge, Card, Icon, Link, ScrollReveal, Stat } from '@santi020k/lumen-as
 import InstallTabs from '../../components/InstallTabs.astro'
 import { siteMetrics } from '../../data/site-metrics'
 
-<Card as="section" class="s2k-quickstart" glass="subtle">
+<Card as="section" class="s2k-quickstart" variant="unstyled">
   <div class="s2k-quickstart__copy">
-    <Badge variant="success">One-line config</Badge>
-    <h2>Start lean and add only what you use</h2>
-    <p>Install the core composer, add the config package for each framework, and let detection keep the configuration file to one line.</p>
+    <Badge variant="outline">ESLint Config v3</Badge>
+    <h2>Start lean. Build on your terms.</h2>
+    <p>Install the core composer, then add the packages for your framework and tooling. Automatic detection keeps the configuration file to one line.</p>
+    <Link href="/guide/getting-started" class="s2k-home-text-link">Read the quick start <Icon name="arrow-up-right" decorative /></Link>
   </div>
   <InstallTabs packages={["eslint", "@santi020k/eslint-config-basic"]} />
 </Card>
 
-<ScrollReveal as="section" animation="slide-up" duration="standard">
-  <h2 class="s2k-stats-kicker">BUILT FOR REAL REPOSITORIES</h2>
-
+<section class="s2k-home-proof" aria-label="Project at a glance">
   <div class="s2k-stats-grid">
-    <Stat class="s2k-stat-card" label="Flat config" value="ESLint 10+" />
-    <Stat class="s2k-stat-card" label="Framework guides" value={String(siteMetrics.frameworkGuideCount)} />
-    <Stat class="s2k-stat-card" label="Optional configs" value={String(siteMetrics.optionalConfigCount)} />
-    <Stat class="s2k-stat-card" label="Rollout patterns" value="CI" />
+    <Stat as="article" variant="bare" class="s2k-stat-card" label="Flat config" value="ESLint 10+" />
+    <Stat as="article" variant="bare" class="s2k-stat-card" label="Framework guides" value={String(siteMetrics.frameworkGuideCount)} />
+    <Stat as="article" variant="bare" class="s2k-stat-card" label="Optional configs" value={String(siteMetrics.optionalConfigCount)} />
+    <Stat as="article" variant="bare" class="s2k-stat-card" label="Editor + pipeline" value="CI ready" />
   </div>
-</ScrollReveal>
+</section>
 
-<br/>
-
-<ScrollReveal as="section" animation="slide-up" duration="standard">
-  <h2 class="s2k-home-kicker">New Adoption Tools</h2>
-
-  <div class="s2k-home-paths">
-    <Link href="/guide/config-builder" class="s2k-home-card" id="card-tool-builder">
-      <div class="s2k-card-header">
-        <Icon name="puzzle" size="lg" class="s2k-card-icon" decorative />
-        <strong>Interactive Config Builder</strong>
-      </div>
-      <span>Choose a stack, generate the install command and config, then share the exact setup through a URL.</span>
+<section class="s2k-home-section">
+  <ScrollReveal class="s2k-home-heading" animation="fade" duration="standard">
+    <p class="s2k-home-eyebrow">01 / Find your starting point</p>
+    <h2>A clear path from setup to rollout.</h2>
+    <p>Preview the choices, understand the configuration, and adopt new rules at your own pace.</p>
+  </ScrollReveal>
+  <div class="s2k-home-tools">
+    <Link href="/guide/config-builder" class="s2k-home-row" id="card-tool-builder">
+      <span class="s2k-home-row__number">01</span>
+      <strong>Build your config <Icon name="arrow-up-right" decorative /></strong>
+      <span>Choose a stack, generate the install command and configuration, then share the exact setup through a URL.</span>
     </Link>
-    <Link href="/guide/doctor-report" class="s2k-home-card" id="card-tool-doctor">
-      <div class="s2k-card-header">
-        <Icon name="stethoscope" size="lg" class="s2k-card-icon" decorative />
-        <strong>Doctor Report Viewer</strong>
-      </div>
-      <span>Turn <code>doctor --json</code> output into a prioritized, private repair plan without uploading repository data.</span>
+    <Link href="/guide/doctor-report" class="s2k-home-row" id="card-tool-doctor">
+      <span class="s2k-home-row__number">02</span>
+      <strong>Understand your repository <Icon name="arrow-up-right" decorative /></strong>
+      <span>Turn <code>doctor --json</code> output into a prioritized repair plan, privately in your browser.</span>
     </Link>
-    <Link href="/guide/releases" class="s2k-home-card" id="card-tool-release">
-      <div class="s2k-card-header">
-        <Icon name="rocket" size="lg" class="s2k-card-icon" decorative />
-        <strong>Release Center</strong>
-      </div>
-      <span>See what changed in the website release and follow the current package upgrade path for v{siteMetrics.packageVersion}.</span>
+    <Link href="/guide/releases" class="s2k-home-row" id="card-tool-release">
+      <span class="s2k-home-row__number">03</span>
+      <strong>Plan your upgrade <Icon name="arrow-up-right" decorative /></strong>
+      <span>Review website changes and the current package upgrade path for v{siteMetrics.packageVersion}.</span>
     </Link>
   </div>
-</ScrollReveal>
+  <nav class="s2k-home-inline-links" aria-label="Adoption guides">
+    <Link href="/guide/getting-started" id="card-dx-install">Install the foundation <Icon name="arrow-right" decorative /></Link>
+    <Link href="/guide/configuration" id="card-dx-compose">Compose your rules <Icon name="arrow-right" decorative /></Link>
+    <Link href="/guide/playgrounds" id="card-dx-rollout">Verify with playgrounds <Icon name="arrow-right" decorative /></Link>
+  </nav>
+</section>
 
-<br/>
-
-<ScrollReveal as="section" animation="slide-up" duration="standard">
-  <h2 class="s2k-home-kicker">Developer Experience First</h2>
-
-  <div class="s2k-home-steps">
-    <Link href="/guide/getting-started" class="s2k-home-card" id="card-dx-install">
-      <div class="s2k-card-header">
-        <Icon name="rocket" size="lg" class="s2k-card-icon" decorative />
-        <strong>01 - Install Seamlessly</strong>
-      </div>
-      <span>Wrangle the base package and get a robust, working flat config before setup becomes a bottleneck.</span>
-    </Link>
-    <Link href="/guide/configuration" class="s2k-home-card" id="card-dx-compose">
-      <div class="s2k-card-header">
-        <Icon name="sliders-horizontal" size="lg" class="s2k-card-icon" decorative />
-        <strong>02 - Compose Deliberately</strong>
-      </div>
-      <span>Choose strict modes, project auto-detection, specific framework layers, and integrations without bloat.</span>
-    </Link>
-    <Link href="/guide/playgrounds" class="s2k-home-card" id="card-dx-rollout">
-      <div class="s2k-card-header">
-        <Icon name="workflow" size="lg" class="s2k-card-icon" decorative />
-        <strong>03 - Rollout Predictably</strong>
-      </div>
-      <span>Use playground fixtures and CI-friendly checks before enforcing rules into production repositories.</span>
-    </Link>
-  </div>
-</ScrollReveal>
-
-<br/>
-
-<ScrollReveal as="section" animation="slide-up" duration="standard">
-  <h2 class="s2k-home-kicker">Seamless Ecosystem Integrations</h2>
-
+<section class="s2k-home-section">
+  <ScrollReveal class="s2k-home-heading" animation="fade" duration="standard">
+    <p class="s2k-home-eyebrow">02 / Your stack, explicitly</p>
+    <h2>One foundation. The frameworks you use.</h2>
+    <p>Framework adapters stay optional. Pick the guide for your project and install only the packages you need.</p>
+  </ScrollReveal>
   <div class="s2k-framework-grid">
     <Link href="/frameworks/typescript" id="fw-typescript"><Icon name="file-code-2" decorative class="s2k-icon"/> TypeScript</Link>
     <Link href="/frameworks/react" id="fw-react"><Icon name="atom" decorative class="s2k-icon"/> React</Link>
@@ -131,64 +101,20 @@ import { siteMetrics } from '../../data/site-metrics'
     <Link href="/frameworks/vite" id="fw-vite"><Icon name="terminal" decorative class="s2k-icon"/> Vite</Link>
     <Link href="/frameworks/slidev" id="fw-slidev"><Icon name="presentation" decorative class="s2k-icon"/> Slidev</Link>
   </div>
-</ScrollReveal>
+</section>
 
-<br/>
-
-<ScrollReveal as="section" animation="slide-up" duration="standard">
-  <h2 class="s2k-home-kicker">Deep Dive Documentation</h2>
-
-  <div class="s2k-home-paths">
-    <Link href="/frameworks/typescript" class="s2k-home-card" id="card-deep-typescript">
-      <div class="s2k-card-header">
-        <Icon name="file-code-2" size="lg" class="s2k-card-icon" decorative />
-        <strong>TypeScript-First Architecture</strong>
-      </div>
-      <span>Compose language, import, and runtime rules dynamically without locking every team into identical stacks.</span>
-    </Link>
-    <Link href="/tooling/overview" class="s2k-home-card" id="card-deep-tooling">
-      <div class="s2k-card-header">
-        <Icon name="blocks" size="lg" class="s2k-card-icon" decorative />
-        <strong>Granular Tooling</strong>
-      </div>
-      <span>Add Prettier, Jest, Vitest, Playwright, Tailwind, and GraphQL integrations precisely where they belong.</span>
-    </Link>
-    <Link href="/guide/cli" class="s2k-home-card" id="card-deep-cli">
-      <div class="s2k-card-header">
-        <Icon name="terminal" size="lg" class="s2k-card-icon" decorative />
-        <strong>Automated Scaffolding</strong>
-      </div>
-      <span>Generate starter configurations, inspect underlying choices, and simplify monorepo linting via the CLI.</span>
-    </Link>
-  </div>
-</ScrollReveal>
-
-<br/>
-
-<ScrollReveal as="section" animation="slide-up" duration="standard">
-  <h2 class="s2k-home-kicker">Project Reference</h2>
-
-  <div class="s2k-home-paths">
-    <Link href="/packages/basic" class="s2k-home-card" id="card-ref-basic">
-      <div class="s2k-card-header">
-        <Icon name="package-check" size="lg" class="s2k-card-icon" decorative />
-        <strong>Package Boundaries</strong>
-      </div>
-      <span>Understand the core module, internal framework packages, integrations, playgrounds, and the testing suite.</span>
-    </Link>
-    <Link href="/api/" class="s2k-home-card" id="card-ref-api">
-      <div class="s2k-card-header">
-        <Icon name="network" size="lg" class="s2k-card-icon" decorative />
-        <strong>Generated API Reference</strong>
-      </div>
-      <span>Consult the TypeDoc reference when standard guides are not enough for complex implementation details.</span>
-    </Link>
-    <Link href="/v1/" class="s2k-home-card" id="card-ref-v1">
-      <div class="s2k-card-header">
-        <Icon name="book-open" size="lg" class="s2k-card-icon" decorative />
-        <strong>Version 1 Legacy Archive</strong>
-      </div>
-      <span>Keep older projects unblocked and stable while newly developed work transitions through the v2 migration path.</span>
-    </Link>
-  </div>
-</ScrollReveal>
+<section class="s2k-home-section s2k-home-reference">
+  <ScrollReveal class="s2k-home-heading" animation="fade" duration="standard">
+    <p class="s2k-home-eyebrow">03 / Go deeper</p>
+    <h2>Keep the details within reach.</h2>
+    <p>Explore the contracts, tooling, and reference behind your configuration.</p>
+  </ScrollReveal>
+  <nav class="s2k-home-reference-links" aria-label="Documentation reference">
+    <Link href="/frameworks/typescript" id="card-deep-typescript"><strong>TypeScript</strong><span>Language, import, and runtime rules</span><Icon name="arrow-up-right" class="s2k-home-arrow" decorative /></Link>
+    <Link href="/tooling/overview" id="card-deep-tooling"><strong>Testing and tooling</strong><span>Opt-in integrations for your workflow</span><Icon name="arrow-up-right" class="s2k-home-arrow" decorative /></Link>
+    <Link href="/guide/cli" id="card-deep-cli"><strong>Command-line tools</strong><span>Scaffold, explain, inspect, and migrate</span><Icon name="arrow-up-right" class="s2k-home-arrow" decorative /></Link>
+    <Link href="/packages/basic" id="card-ref-basic"><strong>Package boundaries</strong><span>Core, frameworks, and feature packs</span><Icon name="arrow-up-right" class="s2k-home-arrow" decorative /></Link>
+    <Link href="/api/" id="card-ref-api"><strong>API reference</strong><span>Generated types and implementation contracts</span><Icon name="arrow-up-right" class="s2k-home-arrow" decorative /></Link>
+    <Link href="/v1/" id="card-ref-v1"><strong>Version 1 archive</strong><span>Reference for older projects</span><Icon name="arrow-up-right" class="s2k-home-arrow" decorative /></Link>
+  </nav>
+</section>

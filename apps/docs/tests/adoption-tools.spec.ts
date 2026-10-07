@@ -177,11 +177,15 @@ test('homepage content remains visible with reduced motion', async ({ page }) =>
 
   await page.goto('/')
 
-  const sections = page.locator('[data-ui-scroll-reveal]')
+  const sections = page.locator('.s2k-home-section')
 
-  await expect(sections).toHaveCount(6)
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
+
+  await expect(page.getByRole('link', { name: 'Build your config', exact: true }).first()).toBeVisible()
 
   for (const section of await sections.all()) {
-    await expect(section).toHaveCSS('opacity', '1')
+    await expect(section.getByRole('heading', { level: 2 })).toBeVisible()
+
+    await expect(section.locator('[data-ui-scroll-reveal]')).toHaveCSS('opacity', '1')
   }
 })

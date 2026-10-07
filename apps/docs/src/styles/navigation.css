@@ -1,0 +1,254 @@
+/* Keep Starlight's navigation behavior and adapt its shared shell to the brand. */
+:root {
+  --sl-nav-height: 6rem;
+  --sl-menu-button-size: 2.75rem;
+  --s2k-nav-focus: var(--brand);
+}
+
+:root[data-theme='dark'] {
+  --s2k-nav-focus: var(--accent);
+}
+
+header.header,
+:root[data-theme='dark'] header.header {
+  padding-block: 1.5rem 0.75rem;
+  border-bottom: 0;
+  background: hsl(var(--canvas));
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.s2k-docs-dock {
+  position: relative;
+  height: 100%;
+  padding-inline: 0.85rem;
+  border: 1px solid hsl(var(--line) / 0.8);
+  border-radius: 0.4rem 1.1rem 1.1rem 1.1rem;
+  background: hsl(var(--surface));
+  box-shadow: 0 6px 18px hsl(var(--s2k-shadow) / 0.05);
+}
+
+.s2k-docs-dock__signature {
+  position: absolute;
+  inset-block-end: calc(100% - 1px);
+  inset-inline-start: -1px;
+  padding: 0.28rem 0.8rem 0.24rem;
+  border: 1px solid hsl(var(--line) / 0.8);
+  border-bottom: 0;
+  border-radius: 0.65rem 0.65rem 0 0;
+  background: hsl(var(--surface));
+  color: hsl(var(--ink-soft));
+  font-size: 0.56rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.s2k-docs-dock .header {
+  background: transparent;
+  gap: 0.85rem;
+}
+
+.s2k-docs-dock .site-title {
+  min-height: 2.75rem;
+  gap: 0.7rem;
+  color: hsl(var(--ink));
+  font-weight: 600;
+  letter-spacing: -0.04em;
+}
+
+.s2k-docs-dock .site-title span {
+  color: hsl(var(--ink));
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.s2k-docs-dock .site-title img {
+  width: 1.85rem;
+  height: 1.85rem;
+}
+
+.s2k-docs-dock :is(a, button, select):focus-visible {
+  outline: 2px solid hsl(var(--s2k-nav-focus));
+  outline-offset: 3px;
+}
+
+.s2k-docs-dock :is(starlight-theme-select select, .social-icons a, site-search button[data-open-modal]) {
+  min-height: 2.75rem;
+  border-radius: 0.75rem;
+}
+
+.s2k-docs-dock .social-icons a {
+  min-width: 2.75rem;
+  justify-content: center;
+}
+
+.s2k-docs-dock .right-group,
+.s2k-docs-dock .social-icons {
+  gap: 0.5rem;
+}
+
+.s2k-docs-dock .social-icons::after {
+  height: 1.5rem;
+  border-color: hsl(var(--line) / 0.65);
+}
+
+.s2k-docs-dock .s2k-version-switcher {
+  margin-inline-end: 0.25rem;
+  opacity: 1;
+  animation: none;
+  transform: none;
+}
+
+.s2k-docs-dock .s2k-version-switcher select {
+  min-height: 2.75rem;
+  padding-inline: 0.75rem 1.65rem;
+  border-radius: 0.75rem;
+  background: hsl(var(--surface-muted));
+  font-size: 0.75rem;
+  font-weight: 500;
+  box-shadow: none;
+}
+
+.s2k-docs-dock .s2k-version-switcher select:hover {
+  border-color: hsl(var(--s2k-nav-focus) / 0.5);
+  background: hsl(var(--surface-strong));
+  box-shadow: none;
+  transform: none;
+}
+
+.sidebar-pane,
+.right-sidebar {
+  border-radius: 0;
+  background: hsl(var(--canvas));
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+}
+
+.sidebar-content summary .large {
+  font-weight: 600;
+}
+
+.sidebar-content a {
+  min-height: 2.75rem;
+  border-radius: 0.6rem;
+  font-weight: 500;
+  transition: color 180ms ease, background-color 180ms ease;
+}
+
+.sidebar-content a:hover,
+.sidebar-content a:focus-visible,
+.right-sidebar a:hover,
+.right-sidebar a:focus-visible {
+  transform: none;
+}
+
+.sidebar-content a[aria-current='page'],
+:root[data-theme='dark'] .sidebar-content a[aria-current='page'] {
+  background: hsl(var(--surface-muted));
+  color: hsl(var(--s2k-nav-focus));
+  box-shadow: inset 2px 0 0 hsl(var(--s2k-nav-focus));
+}
+
+.sidebar-content summary,
+.sidebar-content a {
+  scroll-margin-block: 1rem;
+}
+
+.right-sidebar a[aria-current='true'] {
+  color: hsl(var(--s2k-nav-focus));
+}
+
+.sidebar .sl-menu-button {
+  border-radius: 0.75rem;
+  box-shadow: none;
+}
+
+.sidebar .sl-menu-button:focus-visible {
+  outline: 2px solid hsl(var(--s2k-nav-focus));
+  outline-offset: 3px;
+}
+
+@media (min-width: 50rem) {
+  .s2k-docs-dock .header {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+}
+
+@media (max-width: 49.99rem) {
+  :root {
+    --sl-nav-height: 5.25rem;
+  }
+
+  header.header {
+    padding-block: 1.4rem 0.5rem;
+  }
+
+  :root[data-has-sidebar] header.header {
+    padding-inline-end: var(--sl-nav-pad-x);
+  }
+
+  .s2k-docs-dock {
+    padding-inline: 0.6rem;
+  }
+
+  :root[data-has-sidebar] .s2k-docs-dock {
+    padding-inline-end: calc(var(--sl-menu-button-size) + 1rem);
+  }
+
+  .sidebar .sl-menu-button {
+    top: calc((var(--sl-nav-height) - var(--sl-menu-button-size)) / 2 + 0.45rem);
+    inset-inline-end: calc(var(--sl-nav-pad-x) + 0.45rem);
+    background: transparent;
+    color: hsl(var(--ink));
+  }
+
+  :root[data-theme='light'] .sidebar .sl-menu-button {
+    background: transparent;
+    color: hsl(var(--ink));
+  }
+
+  .s2k-docs-dock .site-title span {
+    font-size: 0.8rem;
+  }
+
+  .s2k-docs-dock .site-title {
+    gap: 0.45rem;
+  }
+
+  .s2k-docs-dock .site-title img {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+@media (max-width: 22rem) {
+  .s2k-docs-dock .site-title span {
+    font-size: 0.7rem;
+  }
+
+  .s2k-docs-dock .header {
+    gap: 0.35rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-content :is(a, details),
+  .s2k-docs-dock :is(a, button, select) {
+    animation: none;
+    transition: none;
+  }
+}
+
+@media print {
+  .s2k-docs-dock__signature {
+    display: none;
+  }
+
+  .s2k-docs-dock {
+    border: 0;
+    box-shadow: none;
+  }
+}
