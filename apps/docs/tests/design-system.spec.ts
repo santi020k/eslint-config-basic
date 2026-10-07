@@ -227,18 +227,37 @@ for (const colorScheme of ['light', 'dark'] as const) {
 
 for (const route of ['/guide/cli/', '/tooling/overview/']) {
   test(`code blocks on ${route} support keyboard scrolling`, async ({ page }) => {
+    await page.setViewportSize({ height: 900, width: 320 })
+
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+
     await page.goto(route)
+
+    await page.evaluate(async () => document.fonts.ready)
 
     const blocks = page.locator('.expressive-code pre')
 
-    expect(await blocks.count()).toBeGreaterThan(0)
+    const overflow = await blocks.evaluateAll(elements => elements
+      .map((element, index) => ({ index, overflows: element.scrollWidth > element.clientWidth }))
+      .filter(item => item.overflows)
+      .map(item => item.index))
 
-    for (const block of await blocks.all()) {
-      await expect(block).toHaveAttribute('tabindex', '0')
+    const firstOverflow = overflow.at(0) ?? -1
+
+    expect(firstOverflow).toBeGreaterThanOrEqual(0)
+
+    for (const index of overflow) {
+      await expect(blocks.nth(index)).toHaveAttribute('tabindex', '0')
     }
 
-    await blocks.first().focus()
+    const scrollable = blocks.nth(firstOverflow)
 
-    await expect(blocks.first()).toBeFocused()
+    await scrollable.focus()
+
+    await expect(scrollable).toBeFocused()
+
+    await page.keyboard.press('ArrowRight')
+
+    await expect.poll(() => scrollable.evaluate(element => element.scrollLeft)).toBeGreaterThan(0)
   })
 }

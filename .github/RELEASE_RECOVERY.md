@@ -9,7 +9,9 @@ version (for example, `release/v3.6.0` with Basic `3.6.0`). Existing
 Before pushing, independently review the complete release diff and resolve each
 finding. Open the release pull request into `main` with validation results,
 compatibility notes, and a recovery plan. CI runs the full release candidate gate
-for both supported release branch formats. Merge only after required checks and
+for both supported release branch formats, the Node 24 contract suite, and Windows
+CLI/detection smoke tests. Documentation changes also require Chromium visual/a11y
+checks and Firefox/WebKit navigation checks before merge. Merge only after required checks and
 reviews pass.
 
 Publishing runs only for a merged release pull request from this repository into
@@ -28,7 +30,17 @@ rerun the original run so recovery retains the intended SHA. Do not manually
 publish packages, recreate or move version tags, or roll versions backward.
 Fix an unrecoverable artifact with a new commit and version.
 
-After publishing, verify npm package versions and provenance, umbrella/package
+After publishing, `scripts/check-published-release.mjs` verifies each versioned npm
+package's artifact integrity and provenance source/workflow, umbrella/package tags,
+and stable GitHub Releases against the merged commit. It installs registry versions
+of every versioned package plus Basic and Full in a temporary consumer, verifies npm
+signatures/attestations, and
+checks both clean linting and rejection of an unused variable. A recovery dispatch
+compares the release commit against its first parent; if `main` has advanced, rerun
+the original workflow instead. The docs deployment stamps its artifact with that
+commit and checks live routes and search after Pages reports success.
+
+Also independently verify npm package versions and provenance, umbrella/package
 tag SHAs, the GitHub Release, and the live documentation deployment. Run a packed
 consumer smoke check before retiring release branches. Delete local and remote
 release branches only after verification and explicit remote cleanup authorization.

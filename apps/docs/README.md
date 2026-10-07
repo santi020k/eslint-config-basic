@@ -13,7 +13,7 @@ theme family: locally served Montserrat, semantic theme colors, solid reading su
 fine rules, and restrained violet accents. The header uses the website's option 2, Split
 studio: a standalone identity and a rounded navigation cluster. It composes Starlight's
 native indexed search with starting hints and no-result guidance, plus a Lumen theme toggle and GitHub icon button with matching restrained hover states; the mobile sidebar keeps its native
-popover, keyboard, and focus behavior. The compact mobile cluster groups search and menu.
+popover, keyboard, and focus behavior. The compact mobile cluster groups search, theme, and menu with evenly spaced 44px controls; the centered menu/close icon uses a quiet surface and an accented open state.
 
 Lumen v4 provides the homepage's bare statistics, command tabs, and short heading reveals.
 Long sections remain visible independently of reveal thresholds. Native cross-document
@@ -27,7 +27,9 @@ content sync so changes to rendering hooks apply to every cached documentation p
 - `src/components/Footer.astro`: split project identity and resource links with author and license credits.
 - `src/styles/navigation.css`: sculpted header and native sidebar styling, with compact group
   headings, a single guide rail, quiet badges, and a violet active-page marker. Mobile links
-  retain 44px touch targets and native disclosure and keyboard behavior.
+  retain 44px touch targets and native disclosure and keyboard behavior. The mobile
+  identity scales to narrow screens, and the in-flow contents bar reserves no extra
+  space below the fixed header.
 - `src/styles/home.css`: editorial homepage compositions.
 
 The shared styles cover current documentation and both frozen archives; archive content
@@ -51,3 +53,21 @@ pnpm run lighthouse    # Run Lighthouse audits and enforce local budgets
 `tests/design-system.spec.ts` additionally checks narrow route families and archives, keyboard
 navigation, theme persistence, version switching, and reduced-motion visibility. Keep material
 design changes verified in light/dark themes at mobile and desktop widths.
+
+## Browser and visual release checks
+
+`pnpm run docs:test:a11y` runs the full Chromium suite, including mandatory screenshot
+comparisons, plus Firefox and WebKit navigation, search, theme, keyboard, and responsive
+checks. Playwright starts its own preview server; set `DOCS_TEST_PORT` to a free port
+when another checkout is using the default 4173.
+
+Screenshot baselines cover the home and installation pages at 390px and 1440px in both
+appearance modes. They are maintained separately for macOS and Ubuntu 24.04 ARM64;
+the docs workflow uses `ubuntu-24.04-arm` with the lockfile's Playwright browser build.
+Generate Linux baselines on that same platform, inspect the images, and then run the
+suite without `--update-snapshots` before committing them. Never generate replacements
+inside the validation workflow.
+
+After Pages deployment, the workflow checks `release-build.json` against the exact
+build commit, representative live routes, and the Pagefind search bundle. It retries
+briefly for deployment propagation and fails if the live site stays stale or broken.

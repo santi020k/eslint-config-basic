@@ -44,6 +44,8 @@ words:
   - devframes
   - dompurify
   - dts
+  - dsse
+  - Sigstore
   - emnapi
   - envinfo
   - esac

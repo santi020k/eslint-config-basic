@@ -10,6 +10,11 @@
 
   Release preparation now accepts validated `release/v<stable-semver>` branches alongside Changesets-generated branches; both undergo source/version checks, complete preflight, and a dependency audit before publication.
 
+  Release verification now retains Node 24 and Windows compatibility checks on
+  release pull requests, runs Linux and macOS visual baselines plus Firefox/WebKit
+  navigation coverage, and verifies registry artifacts, provenance, release tags,
+  published consumer behavior, and live documentation after deployment.
+
 ### Patch Changes
 
 - Updated dependencies []:
