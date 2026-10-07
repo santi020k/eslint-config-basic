@@ -1,5 +1,18 @@
 # @santi020k/eslint-config-tools
 
+## 3.1.4
+
+### Patch Changes
+
+- Refresh the supported dependency ecosystem and security overrides, preserve Zod integration defaults across the plugin upgrade, guarantee TypeScript parsing in Astro frontmatter, and improve the release gates and npm documentation.
+
+  The Basic README gains light/dark artwork, package selection guidance, and published asset/support links. The documentation site uses npm Lumen Astro 4 with accessible motion, contextual GitHub issue reporting, resilient browser feedback, responsive report output, and full-glyph WOFF2 fonts that substantially reduce transfer size.
+
+  Release preparation now accepts validated `release/v<stable-semver>` branches alongside Changesets-generated branches; both undergo source/version checks, complete preflight, and a dependency audit before publication.
+- Updated dependencies []:
+  - @santi020k/eslint-config-core@3.1.4
+  - @santi020k/eslint-config-formats@3.1.4
+
 ## 3.1.3
 
 ### Patch Changes

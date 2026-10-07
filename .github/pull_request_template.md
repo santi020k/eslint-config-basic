@@ -87,6 +87,14 @@ Leave blank for docs-only or CI-only changes.
 - [ ] New and existing tests pass locally (`pnpm run test`)
 - [ ] Full validation passes (`pnpm run ok`)
 
+## Release readiness (release pull requests)
+
+- [ ] Branch `release/v<version>` matches the Basic version; package versions and changelogs are committed
+- [ ] Independent review findings have explicit dispositions
+- [ ] Full release preflight, dependency audit, and required checks pass
+- [ ] Compatibility/migration notes and recovery plan are included
+- [ ] Post-release npm/provenance, tag SHA, packed consumer, and live docs checks are planned
+
 ## Screenshots (if applicable)
 
 <!-- Add screenshots here if your changes affect the UI or documentation output. -->

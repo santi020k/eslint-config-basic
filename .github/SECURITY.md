@@ -4,7 +4,9 @@ I take all security vulnerabilities seriously.
 If you have a vulnerability or other security issues to disclose:
 
 - Thank you very much, please do!
-- Please send them to us by emailing `info@santi020k.me`
+- Prefer [a private vulnerability report](https://github.com/santi020k/eslint-config-basic/security/advisories/new).
+- If private reporting is unavailable, email `info@santi020k.me`.
+- Do not include suspected vulnerabilities, credentials, or exploit details in public issues.
 
 We appreciate your efforts and responsible disclosure and will make every effort to acknowledge your contributions.
 

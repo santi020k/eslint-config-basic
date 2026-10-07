@@ -1,9 +1,16 @@
 {
-  "url": "http://127.0.0.1:4174/",
+  "url": "http://127.0.0.1:4783/",
   "runs": 3,
   "server": {
     "command": "astro",
-    "args": ["preview", "--host", "127.0.0.1", "--port", "4174"],
+    "args": [
+      "preview",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "4783",
+      "--ignore-lock"
+    ],
     "readyTimeoutMs": 30000
   },
   "categories": {
@@ -16,5 +23,6 @@
     "largest-contentful-paint": 5500,
     "cumulative-layout-shift": 0.1,
     "total-blocking-time": 300
-  }
+  },
+  "siteOrigin": "https://eslint.santi020k.com"
 }

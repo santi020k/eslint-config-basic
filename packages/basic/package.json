@@ -1,6 +1,6 @@
 {
   "name": "@santi020k/eslint-config-basic",
-  "version": "3.5.4",
+  "version": "3.6.0",
   "publishConfig": {
     "access": "public",
     "provenance": true
@@ -195,6 +195,9 @@
   "bugs": {
     "url": "https://github.com/santi020k/eslint-config-basic/issues"
   },
-  "author": "santi020k",
+  "author": {
+    "name": "santi020k",
+    "url": "https://santi020k.com"
+  },
   "license": "MIT"
 }

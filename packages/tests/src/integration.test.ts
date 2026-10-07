@@ -125,6 +125,50 @@ describe('Integration Tests', () => {
     })
   })
 
+  describe('Astro frontmatter', () => {
+    test.each([false, true])('parses import types with typeChecked=%s', async typeChecked => {
+      const code = [
+        '---',
+        'import type { HTMLAttributes } from "astro/types"',
+        'const attributes: HTMLAttributes<"button"> = { type: "button" }',
+        '---',
+        '<button {...attributes}>Continue</button>',
+        ''
+      ].join('\n')
+      const config = await defineConfig({
+        detection: false,
+        frameworks: { astro: astro({ tsconfigRootDir: FIXTURES_DIR, typeChecked }) },
+        tools: [],
+        tsconfigRootDir: FIXTURES_DIR,
+        typescript: typeChecked ? 'type-aware' : 'syntax'
+      })
+      const results = await lintText(code, config, join(FIXTURES_DIR, 'astro.astro'))
+
+      expect(results.flatMap(result => result.messages).filter(message => message.fatal)).toEqual([])
+    })
+
+    test.each(['syntax', 'type-aware'] as const)('composes TypeScript frontmatter in %s mode', async typescript => {
+      const config = await defineConfig({
+        detection: false,
+        frameworks: { astro: true },
+        tools: [],
+        tsconfigRootDir: FIXTURES_DIR,
+        typescript
+      })
+      const code = [
+        '---',
+        'import type { HTMLAttributes } from "astro/types"',
+        'const attributes: HTMLAttributes<"button"> = { type: "button" }',
+        '---',
+        '<button {...attributes}>Continue</button>',
+        ''
+      ].join('\n')
+      const results = await lintText(code, config, join(FIXTURES_DIR, 'astro.astro'))
+
+      expect(results.flatMap(result => result.messages).filter(message => message.fatal)).toEqual([])
+    })
+  })
+
   describe('TypeScript', () => {
     test('should report TypeScript-specific issues', async () => {
       const config = await defineConfig({

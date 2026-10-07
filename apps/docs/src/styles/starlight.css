@@ -3,7 +3,7 @@
 
 @font-face {
   font-family: 'Montserrat';
-  src: url('/fonts/montserrat-variable-font-wght.ttf') format('truetype-variations');
+  src: url('/fonts/montserrat-variable-font-wght.woff2') format('woff2');
   font-style: normal;
   font-weight: 100 900;
   font-display: swap;
@@ -11,7 +11,7 @@
 
 @font-face {
   font-family: 'Montserrat';
-  src: url('/fonts/montserrat-italic-variable-font-wght.ttf') format('truetype-variations');
+  src: url('/fonts/montserrat-italic-variable-font-wght.woff2') format('woff2');
   font-style: italic;
   font-weight: 100 900;
   font-display: swap;
@@ -1050,7 +1050,7 @@ header.header > .header {
   }
 }
 
-main .sl-markdown-content > * {
+main .sl-markdown-content > :not([data-ui-scroll-reveal]) {
   animation: s2k-fade-up 0.35s ease-out both;
 }
 
@@ -1088,26 +1088,6 @@ main .sl-markdown-content > *:nth-child(5) {
 .right-sidebar a:hover,
 .right-sidebar a:focus-visible {
   color: hsl(var(--s2k-brand));
-}
-
-[data-animate] {
-  animation: s2k-fade-up 0.45s ease-out both;
-}
-
-[data-animate]:nth-of-type(2) {
-  animation-delay: 70ms;
-}
-
-[data-animate]:nth-of-type(3) {
-  animation-delay: 120ms;
-}
-
-[data-animate]:nth-of-type(4) {
-  animation-delay: 170ms;
-}
-
-[data-animate]:nth-of-type(5) {
-  animation-delay: 220ms;
 }
 
 .s2k-hero-visual {
@@ -1312,10 +1292,6 @@ main .sl-markdown-content > *:nth-child(5) {
 
   .pagination-links a:hover {
     transform: none;
-  }
-
-  [data-animate] {
-    animation: none;
   }
 
   .s2k-home-card:hover,
@@ -1536,6 +1512,7 @@ main .sl-markdown-content > *:nth-child(5) {
 
 .s2k-code-output pre {
   max-height: 24rem;
+  overflow-x: auto;
 }
 
 .s2k-code-output code {
@@ -2000,4 +1977,26 @@ main .sl-markdown-content > *:nth-child(5) {
   .s2k-check-grid {
     grid-template-columns: minmax(0, 1fr);
   }
+}
+
+.s2k-docs-feedback__community {
+  grid-column: 1 / -1;
+  padding-top: var(--ui-space-related);
+  border-top: 1px solid hsl(var(--line));
+}
+
+.s2k-docs-feedback__community .ui-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  gap: var(--ui-space-xs);
+  font-size: 0.85rem;
+}
+
+.s2k-feedback-issue .ui-icon {
+  vertical-align: middle;
+}
+
+:root[data-theme='dark'] .s2k-docs-feedback :is(.ui-link, .s2k-feedback-issue) {
+  color: hsl(var(--s2k-accent));
 }

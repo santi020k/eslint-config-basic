@@ -6,7 +6,8 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to fill out this bug report!
+        Reports are public. Remove credentials, private code, and personal data.
+        For a security vulnerability, use [private reporting](https://github.com/santi020k/eslint-config-basic/security/advisories/new).
 
   - type: textarea
     id: description
@@ -75,7 +76,7 @@ body:
     attributes:
       label: Package Version
       description: Which version of `@santi020k/eslint-config-basic` are you using?
-      placeholder: "e.g. 2.1.0"
+      placeholder: "e.g. 3.6.0"
     validations:
       required: true
 

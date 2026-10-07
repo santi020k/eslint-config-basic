@@ -13,7 +13,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@mikro-orm/core": "^7.2.1",
+    "@mikro-orm/core": "^7.2.3",
     "@santi020k/eslint-config-basic": "workspace:^",
     "eslint": "catalog:"
   },

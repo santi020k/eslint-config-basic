@@ -33,4 +33,4 @@ jobs:
         with:
           node-version: 22.x
       - name: Run pnpm audit
-        run: pnpm audit --audit-level=high --ignore-registry-errors
+        run: pnpm audit --audit-level=high

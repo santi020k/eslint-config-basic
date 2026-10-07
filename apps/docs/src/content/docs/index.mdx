@@ -21,7 +21,7 @@ hero:
       variant: minimal
 ---
 
-import { Badge, Card, Icon, Link, Stat } from '@santi020k/lumen-astro'
+import { Badge, Card, Icon, Link, ScrollReveal, Stat } from '@santi020k/lumen-astro'
 import InstallTabs from '../../components/InstallTabs.astro'
 import { siteMetrics } from '../../data/site-metrics'
 
@@ -34,7 +34,7 @@ import { siteMetrics } from '../../data/site-metrics'
   <InstallTabs packages={["eslint", "@santi020k/eslint-config-basic"]} />
 </Card>
 
-<section data-animate>
+<ScrollReveal as="section" animation="slide-up" duration="standard">
   <h2 class="s2k-stats-kicker">BUILT FOR REAL REPOSITORIES</h2>
 
   <div class="s2k-stats-grid">
@@ -43,11 +43,11 @@ import { siteMetrics } from '../../data/site-metrics'
     <Stat class="s2k-stat-card" label="Optional configs" value={String(siteMetrics.optionalConfigCount)} />
     <Stat class="s2k-stat-card" label="Rollout patterns" value="CI" />
   </div>
-</section>
+</ScrollReveal>
 
 <br/>
 
-<section data-animate>
+<ScrollReveal as="section" animation="slide-up" duration="standard">
   <h2 class="s2k-home-kicker">New Adoption Tools</h2>
 
   <div class="s2k-home-paths">
@@ -73,11 +73,11 @@ import { siteMetrics } from '../../data/site-metrics'
       <span>See what changed in the website release and follow the current package upgrade path for v{siteMetrics.packageVersion}.</span>
     </Link>
   </div>
-</section>
+</ScrollReveal>
 
 <br/>
 
-<section data-animate>
+<ScrollReveal as="section" animation="slide-up" duration="standard">
   <h2 class="s2k-home-kicker">Developer Experience First</h2>
 
   <div class="s2k-home-steps">
@@ -103,16 +103,19 @@ import { siteMetrics } from '../../data/site-metrics'
       <span>Use playground fixtures and CI-friendly checks before enforcing rules into production repositories.</span>
     </Link>
   </div>
-</section>
+</ScrollReveal>
 
 <br/>
 
-<section data-animate>
+<ScrollReveal as="section" animation="slide-up" duration="standard">
   <h2 class="s2k-home-kicker">Seamless Ecosystem Integrations</h2>
 
   <div class="s2k-framework-grid">
     <Link href="/frameworks/typescript" id="fw-typescript"><Icon name="file-code-2" decorative class="s2k-icon"/> TypeScript</Link>
     <Link href="/frameworks/react" id="fw-react"><Icon name="atom" decorative class="s2k-icon"/> React</Link>
+    <Link href="/frameworks/nuxt" id="fw-nuxt"><Icon name="mountain" decorative class="s2k-icon"/> Nuxt</Link>
+    <Link href="/frameworks/tanstack-start" id="fw-tanstack-start"><Icon name="layers" decorative class="s2k-icon"/> TanStack Start</Link>
+    <Link href="/frameworks/lit" id="fw-lit"><Icon name="lightbulb" decorative class="s2k-icon"/> Lit</Link>
     <Link href="/frameworks/preact" id="fw-preact"><Icon name="orbit" decorative class="s2k-icon"/> Preact</Link>
     <Link href="/frameworks/next" id="fw-next"><Icon name="route" decorative class="s2k-icon"/> Next.js</Link>
     <Link href="/frameworks/astro" id="fw-astro"><Icon name="rocket" decorative class="s2k-icon"/> Astro</Link>
@@ -128,11 +131,11 @@ import { siteMetrics } from '../../data/site-metrics'
     <Link href="/frameworks/vite" id="fw-vite"><Icon name="terminal" decorative class="s2k-icon"/> Vite</Link>
     <Link href="/frameworks/slidev" id="fw-slidev"><Icon name="presentation" decorative class="s2k-icon"/> Slidev</Link>
   </div>
-</section>
+</ScrollReveal>
 
 <br/>
 
-<section data-animate>
+<ScrollReveal as="section" animation="slide-up" duration="standard">
   <h2 class="s2k-home-kicker">Deep Dive Documentation</h2>
 
   <div class="s2k-home-paths">
@@ -158,11 +161,11 @@ import { siteMetrics } from '../../data/site-metrics'
       <span>Generate starter configurations, inspect underlying choices, and simplify monorepo linting via the CLI.</span>
     </Link>
   </div>
-</section>
+</ScrollReveal>
 
 <br/>
 
-<section data-animate>
+<ScrollReveal as="section" animation="slide-up" duration="standard">
   <h2 class="s2k-home-kicker">Project Reference</h2>
 
   <div class="s2k-home-paths">
@@ -188,4 +191,4 @@ import { siteMetrics } from '../../data/site-metrics'
       <span>Keep older projects unblocked and stable while newly developed work transitions through the v2 migration path.</span>
     </Link>
   </div>
-</section>
+</ScrollReveal>

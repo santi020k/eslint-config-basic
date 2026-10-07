@@ -16,7 +16,7 @@ concurrency:
 jobs:
   contracts:
     name: Affected integration
-    if: github.event_name != 'pull_request' || github.head_ref != 'changeset-release/main'
+    if: github.event_name != 'pull_request' || (github.head_ref != 'changeset-release/main' && !startsWith(github.head_ref, 'release/v'))
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -52,7 +52,7 @@ jobs:
         run: pnpm run test:affected
 
   build:
-    if: github.event_name != 'pull_request' || github.head_ref != 'changeset-release/main'
+    if: github.event_name != 'pull_request' || (github.head_ref != 'changeset-release/main' && !startsWith(github.head_ref, 'release/v'))
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -124,7 +124,7 @@ jobs:
 
   package-validation:
     name: Affected package artifacts (Node 22.x)
-    if: github.event_name != 'pull_request' || github.head_ref != 'changeset-release/main'
+    if: github.event_name != 'pull_request' || (github.head_ref != 'changeset-release/main' && !startsWith(github.head_ref, 'release/v'))
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -198,7 +198,7 @@ jobs:
 
   release-candidate:
     name: Full release candidate
-    if: github.event_name == 'pull_request' && github.head_ref == 'changeset-release/main'
+    if: github.event_name == 'pull_request' && (github.head_ref == 'changeset-release/main' || startsWith(github.head_ref, 'release/v'))
     runs-on: ubuntu-latest
     timeout-minutes: 40
 
@@ -215,12 +215,23 @@ jobs:
         uses: santi020k/quality/actions/setup-pnpm@eec1701b98bcc0b76d36af288ee78a0369cd84cc # v1
         with:
           node-version: 22.x
+      - name: Validate release branch and version plan
+        shell: bash
+        run: |
+          RELEASE_PREVIOUS_VERSION=$(git show "${RELEASE_BASE_SHA}:packages/basic/package.json" | node -p "JSON.parse(require('fs').readFileSync(0, 'utf8')).version")
+          export RELEASE_PREVIOUS_VERSION
+          node scripts/check-release-source.mjs
+        env:
+          RELEASE_CANDIDATE: "true"
+          RELEASE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
       - name: Run final release gate once
-        run: pnpm run release:check
+        run: |
+          pnpm run release:check
+          pnpm audit --audit-level=high
 
   windows-smoke:
     name: Windows smoke (CLI + detection)
-    if: github.event_name != 'pull_request' || github.head_ref != 'changeset-release/main'
+    if: github.event_name != 'pull_request' || (github.head_ref != 'changeset-release/main' && !startsWith(github.head_ref, 'release/v'))
     runs-on: windows-latest
     timeout-minutes: 20
 

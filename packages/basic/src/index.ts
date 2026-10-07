@@ -27,6 +27,7 @@ import {
   mergeOptionalBucket,
   mergeProjectOptions,
   NextMode,
+  OPTIONAL_BUCKETS,
   patchImportGroups,
   Preset,
   resolveTsconfigRootDir,
@@ -48,6 +49,14 @@ import { createDetectedFrameworkFlags, type FrameworkOptions } from './framework
 import { getIntegrationConfigs, getPrettierConfig } from './integrations.js'
 import { resolveFramework, resolvePreset } from './resolvers.js'
 import { buildTailwindSettingsConfig } from './tailwind.js'
+
+const resolveEnumValue = <T extends string>(values: readonly T[], value: string): T => {
+  const resolved = values.find(candidate => candidate === value)
+
+  if (resolved === undefined) throw new TypeError(`Unknown configuration option: ${value}`)
+
+  return resolved
+}
 
 const SCRIPT_FILE_GLOBS = ['**/scripts/**/*.{js,mjs,cjs,ts,mts,cts}']
 
@@ -201,7 +210,8 @@ const applyTestingFileOverrides = (
   if (entries.length === 0) return configs
 
   return configs.map(config => {
-    const match = entries.find(([testingName]) => (TESTING_CONFIG_NAMES[testingName as Testing] ?? []).includes(config.name ?? ''))
+    const match = entries.find(([testingName]) => Object.entries(TESTING_CONFIG_NAMES)
+      .some(([name, configNames]) => name === testingName && configNames.includes(config.name ?? '')))
 
     if (!match) return config
 
@@ -297,7 +307,7 @@ const resolvePresetMeta = (
   autoFrameworks: boolean
 ) => {
   const preset = requestedPreset ?? detected.preset
-  const presetDefaults = preset ? resolvePreset(preset as Preset) : {}
+  const presetDefaults = preset ? resolvePreset(resolveEnumValue(Object.values(Preset), preset)) : {}
   const frameworkDefaults = autoFrameworks ? createDetectedFrameworkFlags(detected.detectedFrameworks) : {}
 
   return { frameworkDefaults, preset, presetDefaults }
@@ -355,24 +365,26 @@ const resolveNextModeValue = (
   options: EslintConfigOptions | undefined,
   presetDefaults: Partial<EslintConfigOptions>,
   detected: EslintConfigOptions
-): NextMode => (options?.nextMode ?? presetDefaults.nextMode ?? detected.nextMode ?? NextMode.Pages) as NextMode
+): NextMode => resolveEnumValue(
+  Object.values(NextMode), options?.nextMode ?? presetDefaults.nextMode ?? detected.nextMode ?? NextMode.Pages
+)
 
 const resolveRuntimeValue = (
   options: EslintConfigOptions | undefined,
   presetDefaults: Partial<EslintConfigOptions>,
   detected: EslintConfigOptions,
   usePresetRuntime: boolean
-): Runtime => (
+): Runtime => resolveEnumValue(Object.values(Runtime),
   options?.runtime ??
   (usePresetRuntime ? presetDefaults.runtime : undefined) ??
   detected.runtime ??
-  Runtime.Universal
-) as Runtime
+  Runtime.Universal)
 
 const resolveSettingsValue = (
   options: EslintConfigOptions | undefined,
   detected: EslintConfigOptions
-): Setting[] => (options?.settings ?? detected.settings ?? []) as Setting[]
+): Setting[] => (options?.settings ?? detected.settings ?? [])
+  .map(value => resolveEnumValue(Object.values(Setting), value))
 
 const resolveTypescriptValue = (
   options: EslintConfigOptions | undefined,
@@ -876,11 +888,11 @@ export const defineConfig: ConfigComposer = async function defineConfig(
   // option is provided, which silently turned 'merge' into 'replace'.
   const configuredExtensions = mergeOptionalBucket(
     'extensions', detectedExtensions, presetDefaults.extensions, optExtensions, options, optionMergeStrategy
-  ) as Extension[]
+  ).map(value => resolveEnumValue(OPTIONAL_BUCKETS.extensions, value))
 
   const formats = mergeOptionalBucket(
     'formats', detectedFormats, presetDefaults.formats, optFormats, options, optionMergeStrategy
-  ) as Format[]
+  ).map(value => resolveEnumValue(OPTIONAL_BUCKETS.formats, value))
 
   const frameworks = mergeFrameworkOption(
     frameworkDefaults, presetDefaults.frameworks, optFrameworks, optionMergeStrategy
@@ -888,7 +900,7 @@ export const defineConfig: ConfigComposer = async function defineConfig(
 
   const libraries = mergeOptionalBucket(
     'libraries', detectedLibraries, presetDefaults.libraries, optLibraries, options, optionMergeStrategy
-  ) as Library[]
+  ).map(value => resolveEnumValue(OPTIONAL_BUCKETS.libraries, value))
 
   const nextMode = resolveNextModeValue(options, presetDefaults, detected)
   const runtime = resolveRuntimeValue(options, presetDefaults, detected, requestedPreset !== undefined)
@@ -897,11 +909,11 @@ export const defineConfig: ConfigComposer = async function defineConfig(
 
   const testing = mergeOptionalBucket(
     'testing', detectedTesting, presetDefaults.testing, optTesting, options, optionMergeStrategy
-  ) as Testing[]
+  ).map(value => resolveEnumValue(OPTIONAL_BUCKETS.testing, value))
 
   const tools = mergeOptionalBucket(
     'tools', detectedTools, presetDefaults.tools, optTools, options, optionMergeStrategy
-  ) as Tool[]
+  ).map(value => resolveEnumValue(OPTIONAL_BUCKETS.tools, value))
 
   const typescript = resolveTypescriptValue(options, presetDefaults, detected)
   const resolvedTypescript = resolveTypescriptOptions(typescript)

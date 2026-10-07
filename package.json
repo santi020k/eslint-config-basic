@@ -35,7 +35,7 @@
     "docs:test:a11y": "pnpm --filter @santi020k/eslint-config-docs run test:a11y",
     "docs:clean": "pnpm --filter @santi020k/eslint-config-docs run docs:clean",
     "changeset": "changeset",
-    "version-packages": "changeset version",
+    "version-packages": "changeset version && node scripts/format-changelogs.mjs && node scripts/sync-docs-changelog.mjs",
     "check:exports": "turbo run check:exports",
     "check:clean-install": "node scripts/check-clean-install.mjs",
     "check:package-managers": "node scripts/check-package-manager-consumer.mjs",
@@ -97,6 +97,9 @@
     "url": "git+https://github.com/santi020k/eslint-config-basic.git"
   },
   "homepage": "https://eslint.santi020k.com/",
-  "author": "santi020k",
+  "author": {
+    "name": "santi020k",
+    "url": "https://santi020k.com"
+  },
   "license": "MIT"
 }

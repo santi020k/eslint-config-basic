@@ -20,9 +20,9 @@ export const updateCommands = [
 
 <div class="s2k-release-hero">
   <div>
-    <Badge variant="success">Adoption tooling release</Badge>
-    <h2>Understand a configuration before changing source</h2>
-    <p>Preview preset debt, inspect every workspace project's activation state, and repair compatibility issues with evidence from the installed package graph.</p>
+    <Badge variant="success">Quality and documentation release</Badge>
+    <h2>Reliable configuration. Clearer documentation.</h2>
+    <p>Keep Astro frontmatter linting dependable, preserve integration defaults when upgrading plugins, and explore faster documentation with contextual support.</p>
   </div>
   <div class="s2k-release-version">
     <span>Current package line</span>
@@ -34,28 +34,28 @@ export const updateCommands = [
 
 <div class="s2k-release-grid">
   <Card as="article">
-    <Badge variant="secondary">Preview</Badge>
-    <h3>Source-aware preset reports</h3>
-    <p>Run <code>explain-preset --analyze-source</code> to group current lint debt, surface root TypeScript failures first, and preview autofix without writing files.</p>
-    <ButtonLink href="/guide/presets/" variant="secondary" showArrow>Review preset adoption</ButtonLink>
+    <Badge variant="secondary">Parse</Badge>
+    <h3>TypeScript throughout Astro</h3>
+    <p>The Astro adapter explicitly supplies the TypeScript parser for frontmatter, including import types and typed declarations in syntax and type-aware modes.</p>
+    <ButtonLink href="/frameworks/astro/" variant="secondary" showArrow>Configure Astro</ButtonLink>
   </Card>
   <Card as="article">
-    <Badge variant="secondary">Diagnose</Badge>
-    <h3>Per-project activation reports</h3>
-    <p>Doctor now explains installed, detected, enabled, and inactive frameworks and feature packs for each workspace project, including TypeScript and Tailwind policy.</p>
+    <Badge variant="secondary">Upgrade</Badge>
+    <h3>Deliberate integration updates</h3>
+    <p>Updated plugin versions keep established Zod defaults after the upstream preset split. The workspace checks dependency peers, installation policy, and package boundaries before release.</p>
+    <ButtonLink href="/tooling/libraries/" variant="secondary" showArrow>Explore integrations</ButtonLink>
+  </Card>
+  <Card as="article">
+    <Badge variant="secondary">Report</Badge>
+    <h3>Help where you need it</h3>
+    <p>Report a documentation issue directly from its page, ask a setup question, or suggest an improvement. Feedback stays usable when browser storage is unavailable.</p>
+    <ButtonLink href="https://github.com/santi020k/eslint-config-basic/issues/new/choose" variant="secondary" showArrow>Choose a report</ButtonLink>
+  </Card>
+  <Card as="article">
+    <Badge variant="secondary">Read</Badge>
+    <h3>Faster accessible documentation</h3>
+    <p>Lumen 4 brings shared motion and interaction primitives. Full-character WOFF2 fonts reduce downloads, and long Doctor terminal output stays inside its mobile viewport.</p>
     <ButtonLink href="/guide/doctor-report/" variant="secondary" showArrow>Analyze report</ButtonLink>
-  </Card>
-  <Card as="article">
-    <Badge variant="secondary">Repair</Badge>
-    <h3>Installed-graph compatibility</h3>
-    <p>Compatibility and Doctor resolve pnpm catalogs, npm aliases, ESM package manifests, companion versions, and Node engine intersections from the actual installation.</p>
-    <ButtonLink href="/guide/cli/" variant="secondary" showArrow>Explore CLI diagnostics</ButtonLink>
-  </Card>
-  <Card as="article">
-    <Badge variant="secondary">Migrate</Badge>
-    <h3>Safer real-world adoption</h3>
-    <p>Project scoping now covers declaration-only TypeScript packages, shared Astro files, generated Next.js declarations, CLI entry points, and package-local Tailwind CSS graphs.</p>
-    <ButtonLink href="/guide/monorepo/" variant="secondary" showArrow>Configure a monorepo</ButtonLink>
   </Card>
 </div>
 
@@ -73,6 +73,14 @@ Choose the command for the repository's package manager:
 After upgrading, run:
 
 <RunnerTabs args={['doctor', 'inspect']} />
+
+## Maintainer release process
+
+Release branches use `release/v<stable-semver>` and must match the Basic package version.
+Both versioned release branches and Changesets-generated branches receive complete
+preflight and a dependency audit before publishing from the merged main commit.
+See the [release preparation and recovery guide](https://github.com/santi020k/eslint-config-basic/blob/main/.github/RELEASE_RECOVERY.md)
+for validation, migration notes, recovery, and post-release verification.
 
 ## Moving from v1
 

@@ -1,4 +1,10 @@
+import path from 'node:path'
+
 import { expect, test } from '@playwright/test'
+
+import { getDocUrls } from './helpers/docs'
+
+const productionOrigin = 'https://eslint.santi020k.com'
 
 test.describe('SEO', () => {
   test('homepage should have valid meta tags', async ({ page }) => {
@@ -40,6 +46,88 @@ test.describe('SEO', () => {
 
     await expect(canonical).toHaveAttribute('href', /https:\/\/eslint\.santi020k\.com/)
   })
+
+  test('robots and sitemap expose all current documentation on the canonical host', async ({ page, request }) => {
+    await page.goto('/')
+
+    const robots = await request.get('/robots.txt')
+
+    expect(robots.ok()).toBe(true)
+
+    expect(await robots.text()).toContain(`Sitemap: ${productionOrigin}/sitemap-index.xml`)
+
+    const index = await request.get('/sitemap-index.xml')
+
+    expect(index.ok()).toBe(true)
+
+    const sitemapUrls = await page.evaluate(xml => {
+      const document = new DOMParser().parseFromString(xml, 'application/xml')
+
+      return Array.from(document.querySelectorAll('sitemap > loc'), element => element.textContent)
+    }, await index.text())
+
+    expect(sitemapUrls.length).toBeGreaterThan(0)
+
+    const documentUrls: string[] = []
+
+    for (const sitemapUrl of sitemapUrls) {
+      const url = new URL(sitemapUrl)
+
+      expect(url.origin).toBe(productionOrigin)
+
+      const sitemap = await request.get(url.pathname)
+
+      expect(sitemap.ok()).toBe(true)
+
+      documentUrls.push(...await page.evaluate(xml => {
+        const document = new DOMParser().parseFromString(xml, 'application/xml')
+
+        return Array.from(document.querySelectorAll('url > loc'), element => element.textContent)
+      }, await sitemap.text()))
+    }
+
+    expect(new Set(documentUrls).size).toBe(documentUrls.length)
+
+    for (const documentUrl of documentUrls) {
+      const url = new URL(documentUrl)
+
+      expect(url.origin).toBe(productionOrigin)
+
+      expect(url.search).toBe('')
+
+      expect(url.hash).toBe('')
+
+      expect(url.pathname).not.toMatch(/^\/404\/?$/u)
+    }
+
+    for (const route of getDocUrls(path.resolve('src/content/docs'))) {
+      expect(documentUrls, `Sitemap is missing current documentation: ${route}`).toContain(`${productionOrigin}${route}`)
+    }
+  })
+
+  for (const route of ['/', '/guide/installation/', '/guide/config-builder/', '/guide/releases/']) {
+    test(`${route} has matching canonical metadata and a reachable social image`, async ({ page, request }) => {
+      await page.goto(route)
+
+      await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', `${productionOrigin}${route}`)
+
+      await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', `${productionOrigin}${route}`)
+
+      const socialImage = await page.locator('meta[property="og:image"]').getAttribute('content')
+
+      await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', /^https:\/\//u)
+
+      const imageURL = new URL(socialImage ?? '')
+
+      expect(imageURL.origin).toBe(productionOrigin)
+
+      const image = await request.get(imageURL.pathname)
+
+      expect(image.ok()).toBe(true)
+
+      expect(image.headers()['content-type']).toMatch(/^image\//u)
+    })
+  }
 
   test('theme assets follow the selected color scheme', async ({ page }) => {
     await page.goto('/')

@@ -74,7 +74,7 @@ interface CreatePresetReportOptions {
   write?: boolean
 }
 
-const PRESETS = new Set<string>(Object.values(Preset))
+const PRESETS = new Map<string, Preset>(Object.values(Preset).map(preset => [preset, preset]))
 
 const CONFIG_FILENAMES = [
   'eslint.config.js',
@@ -785,14 +785,14 @@ export const createPresetReport = async (
   }
 
   const normalizedPreset = presetName.toLowerCase()
+  const preset = PRESETS.get(normalizedPreset)
 
-  if (!PRESETS.has(normalizedPreset)) {
+  if (preset === undefined) {
     throw new Error(
-      `Unknown preset "${presetName}". Use one of: ${[...PRESETS].sort().join(', ')}.`
+      `Unknown preset "${presetName}". Use one of: ${[...PRESETS.keys()].sort().join(', ')}.`
     )
   }
 
-  const preset = normalizedPreset as Preset
   const presetOptions = resolvePreset(preset)
   const current = await loadProjectEslint(cwd).calculateConfigForFile(file)
   const currentMetadata = await loadDefineConfigMetadata(cwd)
