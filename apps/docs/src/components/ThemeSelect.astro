@@ -1,0 +1,30 @@
+---
+import { ThemeToggle } from '@santi020k/lumen-astro'
+---
+
+<ThemeToggle class="s2k-nav-theme" storageKey="starlight-theme" />
+
+<script>
+  // Follow the system until the visitor explicitly chooses light or dark.
+  const appearance = window.matchMedia('(prefers-color-scheme: dark)')
+
+  appearance.addEventListener('change', () => {
+    try {
+      if (localStorage.getItem('starlight-theme')) return
+    } catch {
+      return
+    }
+
+    const theme = appearance.matches ? 'dark' : 'light'
+
+    document.documentElement.dataset.theme = theme
+
+    document.documentElement.classList.toggle('dark', appearance.matches)
+
+    for (const toggle of document.querySelectorAll('[data-ui-theme-toggle]')) {
+      toggle.setAttribute('aria-pressed', String(appearance.matches))
+
+      toggle.setAttribute('data-ui-theme', theme)
+    }
+  })
+</script>

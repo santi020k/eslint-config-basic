@@ -74,7 +74,7 @@ test.describe('Shared documentation design system', () => {
   test('native document navigation preserves appearance and initializes code tabs', async ({ page }) => {
     await page.goto('/')
 
-    await page.locator('starlight-theme-select select').selectOption('dark')
+    await page.locator('.s2k-docs-dock [data-ui-theme-toggle]').click()
 
     await page.getByRole('link', { name: 'Start with the guide', exact: true }).click()
 
@@ -221,7 +221,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
 
     await expect(controls.locator('#s2k-version-switcher select')).toBeVisible()
 
-    await expect(controls.locator('starlight-theme-select select')).toBeVisible()
+    await expect(controls.locator('[data-ui-theme-toggle]')).toBeVisible()
   })
 }
 

@@ -280,7 +280,8 @@ export default defineConfig({
         Footer: './src/components/Footer.astro',
         Head: './src/components/Head.astro',
         Header: './src/components/Header.astro',
-        PageFrame: './src/components/PageFrame.astro'
+        PageFrame: './src/components/PageFrame.astro',
+        ThemeSelect: './src/components/ThemeSelect.astro'
       },
       head: [
         { attrs: { content: siteName, name: 'application-name' }, tag: 'meta' },

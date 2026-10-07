@@ -1,0 +1,39 @@
+---
+import StarlightSearch from '@astrojs/starlight/components/Search.astro'
+---
+
+<StarlightSearch />
+
+<script>
+  const frame = document.querySelector('site-search .dialog-frame')
+
+  if (frame) {
+    const label = document.createElement('label')
+
+    label.className = 's2k-search-label'
+
+    label.textContent = 'Search documentation'
+
+    frame.prepend(label)
+
+    const connectLabel = (): boolean => {
+      const input = frame.querySelector<HTMLInputElement>('input[type="text"]')
+
+      if (!input) return false
+
+      input.id ||= 's2k-docs-search-input'
+
+      label.htmlFor = input.id
+
+      return true
+    }
+
+    if (!connectLabel()) {
+      const observer = new MutationObserver(() => {
+        if (connectLabel()) observer.disconnect()
+      })
+
+      observer.observe(frame, { childList: true, subtree: true })
+    }
+  }
+</script>
