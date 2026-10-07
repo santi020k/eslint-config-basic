@@ -255,7 +255,12 @@ export default defineConfig({
   integrations: [
     starlight({
       credits: false,
-      customCss: ['./src/styles/starlight.css'],
+      customCss: [
+        './src/styles/starlight.css',
+        './src/styles/reading.css',
+        './src/styles/navigation.css',
+        './src/styles/home.css'
+      ],
       description: siteDescription,
       editLink: {
         baseUrl: 'https://github.com/santi020k/eslint-config-basic/edit/main/apps/docs/'
@@ -267,6 +272,7 @@ export default defineConfig({
       components: {
         Footer: './src/components/Footer.astro',
         Head: './src/components/Head.astro',
+        Header: './src/components/Header.astro',
         PageFrame: './src/components/PageFrame.astro'
       },
       head: [
@@ -364,9 +370,8 @@ export default defineConfig({
       lastUpdated: true,
       logo: {
         alt: 'Santi020k ESLint Config',
-        dark: './src/assets/logo-santi020k-dark.svg',
-        light: './src/assets/logo-santi020k.svg',
-        replacesTitle: true
+        src: './src/assets/logo-square.svg',
+        replacesTitle: false
       },
       sidebar,
       social: [

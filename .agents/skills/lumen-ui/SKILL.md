@@ -57,7 +57,7 @@ Treat Astro as the reference surface, while following the user's existing stack.
 
 ## This Repository
 
-The documentation app uses `@santi020k/lumen-astro` 0.3.0 with Astro Starlight.
+The documentation app uses `@santi020k/lumen-astro` 4.0.0 with Astro Starlight.
 
 - Load Lumen styles once from `apps/docs/src/styles/starlight.css`.
 - Mount `UIPrimitives` once through `apps/docs/src/components/PageFrame.astro`.
@@ -67,6 +67,10 @@ The documentation app uses `@santi020k/lumen-astro` 0.3.0 with Astro Starlight.
   override Lumen's preformatted code, spacing, buttons, and icon visibility.
 - Keep CodeTabs wrapping enabled for long mobile commands.
 - Verify light and dark themes at desktop and mobile widths.
+- Follow the shared reading, navigation, and homepage styles in `apps/docs/src/styles/`.
+  Use solid surfaces and fine rules; keep depth on the sculpted header and hero example.
+- Preserve native Starlight document navigation. Native CSS view transitions enhance it;
+  reduced motion disables transitions and leaves primary documentation visible.
 
 ## Discovery Without MCP
 
