@@ -39,6 +39,9 @@ checks both clean linting and rejection of an unused variable. A recovery dispat
 compares the release commit against its first parent; if `main` has advanced, rerun
 the original workflow instead. The docs deployment stamps its artifact with that
 commit and checks live routes and search after Pages reports success.
+For a closed-PR Release event, docs resolve the merged release commit through
+GitHub's associated pull request metadata; the workflow run's head SHA is the
+pre-merge PR head. Manual recovery retains its original main SHA even if main advances.
 
 Also independently verify npm package versions and provenance, umbrella/package
 tag SHAs, the GitHub Release, and the live documentation deployment. Run a packed
