@@ -73,6 +73,40 @@ propagate into the published packages' consumer dependency graphs or clear this
 advisory. An unofficial prerelease fork requires a separate compatibility and
 maintenance decision.
 
+### Tested remediation candidates
+
+The 2026-10-07 investigation tested a third-party prerelease derivative and then
+an independently maintained patch of the official stable `braces@3.0.3` source.
+Neither candidate has been adopted into the release dependency graph.
+
+The maintained patch bounds parser nesting at 100 and bounds recursive AST,
+array, queue, and parent-chain traversal. Inputs beyond these limits throw a
+controlled `RangeError`. It retains the original package API and behavior within
+the supported limit; deeper patterns are deliberately rejected.
+
+The prototype passed all 764 upstream release tests and 63 additional checks:
+49 compatibility, depth-boundary, original-code stack-overflow negative control,
+Next root-directory globbing, and GraphQL file-loader checks, plus 14 cycle,
+mixed/unclosed nesting, escaping, quoting, and bracket regressions. The additional
+checks passed on Node 22.23.1, Node 24.21.0, and Node 22 with a 256 KiB stack.
+These checks address recursion, not every expansion-cardinality, wide-AST,
+arbitrary getter, or regular-expression resource-exhaustion scenario.
+
+A root patch protects this workspace but does not protect published consumers:
+[npm only considers root overrides](https://docs.npmjs.com/cli/v11/configuring-npm/package-json/#overrides).
+A separate temporary bundle prototype installed and linted in clean npm and pnpm
+consumers without their own overrides. Its archive was 6,583,539 bytes compressed
+and 33,539,366 bytes unpacked. ESLint and GraphQL remained external peers. This
+proves the delivery mechanism using the third-party candidate; the maintained
+patch has not yet been qualified in actual Next, Formats, or Full artifacts.
+
+The preferred direction is a small maintained patch with source provenance,
+retained licenses, deterministic generation, and packed-consumer regression tests.
+The packaging and maintenance decision is pending. Before adopting it, validate
+the actual adapter artifacts, private Expo path, declarations, package metrics,
+supported package managers, and the complete release gate. Do not treat a renamed
+package or a clean audit alone as evidence that the vulnerability is fixed.
+
 Upgrade to a reviewed, published fix when available and rerun `pnpm audit` and
 `pnpm run release:check`. Do not add advisory ignores or use nonexistent versions.
 The remaining high finding blocks the release workflow.
