@@ -2443,7 +2443,7 @@ describe('v3 project assistance', () => {
       scripts: Record<string, string>
     }
 
-    expect(packageJson.scripts.lint).toBe('eslint .')
+    expect(packageJson.scripts.lint).toBe('eslint . --max-warnings=0')
     expect(packageJson.devDependencies.eslint).toBe('^10.0.0')
     expect(packageJson.devDependencies['@santi020k/eslint-config-basic']).toBe('^3.0.0')
     expect(existsSync(join(cwd, 'package.json.doctor.bak'))).toBe(true)

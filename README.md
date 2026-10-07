@@ -183,6 +183,31 @@ export default await defineConfig({
 TypeScript config files (`**/*.config.{ts,mts,cts}`) use this syntax fallback
 automatically. Set `untypedFiles: false` to require type information everywhere.
 
+## Formatting preferences
+
+Choose common style preferences without repeating individual rule names:
+
+```js
+export default await defineConfig({
+  formatting: {
+    arrowParens: 'always',
+    commaDangle: 'always-multiline',
+    quotes: 'double',
+    semi: true
+  }
+})
+```
+
+Every field is optional. `arrowParens` accepts `always` or `as-needed`,
+`commaDangle` accepts `always-multiline` or `never`, `quotes` accepts `double` or
+`single`, and `semi` is a boolean. Omitted fields retain existing defaults.
+Preferences use warning severity; `strict: 'ci'` or `strict: 'pedantic'` promotes
+them to errors. Correctness rules are unchanged. Prettier compatibility and local
+flat-config overrides take precedence. Root preferences are inherited by
+`projects`; each project can override individual fields. Use
+`optionMergeStrategy: 'replace'` in a project to replace its inherited formatting
+object instead of merging fields.
+
 ## Package choice
 
 | Package | Use it when | Dependency model |
@@ -228,6 +253,18 @@ effective rule, `doctor --fix` repairs safe setup issues with backups, and
 that editor-facing ESLint config declarations stay portable. The remaining
 commands automate v3 migration, incremental strict-mode adoption, budgeted
 performance profiling, and effective-rule change review.
+
+Doctor's JSON project report includes `lintOwnership.localConfig`, `lintScript`,
+and `guidance` to help review overlapping workspace lint commands. Doctor also
+reports potentially redundant Astro parser and rule fields passed directly to
+`defineConfig()` when the installed composer and current effective config agree
+on sampled files. These are review candidates, never automatic removals.
+
+When Playwright and Testing Library are both enabled, Playwright-owned globs
+restrict Testing Library's import heuristics while retaining checks for actual
+Testing Library imports. Use `testingFiles.playwright` for browser tests outside
+the standard Playwright directories; generic `tests/**/*.spec.ts` files are not
+assumed to belong to Playwright.
 
 ## Compatibility
 

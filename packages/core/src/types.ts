@@ -298,6 +298,14 @@ export type SettingOption = Setting | SettingName
  */
 export type StrictMode = 'ci' | 'pedantic' | 'recommended' | boolean
 
+/** Opt-in stylistic preferences; correctness rules remain unchanged. */
+export interface FormattingOptions {
+  arrowParens?: 'always' | 'as-needed'
+  commaDangle?: 'always-multiline' | 'never'
+  quotes?: 'double' | 'single'
+  semi?: boolean
+}
+
 export interface TailwindOptions {
 
   /**
@@ -425,6 +433,9 @@ export interface EslintConfigOptions {
 
   /** Additional non-JS/TS file formats to lint */
   formats?: FormatOption[]
+
+  /** Formatting preferences inherited by workspace projects. Prettier and local overrides take precedence. */
+  formatting?: FormattingOptions
 
   /**
    * Framework and library specific configurations.

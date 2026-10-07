@@ -195,3 +195,40 @@ Run `npx @santi020k/eslint-config-basic doctor` — it detects workspace package
 - [Runtime](/guide/runtime) — runtime enum and auto-detection rules
 - [Configuration](/guide/configuration) — full option reference
 - [CLI](/guide/cli) — `doctor` and `inspect` commands for diagnosing monorepo setups
+
+## Independently linted apps
+
+Run `basic-eslint doctor --json` or `basic-eslint doctor --verbose` to review each
+package's local config and lint script. The `lintOwnership` inventory reports
+what is declared; it does not prove which config a wrapper command executes.
+Review root/package overlap before changing ownership.
+
+For an Astro website beside an Expo app that already owns its lint command,
+keep root-owned TypeScript linting scoped to the website:
+
+```js
+import { defineConfig } from '@santi020k/eslint-config-basic'
+
+export default await defineConfig({
+  detection: false,
+  ignores: ['apps/mobile/**'],
+  typescript: false,
+  projects: {
+    'apps/web': {
+      frameworks: { astro: true },
+      typescript: 'type-aware'
+    }
+  }
+})
+```
+
+Install the Astro adapter at the root. The mobile app keeps its existing Expo
+config and lint/typecheck commands. Keep the website's tsconfig inside
+`apps/web`; do not disable type-aware linting across all apps merely because the
+workspace has multiple tsconfigs. `detection: false` disables every automatic
+feature in this example; select additional feature packs explicitly as needed.
+
+Root `formatting` preferences are inherited by projects and merge field by field
+with project preferences. `projectDefaults.formatting` can set shared workspace
+preferences, and a project can use `optionMergeStrategy: 'replace'` to replace its
+inherited formatting object.

@@ -16,13 +16,13 @@
     "api--reference--basic--src.webp": {
       "baseDirectory": "public/og",
       "digest": "925d8e5a031e8ccc3c6ab1f3e238be45dac26a4c7add7342a9faaed31e90f1c4",
-      "fingerprint": "d149aa3be76fbca29232122eb4eead95f15c9e187c89c66358b44c650c7195ab",
+      "fingerprint": "6a74fce695ffebbe11ff7dfd14a58afa2cb197c9520e359c30b022f909a69c1e",
       "output": "api--reference--basic--src.webp"
     },
     "api--reference--core--src.webp": {
       "baseDirectory": "public/og",
       "digest": "c250f301ad4b053f619f402466e40020dd1bf43ddb39b09bbe8d29d0c9983dad",
-      "fingerprint": "b30e257b58bb325ee1ff2c9ab1b53bf2e565d2c00bf597a0ca36767051433a13",
+      "fingerprint": "787f9082cf6175382c030a0c0d3a2d2b215b559256e7609d2d0e0b1e7d511ef1",
       "output": "api--reference--core--src.webp"
     },
     "api--reference--expo--src.webp": {
@@ -226,7 +226,7 @@
     "guide--configuration.webp": {
       "baseDirectory": "public/og",
       "digest": "aca5ece6041d33791172b89649855bfad51d44460f4c8cbaed57502afa6bc575",
-      "fingerprint": "d4bbe5f6bee00404747950b4b23f04ddf88b731386ea952c5165e20ebc05a928",
+      "fingerprint": "abd054e7a6a6b596eb9f863cf11d8ea98313178e13320ed11174b62ad301ed48",
       "output": "guide--configuration.webp"
     },
     "guide--development.webp": {
@@ -238,13 +238,13 @@
     "guide--doctor-report.webp": {
       "baseDirectory": "public/og",
       "digest": "88ead9b96c8cb0d2844ca944b4c94decd7d7b39b1b6e341e2228f9ff0d99b876",
-      "fingerprint": "454c85824c1b5511cfcf98d41c2aa0a315172cfd1a154fceec50e6a84478b242",
+      "fingerprint": "b66b40ebfcb4c927e29ee4ced422597acf57742e072b18b4172f0259c606598f",
       "output": "guide--doctor-report.webp"
     },
     "guide--getting-started.webp": {
       "baseDirectory": "public/og",
       "digest": "da66409f0b158344a53437c6c4f8d66e8feec32b6ad3305b061b543547e5c9df",
-      "fingerprint": "be59ee8cb4c77184955dc779270e8e0541b06c5318235185f2fa347023fc0521",
+      "fingerprint": "6171d0676b719e9bcc8af862e7794ca695ab70d6f475685abb36ef6cb912a496",
       "output": "guide--getting-started.webp"
     },
     "guide--inspector.webp": {
@@ -280,7 +280,7 @@
     "guide--monorepo.webp": {
       "baseDirectory": "public/og",
       "digest": "a5aab261edcdec3187c0166b950929d5aa3eadd252acad670893ebe86c048705",
-      "fingerprint": "b50c4d7b7ba0ec785f4c2d97046cefb0eab537bcb2dd1c2aeae0aef18f94da4e",
+      "fingerprint": "ae85cead348d06e5194f2392b1bb1e87c9278e20b150864fe7cbfb10586eb60a",
       "output": "guide--monorepo.webp"
     },
     "guide--playgrounds.webp": {
@@ -298,7 +298,7 @@
     "guide--releases.webp": {
       "baseDirectory": "public/og",
       "digest": "6ace80465265cd9a3cbafd20355e32e75aee0b501cbf17c3002dd272f5b1941f",
-      "fingerprint": "fec617a2f5ce2e9a921f5dc5b850bd3e2bb4b653e73f908f45fa250a3ba0fe96",
+      "fingerprint": "bfd6b74309d1bfc05ca68189633e0268aedb41713dbf350953b9a346a943d2ff",
       "output": "guide--releases.webp"
     },
     "guide--runtime.webp": {
@@ -310,7 +310,7 @@
     "guide--troubleshooting.webp": {
       "baseDirectory": "public/og",
       "digest": "948d4055175616c636b1a83a72b91562cf1b965f14203a8ee0e52bf091aa991b",
-      "fingerprint": "27fc6ab74b72c5cb13ff5551c4c5d8b8c2f25a0034fe71fbcceab5b851ca7d2d",
+      "fingerprint": "2659d6ea433f41f9ab055f7b7e7f6543d7846633fb977e98dc61d77374e47697",
       "output": "guide--troubleshooting.webp"
     },
     "guide--v4-removals.webp": {
@@ -322,7 +322,7 @@
     "index.webp": {
       "baseDirectory": "public/og",
       "digest": "571a57cea3e28a5dbf2c30ee0abf3353ba17f65926c3bb3ebc2831a6735ff6a5",
-      "fingerprint": "664bcab15472ef9fc79861f645af4eb5f699379739e2bae7494b75587d82f942",
+      "fingerprint": "60b16a897a782048d016bdcf337b3d9cbea2c448c6a7998ea930d02d45a60f6d",
       "output": "index.webp"
     },
     "packages--basic.webp": {
@@ -394,7 +394,7 @@
     "tooling--testing.webp": {
       "baseDirectory": "public/og",
       "digest": "780064ee5300cdc7bdc58c791c3c365ed7f6cd4ce30343aa0797230c7885b665",
-      "fingerprint": "af92c78e268b55dad9415a806070a1d090311fb8a41b2d75ccd2a0eea34bf65b",
+      "fingerprint": "341f0d7a0ecdd17bff0d2b0797547ef520af96716617603212692a155601f14d",
       "output": "tooling--testing.webp"
     },
     "tooling--tools.webp": {
