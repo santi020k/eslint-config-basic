@@ -42,6 +42,18 @@ release afterward. If a newly disclosed development dependency advisory prevents
 rerunning the historical source, first merge its remediation on main and use this
 recovery workflow; do not weaken the historical audit or republish artifacts.
 
+GitHub's built-in Actions token cannot modify workflows. When historical recovery
+is rejected with HTTP 403 because workflow files differ from current main, the
+recovery workflow can use the optional repository secret `RELEASE_GITHUB_TOKEN`.
+Provision it only with explicit owner authorization: use a short-lived GitHub App
+installation token or a short-expiry fine-grained token restricted to this
+repository with Contents write and Workflows write. Do not copy a developer's
+broad CLI credential or commit a token. Remove the temporary secret after recovery.
+Normal publishing continues to use the built-in GitHub token and npm OIDC.
+The credential does not change artifact source checks or immutable tag policy.
+See [GitHub release API permissions](https://docs.github.com/en/rest/releases/releases#create-a-release).
+
+
 After publishing, `scripts/check-published-release.mjs` verifies each versioned npm
 package's artifact integrity and provenance source/workflow, umbrella/package tags,
 and stable GitHub Releases against the merged commit. It installs registry versions

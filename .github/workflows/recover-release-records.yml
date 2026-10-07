@@ -59,10 +59,10 @@ jobs:
       - name: Recover missing records after artifact and consumer verification
         run: node scripts/recover-release-records.mjs
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
           RELEASE_SOURCE_PATH: source
       - name: Verify complete original release
         working-directory: source
         run: node scripts/check-published-release.mjs
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
