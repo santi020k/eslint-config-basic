@@ -1,5 +1,13 @@
 # @santi020k/eslint-config-vite
 
+## 3.1.4
+
+### Patch Changes
+
+- Refresh package READMEs with consistent light and dark artwork, clear installation and configuration examples, quick navigation, compatibility guidance, and direct documentation, source, changelog, and support links. Correct outdated contributor and private-workspace instructions. No configuration APIs, lint rules, or runtime requirements change.
+- Updated dependencies []:
+  - @santi020k/eslint-config-core@3.2.1
+
 ## 3.1.3
 
 ### Patch Changes

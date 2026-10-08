@@ -1,4 +1,27 @@
-# @santi020k/eslint-config-docs
+<p align="center">
+  <a href="../../README.md">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="../../assets/readme/workspace-dark.svg">
+      <img src="../../assets/readme/workspace-light.svg" alt="ESLint Config Basic — Less setup. Clearer feedback." width="1200" height="220">
+    </picture>
+  </a>
+</p>
+
+<h1 align="center">Documentation</h1>
+
+<p align="center">
+  <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-MIT-13967e?style=flat-square" alt="License: MIT"></a>
+  <a href="package.json"><img src="https://img.shields.io/badge/built_with-Astro-6319be?style=flat-square" alt="Built With: Astro"></a>
+</p>
+
+<p align="center">
+  <a href="../../README.md">Project overview</a> ·
+  <a href="package.json">Package manifest</a> ·
+  <a href="https://eslint.santi020k.com/guide/changelog/">Changelog</a> ·
+  <a href="#resources">Resources</a>
+</p>
+
+**On this page:** [Design and motion](#design-and-motion) · [Testing & Quality](#testing--quality) · [Browser and visual release checks](#browser-and-visual-release-checks) · [Generated social images](#generated-social-images) · [Resources](#resources)
 
 Internal Astro Starlight documentation workspace for the [`@santi020k/eslint-config-basic`](https://github.com/santi020k/eslint-config-basic) monorepo.
 
@@ -73,3 +96,14 @@ inside the validation workflow.
 After Pages deployment, the workflow checks `release-build.json` against the exact
 build commit, representative live routes, and the Pagefind search bundle. It retries
 briefly for deployment propagation and fails if the live site stays stale or broken.
+
+## Generated social images
+
+The documentation uses `@santi020k/og` 1.1 presets and a route manifest.
+Run `pnpm run docs:build` from the repository root to regenerate cards and verify
+the built metadata, images, and sitemap audit. Renderer configuration lives in
+`scripts/generate-og-images.mjs`.
+
+## Resources
+
+[Project overview](../../README.md) · [Contributing](../../.github/CONTRIBUTING.md) · [License](../../LICENSE)

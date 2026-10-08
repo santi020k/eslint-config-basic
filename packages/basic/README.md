@@ -14,6 +14,14 @@
   Detect your stack. Add only what you need. Keep feedback useful.
 </p>
 
+<p align="center">
+  <a href="https://www.npmjs.com/package/@santi020k/eslint-config-basic"><img src="https://img.shields.io/npm/v/@santi020k/eslint-config-basic.svg?style=flat-square&amp;color=6319be" alt="npm version"></a>
+  <a href="https://github.com/santi020k/eslint-config-basic/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-13967e" alt="MIT license"></a>
+  <a href="https://www.npmjs.com/package/@santi020k/eslint-config-basic"><img src="https://img.shields.io/npm/dm/@santi020k/eslint-config-basic.svg?style=flat-square" alt="npm downloads"></a>
+  <a href="https://github.com/santi020k/eslint-config-basic/actions/workflows/build.yml"><img src="https://github.com/santi020k/eslint-config-basic/actions/workflows/build.yml/badge.svg" alt="Build"></a>
+  <a href="https://github.com/santi020k/eslint-config-basic/actions/workflows/codeql.yml"><img src="https://github.com/santi020k/eslint-config-basic/actions/workflows/codeql.yml/badge.svg" alt="CodeQL"></a>
+</p>
+
 DX-first ESLint 10 flat config for JavaScript and TypeScript, with auto-detection
 and opt-in framework packages.
 
@@ -23,14 +31,6 @@ and opt-in framework packages.
   <a href="https://www.npmjs.com/package/@santi020k/eslint-config-basic">npm</a> ·
   <a href="https://eslint.santi020k.com/guide/migration-v2-to-v3/">Migration to v3</a> ·
   <a href="https://github.com/santi020k/eslint-config-basic/issues/new/choose">Get help</a>
-</p>
-
-<p align="center">
-  <a href="https://github.com/santi020k/eslint-config-basic/actions/workflows/build.yml"><img src="https://github.com/santi020k/eslint-config-basic/actions/workflows/build.yml/badge.svg" alt="Build"></a>
-  <a href="https://github.com/santi020k/eslint-config-basic/actions/workflows/codeql.yml"><img src="https://github.com/santi020k/eslint-config-basic/actions/workflows/codeql.yml/badge.svg" alt="CodeQL"></a>
-  <a href="https://www.npmjs.com/package/@santi020k/eslint-config-basic"><img src="https://img.shields.io/npm/v/@santi020k/eslint-config-basic.svg" alt="npm version"></a>
-  <a href="https://www.npmjs.com/package/@santi020k/eslint-config-basic"><img src="https://img.shields.io/npm/dm/@santi020k/eslint-config-basic.svg" alt="npm downloads"></a>
-  <a href="https://github.com/santi020k/eslint-config-basic/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license"></a>
 </p>
 
 **Explore:** [Quick start](#quick-start) · [Why v3 changed dependency ownership](#why-v3-changed-dependency-ownership) · [Custom configuration](#custom-configuration) · [Package choice](#package-choice) · [CLI](#cli) · [Compatibility](#compatibility)

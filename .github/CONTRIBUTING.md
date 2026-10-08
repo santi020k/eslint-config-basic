@@ -32,11 +32,13 @@ This project uses **Turborepo** with **pnpm Workspaces**. Each ESLint config liv
 
 | Package | Path | Description |
 | :--- | :--- | :--- |
-| `@santi020k/eslint-config-basic` | `packages/basic` | Main entry point — `eslintConfig()` / `defineConfig()` |
-| `@santi020k/eslint-config-lite` | `packages/lite` | Lighter variant (no CLI/agent features) |
+| `@santi020k/eslint-config-basic` | `packages/basic` | Main entry point — `defineConfig()` |
+| `@santi020k/eslint-config-lite` | `packages/lite` | Deprecated v3 compatibility wrapper; use Basic |
 | `@santi020k/eslint-config-core` | `packages/core` | Core JS rules, types, utilities, detection |
 | `@santi020k/eslint-config-typescript` | `packages/typescript` | TypeScript rules |
-| `@santi020k/eslint-config-integrations` | `packages/integrations` | Optional configs (Tailwind, Vitest, Drizzle, etc.) |
+| `@santi020k/eslint-config-full` | `packages/full` | Batteries-included composer and companion packages |
+| Category feature packs | `packages/{extensions,formats,libraries,testing,tools}` | Optional features with package-owned registries |
+| `@santi020k/eslint-config-integrations` | `packages/integrations` | Deprecated v3 aggregate; use category feature packs |
 | `@santi020k/eslint-config-react` | `packages/react` | React + Hooks rules |
 | `@santi020k/eslint-config-next` | `packages/next` | Next.js rules |
 | `@santi020k/eslint-config-nuxt` | `packages/nuxt` | Nuxt rules |
@@ -55,6 +57,10 @@ This project uses **Turborepo** with **pnpm Workspaces**. Each ESLint config liv
 | `@santi020k/eslint-config-lit` | `packages/lit` | Lit / Web Components rules |
 | `@santi020k/eslint-config-vite` | `packages/vite` | Vite rules |
 | `@santi020k/eslint-config-slidev` | `packages/slidev` | Slidev rules |
+
+Package READMEs are generated with `pnpm run docs:sync-readmes`. Edit the root
+`README.md`, `scripts/docs-packages.mjs`, or `scripts/generate-package-readmes.mjs`
+for generated packages; Full and private-workspace READMEs are maintained separately.
 
 ## TDD Workflow
 
@@ -77,19 +83,19 @@ For the full step-by-step guide see `.claude/skills/add-framework/SKILL.md`. Sum
      (await loadModule<{ myframework: FlatConfigArray }>('@santi020k/eslint-config-myframework')).myframework
    ]
    ```
-5. Add to `packages/basic/package.json` as `"@santi020k/eslint-config-myframework": "workspace:^"`
+5. Add an optional peer in `packages/basic/package.json` and a `workspace:^` dependency in `packages/full/package.json`; mirror existing framework metadata and tests.
 6. Add a playground at `packages/playground/myframework/`
 7. Run `pnpm run test` → must be Green
 8. Update documentation in `apps/docs/src/content/docs/frameworks/`
 
 ## Adding a New Optional Integration
 
-For the full step-by-step guide see `.claude/skills/add-integration/SKILL.md`. Summary:
+Follow the current category packages and their registries:
 
 1. Add the enum value to the appropriate enum in `packages/core/src/types.ts` — this alone makes `contracts.test.ts` fail (Red)
-2. Create `packages/integrations/src/{category}/{name}.ts` using `defineLazyConfig` from `../lazy.js`
-3. Import and add an `if` block in `packages/integrations/src/compose.ts` inside `getIntegrationConfigs()`
-4. Export from `packages/integrations/src/index.ts`
+2. Create `packages/{category}/src/{name}.ts` (extensions, formats, libraries, testing, or tools), following that package's existing lazy-factory pattern.
+3. Register the factory in `packages/{category}/src/registry.ts` with its feature ID, category, and execution order. Basic loads these registries through `packages/basic/src/integrations.ts`.
+4. Export from the category package's `src/index.ts`, update plugin dependencies and detection in Core when needed, and preserve deprecated aggregate re-exports where applicable.
 5. Run `pnpm run test` → must be Green
 6. Add `.toContain('value')` to `types.test.ts`, rule assertions to `options.test.ts`
 7. Update documentation in `apps/docs/src/content/docs/tooling/`
@@ -101,7 +107,7 @@ pnpm run ok           # All-in-one: install + build + test + lint + typecheck
 pnpm run build        # Build all packages (Turborepo)
 pnpm run typecheck    # TypeScript check across all packages
 pnpm run test         # Run Vitest suite (packages/tests)
-pnpm run lint         # ESLint + CSpell + Knip across monorepo
+pnpm run lint         # Build + zero-warning ESLint across the monorepo
 pnpm run lint:fix     # Fix lint issues
 pnpm run dev          # Watch mode
 pnpm run inspector    # Visual ESLint config inspector
@@ -110,7 +116,7 @@ pnpm run changeset    # Create a changeset for your changes
 
 ## Documentation
 
-Full API documentation is available at [santi020k.github.io/eslint-config-basic](https://santi020k.github.io/eslint-config-basic/).
+Full documentation and API references are available at [eslint.santi020k.com](https://eslint.santi020k.com/).
 
 Documentation governance for current docs versus the `v1` archive is defined in `apps/docs/DOCS_GOVERNANCE.md`.
 
@@ -133,7 +139,7 @@ This project uses [Conventional Commits](https://www.conventionalcommits.org/). 
 You can use the interactive commit helper:
 
 ```bash
-npx cz
+pnpm run commit
 ```
 
 ## Pull Request Guidelines
@@ -153,4 +159,4 @@ npx cz
 
 ## Questions?
 
-Open an [issue](https://github.com/santi020k/eslint-config/issues) or start a [discussion](https://github.com/santi020k/eslint-config/discussions).
+Open an [issue or setup question](https://github.com/santi020k/eslint-config-basic/issues/new/choose).

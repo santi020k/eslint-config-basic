@@ -127,3 +127,13 @@ TypeScript 7, GraphQL 17, and Nest typed 7 remain deferred because their current
 peer or runtime requirements exceed the supported contracts. Wrangler's existing
 stable releases depend on an upstream Miniflare prerelease; this transitive tool
 was already present and is not a new prerelease selection.
+
+## 3.6.1 documentation patch
+
+All 29 public packages receive a patch version so their npm READMEs include the
+refreshed presentation, setup guidance, and resource links. Basic moves to 3.6.1;
+companion package minor and patch versions remain independent. No configuration
+APIs, lint rules, dependencies, runtime requirements, or persisted data change.
+No migration is required. To recover from a documentation error, correct the
+source or README generator and publish another patch through the same release
+workflow; preserve immutable tags and existing artifacts.

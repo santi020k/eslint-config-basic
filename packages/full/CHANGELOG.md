@@ -1,5 +1,36 @@
 # @santi020k/eslint-config-full
 
+## 3.2.6
+
+### Patch Changes
+
+- Refresh package READMEs with consistent light and dark artwork, clear installation and configuration examples, quick navigation, compatibility guidance, and direct documentation, source, changelog, and support links. Correct outdated contributor and private-workspace instructions. No configuration APIs, lint rules, or runtime requirements change.
+- Updated dependencies []:
+  - @santi020k/eslint-config-angular@3.1.4
+  - @santi020k/eslint-config-astro@3.1.6
+  - @santi020k/eslint-config-basic@3.6.1
+  - @santi020k/eslint-config-expo@3.1.4
+  - @santi020k/eslint-config-extensions@3.1.5
+  - @santi020k/eslint-config-formats@3.1.5
+  - @santi020k/eslint-config-hono@3.1.4
+  - @santi020k/eslint-config-libraries@3.1.5
+  - @santi020k/eslint-config-lit@3.1.4
+  - @santi020k/eslint-config-nest@3.1.4
+  - @santi020k/eslint-config-next@3.1.4
+  - @santi020k/eslint-config-nuxt@3.1.4
+  - @santi020k/eslint-config-preact@3.1.4
+  - @santi020k/eslint-config-qwik@3.1.4
+  - @santi020k/eslint-config-react@3.1.4
+  - @santi020k/eslint-config-react-router@3.1.4
+  - @santi020k/eslint-config-slidev@3.1.4
+  - @santi020k/eslint-config-solid@3.1.4
+  - @santi020k/eslint-config-svelte@3.1.4
+  - @santi020k/eslint-config-tanstack-start@3.1.4
+  - @santi020k/eslint-config-testing@3.1.5
+  - @santi020k/eslint-config-tools@3.1.5
+  - @santi020k/eslint-config-vite@3.1.4
+  - @santi020k/eslint-config-vue@3.1.4
+
 ## 3.2.5
 
 ### Patch Changes
