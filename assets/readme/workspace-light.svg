@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="220" viewBox="0 0 1200 220" role="img" aria-labelledby="readme-title readme-description">
+  <title id="readme-title">ESLint Config Basic — Less setup. Clearer feedback.</title>
+  <desc id="readme-description">Flat Config · Frameworks · Type-Aware Rules. Decorative checks illustration in the project's existing palette.</desc>
+  <!-- README artwork. Palette and naming follow this repository's existing brand sources. -->
+  <rect x="1" y="1" width="1198" height="218" rx="22" fill="#faf9f5" stroke="#6319be" stroke-opacity=".24"/>
+  <path d="M778 25V195" stroke="#6319be" stroke-opacity=".16"/>
+  <g fill="none" stroke="#6319be" stroke-opacity=".07"><circle cx="1025" cy="110" r="205"/><circle cx="1025" cy="110" r="238"/></g>
+
+  <g font-family="-apple-system,BlinkMacSystemFont,Arial,sans-serif"><text x="48" y="59" font-size="13" letter-spacing="1.3" fill="#6319be">FLAT CONFIG · FRAMEWORKS · TYPE-AWARE RULES</text><text x="48" y="120" font-size="38" font-weight="700" letter-spacing="-1" fill="#13111b">ESLint Config Basic</text><text x="50" y="162" font-size="21" fill="#13111b">Less setup. Clearer feedback.</text></g>
+  <g transform="translate(903 10) scale(.68)" stroke-linecap="round" stroke-linejoin="round"><path d="M70 55H230L150 145 230 235H70L150 145Z" fill="none" stroke="#6319be" stroke-width="2"/>
+<path d="M40 212L107 145 160 190 260 54" fill="none" stroke="#6319be" stroke-width="12"/>
+<circle cx="70" cy="55" r="9" fill="#faf9f5" stroke="#6319be" stroke-width="3"/>
+<circle cx="230" cy="55" r="9" fill="#faf9f5" stroke="#73c7ab" stroke-width="3"/>
+<circle cx="150" cy="145" r="13" fill="#6319be" stroke="#6319be" stroke-width="3"/>
+<circle cx="70" cy="235" r="9" fill="#faf9f5" stroke="#73c7ab" stroke-width="3"/>
+<circle cx="230" cy="235" r="9" fill="#faf9f5" stroke="#6319be" stroke-width="3"/></g>
+</svg>

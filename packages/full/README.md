@@ -1,7 +1,37 @@
-# @santi020k/eslint-config-full
+<p align="center">
+  <a href="https://eslint.santi020k.com/">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/santi020k/eslint-config-basic/main/assets/readme/hero-dark.svg">
+      <img src="https://raw.githubusercontent.com/santi020k/eslint-config-basic/main/assets/readme/hero-light.svg" alt="ESLint Config Basic — Less setup. Clearer feedback." width="1200" height="360">
+    </picture>
+  </a>
+</p>
+
+<h1 align="center">Full configuration</h1>
+
+<p align="center">
+  <a href="https://www.npmjs.com/package/@santi020k/eslint-config-full"><img src="https://img.shields.io/npm/v/@santi020k/eslint-config-full?style=flat-square&amp;color=6319be" alt="Published npm version"></a>
+  <a href="https://github.com/santi020k/eslint-config-basic/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-13967e?style=flat-square" alt="License: MIT"></a>
+</p>
+
+<p align="center">
+  <a href="https://eslint.santi020k.com/">Documentation</a> ·
+  <a href="https://www.npmjs.com/package/@santi020k/eslint-config-full">npm</a> ·
+  <a href="https://github.com/santi020k/eslint-config-basic/tree/main/packages/full">Source</a>
+</p>
+
+**On this page:** [Install](#install) · [Usage](#usage) · [Runtime support](#runtime-support) · [Resources](#resources)
 
 The batteries-included v3 package. It installs every supported framework and
 integration config for teams that prefer one dependency over a smaller install.
+
+## Install
+
+```bash
+pnpm add -D eslint @santi020k/eslint-config-full
+```
+
+## Usage
 
 ```js
 export { default } from '@santi020k/eslint-config-full/recommended'
@@ -47,3 +77,10 @@ installs every companion package, while detection decides which configurations
 execute.
 
 Use `@santi020k/eslint-config-basic` for the lean, modular default.
+
+## Resources
+
+[Package family](https://github.com/santi020k/eslint-config-basic) ·
+[Migration guide](https://eslint.santi020k.com/guide/migration-v2-to-v3/) ·
+[Changelog](https://github.com/santi020k/eslint-config-basic/blob/main/packages/full/CHANGELOG.md) ·
+[License](https://github.com/santi020k/eslint-config-basic/blob/main/LICENSE)

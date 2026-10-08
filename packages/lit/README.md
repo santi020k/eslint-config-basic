@@ -1,10 +1,32 @@
-# @santi020k/eslint-config-lit
+<p align="center">
+  <a href="https://eslint.santi020k.com">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/santi020k/eslint-config-basic/main/assets/readme/workspace-dark.svg">
+      <img src="https://raw.githubusercontent.com/santi020k/eslint-config-basic/main/assets/readme/workspace-light.svg" alt="ESLint Config Basic — Less setup. Clearer feedback." width="1200" height="220">
+    </picture>
+  </a>
+</p>
+
+<h1 align="center">Lit guide</h1>
 
 Lit and Web Components rules for modern flat-config projects.
 
-[![npm version](https://img.shields.io/npm/v/@santi020k/eslint-config-lit.svg)](https://www.npmjs.com/package/@santi020k/eslint-config-lit)
-[![npm downloads](https://img.shields.io/npm/dm/@santi020k/eslint-config-lit.svg)](https://www.npmjs.com/package/@santi020k/eslint-config-lit)
-[![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/santi020k/eslint-config-basic/blob/main/LICENSE)
+<p align="center">
+  <a href="https://www.npmjs.com/package/@santi020k/eslint-config-lit"><img src="https://img.shields.io/npm/v/@santi020k/eslint-config-lit?style=flat-square&amp;color=6319be" alt="Published npm version"></a>
+  <a href="https://github.com/santi020k/eslint-config-basic/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-13967e?style=flat-square" alt="MIT license"></a>
+  <a href="https://www.npmjs.com/package/@santi020k/eslint-config-lit"><img src="https://img.shields.io/npm/dm/@santi020k/eslint-config-lit?style=flat-square" alt="Monthly npm downloads"></a>
+</p>
+
+<p align="center">
+  <a href="https://eslint.santi020k.com/frameworks/lit">Documentation</a> ·
+  <a href="https://www.npmjs.com/package/@santi020k/eslint-config-lit">npm</a> ·
+  <a href="https://github.com/santi020k/eslint-config-basic/tree/main/packages/lit">Source</a> ·
+  <a href="https://github.com/santi020k/eslint-config-basic/blob/main/packages/lit/CHANGELOG.md">Changelog</a>
+</p>
+
+**On this page:** [Installation](#installation) · [Usage](#usage) · [Compatibility](#compatibility) · [Documentation](#documentation) · [License](#license)
+
+Package: `@santi020k/eslint-config-lit`.
 
 ## Installation
 

@@ -25,9 +25,11 @@ const categoryExamples = {
   tools: ['cspell', 'prettier']
 }
 
-const generateBadges = packageName => `[![npm version](https://img.shields.io/npm/v/${packageName}.svg)](https://www.npmjs.com/package/${packageName})
-[![npm downloads](https://img.shields.io/npm/dm/${packageName}.svg)](https://www.npmjs.com/package/${packageName})
-[![license](https://img.shields.io/badge/license-MIT-blue.svg)](${repositoryOrigin}/blob/main/LICENSE)`
+const generateBadges = packageName => `<p align="center">
+  <a href="https://www.npmjs.com/package/${packageName}"><img src="https://img.shields.io/npm/v/${packageName}?style=flat-square&amp;color=6319be" alt="Published npm version"></a>
+  <a href="${repositoryOrigin}/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-13967e?style=flat-square" alt="MIT license"></a>
+  <a href="https://www.npmjs.com/package/${packageName}"><img src="https://img.shields.io/npm/dm/${packageName}?style=flat-square" alt="Monthly npm downloads"></a>
+</p>`
 
 const resolveInstallPackages = packageName => {
   if (packageName === '@santi020k/eslint-config-core') return `eslint ${packageName}`
@@ -162,12 +164,35 @@ const generateReadmeContent = pkg => {
   ].includes(packageName)
 
   const installAndUsage = generateInstallAndUsage(pkg, isCompatibilityPackage, isFoundation)
+  const firstSection = isCompatibilityPackage ? 'Recommended replacement' : 'Installation'
+  const usageSection = isFoundation ? 'Direct usage' : 'Usage'
+  const usageLink = isCompatibilityPackage ? '' : ` · [${usageSection}](#${usageSection.toLowerCase().replaceAll(' ', '-')})`
 
-  return `# ${packageName}
+  return `<p align="center">
+  <a href="${docsOrigin}">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/santi020k/eslint-config-basic/main/assets/readme/workspace-dark.svg">
+      <img src="https://raw.githubusercontent.com/santi020k/eslint-config-basic/main/assets/readme/workspace-light.svg" alt="ESLint Config Basic — Less setup. Clearer feedback." width="1200" height="220">
+    </picture>
+  </a>
+</p>
 
-${notice}${description}
+<h1 align="center">${title}</h1>
+
+${description}
 
 ${generateBadges(packageName)}
+
+<p align="center">
+  <a href="${docsOrigin}${docsPath}">Documentation</a> ·
+  <a href="https://www.npmjs.com/package/${packageName}">npm</a> ·
+  <a href="${repositoryOrigin}/tree/main/${pkg.packagePath}">Source</a> ·
+  <a href="${repositoryOrigin}/blob/main/${pkg.packagePath}/CHANGELOG.md">Changelog</a>
+</p>
+
+**On this page:** [${firstSection}](#${firstSection.toLowerCase().replaceAll(' ', '-')})${usageLink} · [Compatibility](#compatibility) · [Documentation](#documentation) · [License](#license)
+
+${notice}Package: \`${packageName}\`.
 
 ${installAndUsage}
 
