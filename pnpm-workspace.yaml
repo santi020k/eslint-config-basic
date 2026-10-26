@@ -130,7 +130,7 @@ catalogs:
   unicorn65:
     eslint-plugin-unicorn: ^77.0.0
   vite7:
-    vite: ^7.3.6
+    vite: ^7.3.7
   conflicts_typescript_ge5_0_0_l7_0_0:
     typescript: '>=5.0.0 <7.0.2'
 
