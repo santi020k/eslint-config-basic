@@ -114,6 +114,55 @@ pnpm run inspector    # Visual ESLint config inspector
 pnpm run changeset    # Create a changeset for your changes
 ```
 
+## Affected pull-request checks
+
+Ordinary pull requests keep the existing Turbo affected workspace checks and
+workspace-dependency-aware Vitest selection. `pnpm run test:affected` always runs
+integration, invariant, and contract tests, adds package-artifact tests for public
+package changes, and follows dependents and directly changed tests. The complete
+coverage job remains unchanged.
+
+Set `CI_BASE_SHA` and optionally `CI_HEAD_SHA` to compare with the Git merge base.
+Without trustworthy history, or for pushes, release branches, shared configuration,
+manifests, scripts, removed packages, and unknown inputs, the selector runs the
+full suite. Local `HEAD` includes staged, unstaged, and untracked files. Both sides
+of renames and deleted paths remain visible; a changed shared lint configuration
+runs full repository linting. The selector ignores inherited Git directory
+variables so hooks cannot accidentally inspect another checkout.
+
+`pnpm run test:ci` exercises these selection boundaries. `pnpm run release:check`
+includes those regressions and retains the full release build, lint, types,
+coverage, package, and consumer gates. To recover from a selector regression,
+set `GITHUB_EVENT_NAME=workflow_dispatch` locally or revert the selector change through a reviewed
+pull request; never bypass the full release candidate job.
+
+The security refresh uses compatible patched releases of Next, Storybook, Vite,
+MCP, Markdown, Undici, Zod, and URI handling dependencies. Lighthouse uses a patched
+Puppeteer release within its existing major. The Vitest ESLint plugin is pinned to
+1.6.27 because 1.6.28 requires TypeScript 6 while Testing promises TypeScript 5
+support. Fresh consumers verify both TypeScript majors.
+
+### Rollout benchmark
+
+Two alternating local macOS/Node 22.23.1 pairs measured `test:affected` versus
+full test selection on the same committed source and installed dependencies.
+Build prerequisites were already available; neither mode used task-result caching.
+
+| Change | Full median | Affected median | Time reduction |
+| --- | --- | --- | --- |
+| Docs | 31.39 s | 8.18 s | 73.9% |
+| React | 31.48 s | 24.25 s | 23.0% |
+| Core | 31.71 s | 32.91 s | -3.8% |
+
+Docs and React edits show savings in this test-selection lane. Core changes have
+no measured benefit and retain the broad dependent selection. These figures exclude
+builds, installation, audit, package consumers, and the unchanged full coverage job;
+they do not claim total CI savings. An incomplete local Corepack cache initially
+blocked a fresh fixture install, so timings use the validated isolated worktree's existing dependency installation.
+Restoring the missing files from the integrity-verified official pnpm 11.6.0 archive
+made the clean-install gate pass without changing the pinned version. Hosted CI
+must establish fresh-run compatibility before merge.
+
 ## Documentation
 
 Full documentation and API references are available at [eslint.santi020k.com](https://eslint.santi020k.com/).

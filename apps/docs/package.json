@@ -56,7 +56,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@santi020k/lumen-astro": "4.0.0",
+    "@santi020k/lumen-astro": "4.1.0",
     "@santi020k/theme": "2.0.1"
   }
 }
