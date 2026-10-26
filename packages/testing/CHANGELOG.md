@@ -1,5 +1,13 @@
 # @santi020k/eslint-config-testing
 
+## 3.1.6
+
+### Patch Changes
+
+- Keep the Vitest ESLint plugin on the latest release compatible with the documented TypeScript 5 support range.
+
+  Refresh compatible security dependencies, including the Storybook ESLint plugin, and retain the full release gate while making affected checks fail safe when Git history or shared inputs require complete validation.
+
 ## 3.1.5
 
 ### Patch Changes

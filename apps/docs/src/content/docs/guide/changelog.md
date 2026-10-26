@@ -3,6 +3,16 @@ title: "Changelog"
 description: "Release history for @santi020k/eslint-config-basic."
 ---
 
+# Changelog
+
+## 3.6.2
+
+### Patch Changes
+
+- Keep the Vitest ESLint plugin on the latest release compatible with the documented TypeScript 5 support range.
+
+  Refresh compatible security dependencies, including the Storybook ESLint plugin, and retain the full release gate while making affected checks fail safe when Git history or shared inputs require complete validation.
+
 ## 3.6.1
 
 ### Patch Changes

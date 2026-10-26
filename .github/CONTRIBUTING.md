@@ -142,6 +142,26 @@ Puppeteer release within its existing major. The Vitest ESLint plugin is pinned 
 1.6.27 because 1.6.28 requires TypeScript 6 while Testing promises TypeScript 5
 support. Fresh consumers verify both TypeScript majors.
 
+### Rollout benchmark
+
+Two alternating local macOS/Node 22.23.1 pairs measured `test:affected` versus
+full test selection on the same committed source and installed dependencies.
+Build prerequisites were already available; neither mode used task-result caching.
+
+| Change | Full median | Affected median | Time reduction |
+| --- | --- | --- | --- |
+| Docs | 31.39 s | 8.18 s | 73.9% |
+| React | 31.48 s | 24.25 s | 23.0% |
+| Core | 31.71 s | 32.91 s | -3.8% |
+
+Docs and React edits show savings in this test-selection lane. Core changes have
+no measured benefit and retain the broad dependent selection. These figures exclude
+builds, installation, audit, package consumers, and the unchanged full coverage job;
+they do not claim total CI savings. A separate fresh fixture install was blocked
+by pnpm 11.6.0's missing worker entry, so timings use the validated isolated
+worktree's existing dependency installation. Hosted CI must establish fresh-run
+compatibility before merge.
+
 ## Documentation
 
 Full documentation and API references are available at [eslint.santi020k.com](https://eslint.santi020k.com/).
