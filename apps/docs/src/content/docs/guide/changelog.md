@@ -1193,3 +1193,5 @@ See the [v2 to v3 migration guide](https://eslint.santi020k.com/guide/migration-
   - @santi020k/eslint-config-nest@0.1.0
   - @santi020k/eslint-config-next@0.1.0
   - @santi020k/eslint-config-vue@0.1.0
+
+<!-- Ordinary PR affected-mode verification; close without merging. -->
