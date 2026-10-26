@@ -157,10 +157,11 @@ Build prerequisites were already available; neither mode used task-result cachin
 Docs and React edits show savings in this test-selection lane. Core changes have
 no measured benefit and retain the broad dependent selection. These figures exclude
 builds, installation, audit, package consumers, and the unchanged full coverage job;
-they do not claim total CI savings. A separate fresh fixture install was blocked
-by pnpm 11.6.0's missing worker entry, so timings use the validated isolated
-worktree's existing dependency installation. Hosted CI must establish fresh-run
-compatibility before merge.
+they do not claim total CI savings. An incomplete local Corepack cache initially
+blocked a fresh fixture install, so timings use the validated isolated worktree's existing dependency installation.
+Restoring the missing files from the integrity-verified official pnpm 11.6.0 archive
+made the clean-install gate pass without changing the pinned version. Hosted CI
+must establish fresh-run compatibility before merge.
 
 ## Documentation
 
