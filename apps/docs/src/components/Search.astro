@@ -5,12 +5,17 @@ import StarlightSearch from '@astrojs/starlight/components/Search.astro'
 <StarlightSearch />
 
 <script>
-  const searchButton = document.querySelector('site-search button[data-open-modal]')
-  const searchLabel = searchButton?.getAttribute('aria-label')
-  const shortcut = searchButton?.querySelector('kbd')?.textContent
+  const searchButton = document.querySelector<HTMLButtonElement>('site-search button[data-open-modal]')
+  const searchLabel = searchButton?.querySelector('span')
+  const shortcutKeys = searchButton?.querySelectorAll<HTMLElement>('kbd > kbd')
 
-  if (searchLabel && shortcut) {
-    searchButton?.setAttribute('aria-label', `${searchLabel} ${shortcut.trim()}`)
+  if (searchButton && searchLabel && shortcutKeys?.length) {
+    // Keep word boundaries in minified markup without changing the flex layout.
+    searchLabel.textContent = `${searchLabel.textContent.trim()} `
+
+    for (const key of shortcutKeys) key.textContent = `${key.textContent.trim()} `
+
+    searchButton.setAttribute('aria-label', searchButton.textContent.trim())
   }
 
   const frame = document.querySelector('site-search .dialog-frame')

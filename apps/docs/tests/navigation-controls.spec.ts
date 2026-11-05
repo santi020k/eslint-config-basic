@@ -12,9 +12,9 @@ for (const width of [320, 1440]) {
       await page.goto('/guide/installation/')
 
       const searchButton = page.locator('site-search button[data-open-modal]')
-      const shortcut = await searchButton.locator('> kbd').evaluate(element => element.textContent.trim())
+      const shortcutKeys = await searchButton.locator('> kbd > kbd').allTextContents()
 
-      await expect(searchButton).toHaveAccessibleName(`Search ${shortcut}`)
+      await expect(searchButton).toHaveAccessibleName(['Search', ...shortcutKeys.map(key => key.trim())].join(' '))
 
       const toggle = page.locator('.s2k-docs-dock [data-ui-theme-toggle]')
 
@@ -309,5 +309,26 @@ for (const { icons, motion, properties } of [
     await expect(sidebar).toHaveCSS('filter', 'none')
 
     await expect(sidebar).toHaveCSS('transform', 'none')
+  })
+}
+
+for (const platform of ['Linux x86_64', 'MacIntel']) {
+  test(`search label includes its visible shortcut on ${platform}`, async ({ page }) => {
+    await page.addInitScript(value => {
+      Object.defineProperty(navigator, 'platform', { get: () => value })
+    }, platform)
+
+    await page.setViewportSize({ width: 1440, height: 900 })
+
+    await page.goto('/guide/installation/')
+
+    const searchButton = page.locator('site-search button[data-open-modal]')
+    const shortcutKeys = await searchButton.locator('> kbd > kbd').allTextContents()
+
+    await expect(searchButton).toHaveAccessibleName(['Search', ...shortcutKeys.map(key => key.trim())].join(' '))
+
+    await expect(searchButton).toHaveAttribute('aria-keyshortcuts', /^(Control|Meta)\+K$/u)
+
+    await expectNoUnexpectedAccessibilityViolations(page)
   })
 }
