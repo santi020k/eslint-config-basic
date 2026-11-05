@@ -5,6 +5,14 @@ import StarlightSearch from '@astrojs/starlight/components/Search.astro'
 <StarlightSearch />
 
 <script>
+  const searchButton = document.querySelector('site-search button[data-open-modal]')
+  const searchLabel = searchButton?.getAttribute('aria-label')
+  const shortcut = searchButton?.querySelector('kbd')?.textContent
+
+  if (searchLabel && shortcut) {
+    searchButton?.setAttribute('aria-label', `${searchLabel} ${shortcut.trim()}`)
+  }
+
   const frame = document.querySelector('site-search .dialog-frame')
 
   if (frame) {

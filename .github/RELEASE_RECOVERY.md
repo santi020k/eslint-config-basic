@@ -165,3 +165,9 @@ No configuration migration is required. Updated upstream plugins can change
 lint findings; compare effective-rule snapshots and run lint and type checks.
 Use the release workflow recovery process above for failed publication, or ship
 a new corrective version after publication. Never move published tags.
+
+The upgraded accessibility checker also verifies that the documentation search
+button includes its visible keyboard hint in its accessible name. Keyboard
+shortcuts remain exposed through aria-keyshortcuts. Visual tests verify the
+real package version before normalizing release digits to a stable fixture;
+full-page comparisons retain the existing strict pixel thresholds.

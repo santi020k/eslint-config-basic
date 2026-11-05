@@ -11,6 +11,11 @@ for (const width of [320, 1440]) {
 
       await page.goto('/guide/installation/')
 
+      const searchButton = page.locator('site-search button[data-open-modal]')
+      const shortcut = await searchButton.locator('> kbd').evaluate(element => element.textContent.trim())
+
+      await expect(searchButton).toHaveAccessibleName(`Search ${shortcut}`)
+
       const toggle = page.locator('.s2k-docs-dock [data-ui-theme-toggle]')
 
       await expect(toggle).toBeVisible()
