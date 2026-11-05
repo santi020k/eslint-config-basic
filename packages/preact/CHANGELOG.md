@@ -1,5 +1,17 @@
 # @santi020k/eslint-config-preact
 
+## 3.1.5
+
+### Patch Changes
+
+- Refresh compatible stable ESLint, framework, and development dependencies. Update typescript-eslint while retaining the TypeScript 6 tooling API and the stable native TypeScript 7 compiler alias.
+
+  Remediate vulnerable serialization, GraphQL WebSocket, system information, query string, and glob dependency paths. Preserve the documented minimum Node runtime and maintained braces guard.
+
+  No configuration migration is required. Review effective-rule changes from updated upstream plugins before adopting. Recover a failed publication by rerunning the release workflow at its original merged commit; fixes after publication require a new version.
+- Updated dependencies []:
+  - @santi020k/eslint-config-core@3.2.2
+
 ## 3.1.4
 
 ### Patch Changes

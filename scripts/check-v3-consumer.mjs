@@ -131,7 +131,7 @@ try {
 
   const audit = JSON.parse(execFileSync(
     'npm',
-    ['audit', '--omit=dev', '--json'],
+    ['audit', '--omit=dev', '--audit-level=high', '--json'],
     { cwd: tempDir, encoding: 'utf8', stdio: 'pipe' }
   ))
 

@@ -9,13 +9,13 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "hono": "^4.13.13"
+    "hono": "^4.13.16"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^5.20261006.1",
+    "@cloudflare/workers-types": "^5.20261104.1",
     "@santi020k/eslint-config-basic": "workspace:^",
     "eslint": "catalog:",
     "typescript": "catalog:",
-    "wrangler": "^4.147.0"
+    "wrangler": "^4.157.0"
   }
 }

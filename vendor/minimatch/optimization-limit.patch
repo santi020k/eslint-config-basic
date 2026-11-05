@@ -1,0 +1,20 @@
+--- a/dist/esm/index.js
++++ b/dist/esm/index.js
+@@ -446,0 +447 @@
++        const { braceExpandMax = 100_000 } = this.options;
+@@ -474 +475,2 @@
+-                        p2 === '..') {
++                        p2 === '..' ||
++                        globParts.length >= braceExpandMax) {
+@@ -530,0 +533 @@
++        if (globParts.length > 1000) return globParts;
+--- a/dist/commonjs/index.js
++++ b/dist/commonjs/index.js
+@@ -455,0 +456 @@
++        const { braceExpandMax = 100_000 } = this.options;
+@@ -483 +484,2 @@
+-                        p2 === '..') {
++                        p2 === '..' ||
++                        globParts.length >= braceExpandMax) {
+@@ -539,0 +542 @@
++        if (globParts.length > 1000) return globParts;

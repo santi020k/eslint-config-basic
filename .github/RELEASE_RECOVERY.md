@@ -137,3 +137,31 @@ APIs, lint rules, dependencies, runtime requirements, or persisted data change.
 No migration is required. To recover from a documentation error, correct the
 source or README generator and publish another patch through the same release
 workflow; preserve immutable tags and existing artifacts.
+
+## 3.7.0 dependency refresh
+
+This minor release refreshes compatible stable dependencies, including ESLint
+10.14 and typescript-eslint 8.72.1. TypeScript 7.1 remains beta and unsupported
+by the released lint parser; retain the TypeScript 6 tooling alias and the stable
+native TypeScript 7 compiler alias. The documented Node runtime floors and
+runtime-sensitive plugin pins remain in force.
+
+The refreshed graph fixes the reported Seroval, GraphQL legacy WebSocket,
+systeminformation, and qs advisories. Workspace overrides select Seroval 1.7.7
+and glob 14.0.3 for affected dependency ranges. The maintained minimatch 10.2.6
+derivative backports upstream optimization
+limits while retaining the makeRe API required by import-x. Its source,
+regeneration command, limitations, and removal condition are documented in
+`vendor/minimatch/README.md`. The release gate verifies both module formats
+and an original-code negative control. These overrides
+protect the maintainer workspace; they do not configure a consumer's ESLint host.
+Consumers should update their own lockfiles and audit their complete dependency
+graph. The maintained braces remediation remains required. The refreshed Formats
+bundle contains 4,930 files (140 more than the previous baseline) and measures
+32.81 MiB; only its file-count baseline changes, while the byte budget stays
+at 37,320,902 bytes.
+
+No configuration migration is required. Updated upstream plugins can change
+lint findings; compare effective-rule snapshots and run lint and type checks.
+Use the release workflow recovery process above for failed publication, or ship
+a new corrective version after publication. Never move published tags.

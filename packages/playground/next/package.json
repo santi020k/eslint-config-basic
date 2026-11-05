@@ -15,7 +15,7 @@
   "dependencies": {
     "@santi020k/eslint-config-basic": "workspace:^",
     "eslint": "catalog:",
-    "next": "^16.4.3",
+    "next": "^16.4.5",
     "react": "catalog:",
     "react-dom": "catalog:"
   },

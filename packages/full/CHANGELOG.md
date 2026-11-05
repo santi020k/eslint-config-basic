@@ -1,5 +1,40 @@
 # @santi020k/eslint-config-full
 
+## 3.2.8
+
+### Patch Changes
+
+- Refresh compatible stable ESLint, framework, and development dependencies. Update typescript-eslint while retaining the TypeScript 6 tooling API and the stable native TypeScript 7 compiler alias.
+
+  Remediate vulnerable serialization, GraphQL WebSocket, system information, query string, and glob dependency paths. Preserve the documented minimum Node runtime and maintained braces guard.
+
+  No configuration migration is required. Review effective-rule changes from updated upstream plugins before adopting. Recover a failed publication by rerunning the release workflow at its original merged commit; fixes after publication require a new version.
+- Updated dependencies []:
+  - @santi020k/eslint-config-angular@3.1.5
+  - @santi020k/eslint-config-astro@3.1.7
+  - @santi020k/eslint-config-basic@3.7.0
+  - @santi020k/eslint-config-expo@3.1.5
+  - @santi020k/eslint-config-extensions@3.1.6
+  - @santi020k/eslint-config-formats@3.1.6
+  - @santi020k/eslint-config-hono@3.1.5
+  - @santi020k/eslint-config-libraries@3.1.7
+  - @santi020k/eslint-config-lit@3.1.5
+  - @santi020k/eslint-config-nest@3.1.5
+  - @santi020k/eslint-config-next@3.1.5
+  - @santi020k/eslint-config-nuxt@3.1.5
+  - @santi020k/eslint-config-preact@3.1.5
+  - @santi020k/eslint-config-qwik@3.1.5
+  - @santi020k/eslint-config-react@3.1.5
+  - @santi020k/eslint-config-react-router@3.1.5
+  - @santi020k/eslint-config-slidev@3.1.5
+  - @santi020k/eslint-config-solid@3.1.5
+  - @santi020k/eslint-config-svelte@3.1.5
+  - @santi020k/eslint-config-tanstack-start@3.1.5
+  - @santi020k/eslint-config-testing@3.1.7
+  - @santi020k/eslint-config-tools@3.1.6
+  - @santi020k/eslint-config-vite@3.1.5
+  - @santi020k/eslint-config-vue@3.1.5
+
 ## 3.2.7
 
 ### Patch Changes

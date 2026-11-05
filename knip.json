@@ -44,7 +44,6 @@
         "@santi020k/eslint-config-angular",
         "@santi020k/eslint-config-astro",
         "@santi020k/eslint-config-expo",
-        "@santi020k/eslint-config-extensions",
         "@santi020k/eslint-config-formats",
         "@santi020k/eslint-config-hono",
         "@santi020k/eslint-config-lit",

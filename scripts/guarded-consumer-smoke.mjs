@@ -32,6 +32,21 @@ const checkTree = directory => {
 
     assert.notEqual(manifest.name, 'braces', 'An unpatched braces package was bundled')
 
+    if (manifest.name === 'minimatch') {
+      const major = Number(manifest.version.split('.')[0])
+
+      assert.ok(major < 7 || (major >= 11 && manifest.version !== '11.0.0'), 'An affected minimatch package was bundled')
+    }
+
+    if (manifest.name === '@santi020k/minimatch-optimization-guard') {
+      const guarded = createRequire(path)('./dist/commonjs/index.js')
+      const matcher = new guarded.Minimatch('x', { braceExpandMax: 2 })
+
+      assert.ok(matcher.firstPhasePreProcess([['**', '..', 'a', 'b', '**', '..', 'c', 'd']]).length <= 2)
+
+      assert.ok(guarded.makeRe('src/**/*.ts').test('src/index.ts'))
+    }
+
     if (manifest.name !== '@santi020k/braces-depth-guard') continue
 
     assert.equal(manifest.version, '3.0.3-santi.1')

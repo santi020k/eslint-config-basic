@@ -3,6 +3,22 @@ title: "Changelog"
 description: "Release history for @santi020k/eslint-config-basic."
 ---
 
+## 3.7.0
+
+### Minor Changes
+
+- Refresh compatible stable ESLint, framework, and development dependencies. Update typescript-eslint while retaining the TypeScript 6 tooling API and the stable native TypeScript 7 compiler alias.
+
+  Remediate vulnerable serialization, GraphQL WebSocket, system information, query string, and glob dependency paths. Preserve the documented minimum Node runtime and maintained braces guard.
+
+  No configuration migration is required. Review effective-rule changes from updated upstream plugins before adopting. Recover a failed publication by rerunning the release workflow at its original merged commit; fixes after publication require a new version.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @santi020k/eslint-config-core@3.2.2
+  - @santi020k/eslint-config-typescript@3.1.8
+
 ## 3.6.2
 
 ### Patch Changes

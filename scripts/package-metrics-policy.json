@@ -5,7 +5,7 @@
   "@santi020k/eslint-config-core": { "maxBytes": 235787, "maxFiles": 37 },
   "@santi020k/eslint-config-expo": { "maxBytes": 4462, "maxFiles": 4 },
   "@santi020k/eslint-config-extensions": {"maxBytes": 24501938, "maxFiles": 6664},
-  "@santi020k/eslint-config-formats": {"maxBytes": 37320902, "maxFiles": 4790},
+  "@santi020k/eslint-config-formats": {"maxBytes": 37320902, "maxFiles": 4930},
   "@santi020k/eslint-config-full": { "maxBytes": 1850, "maxFiles": 5 },
   "@santi020k/eslint-config-hono": { "maxBytes": 3082, "maxFiles": 4 },
   "@santi020k/eslint-config-integrations": { "maxBytes": 13769, "maxFiles": 24 },

@@ -22,6 +22,9 @@ export default {
   hideBreadcrumbs: true,
   // Keep generated source links stable across unrelated commits.
   gitRevision: 'main',
+  disableGit: true,
+  basePath: 'packages',
+  sourceLinkTemplate: 'https://github.com/santi020k/eslint-config-basic/blob/main/packages/{path}#L{line}',
   excludePrivate: true,
   excludeInternal: true,
   categorizeByGroup: true,

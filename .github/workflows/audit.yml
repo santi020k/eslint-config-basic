@@ -10,6 +10,8 @@ on:
       - 'pnpm-lock.yaml'
       - 'pnpm-workspace.yaml'
       - 'vendor/braces/**'
+      - 'vendor/minimatch/**'
+      - 'scripts/check-minimatch-guard.mjs'
       - 'scripts/check-braces-guard.mjs'
       - '.github/workflows/audit.yml'
   schedule:
@@ -38,3 +40,6 @@ jobs:
         run: pnpm audit --audit-level=high
       - name: Verify maintained braces remediation
         run: node scripts/check-braces-guard.mjs
+
+      - name: Verify maintained minimatch remediation
+        run: node scripts/check-minimatch-guard.mjs
