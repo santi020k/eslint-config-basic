@@ -46,7 +46,7 @@ jobs:
           fetch-depth: 0
       - uses: santi020k/quality/actions/setup-pnpm@eec1701b98bcc0b76d36af288ee78a0369cd84cc # v1
         with:
-          node-version: 22.x
+          node-version-file: .nvmrc
       - name: Audit maintained recovery workspace
         run: pnpm audit --audit-level=high
       - name: Validate original release source
@@ -84,7 +84,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v6
         with:
-          node-version: 22.x
+          node-version-file: .nvmrc
       - name: Resolve original release base
         run: echo "RELEASE_BASE_SHA=$(git -C source rev-parse HEAD^)" >> "$GITHUB_ENV"
       - name: Create missing records with isolated authority

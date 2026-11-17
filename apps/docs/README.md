@@ -29,6 +29,16 @@ Internal Astro Starlight documentation workspace for the [`@santi020k/eslint-con
 - Custom Domain Target: `eslint.santi020k.com`
 - Author: [santi020k](https://santi020k.com)
 
+Local development and documentation builds require Node.js 22.23.4 or newer and
+the repository's pinned pnpm version. This private workspace runtime supports the
+patched Astro documentation tooling; published ESLint packages retain their
+Node.js `>=22.19.0` compatibility contract.
+
+The build leaves resolved Satteri packages external so Astro and Starlight each
+load the native binary matching their parser version. These package paths are
+used only while prerendering; the deployed documentation remains static. Remove
+this workaround when upstream bundling preserves native package resolution.
+
 ## Design and motion
 
 The shared documentation shell follows the sculpted direction of the Santi020k website and

@@ -35,7 +35,7 @@ jobs:
       - name: Set up pnpm workspace
         uses: santi020k/quality/actions/setup-pnpm@eec1701b98bcc0b76d36af288ee78a0369cd84cc # v1
         with:
-          node-version: 22.x
+          node-version-file: .nvmrc
           install: false
       - name: Turborepo Cache
         uses: actions/cache@v5
@@ -82,6 +82,7 @@ jobs:
         uses: santi020k/quality/actions/setup-pnpm@eec1701b98bcc0b76d36af288ee78a0369cd84cc # v1
         with:
           node-version: ${{ matrix.node-version }}
+          node-version-file: ${{ matrix.node-version == '22.x' && '.nvmrc' || '' }}
           install: false
       - name: Turborepo Cache
         uses: actions/cache@v5
@@ -143,7 +144,7 @@ jobs:
       - name: Set up pnpm workspace
         uses: santi020k/quality/actions/setup-pnpm@eec1701b98bcc0b76d36af288ee78a0369cd84cc # v1
         with:
-          node-version: 22.x
+          node-version-file: .nvmrc
           install: false
       - name: Turborepo Cache
         uses: actions/cache@v5
@@ -183,6 +184,7 @@ jobs:
         uses: santi020k/quality/actions/setup-pnpm@eec1701b98bcc0b76d36af288ee78a0369cd84cc # v1
         with:
           node-version: ${{ matrix.node-version }}
+          node-version-file: ${{ matrix.node-version == '22.x' && '.nvmrc' || '' }}
           install: false
       - name: Setup Bun
         if: matrix.manager == 'bun'
@@ -214,7 +216,7 @@ jobs:
       - name: Set up pnpm workspace
         uses: santi020k/quality/actions/setup-pnpm@eec1701b98bcc0b76d36af288ee78a0369cd84cc # v1
         with:
-          node-version: 22.x
+          node-version-file: .nvmrc
       - name: Validate release branch and version plan
         shell: bash
         run: |
@@ -241,7 +243,7 @@ jobs:
       - name: Set up pnpm workspace
         uses: santi020k/quality/actions/setup-pnpm@eec1701b98bcc0b76d36af288ee78a0369cd84cc # v1
         with:
-          node-version: 22.x
+          node-version-file: .nvmrc
       - name: Build CLI dependencies (serialised to avoid native-binary contention on Windows)
         run: pnpm exec turbo run build --filter=@santi020k/eslint-config-basic --concurrency=1 --output-logs=new-only
       - name: Run CLI and detection tests on Windows

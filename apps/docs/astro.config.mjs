@@ -410,5 +410,13 @@ export default defineConfig({
       rehypePlugins: [rehypeScrollableFocusable, rehypeDocsMarkdownLinks]
     })
   },
-  site
+  site,
+  vite: {
+    build: {
+      rolldownOptions: {
+        // Match resolved package paths so each parser loads its own native binary during prerendering.
+        external: [/[/\\]node_modules[/\\]satteri[/\\]/]
+      }
+    }
+  }
 })
