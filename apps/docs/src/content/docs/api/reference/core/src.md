@@ -1349,12 +1349,12 @@ Defined in: [core/src/types.ts:271](https://github.com/santi020k/eslint-config-b
 
 ### ImportedFramework
 
-> **ImportedFramework** = ((`options?`) => [`FlatConfigArray`](#flatconfigarray) \| `Promise`\<[`FlatConfigArray`](#flatconfigarray)\>) \| [`FlatConfigArray`](#flatconfigarray) \| `true` \| \{ `default`: ((`options?`) => [`FlatConfigArray`](#flatconfigarray) \| `Promise`\<[`FlatConfigArray`](#flatconfigarray)\>) \| [`FlatConfigArray`](#flatconfigarray); \}
+> **ImportedFramework** = ((`options?`) => [`FlatConfigArray`](#flatconfigarray) \| `Promise`\<[`FlatConfigArray`](#flatconfigarray)\>) \| [`FlatConfigArray`](#flatconfigarray) \| `boolean` \| \{ `default`: ((`options?`) => [`FlatConfigArray`](#flatconfigarray) \| `Promise`\<[`FlatConfigArray`](#flatconfigarray)\>) \| [`FlatConfigArray`](#flatconfigarray); \}
 
 Defined in: [core/src/types.ts:594](https://github.com/santi020k/eslint-config-basic/blob/main/packages/core/src/types.ts#L594)
 
-Type for framework option values: `true` enables the optional v3 config,
-or pass a config array, a factory function (sync or async, like the lazy
+Framework option values: `true` enables the optional v3 config and `false`
+disables it. You can also pass a config array, a factory function (sync or async, like the lazy
 framework factories exported from `@santi020k/eslint-config-basic`), or an
 imported module with a default export. Any other value throws a descriptive
 `TypeError` (see `resolveFramework` in `@santi020k/eslint-config-basic`).
@@ -2715,7 +2715,7 @@ Defined in: [core/src/compose.ts:7](https://github.com/santi020k/eslint-config-b
 
 > **patchImportGroups**(`allConfigs`, `workspacePrefixes`): `ConfigArray`
 
-Defined in: [core/src/config-helpers.ts:441](https://github.com/santi020k/eslint-config-basic/blob/main/packages/core/src/config-helpers.ts#L441)
+Defined in: [core/src/config-helpers.ts:483](https://github.com/santi020k/eslint-config-basic/blob/main/packages/core/src/config-helpers.ts#L483)
 
 #### Parameters
 
@@ -2737,7 +2737,7 @@ Defined in: [core/src/config-helpers.ts:441](https://github.com/santi020k/eslint
 
 > **patchImportGroupsConfig**(`config`, `workspacePatterns`): `Config`
 
-Defined in: [core/src/config-helpers.ts:406](https://github.com/santi020k/eslint-config-basic/blob/main/packages/core/src/config-helpers.ts#L406)
+Defined in: [core/src/config-helpers.ts:448](https://github.com/santi020k/eslint-config-basic/blob/main/packages/core/src/config-helpers.ts#L448)
 
 #### Parameters
 
@@ -2851,7 +2851,7 @@ Defined in: [core/src/config-helpers.ts:340](https://github.com/santi020k/eslint
 
 > **scopeConfigToProject**(`config`, `projectPath`): `Config`
 
-Defined in: [core/src/config-helpers.ts:387](https://github.com/santi020k/eslint-config-basic/blob/main/packages/core/src/config-helpers.ts#L387)
+Defined in: [core/src/config-helpers.ts:420](https://github.com/santi020k/eslint-config-basic/blob/main/packages/core/src/config-helpers.ts#L420)
 
 #### Parameters
 
@@ -2873,7 +2873,7 @@ Defined in: [core/src/config-helpers.ts:387](https://github.com/santi020k/eslint
 
 > **scopeFilePattern**(`projectPath`, `pattern`): `unknown`
 
-Defined in: [core/src/config-helpers.ts:371](https://github.com/santi020k/eslint-config-basic/blob/main/packages/core/src/config-helpers.ts#L371)
+Defined in: [core/src/config-helpers.ts:379](https://github.com/santi020k/eslint-config-basic/blob/main/packages/core/src/config-helpers.ts#L379)
 
 #### Parameters
 

@@ -5,11 +5,16 @@ import { dirname, extname, isAbsolute, join, resolve } from 'node:path'
 import type { TailwindOptions } from '@santi020k/eslint-config-core'
 import type { TSESLint } from '@typescript-eslint/utils'
 
-const CSS_ESCAPE_PATTERN = String.raw`\\(?:[\dA-Fa-f]{1,6}\s?|[^\f\n\r])`
+// CSS Syntax §4.3.7: an escape is 1-6 hex digits plus at most one CSS whitespace
+// (CRLF counts as one newline), or any other code point standing for itself.
+const CSS_ESCAPE_PATTERN = String.raw`\\(?:[\dA-Fa-f]{1,6}(?:\r\n|[\t\n\f\r ])?|[^\f\n\r])`
+const CSS_ESCAPE_PARTS_PATTERN = /\\(?:([\dA-Fa-f]{1,6})(?:\r\n|[\t\n\f\r ])?|[^\f\n\r])/gu
+const CSS_IDENTIFIER_START_PATTERN = String.raw`(?:${CSS_ESCAPE_PATTERN}|[A-Za-z_\u0080-\u{10FFFF}])`
+const CSS_IDENTIFIER_CONTINUE_PATTERN = String.raw`(?:${CSS_ESCAPE_PATTERN}|[\w\-\u0080-\u{10FFFF}])`
 
 const CSS_CLASS_PATTERN = new RegExp(
-  String.raw`\.((?:${CSS_ESCAPE_PATTERN}|[A-Za-z_])(?:${CSS_ESCAPE_PATTERN}|[\w-])*)`,
-  'g'
+  String.raw`\.((?:-?${CSS_IDENTIFIER_START_PATTERN}|--)${CSS_IDENTIFIER_CONTINUE_PATTERN}*)`,
+  'gu'
 )
 
 const CSS_UTILITY_PATTERN = /@utility\s+([A-Za-z_][\w-]*)\s*\{/g
@@ -42,9 +47,20 @@ const PLUGIN_CLASS_PATTERNS: Readonly<Record<string, readonly string[]>> = {
   '@tailwindcss/typography': ['^not-prose$']
 }
 
-const decodeCssIdentifier = (value: string): string => value
-  .replaceAll(/\\([\dA-Fa-f]{1,6})\s?/g, (_, codePoint: string) => String.fromCodePoint(Number.parseInt(codePoint, 16)))
-  .replaceAll(/\\([^\f\n\r])/g, '$1')
+const decodeCssHexEscape = (hex: string): string => {
+  const codePoint = Number.parseInt(hex, 16)
+  const isSurrogate = codePoint >= 0xD800 && codePoint <= 0xDFFF
+
+  return codePoint === 0 || isSurrogate || codePoint > 0x10FFFF ?
+    '�' :
+    String.fromCodePoint(codePoint)
+}
+
+// A single pass keeps an escaped or decoded backslash from starting another escape.
+const decodeCssIdentifier = (value: string): string => value.replaceAll(
+  CSS_ESCAPE_PARTS_PATTERN,
+  (escape: string, hex: string | undefined) => hex === undefined ? escape.slice(1) : decodeCssHexEscape(hex)
+)
 
 const resolveLocalCssImport = (filePath: string, specifier: string): string | undefined => {
   if (!specifier.startsWith('.') && !isAbsolute(specifier)) return undefined

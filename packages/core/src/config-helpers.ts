@@ -1,5 +1,5 @@
 import { existsSync } from 'node:fs'
-import { join } from 'node:path'
+import { isAbsolute, join } from 'node:path'
 
 import type { TSESLint } from '@typescript-eslint/utils'
 
@@ -368,14 +368,16 @@ export const findTailwindEntryPoint = (rootDir: string): string | undefined => (
   TAILWIND_ENTRYPOINT_CANDIDATES.find(candidate => existsSync(join(rootDir, candidate)))
 )
 
-export const scopeFilePattern = (projectPath: string, pattern: unknown): unknown => {
-  if (typeof pattern === 'string') {
-    const isNegated = pattern.startsWith('!')
-    const basePattern = (isNegated ? pattern.slice(1) : pattern).replace(/^\.\//, '')
-    const scoped = `${projectPath.replace(/\/$/, '')}/${basePattern}`
+const scopeGlob = (projectPath: string, glob: string): string => {
+  const isNegated = glob.startsWith('!')
+  const basePattern = (isNegated ? glob.slice(1) : glob).replace(/^\.\//, '')
+  const scoped = `${projectPath.replace(/\/$/, '')}/${basePattern}`
 
-    return isNegated ? `!${scoped}` : scoped
-  }
+  return isNegated ? `!${scoped}` : scoped
+}
+
+export const scopeFilePattern = (projectPath: string, pattern: unknown): unknown => {
+  if (typeof pattern === 'string') return scopeGlob(projectPath, pattern)
 
   if (Array.isArray(pattern)) {
     return pattern.map(item => scopeFilePattern(projectPath, item))
@@ -384,22 +386,62 @@ export const scopeFilePattern = (projectPath: string, pattern: unknown): unknown
   return pattern
 }
 
+// ESLint also accepts matcher functions wherever it accepts globs; only globs are path-relative.
+const scopeMatcher = <T>(projectPath: string, matcher: T): string | T => (
+  typeof matcher === 'string' ? scopeGlob(projectPath, matcher) : matcher
+)
+
+type FilePattern = NonNullable<TSESLint.FlatConfig.Config['files']>[number]
+
+const scopeProjectFilePattern = (projectPath: string, pattern: FilePattern): FilePattern => {
+  const projectFiles = `${projectPath.replace(/\/$/, '')}/**/*`
+
+  // Top-level file patterns are ORed. A negated glob must be intersected with
+  // the project, as must an AND group that otherwise has no positive scope.
+  if (Array.isArray(pattern)) {
+    return [projectFiles, ...pattern.map(item => scopeMatcher(projectPath, item))]
+  }
+
+  if (typeof pattern !== 'string' || pattern.startsWith('!')) {
+    return [projectFiles, scopeMatcher(projectPath, pattern)]
+  }
+
+  return scopeGlob(projectPath, pattern)
+}
+
+// ESLint treats `ignores` as global ignores only when every other key is metadata.
+const GLOBAL_IGNORES_METADATA_KEYS = new Set(['basePath', 'name'])
+
+const isGlobalIgnoresConfig = (config: TSESLint.FlatConfig.Config): boolean => (
+  Array.isArray(config.ignores) &&
+  Object.keys(config).every(key => key === 'ignores' || GLOBAL_IGNORES_METADATA_KEYS.has(key))
+)
+
 export const scopeConfigToProject = (
   config: TSESLint.FlatConfig.Config,
   projectPath: string
 ): TSESLint.FlatConfig.Config => {
-  if ('ignores' in config && !config.files) {
+  // A base path already scopes the entire block, including local ignores and
+  // negative files. Rebase relative paths once; keep explicit absolute anchors.
+  if (config.basePath !== undefined) {
     return {
       ...config,
-      ignores: config.ignores?.map(pattern => scopeFilePattern(projectPath, pattern) as string)
+      basePath: isAbsolute(config.basePath) ? config.basePath : join(projectPath, config.basePath)
     }
   }
+
+  const ignores = Array.isArray(config.ignores) ?
+    config.ignores.map(pattern => scopeMatcher(projectPath, pattern)) :
+    undefined
+
+  if (isGlobalIgnoresConfig(config)) return { ...config, ignores }
 
   return {
     ...config,
     files: Array.isArray(config.files) ?
-      config.files.map((pattern: unknown) => scopeFilePattern(projectPath, pattern)) as TSESLint.FlatConfig.Config['files'] :
-      [`${projectPath.replace(/\/$/, '')}/**/*`]
+      config.files.map(pattern => scopeProjectFilePattern(projectPath, pattern)) :
+      [`${projectPath.replace(/\/$/, '')}/**/*`],
+    ...(ignores ? { ignores } : {})
   }
 }
 

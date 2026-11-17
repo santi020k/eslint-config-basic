@@ -148,7 +148,15 @@ export default await defineConfig({
 ```
 
 > [!NOTE]
-> Patterns in `ignores` are relative to ESLint's working directory. They are not automatically prefixed with the `projects` subfolder paths — use repo-root-relative globs when needed.
+> Root `ignores` use paths relative to the root ESLint config. Inside a
+> `projects` entry, `files` and `ignores` are prefixed with that project's path.
+> For example, `ignores: ['excluded/**']` in `projects['apps/web']` excludes
+> `apps/web/excluded/**`. An ignore-only block excludes files globally; an
+> `ignores` field alongside rules or other settings excludes files only from
+> that block. Negated file patterns remain confined to the project. For a block
+> with `basePath`, a relative base path is resolved within the project and its
+> patterns remain relative to that base; an absolute base path keeps its explicit
+> location.
 
 ## Troubleshooting
 

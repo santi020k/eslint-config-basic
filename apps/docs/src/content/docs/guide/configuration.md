@@ -203,7 +203,13 @@ Supported detection keys are `typescript`, `frameworks`, `libraries`, `testing`,
 
 ## Additional global ignores
 
-Pass `ignores` when you want repo-specific globs inside `defineConfig()` instead of a separate array entry. Patterns behave like ESLint flat config global ignores (relative to the ESLint working directory). They are not merged from presets or auto-detection. For `projects` sub-configs, patterns are not rewritten with the subfolder prefix; use paths that make sense from the config file's working directory.
+Pass `ignores` when you want repo-specific globs inside `defineConfig()` instead
+of a separate array entry. Root patterns behave like ESLint flat config global
+ignores, relative to the ESLint config directory. They are not merged from
+presets or auto-detection. Inside a `projects` sub-config, patterns are prefixed
+with the project's path: `ignores: ['excluded/**']` in `projects['apps/web']`
+ignores `apps/web/excluded/**`. Local `ignores` on framework rule blocks are
+scoped to the same project and affect only their own block.
 
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'
@@ -396,6 +402,10 @@ blocks. Explicit `@plugin` declarations and root `tailwind.config.*` references
 enable the narrow compatibility classes provided by Tailwind Typography, Forms,
 and the legacy Aspect Ratio plugin; for example, Typography's `not-prose` is
 recognized without a consumer ignore.
+
+Literal Unicode class names and escaped identifiers are recognized without
+truncation or repeated decoding. Invalid hexadecimal Unicode escapes use the
+CSS replacement character instead of interrupting configuration loading.
 
 The detector deliberately does not guess dynamic `@utility name-*` families,
 remote sources, or arbitrary runtime-generated package classes. Install package
