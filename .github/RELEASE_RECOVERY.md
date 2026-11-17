@@ -75,6 +75,26 @@ tag SHAs, the GitHub Release, and the live documentation deployment. Run a packe
 consumer smoke check before retiring release branches. Delete local and remote
 release branches only after verification and explicit remote cleanup authorization.
 
+## 3.8.0 configuration and CLI preparation
+
+Basic 3.8.0 includes broader CSS class discovery and declared package-manager
+fallback, together with project-scoping, framework-flag, and CLI safeguard fixes.
+Core 3.2.3 contains the shared scoping and type changes; Full 3.2.9 carries the
+updated Basic dependency for batteries-included consumers. Runtime floors and
+the dependency security fixes below remain unchanged.
+
+Child rule-block ignores now resolve inside the child project. Remove manual
+project-path prefixes used to compensate for the previous behavior. Customized
+ESLint modules must set `strict` manually before running `baseline` without
+`--preset`. Compare effective-rule snapshots and check sibling projects for rules
+or ignores that previously leaked outside the intended scope.
+
+This is a local release candidate until the authorized release pull request is
+merged and the GitHub workflow publishes it. Run the full release gate and
+independent review before pushing. Recover failed publication through the workflow
+at the original merged commit; correct a published regression with a new patch
+version, preserving immutable tags and artifacts.
+
 ## 3.6.0 security and runtime preparation
 
 The release keeps every public package's advertised Node `>=22.19.0` contract.

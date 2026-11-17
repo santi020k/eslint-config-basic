@@ -20,9 +20,9 @@ export const updateCommands = [
 
 <div class="s2k-release-hero">
   <div>
-    <Badge variant="success">Documentation patch release</Badge>
-    <h2>Useful READMEs, wherever you start.</h2>
-    <p>Version 3.6.1 refreshes the package READMEs with clear setup examples, consistent artwork, quick navigation, and direct links to documentation and support. Configuration APIs, lint rules, and runtime requirements remain unchanged.</p>
+    <Badge variant="success">Configuration and CLI improvements</Badge>
+    <h2>Reliable project boundaries. Safer setup commands.</h2>
+    <p>Version 3.8.0 improves monorepo configuration, recognizes more CSS class names, and respects declared package managers. CLI safeguards protect customized configuration files and make missing agent instructions visible during checks.</p>
   </div>
   <div class="s2k-release-version">
     <span>Release candidate</span>
@@ -32,14 +32,33 @@ export const updateCommands = [
 
 ## Highlights
 
-- Package READMEs share light and dark artwork, version and license badges, and
-  direct documentation, source, and changelog links.
-- Framework adapters and feature packs show the dependencies to install and a
-  working configuration example; deprecated packages point to their replacements.
-- Contributor and private-workspace guides use the current Starlight documentation,
-  correct support links, and commands that run the actual workspace checks.
-- This patch changes documentation only. There are no API migrations or expected
-  effective-rule changes.
+- Child project rule blocks, local ignores, and negated file patterns stay inside
+  their project. Relative `basePath` values are rebased once; explicitly absolute
+  paths retain their intended scope.
+- Public types and the JSON schema accept `false` framework flags. Disabling an
+  unrelated framework no longer prevents required React rules.
+- CSS discovery recognizes Unicode and leading-hyphen class names and safely
+  handles escaped characters, including invalid Unicode escape values.
+- CLI preset updates accept the generated Basic or Full configuration and refuse
+  customized modules before changing files or invoking ESLint.
+- When no workspace or lockfile identifies a package manager, CLI commands use a
+  valid `packageManager` declaration. Existing lockfile precedence is preserved.
+- `generate-skill --check --create` reports a missing requested `AGENTS.md` as stale
+  without writing files and includes `--create` in the recovery command.
+
+## Migration notes for 3.8.0
+
+Child rule-block ignores are relative to the child project. If you manually
+prefixed an ignore with the project path to compensate for the previous behavior,
+remove that extra prefix. Review lint findings in sibling projects after upgrading;
+rules and ignores that previously leaked outside a child project now stay scoped.
+
+For customized ESLint modules, set `strict` manually and run `basic-eslint baseline`
+without `--preset`. See the [CLI guide](/guide/cli/) for the supported generated
+configuration form.
+
+This candidate versions Basic at 3.8.0, Core at 3.2.3, and Full at 3.2.9. Other
+package versions remain independent. Runtime requirements are unchanged.
 
 ## Upgrade the package
 
