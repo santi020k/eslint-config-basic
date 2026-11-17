@@ -179,6 +179,10 @@ List options (`libraries`, `testing`, `formats`, `tools`, `extensions`) and `fra
 
 Use `autoFrameworks: false` when you want manual framework control only (no detected framework auto-enable).
 
+Enabled frameworks still load the configs they require: for example, Next.js
+requires React and Nuxt requires Vue. Setting `react: false` or `vue: false` does
+not suppress that required config while its parent framework remains enabled.
+
 ## Detection Controls
 
 Use `detection: false` to disable all auto-detection, or pass an object to disable specific categories while keeping the rest automatic.
@@ -208,8 +212,11 @@ of a separate array entry. Root patterns behave like ESLint flat config global
 ignores, relative to the ESLint config directory. They are not merged from
 presets or auto-detection. Inside a `projects` sub-config, patterns are prefixed
 with the project's path: `ignores: ['excluded/**']` in `projects['apps/web']`
-ignores `apps/web/excluded/**`. Local `ignores` on framework rule blocks are
-scoped to the same project and affect only their own block.
+ignores `apps/web/excluded/**`.
+
+Custom framework blocks preserve v3 ignore semantics: a block with explicit
+`files` keeps its root-relative `ignores` unchanged; a block without `files`
+uses project-relative ignores. Local ignores affect only their own block.
 
 ```js
 import { defineConfig } from '@santi020k/eslint-config-basic'

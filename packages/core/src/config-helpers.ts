@@ -430,9 +430,11 @@ export const scopeConfigToProject = (
     }
   }
 
-  const ignores = Array.isArray(config.ignores) ?
+  // Preserve v3's root-relative ignores on blocks with explicit files. Blocks
+  // without files have always used project-relative ignores.
+  const ignores = Array.isArray(config.ignores) && !config.files ?
     config.ignores.map(pattern => scopeMatcher(projectPath, pattern)) :
-    undefined
+    config.ignores
 
   if (isGlobalIgnoresConfig(config)) return { ...config, ignores }
 

@@ -1270,6 +1270,73 @@ describe('preset adoption', () => {
 })
 
 describe('incremental baseline', () => {
+  test.each([
+    ['Basic init', false, '@santi020k/eslint-config-basic', 'ci'],
+    ['Full migration after init', true, '@santi020k/eslint-config-full', 'pedantic']
+  ])('round-trips %s output through preset adoption', (_label, full, packageName, preset) => {
+    const cwd = createTempProject()
+    const configPath = join(cwd, 'eslint.config.js')
+    const backupPath = `${configPath}.baseline.bak`
+    const runner = vi.fn<CommandRunner>(() => ({ status: 0, stderr: '', stdout: '' }))
+
+    writeFakeEslint(cwd)
+    vi.spyOn(console, 'log').mockImplementation(() => undefined)
+    handleInit(cwd)
+
+    const initialized = readFileSync(configPath, 'utf8')
+
+    if (full) {
+      handleMigrateV3(cwd, migrationContext(), { full: true, write: true })
+    }
+
+    const migrationBackup = existsSync(`${configPath}.v2.bak`) ? readFileSync(`${configPath}.v2.bak`, 'utf8') : null
+    const generated = readFileSync(configPath, 'utf8')
+
+    expect(migrationBackup).toBe(full ? initialized : null)
+    expect(generated).toBe(`import { defineConfig } from '${packageName}'\n\nexport default defineConfig()\n`)
+
+    handleBaseline(cwd, { preset }, runner)
+
+    const adopted = `import { defineConfig } from '${packageName}'\n\nexport default defineConfig({ strict: '${preset}' })\n`
+
+    expect(readFileSync(configPath, 'utf8')).toBe(adopted)
+    expect(readFileSync(backupPath, 'utf8')).toBe(generated)
+    expect(runner).toHaveBeenCalledTimes(1)
+    expect(runner.mock.calls[0]?.[1]).toEqual(expect.arrayContaining(['--fix', '--suppress-all']))
+
+    handleBaseline(cwd, { preset }, runner)
+
+    expect(readFileSync(configPath, 'utf8')).toBe(adopted)
+    expect(readFileSync(backupPath, 'utf8')).toBe(generated)
+    expect(existsSync(`${backupPath}.2`)).toBe(false)
+    expect(runner).toHaveBeenCalledTimes(2)
+  })
+
+  test('preserves explicit init output when preset adoption requires manual configuration', () => {
+    const cwd = createTempProject({
+      devDependencies: { typescript: '^6.0.3' },
+      name: 'test-project',
+      type: 'module'
+    })
+    const configPath = join(cwd, 'eslint.config.js')
+    const runner = vi.fn<CommandRunner>(() => ({ status: 0, stderr: '', stdout: '' }))
+
+    writeFakeEslint(cwd)
+    writeFileSync(join(cwd, 'tsconfig.json'), '{}\n')
+    vi.spyOn(console, 'log').mockImplementation(() => undefined)
+    handleInit(cwd, false, true)
+
+    const generated = readFileSync(configPath, 'utf8')
+
+    expect(generated).toContain('typescript: true')
+    expect(() => {
+      handleBaseline(cwd, { preset: 'ci' }, runner)
+    }).toThrow('Cannot safely add strict: "ci" to a customized config.')
+    expect(readFileSync(configPath, 'utf8')).toBe(generated)
+    expect(existsSync(`${configPath}.baseline.bak`)).toBe(false)
+    expect(runner).not.toHaveBeenCalled()
+  })
+
   test('enables pedantic mode and delegates suppression creation to project ESLint', () => {
     const cwd = createTempProject()
 

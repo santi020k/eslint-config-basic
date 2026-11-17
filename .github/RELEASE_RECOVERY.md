@@ -83,11 +83,26 @@ Core 3.2.3 contains the shared scoping and type changes; Full 3.2.9 carries the
 updated Basic dependency for batteries-included consumers. Runtime floors and
 the dependency security fixes below remain unchanged.
 
-Child rule-block ignores now resolve inside the child project. Remove manual
-project-path prefixes used to compensate for the previous behavior. Customized
-ESLint modules must set `strict` manually before running `baseline` without
-`--preset`. Compare effective-rule snapshots and check sibling projects for rules
-or ignores that previously leaked outside the intended scope.
+No ignore-path migration is required: custom child blocks with explicit `files`
+keep root-relative `ignores`, while blocks without `files` keep project-relative
+ignores. Customized ESLint modules must set `strict` manually before running
+`baseline` without `--preset`. Compare effective-rule snapshots and check sibling
+projects for rules that previously leaked outside the intended scope.
+
+The private workspace pins Next 16.4.6 to address
+[GHSA-mfr8-8qww-v76h](https://github.com/advisories/GHSA-mfr8-8qww-v76h).
+This override protects the development dependency graph; published consumers
+must update their own Next dependency and lockfile.
+
+Astro remains at 7.4.1 while the private workspace supports Node 22.22.1.
+The fixes for [GHSA-mh32-jxcr-mh9f](https://github.com/advisories/GHSA-mh32-jxcr-mh9f)
+and [GHSA-r3h5-4585-7x3w](https://github.com/advisories/GHSA-r3h5-4585-7x3w)
+require Node 22.23.4 or newer. The documentation deploys static output to GitHub
+Pages, without the Node adapter or on-demand image endpoint required by the file
+disclosure issue. No user-controlled dynamic tag names were found in the inspected
+documentation source. Upgrade Astro when the private workspace Node floor can be
+raised; do not add audit ignores or change published package runtime requirements
+to hide these remaining low/moderate advisories.
 
 This is a local release candidate until the authorized release pull request is
 merged and the GitHub workflow publishes it. Run the full release gate and

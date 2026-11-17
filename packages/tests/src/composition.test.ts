@@ -14,6 +14,7 @@ import {
   Testing,
   Tool
 } from '@santi020k/eslint-config-basic'
+import { defineConfig as defineLiteConfig } from '@santi020k/eslint-config-lite'
 import { TSESLint } from '@typescript-eslint/utils'
 import type { Linter } from 'eslint'
 import { ESLint } from 'eslint'
@@ -139,6 +140,38 @@ describe('defineConfig Function', () => {
       next: [{ name: 'mock-next', rules: {} }]
     })
     expect('react' in frameworks).toBe(false)
+  })
+
+  test.each([
+    {
+      expected: ['eslint-config-next/plugin', 'eslint-config-react/recommended'],
+      frameworks: { next: true, react: false },
+      name: 'Next with React explicitly disabled'
+    },
+    {
+      expected: ['eslint-config-nuxt/rules', 'eslint-config-vue/rules'],
+      frameworks: { nuxt: true, vue: false },
+      name: 'Nuxt with Vue explicitly disabled'
+    }
+  ])('keeps required framework defaults for $name', async ({ expected, frameworks }) => {
+    const original = structuredClone(frameworks)
+    const config = await defineConfig({ detection: false, frameworks, typescript: false })
+
+    expect(extractConfigNames(config)).toEqual(expect.arrayContaining(expected))
+    expect(frameworks).toEqual(original)
+  })
+
+  test('keeps Lite framework disabling and implicit React consistent with Basic', async () => {
+    const config = await defineLiteConfig({
+      detection: false,
+      frameworks: { expo: [{ name: 'supplied-expo', rules: {} }], next: false },
+      typescript: false
+    })
+    const names = extractConfigNames(config)
+
+    expect(names).toContain('supplied-expo')
+    expect(names).toContain('eslint-config-react/recommended')
+    expect(names.some(name => name.startsWith('eslint-config-next/'))).toBe(false)
   })
 
   test('should return config with Nest when nest framework is specified', async () => {
@@ -1202,12 +1235,29 @@ const resolveAllowedCssClasses = async (css: string, candidates: string[]): Prom
 }
 
 describe('Monorepo project scoping', () => {
-  test.each([
-    ['no files', {}],
-    ['its own files', { files: ['**/*.js'] }]
-  ])('keeps a project rule block with local ignores and %s inside its project', async (_, scope) => {
+  test('scopes the project ignores option to that child without ignoring root or sibling files', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'eslint-config-project-ignores-'))
+
+    try {
+      const config = await defineConfig({
+        detection: false,
+        projects: { 'apps/web': { ignores: ['excluded/**'], typescript: false } },
+        root,
+        typescript: false
+      })
+      const eslint = new TSESLint.ESLint({ cwd: root, overrideConfig: config, overrideConfigFile: true })
+
+      expect(await eslint.isPathIgnored('apps/web/excluded/file.js')).toBe(true)
+      expect(await eslint.isPathIgnored('apps/web/src/file.js')).toBe(false)
+      expect(await eslint.isPathIgnored('excluded/file.js')).toBe(false)
+      expect(await eslint.isPathIgnored('apps/other/excluded/file.js')).toBe(false)
+    } finally {
+      rmSync(root, { force: true, recursive: true })
+    }
+  })
+
+  test('keeps a project rule block with local ignores and no files inside its project', async () => {
     const states = await resolveProjectBlock({
-      ...scope,
       ignores: ['excluded/**'],
       name: 'audit/local-ignores',
       plugins: { audit: auditPlugin },
@@ -1223,9 +1273,54 @@ describe('Monorepo project scoping', () => {
     })
   })
 
-  test('scopes nested AND file patterns and negated local ignores without mutating the block', async () => {
+  test.each([
+    {
+      childState: 'unmarked',
+      ignores: ['apps/web/excluded/**'],
+      name: 'root-relative ignores',
+      nestedState: 'marked'
+    },
+    {
+      childState: 'unmarked',
+      ignores: ['**/excluded/**'],
+      name: 'root-relative globbed ignores',
+      nestedState: 'unmarked'
+    },
+    {
+      childState: 'marked',
+      ignores: ['excluded/**'],
+      name: 'ignores targeting a separate root folder',
+      nestedState: 'marked'
+    }
+  ])('preserves $name beside explicit project files', async ({ childState, ignores, nestedState }) => {
+    const original = [...ignores]
+    const states = await resolveProjectBlock({
+      files: ['**/*.js'],
+      ignores,
+      name: 'audit/root-relative-ignores',
+      plugins: { audit: auditPlugin },
+      rules: { 'audit/marker': 'error' }
+    }, [
+      'excluded/file.js',
+      'apps/other/excluded/file.js',
+      'apps/web/src/file.js',
+      'apps/web/excluded/file.js',
+      'apps/web/apps/web/excluded/file.js'
+    ])
+
+    expect(states).toEqual({
+      'apps/other/excluded/file.js': 'unmarked',
+      'apps/web/apps/web/excluded/file.js': nestedState,
+      'apps/web/excluded/file.js': childState,
+      'apps/web/src/file.js': 'marked',
+      'excluded/file.js': 'unmarked'
+    })
+    expect(ignores).toEqual(original)
+  })
+
+  test('scopes nested AND files while preserving negated root-relative ignores and input arrays', async () => {
     const files = [['src/**', '**/*.js']]
-    const ignores = ['src/excluded/**', '!src/excluded/keep/**']
+    const ignores = ['apps/web/src/excluded/**', '!apps/web/src/excluded/keep/**']
     const states = await resolveProjectBlock({
       files,
       ignores,
@@ -1234,21 +1329,25 @@ describe('Monorepo project scoping', () => {
       rules: { 'audit/marker': 'error' }
     }, [
       'src/file.js',
+      'apps/other/src/excluded/keep/file.js',
       'apps/web/lib/file.js',
       'apps/web/src/file.js',
+      'apps/web/src/apps/web/src/excluded/file.js',
       'apps/web/src/excluded/file.js',
       'apps/web/src/excluded/keep/file.js'
     ])
 
     expect(states).toEqual({
+      'apps/other/src/excluded/keep/file.js': 'unmarked',
       'apps/web/lib/file.js': 'unmarked',
+      'apps/web/src/apps/web/src/excluded/file.js': 'marked',
       'apps/web/src/excluded/file.js': 'unmarked',
       'apps/web/src/excluded/keep/file.js': 'marked',
       'apps/web/src/file.js': 'marked',
       'src/file.js': 'unmarked'
     })
     expect(files).toEqual([['src/**', '**/*.js']])
-    expect(ignores).toEqual(['src/excluded/**', '!src/excluded/keep/**'])
+    expect(ignores).toEqual(['apps/web/src/excluded/**', '!apps/web/src/excluded/keep/**'])
   })
 
   test.each([
