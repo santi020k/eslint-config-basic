@@ -32,9 +32,9 @@ export const updateCommands = [
 
 ## Highlights
 
-- Child project rule blocks, local ignores, and negated file patterns stay inside
-  their project. Relative `basePath` values are rebased once; explicitly absolute
-  paths retain their intended scope.
+- Child project rule blocks and negated file patterns stay inside their project,
+  preserving existing ignore semantics. Relative `basePath` values are rebased
+  once; explicitly absolute paths retain their intended scope.
 - Public types and the JSON schema accept `false` framework flags. Disabling an
   unrelated framework no longer prevents required React rules.
 - CSS discovery recognizes Unicode and leading-hyphen class names and safely
@@ -48,17 +48,19 @@ export const updateCommands = [
 
 ## Migration notes for 3.8.0
 
-Child rule-block ignores are relative to the child project. If you manually
-prefixed an ignore with the project path to compensate for the previous behavior,
-remove that extra prefix. Review lint findings in sibling projects after upgrading;
-rules and ignores that previously leaked outside a child project now stay scoped.
+No ignore-path migration is required. Custom child blocks with explicit `files`
+retain their root-relative `ignores`; blocks without `files` retain project-relative
+ignores. Review lint findings in sibling projects after upgrading: rules that
+previously leaked outside a child project now stay scoped.
 
 For customized ESLint modules, set `strict` manually and run `basic-eslint baseline`
 without `--preset`. See the [CLI guide](/guide/cli/) for the supported generated
 configuration form.
 
 This candidate versions Basic at 3.8.0, Core at 3.2.3, and Full at 3.2.9. Other
-package versions remain independent. Runtime requirements are unchanged.
+package versions remain independent. Published ESLint packages continue to support
+Node.js `>=22.19.0`. Contributors working on this repository, including documentation
+builds, now need Node.js 22.23.4 or newer for the Astro 7.4.12 security update.
 
 ## Upgrade the package
 

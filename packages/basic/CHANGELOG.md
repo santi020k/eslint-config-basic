@@ -6,9 +6,9 @@
 
 - Harden project-scoped configuration, CSS class discovery, and CLI maintenance.
 
-  - Keep child rule blocks and negated file patterns inside their project. Scope
-    local ignores consistently, rebase relative `basePath` values once, and retain
-    explicitly absolute base paths.
+  - Keep child rule blocks and negated file patterns inside their project while
+    preserving existing ignore semantics. Rebase relative `basePath` values once
+    and retain explicitly absolute base paths.
   - Accept documented `false` framework flags in public types and the JSON schema.
     An unrelated disabled framework no longer prevents required React rules.
   - Recognize Unicode and leading-hyphen CSS class names. Decode CSS escapes once,
@@ -22,9 +22,9 @@
     `generate-skill --check --create`, without writing files, and include `--create`
     in the suggested recovery command.
 
-  Migration notes: child rule-block ignores are relative to the child project.
-  Remove a manually added project prefix if it compensated for the previous
-  unscoped-ignore behavior. For customized ESLint modules, set `strict` manually
+  Migration notes: no ignore-path migration is required. Custom child blocks with
+  explicit `files` retain root-relative `ignores`; blocks without `files` retain
+  project-relative ignores. For customized ESLint modules, set `strict` manually
   and run `baseline` without `--preset`.
 
 ### Patch Changes

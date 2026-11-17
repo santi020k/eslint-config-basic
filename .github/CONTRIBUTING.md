@@ -4,9 +4,12 @@ Thank you for your interest in contributing! This guide will help you get starte
 
 ## Prerequisites
 
-- Node.js (version specified in `.nvmrc`)
+- Node.js 22.23.4 or newer (`.nvmrc` pins the development version)
 - pnpm (version specified in `packageManager` of `package.json`)
 - corepack (to auto-manage pnpm version)
+
+This private workspace requirement covers development and documentation tooling.
+Published ESLint packages retain their Node.js `>=22.19.0` compatibility contract.
 
 ## Setup
 
