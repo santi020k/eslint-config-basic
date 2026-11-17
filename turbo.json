@@ -6,7 +6,8 @@
     "DOCS_ROOT",
     "ESLINT_BASIC_DEBUG",
     "TURBO_SCM_BASE",
-    "VITEST"
+    "VITEST",
+    "QUALITY_TASK_RUNTIME"
   ],
   "tasks": {
     "build": {

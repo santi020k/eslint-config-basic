@@ -1,3 +1,4 @@
+# cspell:words tlsv
 name: CI
 
 on:
@@ -14,6 +15,38 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  impact-plan:
+    name: Quality v2 impact plan (shadow)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Install published Quality v2
+        run: |
+          curl --proto '=https' --tlsv1.2 --fail --location --silent --show-error https://raw.githubusercontent.com/santi020k/quality/ff490e9efbd5fdfbdb1e6c404f1741d04c57f585/install.sh -o "$RUNNER_TEMP/install-quality.sh"
+          QUALITY_INSTALL_DIR="$RUNNER_TEMP/quality-bin" sh "$RUNNER_TEMP/install-quality.sh" santi020k/quality v2.0.0
+          echo "$RUNNER_TEMP/quality-bin" >> "$GITHUB_PATH"
+      - name: Test conservative policy and gate
+        run: node --test scripts/quality-impact.node-test.mjs
+      - name: Record source-only plan
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          if [[ "$GITHUB_EVENT_NAME" == pull_request && -n "$BASE_SHA" && "$HEAD_REF" != release/* && "$HEAD_REF" != changeset-release/* ]]; then
+            quality impact plan --base "$BASE_SHA" --head HEAD --format json > "$RUNNER_TEMP/quality-impact.json"
+          else
+            quality impact plan --full --format json > "$RUNNER_TEMP/quality-impact.json"
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: quality-impact-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/quality-impact.json
+          if-no-files-found: error
+          retention-days: 7
+
   contracts:
     name: Affected integration
     if: github.event_name != 'pull_request' || (github.head_ref != 'changeset-release/main' && !startsWith(github.head_ref, 'release/v'))
@@ -33,18 +66,17 @@ jobs:
         with:
           fetch-depth: 0
       - name: Set up pnpm workspace
-        uses: santi020k/quality/actions/setup-pnpm@eec1701b98bcc0b76d36af288ee78a0369cd84cc # v1
+        uses: santi020k/quality/actions/setup-pnpm@ff490e9efbd5fdfbdb1e6c404f1741d04c57f585 # v2.0.0
         with:
           node-version: 22.x
+          task-cache-path: .turbo/cache
+          task-cache-key: eslint-packages
           install: false
-      - name: Turborepo Cache
-        uses: actions/cache@v5
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-22.x-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-22.x-
-            ${{ runner.os }}-turbo-
+      - name: Bind task cache to the resolved runtime
+        shell: bash
+        run: |
+          echo "QUALITY_TASK_RUNTIME=$(node --version)-$(pnpm --version)-$(node -p 'process.platform + "/" + process.arch')" >> "$GITHUB_ENV"
+
       - run: pnpm install --frozen-lockfile
       - name: Build integration test dependencies
         run: pnpm exec turbo run build --filter=@santi020k/eslint-config-tests... --concurrency=50%
@@ -79,18 +111,17 @@ jobs:
         with:
           fetch-depth: 0
       - name: Set up pnpm workspace
-        uses: santi020k/quality/actions/setup-pnpm@eec1701b98bcc0b76d36af288ee78a0369cd84cc # v1
+        uses: santi020k/quality/actions/setup-pnpm@ff490e9efbd5fdfbdb1e6c404f1741d04c57f585 # v2.0.0
         with:
           node-version: ${{ matrix.node-version }}
+          task-cache-path: .turbo/cache
+          task-cache-key: eslint-packages
           install: false
-      - name: Turborepo Cache
-        uses: actions/cache@v5
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-${{ matrix.node-version }}-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-${{ matrix.node-version }}-
-            ${{ runner.os }}-turbo-
+      - name: Bind task cache to the resolved runtime
+        shell: bash
+        run: |
+          echo "QUALITY_TASK_RUNTIME=$(node --version)-$(pnpm --version)-$(node -p 'process.platform + "/" + process.arch')" >> "$GITHUB_ENV"
+
       - run: pnpm install --frozen-lockfile
       - name: Run affected package checks (Node 22.x)
         if: matrix.node-version == '22.x'
@@ -141,20 +172,17 @@ jobs:
         with:
           fetch-depth: 0
       - name: Set up pnpm workspace
-        uses: santi020k/quality/actions/setup-pnpm@eec1701b98bcc0b76d36af288ee78a0369cd84cc # v1
+        uses: santi020k/quality/actions/setup-pnpm@ff490e9efbd5fdfbdb1e6c404f1741d04c57f585 # v2.0.0
         with:
           node-version: 22.x
+          task-cache-path: .turbo/cache
+          task-cache-key: eslint-packages
           install: false
-      - name: Turborepo Cache
-        uses: actions/cache@v5
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-package-validation-22.x-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-22.x-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}
-            ${{ runner.os }}-turbo-package-validation-22.x-
-            ${{ runner.os }}-turbo-22.x-
-            ${{ runner.os }}-turbo-
+      - name: Bind task cache to the resolved runtime
+        shell: bash
+        run: |
+          echo "QUALITY_TASK_RUNTIME=$(node --version)-$(pnpm --version)-$(node -p 'process.platform + "/" + process.arch')" >> "$GITHUB_ENV"
+
       - run: pnpm install --frozen-lockfile
       - name: Build affected publishable packages
         run: pnpm exec turbo run build --affected --concurrency=50%
@@ -180,10 +208,17 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Set up pnpm workspace
-        uses: santi020k/quality/actions/setup-pnpm@eec1701b98bcc0b76d36af288ee78a0369cd84cc # v1
+        uses: santi020k/quality/actions/setup-pnpm@ff490e9efbd5fdfbdb1e6c404f1741d04c57f585 # v2.0.0
         with:
           node-version: ${{ matrix.node-version }}
+          task-cache-path: .turbo/cache
+          task-cache-key: eslint-packages
           install: false
+      - name: Bind task cache to the resolved runtime
+        shell: bash
+        run: |
+          echo "QUALITY_TASK_RUNTIME=$(node --version)-$(pnpm --version)-$(node -p 'process.platform + "/" + process.arch')" >> "$GITHUB_ENV"
+
       - name: Setup Bun
         if: matrix.manager == 'bun'
         uses: oven-sh/setup-bun@v2
@@ -212,9 +247,16 @@ jobs:
         with:
           fetch-depth: 0
       - name: Set up pnpm workspace
-        uses: santi020k/quality/actions/setup-pnpm@eec1701b98bcc0b76d36af288ee78a0369cd84cc # v1
+        uses: santi020k/quality/actions/setup-pnpm@ff490e9efbd5fdfbdb1e6c404f1741d04c57f585 # v2.0.0
         with:
           node-version: 22.x
+          task-cache-path: .turbo/cache
+          task-cache-key: eslint-packages
+      - name: Bind task cache to the resolved runtime
+        shell: bash
+        run: |
+          echo "QUALITY_TASK_RUNTIME=$(node --version)-$(pnpm --version)-$(node -p 'process.platform + "/" + process.arch')" >> "$GITHUB_ENV"
+
       - name: Validate release branch and version plan
         shell: bash
         run: |
@@ -239,9 +281,16 @@ jobs:
         with:
           fetch-depth: 0
       - name: Set up pnpm workspace
-        uses: santi020k/quality/actions/setup-pnpm@eec1701b98bcc0b76d36af288ee78a0369cd84cc # v1
+        uses: santi020k/quality/actions/setup-pnpm@ff490e9efbd5fdfbdb1e6c404f1741d04c57f585 # v2.0.0
         with:
           node-version: 22.x
+          task-cache-path: .turbo/cache
+          task-cache-key: eslint-packages
+      - name: Bind task cache to the resolved runtime
+        shell: bash
+        run: |
+          echo "QUALITY_TASK_RUNTIME=$(node --version)-$(pnpm --version)-$(node -p 'process.platform + "/" + process.arch')" >> "$GITHUB_ENV"
+
       - name: Build CLI dependencies (serialised to avoid native-binary contention on Windows)
         run: pnpm exec turbo run build --filter=@santi020k/eslint-config-basic --concurrency=1 --output-logs=new-only
       - name: Run CLI and detection tests on Windows
@@ -255,9 +304,16 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Set up pnpm workspace
-        uses: santi020k/quality/actions/setup-pnpm@eec1701b98bcc0b76d36af288ee78a0369cd84cc # v1
+        uses: santi020k/quality/actions/setup-pnpm@ff490e9efbd5fdfbdb1e6c404f1741d04c57f585 # v2.0.0
         with:
           node-version: 24.x
+          task-cache-path: .turbo/cache
+          task-cache-key: eslint-packages
+      - name: Bind task cache to the resolved runtime
+        shell: bash
+        run: |
+          echo "QUALITY_TASK_RUNTIME=$(node --version)-$(pnpm --version)-$(node -p 'process.platform + "/" + process.arch')" >> "$GITHUB_ENV"
+
       - name: Build test dependencies
         run: pnpm exec turbo run build --filter=@santi020k/eslint-config-tests... --concurrency=50%
       - name: Verify final candidate contracts
@@ -266,11 +322,13 @@ jobs:
   quality-gate:
     name: Quality gate
     if: always()
-    needs: [contracts, build, package-validation, package-manager-consumers, release-candidate, release-node24, windows-smoke]
+    needs: [impact-plan, contracts, build, package-validation, package-manager-consumers, release-candidate, release-node24, windows-smoke]
     runs-on: ubuntu-latest
     steps:
-      - name: Verify required jobs
-        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
-        run: exit 1
-      - name: Confirm quality gate
-        run: echo "All required quality checks passed."
+      - uses: actions/checkout@v6
+      - name: Verify every selected job
+        env:
+          REQUIRED_RESULTS: ${{ toJSON(needs) }}
+          EVENT_NAME: ${{ github.event_name }}
+          HEAD_REF: ${{ github.head_ref }}
+        run: node scripts/quality-gate.mjs

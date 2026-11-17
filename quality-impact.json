@@ -1,0 +1,554 @@
+{
+  "schema_version": 1,
+  "global_inputs": [
+    ".github/",
+    "scripts/",
+    "vendor/",
+    "package.json",
+    "pnpm-lock.yaml",
+    "pnpm-workspace.yaml",
+    "turbo.json",
+    "eslint.config.js",
+    "quality.yml",
+    "quality-impact.json",
+    ".quality-version"
+  ],
+  "ignored_inputs": [],
+  "nodes": {
+    "angular": {
+      "inputs": [
+        "packages/angular/"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "build",
+        "typecheck",
+        "lint",
+        "--filter=@santi020k/eslint-config-angular"
+      ]
+    },
+    "astro": {
+      "inputs": [
+        "packages/astro/"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "build",
+        "typecheck",
+        "lint",
+        "--filter=@santi020k/eslint-config-astro"
+      ]
+    },
+    "basic": {
+      "inputs": [
+        "packages/basic/"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "build",
+        "typecheck",
+        "lint",
+        "--filter=@santi020k/eslint-config-basic"
+      ]
+    },
+    "core": {
+      "inputs": [
+        "packages/core/"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "build",
+        "typecheck",
+        "lint",
+        "--filter=@santi020k/eslint-config-core"
+      ]
+    },
+    "expo": {
+      "inputs": [
+        "packages/expo/"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "build",
+        "typecheck",
+        "lint",
+        "--filter=@santi020k/eslint-config-expo"
+      ]
+    },
+    "extensions": {
+      "inputs": [
+        "packages/extensions/"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "build",
+        "typecheck",
+        "lint",
+        "--filter=@santi020k/eslint-config-extensions"
+      ]
+    },
+    "formats": {
+      "inputs": [
+        "packages/formats/"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "build",
+        "typecheck",
+        "lint",
+        "--filter=@santi020k/eslint-config-formats"
+      ]
+    },
+    "full": {
+      "inputs": [
+        "packages/full/"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "build",
+        "typecheck",
+        "lint",
+        "--filter=@santi020k/eslint-config-full"
+      ]
+    },
+    "hono": {
+      "inputs": [
+        "packages/hono/"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "build",
+        "typecheck",
+        "lint",
+        "--filter=@santi020k/eslint-config-hono"
+      ]
+    },
+    "integrations": {
+      "inputs": [
+        "packages/integrations/"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "build",
+        "typecheck",
+        "lint",
+        "--filter=@santi020k/eslint-config-integrations"
+      ]
+    },
+    "libraries": {
+      "inputs": [
+        "packages/libraries/"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "build",
+        "typecheck",
+        "lint",
+        "--filter=@santi020k/eslint-config-libraries"
+      ]
+    },
+    "lit": {
+      "inputs": [
+        "packages/lit/"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "build",
+        "typecheck",
+        "lint",
+        "--filter=@santi020k/eslint-config-lit"
+      ]
+    },
+    "lite": {
+      "inputs": [
+        "packages/lite/"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "build",
+        "typecheck",
+        "lint",
+        "--filter=@santi020k/eslint-config-lite"
+      ]
+    },
+    "nest": {
+      "inputs": [
+        "packages/nest/"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "build",
+        "typecheck",
+        "lint",
+        "--filter=@santi020k/eslint-config-nest"
+      ]
+    },
+    "next": {
+      "inputs": [
+        "packages/next/"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "build",
+        "typecheck",
+        "lint",
+        "--filter=@santi020k/eslint-config-next"
+      ]
+    },
+    "nuxt": {
+      "inputs": [
+        "packages/nuxt/"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "build",
+        "typecheck",
+        "lint",
+        "--filter=@santi020k/eslint-config-nuxt"
+      ]
+    },
+    "preact": {
+      "inputs": [
+        "packages/preact/"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "build",
+        "typecheck",
+        "lint",
+        "--filter=@santi020k/eslint-config-preact"
+      ]
+    },
+    "qwik": {
+      "inputs": [
+        "packages/qwik/"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "build",
+        "typecheck",
+        "lint",
+        "--filter=@santi020k/eslint-config-qwik"
+      ]
+    },
+    "react": {
+      "inputs": [
+        "packages/react/"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "build",
+        "typecheck",
+        "lint",
+        "--filter=@santi020k/eslint-config-react"
+      ]
+    },
+    "react-router": {
+      "inputs": [
+        "packages/react-router/"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "build",
+        "typecheck",
+        "lint",
+        "--filter=@santi020k/eslint-config-react-router"
+      ]
+    },
+    "slidev": {
+      "inputs": [
+        "packages/slidev/"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "build",
+        "typecheck",
+        "lint",
+        "--filter=@santi020k/eslint-config-slidev"
+      ]
+    },
+    "solid": {
+      "inputs": [
+        "packages/solid/"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "build",
+        "typecheck",
+        "lint",
+        "--filter=@santi020k/eslint-config-solid"
+      ]
+    },
+    "svelte": {
+      "inputs": [
+        "packages/svelte/"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "build",
+        "typecheck",
+        "lint",
+        "--filter=@santi020k/eslint-config-svelte"
+      ]
+    },
+    "tanstack-start": {
+      "inputs": [
+        "packages/tanstack-start/"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "build",
+        "typecheck",
+        "lint",
+        "--filter=@santi020k/eslint-config-tanstack-start"
+      ]
+    },
+    "testing": {
+      "inputs": [
+        "packages/testing/"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "build",
+        "typecheck",
+        "lint",
+        "--filter=@santi020k/eslint-config-testing"
+      ]
+    },
+    "tools": {
+      "inputs": [
+        "packages/tools/"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "build",
+        "typecheck",
+        "lint",
+        "--filter=@santi020k/eslint-config-tools"
+      ]
+    },
+    "typescript": {
+      "inputs": [
+        "packages/typescript/"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "build",
+        "typecheck",
+        "lint",
+        "--filter=@santi020k/eslint-config-typescript"
+      ]
+    },
+    "vite": {
+      "inputs": [
+        "packages/vite/"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "build",
+        "typecheck",
+        "lint",
+        "--filter=@santi020k/eslint-config-vite"
+      ]
+    },
+    "vue": {
+      "inputs": [
+        "packages/vue/"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "build",
+        "typecheck",
+        "lint",
+        "--filter=@santi020k/eslint-config-vue"
+      ]
+    },
+    "contracts": {
+      "inputs": [
+        "packages/tests/"
+      ],
+      "depends_on": [
+        "angular",
+        "astro",
+        "basic",
+        "core",
+        "expo",
+        "extensions",
+        "formats",
+        "full",
+        "hono",
+        "integrations",
+        "libraries",
+        "lit",
+        "lite",
+        "nest",
+        "next",
+        "nuxt",
+        "preact",
+        "qwik",
+        "react",
+        "react-router",
+        "slidev",
+        "solid",
+        "svelte",
+        "tanstack-start",
+        "testing",
+        "tools",
+        "typescript",
+        "vite",
+        "vue"
+      ],
+      "command": "pnpm",
+      "args": [
+        "run",
+        "test:run"
+      ]
+    },
+    "playground": {
+      "inputs": [
+        "packages/playground/"
+      ],
+      "depends_on": [
+        "basic"
+      ],
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "turbo",
+        "run",
+        "lint",
+        "--filter=@playground/*",
+        "--filter=@santi020k/playground-*"
+      ]
+    },
+    "docs": {
+      "inputs": [
+        "apps/docs/",
+        "docs/"
+      ],
+      "depends_on": [
+        "angular",
+        "astro",
+        "basic",
+        "core",
+        "expo",
+        "extensions",
+        "formats",
+        "full",
+        "hono",
+        "integrations",
+        "libraries",
+        "lit",
+        "lite",
+        "nest",
+        "next",
+        "nuxt",
+        "preact",
+        "qwik",
+        "react",
+        "react-router",
+        "slidev",
+        "solid",
+        "svelte",
+        "tanstack-start",
+        "testing",
+        "tools",
+        "typescript",
+        "vite",
+        "vue"
+      ],
+      "command": "pnpm",
+      "args": [
+        "run",
+        "docs:build"
+      ]
+    }
+  }
+}
