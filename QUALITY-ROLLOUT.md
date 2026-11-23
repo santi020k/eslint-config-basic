@@ -32,3 +32,7 @@ from the actual Node and pnpm versions, platform, and architecture. This prevent
 a broad cache restore from reusing outputs after a runtime patch changes, even
 when the declared Node selector remains unchanged. Local runs without that
 variable use a separate task identity.
+
+Shared root compiler configurations are explicit Turbo inputs. The CI regression
+uses actual task hashes to verify compiler, ESLint and runtime invalidation while
+preserving cache hits for unrelated README changes.
