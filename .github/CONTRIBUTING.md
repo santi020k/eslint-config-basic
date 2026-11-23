@@ -122,8 +122,11 @@ pnpm run changeset    # Create a changeset for your changes
 Ordinary pull requests keep the existing Turbo affected workspace checks and
 workspace-dependency-aware Vitest selection. `pnpm run test:affected` always runs
 integration, invariant, and contract tests, adds package-artifact tests for public
-package changes, and follows dependents and directly changed tests. The complete
-coverage job remains unchanged.
+package changes, and follows dependents and directly changed tests. The coverage
+and Node 24 test jobs use Turbo's affected selection on pull requests and always run
+completely on `main`; release candidates run them in the release gate. Windows
+compatibility runs on `main`, on release candidates, and on every pull request that
+changes anything other than documentation or repository metadata.
 
 Set `CI_BASE_SHA` and optionally `CI_HEAD_SHA` to compare with the Git merge base.
 Without trustworthy history, or for pushes, release branches, shared configuration,
