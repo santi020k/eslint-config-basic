@@ -426,11 +426,12 @@ const resolveTypescriptValue = (
 
 const needsReactAutoAdd = (
   frameworks: NonNullable<EslintConfigOptions['frameworks']>
-): boolean => Boolean(
-  frameworks.next ??
-  frameworks.expo ??
-  frameworks['react-router'] ??
-  (frameworks['tanstack-start'] && !frameworks.solid)
+): boolean => (
+  // Coerce each flag on its own: `??` would stop at an explicitly disabled framework.
+  Boolean(frameworks.next) ||
+  Boolean(frameworks.expo) ||
+  Boolean(frameworks['react-router']) ||
+  (Boolean(frameworks['tanstack-start']) && !frameworks.solid)
 ) && !frameworks.react
 
 const applyFrameworkImpliedDeps = (

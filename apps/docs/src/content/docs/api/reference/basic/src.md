@@ -7,7 +7,7 @@ description: "@santi020k/eslint-config-basic"
 
 ### EslintConfigArray
 
-Defined in: [basic/src/index.ts:731](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L731)
+Defined in: [basic/src/index.ts:732](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L732)
 
 Portable public result type returned by the Basic config composer.
 
@@ -215,7 +215,7 @@ Gets or sets the length of the array. This is a number one higher than the highe
 
 > **length**: `number`
 
-Defined in: [basic/src/index.ts:732](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L732)
+Defined in: [basic/src/index.ts:733](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L733)
 
 Gets or sets the length of the array. This is a number one higher than the highest index in the array.
 
@@ -1743,7 +1743,7 @@ Defined in: [basic/src/frameworks.ts:121](https://github.com/santi020k/eslint-co
 
 > `const` **defineConfig**: `ConfigComposer`
 
-Defined in: [basic/src/index.ts:894](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L894)
+Defined in: [basic/src/index.ts:895](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L895)
 
 Generates the ESLint configuration array, applying configurations
 and integration settings based on the input configuration.
@@ -2058,7 +2058,7 @@ Defined in: [basic/src/frameworks.ts:137](https://github.com/santi020k/eslint-co
 
 > **attachReferencedPlugins**(`configs`): `ConfigArray`
 
-Defined in: [basic/src/index.ts:805](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L805)
+Defined in: [basic/src/index.ts:806](https://github.com/santi020k/eslint-config-basic/blob/main/packages/basic/src/index.ts#L806)
 
 Copies already-loaded plugin objects onto rule blocks that reference them.
 ESLint 10 validates plugin availability per effective config object, while

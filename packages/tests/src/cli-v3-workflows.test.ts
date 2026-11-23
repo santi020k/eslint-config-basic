@@ -1,4 +1,13 @@
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs'
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  symlinkSync,
+  writeFileSync
+} from 'node:fs'
 import { createRequire } from 'node:module'
 import { tmpdir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
@@ -1261,6 +1270,73 @@ describe('preset adoption', () => {
 })
 
 describe('incremental baseline', () => {
+  test.each([
+    ['Basic init', false, '@santi020k/eslint-config-basic', 'ci'],
+    ['Full migration after init', true, '@santi020k/eslint-config-full', 'pedantic']
+  ])('round-trips %s output through preset adoption', (_label, full, packageName, preset) => {
+    const cwd = createTempProject()
+    const configPath = join(cwd, 'eslint.config.js')
+    const backupPath = `${configPath}.baseline.bak`
+    const runner = vi.fn<CommandRunner>(() => ({ status: 0, stderr: '', stdout: '' }))
+
+    writeFakeEslint(cwd)
+    vi.spyOn(console, 'log').mockImplementation(() => undefined)
+    handleInit(cwd)
+
+    const initialized = readFileSync(configPath, 'utf8')
+
+    if (full) {
+      handleMigrateV3(cwd, migrationContext(), { full: true, write: true })
+    }
+
+    const migrationBackup = existsSync(`${configPath}.v2.bak`) ? readFileSync(`${configPath}.v2.bak`, 'utf8') : null
+    const generated = readFileSync(configPath, 'utf8')
+
+    expect(migrationBackup).toBe(full ? initialized : null)
+    expect(generated).toBe(`import { defineConfig } from '${packageName}'\n\nexport default defineConfig()\n`)
+
+    handleBaseline(cwd, { preset }, runner)
+
+    const adopted = `import { defineConfig } from '${packageName}'\n\nexport default defineConfig({ strict: '${preset}' })\n`
+
+    expect(readFileSync(configPath, 'utf8')).toBe(adopted)
+    expect(readFileSync(backupPath, 'utf8')).toBe(generated)
+    expect(runner).toHaveBeenCalledTimes(1)
+    expect(runner.mock.calls[0]?.[1]).toEqual(expect.arrayContaining(['--fix', '--suppress-all']))
+
+    handleBaseline(cwd, { preset }, runner)
+
+    expect(readFileSync(configPath, 'utf8')).toBe(adopted)
+    expect(readFileSync(backupPath, 'utf8')).toBe(generated)
+    expect(existsSync(`${backupPath}.2`)).toBe(false)
+    expect(runner).toHaveBeenCalledTimes(2)
+  })
+
+  test('preserves explicit init output when preset adoption requires manual configuration', () => {
+    const cwd = createTempProject({
+      devDependencies: { typescript: '^6.0.3' },
+      name: 'test-project',
+      type: 'module'
+    })
+    const configPath = join(cwd, 'eslint.config.js')
+    const runner = vi.fn<CommandRunner>(() => ({ status: 0, stderr: '', stdout: '' }))
+
+    writeFakeEslint(cwd)
+    writeFileSync(join(cwd, 'tsconfig.json'), '{}\n')
+    vi.spyOn(console, 'log').mockImplementation(() => undefined)
+    handleInit(cwd, false, true)
+
+    const generated = readFileSync(configPath, 'utf8')
+
+    expect(generated).toContain('typescript: true')
+    expect(() => {
+      handleBaseline(cwd, { preset: 'ci' }, runner)
+    }).toThrow('Cannot safely add strict: "ci" to a customized config.')
+    expect(readFileSync(configPath, 'utf8')).toBe(generated)
+    expect(existsSync(`${configPath}.baseline.bak`)).toBe(false)
+    expect(runner).not.toHaveBeenCalled()
+  })
+
   test('enables pedantic mode and delegates suppression creation to project ESLint', () => {
     const cwd = createTempProject()
 
@@ -1351,6 +1427,233 @@ describe('incremental baseline', () => {
         stdout: ''
       }))
     }).toThrow(message)
+  })
+
+  const basicImport = 'import { defineConfig } from \'@santi020k/eslint-config-basic\'\n'
+  const templateSubstitution = ['$', '{'].join('')
+
+  const preparePresetBaseline = (source: string, preset = 'pedantic') => {
+    const cwd = createTempProject()
+    const configPath = join(cwd, 'eslint.config.js')
+    const runner = vi.fn<CommandRunner>(() => ({ status: 0, stderr: '', stdout: '' }))
+
+    writeFakeEslint(cwd)
+    writeFileSync(configPath, source)
+    vi.spyOn(console, 'log').mockImplementation(() => undefined)
+
+    return {
+      backupPath: `${configPath}.baseline.bak`,
+      configPath,
+      cwd,
+      run: (): void => {
+        handleBaseline(cwd, { preset }, runner)
+      },
+      runner
+    }
+  }
+
+  test.each([
+    ['a line comment example', '// Usage: defineConfig()\n'],
+    ['a block comment example', '/*\n * export default defineConfig()\n */\n'],
+    ['a configured preset in a comment', '// export default defineConfig({ strict: \'pedantic\' })\n']
+  ])('updates only the exported config when the file has %s', (_label, decoy) => {
+    const source = `${decoy}${basicImport}\nexport default defineConfig()\n`
+    const baseline = preparePresetBaseline(source)
+
+    baseline.run()
+
+    expect(readFileSync(baseline.configPath, 'utf8')).toBe(
+      `${decoy}${basicImport}\nexport default defineConfig({ strict: 'pedantic' })\n`
+    )
+    expect(readFileSync(baseline.backupPath, 'utf8')).toBe(source)
+    expect(baseline.runner).toHaveBeenCalledTimes(1)
+  })
+
+  test.each([
+    [
+      'an awaited call',
+      `${basicImport}export default await defineConfig()\n`,
+      `${basicImport}export default await defineConfig({ strict: 'ci' })\n`
+    ],
+    [
+      'the full bundle',
+      'import { defineConfig } from "@santi020k/eslint-config-full";\nexport default defineConfig();\n',
+      'import { defineConfig } from "@santi020k/eslint-config-full";\nexport default defineConfig({ strict: \'ci\' });\n'
+    ],
+    [
+      'a call with inner whitespace',
+      `${basicImport}export default await defineConfig(\n  )\n`,
+      `${basicImport}export default await defineConfig({ strict: 'ci' })\n`
+    ],
+    [
+      'comments after each generated statement',
+      `${basicImport.trimEnd()}; // import comment\nexport default defineConfig() /* call comment */;\n// trailing\n`,
+      `${basicImport.trimEnd()}; // import comment\n` +
+      'export default defineConfig({ strict: \'ci\' }) /* call comment */;\n// trailing\n'
+    ]
+  ])('adds the preset to %s', (_label, source, expected) => {
+    const baseline = preparePresetBaseline(source, 'ci')
+
+    baseline.run()
+
+    expect(readFileSync(baseline.configPath, 'utf8')).toBe(expected)
+    expect(readFileSync(baseline.backupPath, 'utf8')).toBe(source)
+    expect(baseline.runner).toHaveBeenCalledTimes(1)
+  })
+
+  test.each([
+    ['the generated preset form', `${basicImport}export default defineConfig({ strict: 'pedantic' })\n`],
+    ['a quoted strict property', `${basicImport}export default await defineConfig({ "strict": "pedantic", })\n`]
+  ])('keeps an exported config that already selects the preset: %s', (_label, source) => {
+    const baseline = preparePresetBaseline(source)
+
+    baseline.run()
+
+    expect(readFileSync(baseline.configPath, 'utf8')).toBe(source)
+    expect(existsSync(baseline.backupPath)).toBe(false)
+    expect(baseline.runner).toHaveBeenCalledTimes(1)
+  })
+
+  test('stays idempotent after it has written the preset once', () => {
+    const baseline = preparePresetBaseline(`${basicImport}\nexport default defineConfig()\n`)
+
+    baseline.run()
+
+    const updated = readFileSync(baseline.configPath, 'utf8')
+
+    baseline.run()
+
+    expect(updated).toBe(`${basicImport}\nexport default defineConfig({ strict: 'pedantic' })\n`)
+    expect(readFileSync(baseline.configPath, 'utf8')).toBe(updated)
+    expect(existsSync(`${baseline.backupPath}.2`)).toBe(false)
+    expect(baseline.runner).toHaveBeenCalledTimes(2)
+  })
+
+  test.each([
+    ['a string example', `const usage = 'export default defineConfig()'\n${basicImport}export default defineConfig()\n`],
+    [
+      'an escaped string example',
+      `const usage = "say \\"export default defineConfig()\\""\n${basicImport}export default defineConfig()\n`
+    ],
+    ['a template literal example', `const usage = \`export default defineConfig()\`\n${basicImport}export default defineConfig()\n`],
+    [
+      'a template literal with substitutions',
+      `const usage = \`export default defineConfig() ${templateSubstitution}[1, 2].length} defineConfig()\`\n` +
+      `${basicImport}export default defineConfig()\n`
+    ],
+    [
+      'a regular expression example',
+      'const usage = /export default defineConfig\\(\\)[/\'"`]/u\n' + basicImport + 'export default defineConfig()\n'
+    ],
+    [
+      'an unrelated method call',
+      `import * as vite from 'vite'\nexport const viteConfig = vite.defineConfig()\n${basicImport}export default defineConfig()\n`
+    ],
+    [
+      'an unrelated named export',
+      `export const defaults = { strict: 'pedantic' }\n${basicImport}export default defineConfig()\n`
+    ],
+    [
+      'a configured preset in a string',
+      `const usage = "strict: 'pedantic'"\n${basicImport}export default defineConfig()\n`
+    ],
+    [
+      'a template literal preset value',
+      `${basicImport}export default defineConfig({ strict: \`pedantic\` })\n`
+    ],
+    ['a spread before the preset', `${basicImport}export default defineConfig({ ...shared, strict: 'pedantic' })\n`],
+    ['a later duplicate preset', `${basicImport}export default defineConfig({ strict: 'ci', strict: 'pedantic' })\n`],
+    [
+      'an aliased import',
+      'import { defineConfig as basicConfig } from \'@santi020k/eslint-config-basic\'\nexport default basicConfig()\n'
+    ],
+    ['a spread into local overrides', `${basicImport}export default [...await defineConfig(), { rules: {} }]\n`],
+    ['a grouped exported expression', `${basicImport}export default (await defineConfig())\n`],
+    [
+      'another Basic call before the export',
+      `${basicImport}export const relaxed = defineConfig({ strict: false })\nexport default defineConfig()\n`
+    ],
+    ['a suffix on the exported expression', `${basicImport}export default defineConfig() || []\n`],
+    ['a second statement after the export', `${basicImport}export default defineConfig();\nconst other = 1\n`],
+    ['a missing import statement terminator', `${basicImport.trimEnd()} export default defineConfig()\n`],
+    ['a customized config with the requested preset', `${basicImport}export default defineConfig({ typescript: true, strict: 'pedantic' })\n`],
+    ['a defineConfig from another package', 'import { defineConfig } from \'eslint/config\'\nexport default defineConfig()\n'],
+    ['a local defineConfig function', 'const defineConfig = () => []\nexport default defineConfig()\n'],
+    [
+      'a namespace member call',
+      'import * as basic from \'@santi020k/eslint-config-basic\'\nexport default basic.defineConfig()\n'
+    ],
+    [
+      'a type-only import',
+      'import type { defineConfig } from \'@santi020k/eslint-config-basic\'\nexport default defineConfig()\n'
+    ],
+    [
+      'an inline type import',
+      'import { type defineConfig } from \'@santi020k/eslint-config-basic\'\nexport default defineConfig()\n'
+    ],
+    [
+      'a different Basic export aliased to defineConfig',
+      'import { createCoreConfig as defineConfig } from \'@santi020k/eslint-config-basic\'\nexport default defineConfig()\n'
+    ],
+    ['a variable indirection', `${basicImport}const config = await defineConfig()\nexport default config\n`],
+    ['a wrapped call', `${basicImport}export default wrap(defineConfig())\n`],
+    ['a missing default export', `${basicImport}export const config = defineConfig()\n`],
+    ['a CommonJS export', `${basicImport}module.exports = defineConfig()\n`],
+    ['duplicate default exports', `${basicImport}export default defineConfig()\nexport default defineConfig()\n`],
+    [
+      'a nested default export',
+      `${basicImport}declare module 'virtual:config' {\n  export default defineConfig()\n}\n`
+    ],
+    ['a comment inside the call', `${basicImport}export default defineConfig(/* options */)\n`],
+    ['options stored in a variable', `${basicImport}const options = { strict: 'pedantic' }\nexport default defineConfig(options)\n`],
+    ['a wrapped options object', `${basicImport}export default defineConfig({ strict: 'pedantic' } satisfies Options)\n`],
+    ['customized options without the preset', `${basicImport}export default defineConfig({ typescript: true })\n`],
+    ['another preset', `${basicImport}export default defineConfig({ strict: 'ci' })\n`],
+    [
+      'a preset on a nested project only',
+      `${basicImport}export default defineConfig({ projects: { 'apps/web': { strict: 'pedantic' } } })\n`
+    ],
+    ['a shorthand preset', `${basicImport}const strict = 'pedantic'\nexport default defineConfig({ strict })\n`],
+    ['a computed preset value', `${basicImport}export default defineConfig({ strict: isCi ? 'pedantic' : false })\n`],
+    ['a spread after the preset', `${basicImport}export default defineConfig({ strict: 'pedantic', ...overrides })\n`],
+    ['a computed key after the preset', `${basicImport}export default defineConfig({ strict: 'pedantic', [key]: false })\n`],
+    ['an unterminated string', `${basicImport}const broken = 'defineConfig()\nexport default defineConfig()\n`],
+    ['an unterminated block comment', `${basicImport}export default defineConfig()\n/* trailing\n`],
+    ['an unterminated template literal', `${basicImport}const text = \`defineConfig()\nexport default defineConfig()\n`],
+    ['an unterminated regular expression', `${basicImport}const pattern = /defineConfig(\nexport default defineConfig()\n`],
+    ['unbalanced brackets', `${basicImport}const list = [1, 2)\nexport default defineConfig()\n`],
+    ['an ambiguous slash', `${basicImport}const ratio = {} / 2\nexport default defineConfig()\n`],
+    ['an escaped identifier', `${basicImport}export default d\\u0065fineConfig()\n`]
+  ])('refuses %s without writing', (_label, source) => {
+    const baseline = preparePresetBaseline(source)
+
+    expect(baseline.run).toThrow('Cannot safely add strict: "pedantic" to a customized config.')
+    expect(readFileSync(baseline.configPath, 'utf8')).toBe(source)
+    expect(readdirSync(baseline.cwd).sort()).toEqual(['eslint.config.js', 'node_modules', 'package.json'])
+    expect(baseline.runner).not.toHaveBeenCalled()
+  })
+
+  test('refuses a preset value written with escapes without writing', () => {
+    const source = `${basicImport}export default defineConfig({ strict: 'c\\u0069' })\n`
+    const baseline = preparePresetBaseline(source, 'ci')
+
+    expect(baseline.run).toThrow('Cannot safely add strict: "ci" to a customized config.')
+    expect(readFileSync(baseline.configPath, 'utf8')).toBe(source)
+    expect(existsSync(baseline.backupPath)).toBe(false)
+    expect(baseline.runner).not.toHaveBeenCalled()
+  })
+
+  test('reports a refused preset update as a CLI failure', () => {
+    const source = `// Usage: defineConfig()\n${basicImport}export default defineConfig({ typescript: true })\n`
+    const baseline = preparePresetBaseline(source)
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined)
+
+    runCli(['node', 'basic-eslint', 'baseline', '--preset', 'pedantic'], baseline.cwd)
+
+    expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining('Cannot safely add strict: "pedantic"'))
+    expect(process.exitCode).toBe(1)
+    expect(readFileSync(baseline.configPath, 'utf8')).toBe(source)
+    expect(existsSync(baseline.backupPath)).toBe(false)
   })
 
   test.each([

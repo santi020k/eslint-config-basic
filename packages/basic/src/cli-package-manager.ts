@@ -1,4 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs'
+import { createRequire } from 'node:module'
 import { dirname, join } from 'node:path'
 
 const BASIC_PACKAGE_NAME = '@santi020k/eslint-config-basic'
@@ -74,6 +75,56 @@ export const findPnpmWorkspaceRoot = (cwd: string): string | undefined => {
   }
 }
 
+const isDependencyRecord = (value: unknown): value is Record<string, unknown> => (
+  Boolean(value) && typeof value === 'object' && !Array.isArray(value)
+)
+
+const SUPPORTED_PACKAGE_MANAGERS = new Set(['bun', 'npm', 'pnpm', 'yarn'])
+const isVersionValidator = (value: unknown): value is (version: string) => unknown => typeof value === 'function'
+
+const getVersionValidator = (): ((version: string) => unknown) => {
+  const semver: unknown = createRequire(import.meta.url)('semver')
+
+  if (!isDependencyRecord(semver) || !isVersionValidator(semver.valid)) {
+    throw new Error('The installed semver package does not expose its version validator.')
+  }
+
+  return semver.valid
+}
+
+const validateVersion = getVersionValidator()
+
+const readPackageManagerDeclaration = (cwd: string): unknown => {
+  const packageJsonPath = join(cwd, 'package.json')
+
+  if (!existsSync(packageJsonPath)) return undefined
+
+  try {
+    const packageJson: unknown = JSON.parse(readFileSync(packageJsonPath, 'utf8'))
+
+    return isDependencyRecord(packageJson) ? packageJson.packageManager : undefined
+  } catch {
+    return undefined
+  }
+}
+
+/**
+ * Reads the Corepack-style `packageManager` field (`<name>@<exact version>`,
+ * optionally with build metadata such as a `+sha512.<hash>` suffix). Anything
+ * else is ignored so a malformed declaration never selects a manager.
+ */
+const getDeclaredPackageManager = (cwd: string): string | undefined => {
+  const declaration = readPackageManagerDeclaration(cwd)
+
+  if (typeof declaration !== 'string' || declaration.trim() !== declaration) return undefined
+
+  const match = /^([a-z]+)@(\d\S*)$/.exec(declaration)
+
+  return match && SUPPORTED_PACKAGE_MANAGERS.has(match[1]) && typeof validateVersion(match[2]) === 'string' ?
+    match[1] :
+    undefined
+}
+
 export const detectPackageManager = (cwd: string): string => {
   if (findPnpmWorkspaceRoot(cwd) || existsSync(join(cwd, 'pnpm-lock.yaml'))) return 'pnpm'
 
@@ -81,7 +132,9 @@ export const detectPackageManager = (cwd: string): string => {
 
   if (existsSync(join(cwd, 'bun.lockb')) || existsSync(join(cwd, 'bun.lock'))) return 'bun'
 
-  return 'npm'
+  if (existsSync(join(cwd, 'package-lock.json')) || existsSync(join(cwd, 'npm-shrinkwrap.json'))) return 'npm'
+
+  return getDeclaredPackageManager(cwd) ?? 'npm'
 }
 
 const parseCatalog = (value: unknown): CatalogPreference => {
@@ -91,10 +144,6 @@ const parseCatalog = (value: unknown): CatalogPreference => {
 
   return name && name !== 'default' ? name : true
 }
-
-const isDependencyRecord = (value: unknown): value is Record<string, unknown> => (
-  Boolean(value) && typeof value === 'object' && !Array.isArray(value)
-)
 
 const getDependencyRecords = (
   packageJson: null | Record<string, unknown>

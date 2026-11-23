@@ -1,8 +1,27 @@
+import type { EslintConfigOptions, ImportedFramework, ProjectConfigOptions } from '@santi020k/eslint-config-basic'
 import { Extension, Format, Library, Runtime, Setting, Testing, Tool } from '@santi020k/eslint-config-basic'
 import type { EslintConfigFeatures } from '@santi020k/eslint-config-basic/agent'
-import { describe, expect, test } from 'vitest'
+import { describe, expect, expectTypeOf, test } from 'vitest'
 
 describe('Type Exports', () => {
+  test('should accept false to switch a framework off', () => {
+    const frameworks = {
+      next: false,
+      react: true,
+      'react-router': [],
+      vue: false
+    } satisfies NonNullable<EslintConfigOptions['frameworks']>
+
+    expect(frameworks.next).toBe(false)
+    expectTypeOf<false>().toExtend<ImportedFramework>()
+    expectTypeOf<boolean>().toExtend<ImportedFramework>()
+    expectTypeOf<{ astro: false }>().toExtend<NonNullable<ProjectConfigOptions['frameworks']>>()
+    expectTypeOf<null>().not.toExtend<ImportedFramework>()
+    expectTypeOf<0>().not.toExtend<ImportedFramework>()
+    expectTypeOf<''>().not.toExtend<ImportedFramework>()
+    expectTypeOf<{ invalid: true }>().not.toExtend<ImportedFramework>()
+  })
+
   test('should export EslintConfigFeatures type', () => {
     const features = {
       configFile: null,

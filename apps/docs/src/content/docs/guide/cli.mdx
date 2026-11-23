@@ -157,6 +157,10 @@ Use `install` after adding the lean Basic package. It detects frameworks,
 TypeScript, and optional feature categories, then adds any missing config
 packages with the project's package manager.
 
+Existing lockfiles and pnpm workspace configuration take precedence. When none
+identifies the manager, the CLI uses a supported `package.json#packageManager`
+declaration, falling back to npm when no valid declaration is available.
+
 ```sh
 npx @santi020k/eslint-config-basic install
 ```
@@ -317,8 +321,12 @@ zero-argument form:
 npx @santi020k/eslint-config-basic baseline --preset pedantic
 ```
 
-The config is backed up before it is changed. As violations are fixed, remove
-obsolete entries with:
+The config is backed up before it is changed. The preset update targets the
+exported configuration; examples in comments or strings do not select the
+preset. Customized or ambiguous configurations require you to set `strict`
+manually before running `baseline` without `--preset`.
+
+As violations are fixed, remove obsolete entries with:
 
 ```sh
 npx @santi020k/eslint-config-basic baseline --prune
@@ -478,6 +486,9 @@ Use `--force` if you want to overwrite existing standards files.
 ```sh title="CI example"
 npx @santi020k/eslint-config-basic generate-skill --check
 ```
+
+To require a root `AGENTS.md` as well, use `generate-skill --check --create`.
+This combination reports a missing file with exit code 1 and never writes it.
 
 ```sh title="Agent standards and ESLint MCP"
 npx @santi020k/eslint-config-basic generate-skill --with-eslint-mcp

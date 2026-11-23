@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
 
-import { resolveDocsCommit } from '../../../scripts/resolve-docs-commit.mjs'
+import { isReleaseMergePush, resolveDocsCommit } from '../../../scripts/resolve-docs-commit.mjs'
 
 const head = 'a'.repeat(40)
 const merged = 'b'.repeat(40)
@@ -46,5 +46,31 @@ describe('documentation deployment source', () => {
     { ...source, eventName: 'push', commit: 'main' }
   ])('rejects untrusted or ambiguous deployment sources %#', input => {
     expect(() => resolveDocsCommit(input)).toThrow()
+  })
+})
+
+describe('documentation deployment deduplication', () => {
+  const push = { commit: merged, eventName: 'push', pullRequests: [pullRequest], repository }
+
+  test.each(['release/v3.6.0', 'changeset-release/main'])('leaves the merge of %s to the Release workflow', ref => {
+    const pullRequests = [{ ...pullRequest, head: { ...pullRequest.head, ref } }]
+
+    expect(isReleaseMergePush({ ...push, pullRequests })).toBe(true)
+  })
+
+  test.each([
+    { ...push, eventName: 'workflow_run' },
+    { ...push, eventName: 'pull_request' },
+    { ...push, eventName: 'workflow_dispatch' },
+    { ...push, commit: current },
+    { ...push, commit: 'main' },
+    { ...push, pullRequests: [] },
+    { ...push, pullRequests: [{ ...pullRequest, merged_at: null }] },
+    { ...push, pullRequests: [{ ...pullRequest, merge_commit_sha: null }] },
+    { ...push, pullRequests: [{ ...pullRequest, head: { ...pullRequest.head, ref: 'docs/typo' } }] },
+    { ...push, pullRequests: [{ ...pullRequest, head: { ...pullRequest.head, repo: { full_name: 'fork/repo' } } }] },
+    { ...push, pullRequests: [{ ...pullRequest, base: { ...pullRequest.base, ref: 'other' } }] }
+  ])('deploys every other documentation source directly %#', input => {
+    expect(isReleaseMergePush(input)).toBe(false)
   })
 })

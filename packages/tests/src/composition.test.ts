@@ -14,6 +14,8 @@ import {
   Testing,
   Tool
 } from '@santi020k/eslint-config-basic'
+import { defineConfig as defineLiteConfig } from '@santi020k/eslint-config-lite'
+import { TSESLint } from '@typescript-eslint/utils'
 import type { Linter } from 'eslint'
 import { ESLint } from 'eslint'
 import { describe, expect, test } from 'vitest'
@@ -138,6 +140,38 @@ describe('defineConfig Function', () => {
       next: [{ name: 'mock-next', rules: {} }]
     })
     expect('react' in frameworks).toBe(false)
+  })
+
+  test.each([
+    {
+      expected: ['eslint-config-next/plugin', 'eslint-config-react/recommended'],
+      frameworks: { next: true, react: false },
+      name: 'Next with React explicitly disabled'
+    },
+    {
+      expected: ['eslint-config-nuxt/rules', 'eslint-config-vue/rules'],
+      frameworks: { nuxt: true, vue: false },
+      name: 'Nuxt with Vue explicitly disabled'
+    }
+  ])('keeps required framework defaults for $name', async ({ expected, frameworks }) => {
+    const original = structuredClone(frameworks)
+    const config = await defineConfig({ detection: false, frameworks, typescript: false })
+
+    expect(extractConfigNames(config)).toEqual(expect.arrayContaining(expected))
+    expect(frameworks).toEqual(original)
+  })
+
+  test('keeps Lite framework disabling and implicit React consistent with Basic', async () => {
+    const config = await defineLiteConfig({
+      detection: false,
+      frameworks: { expo: [{ name: 'supplied-expo', rules: {} }], next: false },
+      typescript: false
+    })
+    const names = extractConfigNames(config)
+
+    expect(names).toContain('supplied-expo')
+    expect(names).toContain('eslint-config-react/recommended')
+    expect(names.some(name => name.startsWith('eslint-config-next/'))).toBe(false)
   })
 
   test('should return config with Nest when nest framework is specified', async () => {
@@ -615,7 +649,8 @@ describe('defineConfig Function', () => {
     const scoped = config.find(entry => entry.name === 'mock-negated-files')
 
     expect(scoped?.files).toContain('apps/web/**/*.tsx')
-    expect(scoped?.files).toContain('!apps/web/**/legacy/**')
+    // A lone negation matches everything else, so it is ANDed with the project glob.
+    expect(scoped?.files).toContainEqual(['apps/web/**/*', '!apps/web/**/legacy/**'])
   })
 
   test('should auto-detect monorepo projects without leaking root framework devDependencies', async () => {
@@ -1124,7 +1159,426 @@ describe('scripts-overrides block', () => {
   })
 })
 
+const auditPlugin = { rules: { marker: { create: () => ({}), meta: { schema: [] } } } }
+
+type ProjectFileState = 'ignored' | 'marked' | 'unmarked'
+
+/**
+ * Composes `block` as a custom framework config of the `apps/web` project and
+ * resolves each file through ESLint to see whether `audit/marker` reaches it.
+ * Pass a function when the block needs the workspace root.
+ */
+const resolveProjectBlock = async (
+  block: ((root: string) => TSESLint.FlatConfig.Config) | TSESLint.FlatConfig.Config,
+  files: string[]
+): Promise<Record<string, ProjectFileState>> => {
+  const root = mkdtempSync(join(tmpdir(), 'eslint-config-project-block-'))
+
+  try {
+    const config = await defineConfig({
+      detection: false,
+      projects: {
+        'apps/web': {
+          frameworks: { react: [typeof block === 'function' ? block(root) : block] },
+          typescript: false
+        }
+      },
+      root,
+      typescript: false
+    })
+    const eslint = new TSESLint.ESLint({ cwd: root, overrideConfig: config, overrideConfigFile: true })
+
+    const states = await Promise.all(files.map(async (file): Promise<[string, ProjectFileState]> => {
+      if (await eslint.isPathIgnored(file)) return [file, 'ignored']
+
+      const { rules } = await eslint.calculateConfigForFile(file)
+
+      return [file, rules?.['audit/marker'] === undefined ? 'unmarked' : 'marked']
+    }))
+
+    return Object.fromEntries(states)
+  } finally {
+    rmSync(root, { force: true, recursive: true })
+  }
+}
+
+/**
+ * Composes a Tailwind project whose entry stylesheet is `css` and returns the
+ * candidates that the unknown-class rule allows as project classes.
+ */
+const resolveAllowedCssClasses = async (css: string, candidates: string[]): Promise<string[]> => {
+  const root = mkdtempSync(join(tmpdir(), 'eslint-config-tailwind-escapes-'))
+
+  try {
+    writeFileSync(join(root, 'styles.css'), css)
+
+    const config = await defineConfig({
+      detection: false,
+      root,
+      tailwind: { entryPoint: 'styles.css' },
+      typescript: false
+    })
+    const rule = config.find(entry => entry.name === 'eslint-config-basic/tailwind-settings')
+      ?.rules?.['better-tailwindcss/no-unknown-classes']
+    const options = Array.isArray(rule) ? rule[1] : undefined
+    const ignore: unknown = typeof options === 'object' && options !== null && 'ignore' in options ?
+      options.ignore :
+      undefined
+    const patterns = Array.isArray(ignore) ?
+      ignore.filter((pattern: unknown): pattern is string => typeof pattern === 'string') :
+      []
+
+    return candidates.filter(className => patterns.some(pattern => new RegExp(pattern).test(className)))
+  } finally {
+    rmSync(root, { force: true, recursive: true })
+  }
+}
+
 describe('Monorepo project scoping', () => {
+  test('scopes the project ignores option to that child without ignoring root or sibling files', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'eslint-config-project-ignores-'))
+
+    try {
+      const config = await defineConfig({
+        detection: false,
+        projects: { 'apps/web': { ignores: ['excluded/**'], typescript: false } },
+        root,
+        typescript: false
+      })
+      const eslint = new TSESLint.ESLint({ cwd: root, overrideConfig: config, overrideConfigFile: true })
+
+      expect(await eslint.isPathIgnored('apps/web/excluded/file.js')).toBe(true)
+      expect(await eslint.isPathIgnored('apps/web/src/file.js')).toBe(false)
+      expect(await eslint.isPathIgnored('excluded/file.js')).toBe(false)
+      expect(await eslint.isPathIgnored('apps/other/excluded/file.js')).toBe(false)
+    } finally {
+      rmSync(root, { force: true, recursive: true })
+    }
+  })
+
+  test('keeps a project rule block with local ignores and no files inside its project', async () => {
+    const states = await resolveProjectBlock({
+      ignores: ['excluded/**'],
+      name: 'audit/local-ignores',
+      plugins: { audit: auditPlugin },
+      rules: { 'audit/marker': 'error' }
+    }, ['root.js', 'excluded/file.js', 'apps/other/src.js', 'apps/web/src/file.js', 'apps/web/excluded/file.js'])
+
+    expect(states).toEqual({
+      'apps/other/src.js': 'unmarked',
+      'apps/web/excluded/file.js': 'unmarked',
+      'apps/web/src/file.js': 'marked',
+      'excluded/file.js': 'unmarked',
+      'root.js': 'unmarked'
+    })
+  })
+
+  test.each([
+    {
+      childState: 'unmarked',
+      ignores: ['apps/web/excluded/**'],
+      name: 'root-relative ignores',
+      nestedState: 'marked'
+    },
+    {
+      childState: 'unmarked',
+      ignores: ['**/excluded/**'],
+      name: 'root-relative globbed ignores',
+      nestedState: 'unmarked'
+    },
+    {
+      childState: 'marked',
+      ignores: ['excluded/**'],
+      name: 'ignores targeting a separate root folder',
+      nestedState: 'marked'
+    }
+  ])('preserves $name beside explicit project files', async ({ childState, ignores, nestedState }) => {
+    const original = [...ignores]
+    const states = await resolveProjectBlock({
+      files: ['**/*.js'],
+      ignores,
+      name: 'audit/root-relative-ignores',
+      plugins: { audit: auditPlugin },
+      rules: { 'audit/marker': 'error' }
+    }, [
+      'excluded/file.js',
+      'apps/other/excluded/file.js',
+      'apps/web/src/file.js',
+      'apps/web/excluded/file.js',
+      'apps/web/apps/web/excluded/file.js'
+    ])
+
+    expect(states).toEqual({
+      'apps/other/excluded/file.js': 'unmarked',
+      'apps/web/apps/web/excluded/file.js': nestedState,
+      'apps/web/excluded/file.js': childState,
+      'apps/web/src/file.js': 'marked',
+      'excluded/file.js': 'unmarked'
+    })
+    expect(ignores).toEqual(original)
+  })
+
+  test('scopes nested AND files while preserving negated root-relative ignores and input arrays', async () => {
+    const files = [['src/**', '**/*.js']]
+    const ignores = ['apps/web/src/excluded/**', '!apps/web/src/excluded/keep/**']
+    const states = await resolveProjectBlock({
+      files,
+      ignores,
+      name: 'audit/nested-patterns',
+      plugins: { audit: auditPlugin },
+      rules: { 'audit/marker': 'error' }
+    }, [
+      'src/file.js',
+      'apps/other/src/excluded/keep/file.js',
+      'apps/web/lib/file.js',
+      'apps/web/src/file.js',
+      'apps/web/src/apps/web/src/excluded/file.js',
+      'apps/web/src/excluded/file.js',
+      'apps/web/src/excluded/keep/file.js'
+    ])
+
+    expect(states).toEqual({
+      'apps/other/src/excluded/keep/file.js': 'unmarked',
+      'apps/web/lib/file.js': 'unmarked',
+      'apps/web/src/apps/web/src/excluded/file.js': 'marked',
+      'apps/web/src/excluded/file.js': 'unmarked',
+      'apps/web/src/excluded/keep/file.js': 'marked',
+      'apps/web/src/file.js': 'marked',
+      'src/file.js': 'unmarked'
+    })
+    expect(files).toEqual([['src/**', '**/*.js']])
+    expect(ignores).toEqual(['apps/web/src/excluded/**', '!apps/web/src/excluded/keep/**'])
+  })
+
+  test.each([
+    {
+      expected: {
+        'apps/other/src.js': 'unmarked',
+        'apps/web/legacy/file.js': 'unmarked',
+        'apps/web/lib/file.js': 'marked',
+        'apps/web/src/file.js': 'marked',
+        'apps/web/src/legacy/file.js': 'marked',
+        'legacy/file.js': 'unmarked',
+        'root.js': 'unmarked'
+      },
+      files: ['src/**/*.js', '!**/legacy/**'],
+      name: 'a top-level negation next to a positive pattern'
+    },
+    {
+      expected: {
+        'apps/other/src.js': 'unmarked',
+        'apps/web/legacy/file.js': 'unmarked',
+        'apps/web/lib/file.js': 'marked',
+        'apps/web/src/file.js': 'marked',
+        'apps/web/src/legacy/file.js': 'unmarked',
+        'legacy/file.js': 'unmarked',
+        'root.js': 'unmarked'
+      },
+      files: ['!**/legacy/**'],
+      name: 'only a top-level negation'
+    },
+    {
+      expected: {
+        'apps/other/src.js': 'unmarked',
+        'apps/web/legacy/file.js': 'unmarked',
+        'apps/web/lib/file.js': 'unmarked',
+        'apps/web/src/file.js': 'marked',
+        'apps/web/src/legacy/file.js': 'unmarked',
+        'legacy/file.js': 'unmarked',
+        'root.js': 'unmarked'
+      },
+      files: [['!**/legacy/**', '!**/lib/**']],
+      name: 'an AND group of negations'
+    },
+    {
+      expected: {
+        'apps/other/src.js': 'unmarked',
+        'apps/web/legacy/file.js': 'unmarked',
+        'apps/web/lib/file.js': 'marked',
+        'apps/web/src/file.js': 'marked',
+        'apps/web/src/legacy/file.js': 'unmarked',
+        'legacy/file.js': 'unmarked',
+        'root.js': 'unmarked'
+      },
+      files: [['src/**', '!**/legacy/**'], 'lib/**/*.js'],
+      name: 'a mixed AND group next to a positive pattern'
+    }
+  ])('confines project files with $name to the project', async ({ expected, files }) => {
+    const original = structuredClone(files)
+    const states = await resolveProjectBlock({
+      files,
+      name: 'audit/negated-files',
+      plugins: { audit: auditPlugin },
+      rules: { 'audit/marker': 'error' }
+    }, Object.keys(expected))
+
+    expect(states).toEqual(expected)
+    expect(files).toEqual(original)
+  })
+
+  test.each([
+    ['its own files', { files: ['**/*.js'] }],
+    ['no files', {}]
+  ])('rebases a relative basePath block with %s onto its project', async (_, scope) => {
+    const states = await resolveProjectBlock({
+      ...scope,
+      basePath: 'sub',
+      ignores: ['excluded/**'],
+      name: 'audit/base-path',
+      plugins: { audit: auditPlugin },
+      rules: { 'audit/marker': 'error' }
+    }, [
+      'root.js',
+      'sub/file.js',
+      'sub/apps/web/file.js',
+      'apps/other/sub/file.js',
+      'apps/web/file.js',
+      'apps/web/sub/file.js',
+      'apps/web/sub/excluded/file.js'
+    ])
+
+    expect(states).toEqual({
+      'apps/other/sub/file.js': 'unmarked',
+      'apps/web/file.js': 'unmarked',
+      'apps/web/sub/excluded/file.js': 'unmarked',
+      'apps/web/sub/file.js': 'marked',
+      'root.js': 'unmarked',
+      'sub/apps/web/file.js': 'unmarked',
+      'sub/file.js': 'unmarked'
+    })
+  })
+
+  test('rebases a relative basePath on an ignore-only project block', async () => {
+    const states = await resolveProjectBlock({ basePath: 'sub', ignores: ['excluded/**'] }, [
+      'sub/excluded/file.js',
+      'sub/apps/web/excluded/file.js',
+      'apps/web/excluded/file.js',
+      'apps/web/sub/file.js',
+      'apps/web/sub/excluded/file.js'
+    ])
+
+    expect(states).toEqual({
+      'apps/web/excluded/file.js': 'unmarked',
+      'apps/web/sub/excluded/file.js': 'ignored',
+      'apps/web/sub/file.js': 'unmarked',
+      'sub/apps/web/excluded/file.js': 'unmarked',
+      'sub/excluded/file.js': 'unmarked'
+    })
+  })
+
+  test('leaves an absolute basePath block where its author anchored it', async () => {
+    const states = await resolveProjectBlock(root => ({
+      basePath: join(root, 'apps/web/sub'),
+      files: ['**/*.js'],
+      name: 'audit/absolute-base-path',
+      plugins: { audit: auditPlugin },
+      rules: { 'audit/marker': 'error' }
+    }), ['root.js', 'apps/web/file.js', 'apps/web/sub/file.js', 'apps/web/sub/apps/web/file.js'])
+
+    expect(states).toEqual({
+      'apps/web/file.js': 'unmarked',
+      'apps/web/sub/apps/web/file.js': 'marked',
+      'apps/web/sub/file.js': 'marked',
+      'root.js': 'unmarked'
+    })
+  })
+
+  test.each([
+    ['an anonymous', {}],
+    ['a named', { name: 'audit/global-ignores' }]
+  ])('keeps %s ignore-only project block as a global ignore of that project', async (_, meta) => {
+    const states = await resolveProjectBlock({ ...meta, ignores: ['excluded/**'] }, [
+      'excluded/file.js',
+      'apps/other/excluded/file.js',
+      'apps/web/src/file.js',
+      'apps/web/excluded/file.js'
+    ])
+
+    expect(states).toEqual({
+      'apps/other/excluded/file.js': 'unmarked',
+      'apps/web/excluded/file.js': 'ignored',
+      'apps/web/src/file.js': 'unmarked',
+      'excluded/file.js': 'unmarked'
+    })
+  })
+
+  test.each([
+    {
+      allowed: ['�'],
+      css: '.\\110000 { color: red; }',
+      name: 'a code point above U+10FFFF as U+FFFD',
+      rejected: []
+    },
+    {
+      allowed: ['zero-�'],
+      css: '.zero-\\0 { color: red; }',
+      name: 'a zero code point as U+FFFD',
+      rejected: ['zero-\u0000']
+    },
+    {
+      allowed: ['first-�', 'last-�'],
+      css: '.first-\\d800, .last-\\dFFF { color: red; }',
+      name: 'surrogate code points as U+FFFD',
+      rejected: ['first-\uD800', 'last-\uDFFF']
+    },
+    {
+      allowed: ['below-퟿', 'above-', 'max-\u{10FFFF}'],
+      css: '.below-\\D7FF, .above-\\E000, .max-\\10FFFF { color: red; }',
+      name: 'the code points bordering the invalid ranges',
+      rejected: ['below-�', 'above-�', 'max-�']
+    },
+    {
+      allowed: ['café', 'smile-\u{1F600}', 'six-Ab'],
+      css: '.caf\\E9, .smile-\\1F600, .six-\\000041b { color: red; }',
+      name: 'BMP, astral, and six-digit hex escapes',
+      rejected: ['six-Л']
+    },
+    {
+      allowed: ['space-Ab', 'tab-Ab', 'feed-Ab', 'newline-Ab', 'crlf-Ab', 'double-A'],
+      css: '.space-\\41 b, .tab-\\41\tb, .feed-\\41\fb, .newline-\\41\nb, .crlf-\\41\r\nb, .double-\\41  b { color: red; }',
+      name: 'one CSS whitespace after a hex escape',
+      rejected: ['crlf-A', 'double-Ab']
+    },
+    {
+      allowed: ['vertical-A', 'nbsp-A b'],
+      css: '.vertical-\\41\vb, .nbsp-\\41 b { color: red; }',
+      name: 'no other whitespace after a hex escape',
+      rejected: ['vertical-Ab', 'nbsp-Ab', 'nbsp-A']
+    },
+    {
+      allowed: ['slash\\41', 'coded\\41'],
+      css: '.slash\\\\41, .coded\\5C 41 { color: red; }',
+      name: 'an escaped or decoded backslash before hex digits only once',
+      rejected: ['slashA', 'slash\\A', 'coded41', 'codedA']
+    },
+    {
+      allowed: ['sm:w-[10.5px]', 'emoji-\u{1F600}-x'],
+      css: '.sm\\:w-\\[10\\.5px\\], .emoji-\\\u{1F600}-x { color: red; }',
+      name: 'ordinary escaped code points as themselves',
+      rejected: ['emoji-\uD83D']
+    },
+    {
+      allowed: ['café-card', '日本語', '\u{1F600}-face', 'x\u{1F600}'],
+      css: '.café-card, .日本語, .\u{1F600}-face, .x\u{1F600} { color: red; }',
+      name: 'literal BMP and astral non-ASCII code points',
+      rejected: ['caf', 'x', 'x\uD83D']
+    },
+    {
+      allowed: ['-leading', '--custom-name', '--', '-_private', '-é', '-10'],
+      css: '.-leading, .--custom-name, .--, .-_private, .-é, .-\\31 0 { color: red; }',
+      name: 'leading hyphens and custom names',
+      rejected: ['leading', 'custom-name', '_private', '-']
+    },
+    {
+      allowed: ['valid-1'],
+      css: '.5col, .-5col, .valid-1, .- { color: red; }',
+      name: 'no class from a raw digit or bare hyphen start',
+      rejected: ['5col', '-5col', 'col', '-']
+    }
+  ])('reads $name in Tailwind component classes', async ({ allowed, css, rejected }) => {
+    expect(await resolveAllowedCssClasses(css, [...allowed, ...rejected])).toEqual(allowed)
+  })
+
   test('scopes discovered Tailwind entry points to their workspace', async () => {
     const root = mkdtempSync(join(tmpdir(), 'eslint-config-tailwind-workspace-'))
 

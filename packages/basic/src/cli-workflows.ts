@@ -461,6 +461,70 @@ const createBackupPath = (filePath: string, suffix: string): string => {
   return `${preferred}.${index}`
 }
 
+// ─── Baseline strict preset ───────────────────────────────────────────────────
+
+type StrictPresetPlan = { action: 'insert', end: number, start: number } | { action: 'keep' } | { action: 'refuse' }
+
+/** Skip only whitespace and complete comments between the generated statements. */
+const skipConfigTrivia = (content: string, start: number): number => {
+  const trivia = /(?:\s+|\/\/[^\r\n\u2028\u2029]*|\/\*[\s\S]*?\*\/)/y
+  let index = start
+
+  for (;;) {
+    trivia.lastIndex = index
+
+    const match = trivia.exec(content)
+
+    if (!match) return index
+
+    index += match[0].length
+  }
+}
+
+/**
+ * Accept only the generated import and default-export statements. Anchoring
+ * the whole module makes examples in comments harmless and refuses custom
+ * code instead of attempting to parse JavaScript or evaluate user options.
+ */
+const planStrictPresetUpdate = (content: string, preset: string): StrictPresetPlan => {
+  const importStart = skipConfigTrivia(content, 0)
+
+  const importMatch = /^import\s*\{\s*defineConfig\s*,?\s*\}\s*from\s*(['"])@santi020k\/eslint-config-(?:basic|full)\1/
+    .exec(content.slice(importStart))
+
+  if (!importMatch) return { action: 'refuse' }
+
+  const importEnd = importStart + importMatch[0].length
+  let exportStart = skipConfigTrivia(content, importEnd)
+
+  if (content[exportStart] === ';') exportStart = skipConfigTrivia(content, exportStart + 1)
+  else if (!/[\r\n\u2028\u2029]/.test(content.slice(importEnd, exportStart))) return { action: 'refuse' }
+
+  const exportMatch = /^export\s+default\s+(?:await\s+)?defineConfig\s*\(/.exec(content.slice(exportStart))
+
+  if (!exportMatch) return { action: 'refuse' }
+
+  const argumentStart = exportStart + exportMatch[0].length
+
+  const argumentMatch = /^\s*(?:\{\s*(?:strict|'strict'|"strict")\s*:\s*(['"])(ci|pedantic)\1\s*,?\s*\}\s*)?\)/
+    .exec(content.slice(argumentStart))
+
+  if (!argumentMatch) return { action: 'refuse' }
+
+  const callEnd = argumentStart + argumentMatch[0].length
+  let end = skipConfigTrivia(content, callEnd)
+
+  if (content[end] === ';') end = skipConfigTrivia(content, end + 1)
+
+  if (end !== content.length) return { action: 'refuse' }
+
+  const currentPreset = argumentMatch[2]
+
+  if (currentPreset) return { action: currentPreset === preset ? 'keep' : 'refuse' }
+
+  return { action: 'insert', end: callEnd, start: argumentStart - 1 }
+}
+
 const updateConfigStrictPreset = (cwd: string, preset: string): null | string => {
   if (!['ci', 'pedantic'].includes(preset)) {
     throw new Error(`Unsupported baseline preset "${preset}". Use "ci" or "pedantic".`)
@@ -478,12 +542,11 @@ const updateConfigStrictPreset = (cwd: string, preset: string): null | string =>
   if (!configPath) throw new Error('No eslint.config.* file was found. Run basic-eslint init first.')
 
   const content = readFileSync(configPath, 'utf8')
+  const plan = planStrictPresetUpdate(content, preset)
 
-  if (new RegExp(`strict\\s*:\\s*['"]${preset}['"]`).test(content)) return null
+  if (plan.action === 'keep') return null
 
-  const zeroArgumentPattern = /\bdefineConfig\(\s*\)/
-
-  if (!zeroArgumentPattern.test(content)) {
+  if (plan.action === 'refuse') {
     throw new Error(
       `Cannot safely add strict: "${preset}" to a customized config. ` +
       'Add it manually, then run basic-eslint baseline without --preset.'
@@ -494,7 +557,10 @@ const updateConfigStrictPreset = (cwd: string, preset: string): null | string =>
 
   writeFileSync(backupPath, content)
 
-  writeFileSync(configPath, content.replace(zeroArgumentPattern, `defineConfig({ strict: '${preset}' })`))
+  writeFileSync(
+    configPath,
+    `${content.slice(0, plan.start)}({ strict: '${preset}' })${content.slice(plan.end)}`
+  )
 
   return basename(backupPath)
 }

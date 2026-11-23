@@ -50,5 +50,6 @@ export default defineConfig({
     timeout: 120_000,
     url: previewURL
   },
-  workers: isGithubCi ? 2 : '50%'
+  // GitHub-hosted runners for public repositories provide four vCPUs.
+  workers: isGithubCi ? 4 : '50%'
 })

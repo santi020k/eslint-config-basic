@@ -2,10 +2,94 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
 import astro from '@santi020k/eslint-config-astro'
+import type { EslintConfigOptions } from '@santi020k/eslint-config-basic'
 import { defineConfig, Extension, Format, Library, NextMode, Testing, Tool } from '@santi020k/eslint-config-basic'
 import { describe, expect, test } from 'vitest'
 
 import { extractConfigNames, extractRuleNames, getEffectiveRuleValue } from './test-utils.js'
+
+type FrameworkOptions = NonNullable<EslintConfigOptions['frameworks']>
+type FrameworkName = keyof FrameworkOptions
+
+const REACT_DEPENDENTS = ['next', 'expo', 'react-router', 'tanstack-start'] as const
+
+const disabledFrameworks = (names: readonly FrameworkName[]): FrameworkOptions => {
+  const frameworks: FrameworkOptions = {}
+
+  for (const name of names) frameworks[name] = false
+
+  return frameworks
+}
+
+const composeFrameworkNames = async (frameworks: FrameworkOptions): Promise<string[]> => extractConfigNames(
+  await defineConfig({ detection: false, frameworks, typescript: false })
+)
+
+describe('Implicit React for React-based frameworks', () => {
+  test.each(REACT_DEPENDENTS.flatMap(enabled => REACT_DEPENDENTS
+    .filter(disabled => disabled !== enabled)
+    .map(disabled => ({ disabled, enabled }))))(
+    'adds React for supplied $enabled configs when $disabled is disabled',
+    async ({ disabled, enabled }) => {
+      const names = await composeFrameworkNames({ [disabled]: false, [enabled]: [] })
+
+      expect(names).toContain('eslint-config-react/recommended')
+    }
+  )
+
+  test.each(REACT_DEPENDENTS)('adds React for %s when every other framework is disabled', async enabled => {
+    const supplied = [{ name: `supplied-${enabled}`, rules: {} }]
+    const frameworks: FrameworkOptions = {
+      ...disabledFrameworks(['solid', 'vue', ...REACT_DEPENDENTS.filter(name => name !== enabled)]),
+      [enabled]: supplied
+    }
+    const snapshot = { ...frameworks }
+    const names = await composeFrameworkNames(frameworks)
+
+    expect(names).toContain('eslint-config-react/recommended')
+    expect(names).toContain(`supplied-${enabled}`)
+    expect(frameworks).toEqual(snapshot)
+    expect(frameworks).not.toHaveProperty('react')
+    expect(supplied).toEqual([{ name: `supplied-${enabled}`, rules: {} }])
+  })
+
+  test('does not add React when every React-based framework is disabled', async () => {
+    const names = await composeFrameworkNames(disabledFrameworks(REACT_DEPENDENTS))
+
+    expect(names).not.toContain('eslint-config-react/recommended')
+  })
+
+  test('drops a bundled framework that is explicitly disabled', async () => {
+    const names = await composeFrameworkNames({ react: true, vue: false })
+
+    expect(names).toContain('eslint-config-react/recommended')
+    expect(names.some(name => name.startsWith('eslint-config-vue/'))).toBe(false)
+  })
+
+  test.each(REACT_DEPENDENTS)('keeps a supplied React config for %s next to disabled frameworks', async enabled => {
+    const names = await composeFrameworkNames({
+      ...disabledFrameworks(REACT_DEPENDENTS.filter(name => name !== enabled)),
+      [enabled]: [],
+      react: [{ name: 'supplied-react', rules: {} }]
+    })
+
+    expect(names).toContain('supplied-react')
+    expect(names).not.toContain('eslint-config-react/recommended')
+  })
+
+  test('keeps TanStack Start on Solid free of implicit React next to disabled frameworks', async () => {
+    const names = await composeFrameworkNames({
+      expo: false,
+      next: false,
+      'react-router': false,
+      solid: [{ name: 'supplied-solid', rules: {} }],
+      'tanstack-start': []
+    })
+
+    expect(names).toContain('supplied-solid')
+    expect(names).not.toContain('eslint-config-react/recommended')
+  })
+})
 
 describe('Edge-Case & Conflict Tests (#6)', () => {
   test('should handle Expo + Next together without crashing', async () => {

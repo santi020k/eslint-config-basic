@@ -8,6 +8,7 @@
   "type": "module",
   "scripts": {
     "lint": "eslint . --max-warnings=0",
+    "test:security": "node --test scripts/effect-security.node-test.mjs",
     "clean": "rm -rf dist node_modules",
     "check:exports": "echo \"No exports to check\"",
     "typecheck": "prisma generate && tsc --noEmit"

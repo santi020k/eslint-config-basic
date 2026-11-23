@@ -299,3 +299,7 @@ Built by [Santiago Molina](https://santi020k.com), alongside
 ## License
 
 MIT © [santi020k](https://santi020k.com). See [LICENSE](LICENSE).
+
+## Repository validation rollout
+
+See [Quality v2 rollout](QUALITY-ROLLOUT.md) for impact planning, task caches and release validation boundaries.

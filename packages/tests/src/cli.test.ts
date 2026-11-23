@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 
@@ -25,6 +25,7 @@ import {
   isCliEntrypoint,
   runCli
 } from '../../basic/src/cli.js'
+import { detectPackageManager } from '../../basic/src/cli-package-manager.js'
 
 const tempDirs: string[] = []
 const basicPackageVersion = (
@@ -2033,7 +2034,79 @@ describe('generateAgentSkills', () => {
     const result = await generateAgentSkills({ check: true, createAgentsMd: true, cwd })
 
     expect(result.written).toHaveLength(0)
+    expect(result.skipped).toHaveLength(0)
+    expect(result.stale).toEqual([join(cwd, 'AGENTS.md')])
     expect(existsSync(join(cwd, 'AGENTS.md'))).toBe(false)
+  })
+
+  test('should ignore a missing AGENTS.md in check mode when it was not requested', async () => {
+    const cwd = createTempProject({ name: 'tmp-project' })
+
+    const result = await generateAgentSkills({ check: true, cwd })
+
+    expect(result).toEqual({ skipped: [], stale: [], written: [] })
+    expect(existsSync(join(cwd, 'AGENTS.md'))).toBe(false)
+  })
+
+  test('should fail the CLI check for a missing requested AGENTS.md without writing it', async () => {
+    const cwd = createTempProject({ name: 'tmp-project' })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+    const previousExitCode = process.exitCode
+
+    await handleGenerateSkill(cwd, false, { check: true, createAgentsMd: true })
+
+    const output = logSpy.mock.calls.flat().join('\n')
+    const exitCode = process.exitCode
+
+    process.exitCode = previousExitCode
+    logSpy.mockRestore()
+
+    expect(output).toContain('Stale or missing: AGENTS.md')
+    expect(output).toContain('Run `generate-skill --force --create` to regenerate them.')
+    expect(output).not.toContain('No agent folders found')
+    expect(exitCode).toBe(1)
+    expect(readdirSync(cwd)).toEqual(['package.json'])
+  })
+
+  test('should keep the CLI check passing when AGENTS.md is absent and not requested', async () => {
+    const cwd = createTempProject({ name: 'tmp-project' })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+    const previousExitCode = process.exitCode
+
+    process.exitCode = undefined
+
+    await handleGenerateSkill(cwd, false, { check: true })
+
+    const output = logSpy.mock.calls.flat().join('\n')
+    const exitCode = process.exitCode
+
+    process.exitCode = previousExitCode
+    logSpy.mockRestore()
+
+    expect(output).toContain('No agent folders found')
+    expect(exitCode).toBeUndefined()
+    expect(readdirSync(cwd)).toEqual(['package.json'])
+  })
+
+  test('should pass the CLI check once the requested AGENTS.md has been created', async () => {
+    const cwd = createTempProject({ name: 'tmp-project' })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+    const previousExitCode = process.exitCode
+
+    process.exitCode = undefined
+
+    await handleGenerateSkill(cwd, false, { createAgentsMd: true })
+    await handleGenerateSkill(cwd, false, { check: true, createAgentsMd: true })
+
+    const output = logSpy.mock.calls.flat().join('\n')
+    const exitCode = process.exitCode
+
+    process.exitCode = previousExitCode
+    logSpy.mockRestore()
+
+    expect(output).toContain('Up to date: AGENTS.md')
+    expect(output).not.toContain('Stale or missing')
+    expect(exitCode).toBeUndefined()
   })
 
   test('should set a non-zero exit code from the CLI handler in check mode when stale', async () => {
@@ -2117,5 +2190,142 @@ describe('findDuplicateEslint', () => {
     expect(output).toContain('10.2.1')
 
     logSpy.mockRestore()
+  })
+})
+
+describe('detectPackageManager', () => {
+  test.each([
+    ['pnpm@11.6.0', 'pnpm'],
+    ['pnpm@11.6.0+sha512.9a36518224080c6fe5165afdcfe79bfa118c29be703f3f462b1e32efe1e98e47', 'pnpm'],
+    ['yarn@4.5.0-rc.1', 'yarn'],
+    ['yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610', 'yarn'],
+    ['bun@1.2.0', 'bun'],
+    ['bun@1.3.0-canary.20+b3ccd2d9', 'bun'],
+    ['npm@10.9.0', 'npm']
+  ])('should honor the declared package manager %s without a lockfile', (packageManager, expected) => {
+    const cwd = createTempProject({ name: 'tmp-project', packageManager })
+
+    expect(detectPackageManager(cwd)).toBe(expected)
+  })
+
+  test.each([
+    ['a missing version', 'pnpm'],
+    ['an empty version', 'pnpm@'],
+    ['a dist-tag', 'pnpm@latest'],
+    ['a version range', 'pnpm@^9.0.0'],
+    ['a partial version', 'pnpm@9.0'],
+    ['a leading-zero version', 'pnpm@09.0.0'],
+    ['a leading-zero numeric prerelease', 'pnpm@9.0.0-01'],
+    ['a leading-zero nested prerelease', 'pnpm@9.0.0-rc.01'],
+    ['an oversized version component', 'pnpm@9007199254740992.0.0'],
+    ['a version prefix', 'pnpm@v9.0.0'],
+    ['an empty prerelease identifier', 'pnpm@9.0.0-'],
+    ['an empty build identifier', 'pnpm@9.0.0+sha512..abc'],
+    ['surrounding whitespace', ' pnpm@9.0.0 '],
+    ['a trailing line break', 'pnpm@9.0.0\n'],
+    ['a missing name', '@9.0.0'],
+    ['an unsupported manager', 'deno@2.0.0'],
+    ['an uppercase manager', 'PNPM@9.0.0'],
+    ['a scoped package', '@pnpm/exe@9.0.0'],
+    ['a number', 9],
+    ['null', null],
+    ['an object', { name: 'pnpm', version: '9.0.0' }],
+    ['an array', ['pnpm@9.0.0']]
+  ])('should fall back to npm for %s in packageManager', (_label, packageManager) => {
+    const cwd = createTempProject({ name: 'tmp-project', packageManager })
+
+    expect(detectPackageManager(cwd)).toBe('npm')
+  })
+
+  test('should fall back to npm when package.json is missing, malformed, or not an object', () => {
+    const missing = mkdtempSync(resolve(tmpdir(), 'eslint-config-basic-cli-'))
+    const malformed = createTempProject({ name: 'tmp-project' })
+    const nonObject = createTempProject({ name: 'tmp-project' })
+
+    tempDirs.push(missing)
+    writeFileSync(join(malformed, 'package.json'), '{ "packageManager": "pnpm@11.6.0", ')
+    writeFileSync(join(nonObject, 'package.json'), '["pnpm@11.6.0"]')
+
+    expect(detectPackageManager(missing)).toBe('npm')
+    expect(detectPackageManager(malformed)).toBe('npm')
+    expect(detectPackageManager(nonObject)).toBe('npm')
+  })
+
+  test.each([
+    ['pnpm-lock.yaml', 'yarn@4.5.0', 'pnpm'],
+    ['pnpm-workspace.yaml', 'yarn@4.5.0', 'pnpm'],
+    ['yarn.lock', 'pnpm@11.6.0', 'yarn'],
+    ['bun.lock', 'pnpm@11.6.0', 'bun'],
+    ['bun.lockb', 'pnpm@11.6.0', 'bun'],
+    ['package-lock.json', 'pnpm@11.6.0', 'npm'],
+    ['npm-shrinkwrap.json', 'pnpm@11.6.0', 'npm']
+  ])('should prefer %s over the declared %s', (lockfile, packageManager, expected) => {
+    const cwd = createTempProject({ name: 'tmp-project', packageManager })
+
+    writeFileSync(join(cwd, lockfile), '')
+
+    expect(detectPackageManager(cwd)).toBe(expected)
+  })
+
+  test('should prefer an ancestor pnpm workspace over a nested declaration', () => {
+    const cwd = createTempProject({ name: 'tmp-workspace' })
+    const child = join(cwd, 'apps', 'web')
+
+    mkdirSync(child, { recursive: true })
+    writeFileSync(join(cwd, 'pnpm-workspace.yaml'), 'packages:\n  - "apps/*"\n')
+    writeFileSync(join(child, 'package.json'), JSON.stringify({ name: 'web', packageManager: 'yarn@4.5.0' }))
+
+    expect(detectPackageManager(child)).toBe('pnpm')
+  })
+
+  test('should keep the existing lockfile order when several lockfiles exist', () => {
+    const cwd = createTempProject({ name: 'tmp-project', packageManager: 'bun@1.2.0' })
+
+    writeFileSync(join(cwd, 'package-lock.json'), '{}')
+    writeFileSync(join(cwd, 'yarn.lock'), '')
+
+    expect(detectPackageManager(cwd)).toBe('yarn')
+  })
+
+  test('should use the declared package manager for install commands without a lockfile', () => {
+    const cwd = createTempProject({
+      dependencies: { react: '19.0.0' },
+      devDependencies: {
+        '@santi020k/eslint-config-basic': '3.0.0',
+        eslint: '10.0.0'
+      },
+      name: 'tmp-project',
+      packageManager: 'pnpm@11.6.0'
+    })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+    const invocations: [string, string[]][] = []
+
+    handleInstall(cwd, true)
+    handleInstall(cwd, false, (command, args) => {
+      invocations.push([command, args])
+
+      return { status: 0 }
+    })
+
+    const output = logSpy.mock.calls.flat().join('\n')
+
+    logSpy.mockRestore()
+
+    expect(output).toContain('pnpm add -D @santi020k/eslint-config-react@^3.0.0')
+    expect(output).not.toContain('npm install')
+    expect(invocations).toEqual([['pnpm', ['add', '-D', '@santi020k/eslint-config-react@^3.0.0']]])
+  })
+
+  test('should report the declared package manager in inspect output', async () => {
+    const cwd = createTempProject({ name: 'tmp-project', packageManager: 'yarn@4.5.0' })
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
+
+    await handleInspect(cwd, true)
+
+    const payload = JSON.parse(String(logSpy.mock.calls[0]?.[0])) as { packageManager?: string }
+
+    logSpy.mockRestore()
+
+    expect(payload.packageManager).toBe('yarn')
   })
 })

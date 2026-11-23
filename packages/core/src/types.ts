@@ -471,9 +471,9 @@ export interface EslintConfigOptions {
 
   /**
    * Extra global ignore globs (flat config `ignores` only, no `files`).
-   * Patterns are relative to ESLint's working directory, like a manual ignore block.
-   * Not merged from presets or detection. For `projects` entries, patterns are not
-   * auto-prefixed with the subproject path; use repo-root-relative globs when needed.
+   * Root patterns are relative to the ESLint config directory. Inside a `projects`
+   * entry, patterns are prefixed with that project's path.
+   * Not merged from presets or detection.
    */
   ignores?: string[]
 
@@ -585,8 +585,9 @@ export interface EslintConfigOptions {
 export type FlatConfigArray = TSESLint.FlatConfig.ConfigArray
 
 /**
- * Type for framework option values: `true` enables the optional v3 config,
- * or pass a config array, a factory function (sync or async, like the lazy
+ * Framework option values: `true` enables the optional v3 config and `false`
+ * disables it unless another enabled framework requires it (such as React for
+ * Next.js or Vue for Nuxt). You can also pass a config array, a factory function (sync or async, like the lazy
  * framework factories exported from `@santi020k/eslint-config-basic`), or an
  * imported module with a default export. Any other value throws a descriptive
  * `TypeError` (see `resolveFramework` in `@santi020k/eslint-config-basic`).
@@ -594,7 +595,7 @@ export type FlatConfigArray = TSESLint.FlatConfig.ConfigArray
 export type ImportedFramework =
   ((options?: Record<string, unknown>) => FlatConfigArray | Promise<FlatConfigArray>) |
   FlatConfigArray |
-  true |
+  boolean |
   { default: ((options?: Record<string, unknown>) => FlatConfigArray | Promise<FlatConfigArray>) | FlatConfigArray }
 
 export type ProjectConfigOptions = Omit<EslintConfigOptions, 'projectDefaults' | 'projects'>

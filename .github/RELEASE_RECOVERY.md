@@ -75,11 +75,55 @@ tag SHAs, the GitHub Release, and the live documentation deployment. Run a packe
 consumer smoke check before retiring release branches. Delete local and remote
 release branches only after verification and explicit remote cleanup authorization.
 
+## 3.8.0 configuration and CLI preparation
+
+Basic 3.8.0 includes broader CSS class discovery and declared package-manager
+fallback, together with project-scoping, framework-flag, and CLI safeguard fixes.
+Core 3.2.3 contains the shared scoping and type changes; Full 3.2.9 carries the
+updated Basic dependency for batteries-included consumers. Published ESLint packages
+retain their Node `>=22.19.0` contract. The private development workspace now
+requires Node `>=22.23.4` for the patched Astro documentation tooling.
+
+No ignore-path migration is required: custom child blocks with explicit `files`
+keep root-relative `ignores`, while blocks without `files` keep project-relative
+ignores. Customized ESLint modules must set `strict` manually before running
+`baseline` without `--preset`. Compare effective-rule snapshots and check sibling
+projects for rules that previously leaked outside the intended scope.
+
+The private workspace pins Next 16.4.6 to address
+[GHSA-mfr8-8qww-v76h](https://github.com/advisories/GHSA-mfr8-8qww-v76h).
+This override protects the development dependency graph; published consumers
+must update their own Next dependency and lockfile.
+
+The documentation workspace upgrades to Astro 7.4.12, including the fixes for
+[GHSA-mh32-jxcr-mh9f](https://github.com/withastro/astro/security/advisories/GHSA-mh32-jxcr-mh9f)
+and [GHSA-r3h5-4585-7x3w](https://github.com/withastro/astro/security/advisories/GHSA-r3h5-4585-7x3w).
+Astro raised its minimum Node version to 22.23.4 in
+[7.4.2](https://github.com/withastro/astro/releases/tag/astro%407.4.2) for the
+October 2026 Node security fixes. Contributors must update their local runtime
+before installing dependencies or building the documentation. Deployment remains
+static output on GitHub Pages; the published ESLint packages keep their existing
+runtime requirements.
+
+This is a local release candidate until the authorized release pull request is
+merged and the GitHub workflow publishes it. Run the full release gate and
+independent review before pushing. Recover failed publication through the workflow
+at the original merged commit; correct a published regression with a new patch
+version, preserving immutable tags and artifacts.
+
+The private workspace overrides Prisma config's pinned Effect 3.20.0 with
+Effect 3.22.5, the latest compatible stable v3 patch reviewed for
+[GHSA-7589-6fvf-x4pw](https://github.com/advisories/GHSA-7589-6fvf-x4pw).
+The override is scoped to `@prisma/config`; published ESLint package contracts
+are unchanged. Remove it when Prisma pins a patched Effect release. Regression
+coverage exercises the actual resolved template decoder and Prisma config loader;
+the full release gate also generates and type-checks the Prisma playground.
+
 ## 3.6.0 security and runtime preparation
 
-The release keeps every public package's advertised Node `>=22.19.0` contract.
-The private development workspace requires Node `>=22.22.1` for lint-staged.
-Compatible stable dependencies are pinned deliberately: Astro plugin 1.7.0,
+Version 3.6.0 kept every public package's advertised Node `>=22.19.0` contract.
+At that release, the private development workspace required Node `>=22.22.1` for
+lint-staged. Compatible stable dependencies were pinned deliberately: Astro plugin 1.7.0,
 Astro Doctor 1.2.0, Command 3.5.3, JSDoc 63.3.3, package-json 0.91.2, and
 Regexp 3.1.0. Reconsider these pins only with minimum-runtime consumer tests;
 newer releases require newer Node versions through their direct or transitive

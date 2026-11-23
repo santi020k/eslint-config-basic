@@ -73,7 +73,8 @@ export interface GenerateSkillOptions {
 
   /**
    * Create a root `AGENTS.md` when it does not exist yet, instead of only
-   * updating an existing one.
+   * updating an existing one. In check mode the missing file is reported as
+   * stale and is never written.
    * @default false
    */
   createAgentsMd?: boolean
@@ -935,6 +936,8 @@ type GuardedSectionResult = 'skipped' | 'stale' | 'written' | null
  *
  * In check mode nothing is written; the function reports `'stale'` when the
  * section is missing or out of date and `'skipped'` when it is up to date.
+ * A missing file is ignored unless `createIfMissing` requests it, in which
+ * case check mode reports it as `'stale'` instead of creating it.
  */
 const handleGuardedSectionFile = (
   filePath: string,
@@ -946,7 +949,9 @@ const handleGuardedSectionFile = (
   const section = buildGuardedSection(body)
 
   if (!existsSync(filePath)) {
-    if (!createIfMissing || check) return null
+    if (!createIfMissing) return null
+
+    if (check) return 'stale'
 
     writeFileSync(filePath, `# Agent instructions\n\n${section}\n`, 'utf-8')
 
@@ -1143,7 +1148,7 @@ export interface HandleGenerateSkillFlags {
   /** Check mode — report stale files and set a non-zero exit code, write nothing */
   check?: boolean
 
-  /** Create a root `AGENTS.md` when it does not exist */
+  /** Create a root `AGENTS.md` when it does not exist; with `check`, require it instead */
   createAgentsMd?: boolean
 
   /** Add the official ESLint MCP server to `.mcp.json` */
@@ -1159,7 +1164,8 @@ const resolveGenerateSkillFlags = (flags: HandleGenerateSkillFlags) => ({
 const outputGenerateSkillResults = (
   check: boolean,
   result: Awaited<ReturnType<typeof generateAgentSkills>>,
-  cwd: string
+  cwd: string,
+  createAgentsMd: boolean
 ): void => {
   if (check) {
     for (const file of result.skipped) {
@@ -1171,7 +1177,10 @@ const outputGenerateSkillResults = (
     }
 
     if (result.stale.length > 0) {
-      console.log(`\n⚠️  ${result.stale.length} skill file(s) are out of date. Run \`generate-skill --force\` to regenerate them.`)
+      // A missing AGENTS.md is only scaffolded when --create is passed again.
+      const regenerateCommand = `generate-skill --force${createAgentsMd ? ' --create' : ''}`
+
+      console.log(`\n⚠️  ${result.stale.length} skill file(s) are out of date. Run \`${regenerateCommand}\` to regenerate them.`)
 
       process.exitCode = 1
     } else {
@@ -1227,5 +1236,5 @@ export const handleGenerateSkill = async (
     return
   }
 
-  outputGenerateSkillResults(check, result, cwd)
+  outputGenerateSkillResults(check, result, cwd, createAgentsMd)
 }
