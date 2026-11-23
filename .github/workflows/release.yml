@@ -35,6 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     permissions:
+      checks: read
       contents: write
       pull-requests: write
       id-token: write
@@ -62,10 +63,24 @@ jobs:
         env:
           RELEASE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
 
-      - name: Validate merged release and dependency security
-        run: |
-          pnpm run release:check
-          pnpm audit --audit-level=high
+      # The release pull request already ran this gate in its "Full release
+      # candidate" job. Reuse that result only when GitHub confirms the check
+      # succeeded for a candidate whose tree is identical to the merged commit.
+      # Recovery runs, diverged trees, and unavailable evidence validate again.
+      - name: Look for a verified release gate on the identical tree
+        id: release-gate
+        run: node scripts/verify-release-gate.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_GATE_CHECK: Full release candidate
+
+      - name: Validate merged release
+        if: steps.release-gate.outputs.verified != 'true'
+        run: pnpm run release:check
+
+      # Advisories change independently of the tree, so the audit always runs.
+      - name: Audit dependency security
+        run: pnpm audit --audit-level=high
 
       - name: Install OIDC-capable npm
         run: npm install --global npm@11.20.0

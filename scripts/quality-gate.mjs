@@ -1,10 +1,18 @@
 import assert from 'node:assert/strict'
 import { pathToFileURL } from 'node:url'
 
+const requiresWindows = (eventName, release, windows) => eventName !== 'pull_request' || release || windows === 'true'
+
 export const verifyGate = (results, eventName, headRef) => {
   const release = eventName === 'pull_request' && /^(release\/v|changeset-release\/main$)/u.test(headRef)
+  const windows = results.scope?.outputs?.windows
 
-  const required = ['impact-plan', 'package-manager-consumers', 'windows-smoke',
+  assert.ok(['true', 'false'].includes(windows), 'Windows selection must be explicit')
+
+  const requireWindows = requiresWindows(eventName, release, windows)
+
+  const required = ['scope', 'impact-plan', 'package-manager-consumers',
+    ...(requireWindows ? ['windows-smoke'] : []),
     ...(release ? ['release-candidate', 'release-node24'] : ['contracts', 'build', 'package-validation'])]
 
   for (const [name, job] of Object.entries(results)) {

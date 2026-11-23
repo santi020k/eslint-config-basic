@@ -1,7 +1,8 @@
 # Quality v2 rollout
 
 This change belongs to the unfinished `release/v3.8.0` candidate. Quality is pinned
-to 2.0.0 and shared setup actions use its immutable release commit.
+to 2.0.0 for impact planning. Shared CI setup actions use the immutable Quality
+2.1.0 release commit.
 
 The parallel impact job records a committed-source shadow plan. Package inputs
 include integration contracts and generated documentation consumers. Shared

@@ -8,10 +8,12 @@ import test from 'node:test'
 import { verifyGate } from './quality-gate.mjs'
 
 test('selected jobs cannot silently skip or fail', () => {
-  const names = ['impact-plan', 'package-manager-consumers', 'windows-smoke', 'contracts', 'build', 'package-validation', 'release-candidate', 'release-node24']
+  const names = ['scope', 'impact-plan', 'package-manager-consumers', 'windows-smoke', 'contracts', 'build', 'package-validation', 'release-candidate', 'release-node24']
 
   for (const head of ['feature/example', 'release/v3.8.0']) {
     const results = Object.fromEntries(names.map(name => [name, { result: 'success' }]))
+
+    results.scope.outputs = { windows: 'true' }
 
     verifyGate(results, 'pull_request', head)
 
@@ -78,5 +80,26 @@ test('published Quality plans package consumers and conservative fallbacks', () 
     assert.equal(plan('unavailable-baseline').mode, 'full')
   } finally {
     rmSync(cwd, { recursive: true, force: true })
+  }
+})
+
+
+test('Windows may skip only for explicitly selected ordinary pull requests', () => {
+  const results = Object.fromEntries(['scope', 'impact-plan', 'package-manager-consumers', 'contracts', 'build', 'package-validation', 'release-candidate', 'release-node24'].map(name => [name, { result: 'success' }]))
+
+  results.scope.outputs = { windows: 'false' }
+
+  results['windows-smoke'] = { result: 'skipped' }
+
+  verifyGate(results, 'pull_request', 'feature/docs')
+
+  assert.throws(() => verifyGate(results, 'push', ''))
+
+  assert.throws(() => verifyGate(results, 'pull_request', 'release/v3.8.0'))
+
+  for (const windows of ['', 'true', 'invalid']) {
+    results.scope.outputs.windows = windows
+
+    assert.throws(() => verifyGate(results, 'pull_request', 'feature/docs'))
   }
 })

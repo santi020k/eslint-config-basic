@@ -23,16 +23,17 @@
     },
     "lint": {
       "dependsOn": ["^build", "@santi020k/eslint-config-basic#build"],
-      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/eslint.config.js"],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/eslint.config.js", "$TURBO_ROOT$/tsconfig.base.json"],
       "outputLogs": "errors-only"
     },
     "lint:fix": {
       "dependsOn": ["^build", "@santi020k/eslint-config-basic#build"],
-      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/eslint.config.js"],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/eslint.config.js", "$TURBO_ROOT$/tsconfig.base.json"],
       "outputLogs": "errors-only"
     },
     "typecheck": {
       "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/tsconfig.base.json"],
       "outputLogs": "errors-only"
     },
     "check:exports": {
@@ -41,11 +42,13 @@
     },
     "test": {
       "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/tsconfig.base.json", "$TURBO_ROOT$/scripts/**"],
       "outputs": ["coverage/**"],
       "outputLogs": "errors-only"
     },
     "test:coverage": {
       "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/tsconfig.base.json", "$TURBO_ROOT$/scripts/**"],
       "outputs": ["coverage/**"],
       "outputLogs": "errors-only"
     },
