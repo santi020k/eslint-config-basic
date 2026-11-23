@@ -139,6 +139,13 @@ coverage, package, and consumer gates. To recover from a selector regression,
 set `GITHUB_EVENT_NAME=workflow_dispatch` locally or revert the selector change through a reviewed
 pull request; never bypass the full release candidate job.
 
+The Release workflow reuses that job instead of repeating `release:check` after the
+merge, but only when `scripts/verify-release-gate.mjs` confirms through GitHub that
+"Full release candidate" succeeded for a candidate commit whose tree is identical to
+the merged commit and that already contained the previous `main` commit. Recovery
+dispatches, diverged trees, and missing or failed checks run the complete gate again.
+The dependency audit always runs because advisories change independently of the tree.
+
 The security refresh uses compatible patched releases of Next, Storybook, Vite,
 MCP, Markdown, Undici, Zod, and URI handling dependencies. Lighthouse uses a patched
 Puppeteer release within its existing major. The Vitest ESLint plugin is pinned to
