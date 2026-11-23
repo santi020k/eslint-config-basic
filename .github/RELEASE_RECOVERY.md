@@ -111,6 +111,14 @@ independent review before pushing. Recover failed publication through the workfl
 at the original merged commit; correct a published regression with a new patch
 version, preserving immutable tags and artifacts.
 
+The private workspace overrides Prisma config's pinned Effect 3.20.0 with
+Effect 3.22.5, the latest compatible stable v3 patch reviewed for
+[GHSA-7589-6fvf-x4pw](https://github.com/advisories/GHSA-7589-6fvf-x4pw).
+The override is scoped to `@prisma/config`; published ESLint package contracts
+are unchanged. Remove it when Prisma pins a patched Effect release. Regression
+coverage exercises the actual resolved template decoder and Prisma config loader;
+the full release gate also generates and type-checks the Prisma playground.
+
 ## 3.6.0 security and runtime preparation
 
 Version 3.6.0 kept every public package's advertised Node `>=22.19.0` contract.

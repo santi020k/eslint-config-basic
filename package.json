@@ -13,7 +13,7 @@
     "test": "pnpm run build && turbo run test",
     "test:run": "pnpm --filter @santi020k/eslint-config-tests run test",
     "test:affected": "pnpm run test:ci && node scripts/test-affected.mjs",
-    "test:ci": "node --test scripts/affected-changes.test.mjs scripts/task-cache.node-test.mjs",
+    "test:ci": "node --test scripts/affected-changes.test.mjs scripts/task-cache.node-test.mjs && pnpm --filter @playground/prisma run test:security",
     "test:coverage": "pnpm run build && turbo run test:coverage",
     "lint": "pnpm run build && pnpm run lint:repo && turbo run lint",
     "lint:repo": "eslint . --cache --no-warn-ignored --max-warnings=0",
