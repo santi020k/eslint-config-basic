@@ -3,10 +3,19 @@ const isSuccessfulRelease = run => run?.name === 'Release' && run.conclusion ===
 const belongsToRepository = (branch, repository) => branch?.repo?.full_name === repository
 const isReleaseBranch = ref => ref === 'changeset-release/main' || (typeof ref === 'string' && ref.startsWith('release/v'))
 
-const isMergedRelease = (pullRequest, head, repository) => pullRequest.merged_at &&
-  isCommit(pullRequest.merge_commit_sha) && pullRequest.head?.sha === head &&
+const isMergedReleasePullRequest = (pullRequest, repository) => Boolean(pullRequest.merged_at) &&
+  isCommit(pullRequest.merge_commit_sha) &&
   belongsToRepository(pullRequest.head, repository) && pullRequest.base?.ref === 'main' &&
   belongsToRepository(pullRequest.base, repository) && isReleaseBranch(pullRequest.head.ref)
+
+const isMergedRelease = (pullRequest, head, repository) =>
+  isMergedReleasePullRequest(pullRequest, repository) && pullRequest.head.sha === head
+
+// The Release workflow publishes exactly these merges and then triggers the
+// deployment itself, so the push for the same commit must not deploy first.
+export const isReleaseMergePush = ({ eventName, commit, repository, pullRequests = [] }) => eventName === 'push' &&
+  isCommit(commit) &&
+  pullRequests.some(pullRequest => isMergedReleasePullRequest(pullRequest, repository) && pullRequest.merge_commit_sha === commit)
 
 export const resolveDocsCommit = ({ eventName, commit, repository, workflowRun, pullRequests = [] }) => {
   if (eventName !== 'workflow_run') {

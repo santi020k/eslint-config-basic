@@ -20,3 +20,5 @@ export interface DocsSource {
 }
 
 export function resolveDocsCommit(source: DocsSource): string
+
+export function isReleaseMergePush(source: Pick<DocsSource, 'eventName' | 'commit' | 'repository' | 'pullRequests'>): boolean
